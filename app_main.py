@@ -29,6 +29,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.homingButton.clicked.connect(self.handle_homing)
         self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
         self.ui.clearTerminalButton.clicked.connect(self.handle_clear_terminal)
+        self.ui.send_text_edit.returnPressed.connect(self.send_input)
+        self.ui.send_text_edit.setPlaceholderText('input here')
+        self.ui.send_push_button.clicked.connect(self.send_input)
         self.ui.send_text_edit.hide()
         self.ui.send_push_button.hide()
 
@@ -66,10 +69,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.serialPortsComboBox.clear()
 
     def handle_connect_button(self):
-        """Connect button opens the selected serial port and
+        """Connect/Disconnect button opens/closes the selected serial port and
            creates the serial worker thread. If the thread was
            already created previously and paused, it revives it."""
-        if self.connection_status == False:
+        if not self.connection_status:
             # print(self.serialPortsComboBox.currentText())
             if self.serialWo.open_port(self.ui.serialPortsComboBox.currentText()):
                 if self.serialWo.no_serial_worker:
@@ -92,11 +95,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.refreshButton.show()
             self.ui.send_text_edit.hide()
             self.ui.send_push_button.hide()
+            self.ui.statusLabel.setText("Not Connected")
 
-
-    def handle_disconnect_button(self):
-        """Disconnect button closes the serial port."""
-        self.serialWo.close_port()
+    def send_input(self):
+        """Send input to the serial port."""
+        self.serialTxQu.put(self.ui.send_text_edit.text() + "\n")
+        self.ui.send_text_edit.clear()
 
     def handle_unlock(self):
         print("unlock")
