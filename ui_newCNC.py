@@ -25,6 +25,15 @@ class Ui_MainWindow(object):
         MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setMinimumSize(QSize(926, 720))
         MainWindow.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.actionLoad = QAction(MainWindow)
+        self.actionLoad.setObjectName(u"actionLoad")
+        font = QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.actionLoad.setFont(font)
+        self.actionHide_Show_Console = QAction(MainWindow)
+        self.actionHide_Show_Console.setObjectName(u"actionHide_Show_Console")
+        self.actionHide_Show_Console.setCheckable(True)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
@@ -33,13 +42,200 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
-        self.controlTab = QWidget()
-        self.controlTab.setObjectName(u"controlTab")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        self.tabWidget.setFont(font)
+        self.viewTab = QWidget()
+        self.viewTab.setObjectName(u"viewTab")
+        self.viewTab.setFont(font)
+        self.horizontalLayout_8 = QHBoxLayout(self.viewTab)
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setSizeConstraint(QLayout.SetFixedSize)
+        self.drillFileLineEdit = QLineEdit(self.viewTab)
+        self.drillFileLineEdit.setObjectName(u"drillFileLineEdit")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.controlTab.sizePolicy().hasHeightForWidth())
-        self.controlTab.setSizePolicy(sizePolicy1)
+        sizePolicy1.setHeightForWidth(self.drillFileLineEdit.sizePolicy().hasHeightForWidth())
+        self.drillFileLineEdit.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.drillFileLineEdit, 4, 0, 1, 1)
+
+        self.checkBox_4 = QCheckBox(self.viewTab)
+        self.checkBox_4.setObjectName(u"checkBox_4")
+        sizePolicy1.setHeightForWidth(self.checkBox_4.sizePolicy().hasHeightForWidth())
+        self.checkBox_4.setSizePolicy(sizePolicy1)
+        self.checkBox_4.setChecked(True)
+
+        self.gridLayout.addWidget(self.checkBox_4, 5, 2, 1, 1)
+
+        self.pushButton_3 = QPushButton(self.viewTab)
+        self.pushButton_3.setObjectName(u"pushButton_3")
+        sizePolicy1.setHeightForWidth(self.pushButton_3.sizePolicy().hasHeightForWidth())
+        self.pushButton_3.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.pushButton_3, 6, 1, 1, 1)
+
+        self.drillViewCheckBox = QCheckBox(self.viewTab)
+        self.drillViewCheckBox.setObjectName(u"drillViewCheckBox")
+        sizePolicy1.setHeightForWidth(self.drillViewCheckBox.sizePolicy().hasHeightForWidth())
+        self.drillViewCheckBox.setSizePolicy(sizePolicy1)
+        self.drillViewCheckBox.setChecked(True)
+
+        self.gridLayout.addWidget(self.drillViewCheckBox, 4, 2, 1, 1)
+
+        self.lineEdit_3 = QLineEdit(self.viewTab)
+        self.lineEdit_3.setObjectName(u"lineEdit_3")
+        sizePolicy1.setHeightForWidth(self.lineEdit_3.sizePolicy().hasHeightForWidth())
+        self.lineEdit_3.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.lineEdit_3, 6, 0, 1, 1)
+
+        self.profileFileLineEdit = QLineEdit(self.viewTab)
+        self.profileFileLineEdit.setObjectName(u"profileFileLineEdit")
+        sizePolicy1.setHeightForWidth(self.profileFileLineEdit.sizePolicy().hasHeightForWidth())
+        self.profileFileLineEdit.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.profileFileLineEdit, 3, 0, 1, 1)
+
+        self.topFileLineEdit = QLineEdit(self.viewTab)
+        self.topFileLineEdit.setObjectName(u"topFileLineEdit")
+        sizePolicy1.setHeightForWidth(self.topFileLineEdit.sizePolicy().hasHeightForWidth())
+        self.topFileLineEdit.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.topFileLineEdit, 1, 0, 1, 1)
+
+        self.topLoadButton = QPushButton(self.viewTab)
+        self.topLoadButton.setObjectName(u"topLoadButton")
+        sizePolicy1.setHeightForWidth(self.topLoadButton.sizePolicy().hasHeightForWidth())
+        self.topLoadButton.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.topLoadButton, 1, 1, 1, 1)
+
+        self.bottomLoadButton = QPushButton(self.viewTab)
+        self.bottomLoadButton.setObjectName(u"bottomLoadButton")
+        sizePolicy1.setHeightForWidth(self.bottomLoadButton.sizePolicy().hasHeightForWidth())
+        self.bottomLoadButton.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.bottomLoadButton, 2, 1, 1, 1)
+
+        self.label = QLabel(self.viewTab)
+        self.label.setObjectName(u"label")
+        sizePolicy1.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+
+        self.bottomViewCheckBox = QCheckBox(self.viewTab)
+        self.bottomViewCheckBox.setObjectName(u"bottomViewCheckBox")
+        sizePolicy1.setHeightForWidth(self.bottomViewCheckBox.sizePolicy().hasHeightForWidth())
+        self.bottomViewCheckBox.setSizePolicy(sizePolicy1)
+        self.bottomViewCheckBox.setChecked(True)
+
+        self.gridLayout.addWidget(self.bottomViewCheckBox, 2, 2, 1, 1)
+
+        self.profileViewCheckBox = QCheckBox(self.viewTab)
+        self.profileViewCheckBox.setObjectName(u"profileViewCheckBox")
+        sizePolicy1.setHeightForWidth(self.profileViewCheckBox.sizePolicy().hasHeightForWidth())
+        self.profileViewCheckBox.setSizePolicy(sizePolicy1)
+        self.profileViewCheckBox.setChecked(True)
+
+        self.gridLayout.addWidget(self.profileViewCheckBox, 3, 2, 1, 1)
+
+        self.pushButton_2 = QPushButton(self.viewTab)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+        sizePolicy1.setHeightForWidth(self.pushButton_2.sizePolicy().hasHeightForWidth())
+        self.pushButton_2.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.pushButton_2, 5, 1, 1, 1)
+
+        self.label_6 = QLabel(self.viewTab)
+        self.label_6.setObjectName(u"label_6")
+        sizePolicy1.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
+        self.label_6.setSizePolicy(sizePolicy1)
+        self.label_6.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout.addWidget(self.label_6, 0, 2, 1, 1)
+
+        self.bottomFileLineEdit = QLineEdit(self.viewTab)
+        self.bottomFileLineEdit.setObjectName(u"bottomFileLineEdit")
+        sizePolicy1.setHeightForWidth(self.bottomFileLineEdit.sizePolicy().hasHeightForWidth())
+        self.bottomFileLineEdit.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.bottomFileLineEdit, 2, 0, 1, 1)
+
+        self.checkBox_5 = QCheckBox(self.viewTab)
+        self.checkBox_5.setObjectName(u"checkBox_5")
+        sizePolicy1.setHeightForWidth(self.checkBox_5.sizePolicy().hasHeightForWidth())
+        self.checkBox_5.setSizePolicy(sizePolicy1)
+        self.checkBox_5.setChecked(True)
+
+        self.gridLayout.addWidget(self.checkBox_5, 6, 2, 1, 1)
+
+        self.drillLoadButton = QPushButton(self.viewTab)
+        self.drillLoadButton.setObjectName(u"drillLoadButton")
+        sizePolicy1.setHeightForWidth(self.drillLoadButton.sizePolicy().hasHeightForWidth())
+        self.drillLoadButton.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.drillLoadButton, 4, 1, 1, 1)
+
+        self.lineEdit_2 = QLineEdit(self.viewTab)
+        self.lineEdit_2.setObjectName(u"lineEdit_2")
+        sizePolicy1.setHeightForWidth(self.lineEdit_2.sizePolicy().hasHeightForWidth())
+        self.lineEdit_2.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.lineEdit_2, 5, 0, 1, 1)
+
+        self.profileLoadButton = QPushButton(self.viewTab)
+        self.profileLoadButton.setObjectName(u"profileLoadButton")
+        sizePolicy1.setHeightForWidth(self.profileLoadButton.sizePolicy().hasHeightForWidth())
+        self.profileLoadButton.setSizePolicy(sizePolicy1)
+
+        self.gridLayout.addWidget(self.profileLoadButton, 3, 1, 1, 1)
+
+        self.topViewCheckBox = QCheckBox(self.viewTab)
+        self.topViewCheckBox.setObjectName(u"topViewCheckBox")
+        sizePolicy1.setHeightForWidth(self.topViewCheckBox.sizePolicy().hasHeightForWidth())
+        self.topViewCheckBox.setSizePolicy(sizePolicy1)
+        self.topViewCheckBox.setLayoutDirection(Qt.LeftToRight)
+        self.topViewCheckBox.setChecked(True)
+        self.topViewCheckBox.setTristate(False)
+
+        self.gridLayout.addWidget(self.topViewCheckBox, 1, 2, 1, 1)
+
+
+        self.verticalLayout_2.addLayout(self.gridLayout)
+
+        self.verticalSpacer = QSpacerItem(20, 448, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_2.addItem(self.verticalSpacer)
+
+
+        self.horizontalLayout_6.addLayout(self.verticalLayout_2)
+
+        self.viewCanvasWidget = QOpenGLWidget(self.viewTab)
+        self.viewCanvasWidget.setObjectName(u"viewCanvasWidget")
+        sizePolicy.setHeightForWidth(self.viewCanvasWidget.sizePolicy().hasHeightForWidth())
+        self.viewCanvasWidget.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout_6.addWidget(self.viewCanvasWidget)
+
+
+        self.horizontalLayout_8.addLayout(self.horizontalLayout_6)
+
+        self.tabWidget.addTab(self.viewTab, "")
+        self.controlTab = QWidget()
+        self.controlTab.setObjectName(u"controlTab")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.controlTab.sizePolicy().hasHeightForWidth())
+        self.controlTab.setSizePolicy(sizePolicy2)
+        self.controlTab.setFont(font)
         self.horizontalLayout_5 = QHBoxLayout(self.controlTab)
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.horizontalLayout_4 = QHBoxLayout()
@@ -49,16 +245,16 @@ class Ui_MainWindow(object):
         self.controlsVerticalLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.statusLabel = QLabel(self.controlTab)
         self.statusLabel.setObjectName(u"statusLabel")
-        sizePolicy2 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.statusLabel.sizePolicy().hasHeightForWidth())
-        self.statusLabel.setSizePolicy(sizePolicy2)
-        font = QFont()
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.statusLabel.setFont(font)
+        sizePolicy3 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.statusLabel.sizePolicy().hasHeightForWidth())
+        self.statusLabel.setSizePolicy(sizePolicy3)
+        font1 = QFont()
+        font1.setPointSize(12)
+        font1.setBold(True)
+        font1.setWeight(75)
+        self.statusLabel.setFont(font1)
         self.statusLabel.setAlignment(Qt.AlignCenter)
 
         self.controlsVerticalLayout.addWidget(self.statusLabel)
@@ -69,12 +265,9 @@ class Ui_MainWindow(object):
         self.droGridLayout.setVerticalSpacing(6)
         self.zAxisLabel = QLabel(self.controlTab)
         self.zAxisLabel.setObjectName(u"zAxisLabel")
-        sizePolicy2.setHeightForWidth(self.zAxisLabel.sizePolicy().hasHeightForWidth())
-        self.zAxisLabel.setSizePolicy(sizePolicy2)
-        font1 = QFont()
-        font1.setBold(True)
-        font1.setWeight(75)
-        self.zAxisLabel.setFont(font1)
+        sizePolicy3.setHeightForWidth(self.zAxisLabel.sizePolicy().hasHeightForWidth())
+        self.zAxisLabel.setSizePolicy(sizePolicy3)
+        self.zAxisLabel.setFont(font)
         self.zAxisLabel.setLayoutDirection(Qt.LeftToRight)
         self.zAxisLabel.setFrameShape(QFrame.NoFrame)
         self.zAxisLabel.setFrameShadow(QFrame.Plain)
@@ -84,8 +277,8 @@ class Ui_MainWindow(object):
 
         self.label_10 = QLabel(self.controlTab)
         self.label_10.setObjectName(u"label_10")
-        sizePolicy2.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
-        self.label_10.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
+        self.label_10.setSizePolicy(sizePolicy3)
         self.label_10.setLayoutDirection(Qt.LeftToRight)
         self.label_10.setFrameShape(QFrame.NoFrame)
         self.label_10.setFrameShadow(QFrame.Plain)
@@ -95,20 +288,20 @@ class Ui_MainWindow(object):
 
         self.zero_z_pushButton = QPushButton(self.controlTab)
         self.zero_z_pushButton.setObjectName(u"zero_z_pushButton")
-        self.zero_z_pushButton.setFont(font1)
+        self.zero_z_pushButton.setFont(font)
 
         self.droGridLayout.addWidget(self.zero_z_pushButton, 3, 3, 1, 1)
 
         self.zero_xyz_pushButton = QPushButton(self.controlTab)
         self.zero_xyz_pushButton.setObjectName(u"zero_xyz_pushButton")
-        self.zero_xyz_pushButton.setFont(font1)
+        self.zero_xyz_pushButton.setFont(font)
 
         self.droGridLayout.addWidget(self.zero_xyz_pushButton, 3, 0, 1, 1)
 
         self.label_9 = QLabel(self.controlTab)
         self.label_9.setObjectName(u"label_9")
-        sizePolicy2.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
-        self.label_9.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
+        self.label_9.setSizePolicy(sizePolicy3)
         self.label_9.setLayoutDirection(Qt.LeftToRight)
         self.label_9.setFrameShape(QFrame.NoFrame)
         self.label_9.setFrameShadow(QFrame.Plain)
@@ -118,8 +311,8 @@ class Ui_MainWindow(object):
 
         self.label_11 = QLabel(self.controlTab)
         self.label_11.setObjectName(u"label_11")
-        sizePolicy2.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
-        self.label_11.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
+        self.label_11.setSizePolicy(sizePolicy3)
         self.label_11.setLayoutDirection(Qt.LeftToRight)
         self.label_11.setFrameShape(QFrame.NoFrame)
         self.label_11.setFrameShadow(QFrame.Plain)
@@ -129,15 +322,15 @@ class Ui_MainWindow(object):
 
         self.zero_y_pushButton = QPushButton(self.controlTab)
         self.zero_y_pushButton.setObjectName(u"zero_y_pushButton")
-        self.zero_y_pushButton.setFont(font1)
+        self.zero_y_pushButton.setFont(font)
 
         self.droGridLayout.addWidget(self.zero_y_pushButton, 3, 2, 1, 1)
 
         self.xAxisLabel = QLabel(self.controlTab)
         self.xAxisLabel.setObjectName(u"xAxisLabel")
-        sizePolicy2.setHeightForWidth(self.xAxisLabel.sizePolicy().hasHeightForWidth())
-        self.xAxisLabel.setSizePolicy(sizePolicy2)
-        self.xAxisLabel.setFont(font1)
+        sizePolicy3.setHeightForWidth(self.xAxisLabel.sizePolicy().hasHeightForWidth())
+        self.xAxisLabel.setSizePolicy(sizePolicy3)
+        self.xAxisLabel.setFont(font)
         self.xAxisLabel.setLayoutDirection(Qt.LeftToRight)
         self.xAxisLabel.setFrameShape(QFrame.NoFrame)
         self.xAxisLabel.setFrameShadow(QFrame.Plain)
@@ -147,15 +340,15 @@ class Ui_MainWindow(object):
 
         self.zero_x_pushButton = QPushButton(self.controlTab)
         self.zero_x_pushButton.setObjectName(u"zero_x_pushButton")
-        self.zero_x_pushButton.setFont(font1)
+        self.zero_x_pushButton.setFont(font)
 
         self.droGridLayout.addWidget(self.zero_x_pushButton, 3, 1, 1, 1)
 
         self.xAxisLabel_2 = QLabel(self.controlTab)
         self.xAxisLabel_2.setObjectName(u"xAxisLabel_2")
-        sizePolicy2.setHeightForWidth(self.xAxisLabel_2.sizePolicy().hasHeightForWidth())
-        self.xAxisLabel_2.setSizePolicy(sizePolicy2)
-        self.xAxisLabel_2.setFont(font1)
+        sizePolicy3.setHeightForWidth(self.xAxisLabel_2.sizePolicy().hasHeightForWidth())
+        self.xAxisLabel_2.setSizePolicy(sizePolicy3)
+        self.xAxisLabel_2.setFont(font)
         self.xAxisLabel_2.setLayoutDirection(Qt.LeftToRight)
         self.xAxisLabel_2.setFrameShape(QFrame.NoFrame)
         self.xAxisLabel_2.setFrameShadow(QFrame.Plain)
@@ -165,9 +358,9 @@ class Ui_MainWindow(object):
 
         self.yAxisLabel = QLabel(self.controlTab)
         self.yAxisLabel.setObjectName(u"yAxisLabel")
-        sizePolicy2.setHeightForWidth(self.yAxisLabel.sizePolicy().hasHeightForWidth())
-        self.yAxisLabel.setSizePolicy(sizePolicy2)
-        self.yAxisLabel.setFont(font1)
+        sizePolicy3.setHeightForWidth(self.yAxisLabel.sizePolicy().hasHeightForWidth())
+        self.yAxisLabel.setSizePolicy(sizePolicy3)
+        self.yAxisLabel.setFont(font)
         self.yAxisLabel.setLayoutDirection(Qt.LeftToRight)
         self.yAxisLabel.setFrameShape(QFrame.NoFrame)
         self.yAxisLabel.setFrameShadow(QFrame.Plain)
@@ -177,9 +370,9 @@ class Ui_MainWindow(object):
 
         self.label_12 = QLabel(self.controlTab)
         self.label_12.setObjectName(u"label_12")
-        sizePolicy2.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
-        self.label_12.setSizePolicy(sizePolicy2)
-        self.label_12.setFont(font1)
+        sizePolicy3.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
+        self.label_12.setSizePolicy(sizePolicy3)
+        self.label_12.setFont(font)
         self.label_12.setLayoutDirection(Qt.LeftToRight)
         self.label_12.setFrameShape(QFrame.NoFrame)
         self.label_12.setFrameShadow(QFrame.Plain)
@@ -189,8 +382,8 @@ class Ui_MainWindow(object):
 
         self.mpos_y_label = QLabel(self.controlTab)
         self.mpos_y_label.setObjectName(u"mpos_y_label")
-        sizePolicy2.setHeightForWidth(self.mpos_y_label.sizePolicy().hasHeightForWidth())
-        self.mpos_y_label.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.mpos_y_label.sizePolicy().hasHeightForWidth())
+        self.mpos_y_label.setSizePolicy(sizePolicy3)
         self.mpos_y_label.setLayoutDirection(Qt.LeftToRight)
         self.mpos_y_label.setFrameShape(QFrame.NoFrame)
         self.mpos_y_label.setFrameShadow(QFrame.Plain)
@@ -200,8 +393,8 @@ class Ui_MainWindow(object):
 
         self.mpos_x_label = QLabel(self.controlTab)
         self.mpos_x_label.setObjectName(u"mpos_x_label")
-        sizePolicy2.setHeightForWidth(self.mpos_x_label.sizePolicy().hasHeightForWidth())
-        self.mpos_x_label.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.mpos_x_label.sizePolicy().hasHeightForWidth())
+        self.mpos_x_label.setSizePolicy(sizePolicy3)
         self.mpos_x_label.setLayoutDirection(Qt.LeftToRight)
         self.mpos_x_label.setFrameShape(QFrame.NoFrame)
         self.mpos_x_label.setFrameShadow(QFrame.Plain)
@@ -211,8 +404,8 @@ class Ui_MainWindow(object):
 
         self.mpos_z_label = QLabel(self.controlTab)
         self.mpos_z_label.setObjectName(u"mpos_z_label")
-        sizePolicy2.setHeightForWidth(self.mpos_z_label.sizePolicy().hasHeightForWidth())
-        self.mpos_z_label.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.mpos_z_label.sizePolicy().hasHeightForWidth())
+        self.mpos_z_label.setSizePolicy(sizePolicy3)
         self.mpos_z_label.setLayoutDirection(Qt.LeftToRight)
         self.mpos_z_label.setFrameShape(QFrame.NoFrame)
         self.mpos_z_label.setFrameShadow(QFrame.Plain)
@@ -222,9 +415,9 @@ class Ui_MainWindow(object):
 
         self.label_5 = QLabel(self.controlTab)
         self.label_5.setObjectName(u"label_5")
-        sizePolicy2.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-        self.label_5.setSizePolicy(sizePolicy2)
-        self.label_5.setFont(font1)
+        sizePolicy3.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+        self.label_5.setSizePolicy(sizePolicy3)
+        self.label_5.setFont(font)
         self.label_5.setLayoutDirection(Qt.LeftToRight)
         self.label_5.setFrameShape(QFrame.NoFrame)
         self.label_5.setFrameShadow(QFrame.Plain)
@@ -240,20 +433,17 @@ class Ui_MainWindow(object):
         self.unlockHomingHorizontalLayout.setContentsMargins(20, 20, 20, 20)
         self.unlockButton = QPushButton(self.controlTab)
         self.unlockButton.setObjectName(u"unlockButton")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.unlockButton.sizePolicy().hasHeightForWidth())
-        self.unlockButton.setSizePolicy(sizePolicy3)
-        self.unlockButton.setFont(font1)
+        sizePolicy1.setHeightForWidth(self.unlockButton.sizePolicy().hasHeightForWidth())
+        self.unlockButton.setSizePolicy(sizePolicy1)
+        self.unlockButton.setFont(font)
 
         self.unlockHomingHorizontalLayout.addWidget(self.unlockButton)
 
         self.homingButton = QPushButton(self.controlTab)
         self.homingButton.setObjectName(u"homingButton")
-        sizePolicy3.setHeightForWidth(self.homingButton.sizePolicy().hasHeightForWidth())
-        self.homingButton.setSizePolicy(sizePolicy3)
-        self.homingButton.setFont(font1)
+        sizePolicy1.setHeightForWidth(self.homingButton.sizePolicy().hasHeightForWidth())
+        self.homingButton.setSizePolicy(sizePolicy1)
+        self.homingButton.setFont(font)
 
         self.unlockHomingHorizontalLayout.addWidget(self.homingButton)
 
@@ -265,64 +455,64 @@ class Ui_MainWindow(object):
         self.gridLayoutDirections.setContentsMargins(5, 5, 5, 5)
         self.xYMinusPlusButton = QPushButton(self.controlTab)
         self.xYMinusPlusButton.setObjectName(u"xYMinusPlusButton")
-        sizePolicy3.setHeightForWidth(self.xYMinusPlusButton.sizePolicy().hasHeightForWidth())
-        self.xYMinusPlusButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.xYMinusPlusButton.sizePolicy().hasHeightForWidth())
+        self.xYMinusPlusButton.setSizePolicy(sizePolicy1)
 
         self.gridLayoutDirections.addWidget(self.xYMinusPlusButton, 0, 0, 1, 1)
 
         self.yPlusButton = QPushButton(self.controlTab)
         self.yPlusButton.setObjectName(u"yPlusButton")
-        sizePolicy3.setHeightForWidth(self.yPlusButton.sizePolicy().hasHeightForWidth())
-        self.yPlusButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.yPlusButton.sizePolicy().hasHeightForWidth())
+        self.yPlusButton.setSizePolicy(sizePolicy1)
 
         self.gridLayoutDirections.addWidget(self.yPlusButton, 0, 1, 1, 1)
 
         self.xYPlusButton = QPushButton(self.controlTab)
         self.xYPlusButton.setObjectName(u"xYPlusButton")
-        sizePolicy3.setHeightForWidth(self.xYPlusButton.sizePolicy().hasHeightForWidth())
-        self.xYPlusButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.xYPlusButton.sizePolicy().hasHeightForWidth())
+        self.xYPlusButton.setSizePolicy(sizePolicy1)
 
         self.gridLayoutDirections.addWidget(self.xYPlusButton, 0, 2, 1, 1)
 
         self.xMinusButton = QPushButton(self.controlTab)
         self.xMinusButton.setObjectName(u"xMinusButton")
-        sizePolicy3.setHeightForWidth(self.xMinusButton.sizePolicy().hasHeightForWidth())
-        self.xMinusButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.xMinusButton.sizePolicy().hasHeightForWidth())
+        self.xMinusButton.setSizePolicy(sizePolicy1)
 
         self.gridLayoutDirections.addWidget(self.xMinusButton, 1, 0, 1, 1)
 
         self.centerButton = QPushButton(self.controlTab)
         self.centerButton.setObjectName(u"centerButton")
-        sizePolicy3.setHeightForWidth(self.centerButton.sizePolicy().hasHeightForWidth())
-        self.centerButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.centerButton.sizePolicy().hasHeightForWidth())
+        self.centerButton.setSizePolicy(sizePolicy1)
 
         self.gridLayoutDirections.addWidget(self.centerButton, 1, 1, 1, 1)
 
         self.xPlusButton = QPushButton(self.controlTab)
         self.xPlusButton.setObjectName(u"xPlusButton")
-        sizePolicy3.setHeightForWidth(self.xPlusButton.sizePolicy().hasHeightForWidth())
-        self.xPlusButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.xPlusButton.sizePolicy().hasHeightForWidth())
+        self.xPlusButton.setSizePolicy(sizePolicy1)
 
         self.gridLayoutDirections.addWidget(self.xPlusButton, 1, 2, 1, 1)
 
         self.xYMinusButton = QPushButton(self.controlTab)
         self.xYMinusButton.setObjectName(u"xYMinusButton")
-        sizePolicy3.setHeightForWidth(self.xYMinusButton.sizePolicy().hasHeightForWidth())
-        self.xYMinusButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.xYMinusButton.sizePolicy().hasHeightForWidth())
+        self.xYMinusButton.setSizePolicy(sizePolicy1)
 
         self.gridLayoutDirections.addWidget(self.xYMinusButton, 2, 0, 1, 1)
 
         self.yMinusButton = QPushButton(self.controlTab)
         self.yMinusButton.setObjectName(u"yMinusButton")
-        sizePolicy3.setHeightForWidth(self.yMinusButton.sizePolicy().hasHeightForWidth())
-        self.yMinusButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.yMinusButton.sizePolicy().hasHeightForWidth())
+        self.yMinusButton.setSizePolicy(sizePolicy1)
 
         self.gridLayoutDirections.addWidget(self.yMinusButton, 2, 1, 1, 1)
 
         self.xYPlusMinuButton = QPushButton(self.controlTab)
         self.xYPlusMinuButton.setObjectName(u"xYPlusMinuButton")
-        sizePolicy3.setHeightForWidth(self.xYPlusMinuButton.sizePolicy().hasHeightForWidth())
-        self.xYPlusMinuButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.xYPlusMinuButton.sizePolicy().hasHeightForWidth())
+        self.xYPlusMinuButton.setSizePolicy(sizePolicy1)
 
         self.gridLayoutDirections.addWidget(self.xYPlusMinuButton, 2, 2, 1, 1)
 
@@ -336,16 +526,16 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.label_3 = QLabel(self.controlTab)
         self.label_3.setObjectName(u"label_3")
-        sizePolicy3.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
-        self.label_3.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
+        self.label_3.setSizePolicy(sizePolicy1)
         self.label_3.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_5.addWidget(self.label_3)
 
         self.doubleSpinBox_2 = QDoubleSpinBox(self.controlTab)
         self.doubleSpinBox_2.setObjectName(u"doubleSpinBox_2")
-        sizePolicy3.setHeightForWidth(self.doubleSpinBox_2.sizePolicy().hasHeightForWidth())
-        self.doubleSpinBox_2.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.doubleSpinBox_2.sizePolicy().hasHeightForWidth())
+        self.doubleSpinBox_2.setSizePolicy(sizePolicy1)
 
         self.verticalLayout_5.addWidget(self.doubleSpinBox_2)
 
@@ -356,16 +546,16 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_4 = QLabel(self.controlTab)
         self.label_4.setObjectName(u"label_4")
-        sizePolicy3.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
-        self.label_4.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
+        self.label_4.setSizePolicy(sizePolicy1)
         self.label_4.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_4.addWidget(self.label_4)
 
         self.doubleSpinBox = QDoubleSpinBox(self.controlTab)
         self.doubleSpinBox.setObjectName(u"doubleSpinBox")
-        sizePolicy3.setHeightForWidth(self.doubleSpinBox.sizePolicy().hasHeightForWidth())
-        self.doubleSpinBox.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.doubleSpinBox.sizePolicy().hasHeightForWidth())
+        self.doubleSpinBox.setSizePolicy(sizePolicy1)
 
         self.verticalLayout_4.addWidget(self.doubleSpinBox)
 
@@ -377,15 +567,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.zPlusButton = QPushButton(self.controlTab)
         self.zPlusButton.setObjectName(u"zPlusButton")
-        sizePolicy3.setHeightForWidth(self.zPlusButton.sizePolicy().hasHeightForWidth())
-        self.zPlusButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.zPlusButton.sizePolicy().hasHeightForWidth())
+        self.zPlusButton.setSizePolicy(sizePolicy1)
 
         self.verticalLayout_3.addWidget(self.zPlusButton)
 
         self.zMinusButton = QPushButton(self.controlTab)
         self.zMinusButton.setObjectName(u"zMinusButton")
-        sizePolicy3.setHeightForWidth(self.zMinusButton.sizePolicy().hasHeightForWidth())
-        self.zMinusButton.setSizePolicy(sizePolicy3)
+        sizePolicy1.setHeightForWidth(self.zMinusButton.sizePolicy().hasHeightForWidth())
+        self.zMinusButton.setSizePolicy(sizePolicy1)
 
         self.verticalLayout_3.addWidget(self.zMinusButton)
 
@@ -421,7 +611,7 @@ class Ui_MainWindow(object):
         sizePolicy4.setVerticalStretch(0)
         sizePolicy4.setHeightForWidth(self.send_push_button.sizePolicy().hasHeightForWidth())
         self.send_push_button.setSizePolicy(sizePolicy4)
-        self.send_push_button.setFont(font1)
+        self.send_push_button.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.send_push_button)
 
@@ -449,7 +639,7 @@ class Ui_MainWindow(object):
         self.refreshButton.setObjectName(u"refreshButton")
         sizePolicy4.setHeightForWidth(self.refreshButton.sizePolicy().hasHeightForWidth())
         self.refreshButton.setSizePolicy(sizePolicy4)
-        self.refreshButton.setFont(font1)
+        self.refreshButton.setFont(font)
         self.refreshButton.setCheckable(False)
 
         self.horizontalLayout.addWidget(self.refreshButton)
@@ -470,7 +660,7 @@ class Ui_MainWindow(object):
         sizePolicy6.setVerticalStretch(0)
         sizePolicy6.setHeightForWidth(self.checkBox.sizePolicy().hasHeightForWidth())
         self.checkBox.setSizePolicy(sizePolicy6)
-        self.checkBox.setFont(font1)
+        self.checkBox.setFont(font)
         self.checkBox.setChecked(True)
         self.splitter_2.addWidget(self.checkBox)
         self.clearTerminalButton = QPushButton(self.splitter_2)
@@ -478,13 +668,13 @@ class Ui_MainWindow(object):
         self.clearTerminalButton.setEnabled(True)
         sizePolicy6.setHeightForWidth(self.clearTerminalButton.sizePolicy().hasHeightForWidth())
         self.clearTerminalButton.setSizePolicy(sizePolicy6)
-        self.clearTerminalButton.setFont(font1)
+        self.clearTerminalButton.setFont(font)
         self.splitter_2.addWidget(self.clearTerminalButton)
         self.connectButton = QPushButton(self.splitter_2)
         self.connectButton.setObjectName(u"connectButton")
-        sizePolicy3.setHeightForWidth(self.connectButton.sizePolicy().hasHeightForWidth())
-        self.connectButton.setSizePolicy(sizePolicy3)
-        self.connectButton.setFont(font1)
+        sizePolicy1.setHeightForWidth(self.connectButton.sizePolicy().hasHeightForWidth())
+        self.connectButton.setSizePolicy(sizePolicy1)
+        self.connectButton.setFont(font)
         self.splitter_2.addWidget(self.connectButton)
 
         self.terminalVerticalLayout.addWidget(self.splitter_2)
@@ -513,31 +703,29 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5.addLayout(self.horizontalLayout_4)
 
         self.tabWidget.addTab(self.controlTab, "")
-        self.tab_2 = QWidget()
-        self.tab_2.setObjectName(u"tab_2")
-        self.horizontalLayout_7 = QHBoxLayout(self.tab_2)
+        self.alignTab = QWidget()
+        self.alignTab.setObjectName(u"alignTab")
+        self.alignTab.setFont(font)
+        self.horizontalLayout_7 = QHBoxLayout(self.alignTab)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.openGLWidget_2 = QOpenGLWidget(self.tab_2)
+        self.openGLWidget_2 = QOpenGLWidget(self.alignTab)
         self.openGLWidget_2.setObjectName(u"openGLWidget_2")
 
         self.horizontalLayout_7.addWidget(self.openGLWidget_2)
 
-        self.label_2 = QLabel(self.tab_2)
+        self.label_2 = QLabel(self.alignTab)
         self.label_2.setObjectName(u"label_2")
 
         self.horizontalLayout_7.addWidget(self.label_2)
 
-        self.verticalSlider = QSlider(self.tab_2)
+        self.verticalSlider = QSlider(self.alignTab)
         self.verticalSlider.setObjectName(u"verticalSlider")
         self.verticalSlider.setMaximum(255)
         self.verticalSlider.setOrientation(Qt.Vertical)
 
         self.horizontalLayout_7.addWidget(self.verticalSlider)
 
-        self.tabWidget.addTab(self.tab_2, "")
-        self.tab_3 = QWidget()
-        self.tab_3.setObjectName(u"tab_3")
-        self.tabWidget.addTab(self.tab_3, "")
+        self.tabWidget.addTab(self.alignTab, "")
 
         self.horizontalLayout_3.addWidget(self.tabWidget)
 
@@ -545,10 +733,20 @@ class Ui_MainWindow(object):
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 1039, 21))
+        self.menuFile = QMenu(self.menubar)
+        self.menuFile.setObjectName(u"menuFile")
+        self.menuFile.setFont(font)
+        self.menuConsole = QMenu(self.menubar)
+        self.menuConsole.setObjectName(u"menuConsole")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+        self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuConsole.menuAction())
+        self.menuFile.addAction(self.actionLoad)
+        self.menuConsole.addAction(self.actionHide_Show_Console)
 
         self.retranslateUi(MainWindow)
 
@@ -560,6 +758,28 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"newCNC", None))
+        self.actionLoad.setText(QCoreApplication.translate("MainWindow", u"Open", None))
+#if QT_CONFIG(shortcut)
+        self.actionLoad.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+O", None))
+#endif // QT_CONFIG(shortcut)
+        self.actionHide_Show_Console.setText(QCoreApplication.translate("MainWindow", u"Hide/Show Console", None))
+#if QT_CONFIG(shortcut)
+        self.actionHide_Show_Console.setShortcut(QCoreApplication.translate("MainWindow", u"Shift+C", None))
+#endif // QT_CONFIG(shortcut)
+        self.checkBox_4.setText("")
+        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
+        self.drillViewCheckBox.setText("")
+        self.topLoadButton.setText(QCoreApplication.translate("MainWindow", u"TOP", None))
+        self.bottomLoadButton.setText(QCoreApplication.translate("MainWindow", u"BOTTOM", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"File Path", None))
+        self.bottomViewCheckBox.setText("")
+        self.profileViewCheckBox.setText("")
+        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"View", None))
+        self.checkBox_5.setText("")
+        self.drillLoadButton.setText(QCoreApplication.translate("MainWindow", u"DRILL", None))
+        self.profileLoadButton.setText(QCoreApplication.translate("MainWindow", u"PROFILE", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.viewTab), QCoreApplication.translate("MainWindow", u"VIEW", None))
         self.statusLabel.setText(QCoreApplication.translate("MainWindow", u"Not Connected", None))
         self.zAxisLabel.setText(QCoreApplication.translate("MainWindow", u"Z", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"0.0", None))
@@ -611,7 +831,8 @@ class Ui_MainWindow(object):
         self.connectButton.setText(QCoreApplication.translate("MainWindow", u"Connect", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.controlTab), QCoreApplication.translate("MainWindow", u"CONTROL", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Tab 2", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("MainWindow", u"Tab 3", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.alignTab), QCoreApplication.translate("MainWindow", u"ALIGN", None))
+        self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
+        self.menuConsole.setTitle(QCoreApplication.translate("MainWindow", u"Console", None))
     # retranslateUi
 
