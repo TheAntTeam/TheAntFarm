@@ -9,6 +9,8 @@ from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui 
 from serial_thread import SerialWorker
 from controller_thread import ControllerWorker
 from style_manager import StyleManager
+from pcb_manager import PcbObj
+from visual_manager import VisualLayer
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -23,6 +25,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self.vl = VisualLayer(self.ui.viewCanvasWidget)
         self.ui.refreshButton.clicked.connect(self.handle_refresh_button)
         self.ui.connectButton.clicked.connect(self.handle_connect_button)
         self.ui.unlockButton.clicked.connect(self.handle_unlock)
@@ -131,11 +134,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def load_gerber_file(self, load_text, extensions):
         filters = extensions + ";;All files (*.*)"
         selected_filter = extensions
-        # options = ""  # ???
+        # options = ""  # Options for the visualization of loading interface.
         load_file_path = QtWidgets.QFileDialog.getOpenFileName(self, load_text, self.last_open_dir, filters, selected_filter)
         if load_file_path[0]:
             self.last_open_dir = os.path.dirname(load_file_path[0])
             self.ui.consoleTextEdit.append("Loading " + load_file_path[0])
+            pcb = PcbObj()
+            pcb.load_gerber(load_file_path[0], 'top')
+            pcb.get_gerber('top')
+            top_layer = pcb.get_gerber_layer('top')
+            self.vl.add_layer(top_layer[0], color="red")
 
 
 if __name__ == "__main__":

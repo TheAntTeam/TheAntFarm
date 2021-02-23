@@ -12,6 +12,8 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+from vispy_qt_widget import VispyCanvas
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -217,7 +219,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_6.addLayout(self.verticalLayout_2)
 
-        self.viewCanvasWidget = QOpenGLWidget(self.viewTab)
+        self.viewCanvasWidget = VispyCanvas(self.viewTab)
         self.viewCanvasWidget.setObjectName(u"viewCanvasWidget")
         sizePolicy.setHeightForWidth(self.viewCanvasWidget.sizePolicy().hasHeightForWidth())
         self.viewCanvasWidget.setSizePolicy(sizePolicy)

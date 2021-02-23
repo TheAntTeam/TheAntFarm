@@ -348,7 +348,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QOpenGLWidget" name="viewCanvasWidget">
+           <widget class="VispyCanvas" name="viewCanvasWidget">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -1396,6 +1396,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VispyCanvas</class>
+   <extends>QOpenGLWidget</extends>
+   <header>vispy_qt_widget</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
