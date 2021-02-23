@@ -1,3 +1,4 @@
+import os
 import sys
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QMainWindow, QApplication
@@ -8,8 +9,6 @@ from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui 
 from serial_thread import SerialWorker
 from controller_thread import ControllerWorker
 from style_manager import StyleManager
-# from PySide2.QtOpenGLWidgets import *
-from PySide2.QtOpenGL import *
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -19,6 +18,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__()
         self.connection_status = False
+        self.last_open_dir = "."
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -34,6 +34,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.send_push_button.clicked.connect(self.send_input)
         self.ui.send_text_edit.hide()
         self.ui.send_push_button.hide()
+        self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
+        self.ui.topLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Top Gerber File", "Gerber (*.gbr *.GBR)"))
+        self.ui.bottomLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Bottom Gerber File", "Gerber (*.gbr *.GBR)"))
+        self.ui.profileLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Profile Gerber File", "Gerber (*.gbr *.GBR)"))
+        self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Drill Excellon File", "Excellon (*.xln *.XLN)"))
 
         # Visualization Worker Thread, started as soon as the thread pool is started. Pass the figure to plot on.
         self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.ui)
@@ -116,6 +121,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handle_clear_terminal(self):
         self.ui.textEdit.clear()
+
+    def hide_show_console(self):
+        if(self.ui.actionHide_Show_Console.isChecked()):
+            self.ui.consoleTextEdit.show()
+        else:
+            self.ui.consoleTextEdit.hide()
+
+    def load_gerber_file(self, load_text, extensions):
+        filters = extensions + ";;All files (*.*)"
+        selected_filter = extensions
+        # options = ""  # ???
+        load_file_path = QtWidgets.QFileDialog.getOpenFileName(self, load_text, self.last_open_dir, filters, selected_filter)
+        if load_file_path[0]:
+            self.last_open_dir = os.path.dirname(load_file_path[0])
+            self.ui.consoleTextEdit.append("Loading " + load_file_path[0])
 
 
 if __name__ == "__main__":

@@ -34,12 +34,13 @@ class Ui_MainWindow(object):
         self.actionHide_Show_Console = QAction(MainWindow)
         self.actionHide_Show_Console.setObjectName(u"actionHide_Show_Console")
         self.actionHide_Show_Console.setCheckable(True)
+        self.actionHide_Show_Console.setChecked(True)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
         self.centralwidget.setSizePolicy(sizePolicy)
-        self.horizontalLayout_3 = QHBoxLayout(self.centralwidget)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.verticalLayout_6 = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setFont(font)
@@ -71,7 +72,7 @@ class Ui_MainWindow(object):
         self.checkBox_4.setSizePolicy(sizePolicy1)
         self.checkBox_4.setChecked(True)
 
-        self.gridLayout.addWidget(self.checkBox_4, 5, 2, 1, 1)
+        self.gridLayout.addWidget(self.checkBox_4, 5, 2, 1, 1, Qt.AlignHCenter)
 
         self.pushButton_3 = QPushButton(self.viewTab)
         self.pushButton_3.setObjectName(u"pushButton_3")
@@ -86,7 +87,7 @@ class Ui_MainWindow(object):
         self.drillViewCheckBox.setSizePolicy(sizePolicy1)
         self.drillViewCheckBox.setChecked(True)
 
-        self.gridLayout.addWidget(self.drillViewCheckBox, 4, 2, 1, 1)
+        self.gridLayout.addWidget(self.drillViewCheckBox, 4, 2, 1, 1, Qt.AlignHCenter)
 
         self.lineEdit_3 = QLineEdit(self.viewTab)
         self.lineEdit_3.setObjectName(u"lineEdit_3")
@@ -123,12 +124,12 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.bottomLoadButton, 2, 1, 1, 1)
 
-        self.label = QLabel(self.viewTab)
-        self.label.setObjectName(u"label")
-        sizePolicy1.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy1)
+        self.filePathLabel = QLabel(self.viewTab)
+        self.filePathLabel.setObjectName(u"filePathLabel")
+        sizePolicy1.setHeightForWidth(self.filePathLabel.sizePolicy().hasHeightForWidth())
+        self.filePathLabel.setSizePolicy(sizePolicy1)
 
-        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.filePathLabel, 0, 0, 1, 1, Qt.AlignHCenter)
 
         self.bottomViewCheckBox = QCheckBox(self.viewTab)
         self.bottomViewCheckBox.setObjectName(u"bottomViewCheckBox")
@@ -136,7 +137,7 @@ class Ui_MainWindow(object):
         self.bottomViewCheckBox.setSizePolicy(sizePolicy1)
         self.bottomViewCheckBox.setChecked(True)
 
-        self.gridLayout.addWidget(self.bottomViewCheckBox, 2, 2, 1, 1)
+        self.gridLayout.addWidget(self.bottomViewCheckBox, 2, 2, 1, 1, Qt.AlignHCenter)
 
         self.profileViewCheckBox = QCheckBox(self.viewTab)
         self.profileViewCheckBox.setObjectName(u"profileViewCheckBox")
@@ -144,7 +145,7 @@ class Ui_MainWindow(object):
         self.profileViewCheckBox.setSizePolicy(sizePolicy1)
         self.profileViewCheckBox.setChecked(True)
 
-        self.gridLayout.addWidget(self.profileViewCheckBox, 3, 2, 1, 1)
+        self.gridLayout.addWidget(self.profileViewCheckBox, 3, 2, 1, 1, Qt.AlignHCenter)
 
         self.pushButton_2 = QPushButton(self.viewTab)
         self.pushButton_2.setObjectName(u"pushButton_2")
@@ -153,13 +154,13 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.pushButton_2, 5, 1, 1, 1)
 
-        self.label_6 = QLabel(self.viewTab)
-        self.label_6.setObjectName(u"label_6")
-        sizePolicy1.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
-        self.label_6.setSizePolicy(sizePolicy1)
-        self.label_6.setAlignment(Qt.AlignCenter)
+        self.viewLabel = QLabel(self.viewTab)
+        self.viewLabel.setObjectName(u"viewLabel")
+        sizePolicy1.setHeightForWidth(self.viewLabel.sizePolicy().hasHeightForWidth())
+        self.viewLabel.setSizePolicy(sizePolicy1)
+        self.viewLabel.setAlignment(Qt.AlignCenter)
 
-        self.gridLayout.addWidget(self.label_6, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.viewLabel, 0, 2, 1, 1, Qt.AlignHCenter)
 
         self.bottomFileLineEdit = QLineEdit(self.viewTab)
         self.bottomFileLineEdit.setObjectName(u"bottomFileLineEdit")
@@ -174,7 +175,7 @@ class Ui_MainWindow(object):
         self.checkBox_5.setSizePolicy(sizePolicy1)
         self.checkBox_5.setChecked(True)
 
-        self.gridLayout.addWidget(self.checkBox_5, 6, 2, 1, 1)
+        self.gridLayout.addWidget(self.checkBox_5, 6, 2, 1, 1, Qt.AlignHCenter)
 
         self.drillLoadButton = QPushButton(self.viewTab)
         self.drillLoadButton.setObjectName(u"drillLoadButton")
@@ -201,11 +202,10 @@ class Ui_MainWindow(object):
         self.topViewCheckBox.setObjectName(u"topViewCheckBox")
         sizePolicy1.setHeightForWidth(self.topViewCheckBox.sizePolicy().hasHeightForWidth())
         self.topViewCheckBox.setSizePolicy(sizePolicy1)
-        self.topViewCheckBox.setLayoutDirection(Qt.LeftToRight)
         self.topViewCheckBox.setChecked(True)
         self.topViewCheckBox.setTristate(False)
 
-        self.gridLayout.addWidget(self.topViewCheckBox, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.topViewCheckBox, 1, 2, 1, 1, Qt.AlignHCenter)
 
 
         self.verticalLayout_2.addLayout(self.gridLayout)
@@ -727,7 +727,12 @@ class Ui_MainWindow(object):
 
         self.tabWidget.addTab(self.alignTab, "")
 
-        self.horizontalLayout_3.addWidget(self.tabWidget)
+        self.verticalLayout_6.addWidget(self.tabWidget)
+
+        self.consoleTextEdit = QTextEdit(self.centralwidget)
+        self.consoleTextEdit.setObjectName(u"consoleTextEdit")
+
+        self.verticalLayout_6.addWidget(self.consoleTextEdit)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -771,11 +776,11 @@ class Ui_MainWindow(object):
         self.drillViewCheckBox.setText("")
         self.topLoadButton.setText(QCoreApplication.translate("MainWindow", u"TOP", None))
         self.bottomLoadButton.setText(QCoreApplication.translate("MainWindow", u"BOTTOM", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"File Path", None))
+        self.filePathLabel.setText(QCoreApplication.translate("MainWindow", u"File Path", None))
         self.bottomViewCheckBox.setText("")
         self.profileViewCheckBox.setText("")
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
-        self.label_6.setText(QCoreApplication.translate("MainWindow", u"View", None))
+        self.viewLabel.setText(QCoreApplication.translate("MainWindow", u"View", None))
         self.checkBox_5.setText("")
         self.drillLoadButton.setText(QCoreApplication.translate("MainWindow", u"DRILL", None))
         self.profileLoadButton.setText(QCoreApplication.translate("MainWindow", u"PROFILE", None))

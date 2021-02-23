@@ -35,7 +35,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <layout class="QVBoxLayout" name="verticalLayout_6">
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="font">
@@ -77,7 +77,7 @@
                 </property>
                </widget>
               </item>
-              <item row="5" column="2">
+              <item row="5" column="2" alignment="Qt::AlignHCenter">
                <widget class="QCheckBox" name="checkBox_4">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -106,7 +106,7 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="2">
+              <item row="4" column="2" alignment="Qt::AlignHCenter">
                <widget class="QCheckBox" name="drillViewCheckBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -178,8 +178,8 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label">
+              <item row="0" column="0" alignment="Qt::AlignHCenter">
+               <widget class="QLabel" name="filePathLabel">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -191,7 +191,7 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="2">
+              <item row="2" column="2" alignment="Qt::AlignHCenter">
                <widget class="QCheckBox" name="bottomViewCheckBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -207,7 +207,7 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="2">
+              <item row="3" column="2" alignment="Qt::AlignHCenter">
                <widget class="QCheckBox" name="profileViewCheckBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -236,8 +236,8 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="2">
-               <widget class="QLabel" name="label_6">
+              <item row="0" column="2" alignment="Qt::AlignHCenter">
+               <widget class="QLabel" name="viewLabel">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -262,7 +262,7 @@
                 </property>
                </widget>
               </item>
-              <item row="6" column="2">
+              <item row="6" column="2" alignment="Qt::AlignHCenter">
                <widget class="QCheckBox" name="checkBox_5">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -314,16 +314,13 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="2">
+              <item row="1" column="2" alignment="Qt::AlignHCenter">
                <widget class="QCheckBox" name="topViewCheckBox">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
-                </property>
-                <property name="layoutDirection">
-                 <enum>Qt::LeftToRight</enum>
                 </property>
                 <property name="checked">
                  <bool>true</bool>
@@ -1334,6 +1331,9 @@
       </widget>
      </widget>
     </item>
+    <item>
+     <widget class="QTextEdit" name="consoleTextEdit"/>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -1383,6 +1383,9 @@
   </action>
   <action name="actionHide_Show_Console">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="text">
