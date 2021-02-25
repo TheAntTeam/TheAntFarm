@@ -8,6 +8,7 @@ from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui 
 """ Custom imports """
 from serial_thread import SerialWorker
 from controller_thread import ControllerWorker
+# from view_thread import ViewWorker
 from style_manager import StyleManager
 from pcb_manager import PcbObj
 from visual_manager import VisualLayer
@@ -41,16 +42,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.topLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Top Gerber File", "Gerber (*.gbr *.GBR)", "red"))
         self.ui.bottomLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Bottom Gerber File", "Gerber (*.gbr *.GBR)", "blue"))
         self.ui.profileLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Profile Gerber File", "Gerber (*.gbr *.GBR)", "black"))
-        self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Drill Excellon File", "Excellon (*.xln *.XLN)", "orange"))
+        self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Drill Excellon File", "Excellon (*.xln *.XLN)", "green"))
 
         # Visualization Worker Thread, started as soon as the thread pool is started. Pass the figure to plot on.
-        self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.ui)
+        self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.ui, self.vl)
+        # self.viewWo = ViewWorker(self.ui, self.vl)
 
         # serial Worker Thread
         self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu, self.ui.textEdit)
 
         self.threadpool = QThreadPool()
         self.threadpool.start(self.controlWo)
+        # self.threadpool.start(self.viewWo)
 
     def set_finish_signal(self):
         """Send signals to stop all threads."""
@@ -126,7 +129,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.textEdit.clear()
 
     def hide_show_console(self):
-        if(self.ui.actionHide_Show_Console.isChecked()):
+        if self.ui.actionHide_Show_Console.isChecked():
             self.ui.consoleTextEdit.show()
         else:
             self.ui.consoleTextEdit.hide()
@@ -139,11 +142,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if load_file_path[0]:
             self.last_open_dir = os.path.dirname(load_file_path[0])
             self.ui.consoleTextEdit.append("Loading " + load_file_path[0])
-            pcb = PcbObj()
-            pcb.load_gerber(load_file_path[0], 'top')
-            pcb.get_gerber('top')
-            top_layer = pcb.get_gerber_layer('top')
-            self.vl.add_layer(top_layer[0], color)
+
+            # self.viewWo.new_layer_color = color
+            # self.viewWo.new_layer_path = load_file_path[0]
+            # self.viewWo.new_layer_flag = True
+
+            self.controlWo.new_layer_color = color
+            self.controlWo.new_layer_path = load_file_path[0]
+            self.controlWo.new_layer_flag = True
+
+            # self.controlWo.plot_layer(load_file_path[0], color)
+            # pcb = PcbObj()
+            # pcb.load_gerber(load_file_path[0], 'top')
+            # pcb.get_gerber('top')
+            # top_layer = pcb.get_gerber_layer('top')
+            # self.vl.add_layer(top_layer[0], color)
 
 
 if __name__ == "__main__":

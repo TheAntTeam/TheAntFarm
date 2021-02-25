@@ -1,10 +1,9 @@
-from time import sleep
-
 from PySide2.QtCore import QRunnable, Slot, QFile, QTextStream, QObject, Signal, QTimer
 from PySide2.QtGui import QPixmap
 import re
 import qimage2ndarray
 from double_side_manager import DoubleSideManager
+from pcb_manager import PcbObj
 
 
 class ControllerWorker(QRunnable):
@@ -12,12 +11,13 @@ class ControllerWorker(QRunnable):
 
     SPLITPAT = re.compile(r"[:,]")
 
-    def __init__(self, serial_rx_queue, serial_tx_queue, ui, *args, **kwargs):
+    def __init__(self, serial_rx_queue, serial_tx_queue, ui, vis_layer, *args, **kwargs):
         super(ControllerWorker, self).__init__()
         self.args = args
         self.kwargs = kwargs
 
         self.ui = ui
+        self.vis_layer = vis_layer
 
         self.double_side_manager = DoubleSideManager()
 
@@ -37,6 +37,10 @@ class ControllerWorker(QRunnable):
         self.timer.start()
         self.status_flag_poll = False
         self.status_l = []
+
+        self.new_layer_flag = False
+        self.new_layer_path = ""
+        self.new_layer_color = ""
 
         # self.signal = signal
         self.finish_signal = False  # Thread termination signal
@@ -67,6 +71,13 @@ class ControllerWorker(QRunnable):
                     break # todo: signal error
 
         return [status, mpos_l]
+
+    def plot_layer(self, layer_path, color):
+        pcb = PcbObj()
+        pcb.load_gerber(layer_path, 'top')
+        pcb.get_gerber('top')
+        top_layer = pcb.get_gerber_layer('top')
+        self.vis_layer.add_layer(top_layer[0], color)
 
     @Slot()
     def run(self):
@@ -103,6 +114,11 @@ class ControllerWorker(QRunnable):
                 # Status poll
                 self.serialTxQueue.put("?\n")  # todo: to be moved somewhere else
                 self.status_flag_poll = False
+
+            if self.new_layer_flag:
+                self.plot_layer(self.new_layer_path,self.new_layer_color)
+                self.new_layer_flag = False
+                self.ui.consoleTextEdit.append("File " + self.new_layer_path + " loaded.")
 
 
 if __name__ == "__main__":
