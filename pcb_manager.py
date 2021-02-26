@@ -13,7 +13,7 @@ from geometry_manager import Geom, merge_polygons
 
 class PcbObj:
 
-    GBR_KEYS = ["top", "bottom"]
+    GBR_KEYS = ["top", "bottom", "profile"]
     EXN_KEYS = ["drill"]
     DEFAULT_ARC_SUBDIVISIONS = 64
     MAX_ARC_CHORD_LEN = 0.2  # mm

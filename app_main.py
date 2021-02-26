@@ -39,10 +39,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.send_text_edit.hide()
         self.ui.send_push_button.hide()
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
-        self.ui.topLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Top Gerber File", "Gerber (*.gbr *.GBR)", "red"))
-        self.ui.bottomLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Bottom Gerber File", "Gerber (*.gbr *.GBR)", "blue"))
-        self.ui.profileLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Profile Gerber File", "Gerber (*.gbr *.GBR)", "black"))
-        self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("Load Drill Excellon File", "Excellon (*.xln *.XLN)", "green"))
+        self.ui.topLoadButton.clicked.connect(lambda: self.load_gerber_file("top", "Load Top Gerber File", "Gerber (*.gbr *.GBR)", "red"))
+        self.ui.bottomLoadButton.clicked.connect(lambda: self.load_gerber_file("bottom", "Load Bottom Gerber File", "Gerber (*.gbr *.GBR)", "blue"))
+        self.ui.profileLoadButton.clicked.connect(lambda: self.load_gerber_file("profile", "Load Profile Gerber File", "Gerber (*.gbr *.GBR)", "black"))
+        self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("drill", "Load Drill Excellon File", "Excellon (*.xln *.XLN)", "green"))
 
         # Visualization Worker Thread, started as soon as the thread pool is started. Pass the figure to plot on.
         self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.ui, self.vl)
@@ -134,7 +134,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.ui.consoleTextEdit.hide()
 
-    def load_gerber_file(self, load_text="Load File", extensions="", color="red"):
+    def load_gerber_file(self, layer="top", load_text="Load File", extensions="", color="red"):
         filters = extensions + ";;All files (*.*)"
         selected_filter = extensions
         # options = ""  # Options for the visualization of loading interface.
@@ -143,20 +143,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.last_open_dir = os.path.dirname(load_file_path[0])
             self.ui.consoleTextEdit.append("Loading " + load_file_path[0])
 
+            # self.viewWo.new_layer = layer
             # self.viewWo.new_layer_color = color
             # self.viewWo.new_layer_path = load_file_path[0]
             # self.viewWo.new_layer_flag = True
 
+            #todo: use an object???
+            self.controlWo.new_layer = layer
             self.controlWo.new_layer_color = color
             self.controlWo.new_layer_path = load_file_path[0]
             self.controlWo.new_layer_flag = True
-
-            # self.controlWo.plot_layer(load_file_path[0], color)
-            # pcb = PcbObj()
-            # pcb.load_gerber(load_file_path[0], 'top')
-            # pcb.get_gerber('top')
-            # top_layer = pcb.get_gerber_layer('top')
-            # self.vl.add_layer(top_layer[0], color)
 
 
 if __name__ == "__main__":

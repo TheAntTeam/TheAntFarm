@@ -17,6 +17,7 @@ class ViewWorker(QRunnable):
         self.ui = ui
         self.vis_layer = vis_layer
 
+        self.new_layer = ""
         self.new_layer_flag = False
         self.new_layer_path = ""
         self.new_layer_color = ""
