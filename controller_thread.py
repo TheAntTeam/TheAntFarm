@@ -38,6 +38,7 @@ class ControllerWorker(QRunnable):
         self.status_flag_poll = False
         self.status_l = []
 
+        self.pcb = PcbObj()
         self.new_layer = ""
         self.new_layer_flag = False
         self.new_layer_path = ""
@@ -74,19 +75,21 @@ class ControllerWorker(QRunnable):
         return [status, mpos_l]
 
     def plot_layer(self, layer, layer_path, color):
-        pcb = PcbObj()
-        pcb.load_gerber(layer_path, layer)
-        pcb.get_gerber(layer)
-        top_layer = pcb.get_gerber_layer(layer)
-        self.vis_layer.add_layer(top_layer[0], color)
-        if self.new_layer == "top": #todo: use a dictionary or something similar???
-            self.ui.topFileLineEdit.setText(layer_path)
-        elif self.new_layer == "bottom":
-            self.ui.bottomFileLineEdit.setText(layer_path)
-        elif self.new_layer == "profile":
-            self.ui.profileFileLineEdit.setText(layer_path)
-        elif self.new_layer == "drill":
-            self.ui.drillFileLineEdit.setText(layer_path)
+        try:
+            self.pcb.load_gerber(layer_path, layer)
+            self.pcb.get_gerber(layer)
+            top_layer = self.pcb.get_gerber_layer(layer)
+            self.vis_layer.add_layer(top_layer[0], color)
+            if self.new_layer == "top": #todo: use a dictionary or something similar???
+                self.ui.topFileLineEdit.setText(layer_path)
+            elif self.new_layer == "bottom":
+                self.ui.bottomFileLineEdit.setText(layer_path)
+            elif self.new_layer == "profile":
+                self.ui.profileFileLineEdit.setText(layer_path)
+            elif self.new_layer == "drill":
+                self.ui.drillFileLineEdit.setText(layer_path)
+        except (AttributeError, ValueError, ZeroDivisionError):
+            print("Error plotting new layer " + layer)
 
     @Slot()
     def run(self):

@@ -1,4 +1,3 @@
-
 import os
 import gerber as gbr
 import gerber.primitives
@@ -174,12 +173,12 @@ class PcbObj:
     def _primitive_paths(self, primitive, region=False):
             gdata = []
             if isinstance(primitive, gbr.primitives.Outline):
-                # tipo closed line
+                # closed line type
                 # print("Closed line")
                 points = primitive.vertices
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Line):
-                # tipo open line
+                # open line type
                 # print("Open line")
                 points = primitive.vertices
                 if isinstance(primitive.aperture, gbr.primitives.Circle):
@@ -197,29 +196,29 @@ class PcbObj:
                     points = [primitive.start, primitive.end]
                     gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
             elif isinstance(primitive, gbr.primitives.Arc):
-                # tipo open line arc
+                # open line arc type
                 # print("Arc")
                 p = primitive
                 points = self._arc_segmentation(p.center, p.radius, p.start_angle, p.end_angle)
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
             elif isinstance(primitive, gbr.primitives.Rectangle):
-                # tipo polygon
+                # rectangle type
                 # print("Rectangle")
                 points = primitive.vertices
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Polygon):
-                # tipo polygon
+                # polygon type
                 # print("Polygon")
                 points = primitive.vertices
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Circle):
-                # tipo polygon
+                # circle type
                 # print("Circle")
                 p = primitive
                 points = self._arc_segmentation(p.position, p.radius, 0, 2 * math.pi)
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Region):
-                # tipo group
+                # region type
                 # print("Region")
                 if primitive.primitives is not None:
                     lines_flag = True
@@ -231,7 +230,7 @@ class PcbObj:
                         gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
 
             elif isinstance(primitive, gbr.primitives.AMGroup):
-                # tipo group
+                # group type
                 # print("AMGroup")
                 if primitive.primitives is not None:
                     lines_flag = True
