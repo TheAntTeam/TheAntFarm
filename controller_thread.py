@@ -50,11 +50,6 @@ class ControllerWorker(QRunnable):
     def on_timeout(self):
         self.status_flag_poll = True
 
-    def save_csv_file(self, file_name):
-        """Save csv file."""
-        self.save_filename = file_name
-        self.save_file = True
-
     def terminate_thread(self):
         """This function is to terminate thread."""
         self.finish_signal = True

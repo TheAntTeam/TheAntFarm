@@ -138,5 +138,6 @@ class VisualLayer:
             mesh.set_data(np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)))
         mesh._bounds_changed()
         self.canvas.view.add(mesh)
+        self.canvas.view.camera.set_range()
         self.canvas.freeze()
         #visuals.XYZAxis(parent=self.canvas.view.scene)

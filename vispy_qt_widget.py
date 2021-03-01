@@ -15,14 +15,16 @@ class VispyCanvas(QtSceneCanvas):
 
         self.unfreeze()
         self.view = self.central_widget.add_view()
-        self.view.bgcolor = '#ffffff'
+        self.view.bgcolor = '#444444'#'#ffffff'
         self.view.camera = TurntableCamera(
-            fov=0.0, distance=30.0, up='+z', center=(0.0, 0.0, 0.0))
+            fov=0.0, distance=0.0, up='+z', center=(0.0, 0.0, 0.0), azimuth=0, elevation=90)
         self.last_pos = [0, 0, 0]
         self.pos_markers = visuals.Markers()
         self.meas_markers = visuals.Markers()
         self.pos_data = np.array([0, 0, 0], ndmin=2)
         self.meas_data = np.array([0, 0, 0], ndmin=2)
+        self.pos_markers.set_data(self.pos_data)
+        self.meas_markers.set_data(self.meas_data)
         self.lines = []
 
         self.view.add(self.pos_markers)
