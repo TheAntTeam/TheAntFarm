@@ -2,7 +2,7 @@ import os
 import sys
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QMainWindow, QApplication
-from PySide2.QtCore import QThreadPool
+from PySide2.QtCore import QThreadPool, Signal
 from queue import Queue
 from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui > ui_newCNC.py
 """ Custom imports """
@@ -17,6 +17,7 @@ from visual_manager import VisualLayer
 class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu = Queue()                   # serial FIFO RX Queue
     serialTxQu = Queue()                   # serial FIFO TX Queue
+    finish_thread = Signal(bool)
 
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__()
@@ -46,19 +47,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Visualization Worker Thread, started as soon as the thread pool is started. Pass the figure to plot on.
         self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.ui, self.vl)
-        # self.viewWo = ViewWorker(self.ui, self.vl)
 
         # serial Worker Thread
         self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu, self.ui.textEdit)
+
+        self.finish_thread.connect(self.controlWo.terminate_thread)
+        self.finish_thread.connect(self.serialWo.terminate_thread)
 
         self.threadpool = QThreadPool()
         self.threadpool.start(self.controlWo)
         # self.threadpool.start(self.viewWo)
 
     def set_finish_signal(self):
-        """Send signals to stop all threads."""
-        self.controlWo.terminate_thread()
-        self.serialWo.terminate_thread()
+        """Emit a signal to stop all threads."""
+        self.finish_thread.emit(True)
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
@@ -164,5 +166,4 @@ if __name__ == "__main__":
     style_man.set_dark_palette()
 
     window.show()
-    # app.exec_()  # todo: use for debugger only
     sys.exit(app.exec_())
