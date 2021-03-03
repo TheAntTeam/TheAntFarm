@@ -6,6 +6,10 @@ from double_side_manager import DoubleSideManager
 from pcb_manager import PcbObj
 
 
+class ControllerSignals(QObject):
+    updatePath = Signal(str, str)  # Signal to update layer path in ui
+
+
 class ControllerWorker(QRunnable):
     """Controller Worker thread"""
 
@@ -15,6 +19,7 @@ class ControllerWorker(QRunnable):
         super(ControllerWorker, self).__init__()
         self.args = args
         self.kwargs = kwargs
+        self.signals = ControllerSignals()
 
         self.ui = ui
         self.vis_layer = vis_layer
@@ -75,16 +80,15 @@ class ControllerWorker(QRunnable):
             self.pcb.get_gerber(layer)
             top_layer = self.pcb.get_gerber_layer(layer)
             self.vis_layer.add_layer(top_layer[0], color)
-            if self.new_layer == "top": #todo: use a dictionary or something similar???
-                self.ui.topFileLineEdit.setText(layer_path)
-            elif self.new_layer == "bottom":
-                self.ui.bottomFileLineEdit.setText(layer_path)
-            elif self.new_layer == "profile":
-                self.ui.profileFileLineEdit.setText(layer_path)
-            elif self.new_layer == "drill":
-                self.ui.drillFileLineEdit.setText(layer_path)
-        except (AttributeError, ValueError, ZeroDivisionError):
+        except (AttributeError, ValueError, ZeroDivisionError, IndexError):
             print("Error plotting new layer " + layer)
+
+    @Slot(str, str, str)
+    def set_new_layer(self, layer, layer_path, color):
+        self.new_layer = layer
+        self.new_layer_path = layer_path
+        self.new_layer_color = color
+        self.new_layer_flag = True
 
     @Slot()
     def run(self):
@@ -125,7 +129,7 @@ class ControllerWorker(QRunnable):
             if self.new_layer_flag:
                 self.plot_layer(self.new_layer, self.new_layer_path, self.new_layer_color)
                 self.new_layer_flag = False
-                self.ui.consoleTextEdit.append("File " + self.new_layer_path + " loaded.")
+                self.signals.updatePath.emit(self.new_layer, self.new_layer_path)
 
 
 if __name__ == "__main__":

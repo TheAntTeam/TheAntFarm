@@ -12,12 +12,13 @@ from controller_thread import ControllerWorker
 from style_manager import StyleManager
 from pcb_manager import PcbObj
 from visual_manager import VisualLayer
+from ui_manager import UiManager
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu = Queue()                   # serial FIFO RX Queue
     serialTxQu = Queue()                   # serial FIFO TX Queue
-    finish_thread = Signal(bool)
+    finish_thread = Signal()
 
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__()
@@ -40,31 +41,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.send_text_edit.hide()
         self.ui.send_push_button.hide()
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
-        self.ui.topLoadButton.clicked.connect(lambda: self.load_gerber_file("top", "Load Top Gerber File", "Gerber (*.gbr *.GBR)", "red"))
-        self.ui.bottomLoadButton.clicked.connect(lambda: self.load_gerber_file("bottom", "Load Bottom Gerber File", "Gerber (*.gbr *.GBR)", "blue"))
-        self.ui.profileLoadButton.clicked.connect(lambda: self.load_gerber_file("profile", "Load Profile Gerber File", "Gerber (*.gbr *.GBR)", "black"))
-        self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("drill", "Load Drill Excellon File", "Excellon (*.xln *.XLN)", "green"))
 
-        # Visualization Worker Thread, started as soon as the thread pool is started. Pass the figure to plot on.
+        # Control Worker Thread, started as soon as the thread pool is started.
         self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.ui, self.vl)
 
-        # serial Worker Thread
+        # Serial Worker Thread, started with the first connection to serial port.
         self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu, self.ui.textEdit)
 
         self.finish_thread.connect(self.controlWo.terminate_thread)
         self.finish_thread.connect(self.serialWo.terminate_thread)
 
+        self.ui_manager = UiManager(self, self.ui, self.controlWo)
         self.threadpool = QThreadPool()
         self.threadpool.start(self.controlWo)
         # self.threadpool.start(self.viewWo)
 
-    def set_finish_signal(self):
-        """Emit a signal to stop all threads."""
-        self.finish_thread.emit(True)
-
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
-        self.set_finish_signal()
+        self.finish_thread.emit()
         app.exit(0)
 
     def handle_refresh_button(self):
