@@ -7,7 +7,8 @@ from pcb_manager import PcbObj
 
 
 class ControllerSignals(QObject):
-    updatePath = Signal(str, str)  # Signal to update layer path in ui
+    update_path_s = Signal(str, str)       # Signal to update layer path in ui
+    update_camera_image_s = Signal(QPixmap) # Signal to update Camera Image in ui
 
 
 class ControllerWorker(QRunnable):
@@ -28,8 +29,7 @@ class ControllerWorker(QRunnable):
 
         self.serialRxQueue = serial_rx_queue
         self.serialTxQueue = serial_tx_queue
-        self.save_file = False
-        self.save_filename = ""
+
         self.status_label = ui.statusLabel
         self.mpos_x_label = ui.mpos_x_label
         self.mpos_y_label = ui.mpos_y_label
@@ -42,6 +42,7 @@ class ControllerWorker(QRunnable):
         self.timer.start()
         self.status_flag_poll = False
         self.status_l = []
+        self.threshold_value = 0
 
         self.pcb = PcbObj()
         self.new_layer = ""
@@ -49,7 +50,7 @@ class ControllerWorker(QRunnable):
         self.new_layer_path = ""
         self.new_layer_color = ""
 
-        # self.signal = signal
+        self.align_active = False
         self.finish_signal = False  # Thread termination signal
 
     def on_timeout(self):
@@ -90,6 +91,14 @@ class ControllerWorker(QRunnable):
         self.new_layer_color = color
         self.new_layer_flag = True
 
+    @Slot(bool)
+    def set_align_is_active(self, align_is_active):
+        self.align_active = align_is_active
+
+    @Slot(int)
+    def update_threshold_value(self, new_threshold):
+        self.threshold_value = new_threshold
+
     @Slot()
     def run(self):
         # print("Init Controller Worker Thread")
@@ -115,13 +124,12 @@ class ControllerWorker(QRunnable):
                     pass
             if self.status_flag_poll:
                 # refresh webcam frame
-                if self.ui.tabWidget.currentIndex() == 1:  # todo: check active tab by name
+                if self.align_active:
                     frame = self.double_side_manager.get_webcam_frame()
-                    thr1 = self.ui.verticalSlider.value()
-                    print(thr1)
-                    frame = self.double_side_manager.detect_holes(frame, thr1)
+                    # print(self.threshold_value)
+                    frame = self.double_side_manager.detect_holes(frame, self.threshold_value)
                     image = qimage2ndarray.array2qimage(frame)
-                    self.ui.label_2.setPixmap(QPixmap.fromImage(image))
+                    self.signals.update_camera_image_s.emit(QPixmap.fromImage(image))
                 # Status poll
                 self.serialTxQueue.put("?\n")  # todo: to be moved somewhere else
                 self.status_flag_poll = False
@@ -129,7 +137,7 @@ class ControllerWorker(QRunnable):
             if self.new_layer_flag:
                 self.plot_layer(self.new_layer, self.new_layer_path, self.new_layer_color)
                 self.new_layer_flag = False
-                self.signals.updatePath.emit(self.new_layer, self.new_layer_path)
+                self.signals.update_path_s.emit(self.new_layer, self.new_layer_path)
 
 
 if __name__ == "__main__":

@@ -130,26 +130,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.ui.consoleTextEdit.hide()
 
-    def load_gerber_file(self, layer="top", load_text="Load File", extensions="", color="red"):
-        filters = extensions + ";;All files (*.*)"
-        selected_filter = extensions
-        # options = ""  # Options for the visualization of loading interface.
-        load_file_path = QtWidgets.QFileDialog.getOpenFileName(self, load_text, self.last_open_dir, filters, selected_filter)
-        if load_file_path[0]:
-            self.last_open_dir = os.path.dirname(load_file_path[0])
-            self.ui.consoleTextEdit.append("Loading " + load_file_path[0])
-
-            # self.viewWo.new_layer = layer
-            # self.viewWo.new_layer_color = color
-            # self.viewWo.new_layer_path = load_file_path[0]
-            # self.viewWo.new_layer_flag = True
-
-            #todo: use an object???
-            self.controlWo.new_layer = layer
-            self.controlWo.new_layer_color = color
-            self.controlWo.new_layer_path = load_file_path[0]
-            self.controlWo.new_layer_flag = True
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

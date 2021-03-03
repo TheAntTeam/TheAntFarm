@@ -1,13 +1,15 @@
 import os
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import Signal, Slot, QObject
-from controller_thread import ControllerWorker
+from PySide2.QtGui import QPixmap
 
 
 class UiManager(QObject):
     """Manage UI objects, signals and slots"""
 
     load_layer_s = Signal(str, str, str)
+    align_active_s = Signal(bool)
+    update_threshold_s = Signal(int)
 
     def __init__(self, main_win, ui, control_worker, *args, **kwargs):
         super(UiManager, self).__init__()
@@ -17,12 +19,20 @@ class UiManager(QObject):
         self.controlWo = control_worker
 
         # Connect Widgets signals and slots
+        # From UI to UI Manager
+        self.ui.tabWidget.currentChanged.connect(self.check_align_is_active)
+        self.ui.verticalSlider.valueChanged.connect(self.update_threshold)
+        # From UI Manager to Controller
+        self.align_active_s.connect(self.controlWo.set_align_is_active)
         self.load_layer_s.connect(self.controlWo.set_new_layer)
-        self.controlWo.signals.updatePath.connect(self.set_layer_path)
+        self.update_threshold_s.connect(self.controlWo.update_threshold_value)
         self.ui.topLoadButton.clicked.connect(lambda: self.load_gerber_file("top", "Load Top Gerber File", "Gerber (*.gbr *.GBR)", "red"))
         self.ui.bottomLoadButton.clicked.connect(lambda: self.load_gerber_file("bottom", "Load Bottom Gerber File", "Gerber (*.gbr *.GBR)", "blue"))
         self.ui.profileLoadButton.clicked.connect(lambda: self.load_gerber_file("profile", "Load Profile Gerber File", "Gerber (*.gbr *.GBR)", "black"))
         self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("drill", "Load Drill Excellon File", "Excellon (*.xln *.XLN)", "green"))
+        # From Controller to UI Manager
+        self.controlWo.signals.update_path_s.connect(self.set_layer_path)
+        self.controlWo.signals.update_camera_image_s.connect(self.update_camera_image)
 
     def load_gerber_file(self, layer="top", load_text="Load File", extensions="", color="red"):
         filters = extensions + ";;All files (*.*)"
@@ -44,3 +54,20 @@ class UiManager(QObject):
         elif layer == "drill":
             self.ui.drillFileLineEdit.setText(layer_path)
 
+    @Slot(QPixmap)
+    def update_camera_image(self, pixmap):
+        self.ui.label_2.setPixmap(pixmap)
+
+    def check_align_is_active(self):
+        # print(self.ui.tabWidget.currentWidget().objectName())
+        if self.ui.tabWidget.currentWidget().objectName() == "alignTab":
+            self.align_active_s.emit(True)
+        else:
+            self.align_active_s.emit(False)
+
+    def update_threshold(self):
+        self.update_threshold_s.emit(self.ui.verticalSlider.value())
+
+
+if __name__ == "__main__":
+    pass
