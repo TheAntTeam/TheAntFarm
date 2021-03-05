@@ -1,6 +1,4 @@
-import os
 import sys
-from PySide2 import QtWidgets
 from PySide2.QtWidgets import QMainWindow, QApplication
 from PySide2.QtCore import QThreadPool, Signal
 from queue import Queue
@@ -8,9 +6,7 @@ from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui 
 """ Custom imports """
 from serial_thread import SerialWorker
 from controller_thread import ControllerWorker
-# from view_thread import ViewWorker
 from style_manager import StyleManager
-from pcb_manager import PcbObj
 from visual_manager import VisualLayer
 from ui_manager import UiManager
 

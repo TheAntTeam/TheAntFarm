@@ -33,6 +33,8 @@ class UiManager(QObject):
         # From Controller to UI Manager
         self.controlWo.signals.update_path_s.connect(self.set_layer_path)
         self.controlWo.signals.update_camera_image_s.connect(self.update_camera_image)
+        self.controlWo.signals.update_status_s.connect(self.update_status)
+        self.controlWo.signals.update_console_text_s.connect(self.update_console_text)
 
     def load_gerber_file(self, layer="top", load_text="Load File", extensions="", color="red"):
         filters = extensions + ";;All files (*.*)"
@@ -57,6 +59,17 @@ class UiManager(QObject):
     @Slot(QPixmap)
     def update_camera_image(self, pixmap):
         self.ui.label_2.setPixmap(pixmap)
+
+    @Slot(list)
+    def update_status(self, status_l):
+        self.ui.statusLabel.setText(status_l[0])
+        self.ui.mpos_x_label.setText(status_l[1][0])
+        self.ui.mpos_y_label.setText(status_l[1][1])
+        self.ui.mpos_z_label.setText(status_l[1][2])
+
+    @Slot(str)
+    def update_console_text(self, new_text):
+        self.ui.textEdit.append(new_text)
 
     def check_align_is_active(self):
         # print(self.ui.tabWidget.currentWidget().objectName())

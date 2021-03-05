@@ -7,8 +7,10 @@ from pcb_manager import PcbObj
 
 
 class ControllerSignals(QObject):
-    update_path_s = Signal(str, str)       # Signal to update layer path in ui
-    update_camera_image_s = Signal(QPixmap) # Signal to update Camera Image in ui
+    update_path_s = Signal(str, str)         # Signal to update layer path in ui
+    update_camera_image_s = Signal(QPixmap)  # Signal to update Camera Image in ui
+    update_status_s = Signal(list)
+    update_console_text_s = Signal(str)
 
 
 class ControllerWorker(QRunnable):
@@ -29,12 +31,6 @@ class ControllerWorker(QRunnable):
 
         self.serialRxQueue = serial_rx_queue
         self.serialTxQueue = serial_tx_queue
-
-        self.status_label = ui.statusLabel
-        self.mpos_x_label = ui.mpos_x_label
-        self.mpos_y_label = ui.mpos_y_label
-        self.mpos_z_label = ui.mpos_z_label
-        self.text_out = ui.textEdit  # Gui text field where events are logged
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_timeout)
@@ -101,25 +97,20 @@ class ControllerWorker(QRunnable):
 
     @Slot()
     def run(self):
-        # print("Init Controller Worker Thread")
-        # self.text_out.append("Init Controller Worker Thread")
+        # self.signals.update_console_text_s.emit("Init Controller Worker Thread")
 
         while not self.finish_signal:
             if not self.serialRxQueue.empty():
                 try:
                     element = self.serialRxQueue.get(block=False)
                     if element:
-                        # self.text_out.append(self.parse_bracket_angle(element))
+                        # self.signals.update_console_text_s.emit(self.parse_bracket_angle(element))
                         if re.match("^<.*>\s*$\s", element):
-                            self.status_l = self.parse_bracket_angle(element)
-                            self.status_label.setText(self.status_l[0])
-                            self.mpos_x_label.setText(self.status_l[1][0])
-                            self.mpos_y_label.setText(self.status_l[1][1])
-                            self.mpos_z_label.setText(self.status_l[1][2])
+                            self.signals.update_status_s.emit(self.parse_bracket_angle(element))
                         elif re.match("ok\s*$\s", element):
                             pass
                         else:
-                            self.text_out.append(element)
+                            self.signals.update_console_text_s.emit(element)
                 except BlockingIOError:
                     pass
             if self.status_flag_poll:
