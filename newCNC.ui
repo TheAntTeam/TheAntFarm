@@ -1395,7 +1395,7 @@
     <string>Hide/Show Console</string>
    </property>
    <property name="shortcut">
-    <string>Shift+C</string>
+    <string>F4</string>
    </property>
   </action>
  </widget>

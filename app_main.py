@@ -39,15 +39,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
 
         # Control Worker Thread, started as soon as the thread pool is started.
-        self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.ui, self.vl)
+        self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.vl)
 
         # Serial Worker Thread, started with the first connection to serial port.
-        self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu, self.ui.textEdit)
+        self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu)
 
         self.finish_thread.connect(self.controlWo.terminate_thread)
         self.finish_thread.connect(self.serialWo.terminate_thread)
 
-        self.ui_manager = UiManager(self, self.ui, self.controlWo)
+        self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo)
         self.threadpool = QThreadPool()
         self.threadpool.start(self.controlWo)
         # self.threadpool.start(self.viewWo)

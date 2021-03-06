@@ -11,12 +11,13 @@ class UiManager(QObject):
     align_active_s = Signal(bool)
     update_threshold_s = Signal(int)
 
-    def __init__(self, main_win, ui, control_worker, *args, **kwargs):
+    def __init__(self, main_win, ui, control_worker, serial_worker, *args, **kwargs):
         super(UiManager, self).__init__()
         self.last_open_dir = "."
         self.main_win = main_win
         self.ui = ui
         self.controlWo = control_worker
+        self.serialWo = serial_worker
 
         # Connect Widgets signals and slots
         # From UI to UI Manager
@@ -30,11 +31,13 @@ class UiManager(QObject):
         self.ui.bottomLoadButton.clicked.connect(lambda: self.load_gerber_file("bottom", "Load Bottom Gerber File", "Gerber (*.gbr *.GBR)", "blue"))
         self.ui.profileLoadButton.clicked.connect(lambda: self.load_gerber_file("profile", "Load Profile Gerber File", "Gerber (*.gbr *.GBR)", "black"))
         self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("drill", "Load Drill Excellon File", "Excellon (*.xln *.XLN)", "green"))
-        # From Controller to UI Manager
+        # From Controller Thread to UI Manager
         self.controlWo.signals.update_path_s.connect(self.set_layer_path)
         self.controlWo.signals.update_camera_image_s.connect(self.update_camera_image)
         self.controlWo.signals.update_status_s.connect(self.update_status)
         self.controlWo.signals.update_console_text_s.connect(self.update_console_text)
+        # From Serial Thread to UI Manager
+        self.serialWo.signals.update_console_text_s.connect(self.update_console_text)
 
     def load_gerber_file(self, layer="top", load_text="Load File", extensions="", color="red"):
         filters = extensions + ";;All files (*.*)"

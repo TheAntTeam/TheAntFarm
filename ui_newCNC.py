@@ -772,7 +772,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(shortcut)
         self.actionHide_Show_Console.setText(QCoreApplication.translate("MainWindow", u"Hide/Show Console", None))
 #if QT_CONFIG(shortcut)
-        self.actionHide_Show_Console.setShortcut(QCoreApplication.translate("MainWindow", u"Shift+C", None))
+        self.actionHide_Show_Console.setShortcut(QCoreApplication.translate("MainWindow", u"F4", None))
 #endif // QT_CONFIG(shortcut)
         self.checkBox_4.setText("")
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))

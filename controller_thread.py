@@ -7,10 +7,10 @@ from pcb_manager import PcbObj
 
 
 class ControllerSignals(QObject):
-    update_path_s = Signal(str, str)         # Signal to update layer path in ui
-    update_camera_image_s = Signal(QPixmap)  # Signal to update Camera Image in ui
-    update_status_s = Signal(list)
-    update_console_text_s = Signal(str)
+    update_path_s = Signal(str, str)         # Signal to update layer path
+    update_camera_image_s = Signal(QPixmap)  # Signal to update Camera Image
+    update_status_s = Signal(list)           # Signal to update controller status
+    update_console_text_s = Signal(str)      # Signal to send text to the console textEdit
 
 
 class ControllerWorker(QRunnable):
@@ -18,13 +18,12 @@ class ControllerWorker(QRunnable):
 
     SPLITPAT = re.compile(r"[:,]")
 
-    def __init__(self, serial_rx_queue, serial_tx_queue, ui, vis_layer, *args, **kwargs):
+    def __init__(self, serial_rx_queue, serial_tx_queue, vis_layer, *args, **kwargs):
         super(ControllerWorker, self).__init__()
         self.args = args
         self.kwargs = kwargs
-        self.signals = ControllerSignals()
+        self.signals = ControllerSignals()  # Controller Worker signals
 
-        self.ui = ui
         self.vis_layer = vis_layer
 
         self.double_side_manager = DoubleSideManager()

@@ -1,23 +1,27 @@
-from PySide2.QtCore import QRunnable, Slot
-
+from PySide2.QtCore import QRunnable, QObject, Signal, Slot
 # Custom imports #
 from serial_channel import SerialChannel
+
+
+class SerialSignals(QObject):
+    update_console_text_s = Signal(str)  # Signal to send text to the console textEdit
 
 
 class SerialWorker(QRunnable):
     """Serial Worker thread"""
     serial_ch = SerialChannel()
 
-    def __init__(self, serial_rx_queue, serial_tx_queue, text_field, *args, **kwargs):
+    def __init__(self, serial_rx_queue, serial_tx_queue, *args, **kwargs):
         super(SerialWorker, self).__init__()
         self.args = args                      # Unused at the moment
         self.kwargs = kwargs                  # Unused at the moment
+        self.signals = SerialSignals()        # Serial Worker signals
+
         self.is_paused = True                 # Running status of the thread
         self.no_serial_worker = True          # It checks that thread is created once
         self.close_it = False                 # It is used to demand closure to runner
         self.serialRxQueue = serial_rx_queue  # FIFO RX Queue to pass data to view thread
         self.serialTxQueue = serial_tx_queue  # FIFO TX Queue to send data to serial port
-        self.text_out = text_field            # Gui text field where events are logged
         self.finish_signal = False            # Thread termination signal
 
     def get_port_list(self):
@@ -28,16 +32,16 @@ class SerialWorker(QRunnable):
         """Open passed serial port. Return outcome of operation. True if success, otherwise False. """
         if port:
             # print("Open " + port)
-            self.text_out.append("Opening " + port)
+            self.signals.update_console_text_s.emit("Opening " + port)
             try:
                 self.serial_ch.open(port)
                 return True
             except IOError:
                 # print("COM port already in use.")
-                self.text_out.append("COM port already in use.")
+                self.signals.update_console_text_s.emit("COM port already in use.")
                 return False
         else:
-            self.text_out.append("No port selected.")
+            self.signals.update_console_text_s.emit("No port selected.")
             return False
 
     def close_port(self):
@@ -45,7 +49,7 @@ class SerialWorker(QRunnable):
            The closing of the serial port is demanded to the runner
            function to avoid side effects."""
         # print("Close " + self.serial_ch.active_port.name)
-        self.text_out.append("Closing " + self.serial_ch.active_port.name)
+        self.signals.update_console_text_s.emit("Closing " + self.serial_ch.active_port.name)
         self.is_paused = True
         self.close_it = True
 
@@ -57,7 +61,7 @@ class SerialWorker(QRunnable):
     def run(self):
         """Serial Worker Runner function."""
         # print("Init Serial Worker Thread")
-        # self.text_out.append("Init Serial Worker Thread")
+        # self.signals.update_console_text_s.emit("Init Serial Worker Thread")
         residual_string = ""
         while not self.finish_signal:
             if self.is_paused:
