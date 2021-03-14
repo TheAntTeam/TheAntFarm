@@ -11,6 +11,7 @@ class ControllerSignals(QObject):
     update_camera_image_s = Signal(QPixmap)  # Signal to update Camera Image
     update_status_s = Signal(list)           # Signal to update controller status
     update_console_text_s = Signal(str)      # Signal to send text to the console textEdit
+    serial_send_s = Signal(str)              # Signal to send text to the serial
 
 
 class ControllerWorker(QRunnable):
@@ -18,7 +19,7 @@ class ControllerWorker(QRunnable):
 
     SPLITPAT = re.compile(r"[:,]")
 
-    def __init__(self, serial_rx_queue, serial_tx_queue, vis_layer, *args, **kwargs):
+    def __init__(self, serial_rx_queue, vis_layer, *args, **kwargs):
         super(ControllerWorker, self).__init__()
         self.args = args
         self.kwargs = kwargs
@@ -29,7 +30,6 @@ class ControllerWorker(QRunnable):
         self.double_side_manager = DoubleSideManager()
 
         self.serialRxQueue = serial_rx_queue
-        self.serialTxQueue = serial_tx_queue
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_timeout)
@@ -121,7 +121,7 @@ class ControllerWorker(QRunnable):
                     image = qimage2ndarray.array2qimage(frame)
                     self.signals.update_camera_image_s.emit(QPixmap.fromImage(image))
                 # Status poll
-                self.serialTxQueue.put("?\n")  # todo: to be moved somewhere else
+                self.signals.serial_send_s.emit("?\n")  # todo: to be moved somewhere else
                 self.status_flag_poll = False
 
             if self.new_layer_flag:

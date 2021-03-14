@@ -10,6 +10,7 @@ class UiManager(QObject):
     load_layer_s = Signal(str, str, str)
     align_active_s = Signal(bool)
     update_threshold_s = Signal(int)
+    serial_send_s = Signal(str)
 
     def __init__(self, main_win, ui, control_worker, serial_worker, *args, **kwargs):
         super(UiManager, self).__init__()
@@ -21,6 +22,11 @@ class UiManager(QObject):
 
         # Connect Widgets signals and slots
         # From UI to UI Manager
+        self.ui.send_push_button.clicked.connect(self.send_input)
+        self.ui.send_text_edit.returnPressed.connect(self.send_input)
+        self.ui.unlockButton.clicked.connect(self.handle_unlock)
+        self.ui.homingButton.clicked.connect(self.handle_homing)
+        self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
         self.ui.tabWidget.currentChanged.connect(self.check_align_is_active)
         self.ui.verticalSlider.valueChanged.connect(self.update_threshold)
         # From UI Manager to Controller
@@ -31,13 +37,17 @@ class UiManager(QObject):
         self.ui.bottomLoadButton.clicked.connect(lambda: self.load_gerber_file("bottom", "Load Bottom Gerber File", "Gerber (*.gbr *.GBR)", "blue"))
         self.ui.profileLoadButton.clicked.connect(lambda: self.load_gerber_file("profile", "Load Profile Gerber File", "Gerber (*.gbr *.GBR)", "black"))
         self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("drill", "Load Drill Excellon File", "Excellon (*.xln *.XLN)", "green"))
+        # From UI Manager to Serial Manager
+        self.serial_send_s.connect(self.serialWo.send)
         # From Controller Thread to UI Manager
         self.controlWo.signals.update_path_s.connect(self.set_layer_path)
         self.controlWo.signals.update_camera_image_s.connect(self.update_camera_image)
         self.controlWo.signals.update_status_s.connect(self.update_status)
         self.controlWo.signals.update_console_text_s.connect(self.update_console_text)
+        # From Controller Thread to Serial Manager
+        self.controlWo.signals.serial_send_s.connect(self.serialWo.send)
         # From Serial Thread to UI Manager
-        self.serialWo.signals.update_console_text_s.connect(self.update_console_text)
+        self.serialWo.update_console_text_s.connect(self.update_console_text)
 
     def load_gerber_file(self, layer="top", load_text="Load File", extensions="", color="red"):
         filters = extensions + ";;All files (*.*)"
@@ -83,6 +93,27 @@ class UiManager(QObject):
 
     def update_threshold(self):
         self.update_threshold_s.emit(self.ui.verticalSlider.value())
+
+    def send_input(self):
+        """Send input to the serial port."""
+        # self.serialTxQu.put(self.ui.send_text_edit.text() + "\n")
+        self.serial_send_s.emit(self.ui.send_text_edit.text() + "\n")
+        self.ui.send_text_edit.clear()
+
+    def handle_unlock(self):
+        print("unlock")
+        # self.serialTxQu.put("$X\n")
+        self.serial_send_s.emit("$X\n")
+
+    def handle_homing(self):
+        print("homing")
+        # self.serialTxQu.put("$H\n")
+        self.serial_send_s.emit("$H\n")
+
+    def handle_x_minus(self):
+        print("x_minus")
+        # self.serialTxQu.put("$J=G91 X-10 F100000\n") #todo: change this, just for test
+        self.serial_send_s.emit("$J=G91 X-10 F100000\n") #todo: change this, just for test
 
 
 if __name__ == "__main__":

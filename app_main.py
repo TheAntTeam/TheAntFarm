@@ -1,10 +1,11 @@
 import sys
 from PySide2.QtWidgets import QMainWindow, QApplication
-from PySide2.QtCore import QThreadPool, Signal
+from PySide2.QtCore import QThreadPool, Signal, QThread
 from queue import Queue
 from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui > ui_newCNC.py
 """ Custom imports """
-from serial_thread import SerialWorker
+from serial_manager import SerialWorker
+#from serial_thread import SerialWorker
 from controller_thread import ControllerWorker
 from style_manager import StyleManager
 from visual_manager import VisualLayer
@@ -13,7 +14,6 @@ from ui_manager import UiManager
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu = Queue()                   # serial FIFO RX Queue
-    serialTxQu = Queue()                   # serial FIFO TX Queue
     finish_thread = Signal()
 
     def __init__(self, *args, **kwargs):
@@ -27,33 +27,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.vl = VisualLayer(self.ui.viewCanvasWidget)
         self.ui.refreshButton.clicked.connect(self.handle_refresh_button)
         self.ui.connectButton.clicked.connect(self.handle_connect_button)
-        self.ui.unlockButton.clicked.connect(self.handle_unlock)
-        self.ui.homingButton.clicked.connect(self.handle_homing)
-        self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
         self.ui.clearTerminalButton.clicked.connect(self.handle_clear_terminal)
-        self.ui.send_text_edit.returnPressed.connect(self.send_input)
         self.ui.send_text_edit.setPlaceholderText('input here')
-        self.ui.send_push_button.clicked.connect(self.send_input)
         self.ui.send_text_edit.hide()
         self.ui.send_push_button.hide()
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
 
         # Control Worker Thread, started as soon as the thread pool is started.
-        self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.vl)
-
-        # Serial Worker Thread, started with the first connection to serial port.
-        self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu)
+        self.controlWo = ControllerWorker(self.serialRxQu, self.vl)
 
         self.finish_thread.connect(self.controlWo.terminate_thread)
-        self.finish_thread.connect(self.serialWo.terminate_thread)
+
+        # Serial Worker Thread.
+        self.serial_thread = QThread(self)
+        self.serial_thread.start()
+        self.serialWo = SerialWorker(self.serialRxQu)
+        self.serialWo.moveToThread(self.serial_thread)
 
         self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo)
         self.threadpool = QThreadPool()
         self.threadpool.start(self.controlWo)
-        # self.threadpool.start(self.viewWo)
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
+        self.serialWo.close_port()
+        self.serial_thread.quit()
         self.finish_thread.emit()
         app.exit(0)
 
@@ -78,12 +76,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.connection_status:
             # print(self.serialPortsComboBox.currentText())
             if self.serialWo.open_port(self.ui.serialPortsComboBox.currentText()):
-                if self.serialWo.no_serial_worker:
-                    self.serialWo.revive_it()
-                    self.threadpool.start(self.serialWo)
-                    self.serialWo.thread_is_started()
-                if self.serialWo.is_paused:
-                    self.serialWo.revive_it()
                 self.connection_status = True
                 self.ui.connectButton.setText("Disconnect")
                 self.ui.serialPortsComboBox.hide()
@@ -99,23 +91,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ui.send_text_edit.hide()
             self.ui.send_push_button.hide()
             self.ui.statusLabel.setText("Not Connected")
-
-    def send_input(self):
-        """Send input to the serial port."""
-        self.serialTxQu.put(self.ui.send_text_edit.text() + "\n")
-        self.ui.send_text_edit.clear()
-
-    def handle_unlock(self):
-        print("unlock")
-        self.serialTxQu.put("$X\n")
-
-    def handle_homing(self):
-        print("homing")
-        self.serialTxQu.put("$H\n")
-
-    def handle_x_minus(self):
-        print("x_minus")
-        self.serialTxQu.put("$J=G91 X-10 F100000\n") #todo: change this, just for test
 
     def handle_clear_terminal(self):
         self.ui.textEdit.clear()
