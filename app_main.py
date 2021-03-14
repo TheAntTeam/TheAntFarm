@@ -8,7 +8,7 @@ from serial_manager import SerialWorker
 #from serial_thread import SerialWorker
 from controller_thread import ControllerWorker
 from style_manager import StyleManager
-from visual_manager import VisualLayer
+from shape_core.visual_manager import VisualLayer
 from ui_manager import UiManager
 
 

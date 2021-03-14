@@ -65,6 +65,7 @@ class GLUTess:
 
         def define_contour(contour):
             vertices = list(contour.coords)             # Get vertices coordinates
+
             if vertices[0] == vertices[-1]:             # Open ring
                 vertices = vertices[:-1]
 
@@ -93,16 +94,30 @@ class GLUTess:
 
         # Free resources
         GLU.gluDeleteTess(tess)
+
+        id = len(self.pts)
+        new_tris = self.tris[:]
+        for i, t in enumerate(self.tris):
+            if not isinstance(t, int):
+                # print("locos " + str(t))
+                self.pts.append((t[0], t[1], z))
+                new_tris[i] = id
+                id += 1
+
+        self.tris = new_tris
+
         return self.tris, self.pts
 
 
 class VisualLayer:
 
+    DELTA = 0.1
+
     def __init__(self, canvas):
         self.canvas = canvas
         self.z = 0.0
 
-    def add_layer(self, geom_list, color=None):
+    def add_layer(self, geom_list, color=None, holes=False):
         ldata = [[], []]
         triangulizer = GLUTess()
         for g in geom_list:
@@ -110,9 +125,14 @@ class VisualLayer:
             tri_off = list(np.array(tri[:]) + len(ldata[1]))
             ldata[0] += tri_off
             ldata[1] += pts[:]
+            if holes:
+                tri, pts = triangulizer.triangulate(g.geom, self.DELTA)
+                tri_off = list(np.array(tri[:]) + len(ldata[1]))
+                ldata[0] += tri_off
+                ldata[1] += pts[:]
         self.create_mesh(ldata, color)
-        print("END")
-        self.z -= 0.1
+        # print("END")
+        self.z -= self.DELTA
 
     def add_triploy(self, tri, pts):
         self.canvas.unfreeze()
@@ -138,6 +158,8 @@ class VisualLayer:
             mesh.set_data(np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)))
         mesh._bounds_changed()
         self.canvas.view.add(mesh)
+
         self.canvas.view.camera.set_range()
+
         self.canvas.freeze()
         #visuals.XYZAxis(parent=self.canvas.view.scene)

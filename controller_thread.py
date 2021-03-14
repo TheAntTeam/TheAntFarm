@@ -3,7 +3,7 @@ from PySide2.QtGui import QPixmap
 import re
 import qimage2ndarray
 from double_side_manager import DoubleSideManager
-from pcb_manager import PcbObj
+from shape_core.pcb_manager import PcbObj
 
 
 class ControllerSignals(QObject):
@@ -72,10 +72,18 @@ class ControllerWorker(QRunnable):
 
     def plot_layer(self, layer, layer_path, color):
         try:
-            self.pcb.load_gerber(layer_path, layer)
-            self.pcb.get_gerber(layer)
-            top_layer = self.pcb.get_gerber_layer(layer)
-            self.vis_layer.add_layer(top_layer[0], color)
+            grb_tags = self.pcb.GBR_KEYS
+            exc_tags = self.pcb.EXN_KEYS
+            if layer in grb_tags:
+                self.pcb.load_gerber(layer_path, layer)
+                self.pcb.get_gerber(layer)
+                loaded_layer = self.pcb.get_gerber_layer(layer)
+                self.vis_layer.add_layer(loaded_layer[0], color)
+            if layer in exc_tags:
+                self.pcb.load_excellon(layer_path, layer)
+                self.pcb.get_excellon(layer)
+                loaded_layer = self.pcb.get_excellon_layer(layer)
+                self.vis_layer.add_layer(loaded_layer[0], color=color, holes=True)
         except (AttributeError, ValueError, ZeroDivisionError, IndexError):
             print("Error plotting new layer " + layer)
 
