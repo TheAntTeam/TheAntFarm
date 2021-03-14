@@ -6,24 +6,17 @@ from double_side_manager import DoubleSideManager
 from shape_core.pcb_manager import PcbObj
 
 
-class ControllerSignals(QObject):
+class ControllerWorker(QObject):
     update_path_s = Signal(str, str)         # Signal to update layer path
     update_camera_image_s = Signal(QPixmap)  # Signal to update Camera Image
     update_status_s = Signal(list)           # Signal to update controller status
     update_console_text_s = Signal(str)      # Signal to send text to the console textEdit
     serial_send_s = Signal(str)              # Signal to send text to the serial
 
-
-class ControllerWorker(QRunnable):
-    """Controller Worker thread"""
-
     SPLITPAT = re.compile(r"[:,]")
 
-    def __init__(self, serial_rx_queue, vis_layer, *args, **kwargs):
+    def __init__(self, serial_rx_queue, vis_layer):
         super(ControllerWorker, self).__init__()
-        self.args = args
-        self.kwargs = kwargs
-        self.signals = ControllerSignals()  # Controller Worker signals
 
         self.vis_layer = vis_layer
 
@@ -31,29 +24,36 @@ class ControllerWorker(QRunnable):
 
         self.serialRxQueue = serial_rx_queue
 
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.on_timeout)
-        self.timer.setInterval(120)
-        self.timer.start()
-        self.status_flag_poll = False
+        self.poll_timer = QTimer()
+        self.poll_timer.timeout.connect(self.on_poll_timeout)
+        self.poll_timer.setInterval(120)
+        self.poll_timer.start()
+
+        self.camera_timer = QTimer()
+        self.camera_timer.timeout.connect(self.on_camera_timeout)
+        self.camera_timer.setInterval(120)
+        self.camera_timer.start()
+
         self.status_l = []
         self.threshold_value = 0
 
         self.pcb = PcbObj()
         self.new_layer = ""
-        self.new_layer_flag = False
         self.new_layer_path = ""
         self.new_layer_color = ""
 
         self.align_active = False
-        self.finish_signal = False  # Thread termination signal
 
-    def on_timeout(self):
-        self.status_flag_poll = True
+    def on_poll_timeout(self):
+        self.serial_send_s.emit("?\n")
 
-    def terminate_thread(self):
-        """This function is to terminate thread."""
-        self.finish_signal = True
+    def on_camera_timeout(self):
+        if self.align_active:
+            frame = self.double_side_manager.get_webcam_frame()
+            # print(self.threshold_value)
+            frame = self.double_side_manager.detect_holes(frame, self.threshold_value)
+            image = qimage2ndarray.array2qimage(frame)
+            self.update_camera_image_s.emit(QPixmap.fromImage(image))
 
     def parse_bracket_angle(self, line):
         fields = line[1:-1].split("|")
@@ -66,7 +66,7 @@ class ControllerWorker(QRunnable):
                 try:
                     mpos_l = [word[1], word[2], word[3]]
                 except (ValueError, IndexError):
-                    break # todo: signal error
+                    print("Error evaluating MPos")
 
         return [status, mpos_l]
 
@@ -92,7 +92,8 @@ class ControllerWorker(QRunnable):
         self.new_layer = layer
         self.new_layer_path = layer_path
         self.new_layer_color = color
-        self.new_layer_flag = True
+        self.plot_layer(self.new_layer, self.new_layer_path, self.new_layer_color)
+        self.update_path_s.emit(self.new_layer, self.new_layer_path)
 
     @Slot(bool)
     def set_align_is_active(self, align_is_active):
@@ -103,40 +104,17 @@ class ControllerWorker(QRunnable):
         self.threshold_value = new_threshold
 
     @Slot()
-    def run(self):
-        # self.signals.update_console_text_s.emit("Init Controller Worker Thread")
-
-        while not self.finish_signal:
-            if not self.serialRxQueue.empty():
-                try:
-                    element = self.serialRxQueue.get(block=False)
-                    if element:
-                        # self.signals.update_console_text_s.emit(self.parse_bracket_angle(element))
-                        if re.match("^<.*>\s*$\s", element):
-                            self.signals.update_status_s.emit(self.parse_bracket_angle(element))
-                        elif re.match("ok\s*$\s", element):
-                            pass
-                        else:
-                            self.signals.update_console_text_s.emit(element)
-                except BlockingIOError:
-                    pass
-            if self.status_flag_poll:
-                # refresh webcam frame
-                if self.align_active:
-                    frame = self.double_side_manager.get_webcam_frame()
-                    # print(self.threshold_value)
-                    frame = self.double_side_manager.detect_holes(frame, self.threshold_value)
-                    image = qimage2ndarray.array2qimage(frame)
-                    self.signals.update_camera_image_s.emit(QPixmap.fromImage(image))
-                # Status poll
-                self.signals.serial_send_s.emit("?\n")  # todo: to be moved somewhere else
-                self.status_flag_poll = False
-
-            if self.new_layer_flag:
-                self.plot_layer(self.new_layer, self.new_layer_path, self.new_layer_color)
-                self.new_layer_flag = False
-                self.signals.update_path_s.emit(self.new_layer, self.new_layer_path)
-
-
-if __name__ == "__main__":
-    pass
+    def parse_rx_queue(self):
+        if not self.serialRxQueue.empty():
+            try:
+                element = self.serialRxQueue.get(block=False)
+                if element:
+                    # self.update_console_text_s.emit(self.parse_bracket_angle(element))
+                    if re.match("^<.*>\s*$\s", element):
+                        self.update_status_s.emit(self.parse_bracket_angle(element))
+                    elif re.match("ok\s*$\s", element):
+                        pass
+                    else:
+                        self.update_console_text_s.emit(element)
+            except BlockingIOError:
+                pass

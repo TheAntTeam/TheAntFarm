@@ -1,11 +1,11 @@
 import sys
 from PySide2.QtWidgets import QMainWindow, QApplication
-from PySide2.QtCore import QThreadPool, Signal, QThread
+from PySide2.QtCore import Signal, QThread
 from queue import Queue
 from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui > ui_newCNC.py
 """ Custom imports """
 from serial_manager import SerialWorker
-from controller_thread import ControllerWorker
+from controller_manager import ControllerWorker
 from style_manager import StyleManager
 from shape_core.visual_manager import VisualLayer
 from ui_manager import UiManager
@@ -13,7 +13,6 @@ from ui_manager import UiManager
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu = Queue()                   # serial FIFO RX Queue
-    finish_thread = Signal()
 
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__()
@@ -33,9 +32,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
 
         # Control Worker Thread, started as soon as the thread pool is started.
+        self.control_thread = QThread(self)
+        self.control_thread.start()
         self.controlWo = ControllerWorker(self.serialRxQu, self.vl)
-
-        self.finish_thread.connect(self.controlWo.terminate_thread)
+        self.controlWo.moveToThread(self.control_thread)
 
         # Serial Worker Thread.
         self.serial_thread = QThread(self)
@@ -44,14 +44,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.serialWo.moveToThread(self.serial_thread)
 
         self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo)
-        self.threadpool = QThreadPool()
-        self.threadpool.start(self.controlWo)
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
         self.serialWo.close_port()
         self.serial_thread.quit()
-        self.finish_thread.emit()
+        self.control_thread.quit()
         app.exit(0)
 
     def handle_refresh_button(self):

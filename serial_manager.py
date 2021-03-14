@@ -4,6 +4,7 @@ from PySide2.QtCore import QIODevice, Signal, Slot, QObject
 
 class SerialWorker(QObject):
     update_console_text_s = Signal(str)
+    rx_queue_not_empty_s = Signal()
 
     def __init__(self, serial_rx_queue):
         super(SerialWorker, self).__init__()
@@ -61,6 +62,7 @@ class SerialWorker(QObject):
                     element = res_split.pop(0)
                     if '\n' in element:
                         self.serialRxQueue.put(element)
+                        self.rx_queue_not_empty_s.emit()
                     else:
                         self.residual_string = element
                 # print("Final residual string: " + self.residual_string)

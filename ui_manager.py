@@ -39,15 +39,17 @@ class UiManager(QObject):
         self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("drill", "Load Drill Excellon File", "Excellon (*.xln *.XLN)", "green"))
         # From UI Manager to Serial Manager
         self.serial_send_s.connect(self.serialWo.send)
-        # From Controller Thread to UI Manager
-        self.controlWo.signals.update_path_s.connect(self.set_layer_path)
-        self.controlWo.signals.update_camera_image_s.connect(self.update_camera_image)
-        self.controlWo.signals.update_status_s.connect(self.update_status)
-        self.controlWo.signals.update_console_text_s.connect(self.update_console_text)
-        # From Controller Thread to Serial Manager
-        self.controlWo.signals.serial_send_s.connect(self.serialWo.send)
-        # From Serial Thread to UI Manager
+        # From Controller Manager to UI Manager
+        self.controlWo.update_path_s.connect(self.set_layer_path)
+        self.controlWo.update_camera_image_s.connect(self.update_camera_image)
+        self.controlWo.update_status_s.connect(self.update_status)
+        self.controlWo.update_console_text_s.connect(self.update_console_text)
+        # From Controller Manager to Serial Manager
+        self.controlWo.serial_send_s.connect(self.serialWo.send)
+        # From Serial Manager to UI Manager
         self.serialWo.update_console_text_s.connect(self.update_console_text)
+        # From Serial Manager to Control Manager
+        self.serialWo.rx_queue_not_empty_s.connect(self.controlWo.parse_rx_queue)
 
     def load_gerber_file(self, layer="top", load_text="Load File", extensions="", color="red"):
         filters = extensions + ";;All files (*.*)"
