@@ -8,6 +8,7 @@ class UiManager(QObject):
     """Manage UI objects, signals and slots"""
 
     load_layer_s = Signal(str, str, str)
+    change_visibility_s = Signal(str, bool)
     align_active_s = Signal(bool)
     update_threshold_s = Signal(int)
     serial_send_s = Signal(str)
@@ -32,11 +33,18 @@ class UiManager(QObject):
         # From UI Manager to Controller
         self.align_active_s.connect(self.controlWo.set_align_is_active)
         self.load_layer_s.connect(self.controlWo.set_new_layer)
+        self.change_visibility_s.connect(self.controlWo.set_layer_visible)
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
         self.ui.topLoadButton.clicked.connect(lambda: self.load_gerber_file("top", "Load Top Gerber File", "Gerber (*.gbr *.GBR)", "red"))
         self.ui.bottomLoadButton.clicked.connect(lambda: self.load_gerber_file("bottom", "Load Bottom Gerber File", "Gerber (*.gbr *.GBR)", "blue"))
         self.ui.profileLoadButton.clicked.connect(lambda: self.load_gerber_file("profile", "Load Profile Gerber File", "Gerber (*.gbr *.GBR)", "black"))
         self.ui.drillLoadButton.clicked.connect(lambda: self.load_gerber_file("drill", "Load Drill Excellon File", "Excellon (*.xln *.XLN)", "green"))
+
+        self.ui.topViewCheckBox.stateChanged.connect(lambda: self.set_layer_visible("top", self.ui.topViewCheckBox.isChecked()))
+        self.ui.bottomViewCheckBox.stateChanged.connect(lambda: self.set_layer_visible("bottom", self.ui.bottomViewCheckBox.isChecked()))
+        self.ui.profileViewCheckBox.stateChanged.connect(lambda: self.set_layer_visible("profile", self.ui.profileViewCheckBox.isChecked()))
+        self.ui.drillViewCheckBox.stateChanged.connect(lambda: self.set_layer_visible("drill", self.ui.drillViewCheckBox.isChecked()))
+
         # From UI Manager to Serial Manager
         self.serial_send_s.connect(self.serialWo.send)
         # From Controller Manager to UI Manager
@@ -59,6 +67,9 @@ class UiManager(QObject):
             self.ui.consoleTextEdit.append("Loading " + load_file_path[0])
 
             self.load_layer_s.emit(layer, load_file_path[0], color)
+
+    def set_layer_visible(self, tag, visible):
+        self.change_visibility_s.emit(tag, visible)
 
     @Slot(str, str)
     def set_layer_path(self, layer, layer_path):

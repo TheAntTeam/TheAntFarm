@@ -2,8 +2,10 @@
 
 from vispy.scene import visuals
 from vispy.color import Color
+from vispy.visuals.filters import Alpha
 from OpenGL import GLU
 import numpy as np
+from collections import OrderedDict
 
 
 class GLUTess:
@@ -115,9 +117,15 @@ class VisualLayer:
 
     def __init__(self, canvas):
         self.canvas = canvas
+        self.translucent_filter = Alpha()
         self.z = 0.0
+        self.meshes = OrderedDict({})
 
-    def add_layer(self, geom_list, color=None, holes=False):
+    def set_layer_visible(self, tag, visible):
+        if tag in self.meshes.keys():
+            self.meshes[tag].visible = visible
+
+    def add_layer(self, tag, geom_list, color=None, holes=False):
         ldata = [[], []]
         triangulizer = GLUTess()
         for g in geom_list:
@@ -130,7 +138,7 @@ class VisualLayer:
                 tri_off = list(np.array(tri[:]) + len(ldata[1]))
                 ldata[0] += tri_off
                 ldata[1] += pts[:]
-        self.create_mesh(ldata, color)
+        self.create_mesh(tag, ldata, color)
         # print("END")
         self.z -= self.DELTA
 
@@ -143,10 +151,18 @@ class VisualLayer:
         self.canvas.freeze()
         visuals.XYZAxis(parent=self.canvas.view.scene)
 
-    def create_mesh(self, ldata, color=None):
+    def create_mesh(self, tag, ldata, color=None):
 
         self.canvas.unfreeze()
-        mesh = visuals.Mesh()
+        mesh = visuals.Mesh(parent=self.canvas.view.scene)
+        # mesh = visuals.Mesh(shading='flat', parent=self.canvas.view.scene)
+        # mesh.unfreeze()
+        # mesh.filter = self.translucent_filter
+        # mesh.attach(self.translucent_filter)
+        # mesh.freeze()
+        # mesh.filter.alpha = 0.3
+        # mesh.shading = None
+
         tri = ldata[0]
         pts = ldata[1]
         if color:
@@ -157,6 +173,7 @@ class VisualLayer:
         else:
             mesh.set_data(np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)))
         mesh._bounds_changed()
+        self.meshes[tag] = mesh
         self.canvas.view.add(mesh)
 
         self.canvas.view.camera.set_range()

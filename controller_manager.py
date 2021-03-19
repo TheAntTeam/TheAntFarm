@@ -78,14 +78,18 @@ class ControllerWorker(QObject):
                 self.pcb.load_gerber(layer_path, layer)
                 self.pcb.get_gerber(layer)
                 loaded_layer = self.pcb.get_gerber_layer(layer)
-                self.vis_layer.add_layer(loaded_layer[0], color)
+                self.vis_layer.add_layer(layer, loaded_layer[0], color)
             if layer in exc_tags:
                 self.pcb.load_excellon(layer_path, layer)
                 self.pcb.get_excellon(layer)
                 loaded_layer = self.pcb.get_excellon_layer(layer)
-                self.vis_layer.add_layer(loaded_layer[0], color=color, holes=True)
+                self.vis_layer.add_layer(layer, loaded_layer[0], color=color, holes=True)
         except (AttributeError, ValueError, ZeroDivisionError, IndexError):
             print("Error plotting new layer " + layer)
+
+    @Slot(str, bool)
+    def set_layer_visible(self, tag, visible):
+        self.vis_layer.set_layer_visible(tag, visible)
 
     @Slot(str, str, str)
     def set_new_layer(self, layer, layer_path, color):
