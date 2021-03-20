@@ -121,10 +121,7 @@ class UiManager(QObject):
 
     def check_align_is_active(self):
         # print(self.ui.tabWidget.currentWidget().objectName())
-        if self.ui.tabWidget.currentWidget().objectName() == "alignTab":
-            self.align_active_s.emit(True)
-        else:
-            self.align_active_s.emit(False)
+        self.align_active_s.emit(self.ui.tabWidget.currentWidget().objectName() == "alignTab")
 
     def update_threshold(self):
         self.update_threshold_s.emit(self.ui.verticalSlider.value())
