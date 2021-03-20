@@ -34,7 +34,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Control Worker Thread, started as soon as the thread pool is started.
         self.control_thread = QThread(self)
         self.control_thread.start()
-        self.controlWo = ControllerWorker(self.serialRxQu, self.vl)
+        self.controlWo = ControllerWorker(self.serialRxQu)
         self.controlWo.moveToThread(self.control_thread)
 
         # Serial Worker Thread.
@@ -43,6 +43,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.serialWo = SerialWorker(self.serialRxQu)
         self.serialWo.moveToThread(self.serial_thread)
 
+        # Important: this call should be after the thread creations.
         self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo)
 
     def closeEvent(self, event):

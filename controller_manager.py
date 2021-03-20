@@ -4,21 +4,20 @@ import re
 import qimage2ndarray
 from double_side_manager import DoubleSideManager
 from shape_core.pcb_manager import PcbObj
+from collections import OrderedDict as Od
 
 
 class ControllerWorker(QObject):
-    update_path_s = Signal(str, str)         # Signal to update layer path
-    update_camera_image_s = Signal(QPixmap)  # Signal to update Camera Image
-    update_status_s = Signal(list)           # Signal to update controller status
-    update_console_text_s = Signal(str)      # Signal to send text to the console textEdit
-    serial_send_s = Signal(str)              # Signal to send text to the serial
+    update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
+    update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
+    update_status_s = Signal(list)               # Signal to update controller status
+    update_console_text_s = Signal(str)          # Signal to send text to the console textEdit
+    serial_send_s = Signal(str)                  # Signal to send text to the serial
 
     SPLITPAT = re.compile(r"[:,]")
 
-    def __init__(self, serial_rx_queue, vis_layer):
+    def __init__(self, serial_rx_queue):
         super(ControllerWorker, self).__init__()
-
-        self.vis_layer = vis_layer
 
         self.double_side_manager = DoubleSideManager()
 
@@ -38,9 +37,6 @@ class ControllerWorker(QObject):
         self.threshold_value = 0
 
         self.pcb = PcbObj()
-        self.new_layer = ""
-        self.new_layer_path = ""
-        self.new_layer_color = ""
 
         self.align_active = False
 
@@ -70,7 +66,8 @@ class ControllerWorker(QObject):
 
         return [status, mpos_l]
 
-    def plot_layer(self, layer, layer_path, color):
+    @Slot(str, str, str)
+    def load_new_layer(self, layer, layer_path):
         try:
             grb_tags = self.pcb.GBR_KEYS
             exc_tags = self.pcb.EXN_KEYS
@@ -78,26 +75,14 @@ class ControllerWorker(QObject):
                 self.pcb.load_gerber(layer_path, layer)
                 self.pcb.get_gerber(layer)
                 loaded_layer = self.pcb.get_gerber_layer(layer)
-                self.vis_layer.add_layer(layer, loaded_layer[0], color)
+                self.update_layer_s.emit(loaded_layer, layer, layer_path, False)
             if layer in exc_tags:
                 self.pcb.load_excellon(layer_path, layer)
                 self.pcb.get_excellon(layer)
                 loaded_layer = self.pcb.get_excellon_layer(layer)
-                self.vis_layer.add_layer(layer, loaded_layer[0], color=color, holes=True)
+                self.update_layer_s.emit(loaded_layer, layer, layer_path, True)
         except (AttributeError, ValueError, ZeroDivisionError, IndexError):
-            print("Error plotting new layer " + layer)
-
-    @Slot(str, bool)
-    def set_layer_visible(self, tag, visible):
-        self.vis_layer.set_layer_visible(tag, visible)
-
-    @Slot(str, str, str)
-    def set_new_layer(self, layer, layer_path, color):
-        self.new_layer = layer
-        self.new_layer_path = layer_path
-        self.new_layer_color = color
-        self.plot_layer(self.new_layer, self.new_layer_path, self.new_layer_color)
-        self.update_path_s.emit(self.new_layer, self.new_layer_path)
+            print("Error plotting new layer " + layer_path)
 
     @Slot(bool)
     def set_align_is_active(self, align_is_active):
