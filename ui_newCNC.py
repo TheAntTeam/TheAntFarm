@@ -758,10 +758,10 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_6.addWidget(self.tabWidget)
 
-        self.consoleTextEdit = QTextEdit(self.centralwidget)
-        self.consoleTextEdit.setObjectName(u"consoleTextEdit")
+        self.logging_plain_text_edit = QPlainTextEdit(self.centralwidget)
+        self.logging_plain_text_edit.setObjectName(u"logging_plain_text_edit")
 
-        self.verticalLayout_6.addWidget(self.consoleTextEdit)
+        self.verticalLayout_6.addWidget(self.logging_plain_text_edit)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)

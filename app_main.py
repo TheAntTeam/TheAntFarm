@@ -8,6 +8,8 @@ from serial_manager import SerialWorker
 from controller_manager import ControllerWorker
 from style_manager import StyleManager
 from ui_manager import UiManager
+from log_manager import QtHandler
+import logging
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -46,6 +48,14 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     style_man = StyleManager(app)
     window = MainWindow()
+
+    h = QtHandler(window.ui_manager.update_logging_status)
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s')
+    h.setFormatter(formatter)
+    root = logging.getLogger()
+    h.setLevel(logging.INFO)
+    root.addHandler(h)
+    root.setLevel(logging.DEBUG)  # Set root log level to the lowest between the log lever of the handlers.
 
     style_man.change_style("Fusion")
     style_man.set_dark_palette()

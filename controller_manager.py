@@ -5,6 +5,9 @@ import qimage2ndarray
 from double_side_manager import DoubleSideManager
 from shape_core.pcb_manager import PcbObj
 from collections import OrderedDict as Od
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ControllerWorker(QObject):
@@ -46,7 +49,7 @@ class ControllerWorker(QObject):
     def on_camera_timeout(self):
         if self.align_active:
             frame = self.double_side_manager.get_webcam_frame()
-            # print(self.threshold_value)
+            logger.debug(str(self.threshold_value))
             frame = self.double_side_manager.detect_holes(frame, self.threshold_value)
             image = qimage2ndarray.array2qimage(frame)
             self.update_camera_image_s.emit(QPixmap.fromImage(image))
@@ -62,7 +65,7 @@ class ControllerWorker(QObject):
                 try:
                     mpos_l = [word[1], word[2], word[3]]
                 except (ValueError, IndexError):
-                    print("Error evaluating MPos")
+                    logging.error("Error evaluating MPos")
 
         return [status, mpos_l]
 
@@ -82,7 +85,7 @@ class ControllerWorker(QObject):
                 loaded_layer = self.pcb.get_excellon_layer(layer)
                 self.update_layer_s.emit(loaded_layer, layer, layer_path, True)
         except (AttributeError, ValueError, ZeroDivisionError, IndexError):
-            print("Error plotting new layer " + layer_path)
+            logging.error("Error plotting new layer " + layer_path)
 
     @Slot(bool)
     def set_align_is_active(self, align_is_active):

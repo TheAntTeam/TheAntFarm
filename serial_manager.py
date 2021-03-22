@@ -1,5 +1,8 @@
 from PySide2.QtSerialPort import QSerialPort, QSerialPortInfo
 from PySide2.QtCore import QIODevice, Signal, Slot, QObject
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SerialWorker(QObject):
@@ -26,7 +29,7 @@ class SerialWorker(QObject):
     def open_port(self, port):
         """Open passed serial port. Return outcome of operation. True if success, otherwise False. """
         if port:
-            # print("Open " + port)
+            logging.debug("Opening " + port)
             self.update_console_text_s.emit("Opening " + port)
             try:
                 self.serial_port.setPortName(port)
@@ -34,7 +37,7 @@ class SerialWorker(QObject):
                 self.serial_port.setBaudRate(QSerialPort.Baud115200)  #todo: pass baudrate
                 return True
             except IOError:
-                # print("COM port already in use.")
+                logging.debug("COM port already in use.")
                 self.update_console_text_s.emit("COM port already in use.")
                 return False
         else:
@@ -43,7 +46,7 @@ class SerialWorker(QObject):
 
     def close_port(self):
         """Close serial port."""
-        # print("Close " + self.serial_ch.active_port.name)
+        logging.debug("Closing " + self.serial_port.portName())
         self.update_console_text_s.emit("Closing " + self.serial_port.portName())
         self.serial_port.close()
 
@@ -52,11 +55,11 @@ class SerialWorker(QObject):
         if self.serial_port.canReadLine():
             data_out = self.serial_port.readLine().data().decode()
             if data_out:
-                # print("data in: " + data_out)
+                logging.debug("data in: " + data_out)
                 self.residual_string = self.residual_string + data_out
-                # print("Residual string: " + residual_string)
+                logging.debug("Residual string: " + self.residual_string)
                 res_split = self.residual_string.splitlines(True)
-                # print("Res split: " + res_split)
+                logging.debug("Res split: " + res_split)
                 self.residual_string = ""
                 while res_split:
                     element = res_split.pop(0)
@@ -65,10 +68,9 @@ class SerialWorker(QObject):
                         self.rx_queue_not_empty_s.emit()
                     else:
                         self.residual_string = element
-                # print("Final residual string: " + self.residual_string)
+                logging.debug("Final residual string: " + self.residual_string)
 
     @Slot()
     def send(self, data):
         if self.serial_port.isOpen():
-            # print(data.encode("utf-8"))
             self.serial_port.write(data.encode("utf-8"))

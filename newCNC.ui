@@ -1384,7 +1384,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTextEdit" name="consoleTextEdit"/>
+     <widget class="QPlainTextEdit" name="logging_plain_text_edit"/>
     </item>
    </layout>
   </widget>

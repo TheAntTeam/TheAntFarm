@@ -4,12 +4,22 @@ from PySide2.QtCore import Signal, Slot, QObject
 from PySide2.QtGui import QPixmap
 from shape_core.visual_manager import VisualLayer
 from collections import OrderedDict as Od
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class UiManager(QObject):
     """Manage UI objects, signals and slots"""
     L_TAGS = ["top", "bottom", "profile", "drill"]
-    COLORS = ["red", "blue", "black", "green"]
+    L_COLORS = ["red", "blue", "black", "green"]
+    LOG_COLORS = {
+        logging.DEBUG:    'white',
+        logging.INFO:     'blue',
+        logging.WARNING:  'orange',
+        logging.ERROR:    'red',
+        logging.CRITICAL: 'purple',
+    }
     load_layer_s = Signal(str, str)
     change_visibility_s = Signal(str, bool)
     align_active_s = Signal(bool)
@@ -25,7 +35,7 @@ class UiManager(QObject):
         self.controlWo = control_worker
         self.serialWo = serial_worker
         self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
-        self.layer_colors = Od([(k, v) for k, v in zip(self.L_TAGS, self.COLORS)])
+        self.layer_colors = Od([(k, v) for k, v in zip(self.L_TAGS, self.L_COLORS)])
         self.L_TEXT = [self.ui.topFileLineEdit, self.ui.bottomFileLineEdit,
                        self.ui.profileFileLineEdit, self.ui.drillFileLineEdit]
         self.layers_te = Od([(k, t) for k, t in zip(self.L_TAGS, self.L_TEXT)])
@@ -92,8 +102,14 @@ class UiManager(QObject):
         load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.last_open_dir, filters)
         if load_file_path[0]:
             self.last_open_dir = os.path.dirname(load_file_path[0])
-            self.ui.consoleTextEdit.append("Loading " + load_file_path[0])
+            self.ui.logging_plain_text_edit.append("Loading " + load_file_path[0])
             self.load_layer_s.emit(layer, load_file_path[0])
+
+    @Slot(str, logging.LogRecord)
+    def update_logging_status(self, status, record):
+        color = self.LOG_COLORS.get(record.levelno, 'black')
+        s = '<pre><font color="%s">%s</font></pre>' % (color, status)
+        self.ui.logging_plain_text_edit.appendHtml(s)
 
     @Slot(str, bool)
     def set_layer_visible(self, tag, visible):
@@ -120,7 +136,6 @@ class UiManager(QObject):
         self.ui.textEdit.append(new_text)
 
     def check_align_is_active(self):
-        # print(self.ui.tabWidget.currentWidget().objectName())
         self.align_active_s.emit(self.ui.tabWidget.currentWidget().objectName() == "alignTab")
 
     def update_threshold(self):
@@ -136,13 +151,11 @@ class UiManager(QObject):
         """Get list of serial ports available."""
         ls = self.serialWo.get_port_list()
         if ls:
-            # print(ls)
-            # self.ui.textEdit.append("Listing serial ports: ")
-            # self.ui.textEdit.append(str(ls))
+            logger.debug("Available ports: " + str(ls))
             self.ui.serialPortsComboBox.clear()
             self.ui.serialPortsComboBox.addItems(ls)
         else:
-            # print('No serial ports available.')
+            logger.info('No serial ports available.')
             self.ui.textEdit.append('No serial ports available.')
             self.ui.serialPortsComboBox.clear()
 
@@ -151,7 +164,6 @@ class UiManager(QObject):
            creates the serial worker thread. If the thread was
            already created previously and paused, it revives it."""
         if not self.connection_status:
-            # print(self.serialPortsComboBox.currentText())
             if self.serialWo.open_port(self.ui.serialPortsComboBox.currentText()):
                 self.connection_status = True
                 self.ui.connectButton.setText("Disconnect")
@@ -174,22 +186,20 @@ class UiManager(QObject):
 
     def hide_show_console(self):
         if self.ui.actionHide_Show_Console.isChecked():
-            self.ui.consoleTextEdit.show()
+            self.ui.logging_plain_text_edit.show()
         else:
-            self.ui.consoleTextEdit.hide()
+            self.ui.logging_plain_text_edit.hide()
 
     def handle_unlock(self):
-        print("unlock")
-        # self.serialTxQu.put("$X\n")
+        logging.debug("Unlock Command")
         self.serial_send_s.emit("$X\n")
 
     def handle_homing(self):
-        print("homing")
-        # self.serialTxQu.put("$H\n")
+        logging.debug("Homing Command")
         self.serial_send_s.emit("$H\n")
 
     def handle_x_minus(self):
-        print("x_minus")
+        logging.debug("X_minus Command")
         # self.serialTxQu.put("$J=G91 X-10 F100000\n") #todo: change this, just for test
         self.serial_send_s.emit("$J=G91 X-10 F100000\n")  # todo: change this, just for test
 
