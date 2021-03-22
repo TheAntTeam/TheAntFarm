@@ -15,7 +15,7 @@ class UiManager(QObject):
     L_COLORS = ["red", "blue", "black", "green"]
     LOG_COLORS = {
         logging.DEBUG:    'white',
-        logging.INFO:     'blue',
+        logging.INFO:     'light blue',
         logging.WARNING:  'orange',
         logging.ERROR:    'red',
         logging.CRITICAL: 'purple',
@@ -102,7 +102,7 @@ class UiManager(QObject):
         load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.last_open_dir, filters)
         if load_file_path[0]:
             self.last_open_dir = os.path.dirname(load_file_path[0])
-            self.ui.logging_plain_text_edit.append("Loading " + load_file_path[0])
+            logging.info("Loading " + load_file_path[0])
             self.load_layer_s.emit(layer, load_file_path[0])
 
     @Slot(str, logging.LogRecord)
