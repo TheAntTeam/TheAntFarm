@@ -26,14 +26,15 @@ class UiManager(QObject):
     update_threshold_s = Signal(int)
     serial_send_s = Signal(str)
 
-    def __init__(self, main_win, ui, control_worker, serial_worker):
+    def __init__(self, main_win, ui, control_worker, serial_worker, settings):
         super(UiManager, self).__init__()
-        self.last_open_dir = "."
-        self.connection_status = False
         self.main_win = main_win
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
+        self.settings = settings
+
+        self.connection_status = False
         self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
         self.layer_colors = Od([(k, v) for k, v in zip(self.L_TAGS, self.L_COLORS)])
         self.L_TEXT = [self.ui.topFileLineEdit, self.ui.bottomFileLineEdit,
@@ -99,9 +100,9 @@ class UiManager(QObject):
 
     def load_gerber_file(self, layer="top", load_text="Load File", extensions=""):
         filters = extensions + ";;All files (*.*)"
-        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.last_open_dir, filters)
+        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.settings.layer_last_dir, filters)
         if load_file_path[0]:
-            self.last_open_dir = os.path.dirname(load_file_path[0])
+            self.settings.layer_last_dir = os.path.dirname(load_file_path[0])
             logging.info("Loading " + load_file_path[0])
             self.load_layer_s.emit(layer, load_file_path[0])
 

@@ -1,6 +1,6 @@
 import sys
-from PySide2.QtWidgets import QMainWindow, QApplication
-from PySide2.QtCore import QThread
+from PySide2.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PySide2.QtCore import QThread, QSettings, QPoint, QSize
 from queue import Queue
 from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui > ui_newCNC.py
 """ Custom imports """
@@ -8,7 +8,8 @@ from serial_manager import SerialWorker
 from controller_manager import ControllerWorker
 from style_manager import StyleManager
 from ui_manager import UiManager
-from log_manager import QtHandler
+from settings_manager import SettingsHandler
+from log_manager import LogHandler
 import logging
 
 
@@ -33,11 +34,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.serialWo = SerialWorker(self.serialRxQu)
         self.serialWo.moveToThread(self.serial_thread)
 
+        self.settings = SettingsHandler("The Ant Team", "newCNC", self)
+        self.settings.read_all_settings()  # TODO: manage exceptions with a try except
+
         # Important: this call should be after the thread creations.
-        self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo)
+        self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo, self.settings)
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
+        self.settings.write_all_settings()  # write_settings()
         self.serialWo.close_port()
         self.serial_thread.quit()
         self.control_thread.quit()
@@ -49,7 +54,7 @@ if __name__ == "__main__":
     style_man = StyleManager(app)
     window = MainWindow()
 
-    h = QtHandler(window.ui_manager.update_logging_status)
+    h = LogHandler(window.ui_manager.update_logging_status)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s')
     h.setFormatter(formatter)
     root = logging.getLogger()

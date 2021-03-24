@@ -229,8 +229,32 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.profileViewCheckBox, 3, 2, 1, 1, Qt.AlignHCenter)
 
+        self.horizontalSpacer = QSpacerItem(140, 17, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer, 7, 0, 1, 1)
+
+        self.pushButton_4 = QPushButton(self.tab)
+        self.pushButton_4.setObjectName(u"pushButton_4")
+        sizePolicy2.setHeightForWidth(self.pushButton_4.sizePolicy().hasHeightForWidth())
+        self.pushButton_4.setSizePolicy(sizePolicy2)
+
+        self.gridLayout.addWidget(self.pushButton_4, 7, 1, 1, 1)
+
+        self.checkBox_6 = QCheckBox(self.tab)
+        self.checkBox_6.setObjectName(u"checkBox_6")
+        sizePolicy2.setHeightForWidth(self.checkBox_6.sizePolicy().hasHeightForWidth())
+        self.checkBox_6.setSizePolicy(sizePolicy2)
+        self.checkBox_6.setChecked(True)
+
+        self.gridLayout.addWidget(self.checkBox_6, 7, 2, 1, 1, Qt.AlignHCenter)
+
 
         self.verticalLayout_7.addLayout(self.gridLayout)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_3)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -239,6 +263,8 @@ class Ui_MainWindow(object):
         self.tabWidget_2.addTab(self.tab, "")
         self.tab_2 = QWidget()
         self.tab_2.setObjectName(u"tab_2")
+        self.verticalLayout_8 = QVBoxLayout(self.tab_2)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.tabWidget_2.addTab(self.tab_2, "")
 
         self.verticalLayout_2.addWidget(self.tabWidget_2)
@@ -760,6 +786,9 @@ class Ui_MainWindow(object):
 
         self.logging_plain_text_edit = QPlainTextEdit(self.centralwidget)
         self.logging_plain_text_edit.setObjectName(u"logging_plain_text_edit")
+        sizePolicy4.setHeightForWidth(self.logging_plain_text_edit.sizePolicy().hasHeightForWidth())
+        self.logging_plain_text_edit.setSizePolicy(sizePolicy4)
+        self.logging_plain_text_edit.setMaximumSize(QSize(16777215, 100))
 
         self.verticalLayout_6.addWidget(self.logging_plain_text_edit)
 
@@ -814,6 +843,8 @@ class Ui_MainWindow(object):
         self.drillViewCheckBox.setText("")
         self.filePathLabel.setText(QCoreApplication.translate("MainWindow", u"File Path", None))
         self.profileViewCheckBox.setText("")
+        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Clear All", None))
+        self.checkBox_6.setText("")
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Tab 1", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Tab 2", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.viewTab), QCoreApplication.translate("MainWindow", u"VIEW", None))

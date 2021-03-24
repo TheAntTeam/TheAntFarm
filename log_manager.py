@@ -19,9 +19,9 @@ class Signaller(QObject):
 # You specify the slot function to do whatever GUI updates you want. The handler
 # doesn't know or care about specific UI elements.
 #
-class QtHandler(logging.Handler):
+class LogHandler(logging.Handler):
     def __init__(self, slot_func, *args, **kwargs):
-        super(QtHandler, self).__init__(*args, **kwargs)
+        super(LogHandler, self).__init__(*args, **kwargs)
         self.signaller = Signaller()
         self.signaller.signal.connect(slot_func)
 
