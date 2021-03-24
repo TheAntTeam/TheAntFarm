@@ -6,6 +6,7 @@ from double_side_manager import DoubleSideManager
 from shape_core.pcb_manager import PcbObj
 from collections import OrderedDict as Od
 import logging
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -64,8 +65,10 @@ class ControllerWorker(QObject):
             if word[0] == "MPos":
                 try:
                     mpos_l = [word[1], word[2], word[3]]
-                except (ValueError, IndexError):
-                    logging.error("Error evaluating MPos")
+                except (ValueError, IndexError) as e:
+                    logging.error(e, exc_info=True)
+                except:
+                    logger.error("Uncaught exception: %s", traceback.format_exc())
 
         return [status, mpos_l]
 
@@ -84,8 +87,10 @@ class ControllerWorker(QObject):
                 self.pcb.get_excellon(layer)
                 loaded_layer = self.pcb.get_excellon_layer(layer)
                 self.update_layer_s.emit(loaded_layer, layer, layer_path, True)
-        except (AttributeError, ValueError, ZeroDivisionError, IndexError):
-            logging.error("Error plotting new layer " + layer_path)
+        except (AttributeError, ValueError, ZeroDivisionError, IndexError) as e:
+            logging.error(e, exc_info=True)
+        except:
+            logger.error("Uncaught exception: %s", traceback.format_exc())
 
     @Slot(bool)
     def set_align_is_active(self, align_is_active):
@@ -108,5 +113,7 @@ class ControllerWorker(QObject):
                         pass
                     else:
                         self.update_console_text_s.emit(element)
-            except BlockingIOError:
-                pass
+            except BlockingIOError as e:
+                logging.error(e, exc_info=True)
+            except:
+                logger.error("Uncaught exception: %s", traceback.format_exc())

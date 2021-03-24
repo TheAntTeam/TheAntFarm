@@ -169,6 +169,13 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.checkBox_4, 5, 2, 1, 1, Qt.AlignHCenter)
 
+        self.pushButton_4 = QPushButton(self.tab)
+        self.pushButton_4.setObjectName(u"pushButton_4")
+        sizePolicy2.setHeightForWidth(self.pushButton_4.sizePolicy().hasHeightForWidth())
+        self.pushButton_4.setSizePolicy(sizePolicy2)
+
+        self.gridLayout.addWidget(self.pushButton_4, 8, 1, 1, 1)
+
         self.drillLoadButton = QPushButton(self.tab)
         self.drillLoadButton.setObjectName(u"drillLoadButton")
         sizePolicy2.setHeightForWidth(self.drillLoadButton.sizePolicy().hasHeightForWidth())
@@ -221,6 +228,14 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.topFileLineEdit, 1, 0, 1, 1)
 
+        self.checkBox_6 = QCheckBox(self.tab)
+        self.checkBox_6.setObjectName(u"checkBox_6")
+        sizePolicy2.setHeightForWidth(self.checkBox_6.sizePolicy().hasHeightForWidth())
+        self.checkBox_6.setSizePolicy(sizePolicy2)
+        self.checkBox_6.setChecked(True)
+
+        self.gridLayout.addWidget(self.checkBox_6, 8, 2, 1, 1, Qt.AlignHCenter)
+
         self.profileViewCheckBox = QCheckBox(self.tab)
         self.profileViewCheckBox.setObjectName(u"profileViewCheckBox")
         sizePolicy2.setHeightForWidth(self.profileViewCheckBox.sizePolicy().hasHeightForWidth())
@@ -231,22 +246,11 @@ class Ui_MainWindow(object):
 
         self.horizontalSpacer = QSpacerItem(140, 17, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
-        self.gridLayout.addItem(self.horizontalSpacer, 7, 0, 1, 1)
+        self.gridLayout.addItem(self.horizontalSpacer, 8, 0, 1, 1)
 
-        self.pushButton_4 = QPushButton(self.tab)
-        self.pushButton_4.setObjectName(u"pushButton_4")
-        sizePolicy2.setHeightForWidth(self.pushButton_4.sizePolicy().hasHeightForWidth())
-        self.pushButton_4.setSizePolicy(sizePolicy2)
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.gridLayout.addWidget(self.pushButton_4, 7, 1, 1, 1)
-
-        self.checkBox_6 = QCheckBox(self.tab)
-        self.checkBox_6.setObjectName(u"checkBox_6")
-        sizePolicy2.setHeightForWidth(self.checkBox_6.sizePolicy().hasHeightForWidth())
-        self.checkBox_6.setSizePolicy(sizePolicy2)
-        self.checkBox_6.setChecked(True)
-
-        self.gridLayout.addWidget(self.checkBox_6, 7, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addItem(self.horizontalSpacer_2, 7, 0, 1, 1)
 
 
         self.verticalLayout_7.addLayout(self.gridLayout)
@@ -585,14 +589,14 @@ class Ui_MainWindow(object):
         self.label_3.setSizePolicy(sizePolicy2)
         self.label_3.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout_5.addWidget(self.label_3)
+        self.verticalLayout_5.addWidget(self.label_3, 0, Qt.AlignHCenter)
 
         self.doubleSpinBox_2 = QDoubleSpinBox(self.controlTab)
         self.doubleSpinBox_2.setObjectName(u"doubleSpinBox_2")
         sizePolicy2.setHeightForWidth(self.doubleSpinBox_2.sizePolicy().hasHeightForWidth())
         self.doubleSpinBox_2.setSizePolicy(sizePolicy2)
 
-        self.verticalLayout_5.addWidget(self.doubleSpinBox_2)
+        self.verticalLayout_5.addWidget(self.doubleSpinBox_2, 0, Qt.AlignHCenter)
 
 
         self.xyzIncrementsHorizontalLayout.addLayout(self.verticalLayout_5)
@@ -605,14 +609,14 @@ class Ui_MainWindow(object):
         self.label_4.setSizePolicy(sizePolicy2)
         self.label_4.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout_4.addWidget(self.label_4)
+        self.verticalLayout_4.addWidget(self.label_4, 0, Qt.AlignHCenter)
 
         self.doubleSpinBox = QDoubleSpinBox(self.controlTab)
         self.doubleSpinBox.setObjectName(u"doubleSpinBox")
         sizePolicy2.setHeightForWidth(self.doubleSpinBox.sizePolicy().hasHeightForWidth())
         self.doubleSpinBox.setSizePolicy(sizePolicy2)
 
-        self.verticalLayout_4.addWidget(self.doubleSpinBox)
+        self.verticalLayout_4.addWidget(self.doubleSpinBox, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
 
         self.xyzIncrementsHorizontalLayout.addLayout(self.verticalLayout_4)
@@ -789,6 +793,7 @@ class Ui_MainWindow(object):
         sizePolicy4.setHeightForWidth(self.logging_plain_text_edit.sizePolicy().hasHeightForWidth())
         self.logging_plain_text_edit.setSizePolicy(sizePolicy4)
         self.logging_plain_text_edit.setMaximumSize(QSize(16777215, 100))
+        self.logging_plain_text_edit.setReadOnly(True)
 
         self.verticalLayout_6.addWidget(self.logging_plain_text_edit)
 
@@ -837,14 +842,14 @@ class Ui_MainWindow(object):
         self.bottomViewCheckBox.setText("")
         self.profileLoadButton.setText(QCoreApplication.translate("MainWindow", u"PROFILE", None))
         self.checkBox_4.setText("")
+        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Clear All", None))
         self.drillLoadButton.setText(QCoreApplication.translate("MainWindow", u"DRILL", None))
         self.topLoadButton.setText(QCoreApplication.translate("MainWindow", u"TOP", None))
         self.bottomLoadButton.setText(QCoreApplication.translate("MainWindow", u"BOTTOM", None))
         self.drillViewCheckBox.setText("")
         self.filePathLabel.setText(QCoreApplication.translate("MainWindow", u"File Path", None))
-        self.profileViewCheckBox.setText("")
-        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Clear All", None))
         self.checkBox_6.setText("")
+        self.profileViewCheckBox.setText("")
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Tab 1", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Tab 2", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.viewTab), QCoreApplication.translate("MainWindow", u"VIEW", None))

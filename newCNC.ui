@@ -263,6 +263,19 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="8" column="1">
+                   <widget class="QPushButton" name="pushButton_4">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Clear All</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="4" column="1">
                    <widget class="QPushButton" name="drillLoadButton">
                     <property name="sizePolicy">
@@ -357,6 +370,22 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="8" column="2" alignment="Qt::AlignHCenter">
+                   <widget class="QCheckBox" name="checkBox_6">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="3" column="2" alignment="Qt::AlignHCenter">
                    <widget class="QCheckBox" name="profileViewCheckBox">
                     <property name="sizePolicy">
@@ -373,7 +402,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="7" column="0">
+                  <item row="8" column="0">
                    <spacer name="horizontalSpacer">
                     <property name="orientation">
                      <enum>Qt::Horizontal</enum>
@@ -389,34 +418,18 @@
                     </property>
                    </spacer>
                   </item>
-                  <item row="7" column="1">
-                   <widget class="QPushButton" name="pushButton_4">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
+                  <item row="7" column="0">
+                   <spacer name="horizontalSpacer_2">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
                     </property>
-                    <property name="text">
-                     <string>Clear All</string>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
                     </property>
-                   </widget>
-                  </item>
-                  <item row="7" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QCheckBox" name="checkBox_6">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="checked">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
+                   </spacer>
                   </item>
                  </layout>
                 </item>
@@ -1110,7 +1123,7 @@
               </property>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_5">
-                <item>
+                <item alignment="Qt::AlignHCenter">
                  <widget class="QLabel" name="label_3">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1126,7 +1139,7 @@
                   </property>
                  </widget>
                 </item>
-                <item>
+                <item alignment="Qt::AlignHCenter">
                  <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1140,7 +1153,7 @@
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_4">
-                <item>
+                <item alignment="Qt::AlignHCenter">
                  <widget class="QLabel" name="label_4">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1156,7 +1169,7 @@
                   </property>
                  </widget>
                 </item>
-                <item>
+                <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                  <widget class="QDoubleSpinBox" name="doubleSpinBox">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1445,6 +1458,9 @@
         <width>16777215</width>
         <height>100</height>
        </size>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
       </property>
      </widget>
     </item>
