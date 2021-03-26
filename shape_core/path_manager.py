@@ -1,10 +1,14 @@
 #
 import time
-from geometry_manager import merge_polygons_path, offset_polygon, offset_polygon_holes, get_bbox_area_sh, fill_holes_sh
-from plot_stuff import plot_paths
+from .geometry_manager import merge_polygons_path, offset_polygon, offset_polygon_holes, get_bbox_area_sh, fill_holes_sh, get_poly_diameter
+from .plot_stuff import plot_paths, plot_shapely
+from shapely.geometry import Polygon, LinearRing, LineString
+from collections import OrderedDict
 
 
 class MachinePath:
+
+    MIN_AREA = 0.1e-1
 
     def __init__(self, machining_type='gerber'):
         # machining type
@@ -12,7 +16,7 @@ class MachinePath:
 
         self.geom_list = []
         if machining_type == 'gerber':
-            self.cfg = {'tool_diameter': 0.2, 'passages': 3 }
+            self.cfg = {'tool_diameter': 0.2, 'passages': 3, 'overlap': 0.5}
             if self.cfg['passages'] < 1:
                 print("[WARNING] At Least One Pass")
                 self.cfg['passages'] = 1
@@ -20,9 +24,15 @@ class MachinePath:
             self.cfg = {'tool_diameter': 1.0, 'margin': 0.1, 'taps_number': 4, 'taps_length': 1.0}
         elif machining_type == 'pocketing':
             self.cfg = {'tool_diameter': 1.0}
+        elif machining_type == 'drill':
+            self.cfg = {'tool_diameter': 1.0, 'bits_diameter': [1.0, 0.8, 0.6, 0.4]}
         else:
             self.cfg = {}
         self.type = machining_type
+        self.path = None
+
+    def get_path(self):
+        return self.path
 
     def load_geom(self, geom_list):
         self.geom_list = geom_list
@@ -31,12 +41,41 @@ class MachinePath:
         self.cfg = cfg
 
     def execute(self):
+        elabs = None
         if self.type == 'gerber':
             self.execute_gerber()
         elif self.type == 'profile':
             self.execute_profile()
         elif self.type == 'pocketing':
-            self.execute_pocketing()
+            elabs = self.execute_pocketing()
+        elif self.type == 'drill':
+            # se e' impostato un tool di pocketing
+            # eseguo la lavorazione
+            # altrimenti risolvo tutto con i fori
+            elabs_p = None
+            if self.cfg['tool_diameter'] is not None:
+                elabs_p = self.execute_pocketing()
+
+            # se è stata effettuata una lavorazione di pocketing
+            # elabs conterrà una lista di bool che identifica i fori
+            # gia' elaborati e che quindi dovranno essere scartati
+            # dalla lavorazione di drilling
+            elabs_d = self.execute_drill(not_to_drill=elabs_p)
+
+            # controllando elabs ora si potranno individurare
+            # quali sono i fori che non sono stati elaborati
+            # ed eventualmente indicarli all'utente
+            elabs = []
+
+            if elabs_p is not None:
+                for i in range(len(elabs_d)):
+                    elabs.append(elabs_p[i] or elabs_d[i])
+
+            if elabs is not None:
+                if not all(elabs):
+                    print("Not all holes are computed, please add bits with correct diameter")
+
+        return elabs
 
     def execute_gerber(self):
         # creo il primo passaggio di lavorazione, quello più vicino alle piste.
@@ -59,9 +98,47 @@ class MachinePath:
         # plot_shapely(og_list + prev_poly)
         t1 = time.time()
         print("Path Generation Done in " + str(t1-t0) + " sec")
+
+        og_list = self.check_min_area(og_list)
+
         plot_paths(prev_poly, [og_list], grb_color='green', path_color='black')
+
         # plot_shapely(og_list)
         # print(og_list)
+
+        # estraggo le linestring dai poligoni path
+        path = []
+        for g in og_list:
+            ex_path = g.exterior
+            print(ex_path.type)
+            if ex_path.type == "LinearRing" or ex_path.type == "LineString":
+                path.append(ex_path)
+            for i in g.interiors:
+                if ex_path.type == "LinearRing" or ex_path.type == "LineString":
+                    path.append(i)
+        self.path = path
+
+    def check_min_area(self, og_list):
+        big_poly = []
+        old_poly = 0
+        new_poly = 0
+        for p in og_list:
+            old_poly += 1
+            new_inners = []
+            for inner in p.interiors:
+                old_poly += 1
+                # need to make a polygon of the linearring to get the _filled_ area of
+                # the closed ring.
+                if abs(Polygon(inner).area) >= self.MIN_AREA:
+                    new_inners.append(inner)
+            if abs(Polygon(p.exterior).area) >= self.MIN_AREA:
+                p = Polygon(p.exterior, new_inners)
+                new_poly += 1 + len(p.interiors)
+                big_poly.append(p)
+
+        print("REMOVED: " + str(old_poly - new_poly))
+
+        return big_poly
 
     def execute_pocketing(self):
         print("Pocketing")
@@ -69,12 +146,18 @@ class MachinePath:
         t0 = time.time()
         og_list = []
         prev_poly = []
+        milled_list = []
         for g in self.geom_list:
             prev_poly.append(g.geom)
             og = offset_polygon(g, -self.cfg['tool_diameter']/2.0)
             if og is not None:
                 if not og.is_empty:
                     og_list.append(og)
+                    milled_list.append(True)
+                else:
+                    milled_list.append(False)
+            else:
+                milled_list.append(False)
 
         # per i sucessivi si parte dal path precedente, lo si ingrandisce del raggio del tool
         # se ne fa l'or e poi lo si riduce del raggio del tool
@@ -89,6 +172,68 @@ class MachinePath:
         plot_paths(prev_poly, [og_list], grb_color='grey', path_color='black')
         # plot_shapely(og_list)
         # print(og_list)
+
+        # estraggo le linestring dai poligoni path
+        path = []
+        for g in og_list:
+            ex_path = g.exterior
+            print(ex_path.type)
+            if ex_path.type == "LinearRing" or ex_path.type == "LineString":
+                path.append(ex_path)
+            for i in g.interiors:
+                if ex_path.type == "LinearRing" or ex_path.type == "LineString":
+                    path.append(i)
+        self.path = path
+
+        return milled_list
+
+    def execute_drill(self, not_to_drill=None):
+        print("Drilling")
+        bd = self.cfg['bits_diameter'][:]
+        bd.sort(reverse=True)
+        # print(bd)
+
+        #print(not_to_drill)
+        to_drill = [True] * len(self.geom_list)
+        if not_to_drill is not None:
+            to_drill = [not elem for elem in not_to_drill]
+        # creo il primo passaggio di lavorazione, quello più vicino al profilo del foro
+        drilled_list = []
+        drills = []
+        for i, g in enumerate(self.geom_list):
+            if to_drill[i]:
+                drilled_list.append(True)
+                c = g.geom.centroid
+                ds = get_poly_diameter(g.geom)
+                # ho il diametro del foro
+                # ora posso selezionare tra i disponibili
+                # la punta corretta per effettuare il foro.
+                # tra quelle disponibili selezione quella piu' vicina
+                # col diametro inferiore
+                # print(ds)
+                for j, d in enumerate(ds):
+                    drills.append([i, c.coords[j], d])
+            else:
+                drilled_list.append(False)
+
+        drills.sort(key=lambda x: x[2], reverse=True)
+        # print(drills)
+
+        drill_per_bit = OrderedDict()
+        b = bd[0]
+        c = 1
+        for dd in drills:
+            d = dd[2]
+            while b > d and c < len(bd):
+                b = bd[c]
+                c += 1
+            if b not in drill_per_bit.keys():
+                drill_per_bit[b] = []
+            drill_per_bit[b].append(dd[1])
+
+        print(drill_per_bit)
+
+        return drilled_list
 
     def execute_profile(self):
         # per eseguire la lavorazione di profilo, va prima individuata la geometria
@@ -154,10 +299,26 @@ class MachinePath:
         # plot_shapely(og_list)
         # print(og_list)
 
+        # estraggo le linestring dai poligoni path
+        path = []
+        for g in og_list:
+            ex_path = g.exterior
+            # print(ex_path.type)
+            if ex_path.type == "LinearRing" or ex_path.type == "LineString":
+                path.append(ex_path)
+            for i in g.interiors:
+                if ex_path.type == "LinearRing" or ex_path.type == "LineString":
+                    path.append(i)
+        self.path = path
+
     def _subpath_execute(self, ppg_list):
 
+        #
+        ov = self.cfg['overlap']
+
         # ppg_list pre path list
-        pre_offset = self.cfg['tool_diameter']/2.0
+
+        pre_offset = self.cfg['tool_diameter']/2.0 * (1 + 0.5 - ov)
         og_list = []
 
         # print("ORIG")
@@ -194,7 +355,7 @@ class MachinePath:
 
         ng_list = []
         for g in mog_list:
-            ng = offset_polygon(g, self.cfg['tool_diameter'] / 2.0, shapely_poly=True)
+            ng = offset_polygon(g, self.cfg['tool_diameter'] / 2.0 * (1 + 0.5 - ov), shapely_poly=True)
             if ng is not None:
                 # ng_list.append(ng)
                 if ng.geom_type == 'MultiPolygon':

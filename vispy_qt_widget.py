@@ -15,7 +15,7 @@ class VispyCanvas(QtSceneCanvas):
 
         self.unfreeze()
         self.view = self.central_widget.add_view()
-        self.view.bgcolor = '#444444'#'#ffffff'
+        self.view.bgcolor = '#444444'   #'#ffffff'
         self.view.camera = TurntableCamera(
             fov=0.0, distance=0.0, up='+z', center=(0.0, 0.0, 0.0), azimuth=0, elevation=90)
         self.last_pos = [0, 0, 0]

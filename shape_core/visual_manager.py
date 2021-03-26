@@ -1,5 +1,6 @@
 #
 
+from vispy import gloo
 from vispy.scene import visuals
 from vispy.color import Color
 from vispy.visuals.filters import Alpha
@@ -113,34 +114,61 @@ class GLUTess:
 
 class VisualLayer:
 
-    DELTA = 0.1
+    DELTA = 1
 
     def __init__(self, canvas):
         self.canvas = canvas
         self.translucent_filter = Alpha()
-        self.z = 0.0
+        self.z = 1
         self.meshes = OrderedDict({})
+        self.paths = OrderedDict({})
 
     def set_layer_visible(self, tag, visible):
         if tag in self.meshes.keys():
             self.meshes[tag].visible = visible
 
+    def set_path_visible(self, tag, visible):
+        if tag in self.paths.keys():
+            self.paths[tag].visible = visible
+
     def add_layer(self, tag, geom_list, color=None, holes=False):
         ldata = [[], []]
         triangulizer = GLUTess()
+        order = self.z
         for g in geom_list:
-            tri, pts = triangulizer.triangulate(g.geom, self.z)
+            # tri, pts = triangulizer.triangulate(g.geom, self.z)
+            tri, pts = triangulizer.triangulate(g.geom, 0)
             tri_off = list(np.array(tri[:]) + len(ldata[1]))
             ldata[0] += tri_off
             ldata[1] += pts[:]
             if holes:
-                tri, pts = triangulizer.triangulate(g.geom, self.DELTA)
+                # tri, pts = triangulizer.triangulate(g.geom, self.DELTA)
+                tri, pts = triangulizer.triangulate(g.geom, 0)
                 tri_off = list(np.array(tri[:]) + len(ldata[1]))
                 ldata[0] += tri_off
                 ldata[1] += pts[:]
-        self.create_mesh(tag, ldata, color)
+                order = 0
+        self.create_mesh(tag, ldata, color, order)
         # print("END")
-        self.z -= self.DELTA
+        # self.z -= self.DELTA
+        self.z += self.DELTA
+
+    def add_path(self, tag, geom_list, color=None):
+        ldata = []
+        order = 0
+        for g in geom_list:
+            if g.type == "LineString":
+                # print(">>>>>>>>>> Line String")
+                # print(list(g.coords))
+                ldata.append(list(g.coords))
+            if g.type == "LinearRing":
+                # print(list(g.coords))
+                # print("<<<<<<<<<< Linear Ring")
+                ldata.append(list(g.coords))
+        self.create_line(tag, ldata, color, order)
+        # print("END")
+        # self.z -= self.DELTA
+        # self.z += self.DELTA
 
     def add_triploy(self, tri, pts):
         self.canvas.unfreeze()
@@ -151,7 +179,33 @@ class VisualLayer:
         self.canvas.freeze()
         visuals.XYZAxis(parent=self.canvas.view.scene)
 
-    def create_mesh(self, tag, ldata, color=None):
+    def create_line(self, tag, ldata, color=None, order=0):
+        self.canvas.unfreeze()
+        connect = []
+        coords = []
+        p = -1
+        for l in ldata:
+            p += 1
+            coords.append(l[0])
+            for j in range(1, len(l)):
+                c = l[j]
+                coords.append(c)
+                connect.append((p, p+1))
+                p += 1
+        coords = np.array(coords)
+        connect = np.array(connect)
+
+        print(coords)
+        print(connect)
+
+        line = visuals.Line(pos=coords, connect=connect, width=0.1, color=color, parent=self.canvas.view)
+        line.order = order
+        self.paths[tag] = line
+        self.canvas.view.add(line)
+        self.canvas.view.camera.set_range()
+        self.canvas.freeze()
+
+    def create_mesh(self, tag, ldata, color=None, order=0):
 
         self.canvas.unfreeze()
         mesh = visuals.Mesh(parent=self.canvas.view.scene)
@@ -162,12 +216,13 @@ class VisualLayer:
         # mesh.freeze()
         # mesh.filter.alpha = 0.3
         # mesh.shading = None
+        mesh.set_gl_state('translucent', cull_face=False)
+        mesh.order = order
 
         tri = ldata[0]
         pts = ldata[1]
         if color:
             mesh_colors = [Color(color).rgba] * int(len(tri) / 3)
-            print(pts[0])
             mesh.set_data(np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)),
                           face_colors=np.asarray(mesh_colors))
         else:
@@ -180,3 +235,13 @@ class VisualLayer:
 
         self.canvas.freeze()
         #visuals.XYZAxis(parent=self.canvas.view.scene)
+
+        #
+        # gloo.set_clear_color('white')
+        # gloo.set_state('opaque')
+        # gloo.set_polygon_offset(1, 1)
+        #
+        # # gloo.set_state(blend=False, depth_test=True, polygon_offset_fill=True)
+        # gloo.set_state(blend=True, depth_test=True, polygon_offset_fill=False)
+        # gloo.set_depth_mask(True)
+        #
