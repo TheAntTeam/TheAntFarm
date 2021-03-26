@@ -228,13 +228,13 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.topFileLineEdit, 1, 0, 1, 1)
 
-        self.checkBox_6 = QCheckBox(self.tab)
-        self.checkBox_6.setObjectName(u"checkBox_6")
-        sizePolicy2.setHeightForWidth(self.checkBox_6.sizePolicy().hasHeightForWidth())
-        self.checkBox_6.setSizePolicy(sizePolicy2)
-        self.checkBox_6.setChecked(True)
+        self.all_view_checkbox = QCheckBox(self.tab)
+        self.all_view_checkbox.setObjectName(u"all_view_checkbox")
+        sizePolicy2.setHeightForWidth(self.all_view_checkbox.sizePolicy().hasHeightForWidth())
+        self.all_view_checkbox.setSizePolicy(sizePolicy2)
+        self.all_view_checkbox.setChecked(True)
 
-        self.gridLayout.addWidget(self.checkBox_6, 8, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.all_view_checkbox, 8, 2, 1, 1, Qt.AlignHCenter)
 
         self.profileViewCheckBox = QCheckBox(self.tab)
         self.profileViewCheckBox.setObjectName(u"profileViewCheckBox")
@@ -269,6 +269,51 @@ class Ui_MainWindow(object):
         self.tab_2.setObjectName(u"tab_2")
         self.verticalLayout_8 = QVBoxLayout(self.tab_2)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.layer_choice_combo_box = QComboBox(self.tab_2)
+        self.layer_choice_combo_box.setObjectName(u"layer_choice_combo_box")
+
+        self.verticalLayout_8.addWidget(self.layer_choice_combo_box)
+
+        self.stackedWidget = QStackedWidget(self.tab_2)
+        self.stackedWidget.setObjectName(u"stackedWidget")
+        self.top_page = QWidget()
+        self.top_page.setObjectName(u"top_page")
+        self.gridLayout_2 = QGridLayout(self.top_page)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.spinBox = QSpinBox(self.top_page)
+        self.spinBox.setObjectName(u"spinBox")
+
+        self.gridLayout_2.addWidget(self.spinBox, 0, 0, 1, 1)
+
+        self.stackedWidget.addWidget(self.top_page)
+        self.page_2 = QWidget()
+        self.page_2.setObjectName(u"page_2")
+        self.gridLayout_3 = QGridLayout(self.page_2)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.doubleSpinBox_3 = QDoubleSpinBox(self.page_2)
+        self.doubleSpinBox_3.setObjectName(u"doubleSpinBox_3")
+
+        self.gridLayout_3.addWidget(self.doubleSpinBox_3, 1, 0, 1, 1)
+
+        self.spinBox_2 = QSpinBox(self.page_2)
+        self.spinBox_2.setObjectName(u"spinBox_2")
+
+        self.gridLayout_3.addWidget(self.spinBox_2, 0, 0, 1, 1)
+
+        self.label = QLabel(self.page_2)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_3.addWidget(self.label, 0, 1, 1, 1)
+
+        self.label_6 = QLabel(self.page_2)
+        self.label_6.setObjectName(u"label_6")
+
+        self.gridLayout_3.addWidget(self.label_6, 1, 1, 1, 1)
+
+        self.stackedWidget.addWidget(self.page_2)
+
+        self.verticalLayout_8.addWidget(self.stackedWidget)
+
         self.tabWidget_2.addTab(self.tab_2, "")
 
         self.verticalLayout_2.addWidget(self.tabWidget_2)
@@ -820,6 +865,7 @@ class Ui_MainWindow(object):
 
         self.tabWidget.setCurrentIndex(0)
         self.tabWidget_2.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -848,10 +894,12 @@ class Ui_MainWindow(object):
         self.bottomLoadButton.setText(QCoreApplication.translate("MainWindow", u"BOTTOM", None))
         self.drillViewCheckBox.setText("")
         self.filePathLabel.setText(QCoreApplication.translate("MainWindow", u"File Path", None))
-        self.checkBox_6.setText("")
+        self.all_view_checkbox.setText("")
         self.profileViewCheckBox.setText("")
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Tab 1", None))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Tab 2", None))
+        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"VIEW LAYERS", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Integer spin box", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"Double spin box", None))
+        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"CREATE JOB", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.viewTab), QCoreApplication.translate("MainWindow", u"VIEW", None))
         self.statusLabel.setText(QCoreApplication.translate("MainWindow", u"Not Connected", None))
         self.zAxisLabel.setText(QCoreApplication.translate("MainWindow", u"Z", None))

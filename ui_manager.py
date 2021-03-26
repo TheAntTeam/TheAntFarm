@@ -40,6 +40,9 @@ class UiManager(QObject):
         self.L_TEXT = [self.ui.topFileLineEdit, self.ui.bottomFileLineEdit,
                        self.ui.profileFileLineEdit, self.ui.drillFileLineEdit]
         self.layers_te = Od([(k, t) for k, t in zip(self.L_TAGS, self.L_TEXT)])
+        self.L_CHECKBOX = [self.ui.topViewCheckBox, self.ui.bottomViewCheckBox,
+                           self.ui.profileViewCheckBox, self.ui.drillViewCheckBox]
+        self.layers_cb = Od([(k, t) for k, t in zip(self.L_TAGS, self.L_CHECKBOX)])
 
         self.ui.send_text_edit.setPlaceholderText('input here')
         self.ui.send_text_edit.hide()
@@ -80,6 +83,7 @@ class UiManager(QObject):
             lambda: self.set_layer_visible("profile", self.ui.profileViewCheckBox.isChecked()))
         self.ui.drillViewCheckBox.stateChanged.connect(
             lambda: self.set_layer_visible("drill", self.ui.drillViewCheckBox.isChecked()))
+        self.ui.all_view_checkbox.stateChanged.connect(lambda: self.hide_show_layers(self.ui.all_view_checkbox.isChecked()))
 
         # From UI Manager to Serial Manager
         self.serial_send_s.connect(self.serialWo.send)
@@ -113,11 +117,9 @@ class UiManager(QObject):
         for view in loaded_views:
             self.vis_layer.remove_layer(view)
 
-    @Slot(str, logging.LogRecord)
-    def update_logging_status(self, status, record):
-        color = self.LOG_COLORS.get(record.levelno, 'black')
-        s = '<pre><font color="%s">%s</font></pre>' % (color, status)
-        self.ui.logging_plain_text_edit.appendHtml(s)
+    def hide_show_layers(self, checked):
+        for cb in self.layers_cb:
+            self.layers_cb[cb].setChecked(checked)
 
     @Slot(str, bool)
     def set_layer_visible(self, tag, visible):
@@ -127,6 +129,12 @@ class UiManager(QObject):
     def visualize_new_layer(self, loaded_layer, layer, layer_path, holes):
         self.vis_layer.add_layer(layer, loaded_layer[0], self.layer_colors[layer], holes)
         self.layers_te[layer].setText(layer_path)
+
+    @Slot(str, logging.LogRecord)
+    def update_logging_status(self, status, record):
+        color = self.LOG_COLORS.get(record.levelno, 'black')
+        s = '<pre><font color="%s">%s</font></pre>' % (color, status)
+        self.ui.logging_plain_text_edit.appendHtml(s)
 
     @Slot(QPixmap)
     def update_camera_image(self, pixmap):
