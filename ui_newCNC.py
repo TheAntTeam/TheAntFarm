@@ -169,12 +169,12 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.checkBox_4, 5, 2, 1, 1, Qt.AlignHCenter)
 
-        self.pushButton_4 = QPushButton(self.tab)
-        self.pushButton_4.setObjectName(u"pushButton_4")
-        sizePolicy2.setHeightForWidth(self.pushButton_4.sizePolicy().hasHeightForWidth())
-        self.pushButton_4.setSizePolicy(sizePolicy2)
+        self.clear_views_push_button = QPushButton(self.tab)
+        self.clear_views_push_button.setObjectName(u"clear_views_push_button")
+        sizePolicy2.setHeightForWidth(self.clear_views_push_button.sizePolicy().hasHeightForWidth())
+        self.clear_views_push_button.setSizePolicy(sizePolicy2)
 
-        self.gridLayout.addWidget(self.pushButton_4, 8, 1, 1, 1)
+        self.gridLayout.addWidget(self.clear_views_push_button, 8, 1, 1, 1)
 
         self.drillLoadButton = QPushButton(self.tab)
         self.drillLoadButton.setObjectName(u"drillLoadButton")
@@ -842,7 +842,7 @@ class Ui_MainWindow(object):
         self.bottomViewCheckBox.setText("")
         self.profileLoadButton.setText(QCoreApplication.translate("MainWindow", u"PROFILE", None))
         self.checkBox_4.setText("")
-        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Clear All", None))
+        self.clear_views_push_button.setText(QCoreApplication.translate("MainWindow", u"Clear All", None))
         self.drillLoadButton.setText(QCoreApplication.translate("MainWindow", u"DRILL", None))
         self.topLoadButton.setText(QCoreApplication.translate("MainWindow", u"TOP", None))
         self.bottomLoadButton.setText(QCoreApplication.translate("MainWindow", u"BOTTOM", None))

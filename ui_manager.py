@@ -58,6 +58,7 @@ class UiManager(QObject):
         self.ui.tabWidget.currentChanged.connect(self.check_align_is_active)
         self.ui.verticalSlider.valueChanged.connect(self.update_threshold)
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
+        self.ui.clear_views_push_button.clicked.connect(self.remove_all_vis_layers)
 
         # From UI Manager to Controller
         self.align_active_s.connect(self.controlWo.set_align_is_active)
@@ -102,9 +103,15 @@ class UiManager(QObject):
         filters = extensions + ";;All files (*.*)"
         load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.settings.layer_last_dir, filters)
         if load_file_path[0]:
+            self.vis_layer.remove_layer(layer)
             self.settings.layer_last_dir = os.path.dirname(load_file_path[0])
             logging.info("Loading " + load_file_path[0])
             self.load_layer_s.emit(layer, load_file_path[0])
+
+    def remove_all_vis_layers(self):
+        loaded_views = list(self.vis_layer.get_layers_tag())
+        for view in loaded_views:
+            self.vis_layer.remove_layer(view)
 
     @Slot(str, logging.LogRecord)
     def update_logging_status(self, status, record):
