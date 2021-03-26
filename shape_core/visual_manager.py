@@ -131,6 +131,26 @@ class VisualLayer:
         if tag in self.paths.keys():
             self.paths[tag].visible = visible
 
+    def get_layers_tag(self):
+        return self.meshes.keys()
+
+    def get_paths_tag(self):
+        return self.paths.keys()
+
+    def remove_layer(self, tag):
+        if tag in self.meshes.keys():
+            to_remove = self.meshes[tag]
+            # self.canvas.events.draw.disconnect(to_remove.on_draw)
+            to_remove.parent = None
+            del self.meshes[tag]
+
+    def remove_path(self, tag):
+        if tag in self.paths.keys():
+            to_remove = self.paths[tag]
+            # self.canvas.events.draw.disconnect(to_remove.on_draw)
+            to_remove.parent = None
+            del self.paths[tag]
+
     def add_layer(self, tag, geom_list, color=None, holes=False):
         ldata = [[], []]
         triangulizer = GLUTess()
@@ -195,8 +215,8 @@ class VisualLayer:
         coords = np.array(coords)
         connect = np.array(connect)
 
-        print(coords)
-        print(connect)
+        # print(coords)
+        # print(connect)
 
         line = visuals.Line(pos=coords, connect=connect, width=0.1, color=color, parent=self.canvas.view)
         line.order = order
