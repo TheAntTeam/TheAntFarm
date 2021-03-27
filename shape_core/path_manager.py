@@ -4,6 +4,7 @@ from .geometry_manager import merge_polygons_path, offset_polygon, offset_polygo
 from .plot_stuff import plot_paths, plot_shapely
 from shapely.geometry import Polygon, LinearRing, LineString
 from collections import OrderedDict
+from .path_optimizer import get_optimized_path
 
 
 class MachinePath:
@@ -25,7 +26,8 @@ class MachinePath:
         elif machining_type == 'pocketing':
             self.cfg = {'tool_diameter': 1.0}
         elif machining_type == 'drill':
-            self.cfg = {'tool_diameter': 1.0, 'bits_diameter': [1.0, 0.8, 0.6, 0.4]}
+            # self.cfg = {'tool_diameter': 1.0, 'bits_diameter': [1.0, 0.8, 0.6, 0.4]}
+            self.cfg = {'tool_diameter': None, 'bits_diameter': [0.4]}
         else:
             self.cfg = {}
         self.type = machining_type
@@ -110,7 +112,7 @@ class MachinePath:
         path = []
         for g in og_list:
             ex_path = g.exterior
-            print(ex_path.type)
+            # print(ex_path.type)
             if ex_path.type == "LinearRing" or ex_path.type == "LineString":
                 path.append(ex_path)
             for i in g.interiors:
@@ -177,7 +179,7 @@ class MachinePath:
         path = []
         for g in og_list:
             ex_path = g.exterior
-            print(ex_path.type)
+            # print(ex_path.type)
             if ex_path.type == "LinearRing" or ex_path.type == "LineString":
                 path.append(ex_path)
             for i in g.interiors:
@@ -231,7 +233,13 @@ class MachinePath:
                 drill_per_bit[b] = []
             drill_per_bit[b].append(dd[1])
 
+        print("drill list per bit")
         print(drill_per_bit)
+
+        for bit_k in drill_per_bit.keys():
+            bit_points = drill_per_bit[bit_k]
+            optimized_path = get_optimized_path(bit_points)
+            print("Bit " + str(bit_k) + " " + str(optimized_path))
 
         return drilled_list
 
