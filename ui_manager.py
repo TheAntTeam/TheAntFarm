@@ -1,6 +1,6 @@
 import os
 from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import Signal, Slot, QObject
+from PySide2.QtCore import Signal, Slot, QObject, Qt
 from PySide2.QtGui import QPixmap
 from shape_core.visual_manager import VisualLayer
 from collections import OrderedDict as Od
@@ -11,8 +11,9 @@ logger = logging.getLogger(__name__)
 
 class UiManager(QObject):
     """Manage UI objects, signals and slots"""
-    L_TAGS = ["top", "bottom", "profile", "drill"]
-    L_COLORS = ["red", "blue", "black", "green"]
+    L_TAGS = ["top", "bottom", "profile", "drill", "no_copper_top", "no_copper_bottom"]
+    L_NAMES = ["TOP", "BOTTOM", "PROFILE", "DRILL", "NO COPPER TOP", "NO COPPER BOTTOM"]
+    L_COLORS = ["red", "blue", "black", "green", "purple", "brown"]
     LOG_COLORS = {
         logging.DEBUG:    'white',
         logging.INFO:     'light blue',
@@ -34,27 +35,32 @@ class UiManager(QObject):
         self.serialWo = serial_worker
         self.settings = settings
 
-        self.connection_status = False
+        self.serial_connection_status = False
         self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
         self.layer_colors = Od([(k, v) for k, v in zip(self.L_TAGS, self.L_COLORS)])
-        self.L_TEXT = [self.ui.topFileLineEdit, self.ui.bottomFileLineEdit,
-                       self.ui.profileFileLineEdit, self.ui.drillFileLineEdit]
+        self.L_TEXT = [self.ui.topFileLineEdit, self.ui.bottomFileLineEdit, self.ui.profileFileLineEdit,
+                       self.ui.drillFileLineEdit, self.ui.no_copper_1_le, self.ui.no_copper_2_le]
         self.layers_te = Od([(k, t) for k, t in zip(self.L_TAGS, self.L_TEXT)])
-        self.L_CHECKBOX = [self.ui.topViewCheckBox, self.ui.bottomViewCheckBox,
-                           self.ui.profileViewCheckBox, self.ui.drillViewCheckBox]
+        self.L_CHECKBOX = [self.ui.topViewCheckBox, self.ui.bottomViewCheckBox, self.ui.profileViewCheckBox,
+                           self.ui.drillViewCheckBox, self.ui.no_copper_1_chb, self.ui.no_copper_2_chb]
         self.layers_cb = Od([(k, t) for k, t in zip(self.L_TAGS, self.L_CHECKBOX)])
 
+        [self.ui.layer_choice_cb.addItem(x) for x in self.L_NAMES]  # todo: the loaded list depends on...
         self.ui.send_text_edit.setPlaceholderText('input here')
         self.ui.send_text_edit.hide()
         self.ui.send_push_button.hide()
 
+        self.ui.layer_choice_cb.currentIndexChanged.connect(self.change_job_page)
+
+
         # Connect Widgets signals and slots
         # From UI to UI Manager
-        self.ui.refreshButton.clicked.connect(self.handle_refresh_button)
-        self.ui.connectButton.clicked.connect(self.handle_connect_button)
-        self.ui.clearTerminalButton.clicked.connect(self.handle_clear_terminal)
+        self.ui.refresh_button.clicked.connect(self.handle_refresh_button)
+        self.ui.connect_button.clicked.connect(self.handle_connect_button)
+        self.ui.clear_terminal_button.clicked.connect(self.handle_clear_terminal)
         self.ui.send_push_button.clicked.connect(self.send_input)
         self.ui.send_text_edit.returnPressed.connect(self.send_input)
+        self.ui.autoscroll_chb.stateChanged.connect(self.set_autoscroll_serial_te)
         self.ui.unlockButton.clicked.connect(self.handle_unlock)
         self.ui.homingButton.clicked.connect(self.handle_homing)
         self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
@@ -130,6 +136,11 @@ class UiManager(QObject):
         self.vis_layer.add_layer(layer, loaded_layer[0], self.layer_colors[layer], holes)
         self.layers_te[layer].setText(layer_path)
 
+    def change_job_page(self):
+        current_text_cb = self.ui.layer_choice_cb.currentText()
+        idx = self.L_NAMES.index(current_text_cb)
+        self.ui.jobs_sw.setCurrentIndex(idx)
+
     @Slot(str, logging.LogRecord)
     def update_logging_status(self, status, record):
         color = self.LOG_COLORS.get(record.levelno, 'black')
@@ -149,7 +160,7 @@ class UiManager(QObject):
 
     @Slot(str)
     def update_console_text(self, new_text):
-        self.ui.textEdit.append(new_text)
+        self.ui.serial_te.append(new_text)
 
     def check_align_is_active(self):
         self.align_active_s.emit(self.ui.tabWidget.currentWidget().objectName() == "alignTab")
@@ -163,42 +174,54 @@ class UiManager(QObject):
         self.serial_send_s.emit(self.ui.send_text_edit.text() + "\n")
         self.ui.send_text_edit.clear()
 
+    def set_autoscroll_serial_te(self):
+        pass
+        # This doesn't work
+        # if self.ui.autoscroll_chb.isChecked():
+        #     self.ui.serial_te.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        #     self.ui.serial_te.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        # else:
+        #     self.ui.serial_te.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        #     self.ui.serial_te.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+
     def handle_refresh_button(self):
         """Get list of serial ports available."""
         ls = self.serialWo.get_port_list()
         if ls:
             logger.debug("Available ports: " + str(ls))
-            self.ui.serialPortsComboBox.clear()
-            self.ui.serialPortsComboBox.addItems(ls)
+            self.ui.serial_ports_cb.clear()
+            self.ui.serial_ports_cb.addItems(ls)
         else:
             logger.info('No serial ports available.')
-            self.ui.textEdit.append('No serial ports available.')
-            self.ui.serialPortsComboBox.clear()
+            self.ui.serial_te.append('No serial ports available.')
+            self.ui.serial_ports_cb.clear()
 
     def handle_connect_button(self):
         """Connect/Disconnect button opens/closes the selected serial port and
            creates the serial worker thread. If the thread was
            already created previously and paused, it revives it."""
-        if not self.connection_status:
-            if self.serialWo.open_port(self.ui.serialPortsComboBox.currentText()):
-                self.connection_status = True
-                self.ui.connectButton.setText("Disconnect")
-                self.ui.serialPortsComboBox.hide()
-                self.ui.refreshButton.hide()
+        if not self.serial_connection_status:
+            if self.serialWo.open_port(self.ui.serial_ports_cb.currentText()):
+                self.serial_connection_status = True
+                self.ui.connect_button.setText("Disconnect")
+                self.ui.serial_ports_cb.hide()
+                self.ui.serial_baud_cb.hide()
+                self.ui.refresh_button.hide()
                 self.ui.send_text_edit.show()
                 self.ui.send_push_button.show()
         else:
             self.serialWo.close_port()
-            self.connection_status = False
-            self.ui.connectButton.setText("Connect")
-            self.ui.serialPortsComboBox.show()
-            self.ui.refreshButton.show()
+            self.serial_connection_status = False
+            self.ui.connect_button.setText("Connect")
+            self.ui.serial_ports_cb.show()
+            self.ui.serial_baud_cb.show()
+            self.ui.refresh_button.show()
             self.ui.send_text_edit.hide()
             self.ui.send_push_button.hide()
             self.ui.statusLabel.setText("Not Connected")
 
     def handle_clear_terminal(self):
-        self.ui.textEdit.clear()
+        self.ui.serial_te.clear()
 
     def hide_show_console(self):
         if self.ui.actionHide_Show_Console.isChecked():

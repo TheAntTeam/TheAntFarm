@@ -34,7 +34,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.serialWo = SerialWorker(self.serialRxQu)
         self.serialWo.moveToThread(self.serial_thread)
 
-        self.settings = SettingsHandler("The Ant Team", "newCNC", self)
+        self.settings = SettingsHandler("The_Ant_Team", "newCNC", "newCNCPortableSettings", self)
         self.settings.read_all_settings()  # TODO: manage exceptions with a try except
 
         # Important: this call should be after the thread creations.
