@@ -74,7 +74,7 @@
                </sizepolicy>
               </property>
               <property name="tabPosition">
-               <enum>QTabWidget::South</enum>
+               <enum>QTabWidget::North</enum>
               </property>
               <property name="tabShape">
                <enum>QTabWidget::Triangular</enum>
@@ -95,7 +95,7 @@
                   <item row="5" column="0">
                    <widget class="QLineEdit" name="no_copper_1_le">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -137,7 +137,7 @@
                   <item row="3" column="0">
                    <widget class="QLineEdit" name="profileFileLineEdit">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -182,7 +182,7 @@
                   <item row="4" column="0">
                    <widget class="QLineEdit" name="drillFileLineEdit">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -237,7 +237,7 @@
                   <item row="6" column="0">
                    <widget class="QLineEdit" name="no_copper_2_le">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -272,7 +272,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>Clear All</string>
+                     <string>CLEAR ALL</string>
                     </property>
                    </widget>
                   </item>
@@ -305,7 +305,7 @@
                   <item row="2" column="0">
                    <widget class="QLineEdit" name="bottomFileLineEdit">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -360,7 +360,7 @@
                   <item row="1" column="0">
                    <widget class="QLineEdit" name="topFileLineEdit">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -408,7 +408,7 @@
                      <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
-                     <enum>QSizePolicy::Fixed</enum>
+                     <enum>QSizePolicy::Expanding</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>

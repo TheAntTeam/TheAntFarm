@@ -63,7 +63,7 @@ class Ui_MainWindow(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.tabWidget_2.sizePolicy().hasHeightForWidth())
         self.tabWidget_2.setSizePolicy(sizePolicy1)
-        self.tabWidget_2.setTabPosition(QTabWidget.South)
+        self.tabWidget_2.setTabPosition(QTabWidget.North)
         self.tabWidget_2.setTabShape(QTabWidget.Triangular)
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
@@ -74,7 +74,7 @@ class Ui_MainWindow(object):
         self.gridLayout.setSizeConstraint(QLayout.SetFixedSize)
         self.no_copper_1_le = QLineEdit(self.tab)
         self.no_copper_1_le.setObjectName(u"no_copper_1_le")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.no_copper_1_le.sizePolicy().hasHeightForWidth())
@@ -85,15 +85,18 @@ class Ui_MainWindow(object):
 
         self.no_copper_2_pb = QPushButton(self.tab)
         self.no_copper_2_pb.setObjectName(u"no_copper_2_pb")
-        sizePolicy2.setHeightForWidth(self.no_copper_2_pb.sizePolicy().hasHeightForWidth())
-        self.no_copper_2_pb.setSizePolicy(sizePolicy2)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.no_copper_2_pb.sizePolicy().hasHeightForWidth())
+        self.no_copper_2_pb.setSizePolicy(sizePolicy3)
 
         self.gridLayout.addWidget(self.no_copper_2_pb, 6, 1, 1, 1)
 
         self.no_copper_2_chb = QCheckBox(self.tab)
         self.no_copper_2_chb.setObjectName(u"no_copper_2_chb")
-        sizePolicy2.setHeightForWidth(self.no_copper_2_chb.sizePolicy().hasHeightForWidth())
-        self.no_copper_2_chb.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.no_copper_2_chb.sizePolicy().hasHeightForWidth())
+        self.no_copper_2_chb.setSizePolicy(sizePolicy3)
         self.no_copper_2_chb.setChecked(True)
 
         self.gridLayout.addWidget(self.no_copper_2_chb, 6, 2, 1, 1, Qt.AlignHCenter)
@@ -108,16 +111,16 @@ class Ui_MainWindow(object):
 
         self.viewLabel = QLabel(self.tab)
         self.viewLabel.setObjectName(u"viewLabel")
-        sizePolicy2.setHeightForWidth(self.viewLabel.sizePolicy().hasHeightForWidth())
-        self.viewLabel.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.viewLabel.sizePolicy().hasHeightForWidth())
+        self.viewLabel.setSizePolicy(sizePolicy3)
         self.viewLabel.setAlignment(Qt.AlignCenter)
 
         self.gridLayout.addWidget(self.viewLabel, 0, 2, 1, 1, Qt.AlignHCenter)
 
         self.topViewCheckBox = QCheckBox(self.tab)
         self.topViewCheckBox.setObjectName(u"topViewCheckBox")
-        sizePolicy2.setHeightForWidth(self.topViewCheckBox.sizePolicy().hasHeightForWidth())
-        self.topViewCheckBox.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.topViewCheckBox.sizePolicy().hasHeightForWidth())
+        self.topViewCheckBox.setSizePolicy(sizePolicy3)
         self.topViewCheckBox.setChecked(True)
         self.topViewCheckBox.setTristate(False)
 
@@ -133,23 +136,23 @@ class Ui_MainWindow(object):
 
         self.no_copper_1_pb = QPushButton(self.tab)
         self.no_copper_1_pb.setObjectName(u"no_copper_1_pb")
-        sizePolicy2.setHeightForWidth(self.no_copper_1_pb.sizePolicy().hasHeightForWidth())
-        self.no_copper_1_pb.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.no_copper_1_pb.sizePolicy().hasHeightForWidth())
+        self.no_copper_1_pb.setSizePolicy(sizePolicy3)
 
         self.gridLayout.addWidget(self.no_copper_1_pb, 5, 1, 1, 1)
 
         self.bottomViewCheckBox = QCheckBox(self.tab)
         self.bottomViewCheckBox.setObjectName(u"bottomViewCheckBox")
-        sizePolicy2.setHeightForWidth(self.bottomViewCheckBox.sizePolicy().hasHeightForWidth())
-        self.bottomViewCheckBox.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.bottomViewCheckBox.sizePolicy().hasHeightForWidth())
+        self.bottomViewCheckBox.setSizePolicy(sizePolicy3)
         self.bottomViewCheckBox.setChecked(True)
 
         self.gridLayout.addWidget(self.bottomViewCheckBox, 2, 2, 1, 1, Qt.AlignHCenter)
 
         self.profileLoadButton = QPushButton(self.tab)
         self.profileLoadButton.setObjectName(u"profileLoadButton")
-        sizePolicy2.setHeightForWidth(self.profileLoadButton.sizePolicy().hasHeightForWidth())
-        self.profileLoadButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.profileLoadButton.sizePolicy().hasHeightForWidth())
+        self.profileLoadButton.setSizePolicy(sizePolicy3)
 
         self.gridLayout.addWidget(self.profileLoadButton, 3, 1, 1, 1)
 
@@ -163,30 +166,30 @@ class Ui_MainWindow(object):
 
         self.no_copper_1_chb = QCheckBox(self.tab)
         self.no_copper_1_chb.setObjectName(u"no_copper_1_chb")
-        sizePolicy2.setHeightForWidth(self.no_copper_1_chb.sizePolicy().hasHeightForWidth())
-        self.no_copper_1_chb.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.no_copper_1_chb.sizePolicy().hasHeightForWidth())
+        self.no_copper_1_chb.setSizePolicy(sizePolicy3)
         self.no_copper_1_chb.setChecked(True)
 
         self.gridLayout.addWidget(self.no_copper_1_chb, 5, 2, 1, 1, Qt.AlignHCenter)
 
         self.clear_views_push_button = QPushButton(self.tab)
         self.clear_views_push_button.setObjectName(u"clear_views_push_button")
-        sizePolicy2.setHeightForWidth(self.clear_views_push_button.sizePolicy().hasHeightForWidth())
-        self.clear_views_push_button.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.clear_views_push_button.sizePolicy().hasHeightForWidth())
+        self.clear_views_push_button.setSizePolicy(sizePolicy3)
 
         self.gridLayout.addWidget(self.clear_views_push_button, 8, 1, 1, 1)
 
         self.drillLoadButton = QPushButton(self.tab)
         self.drillLoadButton.setObjectName(u"drillLoadButton")
-        sizePolicy2.setHeightForWidth(self.drillLoadButton.sizePolicy().hasHeightForWidth())
-        self.drillLoadButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.drillLoadButton.sizePolicy().hasHeightForWidth())
+        self.drillLoadButton.setSizePolicy(sizePolicy3)
 
         self.gridLayout.addWidget(self.drillLoadButton, 4, 1, 1, 1)
 
         self.topLoadButton = QPushButton(self.tab)
         self.topLoadButton.setObjectName(u"topLoadButton")
-        sizePolicy2.setHeightForWidth(self.topLoadButton.sizePolicy().hasHeightForWidth())
-        self.topLoadButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.topLoadButton.sizePolicy().hasHeightForWidth())
+        self.topLoadButton.setSizePolicy(sizePolicy3)
 
         self.gridLayout.addWidget(self.topLoadButton, 1, 1, 1, 1)
 
@@ -200,23 +203,23 @@ class Ui_MainWindow(object):
 
         self.bottomLoadButton = QPushButton(self.tab)
         self.bottomLoadButton.setObjectName(u"bottomLoadButton")
-        sizePolicy2.setHeightForWidth(self.bottomLoadButton.sizePolicy().hasHeightForWidth())
-        self.bottomLoadButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.bottomLoadButton.sizePolicy().hasHeightForWidth())
+        self.bottomLoadButton.setSizePolicy(sizePolicy3)
 
         self.gridLayout.addWidget(self.bottomLoadButton, 2, 1, 1, 1)
 
         self.drillViewCheckBox = QCheckBox(self.tab)
         self.drillViewCheckBox.setObjectName(u"drillViewCheckBox")
-        sizePolicy2.setHeightForWidth(self.drillViewCheckBox.sizePolicy().hasHeightForWidth())
-        self.drillViewCheckBox.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.drillViewCheckBox.sizePolicy().hasHeightForWidth())
+        self.drillViewCheckBox.setSizePolicy(sizePolicy3)
         self.drillViewCheckBox.setChecked(True)
 
         self.gridLayout.addWidget(self.drillViewCheckBox, 4, 2, 1, 1, Qt.AlignHCenter)
 
         self.filePathLabel = QLabel(self.tab)
         self.filePathLabel.setObjectName(u"filePathLabel")
-        sizePolicy2.setHeightForWidth(self.filePathLabel.sizePolicy().hasHeightForWidth())
-        self.filePathLabel.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.filePathLabel.sizePolicy().hasHeightForWidth())
+        self.filePathLabel.setSizePolicy(sizePolicy3)
 
         self.gridLayout.addWidget(self.filePathLabel, 0, 0, 1, 1, Qt.AlignHCenter)
 
@@ -230,21 +233,21 @@ class Ui_MainWindow(object):
 
         self.all_view_checkbox = QCheckBox(self.tab)
         self.all_view_checkbox.setObjectName(u"all_view_checkbox")
-        sizePolicy2.setHeightForWidth(self.all_view_checkbox.sizePolicy().hasHeightForWidth())
-        self.all_view_checkbox.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.all_view_checkbox.sizePolicy().hasHeightForWidth())
+        self.all_view_checkbox.setSizePolicy(sizePolicy3)
         self.all_view_checkbox.setChecked(True)
 
         self.gridLayout.addWidget(self.all_view_checkbox, 8, 2, 1, 1, Qt.AlignHCenter)
 
         self.profileViewCheckBox = QCheckBox(self.tab)
         self.profileViewCheckBox.setObjectName(u"profileViewCheckBox")
-        sizePolicy2.setHeightForWidth(self.profileViewCheckBox.sizePolicy().hasHeightForWidth())
-        self.profileViewCheckBox.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.profileViewCheckBox.sizePolicy().hasHeightForWidth())
+        self.profileViewCheckBox.setSizePolicy(sizePolicy3)
         self.profileViewCheckBox.setChecked(True)
 
         self.gridLayout.addWidget(self.profileViewCheckBox, 3, 2, 1, 1, Qt.AlignHCenter)
 
-        self.horizontalSpacer = QSpacerItem(140, 17, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(140, 17, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.gridLayout.addItem(self.horizontalSpacer, 8, 0, 1, 1)
 
@@ -572,11 +575,8 @@ class Ui_MainWindow(object):
 
         self.checkBox = QCheckBox(self.profile_page)
         self.checkBox.setObjectName(u"checkBox")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.checkBox.sizePolicy().hasHeightForWidth())
-        self.checkBox.setSizePolicy(sizePolicy3)
+        sizePolicy2.setHeightForWidth(self.checkBox.sizePolicy().hasHeightForWidth())
+        self.checkBox.setSizePolicy(sizePolicy2)
         self.checkBox.setMinimumSize(QSize(123, 0))
 
         self.gridLayout_4.addWidget(self.checkBox, 2, 3, 1, 1, Qt.AlignHCenter)
@@ -1163,16 +1163,16 @@ class Ui_MainWindow(object):
         self.unlockHomingHorizontalLayout.setContentsMargins(20, 20, 20, 20)
         self.unlockButton = QPushButton(self.controlTab)
         self.unlockButton.setObjectName(u"unlockButton")
-        sizePolicy2.setHeightForWidth(self.unlockButton.sizePolicy().hasHeightForWidth())
-        self.unlockButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.unlockButton.sizePolicy().hasHeightForWidth())
+        self.unlockButton.setSizePolicy(sizePolicy3)
         self.unlockButton.setFont(font)
 
         self.unlockHomingHorizontalLayout.addWidget(self.unlockButton)
 
         self.homingButton = QPushButton(self.controlTab)
         self.homingButton.setObjectName(u"homingButton")
-        sizePolicy2.setHeightForWidth(self.homingButton.sizePolicy().hasHeightForWidth())
-        self.homingButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.homingButton.sizePolicy().hasHeightForWidth())
+        self.homingButton.setSizePolicy(sizePolicy3)
         self.homingButton.setFont(font)
 
         self.unlockHomingHorizontalLayout.addWidget(self.homingButton)
@@ -1185,64 +1185,64 @@ class Ui_MainWindow(object):
         self.gridLayoutDirections.setContentsMargins(5, 5, 5, 5)
         self.xYMinusPlusButton = QPushButton(self.controlTab)
         self.xYMinusPlusButton.setObjectName(u"xYMinusPlusButton")
-        sizePolicy2.setHeightForWidth(self.xYMinusPlusButton.sizePolicy().hasHeightForWidth())
-        self.xYMinusPlusButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.xYMinusPlusButton.sizePolicy().hasHeightForWidth())
+        self.xYMinusPlusButton.setSizePolicy(sizePolicy3)
 
         self.gridLayoutDirections.addWidget(self.xYMinusPlusButton, 0, 0, 1, 1)
 
         self.yPlusButton = QPushButton(self.controlTab)
         self.yPlusButton.setObjectName(u"yPlusButton")
-        sizePolicy2.setHeightForWidth(self.yPlusButton.sizePolicy().hasHeightForWidth())
-        self.yPlusButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.yPlusButton.sizePolicy().hasHeightForWidth())
+        self.yPlusButton.setSizePolicy(sizePolicy3)
 
         self.gridLayoutDirections.addWidget(self.yPlusButton, 0, 1, 1, 1)
 
         self.xYPlusButton = QPushButton(self.controlTab)
         self.xYPlusButton.setObjectName(u"xYPlusButton")
-        sizePolicy2.setHeightForWidth(self.xYPlusButton.sizePolicy().hasHeightForWidth())
-        self.xYPlusButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.xYPlusButton.sizePolicy().hasHeightForWidth())
+        self.xYPlusButton.setSizePolicy(sizePolicy3)
 
         self.gridLayoutDirections.addWidget(self.xYPlusButton, 0, 2, 1, 1)
 
         self.xMinusButton = QPushButton(self.controlTab)
         self.xMinusButton.setObjectName(u"xMinusButton")
-        sizePolicy2.setHeightForWidth(self.xMinusButton.sizePolicy().hasHeightForWidth())
-        self.xMinusButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.xMinusButton.sizePolicy().hasHeightForWidth())
+        self.xMinusButton.setSizePolicy(sizePolicy3)
 
         self.gridLayoutDirections.addWidget(self.xMinusButton, 1, 0, 1, 1)
 
         self.centerButton = QPushButton(self.controlTab)
         self.centerButton.setObjectName(u"centerButton")
-        sizePolicy2.setHeightForWidth(self.centerButton.sizePolicy().hasHeightForWidth())
-        self.centerButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.centerButton.sizePolicy().hasHeightForWidth())
+        self.centerButton.setSizePolicy(sizePolicy3)
 
         self.gridLayoutDirections.addWidget(self.centerButton, 1, 1, 1, 1)
 
         self.xPlusButton = QPushButton(self.controlTab)
         self.xPlusButton.setObjectName(u"xPlusButton")
-        sizePolicy2.setHeightForWidth(self.xPlusButton.sizePolicy().hasHeightForWidth())
-        self.xPlusButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.xPlusButton.sizePolicy().hasHeightForWidth())
+        self.xPlusButton.setSizePolicy(sizePolicy3)
 
         self.gridLayoutDirections.addWidget(self.xPlusButton, 1, 2, 1, 1)
 
         self.xYMinusButton = QPushButton(self.controlTab)
         self.xYMinusButton.setObjectName(u"xYMinusButton")
-        sizePolicy2.setHeightForWidth(self.xYMinusButton.sizePolicy().hasHeightForWidth())
-        self.xYMinusButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.xYMinusButton.sizePolicy().hasHeightForWidth())
+        self.xYMinusButton.setSizePolicy(sizePolicy3)
 
         self.gridLayoutDirections.addWidget(self.xYMinusButton, 2, 0, 1, 1)
 
         self.yMinusButton = QPushButton(self.controlTab)
         self.yMinusButton.setObjectName(u"yMinusButton")
-        sizePolicy2.setHeightForWidth(self.yMinusButton.sizePolicy().hasHeightForWidth())
-        self.yMinusButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.yMinusButton.sizePolicy().hasHeightForWidth())
+        self.yMinusButton.setSizePolicy(sizePolicy3)
 
         self.gridLayoutDirections.addWidget(self.yMinusButton, 2, 1, 1, 1)
 
         self.xYPlusMinuButton = QPushButton(self.controlTab)
         self.xYPlusMinuButton.setObjectName(u"xYPlusMinuButton")
-        sizePolicy2.setHeightForWidth(self.xYPlusMinuButton.sizePolicy().hasHeightForWidth())
-        self.xYPlusMinuButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.xYPlusMinuButton.sizePolicy().hasHeightForWidth())
+        self.xYPlusMinuButton.setSizePolicy(sizePolicy3)
 
         self.gridLayoutDirections.addWidget(self.xYPlusMinuButton, 2, 2, 1, 1)
 
@@ -1256,16 +1256,16 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.label_3 = QLabel(self.controlTab)
         self.label_3.setObjectName(u"label_3")
-        sizePolicy2.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
-        self.label_3.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
+        self.label_3.setSizePolicy(sizePolicy3)
         self.label_3.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_5.addWidget(self.label_3, 0, Qt.AlignHCenter)
 
         self.doubleSpinBox_2 = QDoubleSpinBox(self.controlTab)
         self.doubleSpinBox_2.setObjectName(u"doubleSpinBox_2")
-        sizePolicy2.setHeightForWidth(self.doubleSpinBox_2.sizePolicy().hasHeightForWidth())
-        self.doubleSpinBox_2.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.doubleSpinBox_2.sizePolicy().hasHeightForWidth())
+        self.doubleSpinBox_2.setSizePolicy(sizePolicy3)
 
         self.verticalLayout_5.addWidget(self.doubleSpinBox_2, 0, Qt.AlignHCenter)
 
@@ -1276,16 +1276,16 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_4 = QLabel(self.controlTab)
         self.label_4.setObjectName(u"label_4")
-        sizePolicy2.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
-        self.label_4.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
+        self.label_4.setSizePolicy(sizePolicy3)
         self.label_4.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_4.addWidget(self.label_4, 0, Qt.AlignHCenter)
 
         self.doubleSpinBox = QDoubleSpinBox(self.controlTab)
         self.doubleSpinBox.setObjectName(u"doubleSpinBox")
-        sizePolicy2.setHeightForWidth(self.doubleSpinBox.sizePolicy().hasHeightForWidth())
-        self.doubleSpinBox.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.doubleSpinBox.sizePolicy().hasHeightForWidth())
+        self.doubleSpinBox.setSizePolicy(sizePolicy3)
 
         self.verticalLayout_4.addWidget(self.doubleSpinBox, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
@@ -1297,15 +1297,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.zPlusButton = QPushButton(self.controlTab)
         self.zPlusButton.setObjectName(u"zPlusButton")
-        sizePolicy2.setHeightForWidth(self.zPlusButton.sizePolicy().hasHeightForWidth())
-        self.zPlusButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.zPlusButton.sizePolicy().hasHeightForWidth())
+        self.zPlusButton.setSizePolicy(sizePolicy3)
 
         self.verticalLayout_3.addWidget(self.zPlusButton)
 
         self.zMinusButton = QPushButton(self.controlTab)
         self.zMinusButton.setObjectName(u"zMinusButton")
-        sizePolicy2.setHeightForWidth(self.zMinusButton.sizePolicy().hasHeightForWidth())
-        self.zMinusButton.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.zMinusButton.sizePolicy().hasHeightForWidth())
+        self.zMinusButton.setSizePolicy(sizePolicy3)
 
         self.verticalLayout_3.addWidget(self.zMinusButton)
 
@@ -1358,15 +1358,15 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.serial_ports_cb = QComboBox(self.controlTab)
         self.serial_ports_cb.setObjectName(u"serial_ports_cb")
-        sizePolicy3.setHeightForWidth(self.serial_ports_cb.sizePolicy().hasHeightForWidth())
-        self.serial_ports_cb.setSizePolicy(sizePolicy3)
+        sizePolicy2.setHeightForWidth(self.serial_ports_cb.sizePolicy().hasHeightForWidth())
+        self.serial_ports_cb.setSizePolicy(sizePolicy2)
 
         self.horizontalLayout.addWidget(self.serial_ports_cb)
 
         self.serial_baud_cb = QComboBox(self.controlTab)
         self.serial_baud_cb.setObjectName(u"serial_baud_cb")
-        sizePolicy3.setHeightForWidth(self.serial_baud_cb.sizePolicy().hasHeightForWidth())
-        self.serial_baud_cb.setSizePolicy(sizePolicy3)
+        sizePolicy2.setHeightForWidth(self.serial_baud_cb.sizePolicy().hasHeightForWidth())
+        self.serial_baud_cb.setSizePolicy(sizePolicy2)
 
         self.horizontalLayout.addWidget(self.serial_baud_cb)
 
@@ -1407,8 +1407,8 @@ class Ui_MainWindow(object):
         self.splitter_2.addWidget(self.clear_terminal_button)
         self.connect_button = QPushButton(self.splitter_2)
         self.connect_button.setObjectName(u"connect_button")
-        sizePolicy2.setHeightForWidth(self.connect_button.sizePolicy().hasHeightForWidth())
-        self.connect_button.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.connect_button.sizePolicy().hasHeightForWidth())
+        self.connect_button.setSizePolicy(sizePolicy3)
         self.connect_button.setFont(font)
         self.splitter_2.addWidget(self.connect_button)
 
@@ -1519,7 +1519,7 @@ class Ui_MainWindow(object):
         self.bottomViewCheckBox.setText("")
         self.profileLoadButton.setText(QCoreApplication.translate("MainWindow", u"PROFILE", None))
         self.no_copper_1_chb.setText("")
-        self.clear_views_push_button.setText(QCoreApplication.translate("MainWindow", u"Clear All", None))
+        self.clear_views_push_button.setText(QCoreApplication.translate("MainWindow", u"CLEAR ALL", None))
         self.drillLoadButton.setText(QCoreApplication.translate("MainWindow", u"DRILL", None))
         self.topLoadButton.setText(QCoreApplication.translate("MainWindow", u"TOP", None))
         self.bottomLoadButton.setText(QCoreApplication.translate("MainWindow", u"BOTTOM", None))
