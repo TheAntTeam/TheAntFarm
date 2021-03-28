@@ -8,8 +8,8 @@ class SettingsHandler:
     JOBS_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'configurations' + os.path.sep + 'jobs_sets_config.ini')
     WIN_POS_X_DEFAULT = 200
     WIN_POS_Y_DEFAULT = 200
-    WIN_SIZ_W_DEFAULT = 960
-    WIN_SIZ_H_DEFAULT = 720
+    WIN_SIZE_W_DEFAULT = 960
+    WIN_SIZE_H_DEFAULT = 720
     LAYER_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
 
     def __init__(self, main_win):
@@ -17,7 +17,7 @@ class SettingsHandler:
         self.jobs_settings = configparser.ConfigParser()
         self.main_win = main_win
         self.pos = QPoint(self.WIN_POS_X_DEFAULT, self.WIN_POS_Y_DEFAULT)
-        self.size = QSize(self.WIN_SIZ_W_DEFAULT, self.WIN_SIZ_H_DEFAULT)
+        self.size = QSize(self.WIN_SIZE_W_DEFAULT, self.WIN_SIZE_H_DEFAULT)
         self.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
 
     def read_all_settings(self):
@@ -33,15 +33,17 @@ class SettingsHandler:
         # GENERAL application settings #
         if "GENERAL" in self.app_settings:
             app_general = self.app_settings["GENERAL"]
-            self.pos = QPoint(app_general.getint("win_position_x"), app_general.getint("win_position_y"))
+            self.pos = QPoint(app_general.getint("win_position_x", self.WIN_POS_X_DEFAULT),
+                              app_general.getint("win_position_y", self.WIN_POS_Y_DEFAULT))
             self.main_win.move(self.pos)  # Restore position
-            self.size = QSize(app_general.getint("win_width"), app_general.getint("win_height"))
+            self.size = QSize(app_general.getint("win_width", self.WIN_SIZE_W_DEFAULT),
+                              app_general.getint("win_height", self.WIN_SIZE_H_DEFAULT))
         self.main_win.resize(self.size)
 
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
             app_layers_settings = self.app_settings["LAYERS"]
-            self.layer_last_dir = app_layers_settings["layer_last_dir"]
+            self.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
 
     def read_all_jobs_settings(self):
         """ Read all jobs'settings from ini files """
@@ -61,8 +63,8 @@ class SettingsHandler:
         """ Write all application settings to ini files """
         self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
-                                        "win_width": self.WIN_SIZ_W_DEFAULT,
-                                        "win_height": self.WIN_SIZ_H_DEFAULT,
+                                        "win_width": self.WIN_SIZE_W_DEFAULT,
+                                        "win_height": self.WIN_SIZE_H_DEFAULT,
                                         "layer_last_dir": self.layer_last_dir}
 
         # GENERAL application settings #
