@@ -38,11 +38,11 @@ class UiManager(QObject):
         self.serial_connection_status = False
         self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
         self.layer_colors = Od([(k, v) for k, v in zip(self.L_TAGS, self.L_COLORS)])
-        self.L_TEXT = [self.ui.topFileLineEdit, self.ui.bottomFileLineEdit, self.ui.profileFileLineEdit,
-                       self.ui.drillFileLineEdit, self.ui.no_copper_1_le, self.ui.no_copper_2_le]
+        self.L_TEXT = [self.ui.top_file_le, self.ui.bottom_file_le, self.ui.profile_file_le,
+                       self.ui.drill_file_le, self.ui.no_copper_1_le, self.ui.no_copper_2_le]
         self.layers_te = Od([(k, t) for k, t in zip(self.L_TAGS, self.L_TEXT)])
-        self.L_CHECKBOX = [self.ui.topViewCheckBox, self.ui.bottomViewCheckBox, self.ui.profileViewCheckBox,
-                           self.ui.drillViewCheckBox, self.ui.no_copper_1_chb, self.ui.no_copper_2_chb]
+        self.L_CHECKBOX = [self.ui.top_view_chb, self.ui.bottom_view_chb, self.ui.profile_view_chb,
+                           self.ui.drill_view_chb, self.ui.no_copper_1_chb, self.ui.no_copper_2_chb]
         self.layers_cb = Od([(k, t) for k, t in zip(self.L_TAGS, self.L_CHECKBOX)])
 
         [self.ui.layer_choice_cb.addItem(x) for x in self.L_NAMES]  # todo: the loaded list depends on...
@@ -64,32 +64,32 @@ class UiManager(QObject):
         self.ui.unlockButton.clicked.connect(self.handle_unlock)
         self.ui.homingButton.clicked.connect(self.handle_homing)
         self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
-        self.ui.tabWidget.currentChanged.connect(self.check_align_is_active)
+        self.ui.main_tab_widget.currentChanged.connect(self.check_align_is_active)
         self.ui.verticalSlider.valueChanged.connect(self.update_threshold)
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
-        self.ui.clear_views_push_button.clicked.connect(self.remove_all_vis_layers)
+        self.ui.clear_views_pb.clicked.connect(self.remove_all_vis_layers)
 
         # From UI Manager to Controller
         self.align_active_s.connect(self.controlWo.set_align_is_active)
         self.load_layer_s.connect(self.controlWo.load_new_layer)
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
-        self.ui.topLoadButton.clicked.connect(
+        self.ui.top_load_pb.clicked.connect(
             lambda: self.load_gerber_file(self.L_TAGS[0], "Load Top Gerber File", "Gerber (*.gbr *.GBR)"))
-        self.ui.bottomLoadButton.clicked.connect(
+        self.ui.bottom_load_pb.clicked.connect(
             lambda: self.load_gerber_file(self.L_TAGS[1], "Load Bottom Gerber File", "Gerber (*.gbr *.GBR)"))
-        self.ui.profileLoadButton.clicked.connect(
+        self.ui.profile_load_pb.clicked.connect(
             lambda: self.load_gerber_file(self.L_TAGS[2], "Load Profile Gerber File", "Gerber (*.gbr *.GBR)"))
-        self.ui.drillLoadButton.clicked.connect(
+        self.ui.drill_load_pb.clicked.connect(
             lambda: self.load_gerber_file(self.L_TAGS[3], "Load Drill Excellon File", "Excellon (*.xln *.XLN)"))
-        self.ui.topViewCheckBox.stateChanged.connect(
-            lambda: self.set_layer_visible("top", self.ui.topViewCheckBox.isChecked()))
-        self.ui.bottomViewCheckBox.stateChanged.connect(
-            lambda: self.set_layer_visible("bottom", self.ui.bottomViewCheckBox.isChecked()))
-        self.ui.profileViewCheckBox.stateChanged.connect(
-            lambda: self.set_layer_visible("profile", self.ui.profileViewCheckBox.isChecked()))
-        self.ui.drillViewCheckBox.stateChanged.connect(
-            lambda: self.set_layer_visible("drill", self.ui.drillViewCheckBox.isChecked()))
-        self.ui.all_view_checkbox.stateChanged.connect(lambda: self.hide_show_layers(self.ui.all_view_checkbox.isChecked()))
+        self.ui.top_view_chb.stateChanged.connect(
+            lambda: self.set_layer_visible("top", self.ui.top_view_chb.isChecked()))
+        self.ui.bottom_view_chb.stateChanged.connect(
+            lambda: self.set_layer_visible("bottom", self.ui.bottom_view_chb.isChecked()))
+        self.ui.profile_view_chb.stateChanged.connect(
+            lambda: self.set_layer_visible("profile", self.ui.profile_view_chb.isChecked()))
+        self.ui.drill_view_chb.stateChanged.connect(
+            lambda: self.set_layer_visible("drill", self.ui.drill_view_chb.isChecked()))
+        self.ui.all_view_chb.stateChanged.connect(lambda: self.hide_show_layers(self.ui.all_view_chb.isChecked()))
 
         # From UI Manager to Serial Manager
         self.serial_send_s.connect(self.serialWo.send)
@@ -145,7 +145,7 @@ class UiManager(QObject):
     def update_logging_status(self, status, record):
         color = self.LOG_COLORS.get(record.levelno, 'black')
         s = '<pre><font color="%s">%s</font></pre>' % (color, status)
-        self.ui.logging_plain_text_edit.appendHtml(s)
+        self.ui.logging_plain_te.appendHtml(s)
 
     @Slot(QPixmap)
     def update_camera_image(self, pixmap):
@@ -163,7 +163,7 @@ class UiManager(QObject):
         self.ui.serial_te.append(new_text)
 
     def check_align_is_active(self):
-        self.align_active_s.emit(self.ui.tabWidget.currentWidget().objectName() == "alignTab")
+        self.align_active_s.emit(self.ui.main_tab_widget.currentWidget().objectName() == "align_tab")
 
     def update_threshold(self):
         self.update_threshold_s.emit(self.ui.verticalSlider.value())
@@ -225,9 +225,9 @@ class UiManager(QObject):
 
     def hide_show_console(self):
         if self.ui.actionHide_Show_Console.isChecked():
-            self.ui.logging_plain_text_edit.show()
+            self.ui.logging_plain_te.show()
         else:
-            self.ui.logging_plain_text_edit.hide()
+            self.ui.logging_plain_te.hide()
 
     def handle_unlock(self):
         logging.debug("Unlock Command")

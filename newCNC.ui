@@ -28,7 +28,7 @@
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QWidget" name="central_widget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
@@ -37,7 +37,7 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="main_tab_widget">
       <property name="font">
        <font>
         <weight>75</weight>
@@ -50,7 +50,7 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="viewTab">
+      <widget class="QWidget" name="view_tab">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -66,7 +66,7 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
-             <widget class="QTabWidget" name="tabWidget_2">
+             <widget class="QTabWidget" name="prepare_widget">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -80,9 +80,9 @@
                <enum>QTabWidget::Rounded</enum>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
-              <widget class="QWidget" name="tab">
+              <widget class="QWidget" name="load_layers_tab">
                <attribute name="title">
                 <string>LOAD LAYERS</string>
                </attribute>
@@ -141,7 +141,7 @@
                    </widget>
                   </item>
                   <item row="3" column="0">
-                   <widget class="QLineEdit" name="profileFileLineEdit">
+                   <widget class="QLineEdit" name="profile_file_le">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -154,7 +154,7 @@
                    </widget>
                   </item>
                   <item row="0" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QLabel" name="viewLabel">
+                   <widget class="QLabel" name="view_label">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -170,7 +170,7 @@
                    </widget>
                   </item>
                   <item row="1" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QCheckBox" name="topViewCheckBox">
+                   <widget class="QCheckBox" name="top_view_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -186,7 +186,7 @@
                    </widget>
                   </item>
                   <item row="4" column="0">
-                   <widget class="QLineEdit" name="drillFileLineEdit">
+                   <widget class="QLineEdit" name="drill_file_le">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -218,7 +218,7 @@
                    </widget>
                   </item>
                   <item row="2" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QCheckBox" name="bottomViewCheckBox">
+                   <widget class="QCheckBox" name="bottom_view_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -234,7 +234,7 @@
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="QPushButton" name="profileLoadButton">
+                   <widget class="QPushButton" name="profile_load_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -276,7 +276,7 @@
                    </widget>
                   </item>
                   <item row="8" column="1">
-                   <widget class="QPushButton" name="clear_views_push_button">
+                   <widget class="QPushButton" name="clear_views_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -289,7 +289,7 @@
                    </widget>
                   </item>
                   <item row="4" column="1">
-                   <widget class="QPushButton" name="drillLoadButton">
+                   <widget class="QPushButton" name="drill_load_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -302,7 +302,7 @@
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="QPushButton" name="topLoadButton">
+                   <widget class="QPushButton" name="top_load_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -315,7 +315,7 @@
                    </widget>
                   </item>
                   <item row="2" column="0">
-                   <widget class="QLineEdit" name="bottomFileLineEdit">
+                   <widget class="QLineEdit" name="bottom_file_le">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -328,7 +328,7 @@
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="QPushButton" name="bottomLoadButton">
+                   <widget class="QPushButton" name="bottom_load_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -341,7 +341,7 @@
                    </widget>
                   </item>
                   <item row="4" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QCheckBox" name="drillViewCheckBox">
+                   <widget class="QCheckBox" name="drill_view_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -357,7 +357,7 @@
                    </widget>
                   </item>
                   <item row="0" column="0" alignment="Qt::AlignHCenter">
-                   <widget class="QLabel" name="filePathLabel">
+                   <widget class="QLabel" name="file_path_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -370,7 +370,7 @@
                    </widget>
                   </item>
                   <item row="1" column="0">
-                   <widget class="QLineEdit" name="topFileLineEdit">
+                   <widget class="QLineEdit" name="top_file_le">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -383,7 +383,7 @@
                    </widget>
                   </item>
                   <item row="8" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QCheckBox" name="all_view_checkbox">
+                   <widget class="QCheckBox" name="all_view_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -399,7 +399,7 @@
                    </widget>
                   </item>
                   <item row="3" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QCheckBox" name="profileViewCheckBox">
+                   <widget class="QCheckBox" name="profile_view_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -415,7 +415,7 @@
                    </widget>
                   </item>
                   <item row="8" column="0">
-                   <spacer name="horizontalSpacer">
+                   <spacer name="horizontal_spacer">
                     <property name="orientation">
                      <enum>Qt::Horizontal</enum>
                     </property>
@@ -431,7 +431,7 @@
                    </spacer>
                   </item>
                   <item row="7" column="0">
-                   <spacer name="horizontalSpacer_2">
+                   <spacer name="horizontal_spacer_2">
                     <property name="orientation">
                      <enum>Qt::Horizontal</enum>
                     </property>
@@ -463,7 +463,7 @@
                 </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="tab_2">
+              <widget class="QWidget" name="create_job_tab">
                <attribute name="title">
                 <string>CREATE JOB</string>
                </attribute>
@@ -1498,7 +1498,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="controlTab">
+      <widget class="QWidget" name="control_tab">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -2461,7 +2461,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="alignTab">
+      <widget class="QWidget" name="align_tab">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -2497,7 +2497,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPlainTextEdit" name="logging_plain_text_edit">
+     <widget class="QPlainTextEdit" name="logging_plain_te">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
