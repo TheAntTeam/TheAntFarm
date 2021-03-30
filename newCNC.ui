@@ -80,7 +80,7 @@
                <enum>QTabWidget::Rounded</enum>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="load_layers_tab">
                <attribute name="title">
@@ -446,9 +446,6 @@
                  </layout>
                 </item>
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_3"/>
-                </item>
-                <item>
                  <spacer name="verticalSpacer">
                   <property name="orientation">
                    <enum>Qt::Vertical</enum>
@@ -479,7 +476,7 @@
                   <widget class="QWidget" name="top_page">
                    <layout class="QGridLayout" name="gridLayout_2">
                     <item row="3" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_6">
+                     <widget class="QDoubleSpinBox" name="top_cut_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -489,31 +486,34 @@
                       <property name="maximum">
                        <double>9999.000000000000000</double>
                       </property>
+                      <property name="value">
+                       <double>0.000000000000000</double>
+                      </property>
                      </widget>
                     </item>
                     <item row="0" column="0">
-                     <widget class="QLabel" name="label_7">
+                     <widget class="QLabel" name="top_tool_diameter_l">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="11" column="0" colspan="2">
-                     <widget class="QPushButton" name="pushButton">
+                     <widget class="QPushButton" name="top_generate_job_pb">
                       <property name="text">
                        <string>Generate Job</string>
                       </property>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QLabel" name="label_8">
+                     <widget class="QLabel" name="top_n_passes_l">
                       <property name="text">
                        <string>Number of Passes</string>
                       </property>
                      </widget>
                     </item>
                     <item row="10" column="0" colspan="2">
-                     <spacer name="verticalSpacer_2">
+                     <spacer name="top_vertical_spacer">
                       <property name="orientation">
                        <enum>Qt::Vertical</enum>
                       </property>
@@ -526,14 +526,14 @@
                      </spacer>
                     </item>
                     <item row="4" column="0">
-                     <widget class="QLabel" name="label_15">
+                     <widget class="QLabel" name="top_travel_z_l">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_7">
+                     <widget class="QDoubleSpinBox" name="top_travel_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -546,28 +546,28 @@
                      </widget>
                     </item>
                     <item row="3" column="0">
-                     <widget class="QLabel" name="label_14">
+                     <widget class="QLabel" name="top_cut_z_l">
                       <property name="text">
                        <string>Cut Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QLabel" name="label_13">
+                     <widget class="QLabel" name="top_overlap_l">
                       <property name="text">
                        <string>Overlap</string>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="0">
-                     <widget class="QLabel" name="label_29">
+                     <widget class="QLabel" name="top_spindle_speed_l">
                       <property name="text">
                        <string>Spindle Speed</string>
                       </property>
                      </widget>
                     </item>
                     <item row="7" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_21">
+                     <widget class="QDoubleSpinBox" name="top_xy_feed_rate_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -580,28 +580,28 @@
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+                     <widget class="QDoubleSpinBox" name="top_tool_diameter_dsb">
                       <property name="minimum">
                        <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
                     <item row="7" column="0">
-                     <widget class="QLabel" name="label_30">
+                     <widget class="QLabel" name="top_xy_feed_rate_l">
                       <property name="text">
                        <string>XY Feed Rate [mm/min]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QSpinBox" name="spinBox">
+                     <widget class="QSpinBox" name="top_n_passes_sb">
                       <property name="minimum">
                        <number>1</number>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_20">
+                     <widget class="QDoubleSpinBox" name="top_spindle_speed_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -614,7 +614,7 @@
                      </widget>
                     </item>
                     <item row="2" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
+                     <widget class="QDoubleSpinBox" name="top_overlap_dsb">
                       <property name="decimals">
                        <number>1</number>
                       </property>
@@ -627,14 +627,14 @@
                      </widget>
                     </item>
                     <item row="9" column="0">
-                     <widget class="QLabel" name="label_31">
+                     <widget class="QLabel" name="top_z_feed_rate_l">
                       <property name="text">
                        <string>Z Feed Rate [mm/min]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="9" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_22">
+                     <widget class="QDoubleSpinBox" name="top_z_feed_rate_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -651,14 +651,14 @@
                   <widget class="QWidget" name="bottom_page">
                    <layout class="QGridLayout" name="gridLayout_3">
                     <item row="9" column="0">
-                     <widget class="QLabel" name="label_32">
+                     <widget class="QLabel" name="bottom_z_feed_rate_l">
                       <property name="text">
                        <string>Z Feed Rate [mm/min]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_10">
+                     <widget class="QDoubleSpinBox" name="bottom_cut_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -671,7 +671,7 @@
                      </widget>
                     </item>
                     <item row="9" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_23">
+                     <widget class="QDoubleSpinBox" name="bottom_z_feed_rate_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -684,35 +684,35 @@
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_8">
+                     <widget class="QDoubleSpinBox" name="bottom_tool_diameter_dsb">
                       <property name="minimum">
                        <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="1">
-                     <widget class="QSpinBox" name="spinBox_2">
+                     <widget class="QSpinBox" name="bottom_n_passes_sb">
                       <property name="minimum">
                        <number>1</number>
                       </property>
                      </widget>
                     </item>
                     <item row="3" column="0">
-                     <widget class="QLabel" name="label_18">
+                     <widget class="QLabel" name="bottom_overlap_l">
                       <property name="text">
                        <string>Overlap</string>
                       </property>
                      </widget>
                     </item>
                     <item row="12" column="0" colspan="2">
-                     <widget class="QPushButton" name="pushButton_2">
+                     <widget class="QPushButton" name="bottom_generate_job_pb">
                       <property name="text">
                        <string>Generate Job</string>
                       </property>
                      </widget>
                     </item>
                     <item row="8" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_24">
+                     <widget class="QDoubleSpinBox" name="bottom_xy_feed_rate_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -725,7 +725,7 @@
                      </widget>
                     </item>
                     <item row="3" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_9">
+                     <widget class="QDoubleSpinBox" name="bottom_overlap_dsb">
                       <property name="decimals">
                        <number>1</number>
                       </property>
@@ -738,7 +738,7 @@
                      </widget>
                     </item>
                     <item row="11" column="0" colspan="2">
-                     <spacer name="verticalSpacer_3">
+                     <spacer name="bottom_vertical_spacer">
                       <property name="orientation">
                        <enum>Qt::Vertical</enum>
                       </property>
@@ -751,35 +751,35 @@
                      </spacer>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QLabel" name="label_16">
+                     <widget class="QLabel" name="bottom_tool_diameter_l">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QLabel" name="label_17">
+                     <widget class="QLabel" name="bottom_n_passes_l">
                       <property name="text">
                        <string>Number of Passes</string>
                       </property>
                      </widget>
                     </item>
                     <item row="5" column="0">
-                     <widget class="QLabel" name="label_20">
+                     <widget class="QLabel" name="bottom_travel_z_l">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="0">
-                     <widget class="QLabel" name="label_19">
+                     <widget class="QLabel" name="bottom_cut_z_l">
                       <property name="text">
                        <string>Cut Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="5" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_11">
+                     <widget class="QDoubleSpinBox" name="bottom_travel_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -792,9 +792,29 @@
                      </widget>
                     </item>
                     <item row="8" column="0">
-                     <widget class="QLabel" name="label_33">
+                     <widget class="QLabel" name="bottom_xy_feed_rate_l">
                       <property name="text">
                        <string>XY Feed Rate [mm/min]</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="0">
+                     <widget class="QLabel" name="bottom_spindle_speed_l">
+                      <property name="text">
+                       <string>Spindle Speed</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="1">
+                     <widget class="QDoubleSpinBox" name="bottom_spindle_speed_dsb">
+                      <property name="decimals">
+                       <number>2</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-9999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>9999.000000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -803,14 +823,14 @@
                   <widget class="QWidget" name="profile_page">
                    <layout class="QGridLayout" name="gridLayout_4">
                     <item row="3" column="1">
-                     <widget class="QLabel" name="label_23">
+                     <widget class="QLabel" name="profile_depth_pass_l">
                       <property name="text">
                        <string>Depth per Pass [mm]</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="7" column="3">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_25">
+                    <item row="9" column="3">
+                     <widget class="QDoubleSpinBox" name="profile_xy_feed_rate_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -823,7 +843,7 @@
                      </widget>
                     </item>
                     <item row="5" column="3">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_16">
+                     <widget class="QDoubleSpinBox" name="profile_cut_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -836,7 +856,7 @@
                      </widget>
                     </item>
                     <item row="1" column="3">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_13">
+                     <widget class="QDoubleSpinBox" name="profile_margin_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -849,7 +869,7 @@
                      </widget>
                     </item>
                     <item row="3" column="3">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_14">
+                     <widget class="QDoubleSpinBox" name="profile_depth_pass_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -861,36 +881,22 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="9" column="1">
-                     <widget class="QLabel" name="label_52">
+                    <item row="11" column="1">
+                     <widget class="QLabel" name="profile_taps_layout_l">
                       <property name="text">
                        <string>Taps layout</string>
                       </property>
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QLabel" name="label_22">
+                     <widget class="QLabel" name="profile_margin_l">
                       <property name="text">
                        <string>Margin [mm]</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="5" column="1">
-                     <widget class="QLabel" name="label_25">
-                      <property name="text">
-                       <string>Cut Z [mm]</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="1">
-                     <widget class="QLabel" name="label_34">
-                      <property name="text">
-                       <string>XY Feed Rate [mm/min]</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="8" column="3">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_26">
+                    <item row="12" column="3">
+                     <widget class="QDoubleSpinBox" name="profile_tap_size_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -902,22 +908,49 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="14" column="1" colspan="3">
-                     <widget class="QPushButton" name="pushButton_3">
+                    <item row="5" column="1">
+                     <widget class="QLabel" name="profile_cut_z_l">
+                      <property name="text">
+                       <string>Cut Z [mm]</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="9" column="1">
+                     <widget class="QLabel" name="profile_xy_feed_rate_l">
+                      <property name="text">
+                       <string>XY Feed Rate [mm/min]</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="10" column="3">
+                     <widget class="QDoubleSpinBox" name="profile_z_feed_rate_dsb">
+                      <property name="decimals">
+                       <number>2</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-9999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>9999.000000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="16" column="1" colspan="3">
+                     <widget class="QPushButton" name="profile_generate_job_pb">
                       <property name="text">
                        <string>Generate Job</string>
                       </property>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QLabel" name="label_21">
+                     <widget class="QLabel" name="profile_tool_diameter_l">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="3" alignment="Qt::AlignHCenter">
-                     <widget class="QCheckBox" name="checkBox">
+                     <widget class="QCheckBox" name="profile_multi_depth_chb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -935,22 +968,29 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="8" column="1">
-                     <widget class="QLabel" name="label_35">
+                    <item row="10" column="1">
+                     <widget class="QLabel" name="profile_z_feed_rate_l">
                       <property name="text">
                        <string>Z Feed Rate [mm/min]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="0" column="3">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_12">
+                     <widget class="QDoubleSpinBox" name="profile_tool_diameter_dsb">
                       <property name="minimum">
                        <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
-                    <item row="13" column="1" colspan="3">
-                     <spacer name="verticalSpacer_4">
+                    <item row="12" column="1">
+                     <widget class="QLabel" name="profile_tap_size_l">
+                      <property name="text">
+                       <string>Tap size [mm]</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="15" column="1" colspan="3">
+                     <spacer name="profile_vertical_spacer">
                       <property name="orientation">
                        <enum>Qt::Vertical</enum>
                       </property>
@@ -963,14 +1003,14 @@
                      </spacer>
                     </item>
                     <item row="6" column="1">
-                     <widget class="QLabel" name="label_24">
+                     <widget class="QLabel" name="profile_travel_z_l">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="3">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_15">
+                     <widget class="QDoubleSpinBox" name="profile_travel_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -982,25 +1022,25 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="9" column="3">
-                     <widget class="QComboBox" name="comboBox"/>
+                    <item row="11" column="3">
+                     <widget class="QComboBox" name="profile_taps_layout_cb"/>
                     </item>
                     <item row="2" column="1">
-                     <widget class="QLabel" name="label">
+                     <widget class="QLabel" name="profile_multi_depth_l">
                       <property name="text">
                        <string>Multi-depth</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="10" column="1">
-                     <widget class="QLabel" name="label_53">
+                    <item row="7" column="1">
+                     <widget class="QLabel" name="profile_spindle_speed_l">
                       <property name="text">
-                       <string>Tap size [mm]</string>
+                       <string>Spindle Speed</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="10" column="3">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_43">
+                    <item row="7" column="3">
+                     <widget class="QDoubleSpinBox" name="profile_spindle_speed_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1017,7 +1057,7 @@
                   <widget class="QWidget" name="drill_page">
                    <layout class="QGridLayout" name="gridLayout_5">
                     <item row="0" column="1" colspan="2">
-                     <widget class="QTableWidget" name="tableWidget">
+                     <widget class="QTableWidget" name="drill_tw">
                       <column>
                        <property name="text">
                         <string>Bit</string>
@@ -1031,7 +1071,7 @@
                      </widget>
                     </item>
                     <item row="5" column="2">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_19">
+                     <widget class="QDoubleSpinBox" name="drill_travel_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1044,28 +1084,41 @@
                      </widget>
                     </item>
                     <item row="4" column="1">
-                     <widget class="QLabel" name="label_27">
+                     <widget class="QLabel" name="drill_cut_z_l">
                       <property name="text">
                        <string>Cut Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="1">
-                     <widget class="QLabel" name="label_26">
+                     <widget class="QLabel" name="drill_tool_diameter_l">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="11" column="1" colspan="2">
-                     <widget class="QPushButton" name="pushButton_4">
+                    <item row="13" column="1" colspan="2">
+                     <widget class="QPushButton" name="drill_generate_job_pb">
                       <property name="text">
                        <string>Generate Job</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="6" column="2">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_27">
+                    <item row="8" column="2">
+                     <widget class="QDoubleSpinBox" name="drill_xy_feed_rate_dsb">
+                      <property name="decimals">
+                       <number>2</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-9999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>9999.000000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="10" column="2">
+                     <widget class="QDoubleSpinBox" name="drill_z_feed_rate_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1078,42 +1131,49 @@
                      </widget>
                     </item>
                     <item row="5" column="1">
-                     <widget class="QLabel" name="label_28">
+                     <widget class="QLabel" name="drill_travel_z_l">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QLabel" name="label_6">
+                     <widget class="QLabel" name="drill_milling_tool_">
                       <property name="text">
                        <string>Milling Tool</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="2">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_17">
+                     <widget class="QDoubleSpinBox" name="drill_tool_diameter_dsb">
                       <property name="minimum">
                        <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
-                    <item row="6" column="1">
-                     <widget class="QLabel" name="label_36">
+                    <item row="8" column="1">
+                     <widget class="QLabel" name="drill_xy_feed_rate_l">
                       <property name="text">
                        <string>XY Feed Rate [mm/min]</string>
                       </property>
                      </widget>
                     </item>
+                    <item row="10" column="1">
+                     <widget class="QLabel" name="drill_z_feed_rate_l">
+                      <property name="text">
+                       <string>Z Feed Rate [mm/min]</string>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="1" column="2">
-                     <widget class="QCheckBox" name="checkBox_2">
+                     <widget class="QCheckBox" name="drill_milling_tool_chb">
                       <property name="text">
                        <string/>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="2">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_18">
+                     <widget class="QDoubleSpinBox" name="drill_cut_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1125,8 +1185,8 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="10" column="1" colspan="2">
-                     <spacer name="verticalSpacer_5">
+                    <item row="12" column="1" colspan="2">
+                     <spacer name="drill_vertical_spacer">
                       <property name="orientation">
                        <enum>Qt::Vertical</enum>
                       </property>
@@ -1138,15 +1198,15 @@
                       </property>
                      </spacer>
                     </item>
-                    <item row="8" column="1">
-                     <widget class="QLabel" name="label_37">
+                    <item row="6" column="1">
+                     <widget class="QLabel" name="drill_spindle_speed_l">
                       <property name="text">
-                       <string>Z Feed Rate [mm/min]</string>
+                       <string>Spindle Speed</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="8" column="2">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_28">
+                    <item row="6" column="2">
+                     <widget class="QDoubleSpinBox" name="drill_spindle_speed_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1163,21 +1223,21 @@
                   <widget class="QWidget" name="nc_area_top_page">
                    <layout class="QGridLayout" name="gridLayout_6">
                     <item row="1" column="0">
-                     <widget class="QLabel" name="label_39">
+                     <widget class="QLabel" name="nc_top_overlap_l">
                       <property name="text">
                        <string>Overlap</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QLabel" name="label_41">
+                     <widget class="QLabel" name="nc_top_cut_z_l">
                       <property name="text">
                        <string>Cut Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="5" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_34">
+                     <widget class="QDoubleSpinBox" name="nc_top_xy_feed_rate_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1190,7 +1250,7 @@
                      </widget>
                     </item>
                     <item row="3" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_32">
+                     <widget class="QDoubleSpinBox" name="nc_top_travel_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1203,21 +1263,21 @@
                      </widget>
                     </item>
                     <item row="4" column="0">
-                     <widget class="QLabel" name="label_42">
+                     <widget class="QLabel" name="nc_top_spindle_speed_l">
                       <property name="text">
                        <string>Spindle Speed</string>
                       </property>
                      </widget>
                     </item>
                     <item row="0" column="0">
-                     <widget class="QLabel" name="label_38">
+                     <widget class="QLabel" name="nc_top_tool_diameter_l">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_31">
+                     <widget class="QDoubleSpinBox" name="nc_top_cut_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1230,28 +1290,28 @@
                      </widget>
                     </item>
                     <item row="3" column="0">
-                     <widget class="QLabel" name="label_40">
+                     <widget class="QLabel" name="nc_top_travel_z_l">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="0">
-                     <widget class="QLabel" name="label_44">
+                     <widget class="QLabel" name="nc_top_z_feed_rate_l">
                       <property name="text">
                        <string>Z Feed Rate [mm/min]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_30">
+                     <widget class="QDoubleSpinBox" name="nc_top_tool_diameter_dsb">
                       <property name="minimum">
                        <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_33">
+                     <widget class="QDoubleSpinBox" name="nc_top_spindle_speed_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1264,7 +1324,7 @@
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_29">
+                     <widget class="QDoubleSpinBox" name="nc_top_overlap_dsb">
                       <property name="decimals">
                        <number>1</number>
                       </property>
@@ -1277,14 +1337,14 @@
                      </widget>
                     </item>
                     <item row="5" column="0">
-                     <widget class="QLabel" name="label_43">
+                     <widget class="QLabel" name="nc_top_xy_feed_rate_l">
                       <property name="text">
                        <string>XY Feed Rate [mm/min]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_35">
+                     <widget class="QDoubleSpinBox" name="nc_top_z_feed_rate_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1297,7 +1357,7 @@
                      </widget>
                     </item>
                     <item row="7" column="0" colspan="2">
-                     <spacer name="verticalSpacer_6">
+                     <spacer name="nc_top_vertical_spacer">
                       <property name="orientation">
                        <enum>Qt::Vertical</enum>
                       </property>
@@ -1310,7 +1370,7 @@
                      </spacer>
                     </item>
                     <item row="8" column="0" colspan="2">
-                     <widget class="QPushButton" name="pushButton_5">
+                     <widget class="QPushButton" name="nc_top_generate_pb">
                       <property name="text">
                        <string>Generate Job</string>
                       </property>
@@ -1321,35 +1381,35 @@
                   <widget class="QWidget" name="nc_area_bottom_page">
                    <layout class="QGridLayout" name="gridLayout_7">
                     <item row="3" column="0">
-                     <widget class="QLabel" name="label_49">
+                     <widget class="QLabel" name="nc_bottom_travel_z_l">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="9" column="0" colspan="2">
-                     <widget class="QPushButton" name="pushButton_6">
+                     <widget class="QPushButton" name="nc_bottom_generate_pb">
                       <property name="text">
                        <string>Generate Job</string>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="0">
-                     <widget class="QLabel" name="label_46">
+                     <widget class="QLabel" name="nc_bottom_spindle_speed_l">
                       <property name="text">
                        <string>Spindle Speed</string>
                       </property>
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_39">
+                     <widget class="QDoubleSpinBox" name="nc_bottom_tool_diameter_dsb">
                       <property name="minimum">
                        <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_37">
+                     <widget class="QDoubleSpinBox" name="nc_bottom_overlap_dsb">
                       <property name="decimals">
                        <number>1</number>
                       </property>
@@ -1362,7 +1422,7 @@
                      </widget>
                     </item>
                     <item row="2" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_40">
+                     <widget class="QDoubleSpinBox" name="nc_bottom_cut_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1375,14 +1435,14 @@
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QLabel" name="label_45">
+                     <widget class="QLabel" name="nc_bottom_cut_z_l">
                       <property name="text">
                        <string>Cut Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="7" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_41">
+                     <widget class="QDoubleSpinBox" name="nc_bottom_z_feed_rate_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1395,21 +1455,21 @@
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QLabel" name="label_48">
+                     <widget class="QLabel" name="nc_bottom_overlap_l">
                       <property name="text">
                        <string>Overlap</string>
                       </property>
                      </widget>
                     </item>
                     <item row="0" column="0">
-                     <widget class="QLabel" name="label_47">
+                     <widget class="QLabel" name="nc_bottom_tool_diameter_l">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="8" column="0" colspan="2">
-                     <spacer name="verticalSpacer_7">
+                     <spacer name="nc_bottom_vertical_spacer">
                       <property name="orientation">
                        <enum>Qt::Vertical</enum>
                       </property>
@@ -1422,7 +1482,7 @@
                      </spacer>
                     </item>
                     <item row="4" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_36">
+                     <widget class="QDoubleSpinBox" name="nc_bottom_spindle_speed_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1435,7 +1495,7 @@
                      </widget>
                     </item>
                     <item row="3" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_38">
+                     <widget class="QDoubleSpinBox" name="nc_bottom_travel_z_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1448,7 +1508,7 @@
                      </widget>
                     </item>
                     <item row="6" column="1">
-                     <widget class="QDoubleSpinBox" name="doubleSpinBox_42">
+                     <widget class="QDoubleSpinBox" name="nc_bottom_xy_feed_rate_dsb">
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1461,14 +1521,14 @@
                      </widget>
                     </item>
                     <item row="7" column="0">
-                     <widget class="QLabel" name="label_51">
+                     <widget class="QLabel" name="nc_bottom_z_feed_rate_l">
                       <property name="text">
                        <string>Z Feed Rate [mm/min]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="0">
-                     <widget class="QLabel" name="label_50">
+                     <widget class="QLabel" name="nc_bottom_xy_feed_rate_l">
                       <property name="text">
                        <string>XY Feed Rate [mm/min]</string>
                       </property>
