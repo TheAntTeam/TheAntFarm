@@ -4,8 +4,9 @@ import os
 
 
 class SettingsHandler:
-    APP_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'configurations' + os.path.sep + 'app_config.ini')
-    JOBS_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'configurations' + os.path.sep + 'jobs_sets_config.ini')
+    CONFIG_FOLDER = os.path.join(os.path.dirname(__file__), 'configurations')
+    APP_CONFIG_PATH = CONFIG_FOLDER + os.path.sep + 'app_config.ini'
+    JOBS_CONFIG_PATH = CONFIG_FOLDER + os.path.sep + 'jobs_sets_config.ini'
     WIN_POS_X_DEFAULT = 200
     WIN_POS_Y_DEFAULT = 200
     WIN_SIZE_W_DEFAULT = 960
@@ -16,6 +17,10 @@ class SettingsHandler:
         self.app_settings = configparser.ConfigParser()
         self.jobs_settings = configparser.ConfigParser()
         self.main_win = main_win
+
+        if not os.path.isdir(self.CONFIG_FOLDER):
+            os.makedirs(self.CONFIG_FOLDER)
+
         self.pos = QPoint(self.WIN_POS_X_DEFAULT, self.WIN_POS_Y_DEFAULT)
         self.size = QSize(self.WIN_SIZE_W_DEFAULT, self.WIN_SIZE_H_DEFAULT)
         self.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT

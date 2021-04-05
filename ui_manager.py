@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 
 class UiManager(QObject):
     """Manage UI objects, signals and slots"""
-    L_TAGS = ["top", "bottom", "profile", "drill", "no_copper_top", "no_copper_bottom"]
-    L_NAMES = ["TOP", "BOTTOM", "PROFILE", "DRILL", "NO COPPER TOP", "NO COPPER BOTTOM"]
+    L_TAGS = ("top", "bottom", "profile", "drill", "no_copper_top", "no_copper_bottom")
+    L_NAMES = ("TOP", "BOTTOM", "PROFILE", "DRILL", "NO COPPER TOP", "NO COPPER BOTTOM")
     L_COLORS = ["red", "blue", "black", "green", "purple", "brown"]
     LOG_COLORS = {
         logging.DEBUG:    'white',
@@ -45,13 +45,12 @@ class UiManager(QObject):
                            self.ui.drill_view_chb, self.ui.no_copper_1_chb, self.ui.no_copper_2_chb]
         self.layers_cb = Od([(k, t) for k, t in zip(self.L_TAGS, self.L_CHECKBOX)])
 
-        [self.ui.layer_choice_cb.addItem(x) for x in self.L_NAMES]  # todo: the loaded list depends on...
+        [self.ui.layer_choice_cb.addItem(x) for x in self.L_NAMES]   # todo: the loaded list depends on the layer actually loaded.
         self.ui.send_text_edit.setPlaceholderText('input here')
         self.ui.send_text_edit.hide()
         self.ui.send_push_button.hide()
 
         self.ui.layer_choice_cb.currentIndexChanged.connect(self.change_job_page)
-
 
         # Connect Widgets signals and slots
         # From UI to UI Manager
