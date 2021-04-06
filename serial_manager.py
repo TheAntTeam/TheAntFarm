@@ -29,7 +29,7 @@ class SerialWorker(QObject):
     def open_port(self, port):
         """Open passed serial port. Return outcome of operation. True if success, otherwise False. """
         if port:
-            logging.debug("Opening " + port)
+            logger.debug("Opening " + port)
             self.update_console_text_s.emit("Opening " + port)
             try:
                 self.serial_port.setPortName(port)
@@ -37,7 +37,7 @@ class SerialWorker(QObject):
                 self.serial_port.setBaudRate(QSerialPort.Baud115200)  #todo: pass baudrate
                 return True
             except IOError:
-                logging.debug("COM port already in use.")
+                logger.debug("COM port already in use.")
                 self.update_console_text_s.emit("COM port already in use.")
                 return False
         else:
@@ -46,7 +46,7 @@ class SerialWorker(QObject):
 
     def close_port(self):
         """Close serial port."""
-        logging.debug("Closing " + self.serial_port.portName())
+        logger.debug("Closing " + self.serial_port.portName())
         self.update_console_text_s.emit("Closing " + self.serial_port.portName())
         self.serial_port.close()
 
@@ -55,11 +55,10 @@ class SerialWorker(QObject):
         if self.serial_port.canReadLine():
             data_out = self.serial_port.readLine().data().decode()
             if data_out:
-                logging.debug("data in: " + data_out)
+                logger.debug("data in: " + data_out)
                 self.residual_string = self.residual_string + data_out
-                logging.debug("Residual string: " + self.residual_string)
+                logger.debug("Residual string: " + self.residual_string)
                 res_split = self.residual_string.splitlines(True)
-                logging.debug("Res split: " + res_split)
                 self.residual_string = ""
                 while res_split:
                     element = res_split.pop(0)
@@ -68,9 +67,10 @@ class SerialWorker(QObject):
                         self.rx_queue_not_empty_s.emit()
                     else:
                         self.residual_string = element
-                logging.debug("Final residual string: " + self.residual_string)
+                logger.debug("Final residual string: " + self.residual_string)
 
     @Slot()
     def send(self, data):
         if self.serial_port.isOpen():
+            logger.debug("data sent: " + data)
             self.serial_port.write(data.encode("utf-8"))
