@@ -274,6 +274,16 @@ class Ui_MainWindow(object):
 
         self.jobs_sw = QStackedWidget(self.create_job_tab)
         self.jobs_sw.setObjectName(u"jobs_sw")
+        self.empty_page = QWidget()
+        self.empty_page.setObjectName(u"empty_page")
+        self.gridLayout_8 = QGridLayout(self.empty_page)
+        self.gridLayout_8.setObjectName(u"gridLayout_8")
+        self.label = QLabel(self.empty_page)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_8.addWidget(self.label, 0, 0, 1, 1)
+
+        self.jobs_sw.addWidget(self.empty_page)
         self.top_page = QWidget()
         self.top_page.setObjectName(u"top_page")
         self.gridLayout_2 = QGridLayout(self.top_page)
@@ -1531,7 +1541,7 @@ class Ui_MainWindow(object):
 
         self.main_tab_widget.setCurrentIndex(0)
         self.prepare_widget.setCurrentIndex(0)
-        self.jobs_sw.setCurrentIndex(5)
+        self.jobs_sw.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -1575,6 +1585,7 @@ class Ui_MainWindow(object):
         self.all_view_chb.setText("")
         self.profile_view_chb.setText("")
         self.prepare_widget.setTabText(self.prepare_widget.indexOf(self.load_layers_tab), QCoreApplication.translate("MainWindow", u"LOAD LAYERS", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Load a valid Layer", None))
         self.top_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
         self.top_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
         self.top_n_passes_l.setText(QCoreApplication.translate("MainWindow", u"Number of Passes", None))
