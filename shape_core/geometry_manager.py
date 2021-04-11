@@ -72,11 +72,31 @@ def merge_polygons_path(poly_set):
 
 
 def fill_holes_sh(poly_sh):
-    if poly_sh.geom_type == "NultiPolygon":
+    if poly_sh.geom_type == "MultiPolygon":
         ret = shg.MultiPolygon(shg.Polygon(p.exterior.coords) for p in poly_sh.geoms)
     else:
         ret = shg.Polygon(poly_sh.exterior.coords)
     return ret
+
+
+def get_poly_diameter(poly_sh):
+    pl = [poly_sh]
+    if poly_sh.geom_type == "MultiPolygon":
+        pl = [p for p in poly_sh.geoms]
+    diameters = []
+    for p in pl:
+        c = p.centroid
+        r = get_max_distance(c, p.exterior.coords)
+        diameters.append(2.0 * r)
+    return diameters
+
+
+def get_max_distance(c, pl):
+    d_max = 0.0
+    for p in pl:
+        d = c.distance(shg.Point(p))
+        d_max = max(d, d_max)
+    return d_max
 
 
 def offset_polygon(polyg, offset, shapely_poly=False):
