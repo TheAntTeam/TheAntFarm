@@ -22,22 +22,21 @@ class UiManager(QObject):
         logging.CRITICAL: 'purple',
     }
 
-    def __init__(self, main_win, ui, control_worker, serial_worker, settings):
+    def __init__(self, main_win, ui, control_worker, serial_worker):
         super(UiManager, self).__init__()
         self.main_win = main_win
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
-        self.settings = settings
 
         self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
 
         # UI Sub-Managers
         self.ui_load_layer_m = UiViewLoadLayerTab(main_win, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES,
-                                                  self.L_COLORS, settings)
-        self.ui_create_job_m = UiCreateJobLayerTab(ui, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES, settings)
-        self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker, settings)
-        self.ui_align_tab_m = UiAlignTab(ui, control_worker, settings)
+                                                  self.L_COLORS)
+        self.ui_create_job_m = UiCreateJobLayerTab(ui, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES)
+        self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker)
+        self.ui_align_tab_m = UiAlignTab(ui, control_worker)
 
         self.ui.prepare_widget.currentChanged.connect(self.from_load_to_create)
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
@@ -66,7 +65,7 @@ class UiViewLoadLayerTab(QObject):
 
     load_layer_s = Signal(str, str)
 
-    def __init__(self, main_win, control_worker, vis_layer, lay_tags, lay_names, lay_colors, settings):
+    def __init__(self, main_win, control_worker, vis_layer, lay_tags, lay_names, lay_colors):
         super(UiViewLoadLayerTab, self).__init__()
         self.main_win = main_win
         self.ui = main_win.ui
@@ -74,7 +73,7 @@ class UiViewLoadLayerTab(QObject):
         self.vis_layer = vis_layer
         self.lay_tags = lay_tags
         self.lay_names = lay_names
-        self.settings = settings
+        self.layer_last_dir = ""
 
         self.layer_colors = Od([(k, v) for k, v in zip(self.lay_tags, lay_colors)])
         self.L_TEXT = [self.ui.top_file_le, self.ui.bottom_file_le, self.ui.profile_file_le,
@@ -116,10 +115,10 @@ class UiViewLoadLayerTab(QObject):
 
     def load_gerber_file(self, layer="top", load_text="Load File", extensions=""):
         filters = extensions + ";;All files (*.*)"
-        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.settings.layer_last_dir, filters)
+        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.layer_last_dir, filters)
         if load_file_path[0]:
             self.vis_layer.remove_layer(layer)
-            self.settings.layer_last_dir = os.path.dirname(load_file_path[0])
+            self.layer_last_dir = os.path.dirname(load_file_path[0])
             logging.info("Loading " + load_file_path[0])
             self.load_layer_s.emit(layer, load_file_path[0])
 
@@ -163,14 +162,13 @@ class UiCreateJobLayerTab(QObject):
 
     generate_path_s = Signal(str, Od)
 
-    def __init__(self, ui, control_wo, vis_layer, lay_tags, lay_names, settings):
+    def __init__(self, ui, control_wo, vis_layer, lay_tags, lay_names):
         super(UiCreateJobLayerTab, self).__init__()
         self.ui = ui
         self.control_wo = control_wo
         self.vis_layer = vis_layer
         self.lay_tags = lay_tags
         self.lay_names = lay_names
-        self.settings = settings
 
         self.current_drill_tool_idx = 0
 
@@ -181,6 +179,7 @@ class UiCreateJobLayerTab(QObject):
         self.ui.add_drill_tool_tb.clicked.connect(self.add_drill_tool)
         self.ui.remove_drill_tool_tb.clicked.connect(self.remove_drill_tool)
 
+        self.ui.top_generate_job_pb.clicked.connect(self.generate_top_path)
         self.ui.bottom_generate_job_pb.clicked.connect(self.generate_bottom_path)
         self.generate_path_s.connect(self.control_wo.generate_new_path)
         self.control_wo.update_path_s.connect(self.add_new_path)
@@ -234,16 +233,50 @@ class UiCreateJobLayerTab(QObject):
         for x in del_rows:
             self.ui.drill_tw.removeRow(x)
 
+    def set_settings_per_top(self, settings_top):
+        self.ui.top_tool_diameter_dsb.setValue(settings_top["tool_diameter"])
+        self.ui.top_n_passes_sb.setValue(settings_top["passages"])
+        self.ui.top_overlap_dsb.setValue(settings_top["overlap"])
+        self.ui.top_cut_z_dsb.setValue(settings_top["cut"])
+        self.ui.top_travel_z_dsb.setValue(settings_top["travel"])
+        self.ui.top_spindle_speed_dsb.setValue(settings_top["spindle"])
+        self.ui.top_xy_feed_rate_dsb.setValue(settings_top["xy_feedrate"])
+        self.ui.top_z_feed_rate_dsb.setValue(settings_top["z_feedrate"])
+
+    def set_settings_per_bottom(self, settings_bottom):
+        self.ui.bottom_tool_diameter_dsb.setValue(settings_bottom["tool_diameter"])
+        self.ui.bottom_n_passes_sb.setValue(settings_bottom["passages"])
+        self.ui.bottom_overlap_dsb.setValue(settings_bottom["overlap"])
+        self.ui.bottom_cut_z_dsb.setValue(settings_bottom["cut"])
+        self.ui.bottom_travel_z_dsb.setValue(settings_bottom["travel"])
+        self.ui.bottom_spindle_speed_dsb.setValue(settings_bottom["spindle"])
+        self.ui.bottom_xy_feed_rate_dsb.setValue(settings_bottom["xy_feedrate"])
+        self.ui.bottom_z_feed_rate_dsb.setValue(settings_bottom["z_feedrate"])
+
+    def set_settings_per_page(self, tag, settings):
+        if tag == self.lay_tags[0]:
+            return self.set_settings_per_top(settings)
+        elif tag == self.lay_tags[1]:
+            return self.set_settings_per_bottom(settings)
+        # elif tag == self.lay_tags[2]:
+        #     return self.set_settings_per_profile(settings)
+        # elif tag == self.lay_tags[3]:
+        #     return self.set_settings_per_drill(settings)
+        # elif tag == self.lay_tags[4]:
+        #     return self.set_settings_per_nc_top(settings)
+        # elif tag == self.lay_tags[5]:
+        #     return self.set_settings_per_nc_bottom(settings)
+
     def get_settings_per_top(self):
         settings_top = Od({})
         settings_top["tool_diameter"] = self.ui.top_tool_diameter_dsb.value()
-        settings_top["num_passes"] = self.ui.top_n_passes_sb.value()
+        settings_top["passages"] = self.ui.top_n_passes_sb.value()
         settings_top["overlap"] = self.ui.top_overlap_dsb.value()
-        settings_top["cut_z"] = self.ui.top_cut_z_dsb.value()
-        settings_top["travel_z"] = self.ui.top_travel_z_dsb.value()
-        settings_top["spindle_speed"] = self.ui.top_spindle_speed_dsb.value()
-        settings_top["xy_feed_rate"] = self.ui.top_xy_feed_rate_dsb.value()
-        settings_top["z_feed_rate"] = self.ui.top_z_feed_rate_dsb.value()
+        settings_top["cut"] = self.ui.top_cut_z_dsb.value()
+        settings_top["travel"] = self.ui.top_travel_z_dsb.value()
+        settings_top["spindle"] = self.ui.top_spindle_speed_dsb.value()
+        settings_top["xy_feedrate"] = self.ui.top_xy_feed_rate_dsb.value()
+        settings_top["z_feedrate"] = self.ui.top_z_feed_rate_dsb.value()
         logging.debug(settings_top)
         return settings_top
 
@@ -266,11 +299,11 @@ class UiCreateJobLayerTab(QObject):
         settings_profile["margin"] = self.ui.profile_margin_dsb.value()
         settings_profile["multi_depth"] = self.ui.profile_multi_depth_chb.isChecked()
         settings_profile["depth_pass"] = self.ui.profile_depth_pass_dsb.value()
-        settings_profile["cut_z"] = self.ui.profile_cut_z_dsb.value()
-        settings_profile["travel_z"] = self.ui.profile_travel_z_dsb.value()
-        settings_profile["spindle_speed"] = self.ui.profile_spindle_speed_dsb.value()
-        settings_profile["xy_feed_rate"] = self.ui.profile_xy_feed_rate_dsb.value()
-        settings_profile["z_feed_rate"] = self.ui.profile_z_feed_rate_dsb.value()
+        settings_profile["cut"] = self.ui.profile_cut_z_dsb.value()
+        settings_profile["travel"] = self.ui.profile_travel_z_dsb.value()
+        settings_profile["spindle"] = self.ui.profile_spindle_speed_dsb.value()
+        settings_profile["xy_feedrate"] = self.ui.profile_xy_feed_rate_dsb.value()
+        settings_profile["z_feedrate"] = self.ui.profile_z_feed_rate_dsb.value()
         settings_profile["taps_layout"] = self.ui.profile_taps_layout_cb.currentText()
         settings_profile["tap_size"] = self.ui.profile_tap_size_dsb.value()
         logging.debug(settings_profile)
@@ -287,11 +320,11 @@ class UiCreateJobLayerTab(QObject):
         settings_drill["drill_tools"] = drill_tools_list
         settings_drill["milling_tool"] = self.ui.drill_milling_tool_chb.isChecked()
         settings_drill["milling_tool_diameter"] = self.ui.drill_milling_tool_diameter_dsb.value()
-        settings_drill["cut_z"] = self.ui.drill_cut_z_dsb.value()
-        settings_drill["travel_z"] = self.ui.drill_travel_z_dsb.value()
-        settings_drill["spindle_speed"] = self.ui.drill_spindle_speed_dsb.value()
-        settings_drill["xy_feed_rate"] = self.ui.drill_xy_feed_rate_dsb.value()
-        settings_drill["z_feed_rate"] = self.ui.drill_z_feed_rate_dsb.value()
+        settings_drill["cut"] = self.ui.drill_cut_z_dsb.value()
+        settings_drill["travel"] = self.ui.drill_travel_z_dsb.value()
+        settings_drill["spindle"] = self.ui.drill_spindle_speed_dsb.value()
+        settings_drill["xy_feedrate"] = self.ui.drill_xy_feed_rate_dsb.value()
+        settings_drill["z_feedrate"] = self.ui.drill_z_feed_rate_dsb.value()
         logging.debug(settings_drill)
         return settings_drill
 
@@ -299,11 +332,11 @@ class UiCreateJobLayerTab(QObject):
         settings_nc_top = Od({})
         settings_nc_top["tool_diameter"] = self.ui.nc_top_tool_diameter_dsb.value()
         settings_nc_top["overlap"] = self.ui.nc_top_overlap_dsb.value()
-        settings_nc_top["cut_z"] = self.ui.nc_top_cut_z_dsb.value()
-        settings_nc_top["travel_z"] = self.ui.nc_top_travel_z_dsb.value()
-        settings_nc_top["spindle_speed"] = self.ui.nc_top_spindle_speed_dsb.value()
-        settings_nc_top["xy_feed_rate"] = self.ui.nc_top_xy_feed_rate_dsb.value()
-        settings_nc_top["z_feed_rate"] = self.ui.nc_top_z_feed_rate_dsb.value()
+        settings_nc_top["cut"] = self.ui.nc_top_cut_z_dsb.value()
+        settings_nc_top["travel"] = self.ui.nc_top_travel_z_dsb.value()
+        settings_nc_top["spindle"] = self.ui.nc_top_spindle_speed_dsb.value()
+        settings_nc_top["xy_feedrate"] = self.ui.nc_top_xy_feed_rate_dsb.value()
+        settings_nc_top["z_feedrate"] = self.ui.nc_top_z_feed_rate_dsb.value()
         logging.debug(settings_nc_top)
         return settings_nc_top
 
@@ -311,11 +344,11 @@ class UiCreateJobLayerTab(QObject):
         settings_nc_bottom = Od({})
         settings_nc_bottom["tool_diameter"] = self.ui.nc_bottom_tool_diameter_dsb.value()
         settings_nc_bottom["overlap"] = self.ui.nc_bottom_overlap_dsb.value()
-        settings_nc_bottom["cut_z"] = self.ui.nc_bottom_cut_z_dsb.value()
-        settings_nc_bottom["travel_z"] = self.ui.nc_bottom_travel_z_dsb.value()
-        settings_nc_bottom["spindle_speed"] = self.ui.nc_bottom_spindle_speed_dsb.value()
-        settings_nc_bottom["xy_feed_rate"] = self.ui.nc_bottom_xy_feed_rate_dsb.value()
-        settings_nc_bottom["z_feed_rate"] = self.ui.nc_bottom_z_feed_rate_dsb.value()
+        settings_nc_bottom["cut"] = self.ui.nc_bottom_cut_z_dsb.value()
+        settings_nc_bottom["travel"] = self.ui.nc_bottom_travel_z_dsb.value()
+        settings_nc_bottom["spindle"] = self.ui.nc_bottom_spindle_speed_dsb.value()
+        settings_nc_bottom["xy_feedrate"] = self.ui.nc_bottom_xy_feed_rate_dsb.value()
+        settings_nc_bottom["z_feedrate"] = self.ui.nc_bottom_z_feed_rate_dsb.value()
         logging.debug(settings_nc_bottom)
         return settings_nc_bottom
 
@@ -333,6 +366,20 @@ class UiCreateJobLayerTab(QObject):
         elif tag == self.lay_tags[5]:
             return self.get_settings_per_nc_bottom()
 
+    def get_all_settings(self):
+        settings = Od({})
+        settings[self.lay_tags[0]] = self.get_settings_per_page(self.lay_tags[0])
+        settings[self.lay_tags[1]] = self.get_settings_per_page(self.lay_tags[1])
+        settings[self.lay_tags[2]] = self.get_settings_per_page(self.lay_tags[2])
+        settings[self.lay_tags[3]] = self.get_settings_per_page(self.lay_tags[3])
+        settings[self.lay_tags[4]] = self.get_settings_per_page(self.lay_tags[4])
+        settings[self.lay_tags[5]] = self.get_settings_per_page(self.lay_tags[5])
+        return settings
+
+    def generate_top_path(self):
+        cfg = self.get_settings_per_page("top")
+        self.generate_path_s.emit("top", cfg)
+
     def generate_bottom_path(self):
         cfg = self.get_settings_per_page("bottom")
         self.generate_path_s.emit("bottom", cfg)
@@ -346,12 +393,11 @@ class UiControlTab(QObject):
     """Class dedicated to UI <--> Control interactions on Control Tab. """
     serial_send_s = Signal(str)
 
-    def __init__(self, ui, control_worker, serial_worker, settings):
+    def __init__(self, ui, control_worker, serial_worker):
         super(UiControlTab, self).__init__()
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
-        self.settings = settings
 
         self.serial_connection_status = False
         self.serial_send_s.connect(self.serialWo.send)
@@ -461,11 +507,10 @@ class UiAlignTab(QObject):
     align_active_s = Signal(bool)
     update_threshold_s = Signal(int)
 
-    def __init__(self, ui, control_worker, settings):
+    def __init__(self, ui, control_worker):
         super(UiAlignTab, self).__init__()
         self.ui = ui
         self.controlWo = control_worker
-        self.settings = settings
 
         # Align TAB related controls.
         self.ui.main_tab_widget.currentChanged.connect(self.check_align_is_active)

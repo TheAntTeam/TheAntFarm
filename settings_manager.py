@@ -12,18 +12,30 @@ class SettingsHandler:
     WIN_SIZE_W_DEFAULT = 960
     WIN_SIZE_H_DEFAULT = 720
     LAYER_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
+    TOOL_DIAMETER_DEFAULT = 1.0
+    PASSAGES_DEFAULT = 1
+    OVERLAP_DEFAULT = 0.40
+    CUT_Z_DEFAULT = -0.07
+    TRAVEL_Z_DEFAULT = 1.0
+    SPINDLE_SPEED_DEFAULT = 1000.0
+    XY_FEEDRATE_DEFAULT = 250.0
+    Z_FEEDRATE_DEFAULT = 40.0
 
-    def __init__(self, main_win):
+    def __init__(self, main_win, ui_manager):
         self.app_settings = configparser.ConfigParser()
         self.jobs_settings = configparser.ConfigParser()
         self.main_win = main_win
+        self.ui_manager = ui_manager
+
+        self.ui_ll = self.ui_manager.ui_load_layer_m
+        self.ui_cj = self.ui_manager.ui_create_job_m
 
         if not os.path.isdir(self.CONFIG_FOLDER):
             os.makedirs(self.CONFIG_FOLDER)
 
         self.pos = QPoint(self.WIN_POS_X_DEFAULT, self.WIN_POS_Y_DEFAULT)
         self.size = QSize(self.WIN_SIZE_W_DEFAULT, self.WIN_SIZE_H_DEFAULT)
-        self.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
+        self.ui_ll.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
 
     def read_all_settings(self):
         """ Read all settings from ini files """
@@ -48,7 +60,7 @@ class SettingsHandler:
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
             app_layers_settings = self.app_settings["LAYERS"]
-            self.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
+            self.ui_ll.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
 
     def read_all_jobs_settings(self):
         """ Read all jobs'settings from ini files """
@@ -58,6 +70,31 @@ class SettingsHandler:
         # Top job related settings #
         if "TOP" in self.jobs_settings:
             top_settings = self.jobs_settings["TOP"]
+            top_set_od = ({})
+            top_set_od["tool_diameter"] = top_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
+            top_set_od["passages"] = top_settings.getint("passages", self.PASSAGES_DEFAULT)
+            top_set_od["overlap"] = top_settings.getfloat("overlap", self.OVERLAP_DEFAULT)
+            top_set_od["cut"] = top_settings.getfloat("cut", self.CUT_Z_DEFAULT)
+            top_set_od["travel"] = top_settings.getfloat("travel", self.TRAVEL_Z_DEFAULT)
+            top_set_od["spindle"] = top_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
+            top_set_od["xy_feedrate"] = top_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
+            top_set_od["z_feedrate"] = top_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
+            self.ui_cj.set_settings_per_page("top", top_set_od)
+
+        # Bottom job related settings #
+        if "BOTTOM" in self.jobs_settings:
+            bottom_settings = self.jobs_settings["BOTTOM"]
+            bottom_set_od = ({})
+            bottom_set_od["tool_diameter"] = bottom_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
+            bottom_set_od["passages"] = bottom_settings.getint("passages", self.PASSAGES_DEFAULT)
+            bottom_set_od["overlap"] = bottom_settings.getfloat("overlap", self.OVERLAP_DEFAULT)
+            bottom_set_od["cut"] = bottom_settings.getfloat("cut", self.CUT_Z_DEFAULT)
+            bottom_set_od["travel"] = bottom_settings.getfloat("travel", self.TRAVEL_Z_DEFAULT)
+            bottom_set_od["spindle"] = bottom_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
+            bottom_set_od["xy_feedrate"] = bottom_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
+            bottom_set_od["z_feedrate"] = bottom_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
+            self.ui_cj.set_settings_per_page("bottom", bottom_set_od)
+
 
     def write_all_settings(self):
         """ Write all settings to ini files """
@@ -70,7 +107,7 @@ class SettingsHandler:
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
                                         "win_height": self.WIN_SIZE_H_DEFAULT,
-                                        "layer_last_dir": self.layer_last_dir}
+                                        "layer_last_dir": self.ui_ll.layer_last_dir}
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -83,7 +120,7 @@ class SettingsHandler:
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
         app_layers = self.app_settings["LAYERS"]
-        app_layers["last_load_dir"] = self.layer_last_dir
+        app_layers["last_load_dir"] = self.ui_ll.layer_last_dir
 
         # Write application ini file #
         with open(self.APP_CONFIG_PATH, 'w') as configfile:
@@ -93,15 +130,33 @@ class SettingsHandler:
         """ Write all jobs settings to ini files """
         self.jobs_settings['DEFAULT'] = {"tool_diameter": 1.0}
 
+        job_settings_od = self.ui_cj.get_all_settings()
+
         # Top job related settings #
         self.jobs_settings["TOP"] = {}
         top_settings = self.jobs_settings["TOP"]
-        top_settings["tool_diameter"] = str(1.0)
+        top_set_od = job_settings_od["top"]
+        top_settings["tool_diameter"] = str(top_set_od["tool_diameter"])
+        top_settings["passages"] = str(top_set_od["passages"])
+        top_settings["overlap"] = str(top_set_od["overlap"])
+        top_settings["cut"] = str(top_set_od["cut"])
+        top_settings["travel"] = str(top_set_od["travel"])
+        top_settings["spindle"] = str(top_set_od["spindle"])
+        top_settings["xy_feedrate"] = str(top_set_od["xy_feedrate"])
+        top_settings["z_feedrate"] = str(top_set_od["z_feedrate"])
 
         # Bottom job related settings #
         self.jobs_settings["BOTTOM"] = {}
         bottom_settings = self.jobs_settings["BOTTOM"]
-        bottom_settings["tool_diameter"] = str(1.0)
+        bottom_set_od = job_settings_od["bottom"]
+        bottom_settings["tool_diameter"] = str(bottom_set_od["tool_diameter"])
+        bottom_settings["passages"] = str(bottom_set_od["passages"])
+        bottom_settings["overlap"] = str(bottom_set_od["overlap"])
+        bottom_settings["cut"] = str(bottom_set_od["cut"])
+        bottom_settings["travel"] = str(bottom_set_od["travel"])
+        bottom_settings["spindle"] = str(bottom_set_od["spindle"])
+        bottom_settings["xy_feedrate"] = str(bottom_set_od["xy_feedrate"])
+        bottom_settings["z_feedrate"] = str(bottom_set_od["z_feedrate"])
 
         # Profile job related settings #
         self.jobs_settings["PROFILE"] = {}

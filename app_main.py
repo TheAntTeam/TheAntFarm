@@ -34,11 +34,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.serialWo = SerialWorker(self.serialRxQu)
         self.serialWo.moveToThread(self.serial_thread)
 
-        self.settings = SettingsHandler(self)
-        self.settings.read_all_settings()  # TODO: manage exceptions with a try except
-
         # Important: this call should be after the thread creations.
-        self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo, self.settings)
+        self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo)
+
+        self.settings = SettingsHandler(self, self.ui_manager)
+        self.settings.read_all_settings()  # TODO: manage exceptions with a try except
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
