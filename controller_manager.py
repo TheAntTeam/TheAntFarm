@@ -106,6 +106,7 @@ class ControllerWorker(QObject):
             try:
                 element = self.serialRxQueue.get(block=False)
                 if element:
+                    logging.debug("Element received: " + element)
                     # self.update_console_text_s.emit(self.parse_bracket_angle(element))
                     if re.match("^<.*>\s*$\s", element):
                         self.update_status_s.emit(self.parse_bracket_angle(element))

@@ -471,8 +471,19 @@
                 <item>
                  <widget class="QStackedWidget" name="jobs_sw">
                   <property name="currentIndex">
-                   <number>5</number>
+                   <number>0</number>
                   </property>
+                  <widget class="QWidget" name="empty_page">
+                   <layout class="QGridLayout" name="gridLayout_8">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label">
+                      <property name="text">
+                       <string>Load a valid Layer</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
                   <widget class="QWidget" name="top_page">
                    <layout class="QGridLayout" name="gridLayout_2">
                     <item row="3" column="1">

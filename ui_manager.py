@@ -1,6 +1,6 @@
 import os
 from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import Signal, Slot, QObject, Qt
+from PySide2.QtCore import Signal, Slot, QObject
 from PySide2.QtGui import QPixmap
 from shape_core.visual_manager import VisualLayer
 from collections import OrderedDict as Od
@@ -30,21 +30,22 @@ class UiManager(QObject):
         self.serialWo = serial_worker
         self.settings = settings
 
+        self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
+
         # UI Sub-Managers
-        self.ui_load_layer_m = UiViewLoadLayerTab(main_win, control_worker, settings)
+        self.ui_load_layer_m = UiViewLoadLayerTab(main_win, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES, self.L_COLORS, settings)
+        self.ui_create_job_m = UiCreateJobLayerTab(ui, self.vis_layer, self.L_TAGS, self.L_NAMES, settings)
         self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker, settings)
         self.ui_align_tab_m = UiAlignTab(ui, control_worker, settings)
 
-        [self.ui.layer_choice_cb.addItem(x) for x in self.L_NAMES]   # todo: the loaded list depends on the layer actually loaded.
-
-        self.ui.layer_choice_cb.currentIndexChanged.connect(self.change_job_page)
-
+        self.ui.prepare_widget.currentChanged.connect(self.from_load_to_create)
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
 
-    def change_job_page(self):
-        current_text_cb = self.ui.layer_choice_cb.currentText()
-        idx = self.L_NAMES.index(current_text_cb)
-        self.ui.jobs_sw.setCurrentIndex(idx)
+    def from_load_to_create(self):
+        if self.ui.prepare_widget.currentWidget().objectName() == "create_job_tab":
+            self.ui_create_job_m.load_active_layers(self.ui_load_layer_m.get_loaded_layers())
+        elif self.ui.prepare_widget.currentWidget().objectName() == "load_layers_tab":
+            self.ui_load_layer_m.visualize_all_active_layers()
 
     @Slot(str, logging.LogRecord)
     def update_logging_status(self, status, record):
@@ -60,56 +61,55 @@ class UiManager(QObject):
 
 
 class UiViewLoadLayerTab(QObject):
-    """Class dedicated to UI <--> Control interactions. """
-    L_TAGS = ("top", "bottom", "profile", "drill", "no_copper_top", "no_copper_bottom")
-    L_NAMES = ("TOP", "BOTTOM", "PROFILE", "DRILL", "NO COPPER TOP", "NO COPPER BOTTOM")
-    L_COLORS = ["red", "blue", "black", "green", "purple", "brown"]
+    """Class dedicated to UI <--> Control interactions on Load Layer Tab. """
 
     load_layer_s = Signal(str, str)
 
-    def __init__(self, main_win, control_worker, settings):
+    def __init__(self, main_win, control_worker, vis_layer, lay_tags, lay_names, lay_colors, settings):
         super(UiViewLoadLayerTab, self).__init__()
         self.main_win = main_win
         self.ui = main_win.ui
         self.controlWo = control_worker
+        self.vis_layer = vis_layer
+        self.lay_tags = lay_tags
+        self.lay_names = lay_names
         self.settings = settings
 
-        self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
-        self.layer_colors = Od([(k, v) for k, v in zip(self.L_TAGS, self.L_COLORS)])
+        self.layer_colors = Od([(k, v) for k, v in zip(self.lay_tags, lay_colors)])
         self.L_TEXT = [self.ui.top_file_le, self.ui.bottom_file_le, self.ui.profile_file_le,
                        self.ui.drill_file_le, self.ui.no_copper_1_le, self.ui.no_copper_2_le]
-        self.layers_te = Od([(k, t) for k, t in zip(self.L_TAGS, self.L_TEXT)])
+        self.layers_te = Od([(k, t) for k, t in zip(self.lay_tags, self.L_TEXT)])
         self.L_CHECKBOX = [self.ui.top_view_chb, self.ui.bottom_view_chb, self.ui.profile_view_chb,
                            self.ui.drill_view_chb, self.ui.no_copper_1_chb, self.ui.no_copper_2_chb]
-        self.layers_chb = Od([(k, t) for k, t in zip(self.L_TAGS, self.L_CHECKBOX)])
+        self.layers_chb = Od([(k, t) for k, t in zip(self.lay_tags, self.L_CHECKBOX)])
 
         # Load Layer TAB related controls.
         self.load_layer_s.connect(self.controlWo.load_new_layer)
         self.controlWo.update_layer_s.connect(self.visualize_new_layer)
         self.ui.top_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.L_TAGS[0], "Load Top Gerber File", "Gerber (*.gbr *.GBR)"))
+            lambda: self.load_gerber_file(self.lay_tags[0], "Load Top Gerber File", "Gerber (*.gbr *.GBR)"))
         self.ui.bottom_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.L_TAGS[1], "Load Bottom Gerber File", "Gerber (*.gbr *.GBR)"))
+            lambda: self.load_gerber_file(self.lay_tags[1], "Load Bottom Gerber File", "Gerber (*.gbr *.GBR)"))
         self.ui.profile_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.L_TAGS[2], "Load Profile Gerber File", "Gerber (*.gbr *.GBR)"))
+            lambda: self.load_gerber_file(self.lay_tags[2], "Load Profile Gerber File", "Gerber (*.gbr *.GBR)"))
         self.ui.drill_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.L_TAGS[3], "Load Drill Excellon File", "Excellon (*.xln *.XLN)"))
+            lambda: self.load_gerber_file(self.lay_tags[3], "Load Drill Excellon File", "Excellon (*.xln *.XLN)"))
         self.ui.no_copper_1_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.L_TAGS[4], "Load No Copper TOP Gerber File", "Gerber (*.gbr *.GBR)"))
+            lambda: self.load_gerber_file(self.lay_tags[4], "Load No Copper TOP Gerber File", "Gerber (*.gbr *.GBR)"))
         self.ui.no_copper_2_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.L_TAGS[5], "Load No Copper BOTTOM Gerber File", "Gerber (*.gbr *.GBR)"))
+            lambda: self.load_gerber_file(self.lay_tags[5], "Load No Copper BOTTOM Gerber File", "Gerber (*.gbr *.GBR)"))
         self.ui.top_view_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.L_TAGS[0], self.ui.top_view_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[0], self.ui.top_view_chb.isChecked()))
         self.ui.bottom_view_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.L_TAGS[1], self.ui.bottom_view_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[1], self.ui.bottom_view_chb.isChecked()))
         self.ui.profile_view_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.L_TAGS[2], self.ui.profile_view_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[2], self.ui.profile_view_chb.isChecked()))
         self.ui.drill_view_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.L_TAGS[3], self.ui.drill_view_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[3], self.ui.drill_view_chb.isChecked()))
         self.ui.no_copper_1_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.L_TAGS[4], self.ui.no_copper_1_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[4], self.ui.no_copper_1_chb.isChecked()))
         self.ui.no_copper_2_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.L_TAGS[5], self.ui.no_copper_2_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[5], self.ui.no_copper_2_chb.isChecked()))
         self.ui.all_view_chb.stateChanged.connect(lambda: self.hide_show_layers(self.ui.all_view_chb.isChecked()))
         self.ui.clear_views_pb.clicked.connect(self.remove_all_vis_layers)
 
@@ -122,25 +122,77 @@ class UiViewLoadLayerTab(QObject):
             logging.info("Loading " + load_file_path[0])
             self.load_layer_s.emit(layer, load_file_path[0])
 
+    @Slot(Od, str, str, bool)
+    def visualize_new_layer(self, loaded_layer, layer_tag, layer_path, holes):
+        self.vis_layer.add_layer(layer_tag, loaded_layer[0], self.layer_colors[layer_tag], holes)
+        self.layers_te[layer_tag].setText(layer_path)
+
+    def visualize_all_active_layers(self):
+        [self.vis_layer.set_layer_visible(x, False) for x in self.lay_tags]
+        loaded_views = list(self.vis_layer.get_layers_tag())
+        for view in loaded_views:
+            if self.layers_chb[view].isChecked():
+                self.vis_layer.set_layer_visible(view, True)
+
     def remove_all_vis_layers(self):
         loaded_views = list(self.vis_layer.get_layers_tag())
         for view in loaded_views:
             self.vis_layer.remove_layer(view)
-        for layer in self.layers_te:
-            self.layers_te[layer].setText("")
+        for layer_tag in self.layers_te:
+            self.layers_te[layer_tag].setText("")
 
     def hide_show_layers(self, checked):
-        for cb in self.layers_chb:
-            self.layers_chb[cb].setChecked(checked)
+        for chb in self.layers_chb:
+            self.layers_chb[chb].setChecked(checked)
 
     @Slot(str, bool)
     def set_layer_visible(self, tag, visible):
         self.vis_layer.set_layer_visible(tag, visible)
 
-    @Slot(Od, str, str, bool)
-    def visualize_new_layer(self, loaded_layer, layer, layer_path, holes):
-        self.vis_layer.add_layer(layer, loaded_layer[0], self.layer_colors[layer], holes)
-        self.layers_te[layer].setText(layer_path)
+    def get_loaded_layers(self):
+        loaded_layers = Od({})
+        for tag in self.lay_tags:
+            if self.layers_te[tag] != "":
+                loaded_layers[tag] = self.layers_te[tag].text()
+        return loaded_layers
+
+
+class UiCreateJobLayerTab(QObject):
+    """Class dedicated to UI <--> Control interactions on Create Job Layer Tab. """
+
+    def __init__(self, ui, vis_layer, lay_tags, lay_names, settings):
+        super(UiCreateJobLayerTab, self).__init__()
+        self.ui = ui
+        self.vis_layer = vis_layer
+        self.lay_tags = lay_tags
+        self.lay_names = lay_names
+        self.settings = settings
+
+        self.ui.layer_choice_cb.currentIndexChanged.connect(self.change_job_page)
+
+    def load_active_layers(self, active_layers):
+        self.ui.layer_choice_cb.clear()
+
+        for layer_tag in active_layers:
+            if active_layers[layer_tag] != "":
+                self.ui.layer_choice_cb.addItem(self.lay_names[self.lay_tags.index(layer_tag)])
+
+    def visualize_active_layer(self):
+        current_text_cb = self.ui.layer_choice_cb.currentText()
+
+        [self.vis_layer.set_layer_visible(x, False) for x in self.lay_tags]
+
+        if current_text_cb in self.lay_names:
+            self.vis_layer.set_layer_visible(self.lay_tags[self.lay_names.index(current_text_cb)], True)
+
+    def change_job_page(self):
+        current_text_cb = self.ui.layer_choice_cb.currentText()
+        idx = 0
+        if current_text_cb in self.lay_names:
+            idx = self.lay_names.index(current_text_cb) + 1  # The offset is needed for the empty page, the first one
+
+        self.ui.jobs_sw.setCurrentIndex(idx)
+        self.visualize_active_layer()
 
 
 class UiControlTab(QObject):
