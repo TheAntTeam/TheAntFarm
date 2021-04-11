@@ -4,6 +4,7 @@ import re
 import qimage2ndarray
 from double_side_manager import DoubleSideManager
 from shape_core.pcb_manager import PcbObj
+from shape_core.path_manager import MachinePath
 from collections import OrderedDict as Od
 import logging
 import traceback
@@ -13,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 class ControllerWorker(QObject):
     update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
+    update_path_s = Signal(str, list)            # Signal to update path visualization
     update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
     update_status_s = Signal(list)               # Signal to update controller status
     update_console_text_s = Signal(str)          # Signal to send text to the console textEdit
@@ -91,6 +93,16 @@ class ControllerWorker(QObject):
             logging.error(e, exc_info=True)
         except:
             logger.error("Uncaught exception: %s", traceback.format_exc())
+
+    @Slot(str, Od)
+    def generate_new_path(self, tag, cfg):
+        gerb_lay = self.pcb.get_gerber_layer(tag)
+        path = MachinePath(tag, machining_type="gerber")
+        path.load_geom(gerb_lay[0])
+        path.load_cfg(cfg)
+        path.execute()
+        p = path.get_path()
+        self.update_path_s.emit(tag, p)
 
     @Slot(bool)
     def set_align_is_active(self, align_is_active):
