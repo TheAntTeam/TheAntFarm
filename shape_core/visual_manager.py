@@ -131,6 +131,12 @@ class VisualLayer:
         if tag in self.paths.keys():
             self.paths[tag].visible = visible
 
+    def get_layers_tag(self):
+        return self.meshes.keys()
+
+    def get_paths_tag(self):
+        return self.paths.keys()
+
     def remove_layer(self, tag):
         if tag in self.meshes.keys():
             to_remove = self.meshes[tag]
