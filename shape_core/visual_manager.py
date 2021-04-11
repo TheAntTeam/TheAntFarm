@@ -131,12 +131,6 @@ class VisualLayer:
         if tag in self.paths.keys():
             self.paths[tag].visible = visible
 
-    def get_layers_tag(self):
-        return self.meshes.keys()
-
-    def get_paths_tag(self):
-        return self.paths.keys()
-
     def remove_layer(self, tag):
         if tag in self.meshes.keys():
             to_remove = self.meshes[tag]
@@ -176,16 +170,18 @@ class VisualLayer:
     def add_path(self, tag, geom_list, color=None):
         ldata = []
         order = 0
-        for g in geom_list:
-            if g.type == "LineString":
-                # print(">>>>>>>>>> Line String")
-                # print(list(g.coords))
-                ldata.append(list(g.coords))
-            if g.type == "LinearRing":
-                # print(list(g.coords))
-                # print("<<<<<<<<<< Linear Ring")
-                ldata.append(list(g.coords))
-        self.create_line(tag, ldata, color, order)
+        for d in geom_list:
+            gl = d[1]
+            for g in gl:
+                if g.type == "LineString":
+                    # print(">>>>>>>>>> Line String")
+                    # print(list(g.coords))
+                    ldata.append(list(g.coords))
+                if g.type == "LinearRing":
+                    # print(list(g.coords))
+                    # print("<<<<<<<<<< Linear Ring")
+                    ldata.append(list(g.coords))
+            self.create_line(tag, ldata, color, order)
         # print("END")
         # self.z -= self.DELTA
         # self.z += self.DELTA

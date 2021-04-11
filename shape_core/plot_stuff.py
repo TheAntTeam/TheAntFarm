@@ -1,4 +1,3 @@
-
 from matplotlib import pyplot
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch
@@ -30,6 +29,20 @@ def pathify(polygon):
 def plot_vertices(vertices):
     fig, ax = pyplot.subplots(1, 1)
     ax.plot(vertices)
+    pyplot.show()
+
+
+def plot_lines(ll1, ll2=None):
+    # plotta line strings
+    fig, ax = pyplot.subplots(1, 1)
+    for l in ll1:
+        x, y = l.xy
+        ax.plot(x, y, 'k')
+    if ll2 is not None:
+        for l in ll2:
+            x, y = l.xy
+            ax.plot(x, y, 'w')
+    ax.set_aspect('equal')
     pyplot.show()
 
 

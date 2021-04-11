@@ -1,33 +1,204 @@
 #
 import time
-from .geometry_manager import merge_polygons_path, offset_polygon, offset_polygon_holes, get_bbox_area_sh, fill_holes_sh, get_poly_diameter
-from .plot_stuff import plot_paths, plot_shapely
-from shapely.geometry import Polygon, LinearRing, LineString
+from geometry_manager import merge_polygons_path, offset_polygon, offset_polygon_holes, get_bbox_area_sh, fill_holes_sh, get_poly_diameter
+from plot_stuff import plot_paths, plot_shapely
+from shapely.geometry import Polygon, LinearRing, LineString, MultiLineString, Point
 from collections import OrderedDict
-from .path_optimizer import get_optimized_path
+from path_optimizer import Optimizer
+from plot_stuff import plot_lines
+
+
+class Gapper:
+
+    def __init__(self, path, cfg):
+        self.cfg = cfg
+        self.in_path = path
+        self.gap_dim = self.cfg['taps_length'] + self.cfg['tool_diameter']
+
+    @staticmethod
+    def rotate(l, n):
+        return l[n:] + l[:n]
+
+    def add_taps_on_external_path(self, strategy='4p'):
+        ex_path = self.in_path
+        b = ex_path.bounds
+        # print("Bounds")
+        # print(b)
+
+        xm = (b[2] + b[0]) / 2.0
+        ym = (b[3] + b[1]) / 2.0
+
+        # croce dritta
+        vl = LineString(((xm, b[1]), (xm, b[3])))
+        hl = LineString(((b[0], ym), (b[2], ym)))
+
+        # croce rotata di 45
+        # vl = LineString(((b[0], b[1]), (b[2], b[3])))
+        # hl = LineString(((b[2], b[1]), (b[0], b[3])))
+
+        # print(vl)
+        # print(hl)
+
+        taps = None
+
+        if strategy == '4p':
+            # Trovo i punti di intersezione tra
+            # la croce vl hl e il perimetro esterno
+            # identifico gli indici dei segmenti
+            # attraversati, da li seguendo il linestring
+            # e creo il segmento da rimuovere lungo taps_length
+            vpts = ex_path.intersection(vl)
+            points = list(ex_path.coords)
+            vtaps = self.get_tap(points, vpts)
+
+            hpts = ex_path.intersection(hl)
+            points = list(ex_path.coords)
+            htaps = self.get_tap(points, hpts)
+
+            taps = MultiLineString(vtaps + htaps)
+            # plot_lines([ex_path], taps)
+
+        if strategy == '2h':
+            # Trovo i punti di intersezione tra
+            # la croce vl hl e il perimetro esterno
+            # identifico gli indici dei segmenti
+            # attraversati, da li seguendo il linestring
+            # e creo il segmento da rimuovere lungo taps_length
+
+            hpts = ex_path.intersection(hl)
+            points = list(ex_path.coords)
+            htaps = self.get_tap(points, hpts)
+
+            taps = MultiLineString(htaps)
+            # plot_lines([ex_path], taps)
+
+        if strategy == '2v':
+            # Trovo i punti di intersezione tra
+            # la croce vl hl e il perimetro esterno
+            # identifico gli indici dei segmenti
+            # attraversati, da li seguendo il linestring
+            # e creo il segmento da rimuovere lungo taps_length
+            vpts = ex_path.intersection(vl)
+            points = list(ex_path.coords)
+            vtaps = self.get_tap(points, vpts)
+
+            taps = MultiLineString(vtaps)
+            # plot_lines([ex_path], taps)
+
+        if taps is not None:
+            npaths = ex_path.difference(taps)
+            plot_lines(npaths)
+            return npaths
+        else:
+            return ex_path
+
+    def get_tap(self, points, vpts):
+        taps = []
+        for pt in vpts.geoms:
+            start_id = 0
+            c = 0
+            prev_len = [(tuple(pt.coords[0]), 0)]
+            post_len = [(tuple(pt.coords[0]), 0)]
+            for i, j in zip(points, points[1:]):
+                if LineString((i, j)).distance(pt) < 1e-8:
+                    start_id = c
+                    prev_len.append((i, Point(i).distance(pt)))
+                    post_len.append((j, Point(j).distance(pt)))
+                c += 1
+            htl = self.gap_dim / 2.0
+
+            # segmento destro
+            # la dimensione del segmento non è
+            # sufficiente quindi scorro i segmenti precedenti
+            pts = self.rotate(points, start_id)
+            # ora il punto di partenza sta alla fine
+            flag = post_len[1][1] <= htl
+            c = 1
+            d = post_len[-1][1]
+            while flag and c < len(pts):
+                di = Point(post_len[-1][0]).distance(Point(pts[c]))
+                post_len.append((pts[c], di))
+                if d + di > htl:
+                    flag = False
+                else:
+                    d += di
+                c += 1
+            if not flag:
+                # ho trovato il numero di segmenti
+                # necessari a ricostruire metà
+                if post_len[-1][1] != htl:
+                    # la lunghezza e' superiore
+                    p1 = post_len[-2][0]
+                    p2 = post_len[-1][0]
+                    l = LineString((p1, p2))
+                    r = htl - post_len[-2][1]
+                    ps = l.intersection(Point(p1).buffer(r))
+                    post_len.pop()
+                    post_len.append((ps.coords[1], htl))
+
+            # segmento sinistro
+            # la dimensione del segmento non è
+            # sufficiente quindi scorro i segmenti precedenti
+            pts = self.rotate(points, start_id)
+            # ora il punto di partenza sta alla fine
+            flag = prev_len[1][1] <= htl
+            c = -1
+            d = prev_len[-1][1]
+            while flag and c > - (len(pts)-1):
+                di = Point(prev_len[-1][0]).distance(Point(pts[c]))
+                prev_len.append((pts[c], di))
+                if d + di > htl:
+                    flag = False
+                else:
+                    d += di
+                c -= 1
+            if not flag:
+                # ho trovato il numero di segmenti
+                # necessari a ricostruire metà
+                if prev_len[-1][1] != htl:
+                    # la lunghezza e' superiore
+                    p1 = prev_len[-2][0]
+                    p2 = prev_len[-1][0]
+                    l = LineString((p1, p2))
+                    r = htl - prev_len[-2][1]
+                    ps = l.intersection(Point(p1).buffer(r))
+                    prev_len.pop()
+                    prev_len.append((ps.coords[1], htl))
+
+            pre_pts = [p[0] for p in prev_len]
+            pre_pts.reverse()
+            pre_pts.pop()
+            post_pts = [p[0] for p in post_len]
+            tap_pts = pre_pts + post_pts
+            # print("Tap")
+            # print(tap_pts)
+            taps.append(LineString(tap_pts))
+        return taps
 
 
 class MachinePath:
 
     MIN_AREA = 0.1e-1
 
-    def __init__(self, machining_type='gerber'):
+    def __init__(self, tag, machining_type='gerber'):
         # machining type
         # gerber, profile
 
+        self.tag = tag
+
         self.geom_list = []
         if machining_type == 'gerber':
-            self.cfg = {'tool_diameter': 0.2, 'passages': 3, 'overlap': 0.5}
+            self.cfg = {'tool_diameter': 0.2, 'passages': 3, 'overlap': 0.3}
             if self.cfg['passages'] < 1:
                 print("[WARNING] At Least One Pass")
                 self.cfg['passages'] = 1
         elif machining_type == 'profile':
-            self.cfg = {'tool_diameter': 1.0, 'margin': 0.1, 'taps_number': 4, 'taps_length': 1.0}
+            self.cfg = {'tool_diameter': 1.0, 'margin': 0.1, 'taps_type': '2h', 'taps_length': 1.0}
         elif machining_type == 'pocketing':
             self.cfg = {'tool_diameter': 1.0}
         elif machining_type == 'drill':
             # self.cfg = {'tool_diameter': 1.0, 'bits_diameter': [1.0, 0.8, 0.6, 0.4]}
-            self.cfg = {'tool_diameter': None, 'bits_diameter': [0.4]}
+            self.cfg = {'tool_diameter': None, 'bits_diameter': [0.8], 'optimize': False}
         else:
             self.cfg = {}
         self.type = machining_type
@@ -118,7 +289,8 @@ class MachinePath:
             for i in g.interiors:
                 if ex_path.type == "LinearRing" or ex_path.type == "LineString":
                     path.append(i)
-        self.path = path
+        t_d = self.cfg['tool_diameter']
+        self.path = [(t_d, path)]
 
     def check_min_area(self, og_list):
         big_poly = []
@@ -185,7 +357,8 @@ class MachinePath:
             for i in g.interiors:
                 if ex_path.type == "LinearRing" or ex_path.type == "LineString":
                     path.append(i)
-        self.path = path
+        t_d = self.cfg['tool_diameter']
+        self.path = [(t_d, path)]
 
         return milled_list
 
@@ -195,7 +368,7 @@ class MachinePath:
         bd.sort(reverse=True)
         # print(bd)
 
-        #print(not_to_drill)
+        # print(not_to_drill)
         to_drill = [True] * len(self.geom_list)
         if not_to_drill is not None:
             to_drill = [not elem for elem in not_to_drill]
@@ -233,13 +406,23 @@ class MachinePath:
                 drill_per_bit[b] = []
             drill_per_bit[b].append(dd[1])
 
-        print("drill list per bit")
-        print(drill_per_bit)
+        # print("drill list per bit")
+        # print(drill_per_bit)
 
         for bit_k in drill_per_bit.keys():
             bit_points = drill_per_bit[bit_k]
-            optimized_path = get_optimized_path(bit_points)
-            print("Bit " + str(bit_k) + " " + str(optimized_path))
+            if self.cfg['optimize']:
+                opt = Optimizer(bit_points)
+                optimized_bit_points = opt.get_optimized_path()
+                drill_per_bit[bit_k] = optimized_bit_points
+                print("Bit " + str(bit_k) + " " + str(optimized_bit_points))
+            else:
+                print("Bit " + str(bit_k) + " " + str(bit_points))
+
+        paths = []
+        for k in drill_per_bit:
+            paths.append((k, LineString(drill_per_bit[k])))
+        self.path = paths
 
         return drilled_list
 
@@ -317,7 +500,21 @@ class MachinePath:
             for i in g.interiors:
                 if ex_path.type == "LinearRing" or ex_path.type == "LineString":
                     path.append(i)
-        self.path = path
+
+        # inserrisco i taps
+        # in base alla strategia scelta
+        t = Gapper(path[0], self.cfg)
+        new_ext = t.add_taps_on_external_path()
+        path[0] = new_ext
+
+        # todo: aggiungere l'opzione per i gap dei fori
+        # pensavo a qualcosa che mettesse almeno 2 gap
+        # nel caso in cui il foro avesse un perimetro
+        # maggiore di un parametro fissato tipo 20mm
+        # il parametro potrebbe essere fissato da GUI
+
+        t_d = self.cfg['tool_diameter']
+        self.path = [(t_d, path)]
 
     def _subpath_execute(self, ppg_list):
 
