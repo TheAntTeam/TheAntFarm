@@ -20,6 +20,11 @@ class SettingsHandler:
     SPINDLE_SPEED_DEFAULT = 1000.0
     XY_FEEDRATE_DEFAULT = 250.0
     Z_FEEDRATE_DEFAULT = 40.0
+    MARGIN_DEFAULT = 0.01
+    DEPTH_PER_PASS_DEFAULT = 0.06
+    MULTI_PATH_FLAG_DEFAULT = False
+    TAPS_LENGHT_DEFAULT = 1.0
+    TAPS_TYPE_INDEX_DEFAULT = 3
 
     def __init__(self, main_win, ui_manager):
         self.app_settings = configparser.ConfigParser()
@@ -95,6 +100,22 @@ class SettingsHandler:
             bottom_set_od["z_feedrate"] = bottom_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
             self.ui_cj.set_settings_per_page("bottom", bottom_set_od)
 
+        # Profile job related settings #
+        if "PROFILE" in self.jobs_settings:
+            profile_settings = self.jobs_settings["PROFILE"]
+            profile_set_od = ({})
+            profile_set_od["tool_diameter"] = profile_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
+            profile_set_od["margin"] = profile_settings.getfloat("margin", self.MARGIN_DEFAULT)
+            profile_set_od["multi_depth"] = profile_settings.getboolean("multi_depth", self.MULTI_PATH_FLAG_DEFAULT)
+            profile_set_od["depth_per_pass"] = profile_settings.getfloat("depth_per_pass", self.DEPTH_PER_PASS_DEFAULT)
+            profile_set_od["cut"] = profile_settings.getfloat("cut", self.CUT_Z_DEFAULT)
+            profile_set_od["travel"] = profile_settings.getfloat("travel", self.TRAVEL_Z_DEFAULT)
+            profile_set_od["spindle"] = profile_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
+            profile_set_od["xy_feedrate"] = profile_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
+            profile_set_od["z_feedrate"] = profile_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
+            profile_set_od["taps_type"] = profile_settings.getint("taps_type", self.TAPS_TYPE_INDEX_DEFAULT)
+            profile_set_od["taps_length"] = profile_settings.getfloat("taps_length", self.TAPS_LENGHT_DEFAULT)
+            self.ui_cj.set_settings_per_page("profile", profile_set_od)
 
     def write_all_settings(self):
         """ Write all settings to ini files """
@@ -128,7 +149,14 @@ class SettingsHandler:
 
     def write_all_jobs_settings(self):
         """ Write all jobs settings to ini files """
-        self.jobs_settings['DEFAULT'] = {"tool_diameter": 1.0}
+        self.jobs_settings['DEFAULT'] = {"tool_diameter": self.TOOL_DIAMETER_DEFAULT,
+                                         "passages": self.PASSAGES_DEFAULT,
+                                         "overlap": self.OVERLAP_DEFAULT,
+                                         "cut": self.CUT_Z_DEFAULT,
+                                         "travel": self.TRAVEL_Z_DEFAULT,
+                                         "spindle": self.SPINDLE_SPEED_DEFAULT,
+                                         "xy_feedrate": self.XY_FEEDRATE_DEFAULT,
+                                         "z_feedrate": self.Z_FEEDRATE_DEFAULT}
 
         job_settings_od = self.ui_cj.get_all_settings()
 
@@ -161,7 +189,18 @@ class SettingsHandler:
         # Profile job related settings #
         self.jobs_settings["PROFILE"] = {}
         profile_settings = self.jobs_settings["PROFILE"]
-        profile_settings["tool_diameter"] = str(1.0)
+        profile_set_od = job_settings_od["profile"]
+        profile_settings["tool_diameter"] = str(profile_set_od["tool_diameter"])
+        profile_settings["margin"] = str(profile_set_od["margin"])
+        profile_settings["multi_depth"] = str(profile_set_od["multi_depth"])
+        profile_settings["depth_per_pass"] = str(profile_set_od["depth_per_pass"])
+        profile_settings["cut"] = str(profile_set_od["cut"])
+        profile_settings["travel"] = str(profile_set_od["travel"])
+        profile_settings["spindle"] = str(profile_set_od["spindle"])
+        profile_settings["xy_feedrate"] = str(profile_set_od["xy_feedrate"])
+        profile_settings["z_feedrate"] = str(profile_set_od["z_feedrate"])
+        profile_settings["taps_type"] = str(profile_set_od["taps_type"])
+        profile_settings["taps_length"] = str(profile_set_od["taps_length"])
 
         # Drill job related settings #
         self.jobs_settings["DRILL"] = {}
