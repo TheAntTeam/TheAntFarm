@@ -290,10 +290,15 @@ class UiCreateJobLayerTab(QObject):
 
     def set_settings_per_drill(self, settings_drill):
         drill_tools_list = settings_drill["bits_diameter"]
-        for dt in drill_tools_list:
-            self.add_drill_tool(dt[0], dt[1])
+        if drill_tools_list:
+            for dt in drill_tools_list:
+                self.add_drill_tool(dt[0], dt[1])
 
-        self.ui.drill_milling_tool_chb.setCheckState(settings_drill["milling_tool"])
+        if settings_drill["milling_tool"]:
+            self.ui.drill_milling_tool_chb.setCheckState(Qt.Checked)
+        else:
+            self.ui.drill_milling_tool_chb.setCheckState(Qt.Unchecked)
+
         self.ui.drill_milling_tool_diameter_dsb.setValue(settings_drill["milling_tool_diameter"])
         self.ui.drill_cut_z_dsb.setValue(settings_drill["cut"])
         self.ui.drill_travel_z_dsb.setValue(settings_drill["travel"])

@@ -117,6 +117,28 @@ class SettingsHandler:
             profile_set_od["taps_length"] = profile_settings.getfloat("taps_length", self.TAPS_LENGHT_DEFAULT)
             self.ui_cj.set_settings_per_page("profile", profile_set_od)
 
+        if "DRILL" in self.jobs_settings:
+            drill_settings = self.jobs_settings["DRILL"]
+            drill_set_od = ({})
+            drill_set_od["milling_tool"] = drill_settings.getboolean("milling_tool_flag", False)
+            drill_set_od["milling_tool_diameter"] = drill_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
+            drill_set_od["cut"] = drill_settings.getfloat("cut", self.CUT_Z_DEFAULT)
+            drill_set_od["travel"] = drill_settings.getfloat("travel")
+            drill_set_od["spindle"] = drill_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
+            drill_set_od["xy_feedrate"] = drill_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
+            drill_set_od["z_feedrate"] = drill_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
+
+            drill_bits_list = []
+            # Section dedicated to drill bits #
+            if "DRILL_BITS" in self.jobs_settings:
+                drill_bits_settings = self.jobs_settings["DRILL_BITS"]
+                for elem in drill_bits_settings:
+                    if "bit" in elem:  # This is needed to avoid to read default settings too.
+                        drill_bits_list.append((elem, drill_bits_settings.getfloat(elem, 0.1)))
+
+            drill_set_od["bits_diameter"] = drill_bits_list
+            self.ui_cj.set_settings_per_page("drill", drill_set_od)
+
     def write_all_settings(self):
         """ Write all settings to ini files """
         self.write_all_app_settings()
@@ -205,7 +227,21 @@ class SettingsHandler:
         # Drill job related settings #
         self.jobs_settings["DRILL"] = {}
         drill_settings = self.jobs_settings["DRILL"]
-        drill_settings["tool_diameter"] = str(1.0)
+        drill_set_od = job_settings_od["drill"]
+        drill_settings["milling_tool_flag"] = str(drill_set_od["milling_tool"])
+        drill_settings["tool_diameter"] = str(drill_set_od["milling_tool_diameter"])
+        drill_settings["cut"] = str(drill_set_od["cut"])
+        drill_settings["travel"] = str(drill_set_od["travel"])
+        drill_settings["spindle"] = str(drill_set_od["spindle"])
+        drill_settings["xy_feedrate"] = str(drill_set_od["xy_feedrate"])
+        drill_settings["z_feedrate"] = str(drill_set_od["z_feedrate"])
+
+        # Section dedicated to drill bits #
+        self.jobs_settings["DRILL_BITS"] = {}
+        drill_bits_settings = self.jobs_settings["DRILL_BITS"]
+        for elem in drill_set_od["bits_diameter"]:
+            drill_bits_settings[elem[0]] = str(elem[1])
+
 
         # No-Copper Top job related settings #
         self.jobs_settings["NC_TOP"] = {}
