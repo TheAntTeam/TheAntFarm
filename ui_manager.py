@@ -306,7 +306,7 @@ class UiCreateJobLayerTab(QObject):
         self.ui.drill_xy_feed_rate_dsb.setValue(settings_drill["xy_feedrate"])
         self.ui.drill_z_feed_rate_dsb.setValue(settings_drill["z_feedrate"])
 
-    def get_settings_per_nc_top(self, settings_nc_top):
+    def set_settings_per_nc_top(self, settings_nc_top):
         self.ui.nc_top_tool_diameter_dsb.setValue(settings_nc_top["tool_diameter"])
         self.ui.nc_top_overlap_dsb.setValue(settings_nc_top["overlap"])
         self.ui.nc_top_cut_z_dsb.setValue(settings_nc_top["cut"])
@@ -315,7 +315,7 @@ class UiCreateJobLayerTab(QObject):
         self.ui.nc_top_xy_feed_rate_dsb.setValue(settings_nc_top["xy_feedrate"])
         self.ui.nc_top_z_feed_rate_dsb.setValue(settings_nc_top["z_feedrate"])
 
-    def get_settings_per_nc_bottom(self, settings_nc_bottom):
+    def set_settings_per_nc_bottom(self, settings_nc_bottom):
         self.ui.nc_bottom_tool_diameter_dsb.setValue(settings_nc_bottom["tool_diameter"])
         self.ui.nc_bottom_overlap_dsb.setValue(settings_nc_bottom["overlap"])
         self.ui.nc_bottom_cut_z_dsb.setValue(settings_nc_bottom["cut"])

@@ -139,6 +139,30 @@ class SettingsHandler:
             drill_set_od["bits_diameter"] = drill_bits_list
             self.ui_cj.set_settings_per_page("drill", drill_set_od)
 
+        if "NC_TOP" in self.jobs_settings:
+            nc_top_settings = self.jobs_settings["NC_TOP"]
+            nc_top_set_od = ({})
+            nc_top_set_od["tool_diameter"] = nc_top_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
+            nc_top_set_od["overlap"] = nc_top_settings.getfloat("overlap", self.OVERLAP_DEFAULT)
+            nc_top_set_od["cut"] = nc_top_settings.getfloat("cut", self.CUT_Z_DEFAULT)
+            nc_top_set_od["travel"] = nc_top_settings.getfloat("travel", self.TRAVEL_Z_DEFAULT)
+            nc_top_set_od["spindle"] = nc_top_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
+            nc_top_set_od["xy_feedrate"] = nc_top_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
+            nc_top_set_od["z_feedrate"] = nc_top_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
+            self.ui_cj.set_settings_per_page("no_copper_top", nc_top_set_od)
+
+        if "NC_BOTTOM" in self.jobs_settings:
+            nc_bottom_settings = self.jobs_settings["NC_BOTTOM"]
+            nc_bottom_set_od = ({})
+            nc_bottom_set_od["tool_diameter"] = nc_bottom_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
+            nc_bottom_set_od["overlap"] = nc_bottom_settings.getfloat("overlap", self.OVERLAP_DEFAULT)
+            nc_bottom_set_od["cut"] = nc_bottom_settings.getfloat("cut", self.CUT_Z_DEFAULT)
+            nc_bottom_set_od["travel"] = nc_bottom_settings.getfloat("travel", self.TRAVEL_Z_DEFAULT)
+            nc_bottom_set_od["spindle"] = nc_bottom_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
+            nc_bottom_set_od["xy_feedrate"] = nc_bottom_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
+            nc_bottom_set_od["z_feedrate"] = nc_bottom_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
+            self.ui_cj.set_settings_per_page("no_copper_bottom", nc_bottom_set_od)
+
     def write_all_settings(self):
         """ Write all settings to ini files """
         self.write_all_app_settings()
@@ -242,16 +266,29 @@ class SettingsHandler:
         for elem in drill_set_od["bits_diameter"]:
             drill_bits_settings[elem[0]] = str(elem[1])
 
-
         # No-Copper Top job related settings #
         self.jobs_settings["NC_TOP"] = {}
         nc_top_settings = self.jobs_settings["NC_TOP"]
-        nc_top_settings["tool_diameter"] = str(1.0)
+        nc_top_set_od = job_settings_od["no_copper_top"]
+        nc_top_settings["tool_diameter"] = str(nc_top_set_od["tool_diameter"])
+        nc_top_settings["overlap"] = str(nc_top_set_od["overlap"])
+        nc_top_settings["cut"] = str(nc_top_set_od["cut"])
+        nc_top_settings["travel"] = str(nc_top_set_od["travel"])
+        nc_top_settings["spindle"] = str(nc_top_set_od["spindle"])
+        nc_top_settings["xy_feedrate"] = str(nc_top_set_od["xy_feedrate"])
+        nc_top_settings["z_feedrate"] = str(nc_top_set_od["z_feedrate"])
 
         # No-Copper Bottom job related settings #
         self.jobs_settings["NC_BOTTOM"] = {}
         nc_bottom_settings = self.jobs_settings["NC_BOTTOM"]
-        nc_bottom_settings["tool_diameter"] = str(1.0)
+        nc_bottom_set_od = job_settings_od["no_copper_bottom"]
+        nc_bottom_settings["tool_diameter"] = str(nc_bottom_set_od["tool_diameter"])
+        nc_bottom_settings["overlap"] = str(nc_bottom_set_od["overlap"])
+        nc_bottom_settings["cut"] = str(nc_bottom_set_od["cut"])
+        nc_bottom_settings["travel"] = str(nc_bottom_set_od["travel"])
+        nc_bottom_settings["spindle"] = str(nc_bottom_set_od["spindle"])
+        nc_bottom_settings["xy_feedrate"] = str(nc_bottom_set_od["xy_feedrate"])
+        nc_bottom_settings["z_feedrate"] = str(nc_bottom_set_od["z_feedrate"])
 
         # Write application ini file #
         with open(self.JOBS_CONFIG_PATH, 'w') as configfile:
