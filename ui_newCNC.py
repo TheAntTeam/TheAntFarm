@@ -1003,12 +1003,36 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_6.addLayout(self.verticalLayout_2)
 
+        self.verticalLayout_9 = QVBoxLayout()
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
         self.viewCanvasWidget = VispyCanvas(self.view_tab)
         self.viewCanvasWidget.setObjectName(u"viewCanvasWidget")
         sizePolicy.setHeightForWidth(self.viewCanvasWidget.sizePolicy().hasHeightForWidth())
         self.viewCanvasWidget.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_6.addWidget(self.viewCanvasWidget)
+        self.verticalLayout_9.addWidget(self.viewCanvasWidget)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_3.addItem(self.horizontalSpacer)
+
+        self.pushButton_3 = QPushButton(self.view_tab)
+        self.pushButton_3.setObjectName(u"pushButton_3")
+
+        self.horizontalLayout_3.addWidget(self.pushButton_3)
+
+        self.pushButton_4 = QPushButton(self.view_tab)
+        self.pushButton_4.setObjectName(u"pushButton_4")
+
+        self.horizontalLayout_3.addWidget(self.pushButton_4)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_3)
+
+
+        self.horizontalLayout_6.addLayout(self.verticalLayout_9)
 
 
         self.horizontalLayout_8.addLayout(self.horizontalLayout_6)
@@ -1769,6 +1793,8 @@ class Ui_MainWindow(object):
         self.nc_bottom_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
         self.nc_bottom_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
         self.prepare_widget.setTabText(self.prepare_widget.indexOf(self.create_job_tab), QCoreApplication.translate("MainWindow", u"CREATE JOB", None))
+        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Top View", None))
+        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Bottom View", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.view_tab), QCoreApplication.translate("MainWindow", u"VIEW", None))
         self.statusLabel.setText(QCoreApplication.translate("MainWindow", u"Not Connected", None))
         self.zAxisLabel.setText(QCoreApplication.translate("MainWindow", u"Z", None))
