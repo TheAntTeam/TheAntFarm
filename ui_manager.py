@@ -463,7 +463,7 @@ class UiCreateJobLayerTab(QObject):
     @Slot(str, list)
     def add_new_path(self, tag, path):
         self.vis_layer.add_path(tag, path, color="white")
-        if self.ui.layer_choice_cb.currentText() != tag:
+        if self.lay_tags[self.ui.layer_choice_cb.currentIndex()] != tag:
             self.vis_layer.set_path_visible(tag, False)
 
 
