@@ -4,6 +4,7 @@ import os
 
 
 class SettingsHandler:
+    # APP CONFIGURATION DEFAULT VALUES
     CONFIG_FOLDER = os.path.join(os.path.dirname(__file__), 'configurations')
     APP_CONFIG_PATH = CONFIG_FOLDER + os.path.sep + 'app_config.ini'
     JOBS_CONFIG_PATH = CONFIG_FOLDER + os.path.sep + 'jobs_sets_config.ini'
@@ -12,6 +13,8 @@ class SettingsHandler:
     WIN_SIZE_W_DEFAULT = 960
     WIN_SIZE_H_DEFAULT = 720
     LAYER_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
+
+    # JOBS CONFIGURATION DEFAULT VALUES
     TOOL_DIAMETER_DEFAULT = 1.0
     PASSAGES_DEFAULT = 1
     OVERLAP_DEFAULT = 0.40
@@ -202,7 +205,12 @@ class SettingsHandler:
                                          "travel": self.TRAVEL_Z_DEFAULT,
                                          "spindle": self.SPINDLE_SPEED_DEFAULT,
                                          "xy_feedrate": self.XY_FEEDRATE_DEFAULT,
-                                         "z_feedrate": self.Z_FEEDRATE_DEFAULT}
+                                         "z_feedrate": self.Z_FEEDRATE_DEFAULT,
+                                         "margin": self.MARGIN_DEFAULT,
+                                         "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
+                                         "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
+                                         "taps_type": self.TAPS_TYPE_INDEX_DEFAULT,
+                                         "taps_length": self.TAPS_LENGHT_DEFAULT}
 
         job_settings_od = self.ui_cj.get_all_settings()
 
