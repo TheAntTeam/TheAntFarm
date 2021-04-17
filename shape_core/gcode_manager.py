@@ -13,6 +13,7 @@ class GCoder:
 
     DIGITS = 4
     STEPS = 3
+    SAFE_Z_PROBE = -1.0
 
     def __init__(self, tag, machining_type='gerber', parent=None, units='ms'):
 
@@ -21,8 +22,8 @@ class GCoder:
 
         self.mill = True
 
-        self.change_tool_pos = (6.0, 8.0, 9.0)
-        self.probe_tool_pos = (6.0, 8.0, 9.0)
+        self.change_tool_pos = (6.0, 8.0, 9.0) # todo: vanno parametrizzati
+        self.probe_tool_pos = (6.0, 8.0, 9.0) # todo: vanno parametrizzati
 
         # units:
         # ms -> metric system
@@ -45,6 +46,7 @@ class GCoder:
                 'xy_feedrate': 250.0,
                 'z_feedrate': 40.0,
                 'spindle': 1000.0,
+                'multi_depth': True,
                 'depth_per_pass': 0.6
             }
         elif machining_type == 'pocketing':
@@ -69,6 +71,9 @@ class GCoder:
         self.path = None
         self.gcode = []
 
+    def load_cfg(self, cfg):
+        self.cfg = cfg
+
     def format_float(self, f):
         ff = round(f, self.DIGITS)
         fs = "{:." + str(self.DIGITS) + "f}"
@@ -77,6 +82,20 @@ class GCoder:
 
     def load_path(self, path):
         self.path = path
+
+    def compute(self):
+        if self.type == 'gerber':
+            self.compute_gerber()
+        elif self.type == 'profile':
+            self.compute_pocketing()
+        elif self.type == 'drill':
+            self.compute_drill()
+        elif self.type == 'pocketing':
+            self.compute_pocketing()
+        else:
+            print("Machining Type not supported")
+            return False
+        return True
 
     def compute_drill(self):
         # computa il gcode relativo alla
@@ -91,8 +110,6 @@ class GCoder:
         self.spindle_on(True)
 
         for d in self.path:
-            print("D")
-            print(d)
             path = d[1]
             self.compute_drill_paths([path])
 
@@ -133,6 +150,57 @@ class GCoder:
 
         self.write(self.get_file_name())
 
+    def compute_pocketing(self):
+        # essenzialmente si tratta di seguire i punti indicati dai paths
+        # unendoli con movimenti veloci.
+        # in aggiunta nel caso ci fosse un cfg valido di multipassaggio
+        # eseguo le n passate necessarie
+        # il formato del gcode, le info contenute e il tipo di file
+        # potranno essere scelti nei settings
+        # per ora creo il gcode con le sole info utili
+
+        self.gcode = []
+        self.create_header()
+        self.add_job_info()
+        self.add_init()
+
+        # todo: aggiungere user head and foot
+
+        self.go_travel()
+        self.spindle_on(True)
+
+        # ora per ogni path disponibile
+        # raggiungo il punto iniziale
+        # vado in modalita' mill
+        # seguo il path ed infine mi rimetto
+        # in modalita' travel
+
+        multi_pass = False
+        if self.cfg['multi_depth']:
+            multi_pass = self.cfg['depth_per_pass'] > 0.0
+
+        for d in self.path:
+            paths = d[1]
+            if multi_pass:
+                cut = self.cfg['cut']
+                sign = cut/abs(cut)
+                dpp = self.cfg['depth_per_pass']
+                n = int(abs(cut)//dpp)
+                # print("cut " + str(cut))
+                # print("dpp " + str(dpp))
+                # print("N " + str(n))
+                pass_list = [sign * dpp * x for x in range(1, n)] + [cut]
+                pass_list.sort(reverse=True)
+                # print("Pass List: " + str(pass_list))
+                self.compute_pocketing_paths(paths, pass_list)
+            else:
+                self.compute_gerber_paths(paths)
+
+        self.spindle_on(False)
+        self.go_to((0.0, 0.0))
+
+        self.write(self.get_file_name())
+
     def compute_drill_paths(self, paths):
         # imposto la velocita' di lavoro
         # per z
@@ -160,6 +228,24 @@ class GCoder:
                 self.go_to(c)
             self.go_travel()
 
+    def compute_pocketing_paths(self, paths, pass_list):
+        # print(paths)
+        for p in paths:
+            rev = True
+            orig_cs = list(p.coords)
+            cs = orig_cs.copy()
+            self.go_to(cs.pop(0))
+            for cp in pass_list:
+                self.go_mill(cp)
+                for c in cs:
+                    self.go_to(c)
+                cs = orig_cs.copy()
+                if rev:
+                    cs.reverse()
+                # cs.pop(0)
+                rev = not rev
+            self.go_travel()
+
     def go_to(self, p):
         gc = ""
         x, y = p
@@ -172,11 +258,35 @@ class GCoder:
         self.gcode.append(gc)
 
     def go_tool_change(self):
+
+        zero_str = self.format_float(0.0)
+        z_m_one = self.format_float(self.SAFE_Z_PROBE)
+        x_str = self.format_float(self.probe_tool_pos[0])
+        y_str = self.format_float(self.probe_tool_pos[1])
+        z_str = self.format_float(self.probe_tool_pos[2])
+
         gc = ""
-        # mi muovo a probe pos
-        # faccio una prima probe
-        # Porto lo z a 0 macchina
-        gc += self.gcode_comment("Dummy Tool Change")
+        gc += self.gcode_comment("The Ant Tool Change")
+        gc += "G90\n"
+        gc += "G01 Z" + z_m_one + "\n"
+        gc += "G00 X" + x_str + " Y" + y_str + "\n"
+        gc += "G91\n"
+        gc += "G38.2 Z" + z_str + "\n"
+        gc += "G55\n"
+        gc += "G10 P2 L20 Z" + zero_str + "\n"
+        gc += "T01\n"
+        gc += "M06\n"
+        gc += "G90\n"
+        gc += "G01 Z" + z_m_one + "\n"
+        gc += "G00 X" + x_str + " Y" + y_str + "\n"
+        gc += "G91\n"
+        gc += "G38.2 Z" + z_str + "\n"
+        gc += "G92 Z" + zero_str + "\n"
+        gc += "G54\n"
+        gc += "G90\n"
+        gc += "G01 Z" + z_m_one + "\n"
+        gc += "G91\n"
+        gc += "G00 X" + zero_str + " Y" + zero_str + "\n"
 
         self.gcode.append(gc)
 
@@ -206,12 +316,15 @@ class GCoder:
         self.gcode.append("G00 Z" + zt_str + "\n")
         self.mill = False
 
-    def go_mill(self):
+    def go_mill(self, z=None):
         gc = ""
         zf = self.cfg['z_feedrate']
+        if z is None:
+            zt = self.cfg['cut']
+        else:
+            zt = z
         zf_str = self.format_float(zf)
         gc += "G01 F" + zf_str + "\n"
-        zt = self.cfg['cut']
         zt_str = self.format_float(zt)
         gc += "G01 Z" + zt_str + "\n"
         xyf = self.cfg['xy_feedrate']

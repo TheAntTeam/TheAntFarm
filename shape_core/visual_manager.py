@@ -1,7 +1,9 @@
 #
+# https://programtalk.com/vs2/python/7189/phy/phy/plot/tests/test_panzoom.py/
+# https://stackoverflow.com/questions/33942728/how-to-get-world-coordinates-from-screen-coordinates-in-vispy
 
 from vispy import gloo
-from vispy.scene import visuals
+from vispy.scene import visuals, PanZoomCamera
 from vispy.color import Color
 from vispy.visuals.filters import Alpha
 from OpenGL import GLU
@@ -118,10 +120,23 @@ class VisualLayer:
 
     def __init__(self, canvas):
         self.canvas = canvas
+        self.canvas.view.camera = PanZoomCamera(aspect=1)
         self.translucent_filter = Alpha()
         self.z = 1
         self.meshes = OrderedDict({})
         self.paths = OrderedDict({})
+
+    def on_mouse_double_click(self, event):
+        print("Double Click")
+        print(event)
+        self.orientation = 0 if self.orientation == 1 else 1
+        self.flip_view(orientation=self.orientation)
+
+    def flip_view(self, orientation=0):
+        if orientation == 0:
+            self.canvas.view.camera.up = '+z'
+        else:
+            self.canvas.view.camera.up = '-z'
 
     def set_layer_visible(self, tag, visible):
         if tag in self.meshes.keys():

@@ -1,11 +1,11 @@
 #
 import time
-from geometry_manager import merge_polygons_path, offset_polygon, offset_polygon_holes, get_bbox_area_sh, fill_holes_sh, get_poly_diameter
-from plot_stuff import plot_paths, plot_shapely
 from shapely.geometry import Polygon, LinearRing, LineString, MultiLineString, Point
 from collections import OrderedDict
-from path_optimizer import Optimizer
-from plot_stuff import plot_lines
+from .geometry_manager import merge_polygons_path, offset_polygon, offset_polygon_holes, get_bbox_area_sh, fill_holes_sh, get_poly_diameter
+from .plot_stuff import plot_paths, plot_shapely
+from .path_optimizer import Optimizer
+from .plot_stuff import plot_lines
 
 
 class Gapper:
@@ -88,9 +88,13 @@ class Gapper:
         if taps is not None:
             npaths = ex_path.difference(taps)
             plot_lines(npaths)
-            return npaths
+            print("N tap part: " + str(npaths.type))
+            if npaths.type == "MultiLineString":
+                return list(npaths.geoms)
+            else:
+                return [npaths]
         else:
-            return ex_path
+            return [ex_path]
 
     def get_tap(self, points, vpts):
         taps = []
@@ -179,6 +183,7 @@ class Gapper:
 class MachinePath:
 
     MIN_AREA = 0.1e-1
+    TD_COEFF = 0.999
 
     def __init__(self, tag, machining_type='gerber'):
         # machining type
@@ -203,6 +208,9 @@ class MachinePath:
             self.cfg = {}
         self.type = machining_type
         self.path = None
+
+    def load_cfg(self, cfg):
+        self.cfg = cfg
 
     def get_path(self):
         return self.path
@@ -255,11 +263,18 @@ class MachinePath:
         t0 = time.time()
         og_list = []
         prev_poly = []
+        td = self.cfg['tool_diameter'] * self.TD_COEFF
         for g in self.geom_list:
             prev_poly.append(g.geom)
-            og = offset_polygon(g, self.cfg['tool_diameter']/2.0)
+            og = offset_polygon(g, td/2.0)
             if og is not None:
                 og_list.append(og)
+
+        #print(og_list)
+
+        og_list = merge_polygons_path(og_list, as_list=True)
+
+        #print(og_list)
 
         # per i sucessivi si parte dal path precedente, lo si ingrandisce del raggio del tool
         # se ne fa l'or e poi lo si riduce del raggio del tool
@@ -321,9 +336,10 @@ class MachinePath:
         og_list = []
         prev_poly = []
         milled_list = []
+        td = self.cfg['tool_diameter'] * self.TD_COEFF
         for g in self.geom_list:
             prev_poly.append(g.geom)
-            og = offset_polygon(g, -self.cfg['tool_diameter']/2.0)
+            og = offset_polygon(g, - td / 2.0)
             if og is not None:
                 if not og.is_empty:
                     og_list.append(og)
@@ -436,15 +452,15 @@ class MachinePath:
         t0 = time.time()
         og_list = []
         prev_poly = [g.geom for g in self.geom_list]
-
+        td = self.cfg['tool_diameter'] * self.TD_COEFF
         # check di singolarità del profilo
         if len(self.geom_list) == 1:
             # profilo mono polygono con eventuali fori
             ext_path = offset_polygon(fill_holes_sh(self.geom_list[0].geom),
-                                      self.cfg['tool_diameter'] / 2.0 + self.cfg['margin'], shapely_poly=True)
+                                      td / 2.0 + self.cfg['margin'], shapely_poly=True)
             if ext_path is not None:
                 og_list.append(ext_path)
-            og = offset_polygon_holes(self.geom_list[0], -self.cfg['tool_diameter'] / 2.0 + self.cfg['margin'])
+            og = offset_polygon_holes(self.geom_list[0], - td / 2.0 + self.cfg['margin'])
             if og is not None:
                 og_list.append(og)
         else:
@@ -473,13 +489,13 @@ class MachinePath:
 
             ext_p = self.geom_list[id]
             ext_path = offset_polygon(fill_holes_sh(ext_p.geom),
-                                      self.cfg['tool_diameter'] / 2.0 + self.cfg['margin'], shapely_poly=True)
+                                      td / 2.0 + self.cfg['margin'], shapely_poly=True)
             if ext_path is not None:
                 og_list.append(ext_path)
 
             for i, g in enumerate(self.geom_list):
                 if i != id:
-                    og = offset_polygon_holes(g, -self.cfg['tool_diameter'] / 2.0 + self.cfg['margin'])
+                    og = offset_polygon_holes(g, - td / 2.0 + self.cfg['margin'])
                     if og is not None:
                         og_list.append(og)
 
@@ -505,7 +521,9 @@ class MachinePath:
         # in base alla strategia scelta
         t = Gapper(path[0], self.cfg)
         new_ext = t.add_taps_on_external_path()
-        path[0] = new_ext
+        # path[0] = new_ext
+        path.pop(0)
+        path = new_ext + path
 
         # todo: aggiungere l'opzione per i gap dei fori
         # pensavo a qualcosa che mettesse almeno 2 gap
@@ -522,8 +540,8 @@ class MachinePath:
         ov = self.cfg['overlap']
 
         # ppg_list pre path list
-
-        pre_offset = self.cfg['tool_diameter']/2.0 * (1 + 0.5 - ov)
+        td = self.cfg['tool_diameter'] * self.TD_COEFF
+        pre_offset = td/2.0 * (1 + 0.5 - ov)
         og_list = []
 
         # print("ORIG")
@@ -560,7 +578,7 @@ class MachinePath:
 
         ng_list = []
         for g in mog_list:
-            ng = offset_polygon(g, self.cfg['tool_diameter'] / 2.0 * (1 + 0.5 - ov), shapely_poly=True)
+            ng = offset_polygon(g, td / 2.0 * (1 + 0.5 - ov), shapely_poly=True)
             if ng is not None:
                 # ng_list.append(ng)
                 if ng.geom_type == 'MultiPolygon':

@@ -20,7 +20,7 @@ from OpenGL.GLU import *
 # import sys
 
 
-def merge_polygons_path(poly_set):
+def merge_polygons_path(poly_set, as_list=False):
     merged = []
 
     use_shapely = True
@@ -68,6 +68,9 @@ def merge_polygons_path(poly_set):
         merged = cascaded_union(poly_set)
         if merged.geom_type != "MultiPolygon":
             merged = [merged]
+        else:
+            if as_list:
+                merged = list(merged)
     return merged
 
 

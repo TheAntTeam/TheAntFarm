@@ -5,10 +5,10 @@ import gerber.primitives
 import numpy as np
 import math
 from gerber.utils import convex_hull
-
 from collections import OrderedDict as Od
+
 from .geometry_manager import Geom, merge_polygons
-# from plot_stuff import plot_vertices, plot_shapely
+# from .plot_stuff import plot_vertices, plot_shapely
 
 
 class PcbObj:
