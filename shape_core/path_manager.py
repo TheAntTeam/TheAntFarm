@@ -289,7 +289,7 @@ class MachinePath:
 
         og_list = self.check_min_area(og_list)
 
-        plot_paths(prev_poly, [og_list], grb_color='green', path_color='black')
+        # plot_paths(prev_poly, [og_list], grb_color='green', path_color='black')
 
         # plot_shapely(og_list)
         # print(og_list)
@@ -359,7 +359,7 @@ class MachinePath:
         # plot_shapely(og_list + prev_poly)
         t1 = time.time()
         print("Path Generation Done in " + str(t1-t0) + " sec")
-        plot_paths(prev_poly, [og_list], grb_color='grey', path_color='black')
+        # plot_paths(prev_poly, [og_list], grb_color='grey', path_color='black')
         # plot_shapely(og_list)
         # print(og_list)
 
@@ -502,7 +502,7 @@ class MachinePath:
         # plot_shapely(og_list + prev_poly)
         t1 = time.time()
         print("Path Generation Done in " + str(t1-t0) + " sec")
-        plot_paths(prev_poly, [og_list], grb_color='green', path_color='black')
+        # plot_paths(prev_poly, [og_list], grb_color='green', path_color='black')
         # plot_shapely(og_list)
         # print(og_list)
 
