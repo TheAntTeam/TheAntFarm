@@ -123,7 +123,7 @@ class SettingsHandler:
             drill_set_od["milling_tool"] = drill_settings.getboolean("milling_tool_flag", False)
             drill_set_od["milling_tool_diameter"] = drill_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
             drill_set_od["cut"] = drill_settings.getfloat("cut", self.CUT_Z_DEFAULT)
-            drill_set_od["travel"] = drill_settings.getfloat("travel")
+            drill_set_od["travel"] = drill_settings.getfloat("travel", self.TRAVEL_Z_DEFAULT)
             drill_set_od["spindle"] = drill_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             drill_set_od["xy_feedrate"] = drill_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             drill_set_od["z_feedrate"] = drill_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
