@@ -131,6 +131,7 @@ class UiViewLoadLayerTab(QObject):
         [self.vis_layer.set_layer_visible(x, False) for x in self.lay_tags]
         loaded_views = list(self.vis_layer.get_layers_tag())
         for view in loaded_views:
+            self.vis_layer.set_path_visible(view, False)
             if self.layers_chb[view].isChecked():
                 self.vis_layer.set_layer_visible(view, True)
 
@@ -198,10 +199,14 @@ class UiCreateJobLayerTab(QObject):
     def visualize_active_layer(self):
         current_text_cb = self.ui.layer_choice_cb.currentText()
 
-        [self.vis_layer.set_layer_visible(x, False) for x in self.lay_tags]
+        for x in self.lay_tags:
+            self.vis_layer.set_layer_visible(x, False)
+            self.vis_layer.set_path_visible(x, False)
 
         if current_text_cb in self.lay_names:
+            current_layer_tag = self.lay_tags[self.lay_names.index(current_text_cb)]
             self.vis_layer.set_layer_visible(self.lay_tags[self.lay_names.index(current_text_cb)], True)
+            self.vis_layer.set_path_visible(current_layer_tag, True)
 
     def change_job_page(self):
         current_text_cb = self.ui.layer_choice_cb.currentText()
@@ -458,6 +463,8 @@ class UiCreateJobLayerTab(QObject):
     @Slot(str, list)
     def add_new_path(self, tag, path):
         self.vis_layer.add_path(tag, path, color="white")
+        if self.ui.layer_choice_cb.currentText() != tag:
+            self.vis_layer.set_path_visible(tag, False)
 
 
 class UiControlTab(QObject):
