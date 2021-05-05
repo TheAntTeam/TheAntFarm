@@ -48,7 +48,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="view_tab">
        <property name="font">
@@ -1649,7 +1649,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="gcode_load">
              <property name="sizePolicy">
@@ -1736,7 +1736,7 @@
                <number>0</number>
               </property>
               <item>
-               <layout class="QVBoxLayout" name="controlsVerticalLayout" stretch="0,0,0,0,0,0,0,0">
+               <layout class="QVBoxLayout" name="controlsVerticalLayout" stretch="0,0,0,0,0,0,0,0,0,0">
                 <property name="sizeConstraint">
                  <enum>QLayout::SetDefaultConstraint</enum>
                 </property>
@@ -1764,6 +1764,13 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="Line" name="line_4">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <layout class="QGridLayout" name="droGridLayout">
                   <property name="leftMargin">
                    <number>0</number>
@@ -1783,6 +1790,44 @@
                   <property name="verticalSpacing">
                    <number>6</number>
                   </property>
+                  <item row="3" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                   <widget class="QPushButton" name="zero_xyz_pushButton">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>XYZ = 0</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="2" alignment="Qt::AlignHCenter">
+                   <widget class="QPushButton" name="zero_y_pushButton">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Y = 0</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="0" column="3" alignment="Qt::AlignHCenter">
                    <widget class="QLabel" name="zAxisLabel">
                     <property name="sizePolicy">
@@ -1814,69 +1859,6 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="label_10">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
-                    </property>
-                    <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
-                    </property>
-                    <property name="text">
-                     <string>0.0</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="3" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QPushButton" name="zero_z_pushButton">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Z = 0</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QPushButton" name="zero_xyz_pushButton">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>XYZ = 0</string>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="2" column="2" alignment="Qt::AlignHCenter">
                    <widget class="QLabel" name="label_9">
                     <property name="sizePolicy">
@@ -1896,162 +1878,6 @@
                     </property>
                     <property name="text">
                      <string>0.0</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="3" alignment="Qt::AlignHCenter">
-                   <widget class="QLabel" name="label_11">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
-                    </property>
-                    <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
-                    </property>
-                    <property name="text">
-                     <string>0.0</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QPushButton" name="zero_y_pushButton">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Y = 0</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="xAxisLabel">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
-                    </property>
-                    <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
-                    </property>
-                    <property name="text">
-                     <string>X</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QPushButton" name="zero_x_pushButton">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>X = 0</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="xAxisLabel_2">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
-                    </property>
-                    <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
-                    </property>
-                    <property name="text">
-                     <string>Axis:</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="yAxisLabel">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
-                    </property>
-                    <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
-                    </property>
-                    <property name="text">
-                     <string>Y</string>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
@@ -2089,33 +1915,27 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QLabel" name="mpos_y_label">
+                  <item row="3" column="3" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                   <widget class="QPushButton" name="zero_z_pushButton">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
-                    </property>
-                    <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
                     </property>
                     <property name="text">
-                     <string>0.0</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <string>Z = 0</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="mpos_x_label">
+                  <item row="1" column="2" alignment="Qt::AlignHCenter">
+                   <widget class="QLabel" name="mpos_y_label">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2164,6 +1984,93 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                   <widget class="QLabel" name="xAxisLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="text">
+                     <string>X</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                   <widget class="QLabel" name="label_10">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="text">
+                     <string>0.0</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                   <widget class="QLabel" name="xAxisLabel_2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="text">
+                     <string>Axis:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QLabel" name="label_5">
                     <property name="sizePolicy">
@@ -2195,7 +2102,114 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="2" column="3" alignment="Qt::AlignHCenter">
+                   <widget class="QLabel" name="label_11">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="text">
+                     <string>0.0</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                   <widget class="QPushButton" name="zero_x_pushButton">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>X = 0</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                   <widget class="QLabel" name="yAxisLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="text">
+                     <string>Y</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                   <widget class="QLabel" name="mpos_x_label">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Plain</enum>
+                    </property>
+                    <property name="text">
+                     <string>0.0</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
+                </item>
+                <item>
+                 <widget class="Line" name="line_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <layout class="QHBoxLayout" name="unlockHomingHorizontalLayout">
@@ -2246,6 +2260,13 @@
                     </property>
                     <property name="text">
                      <string>Homing</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="probe_pb">
+                    <property name="text">
+                     <string>Probe</string>
                     </property>
                    </widget>
                   </item>
@@ -2469,7 +2490,7 @@
                   <item>
                    <layout class="QVBoxLayout" name="verticalLayout_13">
                     <item alignment="Qt::AlignHCenter">
-                     <widget class="QLabel" name="label_7">
+                     <widget class="QLabel" name="xy_jog_l">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -2487,9 +2508,9 @@
                     <item>
                      <layout class="QGridLayout" name="gridLayout_14">
                       <item row="0" column="1">
-                       <widget class="QPushButton" name="pushButton_21">
+                       <widget class="QPushButton" name="xy_plus_1_pb">
                         <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                           <horstretch>0</horstretch>
                           <verstretch>0</verstretch>
                          </sizepolicy>
@@ -2509,10 +2530,13 @@
                         <property name="text">
                          <string>+1</string>
                         </property>
+                        <property name="autoRepeat">
+                         <bool>true</bool>
+                        </property>
                        </widget>
                       </item>
                       <item row="1" column="0">
-                       <widget class="QPushButton" name="pushButton_22">
+                       <widget class="QPushButton" name="xy_div_10_pb">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                           <horstretch>0</horstretch>
@@ -2533,6 +2557,9 @@
                         </property>
                         <property name="text">
                          <string>÷10</string>
+                        </property>
+                        <property name="autoRepeat">
+                         <bool>false</bool>
                         </property>
                        </widget>
                       </item>
@@ -2577,7 +2604,7 @@
                        </widget>
                       </item>
                       <item row="1" column="2">
-                       <widget class="QPushButton" name="pushButton_23">
+                       <widget class="QPushButton" name="xy_mul_10_pb">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                           <horstretch>0</horstretch>
@@ -2600,10 +2627,13 @@
                         <property name="text">
                          <string>x10</string>
                         </property>
+                        <property name="autoRepeat">
+                         <bool>false</bool>
+                        </property>
                        </widget>
                       </item>
                       <item row="2" column="1">
-                       <widget class="QPushButton" name="pushButton_24">
+                       <widget class="QPushButton" name="xy_minus_1_pb">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                           <horstretch>0</horstretch>
@@ -2624,6 +2654,9 @@
                         </property>
                         <property name="text">
                          <string>-1</string>
+                        </property>
+                        <property name="autoRepeat">
+                         <bool>true</bool>
                         </property>
                        </widget>
                       </item>
@@ -2690,7 +2723,7 @@
                   <item>
                    <layout class="QVBoxLayout" name="verticalLayout_4">
                     <item alignment="Qt::AlignHCenter">
-                     <widget class="QLabel" name="label_4">
+                     <widget class="QLabel" name="z_jog_l">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -2708,7 +2741,7 @@
                     <item>
                      <layout class="QGridLayout" name="gridLayout_11">
                       <item row="1" column="1">
-                       <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
+                       <widget class="QDoubleSpinBox" name="z_step_val_dsb">
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
@@ -2742,7 +2775,7 @@
                        </widget>
                       </item>
                       <item row="1" column="2">
-                       <widget class="QPushButton" name="pushButton_15">
+                       <widget class="QPushButton" name="z_mul_10_pb">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                           <horstretch>0</horstretch>
@@ -2765,10 +2798,13 @@
                         <property name="text">
                          <string>x10</string>
                         </property>
+                        <property name="autoRepeat">
+                         <bool>false</bool>
+                        </property>
                        </widget>
                       </item>
                       <item row="1" column="0">
-                       <widget class="QPushButton" name="pushButton_14">
+                       <widget class="QPushButton" name="z_div_10_pb">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                           <horstretch>0</horstretch>
@@ -2790,10 +2826,13 @@
                         <property name="text">
                          <string>÷10</string>
                         </property>
+                        <property name="autoRepeat">
+                         <bool>false</bool>
+                        </property>
                        </widget>
                       </item>
                       <item row="2" column="1">
-                       <widget class="QPushButton" name="pushButton_16">
+                       <widget class="QPushButton" name="z_minus_1_pb">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                           <horstretch>0</horstretch>
@@ -2815,10 +2854,13 @@
                         <property name="text">
                          <string>-1</string>
                         </property>
+                        <property name="autoRepeat">
+                         <bool>true</bool>
+                        </property>
                        </widget>
                       </item>
                       <item row="0" column="1">
-                       <widget class="QPushButton" name="pushButton_13">
+                       <widget class="QPushButton" name="z_plus_1_pb">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                           <horstretch>0</horstretch>
@@ -2839,6 +2881,9 @@
                         </property>
                         <property name="text">
                          <string>+1</string>
+                        </property>
+                        <property name="autoRepeat">
+                         <bool>true</bool>
                         </property>
                        </widget>
                       </item>

@@ -14,9 +14,15 @@ class UiControlTab(QObject):
         self.controlWo = control_worker
         self.serialWo = serial_worker
 
+        self.xy_step_val = 0.1
+        self.ui.xy_jog_l.setText("XY [" + str(self.xy_step_val) + " mm]")
+        self.z_step_val = 0.1
+        self.ui.z_jog_l.setText("Z [" + str(self.z_step_val) + " mm]")
+
         self.serial_connection_status = False
         self.serial_send_s.connect(self.serialWo.send)
         self.controlWo.update_status_s.connect(self.update_status)
+        self.controlWo.update_probe_s.connect(self.update_probe)
         self.controlWo.update_console_text_s.connect(self.update_console_text)
 
         # From Controller Manager to Serial Manager
@@ -41,12 +47,28 @@ class UiControlTab(QObject):
         self.ui.homingButton.clicked.connect(self.handle_homing)
         self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
 
+        self.ui.xy_plus_1_pb.clicked.connect(self.handle_xy_plus_1)
+        self.ui.xy_minus_1_pb.clicked.connect(self.handle_xy_minus_1)
+        self.ui.xy_div_10_pb.clicked.connect(self.handle_xy_div_10)
+        self.ui.xy_mul_10_pb.clicked.connect(self.handle_xy_mul_10)
+        self.ui.z_plus_1_pb.clicked.connect(self.handle_z_plus_1)
+        self.ui.z_minus_1_pb.clicked.connect(self.handle_z_minus_1)
+        self.ui.z_div_10_pb.clicked.connect(self.handle_z_div_10)
+        self.ui.z_mul_10_pb.clicked.connect(self.handle_z_mul_10)
+
+        self.ui.probe_pb.clicked.connect(self.handle_probe_cmd)
+        self.ui.ABL_pb.clicked.connect(self.handle_auto_bed_levelling)
+
     @Slot(list)
     def update_status(self, status_l):
         self.ui.statusLabel.setText(status_l[0])
         self.ui.mpos_x_label.setText(status_l[1][0])
         self.ui.mpos_y_label.setText(status_l[1][1])
         self.ui.mpos_z_label.setText(status_l[1][2])
+
+    @Slot(list)
+    def update_probe(self, probe_l):
+        pass
 
     @Slot(str)
     def update_console_text(self, new_text):
@@ -115,3 +137,59 @@ class UiControlTab(QObject):
         logging.debug("X_minus Command")
         # self.serialTxQu.put("$J=G91 X-10 F100000\n") #todo: change this, just for test
         self.serial_send_s.emit("$J=G91 X-10 F100000\n")  # todo: change this, just for test
+
+    def handle_xy_plus_1(self):
+        xy_val = self.ui.xy_step_val_dsb.value() + self.xy_step_val
+        self.ui.xy_step_val_dsb.setValue(xy_val)
+
+    def handle_xy_minus_1(self):
+        xy_val = self.ui.xy_step_val_dsb.value() - self.xy_step_val
+        self.ui.xy_step_val_dsb.setValue(xy_val)
+
+    def handle_xy_div_10(self):
+        if not self.xy_step_val == 0.01:  # Minimum step is 0.01
+            self.xy_step_val = self.xy_step_val / 10.0
+            self.ui.xy_jog_l.setText("XY [" + str(self.xy_step_val) + " mm]")
+
+    def handle_xy_mul_10(self):
+        if not self.xy_step_val == 100.0:  # Maximum step is 100.0
+            self.xy_step_val = self.xy_step_val * 10.0
+            self.ui.xy_jog_l.setText("XY [" + str(self.xy_step_val) + " mm]")
+
+    def handle_z_plus_1(self):
+        z_val = self.ui.z_step_val_dsb.value() + self.z_step_val
+        self.ui.z_step_val_dsb.setValue(z_val)
+
+    def handle_z_minus_1(self):
+        z_val = self.ui.z_step_val_dsb.value() - self.z_step_val
+        self.ui.z_step_val_dsb.setValue(z_val)
+
+    def handle_z_div_10(self):
+        if not self.z_step_val == 0.01:  # Minimum step is 0.01
+            self.z_step_val = self.z_step_val / 10.0
+            self.ui.z_jog_l.setText("Z [" + str(self.z_step_val) + " mm]")
+
+    def handle_z_mul_10(self):
+        if not self.z_step_val == 100.0:  # Maximum step is 100.0
+            self.z_step_val = self.z_step_val * 10.0
+            self.ui.z_jog_l.setText("Z [" + str(self.z_step_val) + " mm]")
+
+    def handle_probe_cmd(self):
+        logging.debug("Probe Command")
+        # todo: fake parameters just to test probe
+        probe_z_max = -11.0
+        probe_feed_rate = 10.0
+        self.controlWo.cmd_probe(probe_z_max, probe_feed_rate)
+
+    def handle_auto_bed_levelling(self):
+        logging.debug("Auto Bed Levelling Command")
+        # todo: fake parameters just for testing ABL
+        xy_coord_list = [(0.0, 0.0), (0.0, 1.0), (0.0, 2.0),
+                         (1.0, 0.0), (1.0, 1.0), (1.0, 2.0),
+                         (2.0, 0.0), (2.0, 1.0), (2.0, 2.0)]
+        travel_z = 1.0
+        probe_z_max = -11.0
+        probe_feed_rate = 10.0
+        self.controlWo.cmd_auto_bed_levelling(xy_coord_list, travel_z, probe_z_max, probe_feed_rate)
+
+
