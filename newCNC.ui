@@ -1829,7 +1829,7 @@
                    </widget>
                   </item>
                   <item row="0" column="3" alignment="Qt::AlignHCenter">
-                   <widget class="QLabel" name="zAxisLabel">
+                   <widget class="QLabel" name="z_axis_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -1860,7 +1860,7 @@
                    </widget>
                   </item>
                   <item row="2" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QLabel" name="label_9">
+                   <widget class="QLabel" name="wpos_y_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -1885,7 +1885,7 @@
                    </widget>
                   </item>
                   <item row="2" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="label_12">
+                   <widget class="QLabel" name="wpos_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -1985,7 +1985,7 @@
                    </widget>
                   </item>
                   <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="xAxisLabel">
+                   <widget class="QLabel" name="x_axis_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2016,7 +2016,7 @@
                    </widget>
                   </item>
                   <item row="2" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="label_10">
+                   <widget class="QLabel" name="wpos_x_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2041,7 +2041,7 @@
                    </widget>
                   </item>
                   <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="xAxisLabel_2">
+                   <widget class="QLabel" name="axis_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2072,7 +2072,7 @@
                    </widget>
                   </item>
                   <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="label_5">
+                   <widget class="QLabel" name="mpos_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2103,7 +2103,7 @@
                    </widget>
                   </item>
                   <item row="2" column="3" alignment="Qt::AlignHCenter">
-                   <widget class="QLabel" name="label_11">
+                   <widget class="QLabel" name="wpos_z_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2147,7 +2147,7 @@
                    </widget>
                   </item>
                   <item row="0" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="yAxisLabel">
+                   <widget class="QLabel" name="y_axis_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2693,7 +2693,7 @@
                      <enum>QLayout::SetDefaultConstraint</enum>
                     </property>
                     <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                     <widget class="QPushButton" name="zPlusButton">
+                     <widget class="QPushButton" name="z_plus_pb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -2706,7 +2706,7 @@
                      </widget>
                     </item>
                     <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                     <widget class="QPushButton" name="zMinusButton">
+                     <widget class="QPushButton" name="z_minus_pb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>

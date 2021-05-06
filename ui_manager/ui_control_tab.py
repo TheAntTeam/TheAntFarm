@@ -53,6 +53,8 @@ class UiControlTab(QObject):
         self.ui.xYPlusMinuButton.clicked.connect(self.handle_x_plus_y_minus)
         self.ui.xYMinusButton.clicked.connect(self.handle_xy_minus)
         self.ui.xYMinusPlusButton.clicked.connect(self.handle_x_minus_y_plus)
+        self.ui.z_minus_pb.clicked.connect(self.handle_z_minus)
+        self.ui.z_plus_pb.clicked.connect(self.handle_z_plus)
 
         self.ui.xy_plus_1_pb.clicked.connect(self.handle_xy_plus_1)
         self.ui.xy_minus_1_pb.clicked.connect(self.handle_xy_minus_1)
@@ -179,6 +181,16 @@ class UiControlTab(QObject):
         logging.debug("X_minus_y_plus Command")
         x_m_y_p_val = self.ui.xy_step_val_dsb.value()
         self.serial_send_s.emit("$J=G91 X-" + str(x_m_y_p_val) + "Y" + str(x_m_y_p_val) + " F100000\n")
+
+    def handle_z_minus(self):
+        logging.debug("Z_minus Command")
+        z_minus_val = self.ui.z_step_val_dsb.value()
+        self.serial_send_s.emit("$J=G91 Z-" + str(z_minus_val) + " F100000\n")
+
+    def handle_z_plus(self):
+        logging.debug("Z_plus Command")
+        z_plus_val = self.ui.z_step_val_dsb.value()
+        self.serial_send_s.emit("$J=G91 Z" + str(z_plus_val) + " F100000\n")
 
     def handle_xy_plus_1(self):
         xy_val = self.ui.xy_step_val_dsb.value() + self.xy_step_val
