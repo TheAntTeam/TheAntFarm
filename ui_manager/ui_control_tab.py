@@ -46,6 +46,13 @@ class UiControlTab(QObject):
         self.ui.unlockButton.clicked.connect(self.handle_unlock)
         self.ui.homingButton.clicked.connect(self.handle_homing)
         self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
+        self.ui.xPlusButton.clicked.connect(self.handle_x_plus)
+        self.ui.yMinusButton.clicked.connect(self.handle_y_minus)
+        self.ui.yPlusButton.clicked.connect(self.handle_y_plus)
+        self.ui.xYPlusButton.clicked.connect(self.handle_xy_plus)
+        self.ui.xYPlusMinuButton.clicked.connect(self.handle_x_plus_y_minus)
+        self.ui.xYMinusButton.clicked.connect(self.handle_xy_minus)
+        self.ui.xYMinusPlusButton.clicked.connect(self.handle_x_minus_y_plus)
 
         self.ui.xy_plus_1_pb.clicked.connect(self.handle_xy_plus_1)
         self.ui.xy_minus_1_pb.clicked.connect(self.handle_xy_minus_1)
@@ -135,8 +142,43 @@ class UiControlTab(QObject):
 
     def handle_x_minus(self):
         logging.debug("X_minus Command")
-        # self.serialTxQu.put("$J=G91 X-10 F100000\n") #todo: change this, just for test
-        self.serial_send_s.emit("$J=G91 X-10 F100000\n")  # todo: change this, just for test
+        x_min_val = self.ui.xy_step_val_dsb.value()
+        self.serial_send_s.emit("$J=G91 X-" + str(x_min_val) + " F100000\n")
+
+    def handle_x_plus(self):
+        logging.debug("X_plus Command")
+        x_plus_val = self.ui.xy_step_val_dsb.value()
+        self.serial_send_s.emit("$J=G91 X" + str(x_plus_val) + " F100000\n")
+
+    def handle_y_minus(self):
+        logging.debug("Y_minus Command")
+        y_min_val = self.ui.xy_step_val_dsb.value()
+        self.serial_send_s.emit("$J=G91 Y-" + str(y_min_val) + " F100000\n")
+
+    def handle_y_plus(self):
+        logging.debug("Y_plus Command")
+        y_plus_val = self.ui.xy_step_val_dsb.value()
+        self.serial_send_s.emit("$J=G91 Y" + str(y_plus_val) + " F100000\n")
+
+    def handle_xy_plus(self):
+        logging.debug("XY_plus Command")
+        xy_plus_val = self.ui.xy_step_val_dsb.value()
+        self.serial_send_s.emit("$J=G91 X" + str(xy_plus_val) + "Y" + str(xy_plus_val) + " F100000\n")
+
+    def handle_x_plus_y_minus(self):
+        logging.debug("X_plus_Y_minus Command")
+        x_p_y_m_val = self.ui.xy_step_val_dsb.value()
+        self.serial_send_s.emit("$J=G91 X" + str(x_p_y_m_val) + "Y-" + str(x_p_y_m_val) + " F100000\n")
+
+    def handle_xy_minus(self):
+        logging.debug("XY_minus Command")
+        xy_minus_val = self.ui.xy_step_val_dsb.value()
+        self.serial_send_s.emit("$J=G91 X-" + str(xy_minus_val) + "Y-" + str(xy_minus_val) + " F100000\n")
+
+    def handle_x_minus_y_plus(self):
+        logging.debug("X_minus_y_plus Command")
+        x_m_y_p_val = self.ui.xy_step_val_dsb.value()
+        self.serial_send_s.emit("$J=G91 X-" + str(x_m_y_p_val) + "Y" + str(x_m_y_p_val) + " F100000\n")
 
     def handle_xy_plus_1(self):
         xy_val = self.ui.xy_step_val_dsb.value() + self.xy_step_val
@@ -184,9 +226,9 @@ class UiControlTab(QObject):
     def handle_auto_bed_levelling(self):
         logging.debug("Auto Bed Levelling Command")
         # todo: fake parameters just for testing ABL
-        xy_coord_list = [(0.0, 0.0), (0.0, 1.0), (0.0, 2.0),
-                         (1.0, 0.0), (1.0, 1.0), (1.0, 2.0),
-                         (2.0, 0.0), (2.0, 1.0), (2.0, 2.0)]
+        xy_coord_list = [(0.0, 0.0), (0.0, 10.0), (0.0, 20.0),
+                         (10.0, 0.0), (10.0, 10.0), (10.0, 20.0),
+                         (20.0, 0.0), (20.0, 10.0), (20.0, 20.0)]
         travel_z = 1.0
         probe_z_max = -11.0
         probe_feed_rate = 10.0

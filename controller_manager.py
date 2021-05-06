@@ -228,14 +228,14 @@ class ControllerWorker(QObject):
         self.prb_num_todo = 0
         for coord in xy_coord_list:
             self.prb_num_todo += 1
-            abl_cmd_s += "G00 Z" + str(travel_z) + " F100\n"  # Get to safety Z Travel
-            abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + " F100\n"  # Go to XY coordinate
+            abl_cmd_s += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
+            abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + " F10\n"  # Go to XY coordinate
             abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
-            abl_cmd_s += "G00 Z" + str(travel_z) + " F100\n"  # Get to safety Z Travel
+            abl_cmd_s += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
             self.abl_cmd_ls.append(abl_cmd_s)
             abl_cmd_s = ""
 
-        self.abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + " F100\n"  # Get to safety Z Travel
+        self.abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
 
         self.prb_activated = False
         self.prb_updated = False
