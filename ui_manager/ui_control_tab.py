@@ -14,10 +14,8 @@ class UiControlTab(QObject):
         self.controlWo = control_worker
         self.serialWo = serial_worker
 
-        self.xy_step_val = 0.1
-        self.ui.xy_jog_l.setText("XY [" + str(self.xy_step_val) + " mm]")
-        self.z_step_val = 0.1
-        self.ui.z_jog_l.setText("Z [" + str(self.z_step_val) + " mm]")
+        self.ui.xy_jog_l.setText("XY [" + str(self.ui.xy_step_val_dsb.value()) + " mm]")
+        self.ui.z_jog_l.setText("Z [" + str(self.ui.z_step_val_dsb.value()) + " mm]")
 
         self.serial_connection_status = False
         self.serial_send_s.connect(self.serialWo.send)
@@ -34,17 +32,17 @@ class UiControlTab(QObject):
         # From Serial Manager to Control Manager
         self.serialWo.rx_queue_not_empty_s.connect(self.controlWo.parse_rx_queue)
 
-        self.ui.send_text_edit.setPlaceholderText('input here')
-        self.ui.send_text_edit.hide()
-        self.ui.send_push_button.hide()
+        self.ui.send_te.setPlaceholderText('input here')
+        self.ui.send_te.hide()
+        self.ui.send_pb.hide()
 
-        self.ui.refresh_button.clicked.connect(self.handle_refresh_button)
-        self.ui.connect_button.clicked.connect(self.handle_connect_button)
-        self.ui.clear_terminal_button.clicked.connect(self.handle_clear_terminal)
-        self.ui.send_push_button.clicked.connect(self.send_input)
-        self.ui.send_text_edit.returnPressed.connect(self.send_input)
-        self.ui.unlockButton.clicked.connect(self.handle_unlock)
-        self.ui.homingButton.clicked.connect(self.handle_homing)
+        self.ui.refresh_pb.clicked.connect(self.handle_refresh_button)
+        self.ui.connect_pb.clicked.connect(self.handle_connect_button)
+        self.ui.clear_terminal_pb.clicked.connect(self.handle_clear_terminal)
+        self.ui.send_pb.clicked.connect(self.send_input)
+        self.ui.send_te.returnPressed.connect(self.send_input)
+        self.ui.unlock_pb.clicked.connect(self.handle_unlock)
+        self.ui.homing_pb.clicked.connect(self.handle_homing)
         self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
         self.ui.xPlusButton.clicked.connect(self.handle_x_plus)
         self.ui.yMinusButton.clicked.connect(self.handle_y_minus)
@@ -70,7 +68,7 @@ class UiControlTab(QObject):
 
     @Slot(list)
     def update_status(self, status_l):
-        self.ui.statusLabel.setText(status_l[0])
+        self.ui.status_l.setText(status_l[0])
         self.ui.mpos_x_label.setText(status_l[1][0])
         self.ui.mpos_y_label.setText(status_l[1][1])
         self.ui.mpos_z_label.setText(status_l[1][2])
@@ -85,9 +83,9 @@ class UiControlTab(QObject):
 
     def send_input(self):
         """Send input to the serial port."""
-        # self.serialTxQu.put(self.ui.send_text_edit.text() + "\n")
-        self.serial_send_s.emit(self.ui.send_text_edit.text() + "\n")
-        self.ui.send_text_edit.clear()
+        # self.serialTxQu.put(self.ui.send_te.text() + "\n")
+        self.serial_send_s.emit(self.ui.send_te.text() + "\n")
+        self.ui.send_te.clear()
 
     def handle_refresh_button(self):
         """Get list of serial ports available."""
@@ -108,22 +106,22 @@ class UiControlTab(QObject):
         if not self.serial_connection_status:
             if self.serialWo.open_port(self.ui.serial_ports_cb.currentText()):
                 self.serial_connection_status = True
-                self.ui.connect_button.setText("Disconnect")
+                self.ui.connect_pb.setText("Disconnect")
                 self.ui.serial_ports_cb.hide()
                 self.ui.serial_baud_cb.hide()
-                self.ui.refresh_button.hide()
-                self.ui.send_text_edit.show()
-                self.ui.send_push_button.show()
+                self.ui.refresh_pb.hide()
+                self.ui.send_te.show()
+                self.ui.send_pb.show()
         else:
             self.serialWo.close_port()
             self.serial_connection_status = False
-            self.ui.connect_button.setText("Connect")
+            self.ui.connect_pb.setText("Connect")
             self.ui.serial_ports_cb.show()
             self.ui.serial_baud_cb.show()
-            self.ui.refresh_button.show()
-            self.ui.send_text_edit.hide()
-            self.ui.send_push_button.hide()
-            self.ui.statusLabel.setText("Not Connected")
+            self.ui.refresh_pb.show()
+            self.ui.send_te.hide()
+            self.ui.send_pb.hide()
+            self.ui.status_l.setText("Not Connected")
 
     def handle_clear_terminal(self):
         self.ui.serial_te.clear()
@@ -193,40 +191,48 @@ class UiControlTab(QObject):
         self.serial_send_s.emit("$J=G91 Z" + str(z_plus_val) + " F100000\n")
 
     def handle_xy_plus_1(self):
-        xy_val = self.ui.xy_step_val_dsb.value() + self.xy_step_val
+        xy_val = self.ui.xy_step_val_dsb.value() + self.ui.xy_step_val_dsb.singleStep()
         self.ui.xy_step_val_dsb.setValue(xy_val)
 
     def handle_xy_minus_1(self):
-        xy_val = self.ui.xy_step_val_dsb.value() - self.xy_step_val
+        xy_val = self.ui.xy_step_val_dsb.value() - self.ui.xy_step_val_dsb.singleStep()
         self.ui.xy_step_val_dsb.setValue(xy_val)
 
     def handle_xy_div_10(self):
-        if not self.xy_step_val == 0.01:  # Minimum step is 0.01
-            self.xy_step_val = self.xy_step_val / 10.0
-            self.ui.xy_jog_l.setText("XY [" + str(self.xy_step_val) + " mm]")
+        xy_step_val = self.ui.xy_step_val_dsb.singleStep()
+        if not xy_step_val == 0.01:  # Minimum step is 0.01
+            xy_step_val /= 10.0  # self.xy_step_val / 10.0
+            self.ui.xy_step_val_dsb.setSingleStep(xy_step_val)
+            self.ui.xy_jog_l.setText("XY [" + str(xy_step_val) + " mm]")
 
     def handle_xy_mul_10(self):
-        if not self.xy_step_val == 100.0:  # Maximum step is 100.0
-            self.xy_step_val = self.xy_step_val * 10.0
-            self.ui.xy_jog_l.setText("XY [" + str(self.xy_step_val) + " mm]")
+        xy_step_val = self.ui.xy_step_val_dsb.singleStep()
+        if not xy_step_val == 100.0:  # Maximum step is 100.0
+            xy_step_val = self.ui.xy_step_val_dsb.singleStep() * 10.0  # xy_step_val * 10.0
+            self.ui.xy_step_val_dsb.setSingleStep(xy_step_val)
+            self.ui.xy_jog_l.setText("XY [" + str(xy_step_val) + " mm]")
 
     def handle_z_plus_1(self):
-        z_val = self.ui.z_step_val_dsb.value() + self.z_step_val
+        z_val = self.ui.z_step_val_dsb.value() + self.ui.z_step_val_dsb.singleStep()
         self.ui.z_step_val_dsb.setValue(z_val)
 
     def handle_z_minus_1(self):
-        z_val = self.ui.z_step_val_dsb.value() - self.z_step_val
+        z_val = self.ui.z_step_val_dsb.value() - self.ui.z_step_val_dsb.singleStep()
         self.ui.z_step_val_dsb.setValue(z_val)
 
     def handle_z_div_10(self):
-        if not self.z_step_val == 0.01:  # Minimum step is 0.01
-            self.z_step_val = self.z_step_val / 10.0
-            self.ui.z_jog_l.setText("Z [" + str(self.z_step_val) + " mm]")
+        z_step_val = self.ui.z_step_val_dsb.singleStep()
+        if not z_step_val == 0.01:  # Minimum step is 0.01
+            z_step_val /= 10.0
+            self.ui.z_step_val_dsb.setSingleStep(z_step_val)
+            self.ui.z_jog_l.setText("Z [" + str(z_step_val) + " mm]")
 
     def handle_z_mul_10(self):
-        if not self.z_step_val == 100.0:  # Maximum step is 100.0
-            self.z_step_val = self.z_step_val * 10.0
-            self.ui.z_jog_l.setText("Z [" + str(self.z_step_val) + " mm]")
+        z_step_val = self.ui.z_step_val_dsb.singleStep()
+        if not z_step_val == 100.0:  # Maximum step is 100.0
+            z_step_val *= 10.0
+            self.ui.z_step_val_dsb.setSingleStep(z_step_val)
+            self.ui.z_jog_l.setText("Z [" + str(z_step_val) + " mm]")
 
     def handle_probe_cmd(self):
         logging.debug("Probe Command")
