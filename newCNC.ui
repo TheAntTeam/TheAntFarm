@@ -48,7 +48,13 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
+      </property>
+      <property name="tabsClosable">
+       <bool>false</bool>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
       </property>
       <widget class="QWidget" name="view_tab">
        <property name="font">
@@ -80,7 +86,7 @@
                <enum>QTabWidget::Rounded</enum>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="load_layers_tab">
                <attribute name="title">
@@ -3303,6 +3309,48 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="settings_tab">
+       <attribute name="title">
+        <string>Settings/Preferences</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_12">
+        <item>
+         <widget class="QTabWidget" name="tabWidget_2">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="tab_3">
+           <attribute name="title">
+            <string>Tab 1</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_9">
+            <item row="0" column="0">
+             <widget class="QPushButton" name="pushButton">
+              <property name="text">
+               <string>place holder</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_4">
+           <attribute name="title">
+            <string>Tab 2</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_13">
+            <item row="0" column="0">
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="text">
+               <string>place holder 2</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
     <item>
@@ -3346,6 +3394,7 @@
      <string>File</string>
     </property>
     <addaction name="actionLoad"/>
+    <addaction name="actionSettings_Preferences"/>
    </widget>
    <widget class="QMenu" name="menuConsole">
     <property name="title">
@@ -3376,13 +3425,33 @@
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Hide/Show Console</string>
    </property>
    <property name="shortcut">
     <string>F4</string>
+   </property>
+  </action>
+  <action name="actionSettings_Preferences">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Settings/Preferences</string>
+   </property>
+   <property name="toolTip">
+    <string>Hide/Show Settings Tab</string>
+   </property>
+   <property name="statusTip">
+    <string>Hide/Show Settings Tab</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>

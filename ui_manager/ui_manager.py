@@ -30,6 +30,8 @@ class UiManager(QObject):
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
+        self.hide_show_console()
+        self.hide_show_preferences_tab()
 
         self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
 
@@ -42,6 +44,7 @@ class UiManager(QObject):
 
         self.ui.prepare_widget.currentChanged.connect(self.from_load_to_create)
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
+        self.ui.actionSettings_Preferences.triggered.connect(self.hide_show_preferences_tab)
 
     def from_load_to_create(self):
         if self.ui.prepare_widget.currentWidget().objectName() == "create_job_tab":
@@ -60,3 +63,9 @@ class UiManager(QObject):
             self.ui.logging_plain_te.show()
         else:
             self.ui.logging_plain_te.hide()
+
+    def hide_show_preferences_tab(self):
+        if self.ui.actionSettings_Preferences.isChecked():
+            self.ui.main_tab_widget.setTabVisible(3, True)
+        else:
+            self.ui.main_tab_widget.setTabVisible(3, False)
