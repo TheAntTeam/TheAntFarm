@@ -477,7 +477,7 @@
                 <item>
                  <widget class="QStackedWidget" name="jobs_sw">
                   <property name="currentIndex">
-                   <number>3</number>
+                   <number>0</number>
                   </property>
                   <widget class="QWidget" name="empty_page">
                    <layout class="QGridLayout" name="gridLayout_8">
@@ -3315,7 +3315,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
-         <widget class="QTabWidget" name="tabWidget_2">
+         <widget class="QTabWidget" name="settings_sub_tab">
           <property name="currentIndex">
            <number>0</number>
           </property>
@@ -3325,7 +3325,7 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout_9">
             <item row="0" column="0">
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="placeholder_pb">
               <property name="text">
                <string>place holder</string>
               </property>

@@ -1847,18 +1847,18 @@ class Ui_MainWindow(object):
         self.settings_tab.setObjectName(u"settings_tab")
         self.verticalLayout_12 = QVBoxLayout(self.settings_tab)
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
-        self.tabWidget_2 = QTabWidget(self.settings_tab)
-        self.tabWidget_2.setObjectName(u"tabWidget_2")
+        self.settings_sub_tab = QTabWidget(self.settings_tab)
+        self.settings_sub_tab.setObjectName(u"settings_sub_tab")
         self.tab_3 = QWidget()
         self.tab_3.setObjectName(u"tab_3")
         self.gridLayout_9 = QGridLayout(self.tab_3)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.pushButton = QPushButton(self.tab_3)
-        self.pushButton.setObjectName(u"pushButton")
+        self.placeholder_pb = QPushButton(self.tab_3)
+        self.placeholder_pb.setObjectName(u"placeholder_pb")
 
-        self.gridLayout_9.addWidget(self.pushButton, 0, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.placeholder_pb, 0, 0, 1, 1)
 
-        self.tabWidget_2.addTab(self.tab_3, "")
+        self.settings_sub_tab.addTab(self.tab_3, "")
         self.tab_4 = QWidget()
         self.tab_4.setObjectName(u"tab_4")
         self.gridLayout_13 = QGridLayout(self.tab_4)
@@ -1868,9 +1868,9 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.pushButton_2, 0, 0, 1, 1)
 
-        self.tabWidget_2.addTab(self.tab_4, "")
+        self.settings_sub_tab.addTab(self.tab_4, "")
 
-        self.verticalLayout_12.addWidget(self.tabWidget_2)
+        self.verticalLayout_12.addWidget(self.settings_sub_tab)
 
         self.main_tab_widget.addTab(self.settings_tab, "")
 
@@ -1993,9 +1993,9 @@ class Ui_MainWindow(object):
 
         self.main_tab_widget.setCurrentIndex(0)
         self.prepare_widget.setCurrentIndex(0)
-        self.jobs_sw.setCurrentIndex(3)
+        self.jobs_sw.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(1)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.settings_sub_tab.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2203,10 +2203,10 @@ class Ui_MainWindow(object):
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.control_tab), QCoreApplication.translate("MainWindow", u"CONTROL", None))
         self.label_2.setText("")
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.align_tab), QCoreApplication.translate("MainWindow", u"ALIGN", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"place holder", None))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_3), QCoreApplication.translate("MainWindow", u"Tab 1", None))
+        self.placeholder_pb.setText(QCoreApplication.translate("MainWindow", u"place holder", None))
+        self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.tab_3), QCoreApplication.translate("MainWindow", u"Tab 1", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"place holder 2", None))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"Tab 2", None))
+        self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"Tab 2", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.settings_tab), QCoreApplication.translate("MainWindow", u"Settings/Preferences", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuConsole.setTitle(QCoreApplication.translate("MainWindow", u"Console", None))

@@ -65,7 +65,8 @@ class UiManager(QObject):
             self.ui.logging_plain_te.hide()
 
     def hide_show_preferences_tab(self):
+        setting_tab_idx = self.ui.main_tab_widget.indexOf(self.ui.settings_tab)
         if self.ui.actionSettings_Preferences.isChecked():
-            self.ui.main_tab_widget.setTabVisible(3, True)
+            self.ui.main_tab_widget.setTabVisible(setting_tab_idx, True)
         else:
-            self.ui.main_tab_widget.setTabVisible(3, False)
+            self.ui.main_tab_widget.setTabVisible(setting_tab_idx, False)
