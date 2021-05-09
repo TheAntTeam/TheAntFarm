@@ -4,56 +4,55 @@ import os
 
 
 class SettingsHandler:
-    # APP CONFIGURATION DEFAULT VALUES
+    # Configuration file folder
     CONFIG_FOLDER = os.path.join(os.path.dirname(__file__), 'configurations')
-    APP_CONFIG_PATH = CONFIG_FOLDER + os.path.sep + 'app_config.ini'
-    JOBS_CONFIG_PATH = CONFIG_FOLDER + os.path.sep + 'jobs_sets_config.ini'
-    WIN_POS_X_DEFAULT = 200
-    WIN_POS_Y_DEFAULT = 200
-    WIN_SIZE_W_DEFAULT = 960
-    WIN_SIZE_H_DEFAULT = 720
-    LAYER_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
-
-    # JOBS CONFIGURATION DEFAULT VALUES
-    TOOL_DIAMETER_DEFAULT = 1.0
-    PASSAGES_DEFAULT = 1
-    OVERLAP_DEFAULT = 0.40
-    CUT_Z_DEFAULT = -0.07
-    TRAVEL_Z_DEFAULT = 1.0
-    SPINDLE_SPEED_DEFAULT = 1000.0
-    XY_FEEDRATE_DEFAULT = 250.0
-    Z_FEEDRATE_DEFAULT = 40.0
-    MARGIN_DEFAULT = 0.01
-    DEPTH_PER_PASS_DEFAULT = 0.06
-    MULTI_PATH_FLAG_DEFAULT = False
-    TAPS_LENGHT_DEFAULT = 1.0
-    TAPS_TYPE_INDEX_DEFAULT = 3
 
     def __init__(self, main_win, ui_manager):
-        self.app_settings = configparser.ConfigParser()
-        self.jobs_settings = configparser.ConfigParser()
+        if not os.path.isdir(self.CONFIG_FOLDER):
+            os.makedirs(self.CONFIG_FOLDER)
+
         self.main_win = main_win
         self.ui_manager = ui_manager
 
         self.ui_ll = self.ui_manager.ui_load_layer_m
+        self.app_settings = AppSettingsHandler(self.CONFIG_FOLDER, main_win, self.ui_ll)
+
         self.ui_cj = self.ui_manager.ui_create_job_m
+        self.jobs_settings = JobSettingsHandler(self.CONFIG_FOLDER, self.ui_cj)
 
-        if not os.path.isdir(self.CONFIG_FOLDER):
-            os.makedirs(self.CONFIG_FOLDER)
+    def read_all_settings(self):
+        """ Read all settings from ini files """
+        self.app_settings.read_all_app_settings()
+        self.jobs_settings.read_all_jobs_settings()
 
+    def write_all_settings(self):
+        """ Write all settings to ini files """
+        self.app_settings.write_all_app_settings()
+        self.jobs_settings.write_all_jobs_settings()
+
+
+class AppSettingsHandler:
+    # APP CONFIGURATION DEFAULT VALUES
+    WIN_POS_X_DEFAULT = 200
+    WIN_POS_Y_DEFAULT = 200
+    WIN_SIZE_W_DEFAULT = 1160
+    WIN_SIZE_H_DEFAULT = 720
+    LAYER_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
+
+    def __init__(self, config_folder, main_win, ui_ll):
+        self.app_config_path = config_folder + os.path.sep + 'app_config.ini'
+        self.app_settings = configparser.ConfigParser()
+
+        self.main_win = main_win
+        self.ui_ll = ui_ll
         self.pos = QPoint(self.WIN_POS_X_DEFAULT, self.WIN_POS_Y_DEFAULT)
         self.size = QSize(self.WIN_SIZE_W_DEFAULT, self.WIN_SIZE_H_DEFAULT)
         self.ui_ll.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
 
-    def read_all_settings(self):
-        """ Read all settings from ini files """
-        self.read_all_app_settings()
-        self.read_all_jobs_settings()
-
     def read_all_app_settings(self):
         """ Read all application settings from ini files """
         # Read application ini file #
-        self.app_settings.read(self.APP_CONFIG_PATH)
+        self.app_settings.read(self.app_config_path)
 
         # GENERAL application settings #
         if "GENERAL" in self.app_settings:
@@ -70,10 +69,57 @@ class SettingsHandler:
             app_layers_settings = self.app_settings["LAYERS"]
             self.ui_ll.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
 
+    def write_all_app_settings(self):
+        """ Write all application settings to ini files """
+        self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
+                                        "win_position_y": self.WIN_POS_Y_DEFAULT,
+                                        "win_width": self.WIN_SIZE_W_DEFAULT,
+                                        "win_height": self.WIN_SIZE_H_DEFAULT,
+                                        "layer_last_dir": self.ui_ll.layer_last_dir}
+
+        # GENERAL application settings #
+        self.app_settings["GENERAL"] = {}
+        app_general = self.app_settings["GENERAL"]
+        app_general["win_position_x"] = str(self.main_win.pos().x())
+        app_general["win_position_y"] = str(self.main_win.pos().y())
+        app_general["win_width"] = str(self.main_win.width())
+        app_general["win_height"] = str(self.main_win.height())
+
+        # Layers related application settings #
+        self.app_settings["LAYERS"] = {}
+        app_layers = self.app_settings["LAYERS"]
+        app_layers["last_load_dir"] = self.ui_ll.layer_last_dir
+
+        # Write application ini file #
+        with open(self.app_config_path, 'w') as configfile:
+            self.app_settings.write(configfile)
+
+
+class JobSettingsHandler:
+    # JOBS CONFIGURATION DEFAULT VALUES
+    TOOL_DIAMETER_DEFAULT = 1.0
+    PASSAGES_DEFAULT = 1
+    OVERLAP_DEFAULT = 0.40
+    CUT_Z_DEFAULT = -0.07
+    TRAVEL_Z_DEFAULT = 1.0
+    SPINDLE_SPEED_DEFAULT = 1000.0
+    XY_FEEDRATE_DEFAULT = 250.0
+    Z_FEEDRATE_DEFAULT = 40.0
+    MARGIN_DEFAULT = 0.01
+    DEPTH_PER_PASS_DEFAULT = 0.06
+    MULTI_PATH_FLAG_DEFAULT = False
+    TAPS_LENGTH_DEFAULT = 1.0
+    TAPS_TYPE_INDEX_DEFAULT = 3
+
+    def __init__(self, config_folder, ui_cj):
+        self.jobs_config_path = config_folder + os.path.sep + 'jobs_sets_config.ini'
+        self.jobs_settings = configparser.ConfigParser()
+        self.ui_cj = ui_cj
+
     def read_all_jobs_settings(self):
         """ Read all jobs'settings from ini files """
         # Read jobs'settings ini file #
-        self.jobs_settings.read(self.JOBS_CONFIG_PATH)
+        self.jobs_settings.read(self.jobs_config_path)
 
         # Top job related settings #
         if "TOP" in self.jobs_settings:
@@ -117,7 +163,7 @@ class SettingsHandler:
             profile_set_od["xy_feedrate"] = profile_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             profile_set_od["z_feedrate"] = profile_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
             profile_set_od["taps_type"] = profile_settings.getint("taps_type", self.TAPS_TYPE_INDEX_DEFAULT)
-            profile_set_od["taps_length"] = profile_settings.getfloat("taps_length", self.TAPS_LENGHT_DEFAULT)
+            profile_set_od["taps_length"] = profile_settings.getfloat("taps_length", self.TAPS_LENGTH_DEFAULT)
             self.ui_cj.set_settings_per_page("profile", profile_set_od)
 
         if "DRILL" in self.jobs_settings:
@@ -166,36 +212,6 @@ class SettingsHandler:
             nc_bottom_set_od["z_feedrate"] = nc_bottom_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
             self.ui_cj.set_settings_per_page("no_copper_bottom", nc_bottom_set_od)
 
-    def write_all_settings(self):
-        """ Write all settings to ini files """
-        self.write_all_app_settings()
-        self.write_all_jobs_settings()
-
-    def write_all_app_settings(self):
-        """ Write all application settings to ini files """
-        self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
-                                        "win_position_y": self.WIN_POS_Y_DEFAULT,
-                                        "win_width": self.WIN_SIZE_W_DEFAULT,
-                                        "win_height": self.WIN_SIZE_H_DEFAULT,
-                                        "layer_last_dir": self.ui_ll.layer_last_dir}
-
-        # GENERAL application settings #
-        self.app_settings["GENERAL"] = {}
-        app_general = self.app_settings["GENERAL"]
-        app_general["win_position_x"] = str(self.main_win.pos().x())
-        app_general["win_position_y"] = str(self.main_win.pos().y())
-        app_general["win_width"] = str(self.main_win.width())
-        app_general["win_height"] = str(self.main_win.height())
-
-        # Layers related application settings #
-        self.app_settings["LAYERS"] = {}
-        app_layers = self.app_settings["LAYERS"]
-        app_layers["last_load_dir"] = self.ui_ll.layer_last_dir
-
-        # Write application ini file #
-        with open(self.APP_CONFIG_PATH, 'w') as configfile:
-            self.app_settings.write(configfile)
-
     def write_all_jobs_settings(self):
         """ Write all jobs settings to ini files """
         self.jobs_settings['DEFAULT'] = {"tool_diameter": self.TOOL_DIAMETER_DEFAULT,
@@ -210,7 +226,7 @@ class SettingsHandler:
                                          "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
                                          "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
                                          "taps_type": self.TAPS_TYPE_INDEX_DEFAULT,
-                                         "taps_length": self.TAPS_LENGHT_DEFAULT}
+                                         "taps_length": self.TAPS_LENGTH_DEFAULT}
 
         job_settings_od = self.ui_cj.get_all_settings()
 
@@ -299,5 +315,5 @@ class SettingsHandler:
         nc_bottom_settings["z_feedrate"] = str(nc_bottom_set_od["z_feedrate"])
 
         # Write application ini file #
-        with open(self.JOBS_CONFIG_PATH, 'w') as configfile:
+        with open(self.jobs_config_path, 'w') as configfile:
             self.jobs_settings.write(configfile)
