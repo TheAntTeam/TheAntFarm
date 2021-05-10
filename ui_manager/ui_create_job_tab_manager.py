@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class UiCreateJobLayerTab(QObject):
     """Class dedicated to UI <--> Control interactions on Create Job Layer Tab. """
 
-    generate_path_s = Signal(str, Od)
+    generate_path_s = Signal(str, Od, str)
 
     TAPS_TYPE_TEXT = ["None", "1 Left + 1 Right", "1 Top + 1 Bottom", "4 - 1 per side",
                               "2 Left + 2 Right", "2 Top + 2 Bottom", "8 - 2 per side"]
@@ -35,6 +35,8 @@ class UiCreateJobLayerTab(QObject):
 
         self.ui.top_generate_job_pb.clicked.connect(self.generate_top_path)
         self.ui.bottom_generate_job_pb.clicked.connect(self.generate_bottom_path)
+        # self.ui.profile_generate_job_pb.clicked.connect(self.generate_profile_path)  # todo: set/calc cfg['passages']
+        # self.ui.drill_generate_job_pb.clicked.connect(self.generate_drill_path)  # todo: decide cfg names for drill
         self.generate_path_s.connect(self.control_wo.generate_new_path)
         self.control_wo.update_path_s.connect(self.add_new_path)
 
@@ -303,14 +305,23 @@ class UiCreateJobLayerTab(QObject):
 
     def generate_top_path(self):
         cfg = self.get_settings_per_page("top")
-        self.generate_path_s.emit("top", cfg)
+        self.generate_path_s.emit("top", cfg, "gerber")
 
     def generate_bottom_path(self):
         cfg = self.get_settings_per_page("bottom")
-        self.generate_path_s.emit("bottom", cfg)
+        self.generate_path_s.emit("bottom", cfg, "gerber")
+
+    def generate_profile_path(self):
+        cfg = self.get_settings_per_page("profile")
+        self.generate_path_s.emit("profile", cfg, "gerber")
+
+    def generate_drill_path(self):
+        cfg = self.get_settings_per_page("drill")
+        self.generate_path_s.emit("drill", cfg, "drill")
 
     @Slot(str, list)
     def add_new_path(self, tag, path):
+        self.vis_layer.remove_path(tag)
         self.vis_layer.add_path(tag, path, color="white")
         if self.lay_tags[self.ui.layer_choice_cb.currentIndex()] != tag:
             self.vis_layer.set_path_visible(tag, False)

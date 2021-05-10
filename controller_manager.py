@@ -133,11 +133,14 @@ class ControllerWorker(QObject):
         except:
             logger.error("Uncaught exception: %s", traceback.format_exc())
 
-    @Slot(str, Od)
-    def generate_new_path(self, tag, cfg):
-        gerb_lay = self.pcb.get_gerber_layer(tag)
-        path = MachinePath(tag, machining_type="gerber")
-        path.load_geom(gerb_lay[0])
+    @Slot(str, Od, str)
+    def generate_new_path(self, tag, cfg, machining_type):
+        if machining_type == "gerber":
+            machining_layer = self.pcb.get_gerber_layer(tag)
+        elif machining_type == "drill":
+            machining_layer = self.pcb.get_excellon_layer(tag)
+        path = MachinePath(tag, machining_type)
+        path.load_geom(machining_layer[0])
         path.load_cfg(cfg)
         path.execute()
         p = path.get_path()
