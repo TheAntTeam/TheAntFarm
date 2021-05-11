@@ -2,6 +2,7 @@ from PySide2.QtWidgets import QLabel, QDoubleSpinBox, QHeaderView
 from PySide2.QtCore import Signal, Slot, QObject
 from PySide2.QtGui import Qt
 from collections import OrderedDict as Od
+import math
 import logging
 
 logger = logging.getLogger(__name__)
@@ -35,8 +36,8 @@ class UiCreateJobLayerTab(QObject):
 
         self.ui.top_generate_job_pb.clicked.connect(self.generate_top_path)
         self.ui.bottom_generate_job_pb.clicked.connect(self.generate_bottom_path)
-        # self.ui.profile_generate_job_pb.clicked.connect(self.generate_profile_path)  # todo: set/calc cfg['passages']
-        # self.ui.drill_generate_job_pb.clicked.connect(self.generate_drill_path)  # todo: decide cfg names for drill
+        self.ui.profile_generate_job_pb.clicked.connect(self.generate_profile_path)
+        self.ui.drill_generate_job_pb.clicked.connect(self.generate_drill_path)
         self.generate_path_s.connect(self.control_wo.generate_new_path)
         self.control_wo.update_path_s.connect(self.add_new_path)
 
@@ -155,7 +156,7 @@ class UiCreateJobLayerTab(QObject):
         else:
             self.ui.drill_milling_tool_chb.setCheckState(Qt.Unchecked)
 
-        self.ui.drill_milling_tool_diameter_dsb.setValue(settings_drill["milling_tool_diameter"])
+        self.ui.drill_milling_tool_diameter_dsb.setValue(settings_drill["tool_diameter"])
         self.ui.drill_cut_z_dsb.setValue(settings_drill["cut"])
         self.ui.drill_travel_z_dsb.setValue(settings_drill["travel"])
         self.ui.drill_spindle_speed_dsb.setValue(settings_drill["spindle"])
@@ -227,6 +228,10 @@ class UiCreateJobLayerTab(QObject):
         settings_profile["multi_depth"] = self.ui.profile_multi_depth_chb.isChecked()
         settings_profile["depth_per_pass"] = self.ui.profile_depth_pass_dsb.value()
         settings_profile["cut"] = self.ui.profile_cut_z_dsb.value()
+        settings_profile["passages"] = 1
+        if settings_profile["multi_depth"]:
+            settings_profile["passages"] = math.ceil(abs(settings_profile["cut"]/settings_profile["depth_per_pass"]))
+        settings_profile["overlap"] = 1.0
         settings_profile["travel"] = self.ui.profile_travel_z_dsb.value()
         settings_profile["spindle"] = self.ui.profile_spindle_speed_dsb.value()
         settings_profile["xy_feedrate"] = self.ui.profile_xy_feed_rate_dsb.value()
@@ -246,7 +251,7 @@ class UiCreateJobLayerTab(QObject):
 
         settings_drill["bits_diameter"] = drill_tools_list
         settings_drill["milling_tool"] = self.ui.drill_milling_tool_chb.isChecked()
-        settings_drill["milling_tool_diameter"] = self.ui.drill_milling_tool_diameter_dsb.value()
+        settings_drill["tool_diameter"] = self.ui.drill_milling_tool_diameter_dsb.value()
         settings_drill["cut"] = self.ui.drill_cut_z_dsb.value()
         settings_drill["travel"] = self.ui.drill_travel_z_dsb.value()
         settings_drill["spindle"] = self.ui.drill_spindle_speed_dsb.value()
@@ -323,5 +328,6 @@ class UiCreateJobLayerTab(QObject):
     def add_new_path(self, tag, path):
         self.vis_layer.remove_path(tag)
         self.vis_layer.add_path(tag, path, color="white")
-        if self.lay_tags[self.ui.layer_choice_cb.currentIndex()] != tag:
+        index_tag_cb = self.lay_names.index(self.ui.layer_choice_cb.currentText())
+        if self.lay_tags[index_tag_cb] != tag:
             self.vis_layer.set_path_visible(tag, False)

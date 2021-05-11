@@ -158,6 +158,7 @@ class JobSettingsHandler:
             profile_set_od["multi_depth"] = profile_settings.getboolean("multi_depth", self.MULTI_PATH_FLAG_DEFAULT)
             profile_set_od["depth_per_pass"] = profile_settings.getfloat("depth_per_pass", self.DEPTH_PER_PASS_DEFAULT)
             profile_set_od["cut"] = profile_settings.getfloat("cut", self.CUT_Z_DEFAULT)
+            profile_set_od["passages"] = profile_settings.getint("passages", self.PASSAGES_DEFAULT)
             profile_set_od["travel"] = profile_settings.getfloat("travel", self.TRAVEL_Z_DEFAULT)
             profile_set_od["spindle"] = profile_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             profile_set_od["xy_feedrate"] = profile_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
@@ -170,7 +171,7 @@ class JobSettingsHandler:
             drill_settings = self.jobs_settings["DRILL"]
             drill_set_od = ({})
             drill_set_od["milling_tool"] = drill_settings.getboolean("milling_tool_flag", False)
-            drill_set_od["milling_tool_diameter"] = drill_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
+            drill_set_od["tool_diameter"] = drill_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
             drill_set_od["cut"] = drill_settings.getfloat("cut", self.CUT_Z_DEFAULT)
             drill_set_od["travel"] = drill_settings.getfloat("travel", self.TRAVEL_Z_DEFAULT)
             drill_set_od["spindle"] = drill_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
@@ -265,6 +266,7 @@ class JobSettingsHandler:
         profile_settings["multi_depth"] = str(profile_set_od["multi_depth"])
         profile_settings["depth_per_pass"] = str(profile_set_od["depth_per_pass"])
         profile_settings["cut"] = str(profile_set_od["cut"])
+        profile_settings["passages"] = str(profile_set_od["passages"])
         profile_settings["travel"] = str(profile_set_od["travel"])
         profile_settings["spindle"] = str(profile_set_od["spindle"])
         profile_settings["xy_feedrate"] = str(profile_set_od["xy_feedrate"])
@@ -277,7 +279,7 @@ class JobSettingsHandler:
         drill_settings = self.jobs_settings["DRILL"]
         drill_set_od = job_settings_od["drill"]
         drill_settings["milling_tool_flag"] = str(drill_set_od["milling_tool"])
-        drill_settings["tool_diameter"] = str(drill_set_od["milling_tool_diameter"])
+        drill_settings["tool_diameter"] = str(drill_set_od["tool_diameter"])
         drill_settings["cut"] = str(drill_set_od["cut"])
         drill_settings["travel"] = str(drill_set_od["travel"])
         drill_settings["spindle"] = str(drill_set_od["spindle"])
