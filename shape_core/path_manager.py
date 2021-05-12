@@ -10,6 +10,16 @@ from .plot_stuff import plot_lines
 
 class Gapper:
 
+    DEFAULT_STRATEGIES = (
+        "none",
+        "2h",
+        "2v",
+        "4p",
+        "4h",
+        "4v",
+        "8p"
+    )
+
     def __init__(self, path, cfg):
         self.cfg = cfg
         self.in_path = path
@@ -18,6 +28,9 @@ class Gapper:
     @staticmethod
     def rotate(l, n):
         return l[n:] + l[:n]
+
+    def get_available_strategies(self):
+        return self.DEFAULT_STRATEGIES
 
     def add_taps_on_external_path(self, strategy='4p'):
         ex_path = self.in_path
@@ -29,6 +42,9 @@ class Gapper:
         ym = (b[3] + b[1]) / 2.0
 
         # croce dritta
+        vl = LineString(((xm, b[1]), (xm, b[3])))
+        hl = LineString(((b[0], ym), (b[2], ym)))
+
         vl = LineString(((xm, b[1]), (xm, b[3])))
         hl = LineString(((b[0], ym), (b[2], ym)))
 
@@ -198,7 +214,7 @@ class MachinePath:
                 print("[WARNING] At Least One Pass")
                 self.cfg['passages'] = 1
         elif machining_type == 'profile':
-            self.cfg = {'tool_diameter': 1.0, 'margin': 0.1, 'taps_type': '2h', 'taps_length': 1.0}
+            self.cfg = {'tool_diameter': 1.0, 'margin': 0.1, 'taps_type': 3, 'taps_length': 1.0}
         elif machining_type == 'pocketing':
             self.cfg = {'tool_diameter': 1.0}
         elif machining_type == 'drill':
@@ -520,7 +536,9 @@ class MachinePath:
         # inserrisco i taps
         # in base alla strategia scelta
         t = Gapper(path[0], self.cfg)
-        new_ext = t.add_taps_on_external_path()
+        stl = t.get_available_strategies()
+        st = stl[self.cfg["taps_type"]]
+        new_ext = t.add_taps_on_external_path(strategy=st)
         # path[0] = new_ext
         path.pop(0)
         path = new_ext + path
