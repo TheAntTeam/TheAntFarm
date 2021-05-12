@@ -178,15 +178,18 @@ class JobSettingsHandler:
             drill_set_od["xy_feedrate"] = drill_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             drill_set_od["z_feedrate"] = drill_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
 
-            drill_bits_list = []
+            drill_bits_names_list = []
+            drill_bits_diameter_list = []
             # Section dedicated to drill bits #
             if "DRILL_BITS" in self.jobs_settings:
                 drill_bits_settings = self.jobs_settings["DRILL_BITS"]
                 for elem in drill_bits_settings:
                     if "bit" in elem:  # This is needed to avoid to read default settings too.
-                        drill_bits_list.append((elem, drill_bits_settings.getfloat(elem, 0.1)))
+                        drill_bits_names_list.append(elem)
+                        drill_bits_diameter_list.append(drill_bits_settings.getfloat(elem, 0.1))  # todo: set fallback value
 
-            drill_set_od["bits_diameter"] = drill_bits_list
+            drill_set_od["bits_names"] = drill_bits_names_list
+            drill_set_od["bits_diameter"] = drill_bits_diameter_list
             self.ui_cj.set_settings_per_page("drill", drill_set_od)
 
         if "NC_TOP" in self.jobs_settings:
@@ -289,8 +292,9 @@ class JobSettingsHandler:
         # Section dedicated to drill bits #
         self.jobs_settings["DRILL_BITS"] = {}
         drill_bits_settings = self.jobs_settings["DRILL_BITS"]
-        for elem in drill_set_od["bits_diameter"]:
-            drill_bits_settings[elem[0]] = str(elem[1])
+
+        for index, elem in enumerate(drill_set_od["bits_names"]):
+            drill_bits_settings[elem] = str(drill_set_od["bits_diameter"][index])
 
         # No-Copper Top job related settings #
         self.jobs_settings["NC_TOP"] = {}

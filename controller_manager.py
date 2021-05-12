@@ -135,10 +135,14 @@ class ControllerWorker(QObject):
 
     @Slot(str, Od, str)
     def generate_new_path(self, tag, cfg, machining_type):
-        if machining_type == "gerber":
+        if machining_type == "gerber" or machining_type == "profile":
             machining_layer = self.pcb.get_gerber_layer(tag)
         elif machining_type == "drill":
+            # cfg["tool_diameter"] = None  # todo: remove these two lines possibly. Just for test.
+            # cfg["optimize"] = False
             machining_layer = self.pcb.get_excellon_layer(tag)
+        else:
+            logger.error("Wrong machining type")
         path = MachinePath(tag, machining_type)
         path.load_geom(machining_layer[0])
         path.load_cfg(cfg)

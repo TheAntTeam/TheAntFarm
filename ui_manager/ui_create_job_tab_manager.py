@@ -146,10 +146,11 @@ class UiCreateJobLayerTab(QObject):
         self.ui.profile_tap_size_dsb.setValue(settings_profile["taps_length"])
 
     def set_settings_per_drill(self, settings_drill):
-        drill_tools_list = settings_drill["bits_diameter"]
-        if drill_tools_list:
-            for dt in drill_tools_list:
-                self.add_drill_tool(dt[0], dt[1])
+        drill_tools_names_list = settings_drill["bits_names"]
+        drill_tools_diameter_list = settings_drill["bits_diameter"]
+        if drill_tools_diameter_list and drill_tools_names_list:
+            for index, elem in enumerate(drill_tools_names_list):
+                self.add_drill_tool(elem, drill_tools_diameter_list[index])
 
         if settings_drill["milling_tool"]:
             self.ui.drill_milling_tool_chb.setCheckState(Qt.Checked)
@@ -243,13 +244,15 @@ class UiCreateJobLayerTab(QObject):
 
     def get_settings_per_drill(self):
         settings_drill = Od({})
-        drill_tools_list = []
+        drill_tools_names = []
+        drill_tools_diameters = []
         count_row = self.ui.drill_tw.rowCount()
         for x in range(0, count_row):
-            drill_tool_l = (self.ui.drill_tw.cellWidget(x, 0).text(), self.ui.drill_tw.cellWidget(x, 1).value())
-            drill_tools_list.append(drill_tool_l)
+            drill_tools_diameters.append(self.ui.drill_tw.cellWidget(x, 1).value())
+            drill_tools_names.append(self.ui.drill_tw.cellWidget(x, 0).text())
 
-        settings_drill["bits_diameter"] = drill_tools_list
+        settings_drill["bits_names"] = drill_tools_names
+        settings_drill["bits_diameter"] = drill_tools_diameters
         settings_drill["milling_tool"] = self.ui.drill_milling_tool_chb.isChecked()
         settings_drill["tool_diameter"] = self.ui.drill_milling_tool_diameter_dsb.value()
         settings_drill["cut"] = self.ui.drill_cut_z_dsb.value()
@@ -318,7 +321,7 @@ class UiCreateJobLayerTab(QObject):
 
     def generate_profile_path(self):
         cfg = self.get_settings_per_page("profile")
-        self.generate_path_s.emit("profile", cfg, "gerber")
+        self.generate_path_s.emit("profile", cfg, "profile")
 
     def generate_drill_path(self):
         cfg = self.get_settings_per_page("drill")
