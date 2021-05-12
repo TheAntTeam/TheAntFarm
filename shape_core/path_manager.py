@@ -443,17 +443,18 @@ class MachinePath:
 
         for bit_k in drill_per_bit.keys():
             bit_points = drill_per_bit[bit_k]
-            if self.cfg['optimize']:
-                opt = Optimizer(bit_points)
-                optimized_bit_points = opt.get_optimized_path()
-                drill_per_bit[bit_k] = optimized_bit_points
-                print("Bit " + str(bit_k) + " " + str(optimized_bit_points))
-            else:
-                print("Bit " + str(bit_k) + " " + str(bit_points))
+            if 'optimize' in self.cfg.keys():
+                if self.cfg['optimize']:
+                    opt = Optimizer(bit_points)
+                    optimized_bit_points = opt.get_optimized_path()
+                    drill_per_bit[bit_k] = optimized_bit_points
+                    print("Bit " + str(bit_k) + " " + str(optimized_bit_points))
+                else:
+                    print("Bit " + str(bit_k) + " " + str(bit_points))
 
         paths = []
         for k in drill_per_bit:
-            paths.append((k, LineString(drill_per_bit[k])))
+            paths.append((k, [LineString(drill_per_bit[k])]))
         self.path = paths
 
         return drilled_list
