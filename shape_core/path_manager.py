@@ -87,7 +87,7 @@ class Gapper:
 
         if taps is not None:
             npaths = ex_path.difference(taps)
-            plot_lines(npaths)
+            # plot_lines(npaths)
             print("N tap part: " + str(npaths.type))
             if npaths.type == "MultiLineString":
                 return list(npaths.geoms)
@@ -460,9 +460,9 @@ class MachinePath:
                                       td / 2.0 + self.cfg['margin'], shapely_poly=True)
             if ext_path is not None:
                 og_list.append(ext_path)
-            og = offset_polygon_holes(self.geom_list[0], - td / 2.0 + self.cfg['margin'])
-            if og is not None:
-                og_list.append(og)
+            # og = offset_polygon_holes(self.geom_list[0], - td / 2.0 + self.cfg['margin'])
+            # if og is not None:
+            #     og_list.append(og)
         else:
             # profilo composto da più poligoni
             # per individuare il profilo esterno calcolo le aree delle bbox di ogni poligono
