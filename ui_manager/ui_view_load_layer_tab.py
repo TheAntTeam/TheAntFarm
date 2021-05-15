@@ -31,8 +31,8 @@ class UiViewLoadLayerTab(QObject):
         self.layers_chb = Od([(k, t) for k, t in zip(self.lay_tags, self.L_CHECKBOX)])
 
         # Load Layer TAB related controls.
-        self.load_layer_s.connect(self.controlWo.load_new_layer)
-        self.controlWo.update_layer_s.connect(self.visualize_new_layer)
+        self.load_layer_s.connect(self.controlWo.view_tab_controller.load_new_layer)
+        self.controlWo.view_tab_controller.update_layer_s.connect(self.visualize_new_layer)
         self.ui.top_load_pb.clicked.connect(
             lambda: self.load_gerber_file(self.lay_tags[0], "Load Top Gerber File", "Gerber (*.gbr *.GBR)"))
         self.ui.bottom_load_pb.clicked.connect(

@@ -13,8 +13,6 @@ logger = logging.getLogger(__name__)
 
 
 class ControllerWorker(QObject):
-    update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
-    update_path_s = Signal(str, list)            # Signal to update path visualization
     update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
     update_status_s = Signal(list)               # Signal to update controller status
     update_console_text_s = Signal(str)          # Signal to send text to the console textEdit
@@ -37,6 +35,8 @@ class ControllerWorker(QObject):
 
         self.double_side_manager = DoubleSideManager()
 
+        self.view_tab_controller = ViewTabController()
+
         self.serialRxQueue = serial_rx_queue
 
         self.poll_timer = QTimer()
@@ -51,8 +51,6 @@ class ControllerWorker(QObject):
 
         self.status_l = []
         self.threshold_value = 0
-
-        self.pcb = PcbObj()
 
         self.align_active = False
 
@@ -112,43 +110,6 @@ class ControllerWorker(QObject):
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
         return self.prb_val
-
-    @Slot(str, str, str)
-    def load_new_layer(self, layer, layer_path):
-        try:
-            grb_tags = self.pcb.GBR_KEYS
-            exc_tags = self.pcb.EXN_KEYS
-            if layer in grb_tags:
-                self.pcb.load_gerber(layer_path, layer)
-                self.pcb.get_gerber(layer)
-                loaded_layer = self.pcb.get_gerber_layer(layer)
-                self.update_layer_s.emit(loaded_layer, layer, layer_path, False)
-            if layer in exc_tags:
-                self.pcb.load_excellon(layer_path, layer)
-                self.pcb.get_excellon(layer)
-                loaded_layer = self.pcb.get_excellon_layer(layer)
-                self.update_layer_s.emit(loaded_layer, layer, layer_path, True)
-        except (AttributeError, ValueError, ZeroDivisionError, IndexError) as e:
-            logging.error(e, exc_info=True)
-        except:
-            logger.error("Uncaught exception: %s", traceback.format_exc())
-
-    @Slot(str, Od, str)
-    def generate_new_path(self, tag, cfg, machining_type):
-        if machining_type == "gerber" or machining_type == "profile":
-            machining_layer = self.pcb.get_gerber_layer(tag)
-        elif machining_type == "drill":
-            # cfg["tool_diameter"] = None  # todo: remove these two lines possibly. Just for test.
-            # cfg["optimize"] = False
-            machining_layer = self.pcb.get_excellon_layer(tag)
-        else:
-            logger.error("Wrong machining type")
-        path = MachinePath(tag, machining_type)
-        path.load_geom(machining_layer[0])
-        path.load_cfg(cfg)
-        path.execute()
-        p = path.get_path()
-        self.update_path_s.emit(tag, p)
 
     @Slot(bool)
     def set_align_is_active(self, align_is_active):
@@ -268,3 +229,59 @@ class ControllerWorker(QObject):
     def ack_auto_bed_levelling(self):
         logging.info("ABL values: " + str(self.abl_val))
         self.update_abl_s.emit(self.abl_val)
+
+
+class ViewTabController(QObject):
+    update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
+    update_path_s = Signal(str, list)            # Signal to update path visualization
+
+    def __init__(self):
+        super(ViewTabController, self).__init__()
+        self.pcb = PcbObj()
+
+    @Slot(str, str)
+    def load_new_layer(self, layer, layer_path):
+        try:
+            grb_tags = self.pcb.GBR_KEYS
+            exc_tags = self.pcb.EXN_KEYS
+            if layer in grb_tags:
+                self.pcb.load_gerber(layer_path, layer)
+                self.pcb.get_gerber(layer)
+                loaded_layer = self.pcb.get_gerber_layer(layer)
+                self.update_layer_s.emit(loaded_layer, layer, layer_path, False)
+            if layer in exc_tags:
+                self.pcb.load_excellon(layer_path, layer)
+                self.pcb.get_excellon(layer)
+                loaded_layer = self.pcb.get_excellon_layer(layer)
+                self.update_layer_s.emit(loaded_layer, layer, layer_path, True)
+        except (AttributeError, ValueError, ZeroDivisionError, IndexError) as e:
+            logging.error(e, exc_info=True)
+        except:
+            logger.error("Uncaught exception: %s", traceback.format_exc())
+
+    @Slot(str, Od, str)
+    def generate_new_path(self, tag, cfg, machining_type):
+        if machining_type == "gerber" or machining_type == "profile":
+            machining_layer = self.pcb.get_gerber_layer(tag)
+        elif machining_type == "drill":
+            # cfg["tool_diameter"] = None  # todo: remove these two lines possibly. Just for test.
+            # cfg["optimize"] = False
+            machining_layer = self.pcb.get_excellon_layer(tag)
+        else:
+            logger.error("Wrong machining type")
+        path = MachinePath(tag, machining_type)
+        path.load_geom(machining_layer[0])
+        path.load_cfg(cfg)
+        path.execute()
+        p = path.get_path()
+        self.update_path_s.emit(tag, p)
+
+
+class ControlTabController(QObject):
+    def __init__(self):
+        super(ControlTabController, self).__init__()
+
+
+class AlignTabController(QObject):
+    def __init__(self):
+        super(AlignTabController, self).__init__()

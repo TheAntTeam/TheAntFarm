@@ -38,8 +38,8 @@ class UiCreateJobLayerTab(QObject):
         self.ui.bottom_generate_job_pb.clicked.connect(self.generate_bottom_path)
         self.ui.profile_generate_job_pb.clicked.connect(self.generate_profile_path)
         self.ui.drill_generate_job_pb.clicked.connect(self.generate_drill_path)
-        self.generate_path_s.connect(self.control_wo.generate_new_path)
-        self.control_wo.update_path_s.connect(self.add_new_path)
+        self.generate_path_s.connect(self.control_wo.view_tab_controller.generate_new_path)
+        self.control_wo.view_tab_controller.update_path_s.connect(self.add_new_path)
 
     def load_active_layers(self, active_layers):
         self.ui.layer_choice_cb.clear()
