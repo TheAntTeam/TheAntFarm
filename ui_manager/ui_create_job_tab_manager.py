@@ -14,7 +14,7 @@ class UiCreateJobLayerTab(QObject):
     generate_path_s = Signal(str, Od, str)
 
     TAPS_TYPE_TEXT = ["None", "1 Left + 1 Right", "1 Top + 1 Bottom", "4 - 1 per side",
-                              "2 Left + 2 Right", "2 Top + 2 Bottom", "8 - 2 per side"]
+                              "2 Left + 2 Right", "2 Top + 2 Bottom", "8 - 2 per side", "4 - 1 per corner"]
 
     def __init__(self, ui, control_wo, vis_layer, lay_tags, lay_names):
         super(UiCreateJobLayerTab, self).__init__()
