@@ -304,6 +304,8 @@ class MachinePath:
         self.path = None
 
     def load_cfg(self, cfg):
+        print("Cfg")
+        print(cfg)
         self.cfg = cfg
 
     def get_path(self):
@@ -311,9 +313,6 @@ class MachinePath:
 
     def load_geom(self, geom_list):
         self.geom_list = geom_list
-
-    def load_cfg(self, cfg):
-        self.cfg = cfg
 
     def execute(self):
         elabs = None
@@ -328,7 +327,7 @@ class MachinePath:
             # eseguo la lavorazione
             # altrimenti risolvo tutto con i fori
             elabs_p = None
-            if self.cfg['tool_diameter'] is not None:
+            if self.cfg['tool_diameter'] is not None and self.cfg['milling_tool']:
                 elabs_p = self.execute_pocketing()
 
             # se è stata effettuata una lavorazione di pocketing
@@ -533,7 +532,19 @@ class MachinePath:
         paths = []
         for k in drill_per_bit:
             paths.append((k, [LineString(drill_per_bit[k])]))
-        self.path = paths
+
+        # se fori sono gia' stati eseguita dalla procedura
+        # di pocketing allora controllo che il path non sia nullo
+        # in quel caso aggiungo il path di drill a quello gia'
+        # eseguito
+
+        if not_to_drill is not None:
+            if any(not_to_drill) and self.path is not None:
+                self.path += paths
+            else:
+                self.path = paths
+        else:
+            self.path = paths
 
         return drilled_list
 

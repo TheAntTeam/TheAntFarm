@@ -189,6 +189,7 @@ class VisualLayer:
         self.z += self.DELTA
 
     def add_path(self, tag, geom_list, color=None):
+        # todo: add zbuffer controll
         ldata = []
         order = 0
         for d in geom_list:
@@ -223,7 +224,8 @@ class VisualLayer:
         p = -1
         for l in ldata:
             p += 1
-            coords.append(l[0])
+            c = l[0]
+            coords.append(c)
             for j in range(1, len(l)):
                 c = l[j]
                 coords.append(c)
