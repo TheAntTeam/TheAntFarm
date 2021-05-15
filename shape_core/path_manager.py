@@ -1,11 +1,12 @@
 #
 import time
-from shapely.geometry import Polygon, LinearRing, LineString, MultiLineString, Point
+from shapely.geometry import Polygon, LinearRing, LineString, MultiLineString, Point, MultiPoint
 from collections import OrderedDict
 from .geometry_manager import merge_polygons_path, offset_polygon, offset_polygon_holes, get_bbox_area_sh, fill_holes_sh, get_poly_diameter
 from .plot_stuff import plot_paths, plot_shapely
 from .path_optimizer import Optimizer
 from .plot_stuff import plot_lines
+import numpy as np
 
 
 class Gapper:
@@ -17,7 +18,8 @@ class Gapper:
         "4p",
         "4h",
         "4v",
-        "8p"
+        "8p",
+        "4x"
     )
 
     def __init__(self, path, cfg):
@@ -41,21 +43,49 @@ class Gapper:
         xm = (b[2] + b[0]) / 2.0
         ym = (b[3] + b[1]) / 2.0
 
+        x2 = np.linspace(b[0], b[2], 4)[1:3]
+        y2 = np.linspace(b[1], b[3], 4)[1:3]
+
+        v2l = (
+            LineString(((x2[0], b[1]), (x2[0], b[3]))),
+            LineString(((x2[1], b[1]), (x2[1], b[3])))
+        )
+
+        h2l = (
+            LineString(((b[0], y2[0]), (b[2], y2[0]))),
+            LineString(((b[0], y2[1]), (b[2], y2[1])))
+        )
+
         # croce dritta
         vl = LineString(((xm, b[1]), (xm, b[3])))
         hl = LineString(((b[0], ym), (b[2], ym)))
 
-        vl = LineString(((xm, b[1]), (xm, b[3])))
-        hl = LineString(((b[0], ym), (b[2], ym)))
-
         # croce rotata di 45
-        # vl = LineString(((b[0], b[1]), (b[2], b[3])))
-        # hl = LineString(((b[2], b[1]), (b[0], b[3])))
-
-        # print(vl)
-        # print(hl)
+        lrl = LineString(((b[0], b[1]), (b[2], b[3])))
+        rll = LineString(((b[2], b[1]), (b[0], b[3])))
 
         taps = None
+
+        if strategy == '8p':
+            # Trovo i punti di intersezione tra
+            # v2l h2l e il perimetro esterno
+            # identifico gli indici dei segmenti
+            # attraversati, da li seguendo il linestring
+            # e creo il segmento da rimuovere lungo taps_length
+            vpts0 = ex_path.intersection(v2l[0])
+            vpts1 = ex_path.intersection(v2l[1])
+            vpts = MultiPoint(list(vpts0) + list(vpts1))
+            points = list(ex_path.coords)
+            vtaps = self.get_tap(points, vpts)
+
+            hpts0 = ex_path.intersection(h2l[0])
+            hpts1 = ex_path.intersection(h2l[1])
+            hpts = MultiPoint(list(hpts0) + list(hpts1))
+            points = list(ex_path.coords)
+            htaps = self.get_tap(points, hpts)
+
+            taps = MultiLineString(vtaps + htaps)
+            # plot_lines([ex_path], taps)
 
         if strategy == '4p':
             # Trovo i punti di intersezione tra
@@ -68,6 +98,23 @@ class Gapper:
             vtaps = self.get_tap(points, vpts)
 
             hpts = ex_path.intersection(hl)
+            points = list(ex_path.coords)
+            htaps = self.get_tap(points, hpts)
+
+            taps = MultiLineString(vtaps + htaps)
+            # plot_lines([ex_path], taps)
+
+        if strategy == '4x':
+            # Trovo i punti di intersezione tra
+            # la croce lrl rll e il perimetro esterno
+            # identifico gli indici dei segmenti
+            # attraversati, da li seguendo il linestring
+            # e creo il segmento da rimuovere lungo taps_length
+            vpts = ex_path.intersection(lrl)
+            points = list(ex_path.coords)
+            vtaps = self.get_tap(points, vpts)
+
+            hpts = ex_path.intersection(rll)
             points = list(ex_path.coords)
             htaps = self.get_tap(points, hpts)
 
@@ -88,6 +135,22 @@ class Gapper:
             taps = MultiLineString(htaps)
             # plot_lines([ex_path], taps)
 
+        if strategy == '4h':
+            # Trovo i punti di intersezione tra
+            # la croce v2l h2l e il perimetro esterno
+            # identifico gli indici dei segmenti
+            # attraversati, da li seguendo il linestring
+            # e creo il segmento da rimuovere lungo taps_length
+
+            hpts0 = ex_path.intersection(h2l[0])
+            hpts1 = ex_path.intersection(h2l[1])
+            hpts = MultiPoint(list(hpts0) + list(hpts1))
+            points = list(ex_path.coords)
+            htaps = self.get_tap(points, hpts)
+
+            taps = MultiLineString(htaps)
+            # plot_lines([ex_path], taps)
+
         if strategy == '2v':
             # Trovo i punti di intersezione tra
             # la croce vl hl e il perimetro esterno
@@ -101,10 +164,25 @@ class Gapper:
             taps = MultiLineString(vtaps)
             # plot_lines([ex_path], taps)
 
+        if strategy == '4v':
+            # Trovo i punti di intersezione tra
+            # la croce v2l h2l e il perimetro esterno
+            # identifico gli indici dei segmenti
+            # attraversati, da li seguendo il linestring
+            # e creo il segmento da rimuovere lungo taps_length
+            vpts0 = ex_path.intersection(v2l[0])
+            vpts1 = ex_path.intersection(v2l[1])
+            vpts = MultiPoint(list(vpts0) + list(vpts1))
+            points = list(ex_path.coords)
+            vtaps = self.get_tap(points, vpts)
+
+            taps = MultiLineString(vtaps)
+            # plot_lines([ex_path], taps)
+
         if taps is not None:
             npaths = ex_path.difference(taps)
             # plot_lines(npaths)
-            print("N tap part: " + str(npaths.type))
+            # print("N tap part: " + str(npaths.type))
             if npaths.type == "MultiLineString":
                 return list(npaths.geoms)
             else:
@@ -539,6 +617,8 @@ class MachinePath:
         t = Gapper(path[0], self.cfg)
         stl = t.get_available_strategies()
         st = stl[self.cfg["taps_type"]]
+        print("Strategy")
+        print(st)
         new_ext = t.add_taps_on_external_path(strategy=st)
         # path[0] = new_ext
         path.pop(0)

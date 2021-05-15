@@ -1,8 +1,8 @@
-cairocffi==0.9.0
+cairocffi>=0.9.0
 cffi==1.14.5
 freetype-py==2.2.0
 numpy==1.20.1
-opencv-python==4.5.1.48
+opencv-python>=4.5.1.48
 pcb-tools==0.1.6
 pyclipper==1.2.1
 pycparser==2.20

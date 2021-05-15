@@ -1758,7 +1758,7 @@ class Ui_MainWindow(object):
         self.status_l.setMinimumSize(QSize(120, 0))
         self.status_l.setMaximumSize(QSize(120, 16777215))
         font2 = QFont()
-        font2.setPointSize(10)
+        font2.setPointSize(8)
         font2.setBold(True)
         font2.setWeight(75)
         self.status_l.setFont(font2)
