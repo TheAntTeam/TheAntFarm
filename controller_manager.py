@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 
 class ControllerWorker(QObject):
+    update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
+    update_path_s = Signal(str, list)            # Signal to update path visualization
     update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
     update_status_s = Signal(list)               # Signal to update controller status
     update_console_text_s = Signal(str)          # Signal to send text to the console textEdit
@@ -230,11 +232,19 @@ class ControllerWorker(QObject):
         logging.info("ABL values: " + str(self.abl_val))
         self.update_abl_s.emit(self.abl_val)
 
+    @Slot(str, str)
+    def load_new_layer(self, layer, layer_path):
+        [loaded_layer, exc_flag] = self.view_tab_controller.load_new_layer(layer, layer_path)
+        if loaded_layer is not None:
+            self.update_layer_s.emit(loaded_layer, layer, layer_path, exc_flag)
+
+    @Slot(str, Od, str)
+    def generate_new_path(self, tag, cfg, machining_type):
+        new_paths = self.view_tab_controller.generate_new_path(tag, cfg, machining_type)
+        self.update_path_s.emit(tag, new_paths)
+
 
 class ViewTabController(QObject):
-    update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
-    update_path_s = Signal(str, list)            # Signal to update path visualization
-
     def __init__(self):
         super(ViewTabController, self).__init__()
         self.pcb = PcbObj()
@@ -248,16 +258,17 @@ class ViewTabController(QObject):
                 self.pcb.load_gerber(layer_path, layer)
                 self.pcb.get_gerber(layer)
                 loaded_layer = self.pcb.get_gerber_layer(layer)
-                self.update_layer_s.emit(loaded_layer, layer, layer_path, False)
+                return [loaded_layer, False]
             if layer in exc_tags:
                 self.pcb.load_excellon(layer_path, layer)
                 self.pcb.get_excellon(layer)
                 loaded_layer = self.pcb.get_excellon_layer(layer)
-                self.update_layer_s.emit(loaded_layer, layer, layer_path, True)
+                return [loaded_layer, True]
         except (AttributeError, ValueError, ZeroDivisionError, IndexError) as e:
             logging.error(e, exc_info=True)
         except:
             logger.error("Uncaught exception: %s", traceback.format_exc())
+        return [None, None]
 
     @Slot(str, Od, str)
     def generate_new_path(self, tag, cfg, machining_type):
@@ -271,8 +282,8 @@ class ViewTabController(QObject):
         path.load_geom(machining_layer[0])
         path.load_cfg(cfg)
         path.execute()
-        p = path.get_path()
-        self.update_path_s.emit(tag, p)
+        new_paths = path.get_path()
+        return new_paths
 
 
 class ControlTabController(QObject):
