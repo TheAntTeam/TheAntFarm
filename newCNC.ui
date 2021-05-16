@@ -1198,7 +1198,7 @@
                      </widget>
                     </item>
                     <item row="3" column="1">
-                     <widget class="QLabel" name="drill_milling_tool_">
+                     <widget class="QLabel" name="drill_milling_tool_l">
                       <property name="text">
                        <string>Milling Tool</string>
                       </property>
@@ -1249,6 +1249,20 @@
                      <widget class="QLabel" name="drill_milling_tool_diameter_l">
                       <property name="text">
                        <string>Mill Tool Diameter [mm]</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="13" column="1">
+                     <widget class="QLabel" name="drill_optimization_l">
+                      <property name="text">
+                       <string>Optimization</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="13" column="2">
+                     <widget class="QCheckBox" name="drill_optimization_chb">
+                      <property name="text">
+                       <string/>
                       </property>
                      </widget>
                     </item>

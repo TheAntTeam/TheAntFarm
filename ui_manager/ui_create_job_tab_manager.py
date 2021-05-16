@@ -164,6 +164,11 @@ class UiCreateJobLayerTab(QObject):
         self.ui.drill_xy_feed_rate_dsb.setValue(settings_drill["xy_feedrate"])
         self.ui.drill_z_feed_rate_dsb.setValue(settings_drill["z_feedrate"])
 
+        if settings_drill["optimize"]:
+            self.ui.drill_optimization_chb.setCheckState(Qt.Checked)
+        else:
+            self.ui.drill_optimization_chb.setCheckState(Qt.Unchecked)
+
     def set_settings_per_nc_top(self, settings_nc_top):
         self.ui.nc_top_tool_diameter_dsb.setValue(settings_nc_top["tool_diameter"])
         self.ui.nc_top_overlap_dsb.setValue(settings_nc_top["overlap"])
@@ -260,6 +265,7 @@ class UiCreateJobLayerTab(QObject):
         settings_drill["spindle"] = self.ui.drill_spindle_speed_dsb.value()
         settings_drill["xy_feedrate"] = self.ui.drill_xy_feed_rate_dsb.value()
         settings_drill["z_feedrate"] = self.ui.drill_z_feed_rate_dsb.value()
+        settings_drill["optimize"] = self.ui.drill_optimization_chb.isChecked()
         logging.debug(settings_drill)
         return settings_drill
 

@@ -177,6 +177,7 @@ class JobSettingsHandler:
             drill_set_od["spindle"] = drill_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             drill_set_od["xy_feedrate"] = drill_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             drill_set_od["z_feedrate"] = drill_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
+            drill_set_od["optimize"] = drill_settings.getboolean("optimize", False)
 
             drill_bits_names_list = []
             drill_bits_diameter_list = []
@@ -288,6 +289,7 @@ class JobSettingsHandler:
         drill_settings["spindle"] = str(drill_set_od["spindle"])
         drill_settings["xy_feedrate"] = str(drill_set_od["xy_feedrate"])
         drill_settings["z_feedrate"] = str(drill_set_od["z_feedrate"])
+        drill_settings["optimize"] = str(drill_set_od["optimize"])
 
         # Section dedicated to drill bits #
         self.jobs_settings["DRILL_BITS"] = {}

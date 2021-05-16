@@ -264,8 +264,6 @@ class ViewTabController(QObject):
         if machining_type == "gerber" or machining_type == "profile":
             machining_layer = self.pcb.get_gerber_layer(tag)
         elif machining_type == "drill":
-            # cfg["tool_diameter"] = None  # todo: remove these two lines possibly. Just for test.
-            # cfg["optimize"] = False
             machining_layer = self.pcb.get_excellon_layer(tag)
         else:
             logger.error("Wrong machining type")

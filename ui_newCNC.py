@@ -754,10 +754,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_travel_z_l, 7, 1, 1, 1)
 
-        self.drill_milling_tool_ = QLabel(self.drill_page)
-        self.drill_milling_tool_.setObjectName(u"drill_milling_tool_")
+        self.drill_milling_tool_l = QLabel(self.drill_page)
+        self.drill_milling_tool_l.setObjectName(u"drill_milling_tool_l")
 
-        self.gridLayout_5.addWidget(self.drill_milling_tool_, 3, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.drill_milling_tool_l, 3, 1, 1, 1)
 
         self.drill_z_feed_rate_l = QLabel(self.drill_page)
         self.drill_z_feed_rate_l.setObjectName(u"drill_z_feed_rate_l")
@@ -791,6 +791,16 @@ class Ui_MainWindow(object):
         self.drill_milling_tool_diameter_l.setObjectName(u"drill_milling_tool_diameter_l")
 
         self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_l, 4, 1, 1, 1)
+
+        self.drill_optimization_l = QLabel(self.drill_page)
+        self.drill_optimization_l.setObjectName(u"drill_optimization_l")
+
+        self.gridLayout_5.addWidget(self.drill_optimization_l, 13, 1, 1, 1)
+
+        self.drill_optimization_chb = QCheckBox(self.drill_page)
+        self.drill_optimization_chb.setObjectName(u"drill_optimization_chb")
+
+        self.gridLayout_5.addWidget(self.drill_optimization_chb, 13, 2, 1, 1)
 
         self.jobs_sw.addWidget(self.drill_page)
         self.nc_area_top_page = QWidget()
@@ -1758,7 +1768,7 @@ class Ui_MainWindow(object):
         self.status_l.setMinimumSize(QSize(120, 0))
         self.status_l.setMaximumSize(QSize(120, 16777215))
         font2 = QFont()
-        font2.setPointSize(8)
+        font2.setPointSize(10)
         font2.setBold(True)
         font2.setWeight(75)
         self.status_l.setFont(font2)
@@ -2090,12 +2100,14 @@ class Ui_MainWindow(object):
         self.drill_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
         self.drill_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
         self.drill_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.drill_milling_tool_.setText(QCoreApplication.translate("MainWindow", u"Milling Tool", None))
+        self.drill_milling_tool_l.setText(QCoreApplication.translate("MainWindow", u"Milling Tool", None))
         self.drill_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
         self.drill_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
         self.drill_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
         self.drill_milling_tool_chb.setText("")
         self.drill_milling_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Mill Tool Diameter [mm]", None))
+        self.drill_optimization_l.setText(QCoreApplication.translate("MainWindow", u"Optimization", None))
+        self.drill_optimization_chb.setText("")
         self.nc_top_overlap_l.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
         self.nc_top_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
         self.nc_top_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
