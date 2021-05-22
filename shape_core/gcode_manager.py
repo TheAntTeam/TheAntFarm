@@ -419,3 +419,9 @@ class GCoder:
         with open(file_path, 'w') as f:
             f.write("".join(self.gcode))
         print("Done")
+
+
+class GCodeParser:
+
+    def __init__(self):
+        pass
