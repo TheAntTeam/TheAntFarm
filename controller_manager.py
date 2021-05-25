@@ -35,9 +35,8 @@ class ControllerWorker(QObject):
     def __init__(self, serial_rx_queue):
         super(ControllerWorker, self).__init__()
 
-        self.double_side_manager = DoubleSideManager()
-
         self.view_tab_controller = ViewTabController()
+        self.align_tab_controller = AlignTabController()
 
         self.serialRxQueue = serial_rx_queue
 
@@ -52,7 +51,6 @@ class ControllerWorker(QObject):
         self.camera_timer.start()
 
         self.status_l = []
-        self.threshold_value = 0
 
         self.align_active = False
 
@@ -74,10 +72,7 @@ class ControllerWorker(QObject):
 
     def on_camera_timeout(self):
         if self.align_active:
-            frame = self.double_side_manager.get_webcam_frame()
-            logger.debug(str(self.threshold_value))
-            frame = self.double_side_manager.detect_holes(frame, self.threshold_value)
-            image = qimage2ndarray.array2qimage(frame)
+            image = self.align_tab_controller.camera_new_frame()
             self.update_camera_image_s.emit(QPixmap.fromImage(image))
 
     def parse_bracket_angle(self, line):
@@ -119,7 +114,7 @@ class ControllerWorker(QObject):
 
     @Slot(int)
     def update_threshold_value(self, new_threshold):
-        self.threshold_value = new_threshold
+        self.align_tab_controller.update_threshold_value(new_threshold)
 
     @Slot()
     def parse_rx_queue(self):
@@ -249,7 +244,6 @@ class ViewTabController(QObject):
         super(ViewTabController, self).__init__()
         self.pcb = PcbObj()
 
-    @Slot(str, str)
     def load_new_layer(self, layer, layer_path):
         try:
             grb_tags = self.pcb.GBR_KEYS
@@ -270,7 +264,6 @@ class ViewTabController(QObject):
             logger.error("Uncaught exception: %s", traceback.format_exc())
         return [None, None]
 
-    @Slot(str, Od, str)
     def generate_new_path(self, tag, cfg, machining_type):
         if machining_type == "gerber" or machining_type == "profile":
             machining_layer = self.pcb.get_gerber_layer(tag)
@@ -294,3 +287,15 @@ class ControlTabController(QObject):
 class AlignTabController(QObject):
     def __init__(self):
         super(AlignTabController, self).__init__()
+        self.double_side_manager = DoubleSideManager()
+        self.threshold_value = 0
+
+    def update_threshold_value(self, new_threshold):
+        self.threshold_value = new_threshold
+
+    def camera_new_frame(self):
+        frame = self.double_side_manager.get_webcam_frame()
+        logger.debug(str(self.threshold_value))
+        frame = self.double_side_manager.detect_holes(frame, self.threshold_value)
+        image = qimage2ndarray.array2qimage(frame)
+        return image
