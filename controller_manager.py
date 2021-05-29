@@ -36,6 +36,7 @@ class ControllerWorker(QObject):
         super(ControllerWorker, self).__init__()
 
         self.view_tab_controller = ViewTabController()
+        self.control_tab_controller = ControlTabController()
         self.align_tab_controller = AlignTabController()
 
         self.serialRxQueue = serial_rx_queue
@@ -68,7 +69,7 @@ class ControllerWorker(QObject):
         self.prb_reps_done = 0
 
     def on_poll_timeout(self):
-        self.serial_send_s.emit("?\n")
+        self.serial_send_s.emit(str("?\n"))  # "?\n")
 
     def on_camera_timeout(self):
         if self.align_active:
@@ -94,9 +95,7 @@ class ControllerWorker(QObject):
 
     def parse_bracket_square(self, line):
         word = self.SPLITPAT.split(line[1:-1])
-        # print("sq_word    = ")
-        # print(word)
-        # print("sq_word[0] = " + word[0])
+
         if word[0] == "PRB":
             try:
                 self.prb_val = [float(word[1]), float(word[2]), float(word[3])]
@@ -126,28 +125,24 @@ class ControllerWorker(QObject):
                     if re.match("^<.*>\s*$\s", element):
                         self.update_status_s.emit(self.parse_bracket_angle(element))
                     elif re.match("^\[.*\]\s*$\s", element):
-                        self.parse_bracket_square(element)
-                        logging.debug("self.prb_activated: " + str(self.prb_activated))
-                        logging.debug("self.prb_updated: " + str(self.prb_updated))
-                        if self.prb_activated and self.prb_updated:
-                            self.prb_activated = False
-                            self.prb_updated = False
+                        self.control_tab_controller.parse_bracket_square(element)
+                        [ack_prb_flag, ack_abl_flag, send_next] = self.control_tab_controller.process_probe_and_abl()
+                        if ack_prb_flag:
                             self.ack_probe()
-                        elif self.abl_activated:
-                            if self.prb_updated:
-                                self.prb_updated = False
-                                self.prb_num_done += 1
-                                self.abl_val.append(self.prb_val)
-                                self.prb_val = []
-                                if self.prb_num_done == self.prb_num_todo:
-                                    self.ack_auto_bed_levelling()
-                                elif self.prb_num_done < self.prb_num_todo:
-                                    logging.info(self.abl_cmd_ls[self.prb_num_done])
-                                    self.serial_send_s.emit(self.abl_cmd_ls[self.prb_num_done])  # Execute next Probe of Auto-Bed-Levelling
-                                else:
-                                    logging.error("ABL: Number of probe done exceeded the number of probe to do.")
-                        else:
-                            logging.error("Wrong square bracket element: " + element)
+                        if ack_abl_flag:
+                            self.ack_auto_bed_levelling()
+                        if send_next:
+                            self.send_next_abl()
+                        # logging.debug("self.prb_activated: " + str(self.prb_activated))
+                        # logging.debug("self.prb_updated: " + str(self.prb_updated))
+                        # if self.prb_activated and self.prb_updated:
+                        #     self.prb_activated = False
+                        #     self.prb_updated = False
+                        #     self.ack_probe()
+                        # elif self.abl_activated:
+                        #     self.update_abl()
+                        # else:
+                        #     logging.error("Wrong square bracket element: " + element)
                     elif re.match("ok\s*$\s", element):
                         pass
                     else:
@@ -162,53 +157,60 @@ class ControllerWorker(QObject):
         self.serial_send_s.emit(cmd_str)
 
     def cmd_probe(self, probe_z_max, probe_feed_rate):
-        probe_cmd_s = ""
-        probe_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
-        probe_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
-
-        self.prb_val = []
-        self.prb_updated = False
-        self.prb_activated = True
-        self.prb_num_todo = 1
-        self.prb_reps_todo = 1
+        # probe_cmd_s = ""
+        # probe_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
+        # probe_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
+        #
+        # self.prb_val = []
+        # self.prb_updated = False
+        # self.prb_activated = True
+        # self.prb_num_todo = 1
+        # self.prb_reps_todo = 1
+        probe_cmd_s = self.control_tab_controller.cmd_probe(probe_z_max, probe_feed_rate)
         logging.info(probe_cmd_s)
         self.serial_send_s.emit(probe_cmd_s)  # Execute probe
 
-    def update_probe(self):
-        self.prb_activated = False
-        if self.prb_updated:
-            self.prb_updated = False
-            self.ack_probe()
-
     def ack_probe(self):
-        logging.info("Probe: " + str(self.prb_val))
-        self.update_probe_s.emit(self.prb_val)
+        prb_val = self.control_tab_controller.get_probe_value()
+        logging.info("Probe: " + str(prb_val))
+        self.update_probe_s.emit(prb_val)
+        # logging.info("Probe: " + str(self.prb_val))
+        # self.update_probe_s.emit(self.prb_val)
 
     def cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
-        self.abl_cmd_ls = []
-        abl_cmd_s = ""
-        abl_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
+        self.control_tab_controller.cmd_auto_bed_levelling(xy_coord_list, travel_z, probe_z_max, probe_feed_rate)
+        self.send_next_abl()  # Send first probe command.
+        # self.abl_cmd_ls = []
+        # abl_cmd_s = ""
+        # abl_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
+        #
+        # self.prb_num_done = 0
+        # self.prb_num_todo = 0
+        # for coord in xy_coord_list:
+        #     self.prb_num_todo += 1
+        #     abl_cmd_s += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
+        #     abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + " F10\n"  # Go to XY coordinate
+        #     abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
+        #     abl_cmd_s += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
+        #     self.abl_cmd_ls.append(abl_cmd_s)
+        #     abl_cmd_s = ""
+        #
+        # self.abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
+        #
+        # self.prb_activated = False
+        # self.prb_updated = False
+        # self.abl_updated = False
+        # self.abl_activated = True
+        #
+        # logging.info(self.abl_cmd_ls[0])
+        # self.serial_send_s.emit(self.abl_cmd_ls[0])  # Execute First Probe of Auto-Bed-Levelling
 
-        self.prb_num_done = 0
-        self.prb_num_todo = 0
-        for coord in xy_coord_list:
-            self.prb_num_todo += 1
-            abl_cmd_s += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
-            abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + " F10\n"  # Go to XY coordinate
-            abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
-            abl_cmd_s += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
-            self.abl_cmd_ls.append(abl_cmd_s)
-            abl_cmd_s = ""
-
-        self.abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
-
-        self.prb_activated = False
-        self.prb_updated = False
-        self.abl_updated = False
-        self.abl_activated = True
-
-        logging.info(self.abl_cmd_ls[0])
-        self.serial_send_s.emit(self.abl_cmd_ls[0])  # Execute First Probe of Auto-Bed-Levelling
+    def send_next_abl(self):
+        next_abl_cmd = self.control_tab_controller.get_next_abl_cmd()
+        logging.info(next_abl_cmd)
+        self.serial_send_s.emit(next_abl_cmd)  # Execute next Probe of Auto-Bed-Levelling
+        # logging.info(self.abl_cmd_ls[self.prb_num_done])
+        # self.serial_send_s.emit(self.abl_cmd_ls[self.prb_num_done])  # Execute next Probe of Auto-Bed-Levelling
 
     def update_abl(self):
         if self.prb_updated:
@@ -219,13 +221,17 @@ class ControllerWorker(QObject):
             if self.prb_num_done == self.prb_num_todo:
                 self.ack_auto_bed_levelling()
             elif self.prb_num_done < self.prb_num_todo:
-                self.serial_send_s.emit(self.abl_cmd_ls[self.prb_num_done])  # Execute next Probe of ABL
+                logging.info(self.abl_cmd_ls[self.prb_num_done])
+                self.serial_send_s.emit(self.abl_cmd_ls[self.prb_num_done])  # Execute next Probe of Auto-Bed-Levelling
             else:
                 logging.error("ABL: Number of probe done exceeded the number of probe to do.")
 
     def ack_auto_bed_levelling(self):
-        logging.info("ABL values: " + str(self.abl_val))
-        self.update_abl_s.emit(self.abl_val)
+        abl_values = self.control_tab_controller.get_abl_value()
+        logging.info("ABL values: " + str(abl_values))
+        self.update_abl_s.emit(abl_values)
+        # logging.info("ABL values: " + str(self.abl_val))
+        # self.update_abl_s.emit(self.abl_val)
 
     @Slot(str, str)
     def load_new_layer(self, layer, layer_path):
@@ -280,8 +286,148 @@ class ViewTabController(QObject):
 
 
 class ControlTabController(QObject):
+
+    STATUSPAT = re.compile(
+        r"^<(\w*?),MPos:([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),WPos:([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),?(.*)>$")
+    POSPAT = re.compile(
+        r"^\[(...):([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*):?(\d*)\]$")
+    TLOPAT = re.compile(r"^\[(...):([+\-]?\d*\.\d*)\]$")
+    DOLLARPAT = re.compile(r"^\[G\d* .*\]$")
+    SPLITPAT = re.compile(r"[:,]")
+    VARPAT = re.compile(r"^\$(\d+)=(\d*\.?\d*) *\(?.*")
+
     def __init__(self):
         super(ControlTabController, self).__init__()
+        self.status_l = []
+        self.dro_status_updated = False
+        self.prb_activated = False
+        self.abl_activated = False
+        self.prb_updated = False
+        self.abl_updated = False
+        self.prb_val = []
+        self.abl_val = []
+        self.abl_cmd_ls = []
+        self.prb_num_todo = 0
+        self.prb_num_done = 0
+        self.prb_reps_todo = 1
+        self.prb_reps_done = 0
+
+    def get_probe_value(self):
+        return self.prb_val
+
+    def get_abl_value(self):
+        return self.abl_val
+
+    def get_next_abl_cmd(self):
+        return self.abl_cmd_ls[self.prb_num_done]
+
+    def process_probe_and_abl(self):
+        ack_prb_flag = False
+        ack_abl_flag = False
+        send_next = False
+        logging.debug("self.prb_activated: " + str(self.prb_activated))
+        logging.debug("self.prb_updated: " + str(self.prb_updated))
+        if self.prb_activated and self.prb_updated:
+            self.prb_activated = False
+            self.prb_updated = False
+            ack_prb_flag = True
+        elif self.abl_activated:
+            [ack_abl_flag, send_next] = self.update_abl()
+        else:
+            logging.warning("Not a probe, nor an ABL.")
+
+        return [ack_prb_flag, ack_abl_flag, send_next]
+
+    def parse_bracket_angle(self, line):
+        fields = line[1:-1].split("|")
+        status = fields[0]
+        mpos_l = []
+
+        for field in fields[1:]:
+            word = self.SPLITPAT.split(field)
+            if word[0] == "MPos":
+                try:
+                    mpos_l = [word[1], word[2], word[3]]
+                except (ValueError, IndexError) as e:
+                    logging.error(e, exc_info=True)
+                except:
+                    logger.error("Uncaught exception: %s", traceback.format_exc())
+
+        return [status, mpos_l]
+
+    def parse_bracket_square(self, line):
+        word = self.SPLITPAT.split(line[1:-1])
+
+        if word[0] == "PRB":
+            try:
+                self.prb_val = [float(word[1]), float(word[2]), float(word[3])]
+                self.prb_updated = True
+            except (ValueError, IndexError) as e:
+                logging.error(e, exc_info=True)
+            except:
+                logger.error("Uncaught exception: %s", traceback.format_exc())
+
+        return self.prb_val
+
+    def cmd_probe(self, probe_z_max, probe_feed_rate):
+        probe_cmd_s = ""
+        probe_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
+        probe_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
+
+        self.prb_val = []
+        self.prb_updated = False
+        self.prb_activated = True
+        self.prb_num_todo = 1
+        self.prb_reps_todo = 1
+
+        return probe_cmd_s
+
+    def cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
+        [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
+                                                                                probe_z_max, probe_feed_rate)
+        self.prb_num_done = 0
+        self.prb_activated = False
+        self.prb_updated = False
+        self.abl_updated = False
+        self.abl_activated = True
+
+        return [self.abl_cmd_ls, self.prb_num_todo]
+
+    def make_cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
+        abl_cmd_ls = []
+        abl_cmd_s = ""
+        abl_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
+
+        prb_num_todo = 0
+        for coord in xy_coord_list:
+            prb_num_todo += 1
+            abl_cmd_s += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
+            abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + " F10\n"  # Go to XY coordinate
+            abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
+            abl_cmd_s += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
+            abl_cmd_ls.append(abl_cmd_s)
+            abl_cmd_s = ""
+
+        abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
+
+        return [abl_cmd_ls, prb_num_todo]
+
+    def update_abl(self):
+        ack_flag = False
+        send_next = False
+        if self.prb_updated:
+            self.prb_updated = False
+            self.prb_num_done += 1
+            self.abl_val.append(self.prb_val)
+            self.prb_val = []
+            if self.prb_num_done == self.prb_num_todo:
+                ack_flag = True
+            elif self.prb_num_done < self.prb_num_todo:
+                send_next = True
+            else:
+                logging.error("ABL: Number of probe done exceeded the number of probe to do.")
+
+        return [ack_flag, send_next]
 
 
 class AlignTabController(QObject):
