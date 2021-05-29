@@ -1,6 +1,7 @@
 from PySide2.QtSerialPort import QSerialPort, QSerialPortInfo
 from PySide2.QtCore import QIODevice, Signal, Slot, QObject
 import logging
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -69,8 +70,19 @@ class SerialWorker(QObject):
                         self.residual_string = element
                 logger.debug("Final residual string: " + self.residual_string)
 
-    @Slot()
+    @Slot(str)
     def send(self, data):
         if self.serial_port.isOpen():
-            logger.debug("data sent: " + data)
-            self.serial_port.write(data.encode("utf-8"))
+            try:
+                logger.debug("data sent: " + str(data))
+                if isinstance(data, bytes):
+                    self.serial_port.write(data)
+                if isinstance(data, int):
+                    pass  # do nothing, this should not happen
+                    # self.serial_port.write(data)
+                else:
+                    self.serial_port.write(data.encode("utf-8"))
+            except AttributeError as e:
+                logging.error(e, exc_info=True)
+            except:
+                logger.error("Uncaught exception: %s", traceback.format_exc())
