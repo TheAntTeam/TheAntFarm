@@ -5,7 +5,7 @@ from queue import Queue
 from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui > ui_newCNC.py
 """ Custom imports """
 from serial_manager import SerialWorker
-from controller_manager import ControllerWorker
+from controller.controller_manager import ControllerWorker
 from style_manager import StyleManager
 from ui_manager.ui_manager import UiManager
 from settings_manager import SettingsHandler
