@@ -689,8 +689,9 @@ class Ui_MainWindow(object):
         self.drill_tw.setHorizontalHeaderItem(1, __qtablewidgetitem1)
         self.drill_tw.setObjectName(u"drill_tw")
         self.drill_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.drill_tw.setColumnCount(2)
 
-        self.gridLayout_5.addWidget(self.drill_tw, 0, 1, 1, 2)
+        self.gridLayout_5.addWidget(self.drill_tw, 0, 1, 1, 2, Qt.AlignHCenter|Qt.AlignVCenter)
 
         self.drill_travel_z_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_travel_z_dsb.setObjectName(u"drill_travel_z_dsb")
@@ -1351,25 +1352,47 @@ class Ui_MainWindow(object):
 
         self.controlsVerticalLayout.addLayout(self.unlockHomingHorizontalLayout)
 
-        self.line_2 = QFrame(self.sender_tab)
-        self.line_2.setObjectName(u"line_2")
-        self.line_2.setFrameShape(QFrame.HLine)
-        self.line_2.setFrameShadow(QFrame.Sunken)
+        self.line = QFrame(self.sender_tab)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
 
-        self.controlsVerticalLayout.addWidget(self.line_2)
+        self.controlsVerticalLayout.addWidget(self.line)
 
-        self.horizontalLayout_12 = QHBoxLayout()
-        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.gridLayoutDirections = QGridLayout()
-        self.gridLayoutDirections.setObjectName(u"gridLayoutDirections")
-        self.gridLayoutDirections.setContentsMargins(5, 5, 5, 5)
+        self.jog_layout = QGridLayout()
+        self.jog_layout.setObjectName(u"jog_layout")
+        self.gridLayout_17 = QGridLayout()
+        self.gridLayout_17.setObjectName(u"gridLayout_17")
+        self.gridLayout_17.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.z_plus_pb = QPushButton(self.sender_tab)
+        self.z_plus_pb.setObjectName(u"z_plus_pb")
+        sizePolicy3.setHeightForWidth(self.z_plus_pb.sizePolicy().hasHeightForWidth())
+        self.z_plus_pb.setSizePolicy(sizePolicy3)
+        self.z_plus_pb.setMaximumSize(QSize(100, 16777215))
+
+        self.gridLayout_17.addWidget(self.z_plus_pb, 0, 0, 1, 1)
+
+        self.z_minus_pb = QPushButton(self.sender_tab)
+        self.z_minus_pb.setObjectName(u"z_minus_pb")
+        sizePolicy3.setHeightForWidth(self.z_minus_pb.sizePolicy().hasHeightForWidth())
+        self.z_minus_pb.setSizePolicy(sizePolicy3)
+        self.z_minus_pb.setMaximumSize(QSize(100, 16777215))
+
+        self.gridLayout_17.addWidget(self.z_minus_pb, 1, 0, 1, 1)
+
+
+        self.jog_layout.addLayout(self.gridLayout_17, 2, 0, 1, 1)
+
+        self.gridLayoutDirections_3 = QGridLayout()
+        self.gridLayoutDirections_3.setObjectName(u"gridLayoutDirections_3")
+        self.gridLayoutDirections_3.setContentsMargins(0, 0, 0, 0)
         self.xYMinusPlusButton = QToolButton(self.sender_tab)
         self.xYMinusPlusButton.setObjectName(u"xYMinusPlusButton")
         sizePolicy3.setHeightForWidth(self.xYMinusPlusButton.sizePolicy().hasHeightForWidth())
         self.xYMinusPlusButton.setSizePolicy(sizePolicy3)
         self.xYMinusPlusButton.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayoutDirections.addWidget(self.xYMinusPlusButton, 0, 0, 1, 1)
+        self.gridLayoutDirections_3.addWidget(self.xYMinusPlusButton, 0, 0, 1, 1)
 
         self.xYPlusMinuButton = QToolButton(self.sender_tab)
         self.xYPlusMinuButton.setObjectName(u"xYPlusMinuButton")
@@ -1377,7 +1400,7 @@ class Ui_MainWindow(object):
         self.xYPlusMinuButton.setSizePolicy(sizePolicy3)
         self.xYPlusMinuButton.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayoutDirections.addWidget(self.xYPlusMinuButton, 2, 2, 1, 1)
+        self.gridLayoutDirections_3.addWidget(self.xYPlusMinuButton, 2, 2, 1, 1)
 
         self.xMinusButton = QToolButton(self.sender_tab)
         self.xMinusButton.setObjectName(u"xMinusButton")
@@ -1385,7 +1408,7 @@ class Ui_MainWindow(object):
         self.xMinusButton.setSizePolicy(sizePolicy3)
         self.xMinusButton.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayoutDirections.addWidget(self.xMinusButton, 1, 0, 1, 1)
+        self.gridLayoutDirections_3.addWidget(self.xMinusButton, 1, 0, 1, 1)
 
         self.xYMinusButton = QToolButton(self.sender_tab)
         self.xYMinusButton.setObjectName(u"xYMinusButton")
@@ -1393,7 +1416,7 @@ class Ui_MainWindow(object):
         self.xYMinusButton.setSizePolicy(sizePolicy3)
         self.xYMinusButton.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayoutDirections.addWidget(self.xYMinusButton, 2, 0, 1, 1)
+        self.gridLayoutDirections_3.addWidget(self.xYMinusButton, 2, 0, 1, 1)
 
         self.yPlusButton = QToolButton(self.sender_tab)
         self.yPlusButton.setObjectName(u"yPlusButton")
@@ -1401,7 +1424,7 @@ class Ui_MainWindow(object):
         self.yPlusButton.setSizePolicy(sizePolicy3)
         self.yPlusButton.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayoutDirections.addWidget(self.yPlusButton, 0, 1, 1, 1)
+        self.gridLayoutDirections_3.addWidget(self.yPlusButton, 0, 1, 1, 1)
 
         self.centerButton = QToolButton(self.sender_tab)
         self.centerButton.setObjectName(u"centerButton")
@@ -1409,7 +1432,7 @@ class Ui_MainWindow(object):
         self.centerButton.setSizePolicy(sizePolicy3)
         self.centerButton.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayoutDirections.addWidget(self.centerButton, 1, 1, 1, 1)
+        self.gridLayoutDirections_3.addWidget(self.centerButton, 1, 1, 1, 1)
 
         self.yMinusButton = QToolButton(self.sender_tab)
         self.yMinusButton.setObjectName(u"yMinusButton")
@@ -1417,7 +1440,7 @@ class Ui_MainWindow(object):
         self.yMinusButton.setSizePolicy(sizePolicy3)
         self.yMinusButton.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayoutDirections.addWidget(self.yMinusButton, 2, 1, 1, 1)
+        self.gridLayoutDirections_3.addWidget(self.yMinusButton, 2, 1, 1, 1)
 
         self.xYPlusButton = QToolButton(self.sender_tab)
         self.xYPlusButton.setObjectName(u"xYPlusButton")
@@ -1425,7 +1448,7 @@ class Ui_MainWindow(object):
         self.xYPlusButton.setSizePolicy(sizePolicy3)
         self.xYPlusButton.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayoutDirections.addWidget(self.xYPlusButton, 0, 2, 1, 1)
+        self.gridLayoutDirections_3.addWidget(self.xYPlusButton, 0, 2, 1, 1)
 
         self.xPlusButton = QToolButton(self.sender_tab)
         self.xPlusButton.setObjectName(u"xPlusButton")
@@ -1433,32 +1456,107 @@ class Ui_MainWindow(object):
         self.xPlusButton.setSizePolicy(sizePolicy3)
         self.xPlusButton.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayoutDirections.addWidget(self.xPlusButton, 1, 2, 1, 1)
+        self.gridLayoutDirections_3.addWidget(self.xPlusButton, 1, 2, 1, 1)
 
 
-        self.horizontalLayout_12.addLayout(self.gridLayoutDirections)
+        self.jog_layout.addLayout(self.gridLayoutDirections_3, 0, 0, 1, 1)
 
-        self.verticalLayout_13 = QVBoxLayout()
-        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.verticalLayout_15 = QVBoxLayout()
+        self.verticalLayout_15.setObjectName(u"verticalLayout_15")
+        self.z_jog_l = QLabel(self.sender_tab)
+        self.z_jog_l.setObjectName(u"z_jog_l")
+        sizePolicy3.setHeightForWidth(self.z_jog_l.sizePolicy().hasHeightForWidth())
+        self.z_jog_l.setSizePolicy(sizePolicy3)
+        self.z_jog_l.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_15.addWidget(self.z_jog_l, 0, Qt.AlignHCenter|Qt.AlignVCenter)
+
+        self.gridLayout_18 = QGridLayout()
+        self.gridLayout_18.setObjectName(u"gridLayout_18")
+        self.z_step_val_dsb = QDoubleSpinBox(self.sender_tab)
+        self.z_step_val_dsb.setObjectName(u"z_step_val_dsb")
+        self.z_step_val_dsb.setMaximumSize(QSize(50, 16777215))
+        self.z_step_val_dsb.setFont(font)
+        self.z_step_val_dsb.setAlignment(Qt.AlignCenter)
+        self.z_step_val_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.z_step_val_dsb.setMinimum(0.010000000000000)
+        self.z_step_val_dsb.setMaximum(1000.000000000000000)
+        self.z_step_val_dsb.setSingleStep(0.100000000000000)
+        self.z_step_val_dsb.setValue(0.100000000000000)
+
+        self.gridLayout_18.addWidget(self.z_step_val_dsb, 1, 1, 1, 1)
+
+        self.z_mul_10_pb = QPushButton(self.sender_tab)
+        self.z_mul_10_pb.setObjectName(u"z_mul_10_pb")
+        sizePolicy3.setHeightForWidth(self.z_mul_10_pb.sizePolicy().hasHeightForWidth())
+        self.z_mul_10_pb.setSizePolicy(sizePolicy3)
+        self.z_mul_10_pb.setMaximumSize(QSize(50, 16777215))
+        font1 = QFont()
+        font1.setPointSize(8)
+        font1.setBold(True)
+        font1.setWeight(75)
+        self.z_mul_10_pb.setFont(font1)
+        self.z_mul_10_pb.setAutoRepeat(False)
+
+        self.gridLayout_18.addWidget(self.z_mul_10_pb, 1, 2, 1, 1)
+
+        self.z_div_10_pb = QPushButton(self.sender_tab)
+        self.z_div_10_pb.setObjectName(u"z_div_10_pb")
+        sizePolicy3.setHeightForWidth(self.z_div_10_pb.sizePolicy().hasHeightForWidth())
+        self.z_div_10_pb.setSizePolicy(sizePolicy3)
+        self.z_div_10_pb.setMaximumSize(QSize(50, 16777215))
+        self.z_div_10_pb.setFont(font)
+        self.z_div_10_pb.setAutoRepeat(False)
+
+        self.gridLayout_18.addWidget(self.z_div_10_pb, 1, 0, 1, 1)
+
+        self.z_minus_1_pb = QPushButton(self.sender_tab)
+        self.z_minus_1_pb.setObjectName(u"z_minus_1_pb")
+        sizePolicy3.setHeightForWidth(self.z_minus_1_pb.sizePolicy().hasHeightForWidth())
+        self.z_minus_1_pb.setSizePolicy(sizePolicy3)
+        self.z_minus_1_pb.setMaximumSize(QSize(50, 16777215))
+        self.z_minus_1_pb.setFont(font)
+        self.z_minus_1_pb.setAutoRepeat(True)
+
+        self.gridLayout_18.addWidget(self.z_minus_1_pb, 2, 1, 1, 1)
+
+        self.z_plus_1_pb = QPushButton(self.sender_tab)
+        self.z_plus_1_pb.setObjectName(u"z_plus_1_pb")
+        sizePolicy3.setHeightForWidth(self.z_plus_1_pb.sizePolicy().hasHeightForWidth())
+        self.z_plus_1_pb.setSizePolicy(sizePolicy3)
+        self.z_plus_1_pb.setMaximumSize(QSize(50, 16777215))
+        self.z_plus_1_pb.setFont(font)
+        self.z_plus_1_pb.setAutoRepeat(True)
+
+        self.gridLayout_18.addWidget(self.z_plus_1_pb, 0, 1, 1, 1)
+
+
+        self.verticalLayout_15.addLayout(self.gridLayout_18)
+
+
+        self.jog_layout.addLayout(self.verticalLayout_15, 2, 1, 1, 1)
+
+        self.verticalLayout_14 = QVBoxLayout()
+        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
         self.xy_jog_l = QLabel(self.sender_tab)
         self.xy_jog_l.setObjectName(u"xy_jog_l")
         sizePolicy3.setHeightForWidth(self.xy_jog_l.sizePolicy().hasHeightForWidth())
         self.xy_jog_l.setSizePolicy(sizePolicy3)
         self.xy_jog_l.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout_13.addWidget(self.xy_jog_l, 0, Qt.AlignHCenter)
+        self.verticalLayout_14.addWidget(self.xy_jog_l, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.gridLayout_14 = QGridLayout()
-        self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.gridLayout_16 = QGridLayout()
+        self.gridLayout_16.setObjectName(u"gridLayout_16")
         self.xy_plus_1_pb = QPushButton(self.sender_tab)
         self.xy_plus_1_pb.setObjectName(u"xy_plus_1_pb")
         sizePolicy3.setHeightForWidth(self.xy_plus_1_pb.sizePolicy().hasHeightForWidth())
         self.xy_plus_1_pb.setSizePolicy(sizePolicy3)
-        self.xy_plus_1_pb.setMaximumSize(QSize(50, 75))
+        self.xy_plus_1_pb.setMaximumSize(QSize(50, 16777215))
         self.xy_plus_1_pb.setFont(font)
         self.xy_plus_1_pb.setAutoRepeat(True)
 
-        self.gridLayout_14.addWidget(self.xy_plus_1_pb, 0, 1, 1, 1)
+        self.gridLayout_16.addWidget(self.xy_plus_1_pb, 0, 1, 1, 1)
 
         self.xy_div_10_pb = QPushButton(self.sender_tab)
         self.xy_div_10_pb.setObjectName(u"xy_div_10_pb")
@@ -1468,7 +1566,7 @@ class Ui_MainWindow(object):
         self.xy_div_10_pb.setFont(font)
         self.xy_div_10_pb.setAutoRepeat(False)
 
-        self.gridLayout_14.addWidget(self.xy_div_10_pb, 1, 0, 1, 1)
+        self.gridLayout_16.addWidget(self.xy_div_10_pb, 1, 0, 1, 1)
 
         self.xy_step_val_dsb = QDoubleSpinBox(self.sender_tab)
         self.xy_step_val_dsb.setObjectName(u"xy_step_val_dsb")
@@ -1483,21 +1581,17 @@ class Ui_MainWindow(object):
         self.xy_step_val_dsb.setSingleStep(0.100000000000000)
         self.xy_step_val_dsb.setValue(0.100000000000000)
 
-        self.gridLayout_14.addWidget(self.xy_step_val_dsb, 1, 1, 1, 1)
+        self.gridLayout_16.addWidget(self.xy_step_val_dsb, 1, 1, 1, 1)
 
         self.xy_mul_10_pb = QPushButton(self.sender_tab)
         self.xy_mul_10_pb.setObjectName(u"xy_mul_10_pb")
         sizePolicy3.setHeightForWidth(self.xy_mul_10_pb.sizePolicy().hasHeightForWidth())
         self.xy_mul_10_pb.setSizePolicy(sizePolicy3)
         self.xy_mul_10_pb.setMaximumSize(QSize(50, 16777215))
-        font1 = QFont()
-        font1.setPointSize(8)
-        font1.setBold(True)
-        font1.setWeight(75)
         self.xy_mul_10_pb.setFont(font1)
         self.xy_mul_10_pb.setAutoRepeat(False)
 
-        self.gridLayout_14.addWidget(self.xy_mul_10_pb, 1, 2, 1, 1)
+        self.gridLayout_16.addWidget(self.xy_mul_10_pb, 1, 2, 1, 1)
 
         self.xy_minus_1_pb = QPushButton(self.sender_tab)
         self.xy_minus_1_pb.setObjectName(u"xy_minus_1_pb")
@@ -1507,120 +1601,31 @@ class Ui_MainWindow(object):
         self.xy_minus_1_pb.setFont(font)
         self.xy_minus_1_pb.setAutoRepeat(True)
 
-        self.gridLayout_14.addWidget(self.xy_minus_1_pb, 2, 1, 1, 1)
+        self.gridLayout_16.addWidget(self.xy_minus_1_pb, 2, 1, 1, 1)
 
 
-        self.verticalLayout_13.addLayout(self.gridLayout_14)
+        self.verticalLayout_14.addLayout(self.gridLayout_16)
 
 
-        self.horizontalLayout_12.addLayout(self.verticalLayout_13)
+        self.jog_layout.addLayout(self.verticalLayout_14, 0, 1, 1, 1)
+
+        self.line_2 = QFrame(self.sender_tab)
+        self.line_2.setObjectName(u"line_2")
+        self.line_2.setLineWidth(1)
+        self.line_2.setFrameShape(QFrame.HLine)
+        self.line_2.setFrameShadow(QFrame.Sunken)
+
+        self.jog_layout.addWidget(self.line_2, 1, 1, 1, 1)
+
+        self.line_5 = QFrame(self.sender_tab)
+        self.line_5.setObjectName(u"line_5")
+        self.line_5.setFrameShape(QFrame.HLine)
+        self.line_5.setFrameShadow(QFrame.Sunken)
+
+        self.jog_layout.addWidget(self.line_5, 1, 0, 1, 1)
 
 
-        self.controlsVerticalLayout.addLayout(self.horizontalLayout_12)
-
-        self.line = QFrame(self.sender_tab)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
-
-        self.controlsVerticalLayout.addWidget(self.line)
-
-        self.xyzIncrementsHorizontalLayout = QHBoxLayout()
-        self.xyzIncrementsHorizontalLayout.setObjectName(u"xyzIncrementsHorizontalLayout")
-        self.xyzIncrementsHorizontalLayout.setContentsMargins(1, 1, 1, 1)
-        self.verticalLayout_5 = QVBoxLayout()
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.verticalLayout_5.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.z_plus_pb = QPushButton(self.sender_tab)
-        self.z_plus_pb.setObjectName(u"z_plus_pb")
-        sizePolicy3.setHeightForWidth(self.z_plus_pb.sizePolicy().hasHeightForWidth())
-        self.z_plus_pb.setSizePolicy(sizePolicy3)
-
-        self.verticalLayout_5.addWidget(self.z_plus_pb, 0, Qt.AlignHCenter|Qt.AlignVCenter)
-
-        self.z_minus_pb = QPushButton(self.sender_tab)
-        self.z_minus_pb.setObjectName(u"z_minus_pb")
-        sizePolicy3.setHeightForWidth(self.z_minus_pb.sizePolicy().hasHeightForWidth())
-        self.z_minus_pb.setSizePolicy(sizePolicy3)
-
-        self.verticalLayout_5.addWidget(self.z_minus_pb, 0, Qt.AlignHCenter|Qt.AlignVCenter)
-
-
-        self.xyzIncrementsHorizontalLayout.addLayout(self.verticalLayout_5)
-
-        self.verticalLayout_4 = QVBoxLayout()
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.z_jog_l = QLabel(self.sender_tab)
-        self.z_jog_l.setObjectName(u"z_jog_l")
-        sizePolicy3.setHeightForWidth(self.z_jog_l.sizePolicy().hasHeightForWidth())
-        self.z_jog_l.setSizePolicy(sizePolicy3)
-        self.z_jog_l.setAlignment(Qt.AlignCenter)
-
-        self.verticalLayout_4.addWidget(self.z_jog_l, 0, Qt.AlignHCenter)
-
-        self.gridLayout_11 = QGridLayout()
-        self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.z_step_val_dsb = QDoubleSpinBox(self.sender_tab)
-        self.z_step_val_dsb.setObjectName(u"z_step_val_dsb")
-        self.z_step_val_dsb.setMaximumSize(QSize(50, 16777215))
-        self.z_step_val_dsb.setFont(font)
-        self.z_step_val_dsb.setAlignment(Qt.AlignCenter)
-        self.z_step_val_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.z_step_val_dsb.setMinimum(0.010000000000000)
-        self.z_step_val_dsb.setMaximum(1000.000000000000000)
-        self.z_step_val_dsb.setSingleStep(0.100000000000000)
-        self.z_step_val_dsb.setValue(0.100000000000000)
-
-        self.gridLayout_11.addWidget(self.z_step_val_dsb, 1, 1, 1, 1)
-
-        self.z_mul_10_pb = QPushButton(self.sender_tab)
-        self.z_mul_10_pb.setObjectName(u"z_mul_10_pb")
-        sizePolicy3.setHeightForWidth(self.z_mul_10_pb.sizePolicy().hasHeightForWidth())
-        self.z_mul_10_pb.setSizePolicy(sizePolicy3)
-        self.z_mul_10_pb.setMaximumSize(QSize(50, 16777215))
-        self.z_mul_10_pb.setFont(font1)
-        self.z_mul_10_pb.setAutoRepeat(False)
-
-        self.gridLayout_11.addWidget(self.z_mul_10_pb, 1, 2, 1, 1)
-
-        self.z_div_10_pb = QPushButton(self.sender_tab)
-        self.z_div_10_pb.setObjectName(u"z_div_10_pb")
-        sizePolicy3.setHeightForWidth(self.z_div_10_pb.sizePolicy().hasHeightForWidth())
-        self.z_div_10_pb.setSizePolicy(sizePolicy3)
-        self.z_div_10_pb.setMaximumSize(QSize(50, 16777215))
-        self.z_div_10_pb.setFont(font)
-        self.z_div_10_pb.setAutoRepeat(False)
-
-        self.gridLayout_11.addWidget(self.z_div_10_pb, 1, 0, 1, 1)
-
-        self.z_minus_1_pb = QPushButton(self.sender_tab)
-        self.z_minus_1_pb.setObjectName(u"z_minus_1_pb")
-        sizePolicy3.setHeightForWidth(self.z_minus_1_pb.sizePolicy().hasHeightForWidth())
-        self.z_minus_1_pb.setSizePolicy(sizePolicy3)
-        self.z_minus_1_pb.setMaximumSize(QSize(50, 16777215))
-        self.z_minus_1_pb.setFont(font)
-        self.z_minus_1_pb.setAutoRepeat(True)
-
-        self.gridLayout_11.addWidget(self.z_minus_1_pb, 2, 1, 1, 1)
-
-        self.z_plus_1_pb = QPushButton(self.sender_tab)
-        self.z_plus_1_pb.setObjectName(u"z_plus_1_pb")
-        sizePolicy3.setHeightForWidth(self.z_plus_1_pb.sizePolicy().hasHeightForWidth())
-        self.z_plus_1_pb.setSizePolicy(sizePolicy3)
-        self.z_plus_1_pb.setMaximumSize(QSize(50, 16777215))
-        self.z_plus_1_pb.setFont(font)
-        self.z_plus_1_pb.setAutoRepeat(True)
-
-        self.gridLayout_11.addWidget(self.z_plus_1_pb, 0, 1, 1, 1)
-
-
-        self.verticalLayout_4.addLayout(self.gridLayout_11)
-
-
-        self.xyzIncrementsHorizontalLayout.addLayout(self.verticalLayout_4)
-
-
-        self.controlsVerticalLayout.addLayout(self.xyzIncrementsHorizontalLayout)
+        self.controlsVerticalLayout.addLayout(self.jog_layout)
 
         self.terminalVerticalLayout = QVBoxLayout()
         self.terminalVerticalLayout.setObjectName(u"terminalVerticalLayout")
@@ -2004,7 +2009,7 @@ class Ui_MainWindow(object):
         self.main_tab_widget.setCurrentIndex(0)
         self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.settings_sub_tab.setCurrentIndex(0)
 
 
@@ -2153,6 +2158,8 @@ class Ui_MainWindow(object):
         self.homing_pb.setText(QCoreApplication.translate("MainWindow", u"Homing", None))
         self.probe_pb.setText(QCoreApplication.translate("MainWindow", u"Probe", None))
         self.ABL_pb.setText(QCoreApplication.translate("MainWindow", u"ABL", None))
+        self.z_plus_pb.setText(QCoreApplication.translate("MainWindow", u"Z+", None))
+        self.z_minus_pb.setText(QCoreApplication.translate("MainWindow", u"Z-", None))
         self.xYMinusPlusButton.setText(QCoreApplication.translate("MainWindow", u"X- Y+", None))
         self.xYPlusMinuButton.setText(QCoreApplication.translate("MainWindow", u"X+ Y-", None))
         self.xMinusButton.setText(QCoreApplication.translate("MainWindow", u"X-", None))
@@ -2162,18 +2169,16 @@ class Ui_MainWindow(object):
         self.yMinusButton.setText(QCoreApplication.translate("MainWindow", u"Y-", None))
         self.xYPlusButton.setText(QCoreApplication.translate("MainWindow", u"X+ Y+", None))
         self.xPlusButton.setText(QCoreApplication.translate("MainWindow", u"X+", None))
-        self.xy_jog_l.setText(QCoreApplication.translate("MainWindow", u"XY", None))
-        self.xy_plus_1_pb.setText(QCoreApplication.translate("MainWindow", u"+1", None))
-        self.xy_div_10_pb.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
-        self.xy_mul_10_pb.setText(QCoreApplication.translate("MainWindow", u"x10", None))
-        self.xy_minus_1_pb.setText(QCoreApplication.translate("MainWindow", u"-1", None))
-        self.z_plus_pb.setText(QCoreApplication.translate("MainWindow", u"Z+", None))
-        self.z_minus_pb.setText(QCoreApplication.translate("MainWindow", u"Z-", None))
-        self.z_jog_l.setText(QCoreApplication.translate("MainWindow", u"Z", None))
+        self.z_jog_l.setText(QCoreApplication.translate("MainWindow", u" Z [0.1 mm]", None))
         self.z_mul_10_pb.setText(QCoreApplication.translate("MainWindow", u"x10", None))
         self.z_div_10_pb.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
         self.z_minus_1_pb.setText(QCoreApplication.translate("MainWindow", u"-1", None))
         self.z_plus_1_pb.setText(QCoreApplication.translate("MainWindow", u"+1", None))
+        self.xy_jog_l.setText(QCoreApplication.translate("MainWindow", u"XY [0.1 mm]", None))
+        self.xy_plus_1_pb.setText(QCoreApplication.translate("MainWindow", u"+1", None))
+        self.xy_div_10_pb.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
+        self.xy_mul_10_pb.setText(QCoreApplication.translate("MainWindow", u"x10", None))
+        self.xy_minus_1_pb.setText(QCoreApplication.translate("MainWindow", u"-1", None))
         self.send_pb.setText(QCoreApplication.translate("MainWindow", u"Send", None))
 #if QT_CONFIG(tooltip)
         self.serial_ports_cb.setToolTip(QCoreApplication.translate("MainWindow", u"Available serial ports.", None))
