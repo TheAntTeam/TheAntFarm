@@ -107,6 +107,7 @@ class ControlController(QObject):
     def cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
         [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
                                                                                 probe_z_max, probe_feed_rate)
+        self.abl_val = []
         self.prb_num_done = 0
         self.prb_activated = False
         self.prb_updated = False
