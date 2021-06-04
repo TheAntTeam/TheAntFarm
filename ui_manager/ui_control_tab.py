@@ -41,8 +41,8 @@ class UiControlTab(QObject):
         self.ui.clear_terminal_pb.clicked.connect(self.handle_clear_terminal)
         self.ui.send_pb.clicked.connect(self.send_input)
         self.ui.send_te.returnPressed.connect(self.send_input)
-        self.ui.unlock_pb.clicked.connect(self.handle_unlock)
-        self.ui.homing_pb.clicked.connect(self.handle_homing)
+        self.ui.unlock_tb.clicked.connect(self.handle_unlock)
+        self.ui.homing_tb.clicked.connect(self.handle_homing)
         self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
         self.ui.xPlusButton.clicked.connect(self.handle_x_plus)
         self.ui.yMinusButton.clicked.connect(self.handle_y_minus)
@@ -65,6 +65,13 @@ class UiControlTab(QObject):
 
         self.ui.probe_pb.clicked.connect(self.handle_probe_cmd)
         self.ui.ABL_pb.clicked.connect(self.handle_auto_bed_levelling)
+
+        self.ui.unlock_tb.setEnabled(False)
+        self.ui.homing_tb.setEnabled(False)
+        self.ui.play_tb.setEnabled(False)
+        self.ui.pause_resume_tb.setEnabled(False)
+        self.ui.stop_tb.setEnabled(False)
+        self.ui.tool_change_tb.setEnabled(False)
 
     @Slot(list)
     def update_status(self, status_l):
@@ -112,6 +119,8 @@ class UiControlTab(QObject):
                 self.ui.refresh_pb.hide()
                 self.ui.send_te.show()
                 self.ui.send_pb.show()
+                self.ui.unlock_tb.setEnabled(True)
+                self.ui.homing_tb.setEnabled(True)
         else:
             self.serialWo.close_port()
             self.serial_connection_status = False
@@ -122,6 +131,8 @@ class UiControlTab(QObject):
             self.ui.send_te.hide()
             self.ui.send_pb.hide()
             self.ui.status_l.setText("Not Connected")
+            self.ui.unlock_tb.setEnabled(False)
+            self.ui.homing_tb.setEnabled(False)
 
     def handle_clear_terminal(self):
         self.ui.serial_te.clear()

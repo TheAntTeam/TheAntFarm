@@ -274,13 +274,13 @@ class Optimizer:
             x.append(c[0])
             y.append(c[1])
 
-        fig, ax = plt.subplots(1, 1)
-        ax.plot(x, y,  '-or')
-        ax.set_ylabel('Y')
-        ax.set_xlabel('X')
-        ax.set_aspect('equal')
-        fig.tight_layout()
-        plt.show()
+        # fig, ax = plt.subplots(1, 1)
+        # ax.plot(x, y,  '-or')
+        # ax.set_ylabel('Y')
+        # ax.set_xlabel('X')
+        # ax.set_aspect('equal')
+        # fig.tight_layout()
+        # plt.show()
 
         return optimized_coords
 
