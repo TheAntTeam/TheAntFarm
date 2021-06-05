@@ -1317,17 +1317,6 @@ class Ui_MainWindow(object):
 
         self.controlsVerticalLayout.addWidget(self.line_3)
 
-        self.tableWidget_2 = QTableWidget(self.sender_tab)
-        if (self.tableWidget_2.columnCount() < 3):
-            self.tableWidget_2.setColumnCount(3)
-        if (self.tableWidget_2.rowCount() < 4):
-            self.tableWidget_2.setRowCount(4)
-        self.tableWidget_2.setObjectName(u"tableWidget_2")
-        self.tableWidget_2.setRowCount(4)
-        self.tableWidget_2.setColumnCount(3)
-
-        self.controlsVerticalLayout.addWidget(self.tableWidget_2)
-
         self.gridLayout_10 = QGridLayout()
         self.gridLayout_10.setObjectName(u"gridLayout_10")
         self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -1354,62 +1343,143 @@ class Ui_MainWindow(object):
 
         self.gridLayout_10.addWidget(self.get_bbox_pb, 0, 2, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.horizontalLayout_11 = QHBoxLayout()
-        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-        self.label_3 = QLabel(self.sender_tab)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setFont(font)
-
-        self.horizontalLayout_11.addWidget(self.label_3, 0, Qt.AlignHCenter|Qt.AlignVCenter)
-
-        self.doubleSpinBox = QDoubleSpinBox(self.sender_tab)
-        self.doubleSpinBox.setObjectName(u"doubleSpinBox")
-        self.doubleSpinBox.setAlignment(Qt.AlignCenter)
-        self.doubleSpinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-
-        self.horizontalLayout_11.addWidget(self.doubleSpinBox)
-
-
-        self.gridLayout_10.addLayout(self.horizontalLayout_11, 1, 0, 1, 1)
-
-        self.horizontalLayout_12 = QHBoxLayout()
-        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.label_4 = QLabel(self.sender_tab)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setFont(font)
-
-        self.horizontalLayout_12.addWidget(self.label_4, 0, Qt.AlignHCenter|Qt.AlignVCenter)
-
-        self.doubleSpinBox_3 = QDoubleSpinBox(self.sender_tab)
-        self.doubleSpinBox_3.setObjectName(u"doubleSpinBox_3")
-        self.doubleSpinBox_3.setAlignment(Qt.AlignCenter)
-        self.doubleSpinBox_3.setButtonSymbols(QAbstractSpinBox.NoButtons)
-
-        self.horizontalLayout_12.addWidget(self.doubleSpinBox_3)
-
-
-        self.gridLayout_10.addLayout(self.horizontalLayout_12, 1, 1, 1, 1)
-
-        self.horizontalLayout_13 = QHBoxLayout()
-        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
-        self.label_5 = QLabel(self.sender_tab)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setFont(font)
-
-        self.horizontalLayout_13.addWidget(self.label_5)
-
-        self.spinBox = QSpinBox(self.sender_tab)
-        self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setAlignment(Qt.AlignCenter)
-        self.spinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-
-        self.horizontalLayout_13.addWidget(self.spinBox)
-
-
-        self.gridLayout_10.addLayout(self.horizontalLayout_13, 1, 2, 1, 1)
-
 
         self.controlsVerticalLayout.addLayout(self.gridLayout_10)
+
+        self.gridLayout_11 = QGridLayout()
+        self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.label_6 = QLabel(self.sender_tab)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setFont(font)
+        self.label_6.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_11.addWidget(self.label_6, 0, 1, 1, 1)
+
+        self.label_7 = QLabel(self.sender_tab)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setFont(font)
+        self.label_7.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_11.addWidget(self.label_7, 0, 2, 1, 1)
+
+        self.label_8 = QLabel(self.sender_tab)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setFont(font)
+        self.label_8.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_11.addWidget(self.label_8, 0, 3, 1, 1)
+
+        self.label_9 = QLabel(self.sender_tab)
+        self.label_9.setObjectName(u"label_9")
+        self.label_9.setFont(font)
+        self.label_9.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_11.addWidget(self.label_9, 0, 4, 1, 1)
+
+        self.label_10 = QLabel(self.sender_tab)
+        self.label_10.setObjectName(u"label_10")
+        self.label_10.setFont(font)
+        self.label_10.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_11.addWidget(self.label_10, 1, 0, 1, 1)
+
+        self.doubleSpinBox_2 = QDoubleSpinBox(self.sender_tab)
+        self.doubleSpinBox_2.setObjectName(u"doubleSpinBox_2")
+        self.doubleSpinBox_2.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_2.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+        self.gridLayout_11.addWidget(self.doubleSpinBox_2, 1, 1, 1, 1)
+
+        self.doubleSpinBox_4 = QDoubleSpinBox(self.sender_tab)
+        self.doubleSpinBox_4.setObjectName(u"doubleSpinBox_4")
+        self.doubleSpinBox_4.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_4.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+        self.gridLayout_11.addWidget(self.doubleSpinBox_4, 1, 2, 1, 1)
+
+        self.doubleSpinBox_5 = QDoubleSpinBox(self.sender_tab)
+        self.doubleSpinBox_5.setObjectName(u"doubleSpinBox_5")
+        self.doubleSpinBox_5.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_5.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+        self.gridLayout_11.addWidget(self.doubleSpinBox_5, 1, 3, 1, 1)
+
+        self.spinBox_2 = QSpinBox(self.sender_tab)
+        self.spinBox_2.setObjectName(u"spinBox_2")
+        self.spinBox_2.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_11.addWidget(self.spinBox_2, 1, 4, 1, 1)
+
+        self.label_11 = QLabel(self.sender_tab)
+        self.label_11.setObjectName(u"label_11")
+        self.label_11.setFont(font)
+        self.label_11.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_11.addWidget(self.label_11, 2, 0, 1, 1)
+
+        self.doubleSpinBox_7 = QDoubleSpinBox(self.sender_tab)
+        self.doubleSpinBox_7.setObjectName(u"doubleSpinBox_7")
+        self.doubleSpinBox_7.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_7.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+        self.gridLayout_11.addWidget(self.doubleSpinBox_7, 2, 1, 1, 1)
+
+        self.doubleSpinBox_6 = QDoubleSpinBox(self.sender_tab)
+        self.doubleSpinBox_6.setObjectName(u"doubleSpinBox_6")
+        self.doubleSpinBox_6.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_6.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+        self.gridLayout_11.addWidget(self.doubleSpinBox_6, 2, 2, 1, 1)
+
+        self.doubleSpinBox_8 = QDoubleSpinBox(self.sender_tab)
+        self.doubleSpinBox_8.setObjectName(u"doubleSpinBox_8")
+        self.doubleSpinBox_8.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_8.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+        self.gridLayout_11.addWidget(self.doubleSpinBox_8, 2, 3, 1, 1)
+
+        self.spinBox_3 = QSpinBox(self.sender_tab)
+        self.spinBox_3.setObjectName(u"spinBox_3")
+        self.spinBox_3.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_11.addWidget(self.spinBox_3, 2, 4, 1, 1)
+
+        self.label_12 = QLabel(self.sender_tab)
+        self.label_12.setObjectName(u"label_12")
+        self.label_12.setFont(font)
+        self.label_12.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_11.addWidget(self.label_12, 3, 0, 1, 1)
+
+        self.doubleSpinBox_10 = QDoubleSpinBox(self.sender_tab)
+        self.doubleSpinBox_10.setObjectName(u"doubleSpinBox_10")
+        self.doubleSpinBox_10.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_10.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+        self.gridLayout_11.addWidget(self.doubleSpinBox_10, 3, 1, 1, 1)
+
+        self.doubleSpinBox_9 = QDoubleSpinBox(self.sender_tab)
+        self.doubleSpinBox_9.setObjectName(u"doubleSpinBox_9")
+        self.doubleSpinBox_9.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_9.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+        self.gridLayout_11.addWidget(self.doubleSpinBox_9, 3, 2, 1, 1)
+
+        self.doubleSpinBox_11 = QDoubleSpinBox(self.sender_tab)
+        self.doubleSpinBox_11.setObjectName(u"doubleSpinBox_11")
+        self.doubleSpinBox_11.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_11.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+        self.gridLayout_11.addWidget(self.doubleSpinBox_11, 3, 3, 1, 1)
+
+        self.spinBox_4 = QSpinBox(self.sender_tab)
+        self.spinBox_4.setObjectName(u"spinBox_4")
+        self.spinBox_4.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_11.addWidget(self.spinBox_4, 3, 4, 1, 1)
+
+
+        self.controlsVerticalLayout.addLayout(self.gridLayout_11)
 
         self.line = QFrame(self.sender_tab)
         self.line.setObjectName(u"line")
@@ -1824,15 +1894,105 @@ class Ui_MainWindow(object):
         sizePolicy9.setVerticalStretch(0)
         sizePolicy9.setHeightForWidth(self.status_l.sizePolicy().hasHeightForWidth())
         self.status_l.setSizePolicy(sizePolicy9)
-        self.status_l.setMinimumSize(QSize(120, 80))
+        self.status_l.setMinimumSize(QSize(120, 50))
         self.status_l.setMaximumSize(QSize(120, 16777215))
+        palette = QPalette()
+        brush = QBrush(QColor(0, 0, 0, 255))
+        brush.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.WindowText, brush)
+        brush1 = QBrush(QColor(0, 255, 127, 255))
+        brush1.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Button, brush1)
+        brush2 = QBrush(QColor(127, 255, 191, 255))
+        brush2.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Light, brush2)
+        brush3 = QBrush(QColor(63, 255, 159, 255))
+        brush3.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Midlight, brush3)
+        brush4 = QBrush(QColor(0, 127, 63, 255))
+        brush4.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Dark, brush4)
+        brush5 = QBrush(QColor(0, 170, 84, 255))
+        brush5.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Mid, brush5)
+        brush6 = QBrush(QColor(0, 255, 255, 255))
+        brush6.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Text, brush6)
+        brush7 = QBrush(QColor(170, 170, 255, 255))
+        brush7.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.BrightText, brush7)
+        palette.setBrush(QPalette.Active, QPalette.ButtonText, brush)
+        brush8 = QBrush(QColor(255, 255, 255, 255))
+        brush8.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Base, brush8)
+        palette.setBrush(QPalette.Active, QPalette.Window, brush1)
+        palette.setBrush(QPalette.Active, QPalette.Shadow, brush)
+        brush9 = QBrush(QColor(170, 170, 0, 255))
+        brush9.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.HighlightedText, brush9)
+        palette.setBrush(QPalette.Active, QPalette.AlternateBase, brush2)
+        brush10 = QBrush(QColor(170, 85, 255, 255))
+        brush10.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.NoRole, brush10)
+        brush11 = QBrush(QColor(255, 255, 220, 255))
+        brush11.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.ToolTipBase, brush11)
+        palette.setBrush(QPalette.Active, QPalette.ToolTipText, brush)
+        brush12 = QBrush(QColor(255, 255, 127, 128))
+        brush12.setStyle(Qt.SolidPattern)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+        palette.setBrush(QPalette.Active, QPalette.PlaceholderText, brush12)
+#endif
+        palette.setBrush(QPalette.Inactive, QPalette.WindowText, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.Button, brush1)
+        palette.setBrush(QPalette.Inactive, QPalette.Light, brush2)
+        palette.setBrush(QPalette.Inactive, QPalette.Midlight, brush3)
+        palette.setBrush(QPalette.Inactive, QPalette.Dark, brush4)
+        palette.setBrush(QPalette.Inactive, QPalette.Mid, brush5)
+        palette.setBrush(QPalette.Inactive, QPalette.Text, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.BrightText, brush8)
+        palette.setBrush(QPalette.Inactive, QPalette.ButtonText, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.Base, brush8)
+        palette.setBrush(QPalette.Inactive, QPalette.Window, brush1)
+        palette.setBrush(QPalette.Inactive, QPalette.Shadow, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.HighlightedText, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.AlternateBase, brush2)
+        palette.setBrush(QPalette.Inactive, QPalette.NoRole, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.ToolTipBase, brush11)
+        palette.setBrush(QPalette.Inactive, QPalette.ToolTipText, brush)
+        brush13 = QBrush(QColor(0, 0, 0, 128))
+        brush13.setStyle(Qt.SolidPattern)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+        palette.setBrush(QPalette.Inactive, QPalette.PlaceholderText, brush13)
+#endif
+        palette.setBrush(QPalette.Disabled, QPalette.WindowText, brush4)
+        palette.setBrush(QPalette.Disabled, QPalette.Button, brush1)
+        palette.setBrush(QPalette.Disabled, QPalette.Light, brush2)
+        palette.setBrush(QPalette.Disabled, QPalette.Midlight, brush3)
+        palette.setBrush(QPalette.Disabled, QPalette.Dark, brush4)
+        palette.setBrush(QPalette.Disabled, QPalette.Mid, brush5)
+        palette.setBrush(QPalette.Disabled, QPalette.Text, brush4)
+        palette.setBrush(QPalette.Disabled, QPalette.BrightText, brush8)
+        palette.setBrush(QPalette.Disabled, QPalette.ButtonText, brush4)
+        palette.setBrush(QPalette.Disabled, QPalette.Base, brush1)
+        palette.setBrush(QPalette.Disabled, QPalette.Window, brush1)
+        palette.setBrush(QPalette.Disabled, QPalette.Shadow, brush)
+        palette.setBrush(QPalette.Disabled, QPalette.HighlightedText, brush8)
+        palette.setBrush(QPalette.Disabled, QPalette.AlternateBase, brush1)
+        palette.setBrush(QPalette.Disabled, QPalette.NoRole, brush)
+        palette.setBrush(QPalette.Disabled, QPalette.ToolTipBase, brush11)
+        palette.setBrush(QPalette.Disabled, QPalette.ToolTipText, brush)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+        palette.setBrush(QPalette.Disabled, QPalette.PlaceholderText, brush13)
+#endif
+        self.status_l.setPalette(palette)
         font2 = QFont()
         font2.setPointSize(10)
         font2.setBold(True)
         font2.setWeight(75)
         self.status_l.setFont(font2)
-        self.status_l.setFrameShape(QFrame.Box)
-        self.status_l.setFrameShadow(QFrame.Sunken)
+        self.status_l.setFrameShape(QFrame.StyledPanel)
+        self.status_l.setFrameShadow(QFrame.Plain)
         self.status_l.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_3.addWidget(self.status_l)
@@ -1841,7 +2001,7 @@ class Ui_MainWindow(object):
         self.unlock_tb.setObjectName(u"unlock_tb")
         sizePolicy9.setHeightForWidth(self.unlock_tb.sizePolicy().hasHeightForWidth())
         self.unlock_tb.setSizePolicy(sizePolicy9)
-        self.unlock_tb.setMinimumSize(QSize(120, 80))
+        self.unlock_tb.setMinimumSize(QSize(120, 90))
         self.unlock_tb.setMaximumSize(QSize(120, 16777215))
         icon = QIcon()
         icon.addFile(u"resources/icons/unlock-padlock.svg", QSize(), QIcon.Normal, QIcon.Off)
@@ -1855,7 +2015,7 @@ class Ui_MainWindow(object):
         self.homing_tb.setObjectName(u"homing_tb")
         sizePolicy9.setHeightForWidth(self.homing_tb.sizePolicy().hasHeightForWidth())
         self.homing_tb.setSizePolicy(sizePolicy9)
-        self.homing_tb.setMinimumSize(QSize(120, 80))
+        self.homing_tb.setMinimumSize(QSize(120, 90))
         self.homing_tb.setMaximumSize(QSize(120, 16777215))
         icon1 = QIcon()
         icon1.addFile(u"resources/icons/home.svg", QSize(), QIcon.Normal, QIcon.Off)
@@ -1869,7 +2029,7 @@ class Ui_MainWindow(object):
         self.play_tb.setObjectName(u"play_tb")
         sizePolicy9.setHeightForWidth(self.play_tb.sizePolicy().hasHeightForWidth())
         self.play_tb.setSizePolicy(sizePolicy9)
-        self.play_tb.setMinimumSize(QSize(120, 80))
+        self.play_tb.setMinimumSize(QSize(120, 90))
         self.play_tb.setMaximumSize(QSize(120, 16777215))
         icon2 = QIcon()
         icon2.addFile(u"resources/icons/play-button-arrowhead.svg", QSize(), QIcon.Normal, QIcon.Off)
@@ -1883,7 +2043,7 @@ class Ui_MainWindow(object):
         self.pause_resume_tb.setObjectName(u"pause_resume_tb")
         sizePolicy9.setHeightForWidth(self.pause_resume_tb.sizePolicy().hasHeightForWidth())
         self.pause_resume_tb.setSizePolicy(sizePolicy9)
-        self.pause_resume_tb.setMinimumSize(QSize(120, 80))
+        self.pause_resume_tb.setMinimumSize(QSize(120, 90))
         self.pause_resume_tb.setMaximumSize(QSize(120, 16777215))
         icon3 = QIcon()
         icon3.addFile(u"resources/icons/pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Normal, QIcon.Off)
@@ -1897,7 +2057,7 @@ class Ui_MainWindow(object):
         self.stop_tb.setObjectName(u"stop_tb")
         sizePolicy9.setHeightForWidth(self.stop_tb.sizePolicy().hasHeightForWidth())
         self.stop_tb.setSizePolicy(sizePolicy9)
-        self.stop_tb.setMinimumSize(QSize(120, 80))
+        self.stop_tb.setMinimumSize(QSize(120, 90))
         self.stop_tb.setMaximumSize(QSize(120, 16777215))
         icon4 = QIcon()
         icon4.addFile(u"resources/icons/stop-button-black-rounded-square.svg", QSize(), QIcon.Normal, QIcon.Off)
@@ -1911,7 +2071,7 @@ class Ui_MainWindow(object):
         self.tool_change_tb.setObjectName(u"tool_change_tb")
         sizePolicy9.setHeightForWidth(self.tool_change_tb.sizePolicy().hasHeightForWidth())
         self.tool_change_tb.setSizePolicy(sizePolicy9)
-        self.tool_change_tb.setMinimumSize(QSize(120, 80))
+        self.tool_change_tb.setMinimumSize(QSize(120, 90))
         self.tool_change_tb.setMaximumSize(QSize(120, 16777215))
         icon5 = QIcon()
         icon5.addFile(u"resources/icons/milling-machine.svg", QSize(), QIcon.Normal, QIcon.Off)
@@ -2096,7 +2256,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(0)
+        self.main_tab_widget.setCurrentIndex(1)
         self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(1)
@@ -2247,9 +2407,13 @@ class Ui_MainWindow(object):
         self.ABL_pb.setText(QCoreApplication.translate("MainWindow", u"ABL", None))
         self.probe_pb.setText(QCoreApplication.translate("MainWindow", u"PROBE", None))
         self.get_bbox_pb.setText(QCoreApplication.translate("MainWindow", u"GET BBOX", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"X Min", None))
-        self.label_4.setText(QCoreApplication.translate("MainWindow", u"X Max", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"X Steps", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"Min", None))
+        self.label_7.setText(QCoreApplication.translate("MainWindow", u"Max", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Step", None))
+        self.label_9.setText(QCoreApplication.translate("MainWindow", u"N", None))
+        self.label_10.setText(QCoreApplication.translate("MainWindow", u"X", None))
+        self.label_11.setText(QCoreApplication.translate("MainWindow", u"Y", None))
+        self.label_12.setText(QCoreApplication.translate("MainWindow", u"Z", None))
         self.z_plus_pb.setText(QCoreApplication.translate("MainWindow", u"Z+", None))
         self.z_minus_pb.setText(QCoreApplication.translate("MainWindow", u"Z-", None))
         self.xYMinusPlusButton.setText(QCoreApplication.translate("MainWindow", u"X- Y+", None))
