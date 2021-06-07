@@ -76,9 +76,23 @@ class UiControlTab(QObject):
     @Slot(list)
     def update_status(self, status_l):
         self.ui.status_l.setText(status_l[0])
+        self.update_status_colors(status_l[0])
         self.ui.mpos_x_label.setText(status_l[1][0])
         self.ui.mpos_y_label.setText(status_l[1][1])
         self.ui.mpos_z_label.setText(status_l[1][2])
+
+    def update_status_colors(self, status):
+        sta = status.lower()
+        bkg_c = "gray"
+        txt_c = "white"
+        if "alarm" in sta:
+            bkg_c = "red"
+            txt_c = "white"
+        elif "idle" in sta:
+            bkg_c = "yellow"
+            txt_c = "black"
+
+        self.ui.status_l.setStyleSheet("QLabel { background-color : " + bkg_c + "; color : " + txt_c + "; }")
 
     @Slot(list)
     def update_probe(self, probe_l):

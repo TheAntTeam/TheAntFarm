@@ -1686,7 +1686,7 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_11">
               <item>
-               <widget class="QTableWidget" name="tableWidget">
+               <widget class="QTableWidget" name="gcode_tw">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -2382,8 +2382,14 @@
                   </item>
                   <item row="1" column="3">
                    <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
                     </property>
                     <property name="buttonSymbols">
                      <enum>QAbstractSpinBox::NoButtons</enum>
@@ -2435,8 +2441,14 @@
                   </item>
                   <item row="2" column="3">
                    <widget class="QDoubleSpinBox" name="doubleSpinBox_8">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
                     </property>
                     <property name="buttonSymbols">
                      <enum>QAbstractSpinBox::NoButtons</enum>
@@ -2483,23 +2495,6 @@
                     </property>
                     <property name="buttonSymbols">
                      <enum>QAbstractSpinBox::NoButtons</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="3">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_11">
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="4">
-                   <widget class="QSpinBox" name="spinBox_4">
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
                     </property>
                    </widget>
                   </item>

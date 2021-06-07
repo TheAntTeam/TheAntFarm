@@ -1080,12 +1080,12 @@ class Ui_MainWindow(object):
         self.gcode_load.setSizePolicy(sizePolicy3)
         self.verticalLayout_11 = QVBoxLayout(self.gcode_load)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
-        self.tableWidget = QTableWidget(self.gcode_load)
-        self.tableWidget.setObjectName(u"tableWidget")
-        sizePolicy.setHeightForWidth(self.tableWidget.sizePolicy().hasHeightForWidth())
-        self.tableWidget.setSizePolicy(sizePolicy)
+        self.gcode_tw = QTableWidget(self.gcode_load)
+        self.gcode_tw.setObjectName(u"gcode_tw")
+        sizePolicy.setHeightForWidth(self.gcode_tw.sizePolicy().hasHeightForWidth())
+        self.gcode_tw.setSizePolicy(sizePolicy)
 
-        self.verticalLayout_11.addWidget(self.tableWidget)
+        self.verticalLayout_11.addWidget(self.gcode_tw)
 
         self.horizontalLayout_10 = QHBoxLayout()
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
@@ -1399,7 +1399,9 @@ class Ui_MainWindow(object):
 
         self.doubleSpinBox_5 = QDoubleSpinBox(self.sender_tab)
         self.doubleSpinBox_5.setObjectName(u"doubleSpinBox_5")
+        self.doubleSpinBox_5.setEnabled(False)
         self.doubleSpinBox_5.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_5.setReadOnly(True)
         self.doubleSpinBox_5.setButtonSymbols(QAbstractSpinBox.NoButtons)
 
         self.gridLayout_11.addWidget(self.doubleSpinBox_5, 1, 3, 1, 1)
@@ -1433,7 +1435,9 @@ class Ui_MainWindow(object):
 
         self.doubleSpinBox_8 = QDoubleSpinBox(self.sender_tab)
         self.doubleSpinBox_8.setObjectName(u"doubleSpinBox_8")
+        self.doubleSpinBox_8.setEnabled(False)
         self.doubleSpinBox_8.setAlignment(Qt.AlignCenter)
+        self.doubleSpinBox_8.setReadOnly(True)
         self.doubleSpinBox_8.setButtonSymbols(QAbstractSpinBox.NoButtons)
 
         self.gridLayout_11.addWidget(self.doubleSpinBox_8, 2, 3, 1, 1)
@@ -1464,19 +1468,6 @@ class Ui_MainWindow(object):
         self.doubleSpinBox_9.setButtonSymbols(QAbstractSpinBox.NoButtons)
 
         self.gridLayout_11.addWidget(self.doubleSpinBox_9, 3, 2, 1, 1)
-
-        self.doubleSpinBox_11 = QDoubleSpinBox(self.sender_tab)
-        self.doubleSpinBox_11.setObjectName(u"doubleSpinBox_11")
-        self.doubleSpinBox_11.setAlignment(Qt.AlignCenter)
-        self.doubleSpinBox_11.setButtonSymbols(QAbstractSpinBox.NoButtons)
-
-        self.gridLayout_11.addWidget(self.doubleSpinBox_11, 3, 3, 1, 1)
-
-        self.spinBox_4 = QSpinBox(self.sender_tab)
-        self.spinBox_4.setObjectName(u"spinBox_4")
-        self.spinBox_4.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_11.addWidget(self.spinBox_4, 3, 4, 1, 1)
 
 
         self.controlsVerticalLayout.addLayout(self.gridLayout_11)
