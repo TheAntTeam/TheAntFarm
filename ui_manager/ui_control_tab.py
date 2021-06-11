@@ -91,6 +91,9 @@ class UiControlTab(QObject):
         elif "idle" in sta:
             bkg_c = "yellow"
             txt_c = "black"
+        elif "not connected" in sta:
+            bkg_c = "dark gray"
+            txt_c = "black"
 
         self.ui.status_l.setStyleSheet("QLabel { background-color : " + bkg_c + "; color : " + txt_c + "; }")
 
@@ -145,6 +148,7 @@ class UiControlTab(QObject):
             self.ui.send_te.hide()
             self.ui.send_pb.hide()
             self.ui.status_l.setText("Not Connected")
+            self.update_status_colors("Not Connected")
             self.ui.unlock_tb.setEnabled(False)
             self.ui.homing_tb.setEnabled(False)
 
