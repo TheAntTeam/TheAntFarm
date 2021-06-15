@@ -5,11 +5,12 @@ from PySide2.QtCore import Qt
 
 class StyleManager:
     """Style manager class"""
+
     def __init__(self, app_ptr):
         self.app_ptr = app_ptr
         self.native_styles = QStyleFactory.keys()
         self.default_palette = QPalette()
-        self.default_style = "Fusion" #None
+        self.default_style = "Fusion"  # None
         self.dark_palette_action = None
 
     def list_styles(self):
@@ -64,7 +65,7 @@ class StyleManager:
             self.app_ptr.setPalette(self.default_palette)
 
     def set_dark_palette(self):
-        dark_gray = QColor(53,53,53)
+        dark_gray = QColor(53, 53, 53)
         gray = QColor(128, 128, 128)
         black = QColor(25, 25, 25)
         blue = QColor(42, 130, 218)

@@ -1,4 +1,7 @@
-from PySide2.QtCore import Signal, Slot, QObject
+from PySide2.QtCore import Signal, Slot, QObject, QSize
+from PySide2.QtWidgets import QFileDialog, QLineEdit, QToolButton
+from PySide2.QtGui import QIcon
+import os
 import logging
 
 logger = logging.getLogger(__name__)
@@ -13,6 +16,7 @@ class UiControlTab(QObject):
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
+        self.gcode_last_dir = ""
 
         self.ui.xy_jog_l.setText("XY [" + str(self.ui.xy_step_val_dsb.value()) + " mm]")
         self.ui.z_jog_l.setText("Z [" + str(self.ui.z_step_val_dsb.value()) + " mm]")
@@ -31,6 +35,8 @@ class UiControlTab(QObject):
 
         # From Serial Manager to Control Manager
         self.serialWo.rx_queue_not_empty_s.connect(self.controlWo.parse_rx_queue)
+
+        self.ui.open_gcode_tb.clicked.connect(self.open_gcode_files)
 
         self.ui.send_te.setPlaceholderText('input here')
         self.ui.send_te.hide()
@@ -96,6 +102,31 @@ class UiControlTab(QObject):
             txt_c = "black"
 
         self.ui.status_l.setStyleSheet("QLabel { background-color : " + bkg_c + "; color : " + txt_c + "; }")
+
+    def open_gcode_files(self):
+        load_gcode = QFileDialog.getOpenFileNames(None,
+                                                  "Load G-Code File(s)",
+                                                  self.gcode_last_dir,
+                                                  "G-Code Files (*.gcode)")
+
+        logging.debug(load_gcode)
+        load_gcode_paths = load_gcode[0]
+        if load_gcode_paths:
+            self.gcode_last_dir = os.path.dirname(load_gcode_paths[0])
+            num_cols = self.ui.gcode_tw.columnCount()
+            if num_cols == 0:
+                self.ui.gcode_tw.insertColumn(0)
+            for elem in load_gcode_paths:
+                num_rows = self.ui.gcode_tw.rowCount()
+                self.ui.gcode_tw.insertRow(num_rows)
+                new_le = QLineEdit(elem)
+                new_le.setReadOnly(True)
+                self.ui.gcode_tw.setCellWidget(num_rows, 0, new_le)
+                new_tb = QToolButton()
+                icon = QIcon()
+                icon.addFile(u"resources/icons/play-button-arrowhead.svg", QSize(), QIcon.Normal, QIcon.Off)
+                new_tb.setIcon(icon)
+                self.ui.gcode_tw.setCellWidget(num_rows, 2, new_tb)
 
     @Slot(list)
     def update_probe(self, probe_l):

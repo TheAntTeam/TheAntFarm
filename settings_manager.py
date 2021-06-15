@@ -14,21 +14,25 @@ class SettingsHandler:
         self.main_win = main_win
         self.ui_manager = ui_manager
 
-        self.ui_ll = self.ui_manager.ui_load_layer_m
-        self.app_settings = AppSettingsHandler(self.CONFIG_FOLDER, main_win, self.ui_ll)
+        # self.ui_ll = self.ui_manager.ui_load_layer_m
+        self.app_settings = AppSettingsHandler(self.CONFIG_FOLDER, main_win, ui_manager)  # self.ui_ll)
 
         self.ui_cj = self.ui_manager.ui_create_job_m
         self.jobs_settings = JobSettingsHandler(self.CONFIG_FOLDER, self.ui_cj)
+
+        self.gcf_settings = GCodeFilesSettingsHandler(self.CONFIG_FOLDER)
 
     def read_all_settings(self):
         """ Read all settings from ini files """
         self.app_settings.read_all_app_settings()
         self.jobs_settings.read_all_jobs_settings()
+        self.gcf_settings.read_all_gcf_settings()
 
     def write_all_settings(self):
         """ Write all settings to ini files """
         self.app_settings.write_all_app_settings()
         self.jobs_settings.write_all_jobs_settings()
+        self.gcf_settings.write_all_gcf_settings()
 
 
 class AppSettingsHandler:
@@ -38,16 +42,19 @@ class AppSettingsHandler:
     WIN_SIZE_W_DEFAULT = 1160
     WIN_SIZE_H_DEFAULT = 720
     LAYER_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
+    GCODE_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
 
-    def __init__(self, config_folder, main_win, ui_ll):
+    def __init__(self, config_folder, main_win, ui_manager):
         self.app_config_path = config_folder + os.path.sep + 'app_config.ini'
         self.app_settings = configparser.ConfigParser()
 
         self.main_win = main_win
-        self.ui_ll = ui_ll
+        self.ui_ll = ui_manager.ui_load_layer_m
+        self.ui_ct = ui_manager.ui_control_tab_m
         self.pos = QPoint(self.WIN_POS_X_DEFAULT, self.WIN_POS_Y_DEFAULT)
         self.size = QSize(self.WIN_SIZE_W_DEFAULT, self.WIN_SIZE_H_DEFAULT)
         self.ui_ll.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
+        self.ui_ct.gcode_last_dir = self.GCODE_LAST_DIR_DEFAULT
 
     def read_all_app_settings(self):
         """ Read all application settings from ini files """
@@ -69,6 +76,10 @@ class AppSettingsHandler:
             app_layers_settings = self.app_settings["LAYERS"]
             self.ui_ll.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
 
+        if "GCODES" in self.app_settings:
+            app_gcode_settings = self.app_settings["GCODES"]
+            self.ui_ct.gcode_last_dir = app_gcode_settings.get("gcode_last_dir", self.GCODE_LAST_DIR_DEFAULT)
+
     def write_all_app_settings(self):
         """ Write all application settings to ini files """
         self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
@@ -89,6 +100,11 @@ class AppSettingsHandler:
         self.app_settings["LAYERS"] = {}
         app_layers = self.app_settings["LAYERS"]
         app_layers["last_load_dir"] = self.ui_ll.layer_last_dir
+
+        # Layers related application settings #
+        self.app_settings["GCODES"] = {}
+        app_layers = self.app_settings["GCODES"]
+        app_layers["gcode_last_dir"] = self.ui_ct.gcode_last_dir
 
         # Write application ini file #
         with open(self.app_config_path, 'w') as configfile:
@@ -325,3 +341,31 @@ class JobSettingsHandler:
         # Write application ini file #
         with open(self.jobs_config_path, 'w') as configfile:
             self.jobs_settings.write(configfile)
+
+
+class GCodeFilesSettingsHandler:
+    # G-Code Files CONFIGURATION DEFAULT VALUES
+
+    def __init__(self, config_folder):
+        self.gcf_config_path = os.path.join(config_folder, 'gcode_files_config.ini')
+        self.gcf_settings = configparser.ConfigParser()
+
+    def read_all_gcf_settings(self):
+        """ Read all g-code files'settings from ini files """
+        # Read g-code files'settings ini file #
+        self.gcf_settings.read(self.gcf_config_path)
+
+        # if "FILES" in self.gcf_settings:
+
+    def write_all_gcf_settings(self):
+        """ Write all g-code files'settings to ini files """
+        # self.gcf_settings['DEFAULT'] = {}
+
+        gcf_settings_od = {}
+        self.gcf_settings["FILES"] = {}
+        files_settings = self.gcf_settings["FILES"]
+        files_settings["ciao"] = "hola"
+
+        # Write application ini file #
+        with open(self.gcf_config_path, 'w') as configfile:
+            self.gcf_settings.write(configfile)
