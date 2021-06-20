@@ -3,7 +3,7 @@
 # https://stackoverflow.com/questions/33942728/how-to-get-world-coordinates-from-screen-coordinates-in-vispy
 
 from vispy import gloo
-from vispy.scene import visuals, PanZoomCamera
+from vispy.scene import visuals, PanZoomCamera, TurntableCamera
 from vispy.color import Color
 from vispy.visuals.filters import Alpha
 from OpenGL import GLU
@@ -117,14 +117,36 @@ class GLUTess:
 class VisualLayer:
 
     DELTA = 1
+    TOP_ORDER = {'drill': 0, 'profile': 1, 'top': 3, 'bottom': 4, 'nc_top': 2, 'nc_bottom': 5}
+    BTM_ORDER = {'drill': 0, 'profile': 1, 'top': 4, 'bottom': 3, 'nc_top': 5, 'nc_bottom': 2}
 
     def __init__(self, canvas):
         self.canvas = canvas
         self.canvas.view.camera = PanZoomCamera(aspect=1)
         self.translucent_filter = Alpha()
-        self.z = 1
         self.meshes = OrderedDict({})
         self.paths = OrderedDict({})
+        self.view = 0
+
+    def top_view(self):
+        self.canvas.view.camera.up = "+z"
+        self.canvas.view.camera.flip = (False, False, False)
+
+        for m in self.meshes.keys():
+            self.meshes[m].order = self.TOP_ORDER[m]
+
+        self.canvas._draw_order.clear()
+        self.canvas.update()
+
+    def bottom_view(self):
+        self.canvas.view.camera.up = "-z"
+        self.canvas.view.camera.flip = (True, False, True)
+
+        for m in self.meshes.keys():
+            self.meshes[m].order = self.BTM_ORDER[m]
+
+        self.canvas._draw_order.clear()
+        self.canvas.update()
 
     def on_mouse_double_click(self, event):
         print("Double Click")
@@ -169,7 +191,11 @@ class VisualLayer:
     def add_layer(self, tag, geom_list, color=None, holes=False):
         ldata = [[], []]
         triangulizer = GLUTess()
-        order = self.z
+        order = 0
+        order_d = self.TOP_ORDER if self.canvas.view.camera.up == '+z' else self.BTM_ORDER
+        if tag in order_d:
+            order = order_d[tag]
+
         for g in geom_list:
             # tri, pts = triangulizer.triangulate(g.geom, self.z)
             tri, pts = triangulizer.triangulate(g.geom, 0)
@@ -186,7 +212,7 @@ class VisualLayer:
         self.create_mesh(tag, ldata, color, order)
         # print("END")
         # self.z -= self.DELTA
-        self.z += self.DELTA
+        # self.z += self.DELTA
 
     def add_path(self, tag, geom_list, color=None):
         # todo: add zbuffer controll
@@ -260,6 +286,13 @@ class VisualLayer:
 
         tri = ldata[0]
         pts = ldata[1]
+
+        # print(order)
+        # new_pts = []
+        # for p in pts:
+        #     new_pts.append((p[0], p[1], order))
+        # pts = new_pts
+
         if color:
             mesh_colors = [Color(color).rgba] * int(len(tri) / 3)
             mesh.set_data(np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)),

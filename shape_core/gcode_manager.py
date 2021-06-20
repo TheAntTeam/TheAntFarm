@@ -22,8 +22,8 @@ class GCoder:
 
         self.mill = True
 
-        self.change_tool_pos = (6.0, 8.0, 9.0) # todo: vanno parametrizzati
-        self.probe_tool_pos = (6.0, 8.0, 9.0) # todo: vanno parametrizzati
+        self.change_tool_pos = (6.0, 8.0, 9.0)  # todo: vanno parametrizzati
+        self.probe_tool_pos = (6.0, 8.0, 9.0)  # todo: vanno parametrizzati
 
         # units:
         # ms -> metric system

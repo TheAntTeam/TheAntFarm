@@ -311,7 +311,9 @@ def _merge_poly_set(poly_set, pure_merge=False):
             init_holes.append(i.coords)
 
     if to_merge:
+        start_time = time.time()
         dark_poly_sh = _merge_polylist_shapely(to_merge)
+        print("--- %s seconds ---" % (time.time() - start_time))
         to_merge = [g.geom.exterior.coords for g in clear]
 
         if to_merge or pure_merge:
@@ -371,6 +373,8 @@ def _merge_poly_set(poly_set, pure_merge=False):
 
 
 def merge_polygons(mp):
+    print("Collect Geom")
+    start_time = time.time()
     others = []
 
     to_merge = []
@@ -403,7 +407,7 @@ def merge_polygons(mp):
                 pre_pol = p.polarity
             else:
                 others.append(p)
-
+    print("--- %s seconds ---" % (time.time() - start_time))
     print("Geom Collected")
     if poly_set[0]:
         merged += _merge_poly_set(poly_set)
@@ -411,7 +415,7 @@ def merge_polygons(mp):
     # plot_shapely(tmp_p, color="orange")
 
     print("Final Merging")
-
+    start_time = time.time()
     # merged_final = _merge_poly_set([merged, []], pure_merge=True)
 
     merged_final = []
@@ -436,6 +440,7 @@ def merge_polygons(mp):
     layer = merged_final
     # tmp_p = [m.geom for m in layer]
     # plot_shapely(tmp_p)
+    print("--- %s seconds ---" % (time.time() - start_time))
 
     return layer, others
 

@@ -1,5 +1,6 @@
 
 import os
+import time
 import gerber as gbr
 import gerber.primitives
 import numpy as np
@@ -16,8 +17,8 @@ class PcbObj:
     GBR_KEYS = ["top", "bottom", "profile"]
     EXN_KEYS = ["drill"]
     DEFAULT_ARC_SUBDIVISIONS = 64
-    MAX_ARC_CHORD_LEN = 0.2  # mm
-    MIN_ARC_CHORD_LEN = 0.02  # mm
+    MAX_ARC_CHORD_LEN = 0.5  # mm
+    MIN_ARC_CHORD_LEN = 0.1  # mm
 
     def __init__(self):
 
@@ -83,15 +84,20 @@ class PcbObj:
         self.excellons[tag].to_metric()
 
     def get_gerber_layer(self, tag):
+        print("Get Gerber Layer")
+        start_time = time.time()
         g = self.get_gerber(tag)
         mp = []
+        print("*** %s seconds ---" % (time.time() - start_time))
         for primitive in g.primitives:
             gdata = self._primitive_paths(primitive)
             for gd in gdata:
                 g = Geom(gd)
                 if g.closed:
                     mp.append(g)
+        print("**- %s seconds ---" % (time.time() - start_time))
         self.layers[tag] = merge_polygons(mp)
+        print("*-- %s seconds ---" % (time.time() - start_time))
         return self.layers[tag]
 
     def get_excellon_layer(self, tag):
@@ -116,7 +122,6 @@ class PcbObj:
 
             # chord length 2 * r * sin(theta/2)
             clen = abs(2.0 * radius * math.sin(0.5 * self.arc_angle))
-            # print(clen)
 
             if clen < self.arc_min_len:
                 min_theta = self.arc_min_len / radius
@@ -129,8 +134,6 @@ class PcbObj:
             divisions = max(divisions, 4)
         else:
             divisions = forced_divisions
-
-
 
         theta = np.linspace(start_angle, end_angle, divisions)
 
