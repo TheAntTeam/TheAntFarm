@@ -14,6 +14,8 @@ class GCoder:
     DIGITS = 4
     STEPS = 3
     SAFE_Z_PROBE = -1.0
+    CHANGE_TOOL_POS = (6.0, 8.0, 9.0)
+    PROBE_TOOL_POS = (6.0, 8.0, 9.0)
 
     def __init__(self, tag, machining_type='gerber', parent=None, units='ms'):
 
@@ -22,8 +24,9 @@ class GCoder:
 
         self.mill = True
 
-        self.change_tool_pos = (6.0, 8.0, 9.0)  # todo: vanno parametrizzati
-        self.probe_tool_pos = (6.0, 8.0, 9.0)  # todo: vanno parametrizzati
+        self.change_tool_pos = self.CHANGE_TOOL_POS  # todo: vanno parametrizzati
+        self.probe_tool_pos = self.PROBE_TOOL_POS  # todo: vanno parametrizzati
+        self.safe_z_probe = self.SAFE_Z_PROBE
 
         # units:
         # ms -> metric system
@@ -116,7 +119,7 @@ class GCoder:
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-        self.write(self.get_file_name())
+        #self.write(self.get_file_name())
 
     def compute_gerber(self):
         # essenzialmente si tratta di seguire i punti indicati dai paths
@@ -148,7 +151,7 @@ class GCoder:
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-        self.write(self.get_file_name())
+        #self.write(self.get_file_name())
 
     def compute_pocketing(self):
         # essenzialmente si tratta di seguire i punti indicati dai paths
@@ -199,7 +202,7 @@ class GCoder:
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-        self.write(self.get_file_name())
+        #self.write(self.get_file_name())
 
     def compute_drill_paths(self, paths):
         # imposto la velocita' di lavoro

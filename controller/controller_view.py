@@ -1,6 +1,8 @@
 from PySide2.QtCore import QObject
 from shape_core.pcb_manager import PcbObj
 from shape_core.path_manager import MachinePath
+from shape_core.gcode_manager import GCoder
+import os
 import logging
 import traceback
 
@@ -45,3 +47,15 @@ class ViewController(QObject):
         path.execute()
         new_paths = path.get_path()
         return new_paths
+
+    @staticmethod
+    def generate_new_gcode_file(tag, cfg, machining_type, path):
+        gcoder = GCoder(tag, machining_type)
+        gcoder.load_cfg(cfg)
+        gcoder.load_path(path)
+        if gcoder.compute():
+            gcode_filename = gcoder.get_file_name()
+            gcode_path = os.path.join(os.path.dirname(__file__), gcode_filename)
+            gcoder.write(gcode_path)
+        else:
+            logging.error("Gcode generation failed.")

@@ -355,7 +355,8 @@ class GCodeFilesSettingsHandler:
         # Read g-code files'settings ini file #
         self.gcf_settings.read(self.gcf_config_path)
 
-        # if "FILES" in self.gcf_settings:
+        if "FILES" in self.gcf_settings:
+            self.gcf_settings["FILES"]["gcode_folder"]
 
     def write_all_gcf_settings(self):
         """ Write all g-code files'settings to ini files """
@@ -364,7 +365,7 @@ class GCodeFilesSettingsHandler:
         gcf_settings_od = {}
         self.gcf_settings["FILES"] = {}
         files_settings = self.gcf_settings["FILES"]
-        files_settings["ciao"] = "hola"
+        files_settings["gcode_folder"] = os.path.dirname(self.gcf_config_path)
 
         # Write application ini file #
         with open(self.gcf_config_path, 'w') as configfile:

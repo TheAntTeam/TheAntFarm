@@ -69,6 +69,7 @@ class ControllerWorker(QObject):
     @Slot(str, Od, str)
     def generate_new_path(self, tag, cfg, machining_type):
         new_paths = self.view_controller.generate_new_path(tag, cfg, machining_type)
+        self.view_controller.generate_new_gcode_file(tag, cfg, machining_type, new_paths)
         self.update_path_s.emit(tag, new_paths)
 
     # ***************** CONTROL related functions. ***************** #
