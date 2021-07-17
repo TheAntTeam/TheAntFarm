@@ -1,6 +1,11 @@
 
 import os
+import re
+import numpy as np
+from collections import OrderedDict as od
 from datetime import datetime
+# import matplotlib.pyplot as plt
+import scipy.interpolate as spi
 
 
 class GCoder:
@@ -114,7 +119,7 @@ class GCoder:
 
         for d in self.path:
             path = d[1]
-            self.compute_drill_paths([path])
+            self.compute_drill_paths(path)
 
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
@@ -424,7 +429,221 @@ class GCoder:
         print("Done")
 
 
+class GcodeLine:
+    def __init__(self):
+        self.command = ()
+        self.params = od({})
+        self.comment = ""
+
+    def __repr__(self):
+        s = "GcodeLine (\n"
+        s += " command = " + str(self.command) + "\n"
+        t = []
+        for k in self.params:
+            t.append(str(k) + ": " + str(self.params[k]))
+        s += " params  = {" + ", ".join(t) + "}\n"
+        s += " comment = " + str(self.comment) + "\n"
+        s += ")\n"
+        return s
+
+
+class GcodePoint:
+    def __init__(self):
+        self.coords = np.zeros((3,))
+        self.line = -1
+        self.sub_line = 0
+        self.type = "w"  # w working t travel
+
+    def __repr__(self):
+        s = "GcodeVector (\n"
+        s += " coords = " + str(self.coords) + "," + "\n"
+        s += " type  = " + str("working" if self.type == "w" else "travel") + "\n"
+        s += " line  = " + str(self.line) + "\n"
+        if self.sub_line > 0:
+            s += " sub_line  = " + str(self.sub_line) + "\n"
+        s += ")\n"
+        return s
+
+    def copy(self):
+        np = GcodePoint()
+        np.coords = self.coords.copy()
+        np.line = self.line
+        np.sub_line = self.sub_line
+        np.type = self.type
+        return np
+
+
+class GCode:
+
+    def __init__(self, lines):
+        self.original_lines = lines
+        self.modified_lines = []
+        self.gcll = []
+        self.original_vectors = []
+        self.modified_vectors = []
+        self.bb = None
+
+
 class GCodeParser:
 
-    def __init__(self):
-        pass
+    COORD_TAG = ['x', 'y', 'z']
+
+    def __init__(self, cfg):
+        self.gcode_path = ""
+        self.cfg = cfg
+        self.gc = None
+
+    def load_gcode_file(self, gcode_path):
+        lines = []
+        if os.path.isfile(gcode_path):
+            self.gcode_path = gcode_path
+            with open(self.gcode_path) as f:
+                lines = f.readlines()
+            if lines:
+                # ha caricato il file gcode
+                # come primo step va tipizzata ogni linea
+                self.gc = GCode(lines)
+        else:
+            print("Invalid GCode File Path")
+
+    def interp(self):
+        if self.gc is not None:
+            ls = self.gc.original_lines
+            gcll = []
+            for l in ls:
+                d = l.strip()
+                d = d.replace("(", ";")
+                d = d.replace(")", "")
+                d += ";"
+                tmp = d.split(";")
+                data, comment = tmp[0:2]
+                if data or comment:
+                    gcl = GcodeLine()
+                    # salvo l'eventuale commento
+                    gcl.comment = comment.strip()
+                    # decodifico l'eventuale comando
+                    if data:
+                        data = data.lower()
+                        splitted = re.findall(r'[a-z][-]*[\d.]+', data)
+
+                        cmd = splitted.pop(0)
+                        ct = cmd[0]
+                        cd = [int(x) for x in cmd[1::].split(".")]
+                        gcl.command = (ct, cd)
+
+                        par = splitted
+                        params = od({})
+                        for p in par:
+                            params[p[0]] = float(p[1::])
+                        gcl.params = params
+                    gcll.append(gcl)
+            self.gc.gcll = gcll
+
+    def vectorize(self):
+        if self.gc.gcll:
+            p0 = GcodePoint()
+            last_coord = p0.coords.copy()
+            vl = [p0]
+            bb_max = [-1e6, -1e6, -1e6]
+            bb_min = [1e6, 1e6, 1e6]
+            for i, gcl in enumerate(self.gc.gcll):
+                if gcl.command:
+                    # print(gcl)
+                    cn = gcl.command[0]
+                    ci = gcl.command[1][0]
+                    if cn == 'g' and ci < 2:
+                        # e' un comando di movimento vado ad aggiornare la lista
+                        # dei vettori
+                        a = set(gcl.params.keys())
+                        b = set(self.COORD_TAG)
+                        c = b.intersection(a)
+                        if c:
+                            for e in c:
+                                last_coord[self.COORD_TAG.index(e)] = gcl.params[e]
+                                bb_max[self.COORD_TAG.index(e)] = max(bb_max[self.COORD_TAG.index(e)], gcl.params[e])
+                                bb_min[self.COORD_TAG.index(e)] = min(bb_min[self.COORD_TAG.index(e)], gcl.params[e])
+                            p = last_coord.copy()
+                            px = GcodePoint()
+                            px.coords = p
+                            px.type = 't' if ci == 0 else 'w'
+                            px.line = i
+                            #print(gcl)
+                            #print(px)
+                            vl.append(px)
+            if len(vl) > 1:
+                self.gc.original_vectors = vl
+                self.gc.bb = tuple(bb_min + bb_max)
+
+    def get_gcode(self):
+        return self.gc
+
+    def get_bbox(self):
+        return self.gc.bb
+
+
+class GCodeLeveler:
+
+    def __init__(self, gc, grid_data=None):
+        self.gc = gc
+        if grid_data is not None:
+            self.grid_data = grid_data
+        else:
+            self.grid_data = self.get_dummy_grid_data()
+        self.ig = None
+
+    def get_dummy_grid_data(self):
+        grid_steps = 10
+        if self.gc is not None:
+            bb = self.gc.bb
+            if bb is not None:
+                x_min = bb[0]
+                y_min = bb[1]
+                delta_x = bb[3]-bb[0]
+                delta_y = bb[4]-bb[1]
+                delta_i = np.sqrt(delta_x*delta_x + delta_y*delta_y)
+                delta_z = 0.2
+                delta_z0 = -0.1
+                xi = np.linspace(0.0, delta_x, grid_steps)
+                yi = np.linspace(0.0, delta_y, grid_steps)
+                X, Y = np.meshgrid(xi, yi)
+                Z = np.sqrt(np.square(X) + np.square(Y))/delta_i * delta_z + delta_z0
+                X += x_min
+                Y += y_min
+                #cs = plt.contourf(X, Y, Z, cmap="bone")
+                #cbar = plt.colorbar(cs)
+                #plt.title('Grid Example')
+                #plt.show()
+                return X, Y, Z
+
+    def interp_grid_data(self):
+        if self.grid_data is not None:
+            print("Grid Data Interpolation...")
+            X, Y, Z = self.grid_data
+            self.ig = spi.interp2d(X, Y, Z, kind='cubic')
+            print("Done")
+
+    def apply(self):
+        print("Auto Bed Leveler Start")
+        if self.gc is not None and self.ig is not None:
+            mvl = []
+            for p in self.gc.original_vectors:
+                np = p.copy()
+                delta = self.ig(np.coords[0], np.coords[1])
+                np.coords[2] += delta
+                mvl.append(np)
+        print("Auto Bed Leveler Stop")
+
+
+if __name__ == "__main__":
+
+    gcode_path = "C:\\Users\\Mattia\\Documents\\PythonPrj\\TheAntLord\\gcode_tmp\\top_gerber.gcode"
+    cfg = {}
+
+    gcp = GCodeParser(cfg)
+    gcp.load_gcode_file(gcode_path)
+    gcp.interp()
+    gcp.vectorize()
+    abl = GCodeLeveler(gcp.gc)
+    abl.get_dummy_grid_data()
+    abl.interp_grid_data()
+    abl.apply()
