@@ -48,6 +48,11 @@ class UiManager(QObject):
         self.ui.prepare_widget.currentChanged.connect(self.from_load_to_create)
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
         self.ui.actionSettings_Preferences.triggered.connect(self.hide_show_preferences_tab)
+        self.ui.actionSave_Settings.triggered.connect(self.save_all_settings)
+
+    def save_all_settings(self):
+        all_settings_od = {"jobs_settings": self.ui_create_job_m.get_all_settings()}
+        self.settings.write_all_settings(all_settings_od)
 
     def from_load_to_create(self):
         if self.ui.prepare_widget.currentWidget().objectName() == "create_job_tab":

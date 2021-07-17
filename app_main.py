@@ -42,8 +42,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
-        all_settings_od = {"jobs_settings": self.ui_manager.ui_create_job_m.get_all_settings()}
-        self.settings.write_all_settings(all_settings_od)  # write_settings()
+        # all_settings_od = {"jobs_settings": self.ui_manager.ui_create_job_m.get_all_settings()}
+        # self.settings.write_all_settings(all_settings_od)  # write_settings()
+        self.ui_manager.save_all_settings()
         self.serialWo.close_port()
         self.serial_thread.quit()
         self.control_thread.quit()

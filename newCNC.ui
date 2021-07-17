@@ -4294,6 +4294,7 @@
     </property>
     <addaction name="actionLoad"/>
     <addaction name="actionSettings_Preferences"/>
+    <addaction name="actionSave_Settings"/>
    </widget>
    <widget class="QMenu" name="menuConsole">
     <property name="title">
@@ -4351,6 +4352,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionSave_Settings">
+   <property name="text">
+    <string>Save Settings</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>
