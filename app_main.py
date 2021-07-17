@@ -22,11 +22,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self.settings = SettingsHandler(self)
+        self.settings.read_all_settings()  # TODO: manage exceptions with a try except
+
         # Control Worker Thread, started as soon as the thread pool is started.
         self.control_thread = QThread(self)
-        self.control_thread.start()
-        self.controlWo = ControllerWorker(self.serialRxQu)
+        self.controlWo = ControllerWorker(self.serialRxQu, self.settings)
         self.controlWo.moveToThread(self.control_thread)
+        self.control_thread.start()
 
         # Serial Worker Thread.
         self.serial_thread = QThread(self)
@@ -35,14 +38,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.serialWo.moveToThread(self.serial_thread)
 
         # Important: this call should be after the thread creations.
-        self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo)
-
-        self.settings = SettingsHandler(self, self.ui_manager)
-        self.settings.read_all_settings()  # TODO: manage exceptions with a try except
+        self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo, self.settings)
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
-        self.settings.write_all_settings()  # write_settings()
+        all_settings_od = {"jobs_settings": self.ui_manager.ui_create_job_m.get_all_settings()}
+        self.settings.write_all_settings(all_settings_od)  # write_settings()
         self.serialWo.close_port()
         self.serial_thread.quit()
         self.control_thread.quit()

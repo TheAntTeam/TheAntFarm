@@ -16,8 +16,10 @@ class ControlController(QObject):
     SPLITPAT = re.compile(r"[:,]")
     VARPAT = re.compile(r"^\$(\d+)=(\d*\.?\d*) *\(?.*")
 
-    def __init__(self):
+    def __init__(self, settings):
         super(ControlController, self).__init__()
+        self.settings = settings
+
         self.status_l = []
         self.dro_status_updated = False
         self.prb_activated = False

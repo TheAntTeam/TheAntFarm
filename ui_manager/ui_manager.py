@@ -25,12 +25,14 @@ class UiManager(QObject):
         logging.CRITICAL: 'purple',
     }
 
-    def __init__(self, main_win, ui, control_worker, serial_worker):
+    def __init__(self, main_win, ui, control_worker, serial_worker, settings):
         super(UiManager, self).__init__()
         self.main_win = main_win
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
+        self.settings = settings
+
         self.hide_show_console()
         self.hide_show_preferences_tab()
 
@@ -38,9 +40,9 @@ class UiManager(QObject):
 
         # UI Sub-Managers
         self.ui_load_layer_m = UiViewLoadLayerTab(main_win, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES,
-                                                  self.L_COLORS)
-        self.ui_create_job_m = UiCreateJobLayerTab(ui, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES)
-        self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker)
+                                                  self.L_COLORS, self.settings.app_settings)
+        self.ui_create_job_m = UiCreateJobLayerTab(ui, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES, self.settings.jobs_settings)
+        self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker, self.settings.app_settings)
         self.ui_align_tab_m = UiAlignTab(ui, control_worker)
 
         self.ui.prepare_widget.currentChanged.connect(self.from_load_to_create)

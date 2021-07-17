@@ -7,19 +7,14 @@ class SettingsHandler:
     # Configuration file folder
     CONFIG_FOLDER = os.path.join(os.path.dirname(__file__), 'configurations')
 
-    def __init__(self, main_win, ui_manager):
+    def __init__(self, main_win):
         if not os.path.isdir(self.CONFIG_FOLDER):
             os.makedirs(self.CONFIG_FOLDER)
 
         self.main_win = main_win
-        self.ui_manager = ui_manager
 
-        # self.ui_ll = self.ui_manager.ui_load_layer_m
-        self.app_settings = AppSettingsHandler(self.CONFIG_FOLDER, main_win, ui_manager)  # self.ui_ll)
-
-        self.ui_cj = self.ui_manager.ui_create_job_m
-        self.jobs_settings = JobSettingsHandler(self.CONFIG_FOLDER, self.ui_cj)
-
+        self.app_settings = AppSettingsHandler(self.CONFIG_FOLDER, main_win)
+        self.jobs_settings = JobSettingsHandler(self.CONFIG_FOLDER)
         self.gcf_settings = GCodeFilesSettingsHandler(self.CONFIG_FOLDER)
 
     def read_all_settings(self):
@@ -28,10 +23,14 @@ class SettingsHandler:
         self.jobs_settings.read_all_jobs_settings()
         self.gcf_settings.read_all_gcf_settings()
 
-    def write_all_settings(self):
+    def write_all_settings(self, all_settings_od):
         """ Write all settings to ini files """
+        #if "app_settings" in all_settings_od:
+        #    self.app_settings.write_all_app_settings(all_settings_od["app_settings"])
+
         self.app_settings.write_all_app_settings()
-        self.jobs_settings.write_all_jobs_settings()
+        if "jobs_settings" in all_settings_od:
+            self.jobs_settings.write_all_jobs_settings(all_settings_od["jobs_settings"])
         self.gcf_settings.write_all_gcf_settings()
 
 
@@ -44,17 +43,15 @@ class AppSettingsHandler:
     LAYER_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
     GCODE_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
 
-    def __init__(self, config_folder, main_win, ui_manager):
+    def __init__(self, config_folder, main_win):
         self.app_config_path = config_folder + os.path.sep + 'app_config.ini'
         self.app_settings = configparser.ConfigParser()
 
         self.main_win = main_win
-        self.ui_ll = ui_manager.ui_load_layer_m
-        self.ui_ct = ui_manager.ui_control_tab_m
         self.pos = QPoint(self.WIN_POS_X_DEFAULT, self.WIN_POS_Y_DEFAULT)
         self.size = QSize(self.WIN_SIZE_W_DEFAULT, self.WIN_SIZE_H_DEFAULT)
-        self.ui_ll.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
-        self.ui_ct.gcode_last_dir = self.GCODE_LAST_DIR_DEFAULT
+        self.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
+        self.gcode_last_dir = self.GCODE_LAST_DIR_DEFAULT
 
     def read_all_app_settings(self):
         """ Read all application settings from ini files """
@@ -74,11 +71,11 @@ class AppSettingsHandler:
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
             app_layers_settings = self.app_settings["LAYERS"]
-            self.ui_ll.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
+            self.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
 
         if "GCODES" in self.app_settings:
             app_gcode_settings = self.app_settings["GCODES"]
-            self.ui_ct.gcode_last_dir = app_gcode_settings.get("gcode_last_dir", self.GCODE_LAST_DIR_DEFAULT)
+            self.gcode_last_dir = app_gcode_settings.get("gcode_last_dir", self.GCODE_LAST_DIR_DEFAULT)
 
     def write_all_app_settings(self):
         """ Write all application settings to ini files """
@@ -86,7 +83,7 @@ class AppSettingsHandler:
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
                                         "win_height": self.WIN_SIZE_H_DEFAULT,
-                                        "layer_last_dir": self.ui_ll.layer_last_dir}
+                                        "layer_last_dir": self.layer_last_dir}
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -99,12 +96,12 @@ class AppSettingsHandler:
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
         app_layers = self.app_settings["LAYERS"]
-        app_layers["last_load_dir"] = self.ui_ll.layer_last_dir
+        app_layers["last_load_dir"] = self.layer_last_dir
 
         # Layers related application settings #
         self.app_settings["GCODES"] = {}
         app_layers = self.app_settings["GCODES"]
-        app_layers["gcode_last_dir"] = self.ui_ct.gcode_last_dir
+        app_layers["gcode_last_dir"] = self.gcode_last_dir
 
         # Write application ini file #
         with open(self.app_config_path, 'w') as configfile:
@@ -127,10 +124,10 @@ class JobSettingsHandler:
     TAPS_LENGTH_DEFAULT = 1.0
     TAPS_TYPE_INDEX_DEFAULT = 3
 
-    def __init__(self, config_folder, ui_cj):
+    def __init__(self, config_folder):
         self.jobs_config_path = config_folder + os.path.sep + 'jobs_sets_config.ini'
         self.jobs_settings = configparser.ConfigParser()
-        self.ui_cj = ui_cj
+        self.jobs_settings_od = {}
 
     def read_all_jobs_settings(self):
         """ Read all jobs'settings from ini files """
@@ -149,7 +146,7 @@ class JobSettingsHandler:
             top_set_od["spindle"] = top_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             top_set_od["xy_feedrate"] = top_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             top_set_od["z_feedrate"] = top_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
-            self.ui_cj.set_settings_per_page("top", top_set_od)
+            self.jobs_settings_od["top"] = top_set_od
 
         # Bottom job related settings #
         if "BOTTOM" in self.jobs_settings:
@@ -163,7 +160,7 @@ class JobSettingsHandler:
             bottom_set_od["spindle"] = bottom_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             bottom_set_od["xy_feedrate"] = bottom_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             bottom_set_od["z_feedrate"] = bottom_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
-            self.ui_cj.set_settings_per_page("bottom", bottom_set_od)
+            self.jobs_settings_od["bottom"] = bottom_set_od
 
         # Profile job related settings #
         if "PROFILE" in self.jobs_settings:
@@ -181,7 +178,7 @@ class JobSettingsHandler:
             profile_set_od["z_feedrate"] = profile_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
             profile_set_od["taps_type"] = profile_settings.getint("taps_type", self.TAPS_TYPE_INDEX_DEFAULT)
             profile_set_od["taps_length"] = profile_settings.getfloat("taps_length", self.TAPS_LENGTH_DEFAULT)
-            self.ui_cj.set_settings_per_page("profile", profile_set_od)
+            self.jobs_settings_od["profile"] = profile_set_od
 
         if "DRILL" in self.jobs_settings:
             drill_settings = self.jobs_settings["DRILL"]
@@ -207,7 +204,7 @@ class JobSettingsHandler:
 
             drill_set_od["bits_names"] = drill_bits_names_list
             drill_set_od["bits_diameter"] = drill_bits_diameter_list
-            self.ui_cj.set_settings_per_page("drill", drill_set_od)
+            self.jobs_settings_od["drill"] = drill_set_od
 
         if "NC_TOP" in self.jobs_settings:
             nc_top_settings = self.jobs_settings["NC_TOP"]
@@ -219,7 +216,7 @@ class JobSettingsHandler:
             nc_top_set_od["spindle"] = nc_top_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             nc_top_set_od["xy_feedrate"] = nc_top_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             nc_top_set_od["z_feedrate"] = nc_top_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
-            self.ui_cj.set_settings_per_page("no_copper_top", nc_top_set_od)
+            self.jobs_settings_od["no_copper_top"] = nc_top_set_od
 
         if "NC_BOTTOM" in self.jobs_settings:
             nc_bottom_settings = self.jobs_settings["NC_BOTTOM"]
@@ -231,9 +228,9 @@ class JobSettingsHandler:
             nc_bottom_set_od["spindle"] = nc_bottom_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             nc_bottom_set_od["xy_feedrate"] = nc_bottom_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             nc_bottom_set_od["z_feedrate"] = nc_bottom_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
-            self.ui_cj.set_settings_per_page("no_copper_bottom", nc_bottom_set_od)
+            self.jobs_settings_od["no_copper_bottom"] = nc_bottom_set_od
 
-    def write_all_jobs_settings(self):
+    def write_all_jobs_settings(self, job_settings_od):
         """ Write all jobs settings to ini files """
         self.jobs_settings['DEFAULT'] = {"tool_diameter": self.TOOL_DIAMETER_DEFAULT,
                                          "passages": self.PASSAGES_DEFAULT,
@@ -248,8 +245,6 @@ class JobSettingsHandler:
                                          "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
                                          "taps_type": self.TAPS_TYPE_INDEX_DEFAULT,
                                          "taps_length": self.TAPS_LENGTH_DEFAULT}
-
-        job_settings_od = self.ui_cj.get_all_settings()
 
         # Top job related settings #
         self.jobs_settings["TOP"] = {}
@@ -355,8 +350,8 @@ class GCodeFilesSettingsHandler:
         # Read g-code files'settings ini file #
         self.gcf_settings.read(self.gcf_config_path)
 
-        if "FILES" in self.gcf_settings:
-            self.gcf_settings["FILES"]["gcode_folder"]
+        # if "FILES" in self.gcf_settings:
+        #     self.gcf_settings["FILES"]["gcode_folder"]
 
     def write_all_gcf_settings(self):
         """ Write all g-code files'settings to ini files """

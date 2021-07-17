@@ -12,7 +12,7 @@ class UiViewLoadLayerTab(QObject):
 
     load_layer_s = Signal(str, str)
 
-    def __init__(self, main_win, control_worker, vis_layer, lay_tags, lay_names, lay_colors):
+    def __init__(self, main_win, control_worker, vis_layer, lay_tags, lay_names, lay_colors, app_settings):
         super(UiViewLoadLayerTab, self).__init__()
         self.main_win = main_win
         self.ui = main_win.ui
@@ -20,7 +20,7 @@ class UiViewLoadLayerTab(QObject):
         self.vis_layer = vis_layer
         self.lay_tags = lay_tags
         self.lay_names = lay_names
-        self.layer_last_dir = ""
+        self.app_settings = app_settings
 
         self.layer_colors = Od([(k, v) for k, v in zip(self.lay_tags, lay_colors)])
         self.L_TEXT = [self.ui.top_file_le, self.ui.bottom_file_le, self.ui.profile_file_le,
@@ -65,10 +65,10 @@ class UiViewLoadLayerTab(QObject):
 
     def load_gerber_file(self, layer="top", load_text="Load File", extensions=""):
         filters = extensions + ";;All files (*.*)"
-        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.layer_last_dir, filters)
+        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.app_settings.layer_last_dir, filters)
         if load_file_path[0]:
             self.vis_layer.remove_layer(layer)
-            self.layer_last_dir = os.path.dirname(load_file_path[0])
+            self.app_settings.layer_last_dir = os.path.dirname(load_file_path[0])
             logging.info("Loading " + load_file_path[0])
             self.load_layer_s.emit(layer, load_file_path[0])
 

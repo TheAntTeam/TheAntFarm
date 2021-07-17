@@ -11,12 +11,12 @@ class UiControlTab(QObject):
     """Class dedicated to UI <--> Control interactions on Control Tab. """
     serial_send_s = Signal(str)
 
-    def __init__(self, ui, control_worker, serial_worker):
+    def __init__(self, ui, control_worker, serial_worker, app_settings):
         super(UiControlTab, self).__init__()
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
-        self.gcode_last_dir = ""
+        self.app_settings = app_settings
 
         self.ui.xy_jog_l.setText("XY [" + str(self.ui.xy_step_val_dsb.value()) + " mm]")
         self.ui.z_jog_l.setText("Z [" + str(self.ui.z_step_val_dsb.value()) + " mm]")
@@ -106,13 +106,13 @@ class UiControlTab(QObject):
     def open_gcode_files(self):
         load_gcode = QFileDialog.getOpenFileNames(None,
                                                   "Load G-Code File(s)",
-                                                  self.gcode_last_dir,
+                                                  self.app_settings.gcode_last_dir,
                                                   "G-Code Files (*.gcode)")
 
         logging.debug(load_gcode)
         load_gcode_paths = load_gcode[0]
         if load_gcode_paths:
-            self.gcode_last_dir = os.path.dirname(load_gcode_paths[0])
+            self.app_settings.gcode_last_dir = os.path.dirname(load_gcode_paths[0])
             num_cols = self.ui.gcode_tw.columnCount()
             if num_cols == 0:
                 self.ui.gcode_tw.insertColumn(0)

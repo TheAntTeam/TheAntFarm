@@ -10,9 +10,10 @@ logger = logging.getLogger(__name__)
 
 
 class ViewController(QObject):
-    def __init__(self):
+    def __init__(self, settings):
         super(ViewController, self).__init__()
         self.pcb = PcbObj()
+        self.settings = settings
 
     def load_new_layer(self, layer, layer_path):
         try:

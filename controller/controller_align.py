@@ -8,8 +8,10 @@ logger = logging.getLogger(__name__)
 
 
 class AlignController(QObject):
-    def __init__(self):
+    def __init__(self, settings):
         super(AlignController, self).__init__()
+        self.settings = settings
+
         self.double_side_manager = DoubleSideManager()
         self.threshold_value = 0
 

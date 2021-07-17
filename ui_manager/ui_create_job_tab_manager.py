@@ -16,15 +16,18 @@ class UiCreateJobLayerTab(QObject):
     TAPS_TYPE_TEXT = ["None", "1 Left + 1 Right", "1 Top + 1 Bottom", "4 - 1 per side",
                               "2 Left + 2 Right", "2 Top + 2 Bottom", "8 - 2 per side", "4 - 1 per corner"]
 
-    def __init__(self, ui, control_wo, vis_layer, lay_tags, lay_names):
+    def __init__(self, ui, control_wo, vis_layer, lay_tags, lay_names, jobs_settings):
         super(UiCreateJobLayerTab, self).__init__()
         self.ui = ui
         self.control_wo = control_wo
         self.vis_layer = vis_layer
         self.lay_tags = lay_tags
         self.lay_names = lay_names
+        self.jobs_settings = jobs_settings
 
         self.current_drill_tool_idx = 0
+
+        self.set_all_settings_per_page()
 
         header = self.ui.drill_tw.horizontalHeader()
         header.setSectionResizeMode(1, QHeaderView.Stretch)
@@ -63,12 +66,13 @@ class UiCreateJobLayerTab(QObject):
 
     def change_job_page(self):
         current_text_cb = self.ui.layer_choice_cb.currentText()
-        idx = 0
-        if current_text_cb in self.lay_names:
-            idx = self.lay_names.index(current_text_cb) + 1  # The offset is needed for the empty page, the first one
 
-        self.ui.jobs_sw.setCurrentIndex(idx)
-        self.visualize_active_layer()
+        if current_text_cb in self.lay_names:
+            idx = self.lay_names.index(current_text_cb)
+            # self.set_settings_per_page(self.lay_tags[idx])
+
+            self.ui.jobs_sw.setCurrentIndex(idx + 1)  # The offset is needed for the empty page, the first one
+            self.visualize_active_layer()
 
     def add_drill_tool(self, label, value):
         count_row = self.ui.drill_tw.rowCount()
@@ -110,7 +114,8 @@ class UiCreateJobLayerTab(QObject):
         for x in del_rows:
             self.ui.drill_tw.removeRow(x)
 
-    def set_settings_per_top(self, settings_top):
+    def set_settings_per_top(self):
+        settings_top = self.jobs_settings.jobs_settings_od["top"]
         self.ui.top_tool_diameter_dsb.setValue(settings_top["tool_diameter"])
         self.ui.top_n_passes_sb.setValue(settings_top["passages"])
         self.ui.top_overlap_dsb.setValue(settings_top["overlap"])
@@ -120,7 +125,8 @@ class UiCreateJobLayerTab(QObject):
         self.ui.top_xy_feed_rate_dsb.setValue(settings_top["xy_feedrate"])
         self.ui.top_z_feed_rate_dsb.setValue(settings_top["z_feedrate"])
 
-    def set_settings_per_bottom(self, settings_bottom):
+    def set_settings_per_bottom(self):
+        settings_bottom = self.jobs_settings.jobs_settings_od["bottom"]
         self.ui.bottom_tool_diameter_dsb.setValue(settings_bottom["tool_diameter"])
         self.ui.bottom_n_passes_sb.setValue(settings_bottom["passages"])
         self.ui.bottom_overlap_dsb.setValue(settings_bottom["overlap"])
@@ -130,7 +136,8 @@ class UiCreateJobLayerTab(QObject):
         self.ui.bottom_xy_feed_rate_dsb.setValue(settings_bottom["xy_feedrate"])
         self.ui.bottom_z_feed_rate_dsb.setValue(settings_bottom["z_feedrate"])
 
-    def set_settings_per_profile(self, settings_profile):
+    def set_settings_per_profile(self):
+        settings_profile = self.jobs_settings.jobs_settings_od["profile"]
         self.ui.profile_tool_diameter_dsb.setValue(settings_profile["tool_diameter"])
         self.ui.profile_margin_dsb.setValue(settings_profile["margin"])
         if settings_profile["multi_depth"]:
@@ -146,7 +153,8 @@ class UiCreateJobLayerTab(QObject):
         self.ui.profile_taps_layout_cb.setCurrentIndex(settings_profile["taps_type"])
         self.ui.profile_tap_size_dsb.setValue(settings_profile["taps_length"])
 
-    def set_settings_per_drill(self, settings_drill):
+    def set_settings_per_drill(self):
+        settings_drill = self.jobs_settings.jobs_settings_od["drill"]
         drill_tools_names_list = settings_drill["bits_names"]
         drill_tools_diameter_list = settings_drill["bits_diameter"]
         if drill_tools_diameter_list and drill_tools_names_list:
@@ -170,7 +178,8 @@ class UiCreateJobLayerTab(QObject):
         else:
             self.ui.drill_optimization_chb.setCheckState(Qt.Unchecked)
 
-    def set_settings_per_nc_top(self, settings_nc_top):
+    def set_settings_per_nc_top(self):
+        settings_nc_top = self.jobs_settings.jobs_settings_od["no_copper_top"]
         self.ui.nc_top_tool_diameter_dsb.setValue(settings_nc_top["tool_diameter"])
         self.ui.nc_top_overlap_dsb.setValue(settings_nc_top["overlap"])
         self.ui.nc_top_cut_z_dsb.setValue(settings_nc_top["cut"])
@@ -179,7 +188,8 @@ class UiCreateJobLayerTab(QObject):
         self.ui.nc_top_xy_feed_rate_dsb.setValue(settings_nc_top["xy_feedrate"])
         self.ui.nc_top_z_feed_rate_dsb.setValue(settings_nc_top["z_feedrate"])
 
-    def set_settings_per_nc_bottom(self, settings_nc_bottom):
+    def set_settings_per_nc_bottom(self):
+        settings_nc_bottom = self.jobs_settings.jobs_settings_od["no_copper_bottom"]
         self.ui.nc_bottom_tool_diameter_dsb.setValue(settings_nc_bottom["tool_diameter"])
         self.ui.nc_bottom_overlap_dsb.setValue(settings_nc_bottom["overlap"])
         self.ui.nc_bottom_cut_z_dsb.setValue(settings_nc_bottom["cut"])
@@ -188,19 +198,22 @@ class UiCreateJobLayerTab(QObject):
         self.ui.nc_bottom_xy_feed_rate_dsb.setValue(settings_nc_bottom["xy_feedrate"])
         self.ui.nc_bottom_z_feed_rate_dsb.setValue(settings_nc_bottom["z_feedrate"])
 
-    def set_settings_per_page(self, tag, settings):
+    def set_settings_per_page(self, tag):
         if tag == self.lay_tags[0]:
-            return self.set_settings_per_top(settings)
+            return self.set_settings_per_top()
         elif tag == self.lay_tags[1]:
-            return self.set_settings_per_bottom(settings)
+            return self.set_settings_per_bottom()
         elif tag == self.lay_tags[2]:
-            return self.set_settings_per_profile(settings)
+            return self.set_settings_per_profile()
         elif tag == self.lay_tags[3]:
-            return self.set_settings_per_drill(settings)
+            return self.set_settings_per_drill()
         elif tag == self.lay_tags[4]:
-            return self.set_settings_per_nc_top(settings)
+            return self.set_settings_per_nc_top()
         elif tag == self.lay_tags[5]:
-            return self.set_settings_per_nc_bottom(settings)
+            return self.set_settings_per_nc_bottom()
+
+    def set_all_settings_per_page(self):
+        [self.set_settings_per_page(tag) for tag in self.lay_tags]
 
     def get_settings_per_top(self):
         settings_top = Od({})

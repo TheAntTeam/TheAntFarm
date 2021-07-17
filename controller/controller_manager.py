@@ -22,14 +22,15 @@ class ControllerWorker(QObject):
     update_probe_s = Signal(list)                # Signal to update probe value
     update_abl_s = Signal(list)                  # Signal to update Auto-Bed-Levelling value
 
-    def __init__(self, serial_rx_queue):
+    def __init__(self, serial_rx_queue, settings):
         super(ControllerWorker, self).__init__()
 
-        self.view_controller = ViewController()
-        self.control_controller = ControlController()
-        self.align_controller = AlignController()
-
         self.serialRxQueue = serial_rx_queue
+        self.settings = settings
+
+        self.view_controller = ViewController(self.settings)
+        self.control_controller = ControlController(self.settings)
+        self.align_controller = AlignController(self.settings)
 
         self.poll_timer = QTimer()
         self.poll_timer.timeout.connect(self.on_poll_timeout)
