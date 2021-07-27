@@ -1081,7 +1081,9 @@ class Ui_MainWindow(object):
         sizePolicy3.setHeightForWidth(self.gcode_load.sizePolicy().hasHeightForWidth())
         self.gcode_load.setSizePolicy(sizePolicy3)
         self.verticalLayout_11 = QVBoxLayout(self.gcode_load)
+        self.verticalLayout_11.setSpacing(0)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
+        self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
         self.gcode_tw = QTableWidget(self.gcode_load)
         if (self.gcode_tw.columnCount() < 3):
             self.gcode_tw.setColumnCount(3)
@@ -1092,9 +1094,12 @@ class Ui_MainWindow(object):
         __qtablewidgetitem4 = QTableWidgetItem()
         self.gcode_tw.setHorizontalHeaderItem(2, __qtablewidgetitem4)
         self.gcode_tw.setObjectName(u"gcode_tw")
-        sizePolicy.setHeightForWidth(self.gcode_tw.sizePolicy().hasHeightForWidth())
-        self.gcode_tw.setSizePolicy(sizePolicy)
+        sizePolicy5.setHeightForWidth(self.gcode_tw.sizePolicy().hasHeightForWidth())
+        self.gcode_tw.setSizePolicy(sizePolicy5)
+        self.gcode_tw.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.gcode_tw.setColumnCount(3)
+        self.gcode_tw.horizontalHeader().setCascadingSectionResizes(True)
+        self.gcode_tw.horizontalHeader().setMinimumSectionSize(16)
 
         self.verticalLayout_11.addWidget(self.gcode_tw)
 

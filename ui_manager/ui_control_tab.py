@@ -1,5 +1,5 @@
-from PySide2.QtCore import Signal, Slot, QObject, QSize
-from PySide2.QtWidgets import QFileDialog, QLineEdit, QToolButton
+from PySide2.QtCore import Signal, Slot, QObject, QSize, Qt
+from PySide2.QtWidgets import QFileDialog, QLineEdit, QToolButton, QTableWidgetItem
 from PySide2.QtGui import QIcon
 import os
 import logging
@@ -79,6 +79,8 @@ class UiControlTab(QObject):
         self.ui.stop_tb.setEnabled(False)
         self.ui.tool_change_tb.setEnabled(False)
 
+        self.ui.gcode_tw.itemClicked.connect(self.print_item_clicked)
+
     @Slot(list)
     def update_status(self, status_l):
         self.ui.status_l.setText(status_l[0])
@@ -126,7 +128,20 @@ class UiControlTab(QObject):
                 icon = QIcon()
                 icon.addFile(u"resources/icons/play-button-arrowhead.svg", QSize(), QIcon.Normal, QIcon.Off)
                 new_tb.setIcon(icon)
-                self.ui.gcode_tw.setCellWidget(num_rows, 2, new_tb)
+                qtwi = QTableWidgetItem()
+                qtwi.setIcon(icon)
+                qtwi.setTextAlignment(Qt.AlignCenter)
+                self.ui.gcode_tw.setItem(num_rows, 2, qtwi)
+
+    @Slot(QTableWidgetItem)
+    def print_item_clicked(self, item):
+        row = item.row()
+        gcode_path = self.ui.gcode_tw.cellWidget(row, 0).text()
+        print(gcode_path)
+        self.send_gcode_file(gcode_path)
+
+    def send_gcode_file(self, gcode_path):
+        pass
 
     @Slot(list)
     def update_probe(self, probe_l):
