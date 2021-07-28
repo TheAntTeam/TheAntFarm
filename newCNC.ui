@@ -1703,7 +1703,7 @@
               <item>
                <widget class="QTableWidget" name="gcode_tw">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -2568,6 +2568,12 @@
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>24</height>
+                       </size>
+                      </property>
                       <property name="maximumSize">
                        <size>
                         <width>100</width>
@@ -2590,6 +2596,12 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>24</height>
+                       </size>
                       </property>
                       <property name="maximumSize">
                        <size>
@@ -2630,6 +2642,12 @@
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>22</height>
+                       </size>
+                      </property>
                       <property name="maximumSize">
                        <size>
                         <width>50</width>
@@ -2652,6 +2670,12 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>22</height>
+                       </size>
                       </property>
                       <property name="maximumSize">
                        <size>
@@ -2676,6 +2700,12 @@
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>22</height>
+                       </size>
+                      </property>
                       <property name="maximumSize">
                        <size>
                         <width>50</width>
@@ -2698,6 +2728,12 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>22</height>
+                       </size>
                       </property>
                       <property name="maximumSize">
                        <size>
@@ -2722,6 +2758,12 @@
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>22</height>
+                       </size>
+                      </property>
                       <property name="maximumSize">
                        <size>
                         <width>50</width>
@@ -2744,6 +2786,12 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>22</height>
+                       </size>
                       </property>
                       <property name="maximumSize">
                        <size>
@@ -2768,6 +2816,12 @@
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>22</height>
+                       </size>
+                      </property>
                       <property name="maximumSize">
                        <size>
                         <width>50</width>
@@ -2791,6 +2845,12 @@
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>22</height>
+                       </size>
+                      </property>
                       <property name="maximumSize">
                        <size>
                         <width>50</width>
@@ -2813,6 +2873,12 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>22</height>
+                       </size>
                       </property>
                       <property name="maximumSize">
                        <size>
@@ -2853,6 +2919,12 @@
                      <layout class="QGridLayout" name="gridLayout_18">
                       <item row="1" column="1">
                        <widget class="QDoubleSpinBox" name="z_step_val_dsb">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>20</height>
+                         </size>
+                        </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
@@ -2893,6 +2965,12 @@
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>23</height>
+                         </size>
+                        </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
@@ -2922,6 +3000,12 @@
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>23</height>
+                         </size>
+                        </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
@@ -2950,6 +3034,12 @@
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>23</height>
+                         </size>
+                        </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
@@ -2977,6 +3067,12 @@
                           <horstretch>0</horstretch>
                           <verstretch>0</verstretch>
                          </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>23</height>
+                         </size>
                         </property>
                         <property name="maximumSize">
                          <size>
@@ -3030,6 +3126,12 @@
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>23</height>
+                         </size>
+                        </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
@@ -3058,6 +3160,12 @@
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>23</height>
+                         </size>
+                        </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
@@ -3085,6 +3193,12 @@
                           <horstretch>0</horstretch>
                           <verstretch>0</verstretch>
                          </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>20</height>
+                         </size>
                         </property>
                         <property name="maximumSize">
                          <size>
@@ -3126,6 +3240,12 @@
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>23</height>
+                         </size>
+                        </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
@@ -3154,6 +3274,12 @@
                           <horstretch>0</horstretch>
                           <verstretch>0</verstretch>
                          </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>23</height>
+                         </size>
                         </property>
                         <property name="maximumSize">
                          <size>
@@ -3206,10 +3332,16 @@
                      <bool>true</bool>
                     </property>
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>40</height>
+                     </size>
                     </property>
                     <property name="frameShadow">
                      <enum>QFrame::Sunken</enum>
@@ -3978,7 +4110,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>90</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -4016,7 +4148,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>90</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -4054,7 +4186,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>90</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -4092,7 +4224,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>90</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -4130,7 +4262,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>90</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -4168,7 +4300,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>90</height>
+              <height>80</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -4279,10 +4411,16 @@
     <item>
      <widget class="QPlainTextEdit" name="logging_plain_te">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>40</height>
+       </size>
       </property>
       <property name="maximumSize">
        <size>
