@@ -152,22 +152,22 @@ class UiControlTab(QObject):
                     self.ui.gcode_tw.setItem(num_rows, 2, qtwi)
 
     def print_button_item_clicked(self, index):
-        print("button clicked:", index.row())
+        logging.debug("button clicked:", index.row())
         if index.isValid():
             row = index.row()
             # gcode_path = self.ui.gcode_tw.cellWidget(row, 0).text()
-            # leggo il tooltip
+            # read the tooltip
             gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
-            print(gcode_path)
+            logging.debug(gcode_path)
             self.send_gcode_file(gcode_path)
 
     @Slot(QTableWidgetItem)
     def print_item_clicked(self, item):
         row = item.row()
         # gcode_path = self.ui.gcode_tw.cellWidget(row, 0).text()
-        # leggo il tooltip
+        # read the tooltip
         gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
-        print(gcode_path)
+        logging.debug(gcode_path)
         self.send_gcode_file(gcode_path)
 
     def send_gcode_file(self, gcode_path):
