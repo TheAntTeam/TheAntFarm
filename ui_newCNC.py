@@ -1110,7 +1110,7 @@ class Ui_MainWindow(object):
         sizePolicy3.setHeightForWidth(self.open_gcode_tb.sizePolicy().hasHeightForWidth())
         self.open_gcode_tb.setSizePolicy(sizePolicy3)
         icon = QIcon()
-        icon.addFile(u"resources/icons/open-folder.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"resources/icons/white-open-folder.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.open_gcode_tb.setIcon(icon)
 
         self.horizontalLayout_10.addWidget(self.open_gcode_tb)
@@ -1510,7 +1510,7 @@ class Ui_MainWindow(object):
         self.z_plus_pb.setMinimumSize(QSize(0, 24))
         self.z_plus_pb.setMaximumSize(QSize(100, 16777215))
         icon1 = QIcon()
-        icon1.addFile(u"resources/icons/black_north_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u"resources/icons/white_north_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.z_plus_pb.setIcon(icon1)
 
         self.gridLayout_17.addWidget(self.z_plus_pb, 0, 0, 1, 1)
@@ -1522,7 +1522,7 @@ class Ui_MainWindow(object):
         self.z_minus_pb.setMinimumSize(QSize(0, 24))
         self.z_minus_pb.setMaximumSize(QSize(100, 16777215))
         icon2 = QIcon()
-        icon2.addFile(u"resources/icons/black_south_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon2.addFile(u"resources/icons/white_south_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.z_minus_pb.setIcon(icon2)
 
         self.gridLayout_17.addWidget(self.z_minus_pb, 1, 0, 1, 1)
@@ -1540,7 +1540,7 @@ class Ui_MainWindow(object):
         self.xYMinusPlusButton.setMinimumSize(QSize(0, 22))
         self.xYMinusPlusButton.setMaximumSize(QSize(50, 16777215))
         icon3 = QIcon()
-        icon3.addFile(u"resources/icons/black_north_west_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon3.addFile(u"resources/icons/white_north_west_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.xYMinusPlusButton.setIcon(icon3)
 
         self.gridLayoutDirections_3.addWidget(self.xYMinusPlusButton, 0, 0, 1, 1)
@@ -1552,7 +1552,7 @@ class Ui_MainWindow(object):
         self.xYPlusMinuButton.setMinimumSize(QSize(0, 22))
         self.xYPlusMinuButton.setMaximumSize(QSize(50, 16777215))
         icon4 = QIcon()
-        icon4.addFile(u"resources/icons/black_south_east_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon4.addFile(u"resources/icons/white_south_east_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.xYPlusMinuButton.setIcon(icon4)
 
         self.gridLayoutDirections_3.addWidget(self.xYPlusMinuButton, 2, 2, 1, 1)
@@ -1564,7 +1564,7 @@ class Ui_MainWindow(object):
         self.xMinusButton.setMinimumSize(QSize(0, 22))
         self.xMinusButton.setMaximumSize(QSize(50, 16777215))
         icon5 = QIcon()
-        icon5.addFile(u"resources/icons/black_west_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon5.addFile(u"resources/icons/white_west_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.xMinusButton.setIcon(icon5)
 
         self.gridLayoutDirections_3.addWidget(self.xMinusButton, 1, 0, 1, 1)
@@ -1576,7 +1576,7 @@ class Ui_MainWindow(object):
         self.xYMinusButton.setMinimumSize(QSize(0, 22))
         self.xYMinusButton.setMaximumSize(QSize(50, 16777215))
         icon6 = QIcon()
-        icon6.addFile(u"resources/icons/black_south_west_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon6.addFile(u"resources/icons/white_south_west_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.xYMinusButton.setIcon(icon6)
 
         self.gridLayoutDirections_3.addWidget(self.xYMinusButton, 2, 0, 1, 1)
@@ -1598,7 +1598,7 @@ class Ui_MainWindow(object):
         self.centerButton.setMinimumSize(QSize(0, 22))
         self.centerButton.setMaximumSize(QSize(50, 16777215))
         icon7 = QIcon()
-        icon7.addFile(u"resources/icons/circle.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon7.addFile(u"resources/icons/white_circle.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.centerButton.setIcon(icon7)
 
         self.gridLayoutDirections_3.addWidget(self.centerButton, 1, 1, 1, 1)
@@ -1620,7 +1620,7 @@ class Ui_MainWindow(object):
         self.xYPlusButton.setMinimumSize(QSize(0, 22))
         self.xYPlusButton.setMaximumSize(QSize(50, 16777215))
         icon8 = QIcon()
-        icon8.addFile(u"resources/icons/black_north_east_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon8.addFile(u"resources/icons/white_north_east_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.xYPlusButton.setIcon(icon8)
 
         self.gridLayoutDirections_3.addWidget(self.xYPlusButton, 0, 2, 1, 1)
@@ -1632,7 +1632,7 @@ class Ui_MainWindow(object):
         self.xPlusButton.setMinimumSize(QSize(0, 22))
         self.xPlusButton.setMaximumSize(QSize(50, 16777215))
         icon9 = QIcon()
-        icon9.addFile(u"resources/icons/black_east_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon9.addFile(u"resources/icons/white_east_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.xPlusButton.setIcon(icon9)
 
         self.gridLayoutDirections_3.addWidget(self.xPlusButton, 1, 2, 1, 1)
@@ -1938,6 +1938,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.openGLWidget)
 
+        self.progressBar = QProgressBar(self.control_tab)
+        self.progressBar.setObjectName(u"progressBar")
+        self.progressBar.setValue(0)
+
+        self.verticalLayout.addWidget(self.progressBar)
+
 
         self.horizontalLayout_4.addLayout(self.verticalLayout)
 
@@ -2065,7 +2071,7 @@ class Ui_MainWindow(object):
         self.unlock_tb.setMinimumSize(QSize(120, 80))
         self.unlock_tb.setMaximumSize(QSize(120, 16777215))
         icon10 = QIcon()
-        icon10.addFile(u"resources/icons/unlock-padlock.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon10.addFile(u"resources/icons/white-unlock-padlock.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.unlock_tb.setIcon(icon10)
         self.unlock_tb.setIconSize(QSize(64, 64))
         self.unlock_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2079,7 +2085,7 @@ class Ui_MainWindow(object):
         self.homing_tb.setMinimumSize(QSize(120, 80))
         self.homing_tb.setMaximumSize(QSize(120, 16777215))
         icon11 = QIcon()
-        icon11.addFile(u"resources/icons/home.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon11.addFile(u"resources/icons/white-home.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.homing_tb.setIcon(icon11)
         self.homing_tb.setIconSize(QSize(64, 64))
         self.homing_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2093,7 +2099,7 @@ class Ui_MainWindow(object):
         self.play_tb.setMinimumSize(QSize(120, 80))
         self.play_tb.setMaximumSize(QSize(120, 16777215))
         icon12 = QIcon()
-        icon12.addFile(u"resources/icons/play-button-arrowhead.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon12.addFile(u"resources/icons/white-play-button-arrowhead.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.play_tb.setIcon(icon12)
         self.play_tb.setIconSize(QSize(64, 64))
         self.play_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2107,7 +2113,7 @@ class Ui_MainWindow(object):
         self.pause_resume_tb.setMinimumSize(QSize(120, 80))
         self.pause_resume_tb.setMaximumSize(QSize(120, 16777215))
         icon13 = QIcon()
-        icon13.addFile(u"resources/icons/pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon13.addFile(u"resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.pause_resume_tb.setIcon(icon13)
         self.pause_resume_tb.setIconSize(QSize(64, 64))
         self.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2121,7 +2127,7 @@ class Ui_MainWindow(object):
         self.stop_tb.setMinimumSize(QSize(120, 80))
         self.stop_tb.setMaximumSize(QSize(120, 16777215))
         icon14 = QIcon()
-        icon14.addFile(u"resources/icons/stop-button-black-rounded-square.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon14.addFile(u"resources/icons/white-stop-button-black-rounded-square.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.stop_tb.setIcon(icon14)
         self.stop_tb.setIconSize(QSize(64, 64))
         self.stop_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2135,7 +2141,7 @@ class Ui_MainWindow(object):
         self.tool_change_tb.setMinimumSize(QSize(120, 80))
         self.tool_change_tb.setMaximumSize(QSize(120, 16777215))
         icon15 = QIcon()
-        icon15.addFile(u"resources/icons/milling-machine.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon15.addFile(u"resources/icons/white-milling-machine.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.tool_change_tb.setIcon(icon15)
         self.tool_change_tb.setIconSize(QSize(72, 72))
         self.tool_change_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2207,7 +2213,7 @@ class Ui_MainWindow(object):
         sizePolicy6.setHeightForWidth(self.logging_plain_te.sizePolicy().hasHeightForWidth())
         self.logging_plain_te.setSizePolicy(sizePolicy6)
         self.logging_plain_te.setMinimumSize(QSize(0, 40))
-        self.logging_plain_te.setMaximumSize(QSize(16777215, 100))
+        self.logging_plain_te.setMaximumSize(QSize(16777215, 200))
         self.logging_plain_te.setReadOnly(True)
 
         self.verticalLayout_6.addWidget(self.logging_plain_te)

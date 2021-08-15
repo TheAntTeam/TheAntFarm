@@ -48,7 +48,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -1752,7 +1752,7 @@
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>resources/icons/open-folder.svg</normaloff>resources/icons/open-folder.svg</iconset>
+                    <normaloff>resources/icons/white-open-folder.svg</normaloff>resources/icons/white-open-folder.svg</iconset>
                   </property>
                  </widget>
                 </item>
@@ -2585,7 +2585,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/black_north_arrow.svg</normaloff>resources/icons/black_north_arrow.svg</iconset>
+                        <normaloff>resources/icons/white_north_arrow.svg</normaloff>resources/icons/white_north_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2614,7 +2614,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/black_south_arrow.svg</normaloff>resources/icons/black_south_arrow.svg</iconset>
+                        <normaloff>resources/icons/white_south_arrow.svg</normaloff>resources/icons/white_south_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2659,7 +2659,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/black_north_west_arrow.svg</normaloff>resources/icons/black_north_west_arrow.svg</iconset>
+                        <normaloff>resources/icons/white_north_west_arrow.svg</normaloff>resources/icons/white_north_west_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2688,7 +2688,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/black_south_east_arrow.svg</normaloff>resources/icons/black_south_east_arrow.svg</iconset>
+                        <normaloff>resources/icons/white_south_east_arrow.svg</normaloff>resources/icons/white_south_east_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2717,7 +2717,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/black_west_arrow.svg</normaloff>resources/icons/black_west_arrow.svg</iconset>
+                        <normaloff>resources/icons/white_west_arrow.svg</normaloff>resources/icons/white_west_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2746,7 +2746,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/black_south_west_arrow.svg</normaloff>resources/icons/black_south_west_arrow.svg</iconset>
+                        <normaloff>resources/icons/white_south_west_arrow.svg</normaloff>resources/icons/white_south_west_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2775,7 +2775,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/black_north_arrow.svg</normaloff>resources/icons/black_north_arrow.svg</iconset>
+                        <normaloff>resources/icons/white_north_arrow.svg</normaloff>resources/icons/white_north_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2804,7 +2804,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/circle.svg</normaloff>resources/icons/circle.svg</iconset>
+                        <normaloff>resources/icons/white_circle.svg</normaloff>resources/icons/white_circle.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2833,7 +2833,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/black_south_arrow.svg</normaloff>resources/icons/black_south_arrow.svg</iconset>
+                        <normaloff>resources/icons/white_south_arrow.svg</normaloff>resources/icons/white_south_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2862,7 +2862,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/black_north_east_arrow.svg</normaloff>resources/icons/black_north_east_arrow.svg</iconset>
+                        <normaloff>resources/icons/white_north_east_arrow.svg</normaloff>resources/icons/white_north_east_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2891,7 +2891,7 @@
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>resources/icons/black_east_arrow.svg</normaloff>resources/icons/black_east_arrow.svg</iconset>
+                        <normaloff>resources/icons/white_east_arrow.svg</normaloff>resources/icons/white_east_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -3553,6 +3553,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QProgressBar" name="progressBar">
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -4124,7 +4131,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/unlock-padlock.svg</normaloff>resources/icons/unlock-padlock.svg</iconset>
+              <normaloff>resources/icons/white-unlock-padlock.svg</normaloff>resources/icons/white-unlock-padlock.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4162,7 +4169,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/home.svg</normaloff>resources/icons/home.svg</iconset>
+              <normaloff>resources/icons/white-home.svg</normaloff>resources/icons/white-home.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4200,7 +4207,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/play-button-arrowhead.svg</normaloff>resources/icons/play-button-arrowhead.svg</iconset>
+              <normaloff>resources/icons/white-play-button-arrowhead.svg</normaloff>resources/icons/white-play-button-arrowhead.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4238,7 +4245,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/pause-multimedia-big-gross-symbol-lines.svg</normaloff>resources/icons/pause-multimedia-big-gross-symbol-lines.svg</iconset>
+              <normaloff>resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</normaloff>resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4276,7 +4283,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/stop-button-black-rounded-square.svg</normaloff>resources/icons/stop-button-black-rounded-square.svg</iconset>
+              <normaloff>resources/icons/white-stop-button-black-rounded-square.svg</normaloff>resources/icons/white-stop-button-black-rounded-square.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4314,7 +4321,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/milling-machine.svg</normaloff>resources/icons/milling-machine.svg</iconset>
+              <normaloff>resources/icons/white-milling-machine.svg</normaloff>resources/icons/white-milling-machine.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4425,7 +4432,7 @@
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>100</height>
+        <height>200</height>
        </size>
       </property>
       <property name="readOnly">
