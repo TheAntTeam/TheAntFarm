@@ -46,6 +46,7 @@ class ControllerWorker(QObject):
 
         self.align_active = False
 
+        self.status_to_ack = False
         self.dro_status_updated = False
         self.prb_activated = False
         self.abl_activated = False
@@ -58,6 +59,15 @@ class ControllerWorker(QObject):
         self.prb_num_done = 0
         self.prb_reps_todo = 1
         self.prb_reps_done = 0
+
+        self.sending_file = False
+        self.file_content = []
+        self.sent_lines = 0
+        self.ack_lines = 0
+        self.tot_lines = 0
+        self.buffer_idx = 0
+        self.max_buffered_lines = 100
+        self.min_buffer_threshold = 80
 
     # ***************** VIEW related functions. ***************** #
 
@@ -77,6 +87,7 @@ class ControllerWorker(QObject):
 
     def on_poll_timeout(self):
         self.serial_send_s.emit(str("?\n"))  # "?\n")
+        self.status_to_ack = True
 
     @Slot()
     def parse_rx_queue(self):
@@ -100,7 +111,18 @@ class ControllerWorker(QObject):
                         if other_cmd_flag:
                             self.update_console_text_s.emit(element)
                     elif re.match("ok\s*$\s", element):
-                        pass
+                        # pass
+                        # logging.info(element)
+                        if self.status_to_ack:
+                            self.status_to_ack = False
+                        else:
+                            self.ack_lines += 1
+                            self.buffer_idx -= 1
+                            if self.sent_lines < self.tot_lines:
+                                self.serial_send_s.emit(self.file_content[self.sent_lines])
+                                logging.info(self.file_content[self.sent_lines])
+                                self.sent_lines += 1
+                                self.buffer_idx += 1
                     else:
                         self.update_console_text_s.emit(element)
             except BlockingIOError as e:
@@ -151,3 +173,24 @@ class ControllerWorker(QObject):
     @Slot(int)
     def update_threshold_value(self, new_threshold):
         self.align_controller.update_threshold_value(new_threshold)
+
+    @Slot(str)
+    def send_gcode_file(self, gcode_path):
+        with open(gcode_path) as f:
+            self.file_content = f.readlines()
+        logging.info(self.file_content)
+        if self.file_content:
+            self.sending_file = True
+            self.sent_lines = 0
+            self.ack_lines = 0
+            self.buffer_idx = 0
+            self.tot_lines = len(self.file_content)
+
+            if self.sent_lines < self.tot_lines:  # and self.sent_lines < self.max_buffered_lines:
+                self.serial_send_s.emit(self.file_content[self.sent_lines])
+                logging.info(self.file_content[self.sent_lines])
+                self.sent_lines += 1
+                self.buffer_idx += 1
+
+    def update_file_sent_buffer(self):
+        pass

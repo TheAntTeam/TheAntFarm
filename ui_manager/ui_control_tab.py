@@ -11,6 +11,10 @@ class UiControlTab(QObject):
     """Class dedicated to UI <--> Control interactions on Control Tab. """
     serial_send_s = Signal(str)
 
+    send_gcode_s = Signal(str)                   # Signal to start sending a gcode file
+    stop_gcode_s = Signal()                      # Signal to stop sending a gcode file
+    pause_resume_gcode_s = Signal()              # Signal to pause/resume sending a gcode file
+
     def __init__(self, ui, control_worker, serial_worker, app_settings):
         super(UiControlTab, self).__init__()
         self.ui = ui
@@ -26,6 +30,8 @@ class UiControlTab(QObject):
         self.controlWo.update_status_s.connect(self.update_status)
         self.controlWo.update_probe_s.connect(self.update_probe)
         self.controlWo.update_console_text_s.connect(self.update_console_text)
+
+        self.send_gcode_s.connect(self.controlWo.send_gcode_file)
 
         # From Controller Manager to Serial Manager
         self.controlWo.serial_send_s.connect(self.serialWo.send)
@@ -159,7 +165,7 @@ class UiControlTab(QObject):
             # read the tooltip
             gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
             logging.debug(gcode_path)
-            self.send_gcode_file(gcode_path)
+            self.send_gcode_s.emit(gcode_path)
 
     @Slot(QTableWidgetItem)
     def print_item_clicked(self, item):
@@ -168,10 +174,7 @@ class UiControlTab(QObject):
         # read the tooltip
         gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
         logging.debug(gcode_path)
-        self.send_gcode_file(gcode_path)
-
-    def send_gcode_file(self, gcode_path):
-        pass
+        self.send_gcode_s.emit(gcode_path)
 
     @Slot(list)
     def update_probe(self, probe_l):
