@@ -57,7 +57,7 @@ class ControlController(QObject):
         elif self.abl_activated:
             [ack_abl_flag, send_next] = self.update_abl()
         else:
-            logging.warning("Not a probe, nor an ABL.")
+            # logging.warning("Not a probe, nor an ABL.")
             other_cmd_flag = True
 
         return [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag]

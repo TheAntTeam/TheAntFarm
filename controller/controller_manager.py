@@ -17,15 +17,19 @@ class ControllerWorker(QObject):
     update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
     update_status_s = Signal(list)               # Signal to update controller status
     update_console_text_s = Signal(str)          # Signal to send text to the console textEdit
-    serial_send_s = Signal(str)                  # Signal to send text to the serial
+    serial_send_s = Signal(bytes)                  # Signal to send text to the serial
+    serial_tx_available_s = Signal()             # Signal to send text to the serial
 
     update_probe_s = Signal(list)                # Signal to update probe value
     update_abl_s = Signal(list)                  # Signal to update Auto-Bed-Levelling value
 
-    def __init__(self, serial_rx_queue, settings):
+    update_file_progress_s = Signal(float)
+
+    def __init__(self, serial_rx_queue, serial_tx_queue, settings):
         super(ControllerWorker, self).__init__()
 
         self.serialRxQueue = serial_rx_queue
+        self.serialTxQueue = serial_tx_queue
         self.settings = settings
 
         self.view_controller = ViewController(self.settings)
@@ -62,6 +66,7 @@ class ControllerWorker(QObject):
 
         self.sending_file = False
         self.file_content = []
+        self.file_progress = 0.0
         self.sent_lines = 0
         self.ack_lines = 0
         self.tot_lines = 0
@@ -86,7 +91,8 @@ class ControllerWorker(QObject):
     # ***************** CONTROL related functions. ***************** #
 
     def on_poll_timeout(self):
-        self.serial_send_s.emit(str("?\n"))  # "?\n")
+        status_poll = b"?\n"
+        self.serial_send_s.emit(status_poll)
         self.status_to_ack = True
 
     @Slot()
@@ -109,22 +115,43 @@ class ControllerWorker(QObject):
                         if send_next:
                             self.send_next_abl()
                         if other_cmd_flag:
-                            self.update_console_text_s.emit(element)
+                            if element:
+                                self.update_console_text_s.emit(element)
+                                logger.info(element)
                     elif re.match("ok\s*$\s", element):
                         # pass
                         # logging.info(element)
                         if self.status_to_ack:
                             self.status_to_ack = False
                         else:
-                            self.ack_lines += 1
-                            self.buffer_idx -= 1
-                            if self.sent_lines < self.tot_lines:
-                                self.serial_send_s.emit(self.file_content[self.sent_lines])
-                                logging.info(self.file_content[self.sent_lines])
-                                self.sent_lines += 1
-                                self.buffer_idx += 1
+                            if self.sending_file:
+                                # Update progress #
+                                self.ack_lines += 1
+                                self.buffer_idx -= 1
+                                self.file_progress = (self.ack_lines / self.tot_lines) * 100
+                                logger.info("Acknowledged lines: " + str(self.ack_lines))
+                                logger.debug("Total lines: " + str(self.tot_lines))
+                                self.update_file_progress_s.emit(self.file_progress)
+                                if self.sent_lines < self.tot_lines:
+                                    if self.buffer_idx < self.max_buffered_lines:
+                                        self.serialTxQueue.put(self.file_content[self.sent_lines])
+                                        self.serial_tx_available_s.emit()
+                                        # self.serial_send_s.emit(self.file_content[self.sent_lines])
+                                        logger.info("TX:" + self.file_content[self.sent_lines])
+                                        self.sent_lines += 1
+                                        self.buffer_idx += 1
+                                else:
+                                    self.sending_file = False
+                                    logger.info("End of File sending.")
+                    elif "error" in element.lower():
+                        self.update_console_text_s.emit(element)
+                        logger.error(element)
+                        logger.info(self.buffer_idx)
+                        logger.info(self.sent_lines)
+                        logger.info(self.ack_lines)
                     else:
                         self.update_console_text_s.emit(element)
+                        logging.info(element)
             except BlockingIOError as e:
                 logging.error(e, exc_info=True)
             except:
@@ -181,13 +208,16 @@ class ControllerWorker(QObject):
         logging.info(self.file_content)
         if self.file_content:
             self.sending_file = True
+            self.file_progress = 0.0
             self.sent_lines = 0
             self.ack_lines = 0
             self.buffer_idx = 0
             self.tot_lines = len(self.file_content)
 
             if self.sent_lines < self.tot_lines:  # and self.sent_lines < self.max_buffered_lines:
-                self.serial_send_s.emit(self.file_content[self.sent_lines])
+                self.serialTxQueue.put(self.file_content[self.sent_lines])
+                self.serial_tx_available_s.emit()
+                # self.serial_send_s.emit(self.file_content[self.sent_lines])
                 logging.info(self.file_content[self.sent_lines])
                 self.sent_lines += 1
                 self.buffer_idx += 1

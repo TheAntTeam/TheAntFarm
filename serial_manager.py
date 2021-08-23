@@ -10,14 +10,16 @@ class SerialWorker(QObject):
     update_console_text_s = Signal(str)
     rx_queue_not_empty_s = Signal()
 
-    def __init__(self, serial_rx_queue):
+    def __init__(self, serial_rx_queue, serial_tx_queue):
         super(SerialWorker, self).__init__()
         self.serial_port = QSerialPort(self)
         self.serial_port.readyRead.connect(self.receive)
-        self.serial_port.bytesWritten.connect(self.send)
 
-        self.serialRxQueue = serial_rx_queue  # FIFO RX Queue to pass data to view thread
+        self.serialRxQueue = serial_rx_queue  # FIFO RX Queue to pass data to control thread
+        self.serialTxQueue = serial_tx_queue  # FIFO TX Queue to get data from control thread
         self.residual_string = ""
+
+        self.count_sent = 0
 
     @staticmethod
     def get_port_list():
@@ -70,18 +72,45 @@ class SerialWorker(QObject):
                         self.residual_string = element
                 logger.debug("Final residual string: " + self.residual_string)
 
-    @Slot(str)
+    @Slot(bytes)
     def send(self, data):
         if self.serial_port.isOpen():
             try:
                 logger.debug("data sent: " + str(data))
                 if isinstance(data, bytes):
                     self.serial_port.write(data)
-                if isinstance(data, int):
+                    self.serial_port.waitForBytesWritten(-1)
+                elif isinstance(data, int):
                     pass  # do nothing, this should not happen
-                    # self.serial_port.write(data)
                 else:
-                    self.serial_port.write(data.encode("utf-8"))
+                    self.serial_port.write(data.encode())
+                    self.serial_port.waitForBytesWritten(-1)
+            except AttributeError as e:
+                logging.error(e, exc_info=True)
+            except:
+                logger.error("Uncaught exception: %s", traceback.format_exc())
+
+    @Slot()
+    def send_from_queue(self):
+        if self.serial_port.isOpen():
+            try:
+                if not self.serialTxQueue.empty():
+                    data = self.serialTxQueue.get()
+                    logger.info("data sent: " + str(data))
+                    self.count_sent += 1
+                    logger.info("Sent count: " + str(self.count_sent))
+                    if isinstance(data, bytes):
+                        self.serial_port.write(data)
+                        self.serial_port.waitForBytesWritten(-1)
+                    if isinstance(data, int):
+                        pass  # do nothing, this should not happen
+                        # self.serial_port.write(data)
+                    else:
+                        self.serial_port.write(data.encode("utf-8"))
+                        self.serial_port.waitForBytesWritten(-1)
+                    if not self.serial_port.waitForBytesWritten(-1):
+                        logging.warning("data not completely sent: " + str(data))
+                    self.serial_port.flush()
             except AttributeError as e:
                 logging.error(e, exc_info=True)
             except:

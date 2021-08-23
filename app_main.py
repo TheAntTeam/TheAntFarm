@@ -15,6 +15,7 @@ import logging
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu = Queue()                   # serial FIFO RX Queue
+    serialTxQu = Queue()                   # serial FIFO TX Queue
 
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__()
@@ -27,14 +28,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Control Worker Thread, started as soon as the thread pool is started.
         self.control_thread = QThread(self)
-        self.controlWo = ControllerWorker(self.serialRxQu, self.settings)
+        self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.settings)
         self.controlWo.moveToThread(self.control_thread)
         self.control_thread.start()
 
         # Serial Worker Thread.
         self.serial_thread = QThread(self)
         self.serial_thread.start()
-        self.serialWo = SerialWorker(self.serialRxQu)
+        self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu)
         self.serialWo.moveToThread(self.serial_thread)
 
         # Important: this call should be after the thread creations.
