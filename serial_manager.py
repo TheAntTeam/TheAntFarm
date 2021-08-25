@@ -109,7 +109,7 @@ class SerialWorker(QObject):
                         self.serial_port.write(data.encode("utf-8"))
                         self.serial_port.waitForBytesWritten(-1)
                     if not self.serial_port.waitForBytesWritten(-1):
-                        logging.warning("data not completely sent: " + str(data))
+                        logging.debug("data not completely sent: " + str(data))
                     self.serial_port.flush()
             except AttributeError as e:
                 logging.error(e, exc_info=True)

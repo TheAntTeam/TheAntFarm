@@ -50,7 +50,7 @@ class ControllerWorker(QObject):
 
         self.align_active = False
 
-        self.status_to_ack = False
+        self.status_to_ack = 0
         self.dro_status_updated = False
         self.prb_activated = False
         self.abl_activated = False
@@ -89,11 +89,13 @@ class ControllerWorker(QObject):
         self.update_path_s.emit(tag, new_paths)
 
     # ***************** CONTROL related functions. ***************** #
+    def reset_status_to_ack(self):
+        self.status_to_ack = 0
 
     def on_poll_timeout(self):
         status_poll = b"?\n"
         self.serial_send_s.emit(status_poll)
-        self.status_to_ack = True
+        self.status_to_ack += 1
 
     @Slot()
     def parse_rx_queue(self):
@@ -121,8 +123,9 @@ class ControllerWorker(QObject):
                     elif re.match("ok\s*$\s", element):
                         # pass
                         # logging.info(element)
-                        if self.status_to_ack:
-                            self.status_to_ack = False
+                        logging.debug("status_to_ack: " + str(self.status_to_ack))
+                        if self.status_to_ack > 0:
+                            self.status_to_ack -= 1
                         else:
                             if self.sending_file:
                                 # Update progress #
@@ -207,6 +210,7 @@ class ControllerWorker(QObject):
             self.file_content = f.readlines()
         logging.info(self.file_content)
         if self.file_content:
+            self.status_to_ack = 0  # todo: This is just a test, to be removed.
             self.sending_file = True
             self.file_progress = 0.0
             self.sent_lines = 0
