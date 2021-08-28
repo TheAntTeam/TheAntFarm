@@ -1672,7 +1672,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="gcode_load">
              <property name="sizePolicy">
@@ -4131,7 +4131,9 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/white-unlock-padlock.svg</normaloff>resources/icons/white-unlock-padlock.svg</iconset>
+              <normaloff>resources/icons/white-unlock-padlock.svg</normaloff>
+              <disabledoff>resources/icons/gray-unlock-padlock.svg</disabledoff>
+              <disabledon>resources/icons/gray-unlock-padlock.svg</disabledon>resources/icons/white-unlock-padlock.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4169,7 +4171,10 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/white-home.svg</normaloff>resources/icons/white-home.svg</iconset>
+              <normaloff>resources/icons/white-home.svg</normaloff>
+              <normalon>resources/icons/white-home.svg</normalon>
+              <disabledoff>resources/icons/gray-home.svg</disabledoff>
+              <disabledon>resources/icons/gray-home.svg</disabledon>resources/icons/white-home.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4207,7 +4212,9 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/white-play-button-arrowhead.svg</normaloff>resources/icons/white-play-button-arrowhead.svg</iconset>
+              <normaloff>resources/icons/white-play-button-arrowhead.svg</normaloff>
+              <disabledoff>resources/icons/gray-play-button-arrowhead.svg</disabledoff>
+              <disabledon>resources/icons/gray-play-button-arrowhead.svg</disabledon>resources/icons/white-play-button-arrowhead.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4245,7 +4252,9 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</normaloff>resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</iconset>
+              <normaloff>resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</normaloff>
+              <disabledoff>resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg</disabledoff>
+              <disabledon>resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg</disabledon>resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4283,7 +4292,9 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/white-stop-button-black-rounded-square.svg</normaloff>resources/icons/white-stop-button-black-rounded-square.svg</iconset>
+              <normaloff>resources/icons/white-stop-button-black-rounded-square.svg</normaloff>
+              <disabledoff>resources/icons/gray-stop-button-black-rounded-square.svg</disabledoff>
+              <disabledon>resources/icons/gray-stop-button-black-rounded-square.svg</disabledon>resources/icons/white-stop-button-black-rounded-square.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4321,7 +4332,9 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>resources/icons/white-milling-machine.svg</normaloff>resources/icons/white-milling-machine.svg</iconset>
+              <normaloff>resources/icons/white-milling-machine.svg</normaloff>
+              <disabledoff>resources/icons/gray-milling-machine.svg</disabledoff>
+              <disabledon>resources/icons/gray-milling-machine.svg</disabledon>resources/icons/white-milling-machine.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
