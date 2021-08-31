@@ -40,6 +40,9 @@ class AppSettingsHandler:
     WIN_POS_Y_DEFAULT = 200
     WIN_SIZE_W_DEFAULT = 1160
     WIN_SIZE_H_DEFAULT = 720
+    MAIN_TAB_INDEX_DEFAULT = 0
+    CTRL_TAB_INDEX_DEFAULT = 0
+    SHOW_CONSOLE_DEFAULT = False
     LAYER_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
     GCODE_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
 
@@ -50,6 +53,9 @@ class AppSettingsHandler:
         self.main_win = main_win
         self.pos = QPoint(self.WIN_POS_X_DEFAULT, self.WIN_POS_Y_DEFAULT)
         self.size = QSize(self.WIN_SIZE_W_DEFAULT, self.WIN_SIZE_H_DEFAULT)
+        self.main_tab_index = self.MAIN_TAB_INDEX_DEFAULT
+        self.ctrl_tab_index = self.CTRL_TAB_INDEX_DEFAULT
+        self.console_visibility = self.SHOW_CONSOLE_DEFAULT
         self.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
         self.gcode_last_dir = self.GCODE_LAST_DIR_DEFAULT
 
@@ -66,7 +72,14 @@ class AppSettingsHandler:
             self.main_win.move(self.pos)  # Restore position
             self.size = QSize(app_general.getint("win_width", self.WIN_SIZE_W_DEFAULT),
                               app_general.getint("win_height", self.WIN_SIZE_H_DEFAULT))
+            self.main_tab_index = app_general.getint("main_tab_index", self.MAIN_TAB_INDEX_DEFAULT)
+            self.ctrl_tab_index = app_general.getint("ctrl_tab_index", self.CTRL_TAB_INDEX_DEFAULT)
+            self.console_visibility = app_general.getboolean("console_visibility", self.SHOW_CONSOLE_DEFAULT)
+        # Apply general settings.
         self.main_win.resize(self.size)
+        self.main_win.ui.main_tab_widget.setCurrentIndex(self.main_tab_index)
+        self.main_win.ui.ctrl_tab_widget.setCurrentIndex(self.ctrl_tab_index)
+        self.main_win.ui.actionHide_Show_Console.setChecked(self.console_visibility)
 
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
@@ -83,6 +96,9 @@ class AppSettingsHandler:
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
                                         "win_height": self.WIN_SIZE_H_DEFAULT,
+                                        "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
+                                        "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
+                                        "console_visibility": self.console_visibility,
                                         "layer_last_dir": self.LAYER_LAST_DIR_DEFAULT,
                                         "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT}
 
@@ -93,6 +109,9 @@ class AppSettingsHandler:
         app_general["win_position_y"] = str(self.main_win.pos().y())
         app_general["win_width"] = str(self.main_win.width())
         app_general["win_height"] = str(self.main_win.height())
+        app_general["main_tab_index"] = str(self.main_win.ui.main_tab_widget.currentIndex())
+        app_general["ctrl_tab_index"] = str(self.main_win.ui.ctrl_tab_widget.currentIndex())
+        app_general["console_visibility"] = str(self.main_win.ui.actionHide_Show_Console.isChecked())
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}

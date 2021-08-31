@@ -1668,7 +1668,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,10">
           <item>
-           <widget class="QTabWidget" name="tabWidget">
+           <widget class="QTabWidget" name="ctrl_tab_widget">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -1676,7 +1676,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="gcode_load">
              <property name="sizePolicy">

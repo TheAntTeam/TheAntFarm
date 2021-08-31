@@ -1072,13 +1072,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.tabWidget = QTabWidget(self.control_tab)
-        self.tabWidget.setObjectName(u"tabWidget")
+        self.ctrl_tab_widget = QTabWidget(self.control_tab)
+        self.ctrl_tab_widget.setObjectName(u"ctrl_tab_widget")
         sizePolicy5 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         sizePolicy5.setHorizontalStretch(0)
         sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
-        self.tabWidget.setSizePolicy(sizePolicy5)
+        sizePolicy5.setHeightForWidth(self.ctrl_tab_widget.sizePolicy().hasHeightForWidth())
+        self.ctrl_tab_widget.setSizePolicy(sizePolicy5)
         self.gcode_load = QWidget()
         self.gcode_load.setObjectName(u"gcode_load")
         sizePolicy3.setHeightForWidth(self.gcode_load.sizePolicy().hasHeightForWidth())
@@ -1136,7 +1136,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_11.addLayout(self.horizontalLayout_10)
 
-        self.tabWidget.addTab(self.gcode_load, "")
+        self.ctrl_tab_widget.addTab(self.gcode_load, "")
         self.sender_tab = QWidget()
         self.sender_tab.setObjectName(u"sender_tab")
         sizePolicy3.setHeightForWidth(self.sender_tab.sizePolicy().hasHeightForWidth())
@@ -1928,9 +1928,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_10.addLayout(self.controlsVerticalLayout)
 
-        self.tabWidget.addTab(self.sender_tab, "")
+        self.ctrl_tab_widget.addTab(self.sender_tab, "")
 
-        self.horizontalLayout_4.addWidget(self.tabWidget)
+        self.horizontalLayout_4.addWidget(self.ctrl_tab_widget)
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -2341,7 +2341,7 @@ class Ui_MainWindow(object):
         self.main_tab_widget.setCurrentIndex(1)
         self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
-        self.tabWidget.setCurrentIndex(1)
+        self.ctrl_tab_widget.setCurrentIndex(0)
         self.settings_sub_tab.setCurrentIndex(0)
 
 
@@ -2479,7 +2479,7 @@ class Ui_MainWindow(object):
         self.toolButton_6.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.toolButton_8.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.toolButton_7.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.gcode_load), QCoreApplication.translate("MainWindow", u"GCode", None))
+        self.ctrl_tab_widget.setTabText(self.ctrl_tab_widget.indexOf(self.gcode_load), QCoreApplication.translate("MainWindow", u"GCode", None))
         self.zero_xyz_pushButton.setText(QCoreApplication.translate("MainWindow", u"XYZ = 0", None))
         self.zero_y_pushButton.setText(QCoreApplication.translate("MainWindow", u"Y = 0", None))
         self.z_axis_l.setText(QCoreApplication.translate("MainWindow", u"Z", None))
@@ -2556,7 +2556,7 @@ class Ui_MainWindow(object):
         self.connect_pb.setStatusTip(QCoreApplication.translate("MainWindow", u"Connect to selected serial port.", None))
 #endif // QT_CONFIG(statustip)
         self.connect_pb.setText(QCoreApplication.translate("MainWindow", u"Connect", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.sender_tab), QCoreApplication.translate("MainWindow", u"Sender", None))
+        self.ctrl_tab_widget.setTabText(self.ctrl_tab_widget.indexOf(self.sender_tab), QCoreApplication.translate("MainWindow", u"Sender", None))
         self.status_l.setText(QCoreApplication.translate("MainWindow", u"Not Connected", None))
         self.unlock_tb.setText(QCoreApplication.translate("MainWindow", u"UNLOCK", None))
         self.homing_tb.setText(QCoreApplication.translate("MainWindow", u"HOME", None))
