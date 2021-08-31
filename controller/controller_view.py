@@ -49,14 +49,13 @@ class ViewController(QObject):
         new_paths = path.get_path()
         return new_paths
 
-    @staticmethod
-    def generate_new_gcode_file(tag, cfg, machining_type, path):
+    def generate_new_gcode_file(self, tag, cfg, machining_type, path):
         gcoder = GCoder(tag, machining_type)
         gcoder.load_cfg(cfg)
         gcoder.load_path(path)
         if gcoder.compute():
             gcode_filename = gcoder.get_file_name()
-            gcode_path = os.path.join(os.path.dirname(__file__), gcode_filename)
+            gcode_path = os.path.join(self.settings.gcf_settings.gcode_folder, gcode_filename)
             gcoder.write(gcode_path)
         else:
             logging.error("Gcode generation failed.")
