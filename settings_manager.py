@@ -83,7 +83,8 @@ class AppSettingsHandler:
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
                                         "win_height": self.WIN_SIZE_H_DEFAULT,
-                                        "layer_last_dir": self.layer_last_dir}
+                                        "layer_last_dir": self.LAYER_LAST_DIR_DEFAULT,
+                                        "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT}
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -96,7 +97,7 @@ class AppSettingsHandler:
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
         app_layers = self.app_settings["LAYERS"]
-        app_layers["last_load_dir"] = self.layer_last_dir
+        app_layers["layer_last_dir"] = self.layer_last_dir
 
         # Layers related application settings #
         self.app_settings["GCODES"] = {}
