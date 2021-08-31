@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>newCNC</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>resources/logo/the_ant_logo.png</normaloff>resources/logo/the_ant_logo.png</iconset>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>
   </property>
