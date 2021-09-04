@@ -1934,12 +1934,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.openGLWidget = QOpenGLWidget(self.control_tab)
-        self.openGLWidget.setObjectName(u"openGLWidget")
-        sizePolicy.setHeightForWidth(self.openGLWidget.sizePolicy().hasHeightForWidth())
-        self.openGLWidget.setSizePolicy(sizePolicy)
+        self.controlCanvasWidget = QOpenGLWidget(self.control_tab)
+        self.controlCanvasWidget.setObjectName(u"controlCanvasWidget")
+        sizePolicy.setHeightForWidth(self.controlCanvasWidget.sizePolicy().hasHeightForWidth())
+        self.controlCanvasWidget.setSizePolicy(sizePolicy)
 
-        self.verticalLayout.addWidget(self.openGLWidget)
+        self.verticalLayout.addWidget(self.controlCanvasWidget)
 
         self.progressBar = QProgressBar(self.control_tab)
         self.progressBar.setObjectName(u"progressBar")
