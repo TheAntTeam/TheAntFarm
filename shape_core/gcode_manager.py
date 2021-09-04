@@ -448,16 +448,20 @@ class GcodeLine:
 
 
 class GcodePoint:
+
+    TRAVEL = "t"
+    WORKING = "w"
+
     def __init__(self):
         self.coords = np.zeros((3,))
         self.line = -1
         self.sub_line = 0
-        self.type = "w"  # w working t travel
+        self.type = self.WORKING  # w working t travel
 
     def __repr__(self):
         s = "GcodeVector (\n"
         s += " coords = " + str(self.coords) + "," + "\n"
-        s += " type  = " + str("working" if self.type == "w" else "travel") + "\n"
+        s += " type  = " + str("working" if self.type == self.WORKING else "travel") + "\n"
         s += " line  = " + str(self.line) + "\n"
         if self.sub_line > 0:
             s += " sub_line  = " + str(self.sub_line) + "\n"

@@ -236,7 +236,7 @@ class VisualLayer:
 
     def add_gcode(self, tag, gcode_list, color=('white', 'orange')):
         order = 0
-        gcode_paths = []
+        gcode_paths = {}
         pre_d = gcode_list.pop(0)
         coords = [pre_d.coords]
         pre_d = gcode_list[0]
@@ -244,17 +244,22 @@ class VisualLayer:
             if d.type == pre_d.type:
                 coords.append(d.coords)
             else:
-                c = color[1] if pre_d.type == "t" else color[0]
-                gcode_paths.append((coords, c))
+                c = color[1] if pre_d.type == pre_d.TRAVEL else color[0]
+                if c not in gcode_paths.keys():
+                    gcode_paths[c] = [coords]
+                else:
+                    gcode_paths[c].append(coords)
                 coords = [pre_d.coords]
                 coords.append(d.coords)
             pre_d = d
-        c = color[1] if pre_d.type == "t" else color[0]
-        gcode_paths.append((coords, c))
+        c = color[1] if pre_d.type == pre_d.TRAVEL else color[0]
+        if c not in gcode_paths.keys():
+            gcode_paths[c] = [coords]
+        else:
+            gcode_paths[c].append(coords)
 
-        for c in gcode_paths:
-            color = c[1]
-            self.create_line(tag, [c[0]], color, order)
+        for color in gcode_paths.keys():
+            self.create_line(tag, gcode_paths[color], color, order)
 
     def add_triploy(self, tri, pts):
         self.canvas.unfreeze()
