@@ -22,6 +22,7 @@ class ControllerWorker(QObject):
 
     update_probe_s = Signal(list)                # Signal to update probe value
     update_abl_s = Signal(list)                  # Signal to update Auto-Bed-Levelling value
+    update_gcode_s = Signal(str, list)
 
     update_file_progress_s = Signal(float)
 
@@ -188,6 +189,12 @@ class ControllerWorker(QObject):
         abl_values = self.control_controller.get_abl_value()
         logging.info("ABL values: " + str(abl_values))
         self.update_abl_s.emit(abl_values)
+
+    def vectorize_new_gcode_file(self, data):
+        (tag, gcode_path) = data
+        tag, ov = self.control_controller.vectorize_gcode_file(tag, {}, gcode_path)
+        if ov is not None:
+            self.update_gcode_s.emit(tag, ov)
 
 # ***************** ALIGN related functions. ***************** #
 

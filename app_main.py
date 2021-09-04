@@ -34,9 +34,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Serial Worker Thread.
         self.serial_thread = QThread(self)
-        self.serial_thread.start()
         self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu)
         self.serialWo.moveToThread(self.serial_thread)
+        self.serial_thread.start()
 
         # Important: this call should be after the thread creations.
         self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo, self.settings)

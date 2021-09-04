@@ -234,6 +234,28 @@ class VisualLayer:
         # self.z -= self.DELTA
         # self.z += self.DELTA
 
+    def add_gcode(self, tag, gcode_list, color=('white', 'orange')):
+        order = 0
+        gcode_paths = []
+        pre_d = gcode_list.pop(0)
+        coords = [pre_d.coords]
+        pre_d = gcode_list[0]
+        for d in gcode_list:
+            if d.type == pre_d.type:
+                coords.append(d.coords)
+            else:
+                c = color[1] if pre_d.type == "t" else color[0]
+                gcode_paths.append((coords, c))
+                coords = [pre_d.coords]
+                coords.append(d.coords)
+            pre_d = d
+        c = color[1] if pre_d.type == "t" else color[0]
+        gcode_paths.append((coords, c))
+
+        for c in gcode_paths:
+            color = c[1]
+            self.create_line(tag, [c[0]], color, order)
+
     def add_triploy(self, tri, pts):
         self.canvas.unfreeze()
         mesh = visuals.Mesh()

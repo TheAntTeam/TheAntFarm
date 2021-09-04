@@ -567,8 +567,6 @@ class GCodeParser:
                             px.coords = p
                             px.type = 't' if ci == 0 else 'w'
                             px.line = i
-                            #print(gcl)
-                            #print(px)
                             vl.append(px)
             if len(vl) > 1:
                 self.gc.original_vectors = vl
@@ -576,6 +574,9 @@ class GCodeParser:
 
     def get_gcode(self):
         return self.gc
+
+    def get_gcode_original_vectors(self):
+        return self.gc.original_vectors
 
     def get_bbox(self):
         return self.gc.bb

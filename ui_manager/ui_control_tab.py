@@ -15,6 +15,8 @@ class UiControlTab(QObject):
     stop_gcode_s = Signal()                      # Signal to stop sending a gcode file
     pause_resume_gcode_s = Signal()              # Signal to pause/resume sending a gcode file
 
+    select_gcode_s = Signal(tuple)
+
     def __init__(self, ui, control_worker, serial_worker, ctrl_layer, app_settings):
         super(UiControlTab, self).__init__()
         self.ui = ui
@@ -90,6 +92,9 @@ class UiControlTab(QObject):
 
         self.ui.gcode_tw.itemClicked.connect(self.print_item_clicked)
         self.ui.play_tb.clicked.connect(self.play_send_file)
+
+        self.select_gcode_s.connect(self.controlWo.vectorize_new_gcode_file)
+        self.controlWo.update_gcode_s.connect(self.visualize_gcode)
 
     @Slot(list)
     def update_status(self, status_l):
@@ -169,7 +174,11 @@ class UiControlTab(QObject):
             # read the tooltip
             gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
             logging.debug(gcode_path)
-            self.send_gcode_s.emit(gcode_path)
+            # self.send_gcode_s.emit(gcode_path)
+            self.select_gcode_s.emit(("pippo", gcode_path))
+
+    def visualize_gcode(self, tag, ov):
+        self.ctrl_layer.add_gcode(tag, ov)
 
     @Slot(QTableWidgetItem)
     def print_item_clicked(self, item):

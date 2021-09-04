@@ -2,6 +2,7 @@ from PySide2.QtCore import QObject
 import re
 import logging
 import traceback
+from shape_core.gcode_manager import GCodeParser
 
 logger = logging.getLogger(__name__)
 
@@ -153,3 +154,13 @@ class ControlController(QObject):
                 logging.error("ABL: Number of probe done exceeded the number of probe to do.")
 
         return [ack_flag, send_next]
+
+    # GCode Related
+
+    def vectorize_gcode_file(self, tag, cfg, gcode_path):
+        gcp = GCodeParser(cfg)
+        gcp.load_gcode_file(gcode_path)
+        gcp.interp()
+        gcp.vectorize()
+        ov = gcp.get_gcode_original_vectors()
+        return tag, ov
