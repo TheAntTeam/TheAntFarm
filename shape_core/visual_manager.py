@@ -168,6 +168,10 @@ class VisualLayer:
         if tag in self.paths.keys():
             self.paths[tag].visible = visible
 
+    def set_gcode_visible(self, tag, visible):
+        if tag in self.paths.keys():
+            self.paths[tag].visible = visible
+
     def get_layers_tag(self):
         return self.meshes.keys()
 
@@ -260,6 +264,13 @@ class VisualLayer:
 
         for color in gcode_paths.keys():
             self.create_line(tag, gcode_paths[color], color, order)
+
+    def remove_gcode(self, tag):
+        if tag in self.paths.keys():
+            to_remove = self.paths[tag]
+            # self.canvas.events.draw.disconnect(to_remove.on_draw)
+            to_remove.parent = None
+            del self.paths[tag]
 
     def add_triploy(self, tri, pts):
         self.canvas.unfreeze()

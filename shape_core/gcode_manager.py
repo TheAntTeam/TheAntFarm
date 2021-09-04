@@ -498,15 +498,14 @@ class GCodeParser:
         self.gc = None
 
     def load_gcode_file(self, gcode_path):
-        lines = []
         if os.path.isfile(gcode_path):
             self.gcode_path = gcode_path
             with open(self.gcode_path) as f:
                 lines = f.readlines()
-            if lines:
-                # ha caricato il file gcode
-                # come primo step va tipizzata ogni linea
-                self.gc = GCode(lines)
+                if lines:
+                    # ha caricato il file gcode
+                    # come primo step va tipizzata ogni linea
+                    self.gc = GCode(lines)
         else:
             print("Invalid GCode File Path")
 
@@ -628,6 +627,26 @@ class GCodeLeveler:
             print("Done")
 
     def apply(self):
+        print("Auto Bed Leveler Start")
+        if self.gc is not None and self.ig is not None:
+            mvl = []
+            for p in self.gc.original_vectors:
+                np = p.copy()
+                delta = self.ig(np.coords[0], np.coords[1])
+                np.coords[2] += delta
+                mvl.append(np)
+        print("Auto Bed Leveler Stop")
+
+    def apply_advanced(self):
+        # Rispetto a quello semplice che applica le info di ABL
+        # solo ai vettori originali
+        # questa routine mette in campo strategie per adattare l'intero
+        # gcode alla superficie definita dall'ABL
+        # in questo caso quindi vengono analizzati anche i segmenti del
+        # gcode e non solo i suoi punti. Analizzando quindi l'andamento della
+        # superficie di ABL sotto ogni segmento, nel caso in cui non abbia
+        # un andamento lineare, il segmento viene suddiviso in sub-segmenti
+        # in cui la variazione ABL puo' essere considerata lineare.
         print("Auto Bed Leveler Start")
         if self.gc is not None and self.ig is not None:
             mvl = []
