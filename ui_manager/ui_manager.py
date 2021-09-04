@@ -37,12 +37,13 @@ class UiManager(QObject):
         self.hide_show_preferences_tab()
 
         self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
+        self.ctrl_layer = VisualLayer(self.ui.controlCanvasWidget)
 
         # UI Sub-Managers
         self.ui_load_layer_m = UiViewLoadLayerTab(main_win, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES,
                                                   self.L_COLORS, self.settings.app_settings)
         self.ui_create_job_m = UiCreateJobLayerTab(ui, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES, self.settings.jobs_settings)
-        self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker, self.settings.app_settings)
+        self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker, self.ctrl_layer, self.settings.app_settings)
         self.ui_align_tab_m = UiAlignTab(ui, control_worker)
 
         self.ui.prepare_widget.currentChanged.connect(self.from_load_to_create)

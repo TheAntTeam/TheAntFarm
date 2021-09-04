@@ -15,11 +15,12 @@ class UiControlTab(QObject):
     stop_gcode_s = Signal()                      # Signal to stop sending a gcode file
     pause_resume_gcode_s = Signal()              # Signal to pause/resume sending a gcode file
 
-    def __init__(self, ui, control_worker, serial_worker, app_settings):
+    def __init__(self, ui, control_worker, serial_worker, ctrl_layer, app_settings):
         super(UiControlTab, self).__init__()
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
+        self.ctrl_layer = ctrl_layer
         self.app_settings = app_settings
 
         self.ui.xy_jog_l.setText("XY [" + str(self.ui.xy_step_val_dsb.value()) + " mm]")
@@ -88,6 +89,7 @@ class UiControlTab(QObject):
         self.ui.tool_change_tb.setEnabled(False)
 
         self.ui.gcode_tw.itemClicked.connect(self.print_item_clicked)
+        self.ui.play_tb.clicked.connect(self.play_send_file)
 
     @Slot(list)
     def update_status(self, status_l):
@@ -177,6 +179,12 @@ class UiControlTab(QObject):
         gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
         logging.debug(gcode_path)
         self.send_gcode_s.emit(gcode_path)
+
+    def play_send_file(self):
+        print(self.ui.gcode_tw.selectedItems())
+        print(self.ui.gcode_tw.currentItem())
+        #gcode_path = self.ui.gcode_tw.selectedItems.cellWidget(row, 0).toolTip()
+        self.ui.play_tb.setEnabled(True)
 
     @Slot(list)
     def update_probe(self, probe_l):

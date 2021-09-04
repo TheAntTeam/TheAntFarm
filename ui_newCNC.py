@@ -1934,7 +1934,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.controlCanvasWidget = QOpenGLWidget(self.control_tab)
+        self.controlCanvasWidget = VispyCanvas(self.control_tab)
         self.controlCanvasWidget.setObjectName(u"controlCanvasWidget")
         sizePolicy.setHeightForWidth(self.controlCanvasWidget.sizePolicy().hasHeightForWidth())
         self.controlCanvasWidget.setSizePolicy(sizePolicy)
