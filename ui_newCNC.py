@@ -1088,21 +1088,19 @@ class Ui_MainWindow(object):
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
         self.gcode_tw = QTableWidget(self.gcode_load)
-        if (self.gcode_tw.columnCount() < 3):
-            self.gcode_tw.setColumnCount(3)
+        if (self.gcode_tw.columnCount() < 2):
+            self.gcode_tw.setColumnCount(2)
         __qtablewidgetitem2 = QTableWidgetItem()
         self.gcode_tw.setHorizontalHeaderItem(0, __qtablewidgetitem2)
         __qtablewidgetitem3 = QTableWidgetItem()
         self.gcode_tw.setHorizontalHeaderItem(1, __qtablewidgetitem3)
-        __qtablewidgetitem4 = QTableWidgetItem()
-        self.gcode_tw.setHorizontalHeaderItem(2, __qtablewidgetitem4)
         self.gcode_tw.setObjectName(u"gcode_tw")
         sizePolicy.setHeightForWidth(self.gcode_tw.sizePolicy().hasHeightForWidth())
         self.gcode_tw.setSizePolicy(sizePolicy)
         self.gcode_tw.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.gcode_tw.setColumnCount(3)
+        self.gcode_tw.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.gcode_tw.setColumnCount(2)
         self.gcode_tw.horizontalHeader().setCascadingSectionResizes(True)
-        self.gcode_tw.horizontalHeader().setMinimumSectionSize(16)
 
         self.verticalLayout_11.addWidget(self.gcode_tw)
 
@@ -1112,6 +1110,7 @@ class Ui_MainWindow(object):
         self.open_gcode_tb.setObjectName(u"open_gcode_tb")
         sizePolicy3.setHeightForWidth(self.open_gcode_tb.sizePolicy().hasHeightForWidth())
         self.open_gcode_tb.setSizePolicy(sizePolicy3)
+        self.open_gcode_tb.setMinimumSize(QSize(50, 50))
         icon1 = QIcon()
         icon1.addFile(u"resources/icons/white-open-folder.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.open_gcode_tb.setIcon(icon1)
@@ -1120,18 +1119,15 @@ class Ui_MainWindow(object):
 
         self.toolButton_6 = QToolButton(self.gcode_load)
         self.toolButton_6.setObjectName(u"toolButton_6")
+        self.toolButton_6.setMinimumSize(QSize(50, 50))
 
         self.horizontalLayout_10.addWidget(self.toolButton_6)
 
         self.toolButton_8 = QToolButton(self.gcode_load)
         self.toolButton_8.setObjectName(u"toolButton_8")
+        self.toolButton_8.setMinimumSize(QSize(50, 50))
 
         self.horizontalLayout_10.addWidget(self.toolButton_8)
-
-        self.toolButton_7 = QToolButton(self.gcode_load)
-        self.toolButton_7.setObjectName(u"toolButton_7")
-
-        self.horizontalLayout_10.addWidget(self.toolButton_7)
 
 
         self.verticalLayout_11.addLayout(self.horizontalLayout_10)
@@ -2057,6 +2053,7 @@ class Ui_MainWindow(object):
 #endif
         self.status_l.setPalette(palette)
         font2 = QFont()
+        font2.setFamily(u"MS Shell Dlg 2")
         font2.setPointSize(10)
         font2.setBold(True)
         font2.setWeight(75)
@@ -2064,6 +2061,7 @@ class Ui_MainWindow(object):
         self.status_l.setFrameShape(QFrame.StyledPanel)
         self.status_l.setFrameShadow(QFrame.Plain)
         self.status_l.setAlignment(Qt.AlignCenter)
+        self.status_l.setWordWrap(True)
 
         self.verticalLayout_3.addWidget(self.status_l)
 
@@ -2472,13 +2470,10 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem2 = self.gcode_tw.horizontalHeaderItem(0)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"File Path", None));
         ___qtablewidgetitem3 = self.gcode_tw.horizontalHeaderItem(1)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"View", None));
-        ___qtablewidgetitem4 = self.gcode_tw.horizontalHeaderItem(2)
-        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Play", None));
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Select", None));
         self.open_gcode_tb.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.toolButton_6.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.toolButton_8.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.toolButton_7.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.ctrl_tab_widget.setTabText(self.ctrl_tab_widget.indexOf(self.gcode_load), QCoreApplication.translate("MainWindow", u"GCode", None))
         self.zero_xyz_pushButton.setText(QCoreApplication.translate("MainWindow", u"XYZ = 0", None))
         self.zero_y_pushButton.setText(QCoreApplication.translate("MainWindow", u"Y = 0", None))

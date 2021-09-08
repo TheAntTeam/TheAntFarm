@@ -1,5 +1,6 @@
 from PySide2.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelIndex
-from PySide2.QtWidgets import QFileDialog, QLineEdit, QToolButton, QTableWidgetItem
+from PySide2.QtWidgets import QFileDialog, QLineEdit, QRadioButton, QTableWidgetItem, \
+                              QHeaderView, QCheckBox, QButtonGroup
 from PySide2.QtGui import QIcon
 import os
 import logging
@@ -90,7 +91,15 @@ class UiControlTab(QObject):
         self.ui.stop_tb.setEnabled(False)
         self.ui.tool_change_tb.setEnabled(False)
 
+        # todo: place the column behavior settings somewhere else
+        self.ui.gcode_tw.setColumnWidth(0, 200)
+        self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
+        self.ui.gcode_tw.setColumnWidth(1, 50)
+        self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+
         self.ui.gcode_tw.itemClicked.connect(self.print_item_clicked)
+        self.gcode_rb_group = QButtonGroup()
+        self.gcode_rb_group.setExclusive(True)
         self.ui.play_tb.clicked.connect(self.play_send_file)
 
         self.select_gcode_s.connect(self.controlWo.vectorize_new_gcode_file)
@@ -121,7 +130,6 @@ class UiControlTab(QObject):
         self.ui.status_l.setStyleSheet("QLabel { background-color : " + bkg_c + "; color : " + txt_c + "; }")
 
     def open_gcode_files(self):
-        # todo: c'e' da fissare le dim di alcune colonne (almeno la colonna play) e adattarla alla larghezza
         load_gcode = QFileDialog.getOpenFileNames(None,
                                                   "Load G-Code File(s)",
                                                   self.app_settings.gcode_last_dir,
@@ -137,25 +145,21 @@ class UiControlTab(QObject):
             for elem in load_gcode_paths:
                 num_rows = self.ui.gcode_tw.rowCount()
                 self.ui.gcode_tw.insertRow(num_rows)
-                # ho modificato il contenuto del line edit
-                # ho tolto il path totale e messo solo il nome del file
-                # il path e' contenuto e' nel ToolTip
-                # magari poco elegante ma molto piu' leggibile
+                # The total path is just in the ToolTip while the name shown is only the name
                 new_le = QLineEdit(os.path.basename(elem))
                 new_le.setReadOnly(True)
                 new_le.setToolTip(elem)
                 self.ui.gcode_tw.setCellWidget(num_rows, 0, new_le)
                 if True:
-                    column = 2
+                    column = 1
                     row = num_rows
-                    new_tb = QToolButton()
-                    icon = QIcon()
-                    icon.addFile(u"resources/icons/play-button-arrowhead.svg", QSize(), QIcon.Normal, QIcon.Off)
-                    new_tb.setIcon(icon)
-                    self.ui.gcode_tw.setCellWidget(row, column, new_tb)
+                    new_rb = QRadioButton()
+                    new_rb.setStyleSheet("QRadioButton{ color: white; border: blue;}")
+                    self.gcode_rb_group.addButton(new_rb)
+                    self.ui.gcode_tw.setCellWidget(row, column, new_rb)
                     index = QPersistentModelIndex(
                         self.ui.gcode_tw.model().index(row, column))
-                    new_tb.clicked.connect(
+                    new_rb.toggled.connect(
                         lambda *args, index=index: self.print_button_item_clicked(index))
                 else:
                     icon = QIcon()
@@ -164,18 +168,19 @@ class UiControlTab(QObject):
                     qtwi = QTableWidgetItem()
                     qtwi.setIcon(icon)
                     qtwi.setTextAlignment(Qt.AlignCenter)
-                    self.ui.gcode_tw.setItem(num_rows, 2, qtwi)
+                    self.ui.gcode_tw.setItem(num_rows, 1, qtwi)
 
     def print_button_item_clicked(self, index):
-        logging.debug("button clicked:", index.row())
         if index.isValid():
             row = index.row()
-            # gcode_path = self.ui.gcode_tw.cellWidget(row, 0).text()
-            # read the tooltip
-            gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
-            logging.debug(gcode_path)
-            # self.send_gcode_s.emit(gcode_path)
-            self.select_gcode_s.emit(("pippo", gcode_path))
+            if self.ui.gcode_tw.cellWidget(row, 1).isChecked():
+                # read the tooltip
+                gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
+                logging.debug(gcode_path)
+                # self.send_gcode_s.emit(gcode_path)
+                self.select_gcode_s.emit(("pippo", gcode_path))
+            else:
+                pass  # todo: remove previous gcode visualization
 
     def visualize_gcode(self, tag, ov):
         self.ctrl_layer.add_gcode(tag, ov)
@@ -189,10 +194,13 @@ class UiControlTab(QObject):
         logging.debug(gcode_path)
         self.send_gcode_s.emit(gcode_path)
 
+    def gcode_cb_update(self):
+        pass  # todo: to be implemented.
+
     def play_send_file(self):
         print(self.ui.gcode_tw.selectedItems())
         print(self.ui.gcode_tw.currentItem())
-        #gcode_path = self.ui.gcode_tw.selectedItems.cellWidget(row, 0).toolTip()
+        # gcode_path = self.ui.gcode_tw.selectedItems.cellWidget(row, 0).toolTip()
         self.ui.play_tb.setEnabled(True)
 
     @Slot(list)

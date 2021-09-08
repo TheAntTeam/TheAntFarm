@@ -1715,14 +1715,14 @@
                 <property name="horizontalScrollBarPolicy">
                  <enum>Qt::ScrollBarAlwaysOff</enum>
                 </property>
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::ExtendedSelection</enum>
+                </property>
                 <property name="columnCount">
-                 <number>3</number>
+                 <number>2</number>
                 </property>
                 <attribute name="horizontalHeaderCascadingSectionResizes">
                  <bool>true</bool>
-                </attribute>
-                <attribute name="horizontalHeaderMinimumSectionSize">
-                 <number>16</number>
                 </attribute>
                 <column>
                  <property name="text">
@@ -1731,12 +1731,7 @@
                 </column>
                 <column>
                  <property name="text">
-                  <string>View</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Play</string>
+                  <string>Select</string>
                  </property>
                 </column>
                </widget>
@@ -1751,6 +1746,12 @@
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
                   <property name="text">
                    <string>...</string>
                   </property>
@@ -1762,6 +1763,12 @@
                 </item>
                 <item>
                  <widget class="QToolButton" name="toolButton_6">
+                  <property name="minimumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
                   <property name="text">
                    <string>...</string>
                   </property>
@@ -1769,13 +1776,12 @@
                 </item>
                 <item>
                  <widget class="QToolButton" name="toolButton_8">
-                  <property name="text">
-                   <string>...</string>
+                  <property name="minimumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
                   </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QToolButton" name="toolButton_7">
                   <property name="text">
                    <string>...</string>
                   </property>
@@ -4091,6 +4097,7 @@
             </property>
             <property name="font">
              <font>
+              <family>MS Shell Dlg 2</family>
               <pointsize>10</pointsize>
               <weight>75</weight>
               <bold>true</bold>
@@ -4107,6 +4114,9 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
