@@ -97,7 +97,6 @@ class UiControlTab(QObject):
         self.ui.gcode_tw.setColumnWidth(1, 50)
         self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
 
-        self.ui.gcode_tw.itemClicked.connect(self.print_item_clicked)
         self.gcode_rb_group = QButtonGroup()
         self.gcode_rb_group.setExclusive(True)
         self.ui.play_tb.clicked.connect(self.play_send_file)
@@ -120,6 +119,12 @@ class UiControlTab(QObject):
         if "alarm" in sta:
             bkg_c = "red"
             txt_c = "white"
+        elif "running" in sta:
+            bkg_c = "green"
+            txt_c = "black"
+        elif "jog" in sta:
+            bkg_c = "blue"
+            txt_c = "white"
         elif "idle" in sta:
             bkg_c = "yellow"
             txt_c = "black"
@@ -129,28 +134,31 @@ class UiControlTab(QObject):
 
         self.ui.status_l.setStyleSheet("QLabel { background-color : " + bkg_c + "; color : " + txt_c + "; }")
 
+    def element_not_in_table(self, element):
+        num_rows = self.ui.gcode_tw.rowCount()
+        for row in range(0, num_rows):
+            if element == self.ui.gcode_tw.cellWidget(row, 0).toolTip():
+                return False
+        return True
+
     def open_gcode_files(self):
         load_gcode = QFileDialog.getOpenFileNames(None,
                                                   "Load G-Code File(s)",
                                                   self.app_settings.gcode_last_dir,
-                                                  "G-Code Files (*.gcode)")
-
+                                                  "G-Code Files (*.gcode)" + ";;All files (*.*)")  # todo: add other file extensions
         logging.debug(load_gcode)
         load_gcode_paths = load_gcode[0]
         if load_gcode_paths:
-            self.app_settings.gcode_last_dir = os.path.dirname(load_gcode_paths[0])
-            num_cols = self.ui.gcode_tw.columnCount()
-            if num_cols == 0:
-                self.ui.gcode_tw.insertColumn(0)
+            self.app_settings.gcode_last_dir = os.path.dirname(load_gcode_paths[0])  # update setting
             for elem in load_gcode_paths:
-                num_rows = self.ui.gcode_tw.rowCount()
-                self.ui.gcode_tw.insertRow(num_rows)
-                # The total path is just in the ToolTip while the name shown is only the name
-                new_le = QLineEdit(os.path.basename(elem))
-                new_le.setReadOnly(True)
-                new_le.setToolTip(elem)
-                self.ui.gcode_tw.setCellWidget(num_rows, 0, new_le)
-                if True:
+                if self.element_not_in_table(elem):
+                    num_rows = self.ui.gcode_tw.rowCount()
+                    self.ui.gcode_tw.insertRow(num_rows)
+                    # The total path is just in the ToolTip while the name shown is only the name
+                    new_le = QLineEdit(os.path.basename(elem))
+                    new_le.setReadOnly(True)
+                    new_le.setToolTip(elem)
+                    self.ui.gcode_tw.setCellWidget(num_rows, 0, new_le)
                     column = 1
                     row = num_rows
                     new_rb = QRadioButton()
@@ -161,15 +169,8 @@ class UiControlTab(QObject):
                         self.ui.gcode_tw.model().index(row, column))
                     new_rb.toggled.connect(
                         lambda *args, index=index: self.print_button_item_clicked(index))
-                else:
-                    icon = QIcon()
-                    icon.addFile(u"resources/icons/play-button-arrowhead.svg", QSize(), QIcon.Normal, QIcon.Off)
-                    new_tb.setIcon(icon)
-                    qtwi = QTableWidgetItem()
-                    qtwi.setIcon(icon)
-                    qtwi.setTextAlignment(Qt.AlignCenter)
-                    self.ui.gcode_tw.setItem(num_rows, 1, qtwi)
 
+    @Slot(QTableWidgetItem)
     def print_button_item_clicked(self, index):
         if index.isValid():
             row = index.row()
@@ -184,15 +185,6 @@ class UiControlTab(QObject):
 
     def visualize_gcode(self, tag, ov):
         self.ctrl_layer.add_gcode(tag, ov)
-
-    @Slot(QTableWidgetItem)
-    def print_item_clicked(self, item):
-        row = item.row()
-        # gcode_path = self.ui.gcode_tw.cellWidget(row, 0).text()
-        # read the tooltip
-        gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
-        logging.debug(gcode_path)
-        self.send_gcode_s.emit(gcode_path)
 
     def gcode_cb_update(self):
         pass  # todo: to be implemented.
