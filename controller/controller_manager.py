@@ -192,7 +192,6 @@ class ControllerWorker(QObject):
 
     def vectorize_new_gcode_file(self, gcode_path):
         self.control_controller.load_gcode_file({}, gcode_path)
-        print(self.control_controller.gcodes_od)
 
     def get_gcode(self, gcode_path):
         (tag, ov) = self.control_controller.get_gcode_tag_and_ov(gcode_path)

@@ -187,13 +187,10 @@ class UiControlTab(QObject):
                 logging.debug(gcode_path)
                 self.select_gcode_s.emit(gcode_path)
             else:
-                print(gcode_path)
                 tag, ov = self.controlWo.get_gcode_data(gcode_path)
-                print(tag)
                 self.visualize_gcode(tag, ov, False)
 
     def visualize_gcode(self, tag, ov, visible=True):
-        print(list(self.ctrl_layer.get_paths_tag()))
         if tag not in list(self.ctrl_layer.get_paths_tag()):
             self.ctrl_layer.add_gcode(tag, ov)
 

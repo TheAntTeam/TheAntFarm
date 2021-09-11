@@ -165,7 +165,7 @@ class ControlController(QObject):
     def id_generator(size=4, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
-    def get_new_tag(self, gcode_path):
+    def get_new_tag(self):
         tag_l = [self.gcodes_od[k]["tag"] for k in self.gcodes_od.keys()]
         new_tag = self.id_generator(4)
         while new_tag in tag_l:
@@ -178,7 +178,7 @@ class ControlController(QObject):
         gcp.interp()
         gcp.vectorize()
         # ov = gcp.get_gcode_original_vectors()
-        tag = self.get_new_tag(gcode_path)
+        tag = self.get_new_tag()
         if gcp is not None:
             self.gcodes_od[gcode_path] = {"gcode": gcp, "tag": tag}
 
