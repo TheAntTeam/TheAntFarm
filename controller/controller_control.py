@@ -2,6 +2,9 @@ from PySide2.QtCore import QObject
 import re
 import logging
 import traceback
+import string
+import random
+from collections import OrderedDict
 from shape_core.gcode_manager import GCodeParser
 
 logger = logging.getLogger(__name__)
@@ -34,6 +37,8 @@ class ControlController(QObject):
         self.prb_num_done = 0
         self.prb_reps_todo = 1
         self.prb_reps_done = 0
+
+        self.gcodes_od = OrderedDict({})
 
     def get_probe_value(self):
         return self.prb_val
@@ -156,11 +161,28 @@ class ControlController(QObject):
         return [ack_flag, send_next]
 
     # GCode Related
+    @staticmethod
+    def id_generator(size=4, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
 
-    def vectorize_gcode_file(self, tag, cfg, gcode_path):
+    def get_new_tag(self, gcode_path):
+        tag_l = [self.gcodes_od[k]["tag"] for k in self.gcodes_od.keys()]
+        new_tag = self.id_generator(4)
+        while new_tag in tag_l:
+            new_tag = self.id_generator(4)
+        return new_tag
+
+    def load_gcode_file(self, cfg, gcode_path):
         gcp = GCodeParser(cfg)
         gcp.load_gcode_file(gcode_path)
         gcp.interp()
         gcp.vectorize()
-        ov = gcp.get_gcode_original_vectors()
+        # ov = gcp.get_gcode_original_vectors()
+        tag = self.get_new_tag(gcode_path)
+        if gcp is not None:
+            self.gcodes_od[gcode_path] = {"gcode": gcp, "tag": tag}
+
+    def get_gcode_tag_and_ov(self, gcode_path):
+        ov = self.gcodes_od[gcode_path]["gcode"].get_gcode_original_vectors()
+        tag = self.gcodes_od[gcode_path]["tag"]
         return tag, ov

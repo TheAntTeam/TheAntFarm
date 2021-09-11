@@ -16,7 +16,8 @@ class UiControlTab(QObject):
     stop_gcode_s = Signal()                      # Signal to stop sending a gcode file
     pause_resume_gcode_s = Signal()              # Signal to pause/resume sending a gcode file
 
-    select_gcode_s = Signal(tuple)
+    precalc_gcode_s = Signal(str)
+    select_gcode_s = Signal(str)
 
     def __init__(self, ui, control_worker, serial_worker, ctrl_layer, app_settings):
         super(UiControlTab, self).__init__()
@@ -101,7 +102,8 @@ class UiControlTab(QObject):
         self.gcode_rb_group.setExclusive(True)
         self.ui.play_tb.clicked.connect(self.play_send_file)
 
-        self.select_gcode_s.connect(self.controlWo.vectorize_new_gcode_file)
+        self.precalc_gcode_s.connect(self.controlWo.vectorize_new_gcode_file)
+        self.select_gcode_s.connect(self.controlWo.get_gcode)
         self.controlWo.update_gcode_s.connect(self.visualize_gcode)
 
     @Slot(list)
@@ -156,6 +158,7 @@ class UiControlTab(QObject):
             self.app_settings.gcode_last_dir = os.path.dirname(load_gcode_paths[0])  # update setting
             for elem in load_gcode_paths:
                 if self.element_not_in_table(elem):
+                    self.precalc_gcode_s.emit(elem)
                     num_rows = self.ui.gcode_tw.rowCount()
                     self.ui.gcode_tw.insertRow(num_rows)
                     # The total path is just in the ToolTip while the name shown is only the name
@@ -178,17 +181,23 @@ class UiControlTab(QObject):
     def print_button_item_clicked(self, index):
         if index.isValid():
             row = index.row()
+            gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
             if self.ui.gcode_tw.cellWidget(row, 1).isChecked():
                 # read the tooltip
-                gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
                 logging.debug(gcode_path)
-                # self.send_gcode_s.emit(gcode_path)
-                self.select_gcode_s.emit(("pippo", gcode_path))
+                self.select_gcode_s.emit(gcode_path)
             else:
-                pass  # todo: remove previous gcode visualization
+                print(gcode_path)
+                tag, ov = self.controlWo.get_gcode_data(gcode_path)
+                print(tag)
+                self.visualize_gcode(tag, ov, False)
 
-    def visualize_gcode(self, tag, ov):
-        self.ctrl_layer.add_gcode(tag, ov)
+    def visualize_gcode(self, tag, ov, visible=True):
+        print(list(self.ctrl_layer.get_paths_tag()))
+        if tag not in list(self.ctrl_layer.get_paths_tag()):
+            self.ctrl_layer.add_gcode(tag, ov)
+
+        self.ctrl_layer.set_gcode_visible(tag, visible)
 
     def gcode_cb_update(self):
         pass  # todo: to be implemented.
