@@ -149,8 +149,8 @@ class VisualLayer:
         self.canvas.update()
 
     def on_mouse_double_click(self, event):
-        print("Double Click")
-        print(event)
+        # print("Double Click")
+        # print(event)
         self.orientation = 0 if self.orientation == 1 else 1
         self.flip_view(orientation=self.orientation)
 

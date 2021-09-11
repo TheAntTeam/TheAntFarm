@@ -62,8 +62,8 @@ def merge_polygons_path(poly_set, as_list=False):
             #print(list(p.exterior.coords))
             poly_set[i] = p = p.buffer(0)
             if not p.is_valid:
-                print(list(p.exterior.coords))
-                print(p.is_valid)
+                # print(list(p.exterior.coords))
+                # print(p.is_valid)
                 plot_shapely([p])
         merged = cascaded_union(poly_set)
         if merged.geom_type != "MultiPolygon":
@@ -153,6 +153,7 @@ def offset_polygon(polyg, offset, shapely_poly=False):
             opoly = polyg.geom.buffer(offset)
 
     # print(type(opoly))
+    opoly = opoly.simplify(0.001, preserve_topology=True)
 
     t1 = time.time()
     # print("\t-Time " + str(t1-t0))

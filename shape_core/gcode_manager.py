@@ -229,7 +229,7 @@ class GCoder:
             tool_change = True
 
     def compute_gerber_paths(self, paths):
-        print(paths)
+        # print(paths)
         for p in paths:
             cs = list(p.coords)
             self.go_to(cs.pop(0))

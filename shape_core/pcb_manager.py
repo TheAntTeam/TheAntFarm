@@ -154,7 +154,7 @@ class PcbObj:
         radius = 0.0
         if isinstance(primitive.aperture, gbr.primitives.Rectangle):
             radius = primitive.aperture.height / 4.0
-            subdivisions = 2
+            subdivisions = 4
         elif isinstance(primitive.aperture, gbr.primitives.Circle):
             radius = primitive.aperture.radius
             #print("Radius: " + str(radius))
@@ -176,11 +176,13 @@ class PcbObj:
             start_theta = math.pi / 2.0 + theta
             end_theta = - math.pi / 2.0 + theta
             points = self._arc_segmentation(start, radius, start_theta, end_theta,
-                                            forced_divisions=subdivisions)
+                                            forced_divisions=int(subdivisions/2))
             start_theta = math.pi / 2.0 + theta + math.pi
             end_theta = - math.pi / 2.0 + theta + math.pi
             points += self._arc_segmentation(end, radius, end_theta, start_theta,
-                                             forced_divisions=subdivisions)
+                                             forced_divisions=int(subdivisions/2))
+            #print(len(points))
+
             # if isinstance(primitive.aperture, gbr.primitives.Rectangle) and False:
             #     fig, ax = plt.subplots(1, 1)
             #     ax.plot(*zip(*points))
@@ -229,6 +231,7 @@ class PcbObj:
                     else:
                         points = [primitive.start, primitive.end]
                         closed_flag = False
+                    # print("Rounded Line ", len(points))
                 if isinstance(primitive.aperture, gbr.primitives.Rectangle):
                     if not region:
                         # print("\t with flat end")
@@ -247,6 +250,7 @@ class PcbObj:
                     print("Arc")
                 p = primitive
                 points = self._arc_segmentation(p.center, p.radius, p.start_angle, p.end_angle)
+                # print("Arc ", len(points))
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
             elif isinstance(primitive, gbr.primitives.Rectangle):
                 # tipo polygon
@@ -266,6 +270,7 @@ class PcbObj:
                     print("Circle")
                 p = primitive
                 points = self._arc_segmentation(p.position, p.radius, 0, 2 * math.pi)
+                # print("Arc ", len(points))
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Obround):
                 # tipo polygon
@@ -277,6 +282,7 @@ class PcbObj:
                 points1 = self._arc_segmentation(circle1.position, circle1.radius, 0, 2 * math.pi)
                 points2 = self._arc_segmentation(circle2.position, circle2.radius, 0, 2 * math.pi)
                 points = convex_hull(points1 + points2)
+                # print("Obround ", len(points))
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Region) or isinstance(primitive, gbr.primitives.AMGroup):
                 # tipo group
@@ -310,6 +316,7 @@ class PcbObj:
                     print("Drill")
                 p = primitive
                 points = self._arc_segmentation(p.position, p.radius, 0, 2 * math.pi)
+                # print("Drill ", len(points))
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
 
             # elif isinstance(primitive, gbr.primitives.AMGroup):
