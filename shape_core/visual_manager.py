@@ -224,50 +224,56 @@ class VisualLayer:
 
     def add_path(self, tag, geom_list, color=None):
         # todo: add zbuffer controll
-        ldata = []
-        order = 0
-        for d in geom_list:
-            gl = d[1]
-            for g in gl:
-                if g.type == "LineString":
-                    # print(">>>>>>>>>> Line String")
-                    # print(list(g.coords))
-                    ldata.append(list(g.coords))
-                if g.type == "LinearRing":
-                    # print(list(g.coords))
-                    # print("<<<<<<<<<< Linear Ring")
-                    ldata.append(list(g.coords))
-            self.create_line(tag, ldata, color, order)
-        # print("END")
-        # self.z -= self.DELTA
-        # self.z += self.DELTA
+        if geom_list:
+            ldata = []
+            order = 0
+            for d in geom_list:
+                gl = d[1]
+                for g in gl:
+                    if g.type == "LineString":
+                        # print(">>>>>>>>>> Line String")
+                        # print(list(g.coords))
+                        ldata.append(list(g.coords))
+                    if g.type == "LinearRing":
+                        # print(list(g.coords))
+                        # print("<<<<<<<<<< Linear Ring")
+                        ldata.append(list(g.coords))
+                self.create_line(tag, ldata, color, order)
+            # print("END")
+            # self.z -= self.DELTA
+            # self.z += self.DELTA
+        else:
+            print("Cannot Visualize an Empty Path")
 
     def add_gcode(self, tag, gcode_list, color=('white', 'orange')):
-        order = 0
-        gcode_paths = {}
-        pre_d = gcode_list.pop(0)
-        coords = [pre_d.coords]
-        pre_d = gcode_list[0]
-        for d in gcode_list:
-            if d.type == pre_d.type:
-                coords.append(d.coords)
-            else:
-                c = color[1] if pre_d.type == pre_d.TRAVEL else color[0]
-                if c not in gcode_paths.keys():
-                    gcode_paths[c] = [coords]
+        if gcode_list:
+            order = 0
+            gcode_paths = {}
+            pre_d = gcode_list.pop(0)
+            coords = [pre_d.coords]
+            pre_d = gcode_list[0]
+            for d in gcode_list:
+                if d.type == pre_d.type:
+                    coords.append(d.coords)
                 else:
-                    gcode_paths[c].append(coords)
-                coords = [pre_d.coords]
-                coords.append(d.coords)
-            pre_d = d
-        c = color[1] if pre_d.type == pre_d.TRAVEL else color[0]
-        if c not in gcode_paths.keys():
-            gcode_paths[c] = [coords]
-        else:
-            gcode_paths[c].append(coords)
+                    c = color[1] if pre_d.type == pre_d.TRAVEL else color[0]
+                    if c not in gcode_paths.keys():
+                        gcode_paths[c] = [coords]
+                    else:
+                        gcode_paths[c].append(coords)
+                    coords = [pre_d.coords]
+                    coords.append(d.coords)
+                pre_d = d
+            c = color[1] if pre_d.type == pre_d.TRAVEL else color[0]
+            if c not in gcode_paths.keys():
+                gcode_paths[c] = [coords]
+            else:
+                gcode_paths[c].append(coords)
 
-        for color in gcode_paths.keys():
-            self.create_line(tag, gcode_paths[color], color, order)
+            for color in gcode_paths.keys():
+                self.create_line(tag, gcode_paths[color], color, order)
+        else:
+            print("Cannot Visualize an Empty GCode")
 
     def remove_gcode(self, tag):
         self.remove_path(tag)

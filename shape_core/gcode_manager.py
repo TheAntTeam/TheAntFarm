@@ -644,7 +644,6 @@ class GCodeParser:
                                     px.params[g] = gcl.params[g]
                             vl.append(px)
 
-
             if len(vl) > 1:
                 self.gc.original_vectors = vl
                 self.gc.bb = tuple(bb_min + bb_max)
