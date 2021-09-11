@@ -1,11 +1,13 @@
 
 import os
 import re
+import time
 import numpy as np
 from collections import OrderedDict as od
 from datetime import datetime
 #import matplotlib.pyplot as plt
 import scipy.interpolate as spi
+from shapely.geometry import LineString
 
 
 class GCoder:
@@ -435,6 +437,20 @@ class GcodeLine:
         self.params = od({})
         self.comment = ""
 
+    def get_string(self):
+        s = ""
+        if self.command:
+            s += self.command[0]
+            s += ".".join([str(x) for x in self.command[1]])
+        if self.params:
+            for k in self.params.keys():
+                s += " " + k + str(self.params[k])
+        s = s.upper()
+        if self.comment:
+            s += " ;" + self.comment
+        s += "\n"
+        return s
+
     def __repr__(self):
         s = "GcodeLine (\n"
         s += " command = " + str(self.command) + "\n"
@@ -457,6 +473,7 @@ class GcodePoint:
         self.line = -1
         self.sub_line = 0
         self.type = self.WORKING  # w working t travel
+        self.params = od({})
 
     def __repr__(self):
         s = "GcodeVector (\n"
@@ -465,6 +482,12 @@ class GcodePoint:
         s += " line  = " + str(self.line) + "\n"
         if self.sub_line > 0:
             s += " sub_line  = " + str(self.sub_line) + "\n"
+        if self.params.keys():
+            s += " params = "
+            pl = []
+            for k in self.params.keys():
+                pl.append(str(k) + ":" + str(self.params[k]))
+            s += ", ".join(pl) + "\n"
         s += ")\n"
         return s
 
@@ -474,7 +497,22 @@ class GcodePoint:
         np.line = self.line
         np.sub_line = self.sub_line
         np.type = self.type
+        np.params = self.params.copy()
         return np
+
+    def get_string(self):
+        s = ""
+        if self.type == self.TRAVEL:
+            s += "G0"
+        else:
+            s += "G1"
+        s += " X" + str(self.coords[0])
+        s += " Y" + str(self.coords[1])
+        s += " Z" + str(self.coords[2])
+        for k in self.params.keys():
+            s += " " + str(k).upper() + str(self.params[k])
+        s += "\n"
+        return s
 
 
 class GCode:
@@ -491,6 +529,7 @@ class GCode:
 class GCodeParser:
 
     COORD_TAG = ['x', 'y', 'z']
+    PARAM_TAG = ['f', 'p']
 
     def __init__(self, cfg):
         self.gcode_path = ""
@@ -542,6 +581,34 @@ class GCodeParser:
                     gcll.append(gcl)
             self.gc.gcll = gcll
 
+    def recode_gcode(self):
+        gcls = []
+        if self.gc.modified_vectors:
+            gcv = self.gc.modified_vectors
+        else:
+            gcv = self.gc.original_vectors
+        if gcv:
+            gcv_len = len(gcv)
+            # in base alla lista delle righe
+            gcl = self.gc.gcll
+            #vl = gcv[1].line
+            # parto da uno perche' il primo punto e' 0.0 di default
+            vi = 1
+            for l in range(len(gcl)):
+                if gcv[vi].line == l:
+                    cl_flag = True
+                    # print the gcode vector line
+                    gcls.append(gcv[vi].get_string())
+                    while cl_flag and vi < gcv_len - 1:
+                        vi += 1
+                        cl_flag = gcv[vi].line == l
+                        if cl_flag:
+                            gcls.append(gcv[vi].get_string())
+                else:
+                    if gcl[l].command:
+                        gcls.append(gcl[l].get_string())
+        return gcls
+
     def vectorize(self):
         if self.gc.gcll:
             p0 = GcodePoint()
@@ -560,6 +627,8 @@ class GCodeParser:
                         a = set(gcl.params.keys())
                         b = set(self.COORD_TAG)
                         c = b.intersection(a)
+                        d = set(self.PARAM_TAG)
+                        f = a.intersection(d)
                         if c:
                             for e in c:
                                 last_coord[self.COORD_TAG.index(e)] = gcl.params[e]
@@ -570,7 +639,12 @@ class GCodeParser:
                             px.coords = p
                             px.type = 't' if ci == 0 else 'w'
                             px.line = i
+                            if f:
+                                for g in f:
+                                    px.params[g] = gcl.params[g]
                             vl.append(px)
+
+
             if len(vl) > 1:
                 self.gc.original_vectors = vl
                 self.gc.bb = tuple(bb_min + bb_max)
@@ -580,6 +654,12 @@ class GCodeParser:
 
     def get_gcode_original_vectors(self):
         return self.gc.original_vectors
+
+    def get_gcode_vectors(self):
+        if self.gc.modified_vectors:
+            return self.gc.modified_vectors
+        else:
+            return self.gc.original_vectors
 
     def get_bbox(self):
         return self.gc.bb
@@ -593,19 +673,30 @@ class GCodeLeveler:
             self.grid_data = grid_data
         else:
             self.grid_data = self.get_dummy_grid_data()
-        self.grid_lines = self.get_grid_lines()
+        self.grid_lines, self.grid_step = self.get_grid_lines()
         self.ig = None
 
     def get_grid_lines(self):
         x = list(set(self.grid_data[0].ravel().tolist()))
+        x.sort()
         y = list(set(self.grid_data[1].ravel().tolist()))
+        y.sort()
+        x_step = abs(x[1] - x[0])
+        y_step = abs(y[1] - y[0])
         x_min = min(x)
         x_max = max(x)
         y_min = min(y)
         y_max = max(y)
+        vectors = []
         for yc in y:
-            vec = np.array(((x_min, yc), (x_max, yc)))
-
+            #vec = (np.array((x_min, yc)), np.array((x_max, yc)))
+            #vectors.append(vec)
+            vectors.append(LineString(((x_min, yc), (x_max, yc))))
+        for xc in x:
+            #vec = (np.array((xc, y_min)), np.array((xc, y_max)))
+            #vectors.append(vec)
+            vectors.append(LineString(((xc, y_min), (xc, y_max))))
+        return vectors, (x_step, y_step)
 
     def get_dummy_grid_data(self):
         grid_steps = 10
@@ -659,10 +750,13 @@ class GCodeLeveler:
         # superficie di ABL sotto ogni segmento, nel caso in cui non abbia
         # un andamento lineare, il segmento viene suddiviso in sub-segmenti
         # in cui la variazione ABL puo' essere considerata lineare.
-        print("Advanced Auto Bed Leveler Start")
         if self.gc is not None and self.ig is not None:
+            ta = time.time()
+            print("Advanced Auto Bed Leveler Start")
             mvl = []
             pre_pc = None
+            min_step = min(self.grid_step)
+            print("Min Step ", min_step)
             for p in self.gc.original_vectors:
                 np_l = []
                 nwp = p.copy()
@@ -671,12 +765,46 @@ class GCodeLeveler:
                 if pre_pc is not None:
                     pc = np.array(nwp.coords[:2])
                     seg_len = np.linalg.norm(pc - pre_pc)
-
+                    sub_line = 0
+                    if seg_len <= min_step and seg_len > 0.1:
+                        i_l = self.get_grid_intersection(pc, pre_pc)
+                        if i_l:
+                            for i in i_l:
+                                x = i.xy[0][0]
+                                y = i.xy[1][0]
+                                # if intersection differ from segment vertex
+                                if (x != pc[0] and y != pc[1]) or (x != pre_pc[0] and y != pre_pc[1]):
+                                    nip = nwp.copy()
+                                    nip.coords[0] = x
+                                    nip.coords[1] = y
+                                    delta = self.ig(nip.coords[0], nip.coords[1])
+                                    nip.coords[2] += delta
+                                    nip.sub_line = sub_line
+                                    np_l.append(nip)
+                                    sub_line += 1
+                    np.sub_line = sub_line
+                    np_l.append(np)
                 else:
                     np_l = [np]
                 mvl += np_l
                 pre_pc = np.array(p.coords[:2])
-        print("Advancede Auto Bed Leveler Stop")
+            self.gc.modified_vectors = mvl
+            print("Advancede Auto Bed Leveler Stop")
+            tb = time.time()
+            print("Duration ", tb-ta)
+            return True
+        else:
+            return False
+
+    def get_grid_intersection(self, a1, a2):
+        i_l = []
+        line1 = LineString([a1, a2])
+        for s in self.grid_lines:
+            line2 = s  # LineString([s[0], s[1]])
+            i = line1.intersection(line2)
+            if i:
+                i_l.append(i)
+        return i_l
 
 
 if __name__ == "__main__":
@@ -688,7 +816,8 @@ if __name__ == "__main__":
     gcp.load_gcode_file(gcode_path)
     gcp.interp()
     gcp.vectorize()
-    abl = GCodeLeveler(gcp.gc)
-    abl.get_dummy_grid_data()
-    abl.interp_grid_data()
-    abl.apply_advanced()
+    lines = gcp.recode_gcode()
+    #abl = GCodeLeveler(gcp.gc)
+    #abl.get_dummy_grid_data()
+    #abl.interp_grid_data()
+    #abl.apply_advanced()
