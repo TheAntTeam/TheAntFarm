@@ -1718,6 +1718,9 @@
                 <property name="selectionMode">
                  <enum>QAbstractItemView::ExtendedSelection</enum>
                 </property>
+                <property name="showGrid">
+                 <bool>false</bool>
+                </property>
                 <property name="columnCount">
                  <number>2</number>
                 </property>

@@ -93,6 +93,26 @@ class StyleManager:
 
         self.app_ptr.setPalette(dark_palette)
 
+    @staticmethod
+    def set_radio_btn_style_sheet():
+        radio_btn_ss = "QRadioButton{ color: white; margin-left:40%; margin-right:60%;} " + \
+                       "QRadioButton::indicator { width: 11px;" + \
+                                                 "height: 11px;" + \
+                                                 "border-radius: 5px;} " + \
+                       "QRadioButton::indicator::unchecked{border: 1px solid;" + \
+                                                          "border-color: rgb(132,132,132);" + \
+                                                          "border-radius: 5px;" + \
+                                                          "background-color: white;" + \
+                                                          "width: 11px;" + \
+                                                          "height: 11px;} " + \
+                       "QRadioButton::indicator::checked{border: 3px solid;" + \
+                                                        "border-color: white;" + \
+                                                        "border-radius: 6px;" + \
+                                                        "background-color: rgb(0,116,188);" + \
+                                                        "width: 7px;" + \
+                                                        "height: 7px;}"
+        return radio_btn_ss
+
 
 if __name__ == "__main__":
     pass

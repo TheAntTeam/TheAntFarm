@@ -1099,6 +1099,7 @@ class Ui_MainWindow(object):
         self.gcode_tw.setSizePolicy(sizePolicy)
         self.gcode_tw.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.gcode_tw.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.gcode_tw.setShowGrid(False)
         self.gcode_tw.setColumnCount(2)
         self.gcode_tw.horizontalHeader().setCascadingSectionResizes(True)
 

@@ -1,7 +1,7 @@
 from PySide2.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelIndex
 from PySide2.QtWidgets import QFileDialog, QLineEdit, QRadioButton, QTableWidgetItem, \
                               QHeaderView, QCheckBox, QButtonGroup
-from PySide2.QtGui import QIcon
+from style_manager import StyleManager
 import os
 import logging
 
@@ -94,7 +94,7 @@ class UiControlTab(QObject):
         # todo: place the column behavior settings somewhere else
         self.ui.gcode_tw.setColumnWidth(0, 200)
         self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
-        self.ui.gcode_tw.setColumnWidth(1, 50)
+        self.ui.gcode_tw.setColumnWidth(1, 100)
         self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
 
         self.gcode_rb_group = QButtonGroup()
@@ -135,6 +135,10 @@ class UiControlTab(QObject):
         self.ui.status_l.setStyleSheet("QLabel { background-color : " + bkg_c + "; color : " + txt_c + "; }")
 
     def element_not_in_table(self, element):
+        """ Search if there is an element in the gcode table.
+            The element shall be the gcode path, a string.
+            :returns True if element is not in table
+            :returns False if element is in table. """
         num_rows = self.ui.gcode_tw.rowCount()
         for row in range(0, num_rows):
             if element == self.ui.gcode_tw.cellWidget(row, 0).toolTip():
@@ -162,7 +166,7 @@ class UiControlTab(QObject):
                     column = 1
                     row = num_rows
                     new_rb = QRadioButton()
-                    new_rb.setStyleSheet("QRadioButton{ color: white; border: blue;}")
+                    new_rb.setStyleSheet(StyleManager.set_radio_btn_style_sheet())
                     self.gcode_rb_group.addButton(new_rb)
                     self.ui.gcode_tw.setCellWidget(row, column, new_rb)
                     index = QPersistentModelIndex(
