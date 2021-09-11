@@ -166,11 +166,13 @@ class VisualLayer:
 
     def set_path_visible(self, tag, visible):
         if tag in self.paths.keys():
-            self.paths[tag].visible = visible
+            for p in self.paths[tag]:
+                p.visible = visible
 
     def set_gcode_visible(self, tag, visible):
         if tag in self.paths.keys():
-            self.paths[tag].visible = visible
+            for p in self.paths[tag]:
+                p.visible = visible
 
     def get_layers_tag(self):
         return self.meshes.keys()
@@ -187,9 +189,11 @@ class VisualLayer:
 
     def remove_path(self, tag):
         if tag in self.paths.keys():
-            to_remove = self.paths[tag]
-            # self.canvas.events.draw.disconnect(to_remove.on_draw)
-            to_remove.parent = None
+            for p in self.paths[tag]:
+                to_remove = p
+                # self.canvas.events.draw.disconnect(to_remove.on_draw)
+                to_remove.parent = None
+                del p
             del self.paths[tag]
 
     def add_layer(self, tag, geom_list, color=None, holes=False):
@@ -266,11 +270,7 @@ class VisualLayer:
             self.create_line(tag, gcode_paths[color], color, order)
 
     def remove_gcode(self, tag):
-        if tag in self.paths.keys():
-            to_remove = self.paths[tag]
-            # self.canvas.events.draw.disconnect(to_remove.on_draw)
-            to_remove.parent = None
-            del self.paths[tag]
+        self.remove_path(tag)
 
     def add_triploy(self, tri, pts):
         self.canvas.unfreeze()
@@ -303,7 +303,11 @@ class VisualLayer:
 
         line = visuals.Line(pos=coords, connect=connect, width=0.1, color=color, parent=self.canvas.view)
         line.order = order
-        self.paths[tag] = line
+        if tag in list(self.paths.keys()):
+            self.paths[tag] += [line]
+        else:
+            self.paths[tag] = [line]
+        #self.paths[tag] = line
         self.canvas.view.add(line)
         self.canvas.view.camera.set_range()
         self.canvas.freeze()

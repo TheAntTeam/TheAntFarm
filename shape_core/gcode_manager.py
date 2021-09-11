@@ -593,7 +593,19 @@ class GCodeLeveler:
             self.grid_data = grid_data
         else:
             self.grid_data = self.get_dummy_grid_data()
+        self.grid_lines = self.get_grid_lines()
         self.ig = None
+
+    def get_grid_lines(self):
+        x = list(set(self.grid_data[0].ravel().tolist()))
+        y = list(set(self.grid_data[1].ravel().tolist()))
+        x_min = min(x)
+        x_max = max(x)
+        y_min = min(y)
+        y_max = max(y)
+        for yc in y:
+            vec = np.array(((x_min, yc), (x_max, yc)))
+
 
     def get_dummy_grid_data(self):
         grid_steps = 10
@@ -647,15 +659,24 @@ class GCodeLeveler:
         # superficie di ABL sotto ogni segmento, nel caso in cui non abbia
         # un andamento lineare, il segmento viene suddiviso in sub-segmenti
         # in cui la variazione ABL puo' essere considerata lineare.
-        print("Auto Bed Leveler Start")
+        print("Advanced Auto Bed Leveler Start")
         if self.gc is not None and self.ig is not None:
             mvl = []
+            pre_pc = None
             for p in self.gc.original_vectors:
-                np = p.copy()
-                delta = self.ig(np.coords[0], np.coords[1])
-                np.coords[2] += delta
-                mvl.append(np)
-        print("Auto Bed Leveler Stop")
+                np_l = []
+                nwp = p.copy()
+                delta = self.ig(nwp.coords[0], nwp.coords[1])
+                nwp.coords[2] += delta
+                if pre_pc is not None:
+                    pc = np.array(nwp.coords[:2])
+                    seg_len = np.linalg.norm(pc - pre_pc)
+
+                else:
+                    np_l = [np]
+                mvl += np_l
+                pre_pc = np.array(p.coords[:2])
+        print("Advancede Auto Bed Leveler Stop")
 
 
 if __name__ == "__main__":
@@ -670,4 +691,4 @@ if __name__ == "__main__":
     abl = GCodeLeveler(gcp.gc)
     abl.get_dummy_grid_data()
     abl.interp_grid_data()
-    abl.apply()
+    abl.apply_advanced()
