@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 class UiControlTab(QObject):
     """Class dedicated to UI <--> Control interactions on Control Tab. """
+    controller_connected_s = Signal(bool)
     ui_serial_send_s = Signal(str)
 
     send_gcode_s = Signal(str)                   # Signal to start sending a gcode file
@@ -32,6 +33,7 @@ class UiControlTab(QObject):
 
         self.serial_connection_status = False
         self.ui_serial_send_s.connect(self.serialWo.send)
+        self.controlWo.reset_controller_status_s.connect(self.controlWo.reset_dro_status_updated)
         self.controlWo.update_status_s.connect(self.update_status)
         self.controlWo.update_probe_s.connect(self.update_probe)
         self.controlWo.update_console_text_s.connect(self.update_console_text)
@@ -100,7 +102,11 @@ class UiControlTab(QObject):
 
         self.gcode_rb_group = QButtonGroup()
         self.gcode_rb_group.setExclusive(True)
+
+        self.controller_connected_s.connect(lambda connected: self.controlWo.on_controller_connection(connected))
         self.ui.play_tb.clicked.connect(self.play_send_file)
+        self.ui.stop_tb.clicked.connect(self.stop_send_file)
+        self.controlWo.stop_send_s.connect(self.stop_send_file)
 
         self.precalc_gcode_s.connect(self.controlWo.vectorize_new_gcode_file)
         self.select_gcode_s.connect(self.controlWo.get_gcode)
@@ -121,7 +127,7 @@ class UiControlTab(QObject):
         if "alarm" in sta:
             bkg_c = "red"
             txt_c = "white"
-        elif "running" in sta:
+        elif "run" in sta:
             bkg_c = "green"
             txt_c = "black"
         elif "jog" in sta:
@@ -186,6 +192,8 @@ class UiControlTab(QObject):
                 # read the tooltip
                 logging.debug(gcode_path)
                 self.select_gcode_s.emit(gcode_path)
+                if self.serialWo.open_port(self.ui.serial_ports_cb.currentText()):
+                    self.ui.play_tb.setEnabled(True)
             else:
                 tag, ov = self.controlWo.get_gcode_data(gcode_path)
                 self.visualize_gcode(tag, ov, False)
@@ -200,10 +208,30 @@ class UiControlTab(QObject):
         pass  # todo: to be implemented.
 
     def play_send_file(self):
-        print(self.ui.gcode_tw.selectedItems())
-        print(self.ui.gcode_tw.currentItem())
-        # gcode_path = self.ui.gcode_tw.selectedItems.cellWidget(row, 0).toolTip()
-        self.ui.play_tb.setEnabled(True)
+        if self.serialWo.open_port(self.ui.serial_ports_cb.currentText()):
+            num_rows = self.ui.gcode_tw.rowCount()
+            for row in range(0, num_rows):
+                if self.ui.gcode_tw.cellWidget(row, 1).isChecked():
+                    self.send_gcode_s.emit(self.ui.gcode_tw.cellWidget(row, 0).toolTip())
+                    self.ui.play_tb.setEnabled(False)
+                    self.enable_gcode_rb(False)
+
+    def stop_send_file(self):
+        self.enable_gcode_rb(True)
+        if self.serialWo.open_port(self.ui.serial_ports_cb.currentText()):
+            self.ui.play_tb.setEnabled(True)
+
+    def enable_gcode_rb(self, enabling):
+        num_rows = self.ui.gcode_tw.rowCount()
+        for row in range(0, num_rows):
+            self.ui.gcode_tw.cellWidget(row, 1).setEnabled(enabling)
+
+    def is_gcode_rb_selected(self):
+        num_rows = self.ui.gcode_tw.rowCount()
+        for row in range(0, num_rows):
+            if self.ui.gcode_tw.cellWidget(row, 1).isChecked():
+                return True
+        return False
 
     @Slot(list)
     def update_probe(self, probe_l):
@@ -238,6 +266,7 @@ class UiControlTab(QObject):
         if not self.serial_connection_status:
             if self.serialWo.open_port(self.ui.serial_ports_cb.currentText()):
                 self.serial_connection_status = True
+                self.controlWo.reset_controller_status_s.emit()
                 self.ui.connect_pb.setText("Disconnect")
                 self.ui.serial_ports_cb.hide()
                 self.ui.serial_baud_cb.hide()
@@ -246,8 +275,12 @@ class UiControlTab(QObject):
                 self.ui.send_pb.show()
                 self.ui.unlock_tb.setEnabled(True)
                 self.ui.homing_tb.setEnabled(True)
+                if self.is_gcode_rb_selected():
+                    self.ui.play_tb.setEnabled(True)
+                self.controller_connected_s.emit(True)
         else:
             self.serialWo.close_port()
+            self.controlWo.reset_controller_status_s.emit()
             self.serial_connection_status = False
             self.ui.connect_pb.setText("Connect")
             self.ui.serial_ports_cb.show()
@@ -259,6 +292,8 @@ class UiControlTab(QObject):
             self.update_status_colors("Not Connected")
             self.ui.unlock_tb.setEnabled(False)
             self.ui.homing_tb.setEnabled(False)
+            self.ui.play_tb.setEnabled(False)
+            self.controller_connected_s.emit(False)
 
     def handle_clear_terminal(self):
         self.ui.serial_te.clear()

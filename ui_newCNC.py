@@ -1098,7 +1098,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.gcode_tw.sizePolicy().hasHeightForWidth())
         self.gcode_tw.setSizePolicy(sizePolicy)
         self.gcode_tw.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.gcode_tw.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.gcode_tw.setSelectionMode(QAbstractItemView.MultiSelection)
         self.gcode_tw.setShowGrid(False)
         self.gcode_tw.setColumnCount(2)
         self.gcode_tw.horizontalHeader().setCascadingSectionResizes(True)
@@ -2230,6 +2230,7 @@ class Ui_MainWindow(object):
         self.logging_plain_te.setMinimumSize(QSize(0, 40))
         self.logging_plain_te.setMaximumSize(QSize(16777215, 200))
         self.logging_plain_te.setReadOnly(True)
+        self.logging_plain_te.setMaximumBlockCount(10000)
 
         self.verticalLayout_6.addWidget(self.logging_plain_te)
 

@@ -28,12 +28,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Control Worker Thread, started as soon as the thread pool is started.
         self.control_thread = QThread(self)
+        self.control_thread.setObjectName("control_T")
         self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.settings)
         self.controlWo.moveToThread(self.control_thread)
+        self.controlWo.init_timers()
         self.control_thread.start()
 
         # Serial Worker Thread.
         self.serial_thread = QThread(self)
+        self.serial_thread.setObjectName("serial_T")
         self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu)
         self.serialWo.moveToThread(self.serial_thread)
         self.serial_thread.start()
@@ -58,7 +61,7 @@ if __name__ == "__main__":
     window = MainWindow()
 
     h = LogHandler(window.ui_manager.update_logging_status)
-    formatter = logging.Formatter('%(asctime)s %(levelname)s %(module)s %(funcName)s %(message)s')
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(threadName)s %(module)s %(funcName)s %(message)s')
     h.setFormatter(formatter)
     root = logging.getLogger()
     h.setLevel(logging.INFO)
