@@ -54,7 +54,7 @@ class SerialWorker(QObject):
         self.serial_port.close()
 
     @Slot()
-    def receive(self):
+    def receive_1(self):
         if self.serial_port.canReadLine():
             data_out = self.serial_port.readLine().data().decode()
             if data_out:
@@ -67,6 +67,27 @@ class SerialWorker(QObject):
                     element = res_split.pop(0)
                     if '\n' in element:
                         self.serialRxQueue.put(element)
+                        logger.debug("RXelem: " + element)
+                        self.rx_queue_not_empty_s.emit()
+                    else:
+                        self.residual_string = element
+                logger.debug("Final residual string: " + self.residual_string)
+
+    @Slot()
+    def receive(self):
+        if self.serial_port.canReadLine():
+            data_out = self.serial_port.readAll().data().decode()
+            if data_out:
+                logger.debug("data in: " + data_out)
+                self.residual_string = self.residual_string + data_out
+                logger.debug("Residual string: " + self.residual_string)
+                res_split = self.residual_string.splitlines(True)
+                self.residual_string = ""
+                while res_split:
+                    element = res_split.pop(0)
+                    if '\n' in element:
+                        self.serialRxQueue.put(element)
+                        logger.debug("RXelem: " + element)
                         self.rx_queue_not_empty_s.emit()
                     else:
                         self.residual_string = element
@@ -86,7 +107,7 @@ class SerialWorker(QObject):
                     self.serial_port.write(data.encode())
                     self.serial_port.waitForBytesWritten(-1)
             except AttributeError as e:
-                logging.error(e, exc_info=True)
+                logger.error(e, exc_info=True)
             except:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
@@ -102,16 +123,16 @@ class SerialWorker(QObject):
                     if isinstance(data, bytes):
                         self.serial_port.write(data)
                         self.serial_port.waitForBytesWritten(-1)
-                    if isinstance(data, int):
+                    elif isinstance(data, int):
                         pass  # do nothing, this should not happen
                         # self.serial_port.write(data)
                     else:
                         self.serial_port.write(data.encode("utf-8"))
                         self.serial_port.waitForBytesWritten(-1)
                     if not self.serial_port.waitForBytesWritten(-1):
-                        logging.debug("data not completely sent: " + str(data))
+                        logger.debug("data not completely sent: " + str(data))
                     self.serial_port.flush()
             except AttributeError as e:
-                logging.error(e, exc_info=True)
+                logger.error(e, exc_info=True)
             except:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
