@@ -4469,7 +4469,7 @@
        <bool>true</bool>
       </property>
       <property name="maximumBlockCount">
-       <number>100</number>
+       <number>1000</number>
       </property>
      </widget>
     </item>

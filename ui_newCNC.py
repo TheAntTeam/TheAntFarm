@@ -2230,7 +2230,7 @@ class Ui_MainWindow(object):
         self.logging_plain_te.setMinimumSize(QSize(0, 40))
         self.logging_plain_te.setMaximumSize(QSize(16777215, 200))
         self.logging_plain_te.setReadOnly(True)
-        self.logging_plain_te.setMaximumBlockCount(10000)
+        self.logging_plain_te.setMaximumBlockCount(1000)
 
         self.verticalLayout_6.addWidget(self.logging_plain_te)
 
