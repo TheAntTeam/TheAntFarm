@@ -75,14 +75,14 @@ class ControllerWorker(QObject):
     @Slot(bool)
     def on_controller_connection(self, connected):
         if connected:
-            self.alive_timer.start()
+            self.poll_timer.start()
         else:
-            self.alive_timer.stop()
+            self.poll_timer.stop()
 
     def init_timers(self):
-        # self.poll_timer = QTimer()
-        # self.poll_timer.timeout.connect(self.on_poll_timeout)
-        # self.poll_timer.setInterval(120)
+        self.poll_timer = QTimer()
+        self.poll_timer.timeout.connect(self.on_poll_timeout)
+        self.poll_timer.setInterval(120)
         # self.poll_timer.setSingleShot(True)
         # self.poll_timer.start()
 
@@ -124,7 +124,7 @@ class ControllerWorker(QObject):
             self.serial_send_s.emit(status_poll)
             # self.send_to_tx_queue(status_poll)
             self.status_to_ack = 0
-        elif self.dro_status_updated and self.status_to_ack <= 0:
+        elif self.dro_status_updated:  # and self.status_to_ack <= 10:
             if self.status_to_ack < 0:
                 self.status_to_ack = 1
             else:
@@ -150,13 +150,6 @@ class ControllerWorker(QObject):
                     if re.match("^<.*>\s*$\s", element):
                         logger.debug(element[1:])
                         self.update_status_s.emit(self.control_controller.parse_bracket_angle(element))
-                        # if self.dro_status_updated:
-                        #     self.status_to_ack -= 1
-                        # else:
-                        #     # This variable should be set to true the first time an ack is received.
-                        #     self.dro_status_updated = True
-                        #     self.status_to_ack = 0
-                        # QTimer.singleShot(120, self.on_poll_timeout)
                     elif re.match("^\[.*\]\s*$\s", element):
                         self.control_controller.parse_bracket_square(element)
                         [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = \
@@ -173,18 +166,6 @@ class ControllerWorker(QObject):
                                 logger.info(element)
                     elif re.match("ok\s*$\s", element):
                         logger.info("status_to_ack: " + str(self.status_to_ack))
-                        if self.dro_status_updated:
-                            self.status_to_ack -= 1
-                            QTimer.singleShot(120, self.on_poll_timeout)
-                        else:
-                            # This variable should be set to true the first time an ack is received.
-                            self.dro_status_updated = True
-                            self.status_to_ack = 0
-                            QTimer.singleShot(120, self.on_poll_timeout)
-                        # logger.info(element)
-                        # if self.status_to_ack > 0:
-                        #     self.status_to_ack -= 1
-                        # else:
                         if self.status_to_ack == 0:
                             if self.sending_file:
                                 # Update progress #
@@ -205,6 +186,13 @@ class ControllerWorker(QObject):
                                     self.stop_send_s.emit()
                                     self.sending_file = False
                                     logger.info("End of File sending.")
+                        if self.dro_status_updated and self.status_to_ack >= 1:
+                            self.status_to_ack -= 1
+                            # QTimer.singleShot(120, self.on_poll_timeout)
+                        else:
+                            # This variable should be set to true the first time an ack is received.
+                            self.dro_status_updated = True
+                            # QTimer.singleShot(120, self.on_poll_timeout)
                     elif "error" in element.lower():
                         self.update_console_text_s.emit(element)
                         logger.error(element)
@@ -277,7 +265,7 @@ class ControllerWorker(QObject):
     def send_gcode_file(self, gcode_path):
         with open(gcode_path) as f:
             self.file_content = f.readlines()
-        logger.info(self.file_content)
+        logger.debug(self.file_content)
         if self.file_content:
             #  self.status_to_ack = 0  # todo: This is just a test, to be removed.
             self.sending_file = True
