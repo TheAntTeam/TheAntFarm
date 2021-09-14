@@ -192,7 +192,7 @@ class UiControlTab(QObject):
                 # read the tooltip
                 logging.debug(gcode_path)
                 self.select_gcode_s.emit(gcode_path)
-                if self.serialWo.open_port(self.ui.serial_ports_cb.currentText()):
+                if self.serial_connection_status:
                     self.ui.play_tb.setEnabled(True)
             else:
                 tag, ov = self.controlWo.get_gcode_data(gcode_path)
@@ -208,7 +208,7 @@ class UiControlTab(QObject):
         pass  # todo: to be implemented.
 
     def play_send_file(self):
-        if self.serialWo.open_port(self.ui.serial_ports_cb.currentText()):
+        if self.serial_connection_status:
             num_rows = self.ui.gcode_tw.rowCount()
             for row in range(0, num_rows):
                 if self.ui.gcode_tw.cellWidget(row, 1).isChecked():
@@ -218,7 +218,7 @@ class UiControlTab(QObject):
 
     def stop_send_file(self):
         self.enable_gcode_rb(True)
-        if self.serialWo.open_port(self.ui.serial_ports_cb.currentText()):
+        if self.serial_connection_status:
             self.ui.play_tb.setEnabled(True)
 
     def enable_gcode_rb(self, enabling):

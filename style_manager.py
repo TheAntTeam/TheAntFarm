@@ -95,7 +95,7 @@ class StyleManager:
 
     @staticmethod
     def set_radio_btn_style_sheet():
-        radio_btn_ss = "QRadioButton{ color: white; margin-left:40%; margin-right:60%;} " + \
+        radio_btn_ss = "QRadioButton{ color: white; margin-left:50%; margin-right:50%;} " + \
                        "QRadioButton::indicator { width: 11px;" + \
                                                  "height: 11px;" + \
                                                  "border-radius: 5px;} " + \
