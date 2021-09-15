@@ -64,8 +64,12 @@ class UiManager(QObject):
     @Slot(str, logging.LogRecord)
     def update_logging_status(self, status, record):
         color = self.LOG_COLORS.get(record.levelno, 'black')
+        if "<" in status:
+            status = status.replace("<", "&lt;")
+            status = status.replace(">", "&gt;")
         s = '<pre><font color="%s">%s</font></pre>' % (color, status)
         self.ui.logging_plain_te.appendHtml(s)
+        # self.ui.logging_plain_te.appendPlainText(record)  # Use only for debug.
 
     def hide_show_console(self):
         if self.ui.actionHide_Show_Console.isChecked():
