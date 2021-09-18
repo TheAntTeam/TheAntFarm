@@ -50,6 +50,8 @@ class ControllerWorker(QObject):
 
         self.status_l = []
         self.status_to_ack = 0
+        self.buffered_cmds = []
+        self.cmds_to_ack = 0
         self.dro_status_updated = False
 
         self.prb_activated = False
@@ -89,11 +91,6 @@ class ControllerWorker(QObject):
         # self.poll_timer.setSingleShot(True)
         # self.poll_timer.start()
 
-        self.alive_timer = QTimer()
-        self.alive_timer.timeout.connect(self.on_alive_timeout)
-        self.alive_timer.setInterval(1000)
-        # self.alive_timer.start()
-
         self.camera_timer = QTimer()
         self.camera_timer.timeout.connect(self.on_camera_timeout)
         self.camera_timer.setInterval(120)
@@ -126,24 +123,9 @@ class ControllerWorker(QObject):
         if not self.dro_status_updated:
             self.serial_send_s.emit(status_poll)
             # self.send_to_tx_queue(status_poll)
-            self.status_to_ack = 1
-        elif self.dro_status_updated and \
-                (self.buffered_size + len(status_poll)) < self.REMOTE_RX_BUFFER_MAX_SIZE:  # and self.status_to_ack <= 10:
-            if self.status_to_ack < 0:
-                self.status_to_ack = 1
-            else:
-                self.status_to_ack += 1
+        else:
             self.serial_send_s.emit(status_poll)
             # self.send_to_tx_queue(status_poll)
-            self.buffered_size += len(status_poll)
-
-    def on_alive_timeout(self):
-        status_poll = b"?\n"
-        if not self.dro_status_updated:
-            self.serial_send_s.emit(status_poll)
-            # self.send_to_tx_queue(status_poll)
-            self.status_to_ack = 0
-            logger.debug("#")
 
     @Slot()
     def parse_rx_queue(self):
@@ -154,6 +136,9 @@ class ControllerWorker(QObject):
                     logger.info("Element received: " + str(element))
                     if re.match("^<.*>\s*$\s", element):
                         self.update_status_s.emit(self.control_controller.parse_bracket_angle(element))
+                        # This variable should be set to true the first time an ack is received.
+                        if not self.dro_status_updated:
+                            self.dro_status_updated = True
                     elif re.match("^\[.*\]\s*$\s", element):
                         self.control_controller.parse_bracket_square(element)
                         [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = \
@@ -169,36 +154,31 @@ class ControllerWorker(QObject):
                                 self.update_console_text_s.emit(element)
                                 logger.info(element)
                     elif re.match("ok\s*$\s", element):
-                        logger.info("status_to_ack: " + str(self.status_to_ack))
                         logger.info("buffered size: " + str(self.buffered_size))
-                        if self.status_to_ack == 0:
-                            if self.sending_file:
-                                # Update progress #
-                                self.ack_lines += 1
-                                self.buffered_size -= len(self.file_content[self.sent_lines - 1])
-                                self.file_progress = (self.ack_lines / self.tot_lines) * 100
-                                logger.info("Acknowledged lines: " + str(self.ack_lines))
-                                self.update_file_progress_s.emit(self.file_progress)
-                                if self.sent_lines < self.tot_lines:
-                                    if self.buffered_size + len(self.file_content[self.sent_lines]) < self.REMOTE_RX_BUFFER_MAX_SIZE - 1:
-                                        self.serialTxQueue.put(self.file_content[self.sent_lines])
-                                        self.serial_tx_available_s.emit()
-                                        # self.serial_send_s.emit(self.file_content[self.sent_lines])
-                                        logger.debug("TX:" + self.file_content[self.sent_lines])
-                                        self.buffered_size += len(self.file_content[self.sent_lines])
-                                        self.sent_lines += 1
-                                if self.ack_lines == self.tot_lines:
-                                    self.stop_send_s.emit()
-                                    self.sending_file = False
-                                    logger.info("End of File sending.")
-                        else:
-                            if self.dro_status_updated and self.status_to_ack >= 1:
-                                self.status_to_ack -= 1
-                                self.buffered_size -= 2
-                            else:
-                                # This variable should be set to true the first time an ack is received.
-                                self.dro_status_updated = True
-                                self.status_to_ack -= 1
+                        if self.sending_file and self.cmds_to_ack > 0:
+                            # Update progress #
+                            self.cmds_to_ack -= 1
+                            self.ack_lines += 1
+                            self.buffered_size -= len(self.buffered_cmds[0])
+                            self.buffered_cmds.pop(0)
+                            self.file_progress = (self.ack_lines / self.tot_lines) * 100
+                            logger.info("Acknowledged lines: " + str(self.ack_lines))
+                            self.update_file_progress_s.emit(self.file_progress)
+                            if self.sent_lines < self.tot_lines and \
+                                    (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE:
+                                cmd_to_send = self.file_content[self.sent_lines]
+                                self.serialTxQueue.put(cmd_to_send)
+                                self.serial_tx_available_s.emit()
+                                # self.serial_send_s.emit(cmd_to_send)
+                                self.buffered_cmds.append(cmd_to_send)
+                                logger.debug("TX:" + cmd_to_send)
+                                self.buffered_size += len(cmd_to_send)
+                                self.sent_lines += 1
+                                self.cmds_to_ack += 1
+                            if self.ack_lines == self.tot_lines:
+                                self.stop_send_s.emit()
+                                self.sending_file = False
+                                logger.info("End of File sending.")
                     elif "error" in element.lower():
                         self.update_console_text_s.emit(element)
                         logger.error(element)
@@ -274,20 +254,26 @@ class ControllerWorker(QObject):
         logger.debug(self.file_content)
         if self.file_content:
             #  self.status_to_ack = 0  # todo: This is just a test, to be removed.
-            self.sending_file = True
             self.file_progress = 0.0
+            self.cmds_to_ack = 0
             self.sent_lines = 0
             self.ack_lines = 0
             self.tot_lines = len(self.file_content)
             logger.info("Total lines: " + str(self.tot_lines))
 
-            if self.sent_lines < self.tot_lines:  # and self.sent_lines < self.max_buffered_lines:
-                self.serialTxQueue.put(self.file_content[self.sent_lines])
+            while self.sent_lines < self.tot_lines and \
+                    (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE:
+                cmd_to_send = self.file_content[self.sent_lines]
+                self.serialTxQueue.put(cmd_to_send)
                 self.serial_tx_available_s.emit()
-                # self.serial_send_s.emit(self.file_content[self.sent_lines])
-                logger.info(self.file_content[self.sent_lines])
+                # self.serial_send_s.emit(cmd_to_send)
+                self.buffered_cmds.append(cmd_to_send)
+                logger.info(cmd_to_send)
+                self.buffered_size += len(cmd_to_send)
                 self.sent_lines += 1
-                self.buffered_size += len(self.file_content[self.sent_lines])
+                self.cmds_to_ack += 1
+            logger.info("Buffered size: " + str(self.buffered_size))
+            self.sending_file = True
 
     def stop_gcode_file(self):
         self.sending_file = False

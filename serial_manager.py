@@ -19,6 +19,7 @@ class SerialWorker(QObject):
         self.serialTxQueue = serial_tx_queue  # FIFO TX Queue to get data from control thread
         self.residual_string = ""
 
+        self.count_queue_sent = 0
         self.count_sent = 0
 
     @staticmethod
@@ -97,7 +98,9 @@ class SerialWorker(QObject):
     def send(self, data):
         if self.serial_port.isOpen():
             try:
-                logger.debug("data sent: " + str(data))
+                logger.info("data sent: " + str(data))
+                self.count_sent += 1
+                logger.info("Sent count: " + str(self.count_sent))
                 if isinstance(data, bytes):
                     self.serial_port.write(data)
                     self.serial_port.waitForBytesWritten(-1)
@@ -118,8 +121,8 @@ class SerialWorker(QObject):
                 if not self.serialTxQueue.empty():
                     data = self.serialTxQueue.get()
                     logger.info("data sent: " + str(data))
-                    self.count_sent += 1
-                    logger.info("Sent count: " + str(self.count_sent))
+                    self.count_queue_sent += 1
+                    logger.info("Sent count: " + str(self.count_queue_sent))
                     if isinstance(data, bytes):
                         self.serial_port.write(data)
                         self.serial_port.waitForBytesWritten(-1)
