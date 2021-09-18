@@ -9,6 +9,8 @@ from vispy.visuals.filters import Alpha
 from OpenGL import GLU
 import numpy as np
 from collections import OrderedDict
+import string
+import random
 
 
 class GLUTess:
@@ -119,6 +121,10 @@ class VisualLayer:
     DELTA = 1
     TOP_ORDER = {'drill': 0, 'profile': 1, 'top': 3, 'bottom': 4, 'nc_top': 2, 'nc_bottom': 5}
     BTM_ORDER = {'drill': 0, 'profile': 1, 'top': 4, 'bottom': 3, 'nc_top': 5, 'nc_bottom': 2}
+    POINTER_RADIUS = 0.5
+    POINTER_TAG = "POINTER"
+    POINTER_COLOR = "orange"
+    POINTER_SEGMENTS = 40
 
     def __init__(self, canvas):
         self.canvas = canvas
@@ -127,6 +133,41 @@ class VisualLayer:
         self.meshes = OrderedDict({})
         self.paths = OrderedDict({})
         self.view = 0
+        self.pointer_tag = ""
+
+    def compute_pointer(self, coords):
+        segments = self.POINTER_SEGMENTS
+        xc, yc, zc = coords
+
+        radius = self.POINTER_RADIUS
+        theta = np.linspace(0, 2 * np.pi, segments)
+        x = xc + radius * np.cos(theta)
+        y = yc + radius * np.sin(theta)
+        z = np.ones((segments,)) * zc
+        pointer_coords = np.vstack((x, y, z)).transpose().tolist()
+        return pointer_coords
+
+    def create_pointer(self, coords):
+        pointer_coords = self.compute_pointer(coords)
+        chars = string.ascii_uppercase + string.digits
+        tag = self.POINTER_TAG + "_" + "".join(random.choice(chars) for _ in range(4))
+        self.pointer_tag = tag
+        self.create_line(tag, [pointer_coords], color=self.POINTER_COLOR, order=0, width=0.3)
+
+    def update_pointer(self, coords):
+        if self.pointer_tag:
+            pointer_coords = self.compute_pointer(coords)
+            path = self.paths[self.pointer_tag][0]
+            path.set_data(pos=np.array(pointer_coords))
+
+    def remove_pointer(self):
+        if self.pointer_tag:
+            self.remove_path(self.pointer_tag)
+            self.pointer_tag = ""
+
+    def set_pointer_visible(self, visible):
+        if self.pointer_tag:
+            self.set_path_visible(self.pointer_tag, visible)
 
     def top_view(self):
         self.canvas.view.camera.up = "+z"
@@ -287,7 +328,7 @@ class VisualLayer:
         self.canvas.freeze()
         visuals.XYZAxis(parent=self.canvas.view.scene)
 
-    def create_line(self, tag, ldata, color=None, order=0):
+    def create_line(self, tag, ldata, color=None, order=0, width=0.1):
         self.canvas.unfreeze()
         connect = []
         coords = []
@@ -304,10 +345,11 @@ class VisualLayer:
         coords = np.array(coords)
         connect = np.array(connect)
 
+        # print("Coords")
         # print(coords)
         # print(connect)
 
-        line = visuals.Line(pos=coords, connect=connect, width=0.1, color=color, parent=self.canvas.view)
+        line = visuals.Line(pos=coords, connect=connect, width=width, color=color, parent=self.canvas.view)
         line.order = order
         if tag in list(self.paths.keys()):
             self.paths[tag] += [line]
