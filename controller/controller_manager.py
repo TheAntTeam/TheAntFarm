@@ -146,9 +146,8 @@ class ControllerWorker(QObject):
             try:
                 element = self.serialRxQueue.get(block=False)
                 if element:
-                    # logger.debug("Element received: " + str(element))
+                    logger.info("Element received: " + str(element))
                     if re.match("^<.*>\s*$\s", element):
-                        logger.debug(element[1:])
                         self.update_status_s.emit(self.control_controller.parse_bracket_angle(element))
                     elif re.match("^\[.*\]\s*$\s", element):
                         self.control_controller.parse_bracket_square(element)
@@ -284,5 +283,5 @@ class ControllerWorker(QObject):
                 self.sent_lines += 1
                 self.buffer_idx += 1
 
-    def update_file_sent_buffer(self):
-        pass
+    def stop_gcode_file(self):
+        self.sending_file = False

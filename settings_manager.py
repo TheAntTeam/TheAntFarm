@@ -25,7 +25,7 @@ class SettingsHandler:
 
     def write_all_settings(self, all_settings_od):
         """ Write all settings to ini files """
-        #if "app_settings" in all_settings_od:
+        # if "app_settings" in all_settings_od:
         #    self.app_settings.write_all_app_settings(all_settings_od["app_settings"])
 
         self.app_settings.write_all_app_settings()

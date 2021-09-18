@@ -40,6 +40,7 @@ class UiControlTab(QObject):
         self.controlWo.update_file_progress_s.connect(self.update_progress_bar)
 
         self.send_gcode_s.connect(self.controlWo.send_gcode_file)
+        self.stop_gcode_s.connect(self.controlWo.stop_gcode_file)
 
         # From Controller Manager to Serial Manager
         self.controlWo.serial_send_s.connect(self.serialWo.send)
@@ -214,10 +215,17 @@ class UiControlTab(QObject):
                 if self.ui.gcode_tw.cellWidget(row, 1).isChecked():
                     self.send_gcode_s.emit(self.ui.gcode_tw.cellWidget(row, 0).toolTip())
                     self.ui.play_tb.setEnabled(False)
+                    self.ui.stop_tb.setEnabled(True)
+                    self.ui.unlock_tb.setEnabled(False)
+                    self.ui.homing_tb.setEnabled(False)
                     self.enable_gcode_rb(False)
 
     def stop_send_file(self):
+        self.stop_gcode_s.emit()
         self.enable_gcode_rb(True)
+        self.ui.stop_tb.setEnabled(False)
+        self.ui.unlock_tb.setEnabled(True)
+        self.ui.homing_tb.setEnabled(True)
         if self.serial_connection_status:
             self.ui.play_tb.setEnabled(True)
 
@@ -293,6 +301,7 @@ class UiControlTab(QObject):
             self.ui.unlock_tb.setEnabled(False)
             self.ui.homing_tb.setEnabled(False)
             self.ui.play_tb.setEnabled(False)
+            self.ui.stop_tb.setEnabled(False)
             self.controller_connected_s.emit(False)
 
     def handle_clear_terminal(self):
