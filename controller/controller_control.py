@@ -186,3 +186,9 @@ class ControlController(QObject):
         ov = self.gcodes_od[gcode_path]["gcode"].get_gcode_original_vectors()
         tag = self.gcodes_od[gcode_path]["tag"]
         return tag, ov
+
+    def get_gcode_gcp(self, gcode_path):
+        return self.gcodes_od[gcode_path]["gcode"]
+
+    def get_gcode_lines(self, gcode_path):
+        return self.gcodes_od[gcode_path]["gcode"].recode_gcode()

@@ -119,7 +119,7 @@ class ControllerWorker(QObject):
         self.serial_tx_available_s.emit()
 
     def on_poll_timeout(self):
-        status_poll = b"?\n"
+        status_poll = b"?"
         if not self.dro_status_updated:
             self.serial_send_s.emit(status_poll)
             # self.send_to_tx_queue(status_poll)
@@ -249,11 +249,11 @@ class ControllerWorker(QObject):
 
     @Slot(str)
     def send_gcode_file(self, gcode_path):
-        with open(gcode_path) as f:
-            self.file_content = f.readlines()
+        self.file_content = self.control_controller.get_gcode_lines(gcode_path)
+        # with open(gcode_path) as f:            # DEBUG: take directly from file
+        #     self.file_content = f.readlines()
         logger.debug(self.file_content)
         if self.file_content:
-            #  self.status_to_ack = 0  # todo: This is just a test, to be removed.
             self.file_progress = 0.0
             self.cmds_to_ack = 0
             self.sent_lines = 0
