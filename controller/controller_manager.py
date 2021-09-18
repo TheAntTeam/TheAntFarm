@@ -29,6 +29,8 @@ class ControllerWorker(QObject):
     reset_controller_status_s = Signal()
     stop_send_s = Signal()
 
+    REMOTE_RX_BUFFER_MAX_SIZE = 128
+
     def __init__(self, serial_rx_queue, serial_tx_queue, settings):
         super(ControllerWorker, self).__init__()
 
@@ -68,13 +70,14 @@ class ControllerWorker(QObject):
         self.sent_lines = 0
         self.ack_lines = 0
         self.tot_lines = 0
-        self.buffer_idx = 0
+        self.buffered_size = 0
         self.max_buffered_lines = 100
         self.min_buffer_threshold = 80
 
     @Slot(bool)
     def on_controller_connection(self, connected):
         if connected:
+            self.buffered_size = 0
             self.poll_timer.start()
         else:
             self.poll_timer.stop()
@@ -123,14 +126,16 @@ class ControllerWorker(QObject):
         if not self.dro_status_updated:
             self.serial_send_s.emit(status_poll)
             # self.send_to_tx_queue(status_poll)
-            self.status_to_ack = 0
-        elif self.dro_status_updated:  # and self.status_to_ack <= 10:
+            self.status_to_ack = 1
+        elif self.dro_status_updated and \
+                (self.buffered_size + len(status_poll)) < self.REMOTE_RX_BUFFER_MAX_SIZE:  # and self.status_to_ack <= 10:
             if self.status_to_ack < 0:
                 self.status_to_ack = 1
             else:
                 self.status_to_ack += 1
             self.serial_send_s.emit(status_poll)
             # self.send_to_tx_queue(status_poll)
+            self.buffered_size += len(status_poll)
 
     def on_alive_timeout(self):
         status_poll = b"?\n"
@@ -165,37 +170,39 @@ class ControllerWorker(QObject):
                                 logger.info(element)
                     elif re.match("ok\s*$\s", element):
                         logger.info("status_to_ack: " + str(self.status_to_ack))
+                        logger.info("buffered size: " + str(self.buffered_size))
                         if self.status_to_ack == 0:
                             if self.sending_file:
                                 # Update progress #
                                 self.ack_lines += 1
-                                self.buffer_idx -= 1
+                                self.buffered_size -= len(self.file_content[self.sent_lines - 1])
                                 self.file_progress = (self.ack_lines / self.tot_lines) * 100
                                 logger.info("Acknowledged lines: " + str(self.ack_lines))
                                 self.update_file_progress_s.emit(self.file_progress)
                                 if self.sent_lines < self.tot_lines:
-                                    if self.buffer_idx < self.max_buffered_lines:
+                                    if self.buffered_size + len(self.file_content[self.sent_lines]) < self.REMOTE_RX_BUFFER_MAX_SIZE - 1:
                                         self.serialTxQueue.put(self.file_content[self.sent_lines])
                                         self.serial_tx_available_s.emit()
                                         # self.serial_send_s.emit(self.file_content[self.sent_lines])
                                         logger.debug("TX:" + self.file_content[self.sent_lines])
+                                        self.buffered_size += len(self.file_content[self.sent_lines])
                                         self.sent_lines += 1
-                                        self.buffer_idx += 1
                                 if self.ack_lines == self.tot_lines:
                                     self.stop_send_s.emit()
                                     self.sending_file = False
                                     logger.info("End of File sending.")
-                        if self.dro_status_updated and self.status_to_ack >= 1:
-                            self.status_to_ack -= 1
-                            # QTimer.singleShot(120, self.on_poll_timeout)
                         else:
-                            # This variable should be set to true the first time an ack is received.
-                            self.dro_status_updated = True
-                            # QTimer.singleShot(120, self.on_poll_timeout)
+                            if self.dro_status_updated and self.status_to_ack >= 1:
+                                self.status_to_ack -= 1
+                                self.buffered_size -= 2
+                            else:
+                                # This variable should be set to true the first time an ack is received.
+                                self.dro_status_updated = True
+                                self.status_to_ack -= 1
                     elif "error" in element.lower():
                         self.update_console_text_s.emit(element)
                         logger.error(element)
-                        logger.info(self.buffer_idx)
+                        logger.info(self.buffered_size)
                         logger.info(self.sent_lines)
                         logger.info(self.ack_lines)
                     else:
@@ -271,7 +278,6 @@ class ControllerWorker(QObject):
             self.file_progress = 0.0
             self.sent_lines = 0
             self.ack_lines = 0
-            self.buffer_idx = 0
             self.tot_lines = len(self.file_content)
             logger.info("Total lines: " + str(self.tot_lines))
 
@@ -281,7 +287,7 @@ class ControllerWorker(QObject):
                 # self.serial_send_s.emit(self.file_content[self.sent_lines])
                 logger.info(self.file_content[self.sent_lines])
                 self.sent_lines += 1
-                self.buffer_idx += 1
+                self.buffered_size += len(self.file_content[self.sent_lines])
 
     def stop_gcode_file(self):
         self.sending_file = False

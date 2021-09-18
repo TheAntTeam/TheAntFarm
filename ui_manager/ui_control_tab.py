@@ -120,6 +120,7 @@ class UiControlTab(QObject):
         self.ui.mpos_x_label.setText(status_l[1][0])
         self.ui.mpos_y_label.setText(status_l[1][1])
         self.ui.mpos_z_label.setText(status_l[1][2])
+        self.ctrl_layer.update_pointer(coords=[float(x) for x in status_l[1]])
 
     def update_status_colors(self, status):
         sta = status.lower()
@@ -286,6 +287,7 @@ class UiControlTab(QObject):
                 if self.is_gcode_rb_selected():
                     self.ui.play_tb.setEnabled(True)
                 self.controller_connected_s.emit(True)
+                self.ctrl_layer.create_pointer(coords=(0, 0, 0))
         else:
             self.serialWo.close_port()
             self.controlWo.reset_controller_status_s.emit()
@@ -303,6 +305,7 @@ class UiControlTab(QObject):
             self.ui.play_tb.setEnabled(False)
             self.ui.stop_tb.setEnabled(False)
             self.controller_connected_s.emit(False)
+            self.ctrl_layer.remove_pointer()
 
     def handle_clear_terminal(self):
         self.ui.serial_te.clear()
