@@ -1,4 +1,5 @@
 from PySide2.QtCore import Signal, Slot, QObject
+from PySide2.QtWidgets import QActionGroup
 from shape_core.visual_manager import VisualLayer
 
 from .ui_align_tab import UiAlignTab
@@ -51,6 +52,8 @@ class UiManager(QObject):
         self.ui.actionSettings_Preferences.triggered.connect(self.hide_show_preferences_tab)
         self.ui.actionSave_Settings.triggered.connect(self.save_all_settings)
 
+        self.make_log_action_mutually_exclusive()
+
     def save_all_settings(self):
         all_settings_od = {"jobs_settings": self.ui_create_job_m.get_all_settings()}
         self.settings.write_all_settings(all_settings_od)
@@ -83,3 +86,13 @@ class UiManager(QObject):
             self.ui.main_tab_widget.setTabVisible(setting_tab_idx, True)
         else:
             self.ui.main_tab_widget.setTabVisible(setting_tab_idx, False)
+
+    def make_log_action_mutually_exclusive(self):
+        log_level_group = QActionGroup(self.main_win)
+        log_level_group.addAction(self.ui.action_critical)
+        log_level_group.addAction(self.ui.action_error)
+        log_level_group.addAction(self.ui.action_warning)
+        log_level_group.addAction(self.ui.action_info)
+        log_level_group.addAction(self.ui.action_debug)
+        log_level_group.addAction(self.ui.action_notset)
+        log_level_group.setExclusive(True)

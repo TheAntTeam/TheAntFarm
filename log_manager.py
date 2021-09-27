@@ -28,3 +28,11 @@ class LogHandler(logging.Handler):
     def emit(self, record):
         s = self.format(record)
         self.signaller.signal.emit(s, record)
+
+    def connect_log_actions(self, ui):
+        ui.action_critical.triggered.connect(lambda: self.setLevel(logging.CRITICAL))
+        ui.action_error.triggered.connect(lambda: self.setLevel(logging.ERROR))
+        ui.action_warning.triggered.connect(lambda: self.setLevel(logging.WARNING))
+        ui.action_info.triggered.connect(lambda: self.setLevel(logging.INFO))
+        ui.action_debug.triggered.connect(lambda: self.setLevel(logging.DEBUG))
+        ui.action_notset.triggered.connect(lambda: self.setLevel(logging.NOTSET))

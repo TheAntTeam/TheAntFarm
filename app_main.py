@@ -10,7 +10,7 @@ from style_manager import StyleManager
 from ui_manager.ui_manager import UiManager
 from settings_manager import SettingsHandler
 from log_manager import LogHandler
-import logging
+import logging.handlers
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -63,9 +63,16 @@ if __name__ == "__main__":
     h = LogHandler(window.ui_manager.update_logging_status)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(threadName)s %(module)s %(funcName)s %(message)s')
     h.setFormatter(formatter)
-    root = logging.getLogger()
     h.setLevel(logging.INFO)
+    h.connect_log_actions(window.ui)
+
+    fh = logging.handlers.RotatingFileHandler('./program.log', maxBytes=1000000, backupCount=10)
+    fh.setLevel(logging.DEBUG)
+    fh.setFormatter(formatter)
+
+    root = logging.getLogger()
     root.addHandler(h)
+    root.addHandler(fh)
     root.setLevel(logging.DEBUG)  # Set root log level to the lowest between the log lever of the handlers.
 
     style_man.change_style("Fusion")

@@ -1762,6 +1762,9 @@
                    <iconset>
                     <normaloff>resources/icons/white-open-folder.svg</normaloff>resources/icons/white-open-folder.svg</iconset>
                   </property>
+                  <property name="shortcut">
+                   <string>Ctrl+G</string>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -4502,7 +4505,22 @@
     <property name="title">
      <string>Console</string>
     </property>
+    <widget class="QMenu" name="menu_set_level">
+     <property name="inputMethodHints">
+      <set>Qt::ImhNone</set>
+     </property>
+     <property name="title">
+      <string>Set Level</string>
+     </property>
+     <addaction name="action_critical"/>
+     <addaction name="action_error"/>
+     <addaction name="action_warning"/>
+     <addaction name="action_info"/>
+     <addaction name="action_debug"/>
+     <addaction name="action_notset"/>
+    </widget>
     <addaction name="actionHide_Show_Console"/>
+    <addaction name="menu_set_level"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuConsole"/>
@@ -4562,6 +4580,57 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="action_critical">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>CRITICAL</string>
+   </property>
+  </action>
+  <action name="action_error">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>ERROR</string>
+   </property>
+  </action>
+  <action name="action_warning">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>WARNING</string>
+   </property>
+  </action>
+  <action name="action_info">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>INFO</string>
+   </property>
+  </action>
+  <action name="action_debug">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>DEBUG</string>
+   </property>
+  </action>
+  <action name="action_notset">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>NOTSET</string>
    </property>
   </action>
  </widget>
