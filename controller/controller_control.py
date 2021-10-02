@@ -186,7 +186,7 @@ class ControlController(QObject):
             abl_cmd_s = ""
 
         abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
-        abl_cmd_s += "G00 X" + str(xy_coord_list[0][0]) + "Y" + str(xy_coord_list[0][1]) + "\n"  # Go 1st XY coordinate
+        abl_cmd_ls[-1] += "G00 X" + str(xy_coord_list[0][0]) + "Y" + str(xy_coord_list[0][1]) + "\n"  # Go 1st XY coordinate
         logger.debug("ABL routine: " + str(abl_cmd_ls))
         logger.debug("ABL points to do: " + str(prb_num_todo))
 
