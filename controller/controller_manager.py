@@ -278,3 +278,13 @@ class ControllerWorker(QObject):
 
     def stop_gcode_file(self):
         self.sending_file = False
+        self.serial_send_s.emit(b"!")
+        self.serial_send_s.emit(b'\030')
+        self.file_progress = 0.0
+        self.cmds_to_ack = 0
+        self.sent_lines = 0
+        self.ack_lines = 0
+        self.tot_lines = 0
+        self.buffered_cmds = []
+        self.buffered_size = 0
+
