@@ -170,13 +170,13 @@ class ControlController(QObject):
         return list(zip(xi.ravel().tolist(), yi.ravel().tolist()))
 
     @staticmethod
-    def make_cmd_auto_bed_levelling(xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
+    def make_cmd_auto_bed_levelling(xy_c_l, travel_z, probe_z_max, probe_feed_rate):
         abl_cmd_ls = []
         abl_cmd_s = ""
         abl_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
 
         prb_num_todo = 0
-        for coord in xy_coord_list:
+        for coord in xy_c_l:
             prb_num_todo += 1
             abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
             abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + "\n"  # Go to XY coordinate
@@ -186,7 +186,12 @@ class ControlController(QObject):
             abl_cmd_s = ""
 
         abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
-        abl_cmd_ls[-1] += "G00 X" + str(xy_coord_list[0][0]) + "Y" + str(xy_coord_list[0][1]) + "\n"  # Go 1st XY coordinate
+        abl_cmd_ls[-1] += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
+                          str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
+        abl_cmd_ls[-1] += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
+        abl_cmd_ls[-1] += "G10 P1 L20 Z0\n"  # Set Z zero
+        abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+        abl_cmd_ls[-1] += "G00 X" + str(xy_c_l[0][0]) + "Y" + str(xy_c_l[0][1]) + "\n"  # Go 1st XY coordinate
         logger.debug("ABL routine: " + str(abl_cmd_ls))
         logger.debug("ABL points to do: " + str(prb_num_todo))
 
