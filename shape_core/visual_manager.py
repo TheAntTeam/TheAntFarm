@@ -124,7 +124,7 @@ class VisualLayer:
     POINTER_RADIUS = 0.5
     POINTER_TAG = "POINTER"
     POINTER_COLOR = "orange"
-    POINTER_SEGMENTS = 40
+    POINTER_SEGMENTS = 20
 
     def __init__(self, canvas):
         self.canvas = canvas
@@ -152,7 +152,7 @@ class VisualLayer:
         chars = string.ascii_uppercase + string.digits
         tag = self.POINTER_TAG + "_" + "".join(random.choice(chars) for _ in range(4))
         self.pointer_tag = tag
-        self.create_line(tag, [pointer_coords], color=self.POINTER_COLOR, order=0, width=0.3)
+        self.create_line(tag, [pointer_coords], color=self.POINTER_COLOR, order=0, width=0.1)
 
     def update_pointer(self, coords):
         if self.pointer_tag:
@@ -349,7 +349,7 @@ class VisualLayer:
         # print(coords)
         # print(connect)
 
-        line = visuals.Line(pos=coords, connect=connect, width=width, color=color, parent=self.canvas.view)
+        line = visuals.Line(pos=coords, connect=connect, width=width, color=color, parent=self.canvas.view, antialias=True)
         line.order = order
         if tag in list(self.paths.keys()):
             self.paths[tag] += [line]

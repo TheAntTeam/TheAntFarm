@@ -36,6 +36,7 @@ class ControlController(QObject):
         self.abl_updated = False
         self.prb_val = []
         self.abl_val = []
+        self.abl_steps = ()
         self.abl_cmd_ls = []
         self.prb_num_todo = 0
         self.prb_num_done = 0
@@ -146,6 +147,7 @@ class ControlController(QObject):
         [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
                                                                                 probe_z_max, probe_feed_rate)
         self.abl_val = []
+        self.abl_steps = (steps_t[0]+1, steps_t[1]+1)
         self.prb_num_done = 0
         self.prb_activated = False
         self.prb_updated = False
@@ -164,7 +166,6 @@ class ControlController(QObject):
         y_step = steps_t[1] + 1
         xc = np.linspace(xmin, xmax, x_step)
         yc = np.linspace(ymin, ymax, y_step)
-
         xi, yi = np.meshgrid(xc, yc)
         return list(zip(xi.ravel().tolist(), yi.ravel().tolist()))
 
@@ -238,7 +239,7 @@ class ControlController(QObject):
     def apply_abl(self, gcode_path):
         gcp = self.get_gcode_gcp(gcode_path)
         abl = GCodeLeveler(gcp.gc)
-        abl.get_grid_data(self.abl_val)
+        abl.get_grid_data(self.abl_val, self.abl_steps)
         abl.interp_grid_data()
         abl.apply_advanced()
 

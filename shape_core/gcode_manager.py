@@ -721,6 +721,13 @@ class GCodeLeveler:
                 #plt.show()
                 return X, Y, Z
 
+    def get_grid_data(self, probe_results, steps):
+        x, y, z = zip(*probe_results)
+        X = np.array(x).reshape(steps[0], steps[1])
+        Y = np.array(y).reshape(steps[0], steps[1])
+        Z = np.array(z).reshape(steps[0], steps[1])
+        return X, Y, Z
+
     def interp_grid_data(self):
         if self.grid_data is not None:
             print("Grid Data Interpolation...")
@@ -816,6 +823,7 @@ if __name__ == "__main__":
     gcp.interp()
     gcp.vectorize()
     lines = gcp.recode_gcode()
+
     #abl = GCodeLeveler(gcp.gc)
     #abl.get_dummy_grid_data()
     #abl.interp_grid_data()

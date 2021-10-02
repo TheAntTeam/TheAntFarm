@@ -1,6 +1,6 @@
 import sys
 from PySide2.QtWidgets import QMainWindow, QApplication, QMessageBox
-from PySide2.QtCore import QThread, QSettings, QPoint, QSize
+from PySide2.QtCore import QThread, QSettings, QPoint, QSize, QThreadPool
 from queue import Queue
 from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui > ui_newCNC.py
 """ Custom imports """
@@ -48,10 +48,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """Before closing the application stop all threads and return ok code."""
         # all_settings_od = {"jobs_settings": self.ui_manager.ui_create_job_m.get_all_settings()}
         # self.settings.write_all_settings(all_settings_od)  # write_settings()
+        print("Saving Settings")
         self.ui_manager.save_all_settings()
+        print("Settings Saved")
+        print("Stopping Threads")
         self.serialWo.close_port()
         self.serial_thread.quit()
         self.control_thread.quit()
+        self.serial_thread.wait(10)
+        self.control_thread.wait(10)
+        if self.serial_thread.isRunning():
+            print("Serial Thread still running")
+        else:
+            print("Serial Thread stopped")
+        if self.control_thread.isRunning():
+            print("Control Thread still running")
+        else:
+            print("Control Thread stopped")
         app.exit(0)
 
 
@@ -80,4 +93,3 @@ if __name__ == "__main__":
 
     window.show()
     sys.exit(app.exec_())
-
