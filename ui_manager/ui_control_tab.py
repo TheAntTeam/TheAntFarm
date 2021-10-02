@@ -438,7 +438,7 @@ class UiControlTab(QObject):
 
     @Slot(float)
     def update_progress_bar(self, prog_percentage):
-        logger.info(prog_percentage)
+        logger.debug(prog_percentage)
         self.ui.progressBar.setValue(prog_percentage)
 
 

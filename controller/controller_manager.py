@@ -133,7 +133,7 @@ class ControllerWorker(QObject):
             try:
                 element = self.serialRxQueue.get(block=False)
                 if element:
-                    logger.info("Element received: " + str(element))
+                    logger.debug("Element received: " + str(element))
                     if re.match("^<.*>\s*$\s", element):
                         self.update_status_s.emit(self.control_controller.parse_bracket_angle(element))
                         # This variable should be set to true the first time an ack is received.
@@ -152,9 +152,9 @@ class ControllerWorker(QObject):
                         if other_cmd_flag:
                             if element:
                                 self.update_console_text_s.emit(element)
-                                logger.info(element)
+                                logger.debug(element)
                     elif re.match("ok\s*$\s", element):
-                        logger.info("buffered size: " + str(self.buffered_size))
+                        logger.debug("buffered size: " + str(self.buffered_size))
                         if self.sending_file and self.cmds_to_ack > 0:
                             # Update progress #
                             self.cmds_to_ack -= 1
@@ -162,7 +162,7 @@ class ControllerWorker(QObject):
                             self.buffered_size -= len(self.buffered_cmds[0])
                             self.buffered_cmds.pop(0)
                             self.file_progress = (self.ack_lines / self.tot_lines) * 100
-                            logger.info("Acknowledged lines: " + str(self.ack_lines))
+                            logger.debug("Acknowledged lines: " + str(self.ack_lines))
                             self.update_file_progress_s.emit(self.file_progress)
                             if self.sent_lines < self.tot_lines and \
                                     (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE:
@@ -182,12 +182,12 @@ class ControllerWorker(QObject):
                     elif "error" in element.lower():
                         self.update_console_text_s.emit(element)
                         logger.error(element)
-                        logger.info(self.buffered_size)
-                        logger.info(self.sent_lines)
-                        logger.info(self.ack_lines)
+                        logger.debug(self.buffered_size)
+                        logger.debug(self.sent_lines)
+                        logger.debug(self.ack_lines)
                     else:
                         self.update_console_text_s.emit(element)
-                        logger.info(element)
+                        logger.debug(element)
             except BlockingIOError as e:
                 logger.error(e, exc_info=True)
             except:
@@ -259,6 +259,7 @@ class ControllerWorker(QObject):
             self.sent_lines = 0
             self.ack_lines = 0
             self.tot_lines = len(self.file_content)
+            logger.info("Sending file: " + str(gcode_path))
             logger.info("Total lines: " + str(self.tot_lines))
 
             while self.sent_lines < self.tot_lines and \
@@ -268,11 +269,11 @@ class ControllerWorker(QObject):
                 self.serial_tx_available_s.emit()
                 # self.serial_send_s.emit(cmd_to_send)
                 self.buffered_cmds.append(cmd_to_send)
-                logger.info(cmd_to_send)
+                logger.debug(cmd_to_send)
                 self.buffered_size += len(cmd_to_send)
                 self.sent_lines += 1
                 self.cmds_to_ack += 1
-            logger.info("Buffered size: " + str(self.buffered_size))
+            logger.debug("Buffered size: " + str(self.buffered_size))
             self.sending_file = True
 
     def stop_gcode_file(self):

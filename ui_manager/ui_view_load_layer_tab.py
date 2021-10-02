@@ -69,7 +69,7 @@ class UiViewLoadLayerTab(QObject):
         if load_file_path[0]:
             self.vis_layer.remove_layer(layer)
             self.app_settings.layer_last_dir = os.path.dirname(load_file_path[0])
-            logging.info("Loading " + load_file_path[0])
+            logger.info("Loading " + load_file_path[0])
             self.load_layer_s.emit(layer, load_file_path[0])
 
     @Slot(Od, str, str, bool)
