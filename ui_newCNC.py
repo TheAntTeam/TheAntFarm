@@ -1358,14 +1358,6 @@ class Ui_MainWindow(object):
         self.gridLayout_10 = QGridLayout()
         self.gridLayout_10.setObjectName(u"gridLayout_10")
         self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
-        self.ABL_pb = QPushButton(self.sender_tab)
-        self.ABL_pb.setObjectName(u"ABL_pb")
-        sizePolicy3.setHeightForWidth(self.ABL_pb.sizePolicy().hasHeightForWidth())
-        self.ABL_pb.setSizePolicy(sizePolicy3)
-        self.ABL_pb.setFont(font)
-
-        self.gridLayout_10.addWidget(self.ABL_pb, 0, 1, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
-
         self.probe_pb = QPushButton(self.sender_tab)
         self.probe_pb.setObjectName(u"probe_pb")
         sizePolicy3.setHeightForWidth(self.probe_pb.sizePolicy().hasHeightForWidth())
@@ -1380,6 +1372,25 @@ class Ui_MainWindow(object):
         self.get_bbox_pb.setFont(font)
 
         self.gridLayout_10.addWidget(self.get_bbox_pb, 0, 2, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
+
+        self.horizontalLayout_11 = QHBoxLayout()
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.ABL_pb = QPushButton(self.sender_tab)
+        self.ABL_pb.setObjectName(u"ABL_pb")
+        sizePolicy3.setHeightForWidth(self.ABL_pb.sizePolicy().hasHeightForWidth())
+        self.ABL_pb.setSizePolicy(sizePolicy3)
+        self.ABL_pb.setFont(font)
+
+        self.horizontalLayout_11.addWidget(self.ABL_pb)
+
+        self.abl_active_chb = QCheckBox(self.sender_tab)
+        self.abl_active_chb.setObjectName(u"abl_active_chb")
+        self.abl_active_chb.setChecked(True)
+
+        self.horizontalLayout_11.addWidget(self.abl_active_chb)
+
+
+        self.gridLayout_10.addLayout(self.horizontalLayout_11, 0, 1, 1, 1)
 
 
         self.controlsVerticalLayout.addLayout(self.gridLayout_10)
@@ -2545,9 +2556,13 @@ class Ui_MainWindow(object):
         self.zero_x_pb.setText(QCoreApplication.translate("MainWindow", u"X = 0", None))
         self.y_axis_l.setText(QCoreApplication.translate("MainWindow", u"Y", None))
         self.mpos_x_l.setText(QCoreApplication.translate("MainWindow", u"0.0", None))
-        self.ABL_pb.setText(QCoreApplication.translate("MainWindow", u"ABL", None))
         self.probe_pb.setText(QCoreApplication.translate("MainWindow", u"PROBE", None))
         self.get_bbox_pb.setText(QCoreApplication.translate("MainWindow", u"GET BBOX", None))
+        self.ABL_pb.setText(QCoreApplication.translate("MainWindow", u"ABL", None))
+#if QT_CONFIG(tooltip)
+        self.abl_active_chb.setToolTip(QCoreApplication.translate("MainWindow", u"Apply ABL if checked", None))
+#endif // QT_CONFIG(tooltip)
+        self.abl_active_chb.setText("")
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Min", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Max", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"Step", None))

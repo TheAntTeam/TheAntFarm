@@ -6,7 +6,7 @@ import string
 import random
 import numpy as np
 from collections import OrderedDict
-from shape_core.gcode_manager import GCodeParser
+from shape_core.gcode_manager import GCodeParser, GCodeLeveler
 
 logger = logging.getLogger(__name__)
 
@@ -230,10 +230,25 @@ class ControlController(QObject):
         if gcp is not None:
             self.gcodes_od[gcode_path] = {"gcode": gcp, "tag": tag}
 
-    def get_gcode_tag_and_ov(self, gcode_path):
-        ov = self.gcodes_od[gcode_path]["gcode"].get_gcode_original_vectors()
+    def get_gcode_tag_and_v(self, gcode_path):
+        v = self.gcodes_od[gcode_path]["gcode"].get_gcode_vectors()
         tag = self.gcodes_od[gcode_path]["tag"]
-        return tag, ov
+        return tag, v
+
+    def apply_abl(self, gcode_path):
+        gcp = self.get_gcode_gcp(gcode_path)
+        abl = GCodeLeveler(gcp.gc)
+        abl.get_grid_data(self.abl_val)
+        abl.interp_grid_data()
+        abl.apply_advanced()
+
+    def remove_abl(self, gcode_path):
+        gcp = self.get_gcode_gcp(gcode_path)
+        if gcp.gc.modified_vectors:
+            gcp.gc.modified_vectors = []
+            return True
+        else:
+            return False
 
     def get_gcode_gcp(self, gcode_path):
         return self.gcodes_od[gcode_path]["gcode"]

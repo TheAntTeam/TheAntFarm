@@ -24,7 +24,7 @@ class ControllerWorker(QObject):
     send_abl_s = Signal(tuple, tuple)
     update_abl_s = Signal(list)                  # Signal to update Auto-Bed-Levelling value
     update_bbox_s = Signal(tuple)
-    update_gcode_s = Signal(str, list)
+    update_gcode_s = Signal(str, list, bool, bool)
 
     update_file_progress_s = Signal(float)
 
@@ -56,6 +56,7 @@ class ControllerWorker(QObject):
         self.cmds_to_ack = 0
         self.dro_status_updated = False
 
+        self.abl_apply_active = True
         self.prb_activated = False
         self.abl_activated = False
         self.prb_updated = False
@@ -225,20 +226,32 @@ class ControllerWorker(QObject):
         self.serial_send_s.emit(next_abl_cmd)  # Execute next Probe of Auto-Bed-Levelling
 
     def ack_auto_bed_levelling(self):
-        abl_values = self.control_controller.get_abl_value()
-        logger.info("ABL values: " + str(abl_values))
-        self.update_abl_s.emit(abl_values)
+        self.abl_val = self.control_controller.get_abl_value()
+        logger.info("ABL values: " + str(self.abl_val))
+        # self.update_abl_s.emit(self.abl_val)
+        self.select_active_gcode(self.active_gcode_path)
+
+    def set_abl_active(self, abl_active=True):
+        self.abl_apply_active = abl_active
+        self.select_active_gcode(self.active_gcode_path)
 
     def vectorize_new_gcode_file(self, gcode_path):
         self.control_controller.load_gcode_file({}, gcode_path)
 
     def select_active_gcode(self, gcode_path):
         self.active_gcode_path = gcode_path
-        (tag, ov) = self.control_controller.get_gcode_tag_and_ov(gcode_path)
-        self.update_gcode_s.emit(tag, ov)
+        redraw = False
+        visible = True
+        if self.abl_val and self.abl_apply_active:
+            self.control_controller.apply_abl(gcode_path)
+            redraw = True
+        else:
+            redraw = self.control_controller.remove_abl(gcode_path)
+        (tag, v) = self.control_controller.get_gcode_tag_and_v(gcode_path)
+        self.update_gcode_s.emit(tag, v, visible, redraw)
 
     def get_gcode_data(self, gcode_path):
-        return self.control_controller.get_gcode_tag_and_ov(gcode_path)
+        return self.control_controller.get_gcode_tag_and_v(gcode_path)
 
 # ***************** ALIGN related functions. ***************** #
 

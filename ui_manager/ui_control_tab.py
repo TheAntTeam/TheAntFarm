@@ -94,6 +94,8 @@ class UiControlTab(QObject):
 
         self.ui.probe_pb.clicked.connect(self.handle_probe_cmd)
         self.ui.ABL_pb.clicked.connect(self.handle_auto_bed_levelling)
+        self.ui.abl_active_chb.stateChanged.connect(
+            lambda: self.controlWo.set_abl_active(self.ui.abl_active_chb.isChecked()))
         self.ui.get_bbox_pb.clicked.connect(self.controlWo.get_boundary_box)
 
         self.ui.unlock_tb.setEnabled(False)
@@ -209,10 +211,13 @@ class UiControlTab(QObject):
                     self.ui.play_tb.setEnabled(True)
             else:
                 tag, ov = self.controlWo.get_gcode_data(gcode_path)
-                self.visualize_gcode(tag, ov, False)
+                self.visualize_gcode(tag, ov, visible=False)
 
-    def visualize_gcode(self, tag, ov, visible=True):
+    def visualize_gcode(self, tag, ov, visible=True, redraw=False):
         if tag not in list(self.ctrl_layer.get_paths_tag()):
+            self.ctrl_layer.add_gcode(tag, ov)
+        elif redraw:
+            self.ctrl_layer.remove_gcode(tag)
             self.ctrl_layer.add_gcode(tag, ov)
 
         self.ctrl_layer.set_gcode_visible(tag, visible)
