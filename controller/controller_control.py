@@ -141,7 +141,7 @@ class ControlController(QObject):
         travel_z = bbox_t[5]
         probe_z_max = bbox_t[2]
         probe_feed_rate = 30
-        print(xy_coord_list)
+        logger.debug(xy_coord_list)
 
         [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
                                                                                 probe_z_max, probe_feed_rate)
@@ -177,14 +177,17 @@ class ControlController(QObject):
         prb_num_todo = 0
         for coord in xy_coord_list:
             prb_num_todo += 1
-            abl_cmd_s += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
-            abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + " F10\n"  # Go to XY coordinate
-            abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
-            abl_cmd_s += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
+            abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+            abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + "\n"  # Go to XY coordinate
+            abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
+            abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
             abl_cmd_ls.append(abl_cmd_s)
             abl_cmd_s = ""
 
-        abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + " F10\n"  # Get to safety Z Travel
+        abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+        abl_cmd_s += "G00 X" + str(xy_coord_list[0][0]) + "Y" + str(xy_coord_list[0][1]) + "\n"  # Go 1st XY coordinate
+        logger.debug("ABL routine: " + str(abl_cmd_ls))
+        logger.debug("ABL points to do: " + str(prb_num_todo))
 
         return [abl_cmd_ls, prb_num_todo]
 
@@ -239,5 +242,5 @@ class ControlController(QObject):
         return self.gcodes_od[gcode_path]["gcode"].recode_gcode()
 
     def get_boundary_box(self, gcode_path):
-        print(gcode_path)
+        logger.debug(gcode_path)
         return self.gcodes_od[gcode_path]["gcode"].get_bbox()
