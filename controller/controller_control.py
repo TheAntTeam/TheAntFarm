@@ -4,6 +4,7 @@ import logging
 import traceback
 import string
 import random
+import numpy as np
 from collections import OrderedDict
 from shape_core.gcode_manager import GCodeParser
 
@@ -25,6 +26,8 @@ class ControlController(QObject):
         self.settings = settings
 
         self.status_l = []
+        self.mpos_a = np.array([0, 0, 0])
+        self.wpos_a = np.array([0, 0, 0])
         self.dro_status_updated = False
         self.prb_activated = False
         self.abl_activated = False
@@ -71,19 +74,27 @@ class ControlController(QObject):
     def parse_bracket_angle(self, line):
         fields = line[1:-1].split("|")
         status = fields[0]
-        mpos_l = []
+        wco_a = np.array([])
 
         for field in fields[1:]:
             word = self.SPLITPAT.split(field)
             if word[0] == "MPos":
                 try:
-                    mpos_l = [word[1], word[2], word[3]]
+                    self.mpos_a = np.array([float(word[1]), float(word[2]), float(word[3])])
+                except (ValueError, IndexError) as e:
+                    logging.error(e, exc_info=True)
+                except:
+                    logger.error("Uncaught exception: %s", traceback.format_exc())
+            elif word[0] == "WCO":
+                try:
+                    wco_a = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
                 except:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
 
-        return [status, mpos_l]
+        self.wpos_a = self.mpos_a + wco_a
+        return [status, self.mpos_a, self.wpos_a]
 
     def parse_bracket_square(self, line):
         word = self.SPLITPAT.split(line[1:-1])

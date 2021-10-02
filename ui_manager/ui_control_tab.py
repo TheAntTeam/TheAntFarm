@@ -117,10 +117,13 @@ class UiControlTab(QObject):
     def update_status(self, status_l):
         self.ui.status_l.setText(status_l[0])
         self.update_status_colors(status_l[0])
-        self.ui.mpos_x_label.setText(status_l[1][0])
-        self.ui.mpos_y_label.setText(status_l[1][1])
-        self.ui.mpos_z_label.setText(status_l[1][2])
-        self.ctrl_layer.update_pointer(coords=[float(x) for x in status_l[1]])
+        self.ui.mpos_x_label.setText('{:.3f}'.format(status_l[1][0]))
+        self.ui.mpos_y_label.setText('{:.3f}'.format(status_l[1][1]))
+        self.ui.mpos_z_label.setText('{:.3f}'.format(status_l[1][2]))
+        self.ui.wpos_x_label.setText('{:.3f}'.format(status_l[2][0]))
+        self.ui.wpos_y_label.setText('{:.3f}'.format(status_l[2][1]))
+        self.ui.wpos_z_label.setText('{:.3f}'.format(status_l[2][2]))
+        self.ctrl_layer.update_pointer(coords=status_l[2])
 
     def update_status_colors(self, status):
         sta = status.lower()
