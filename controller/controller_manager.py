@@ -21,7 +21,9 @@ class ControllerWorker(QObject):
     serial_tx_available_s = Signal()             # Signal to send text to the serial
 
     update_probe_s = Signal(list)                # Signal to update probe value
+    send_abl_s = Signal(tuple, tuple)
     update_abl_s = Signal(list)                  # Signal to update Auto-Bed-Levelling value
+    update_bbox_s = Signal(tuple)
     update_gcode_s = Signal(str, list)
 
     update_file_progress_s = Signal(float)
@@ -75,6 +77,8 @@ class ControllerWorker(QObject):
         self.buffered_size = 0
         self.max_buffered_lines = 100
         self.min_buffer_threshold = 80
+
+        self.active_gcode_path = ""
 
     @Slot(bool)
     def on_controller_connection(self, connected):
@@ -208,8 +212,11 @@ class ControllerWorker(QObject):
         logger.info("Probe: " + str(prb_val))
         self.update_probe_s.emit(prb_val)
 
-    def cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
-        self.control_controller.cmd_auto_bed_levelling(xy_coord_list, travel_z, probe_z_max, probe_feed_rate)
+    # def cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
+    #     self.control_controller.cmd_auto_bed_levelling(xy_coord_list, travel_z, probe_z_max, probe_feed_rate)
+    #     self.send_next_abl()  # Send first probe command.
+    def cmd_auto_bed_levelling(self, bbox_t, steps_t):
+        self.control_controller.cmd_auto_bed_levelling(bbox_t, steps_t)
         self.send_next_abl()  # Send first probe command.
 
     def send_next_abl(self):
@@ -225,7 +232,8 @@ class ControllerWorker(QObject):
     def vectorize_new_gcode_file(self, gcode_path):
         self.control_controller.load_gcode_file({}, gcode_path)
 
-    def get_gcode(self, gcode_path):
+    def select_active_gcode(self, gcode_path):
+        self.active_gcode_path = gcode_path
         (tag, ov) = self.control_controller.get_gcode_tag_and_ov(gcode_path)
         self.update_gcode_s.emit(tag, ov)
 
@@ -287,4 +295,9 @@ class ControllerWorker(QObject):
         self.tot_lines = 0
         self.buffered_cmds = []
         self.buffered_size = 0
+
+    def get_boundary_box(self):
+        if not self.active_gcode_path == "":
+            bbox_t = self.control_controller.get_boundary_box(self.active_gcode_path)
+            self.update_bbox_s.emit(bbox_t)
 

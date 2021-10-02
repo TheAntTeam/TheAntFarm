@@ -36,6 +36,8 @@ class UiControlTab(QObject):
         self.controlWo.reset_controller_status_s.connect(self.controlWo.reset_dro_status_updated)
         self.controlWo.update_status_s.connect(self.update_status)
         self.controlWo.update_probe_s.connect(self.update_probe)
+        self.controlWo.send_abl_s.connect(self.controlWo.cmd_auto_bed_levelling)
+        self.controlWo.update_bbox_s.connect(self.update_bbox)
         self.controlWo.update_console_text_s.connect(self.update_console_text)
         self.controlWo.update_file_progress_s.connect(self.update_progress_bar)
 
@@ -92,6 +94,7 @@ class UiControlTab(QObject):
 
         self.ui.probe_pb.clicked.connect(self.handle_probe_cmd)
         self.ui.ABL_pb.clicked.connect(self.handle_auto_bed_levelling)
+        self.ui.get_bbox_pb.clicked.connect(self.controlWo.get_boundary_box)
 
         self.ui.unlock_tb.setEnabled(False)
         self.ui.homing_tb.setEnabled(False)
@@ -115,7 +118,7 @@ class UiControlTab(QObject):
         self.controlWo.stop_send_s.connect(self.stop_send_file)
 
         self.precalc_gcode_s.connect(self.controlWo.vectorize_new_gcode_file)
-        self.select_gcode_s.connect(self.controlWo.get_gcode)
+        self.select_gcode_s.connect(self.controlWo.select_active_gcode)
         self.controlWo.update_gcode_s.connect(self.visualize_gcode)
 
     @Slot(list)
@@ -462,11 +465,38 @@ class UiControlTab(QObject):
         travel_z = 1.0
         probe_z_max = -11.0
         probe_feed_rate = 10.0
-        self.controlWo.cmd_auto_bed_levelling(xy_coord_list, travel_z, probe_z_max, probe_feed_rate)
+        bbox_t, steps_t = self.get_abl_inputs()
+        self.controlWo.send_abl_s.emit(bbox_t, steps_t)
+        # self.controlWo.cmd_auto_bed_levelling(xy_coord_list, travel_z, probe_z_max, probe_feed_rate)
 
     @Slot(float)
     def update_progress_bar(self, prog_percentage):
         logger.debug(prog_percentage)
         self.ui.progressBar.setValue(prog_percentage)
+
+    @Slot(tuple)
+    def update_bbox(self, bbox_t):
+        logger.debug(bbox_t)
+        self.ui.x_min_dsb.setValue(bbox_t[0])
+        self.ui.y_min_dsb.setValue(bbox_t[1])
+        self.ui.z_min_dsb.setValue(-11.0)
+        self.ui.x_max_dsb.setValue(bbox_t[3])
+        self.ui.y_max_dsb.setValue(bbox_t[4])
+        self.ui.z_max_dsb.setValue(bbox_t[5])
+
+    def get_abl_inputs(self):
+        bbox_t = (
+            self.ui.x_min_dsb.value(),
+            self.ui.y_min_dsb.value(),
+            self.ui.z_min_dsb.value(),
+            self.ui.x_max_dsb.value(),
+            self.ui.y_max_dsb.value(),
+            self.ui.z_max_dsb.value()
+        )
+        steps_t = (
+            self.ui.x_num_step_sb.value(),
+            self.ui.y_num_step_sb.value()
+        )
+        return bbox_t, steps_t
 
 

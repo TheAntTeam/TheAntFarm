@@ -124,7 +124,25 @@ class ControlController(QObject):
 
         return probe_cmd_s
 
-    def cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
+    # def cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
+    #     [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
+    #                                                                             probe_z_max, probe_feed_rate)
+    #     self.abl_val = []
+    #     self.prb_num_done = 0
+    #     self.prb_activated = False
+    #     self.prb_updated = False
+    #     self.abl_updated = False
+    #     self.abl_activated = True
+    #
+    #     return [self.abl_cmd_ls, self.prb_num_todo]
+
+    def cmd_auto_bed_levelling(self, bbox_t, steps_t):
+        xy_coord_list = self.get_grid_coords(bbox_t, steps_t)
+        travel_z = bbox_t[5]
+        probe_z_max = bbox_t[2]
+        probe_feed_rate = 30
+        print(xy_coord_list)
+
         [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
                                                                                 probe_z_max, probe_feed_rate)
         self.abl_val = []
@@ -136,7 +154,22 @@ class ControlController(QObject):
 
         return [self.abl_cmd_ls, self.prb_num_todo]
 
-    def make_cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
+    @staticmethod
+    def get_grid_coords(bbox_t, steps_t):
+        xmin = bbox_t[0]
+        ymin = bbox_t[1]
+        xmax = bbox_t[3]
+        ymax = bbox_t[4]
+        x_step = steps_t[0] + 1
+        y_step = steps_t[1] + 1
+        xc = np.linspace(xmin, xmax, x_step)
+        yc = np.linspace(ymin, ymax, y_step)
+
+        xi, yi = np.meshgrid(xc, yc)
+        return list(zip(xi.ravel().tolist(), yi.ravel().tolist()))
+
+    @staticmethod
+    def make_cmd_auto_bed_levelling(xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
         abl_cmd_ls = []
         abl_cmd_s = ""
         abl_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
@@ -204,3 +237,7 @@ class ControlController(QObject):
 
     def get_gcode_lines(self, gcode_path):
         return self.gcodes_od[gcode_path]["gcode"].recode_gcode()
+
+    def get_boundary_box(self, gcode_path):
+        print(gcode_path)
+        return self.gcodes_od[gcode_path]["gcode"].get_bbox()

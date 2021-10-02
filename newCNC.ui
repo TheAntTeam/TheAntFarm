@@ -2423,27 +2423,39 @@
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+                   <widget class="QDoubleSpinBox" name="x_min_dsb">
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
                      <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="2">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+                   <widget class="QDoubleSpinBox" name="x_max_dsb">
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
                      <enum>QAbstractSpinBox::NoButtons</enum>
                     </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
                    </widget>
                   </item>
                   <item row="1" column="3">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
+                   <widget class="QDoubleSpinBox" name="x_step_dsb">
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
@@ -2459,9 +2471,12 @@
                    </widget>
                   </item>
                   <item row="1" column="4">
-                   <widget class="QSpinBox" name="spinBox_2">
+                   <widget class="QSpinBox" name="x_num_step_sb">
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="minimum">
+                     <number>1</number>
                     </property>
                    </widget>
                   </item>
@@ -2482,27 +2497,39 @@
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_7">
+                   <widget class="QDoubleSpinBox" name="y_min_dsb">
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
                      <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
                     </property>
                    </widget>
                   </item>
                   <item row="2" column="2">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_6">
+                   <widget class="QDoubleSpinBox" name="y_max_dsb">
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
                      <enum>QAbstractSpinBox::NoButtons</enum>
                     </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
                    </widget>
                   </item>
                   <item row="2" column="3">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_8">
+                   <widget class="QDoubleSpinBox" name="y_step_dsb">
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
@@ -2518,9 +2545,12 @@
                    </widget>
                   </item>
                   <item row="2" column="4">
-                   <widget class="QSpinBox" name="spinBox_3">
+                   <widget class="QSpinBox" name="y_num_step_sb">
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="minimum">
+                     <number>1</number>
                     </property>
                    </widget>
                   </item>
@@ -2541,22 +2571,34 @@
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_10">
+                   <widget class="QDoubleSpinBox" name="z_min_dsb">
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
                      <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
                     </property>
                    </widget>
                   </item>
                   <item row="3" column="2">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBox_9">
+                   <widget class="QDoubleSpinBox" name="z_max_dsb">
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
                      <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
                     </property>
                    </widget>
                   </item>
