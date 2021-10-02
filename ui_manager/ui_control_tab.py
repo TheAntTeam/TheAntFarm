@@ -65,6 +65,11 @@ class UiControlTab(QObject):
         self.ui.send_te.returnPressed.connect(self.send_input)
         self.ui.unlock_tb.clicked.connect(self.handle_unlock)
         self.ui.homing_tb.clicked.connect(self.handle_homing)
+        self.ui.zero_xy_pb.clicked.connect(self.handle_xy_0)
+        self.ui.zero_x_pb.clicked.connect(self.handle_x_0)
+        self.ui.zero_y_pb.clicked.connect(self.handle_y_0)
+        self.ui.zero_z_pb.clicked.connect(self.handle_z_0)
+        self.ui.center_tb.clicked.connect(self.handle_center_jog)
         self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
         self.ui.xPlusButton.clicked.connect(self.handle_x_plus)
         self.ui.yMinusButton.clicked.connect(self.handle_y_minus)
@@ -117,12 +122,12 @@ class UiControlTab(QObject):
     def update_status(self, status_l):
         self.ui.status_l.setText(status_l[0])
         self.update_status_colors(status_l[0])
-        self.ui.mpos_x_label.setText('{:.3f}'.format(status_l[1][0]))
-        self.ui.mpos_y_label.setText('{:.3f}'.format(status_l[1][1]))
-        self.ui.mpos_z_label.setText('{:.3f}'.format(status_l[1][2]))
-        self.ui.wpos_x_label.setText('{:.3f}'.format(status_l[2][0]))
-        self.ui.wpos_y_label.setText('{:.3f}'.format(status_l[2][1]))
-        self.ui.wpos_z_label.setText('{:.3f}'.format(status_l[2][2]))
+        self.ui.mpos_x_l.setText('{:.3f}'.format(status_l[1][0]))
+        self.ui.mpos_y_l.setText('{:.3f}'.format(status_l[1][1]))
+        self.ui.mpos_z_l.setText('{:.3f}'.format(status_l[1][2]))
+        self.ui.wpos_x_l.setText('{:.3f}'.format(status_l[2][0]))
+        self.ui.wpos_y_l.setText('{:.3f}'.format(status_l[2][1]))
+        self.ui.wpos_z_l.setText('{:.3f}'.format(status_l[2][2]))
         self.ctrl_layer.update_pointer(coords=status_l[2])
 
     def update_status_colors(self, status):
@@ -326,6 +331,26 @@ class UiControlTab(QObject):
     def handle_homing(self):
         logging.debug("Homing Command")
         self.ui_serial_send_s.emit("$H\n")
+
+    def handle_xy_0(self):
+        logging.debug("XY = 0")
+        self.ui_serial_send_s.emit("G10 P1 L20 X0 Y0\n")
+
+    def handle_x_0(self):
+        logging.debug("X = 0")
+        self.ui_serial_send_s.emit("G10 P1 L20 X0\n")
+
+    def handle_y_0(self):
+        logging.debug("Y = 0")
+        self.ui_serial_send_s.emit("G10 P1 L20 Y0\n")
+
+    def handle_z_0(self):
+        logging.debug("Z = 0")
+        self.ui_serial_send_s.emit("G10 P1 L20 Z0\n")
+
+    def handle_center_jog(self):
+        logging.debug("Go to XY working 0")
+        self.ui_serial_send_s.emit("G90 G0 X0 Y0\n")
 
     def handle_x_minus(self):
         logging.debug("X_minus Command")

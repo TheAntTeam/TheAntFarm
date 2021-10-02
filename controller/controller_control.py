@@ -27,6 +27,7 @@ class ControlController(QObject):
 
         self.status_l = []
         self.mpos_a = np.array([0, 0, 0])
+        self.wco_a = np.array([0, 0, 0])
         self.wpos_a = np.array([0, 0, 0])
         self.dro_status_updated = False
         self.prb_activated = False
@@ -72,12 +73,12 @@ class ControlController(QObject):
         return [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag]
 
     def parse_bracket_angle(self, line):
-        fields = line[1:-1].split("|")
+        line_stripped = line.strip()
+        fields = line_stripped[1:-1].split("|")
         status = fields[0]
-        wco_a = np.array([])
 
         for field in fields[1:]:
-            word = self.SPLITPAT.split(field)
+            word = self.SPLITPAT.split(field.strip())
             if word[0] == "MPos":
                 try:
                     self.mpos_a = np.array([float(word[1]), float(word[2]), float(word[3])])
@@ -87,13 +88,13 @@ class ControlController(QObject):
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "WCO":
                 try:
-                    wco_a = np.array([float(word[1]), float(word[2]), float(word[3])])
+                    self.wco_a = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
                 except:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
 
-        self.wpos_a = self.mpos_a + wco_a
+        self.wpos_a = self.mpos_a - self.wco_a
         return [status, self.mpos_a, self.wpos_a]
 
     def parse_bracket_square(self, line):

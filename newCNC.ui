@@ -1676,7 +1676,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="gcode_load">
              <property name="sizePolicy">
@@ -1853,7 +1853,7 @@
                    <number>6</number>
                   </property>
                   <item row="3" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QPushButton" name="zero_xyz_pushButton">
+                   <widget class="QPushButton" name="zero_xy_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -1867,12 +1867,12 @@
                      </font>
                     </property>
                     <property name="text">
-                     <string>XYZ = 0</string>
+                     <string>XY = 0</string>
                     </property>
                    </widget>
                   </item>
                   <item row="3" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QPushButton" name="zero_y_pushButton">
+                   <widget class="QPushButton" name="zero_y_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -1978,7 +1978,7 @@
                    </widget>
                   </item>
                   <item row="3" column="3" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QPushButton" name="zero_z_pushButton">
+                   <widget class="QPushButton" name="zero_z_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -1997,7 +1997,7 @@
                    </widget>
                   </item>
                   <item row="1" column="2" alignment="Qt::AlignHCenter">
-                   <widget class="QLabel" name="mpos_y_label">
+                   <widget class="QLabel" name="mpos_y_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2022,7 +2022,7 @@
                    </widget>
                   </item>
                   <item row="1" column="3" alignment="Qt::AlignHCenter">
-                   <widget class="QLabel" name="mpos_z_label">
+                   <widget class="QLabel" name="mpos_z_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2190,7 +2190,7 @@
                    </widget>
                   </item>
                   <item row="3" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QPushButton" name="zero_x_pushButton">
+                   <widget class="QPushButton" name="zero_x_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2240,7 +2240,7 @@
                    </widget>
                   </item>
                   <item row="1" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                   <widget class="QLabel" name="mpos_x_label">
+                   <widget class="QLabel" name="mpos_x_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -2796,7 +2796,7 @@
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QToolButton" name="centerButton">
+                     <widget class="QToolButton" name="center_tb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
