@@ -4576,7 +4576,6 @@
      <addaction name="action_warning"/>
      <addaction name="action_info"/>
      <addaction name="action_debug"/>
-     <addaction name="action_notset"/>
     </widget>
     <addaction name="actionHide_Show_Console"/>
     <addaction name="menu_set_level"/>
@@ -4682,14 +4681,6 @@
    </property>
    <property name="text">
     <string>DEBUG</string>
-   </property>
-  </action>
-  <action name="action_notset">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>NOTSET</string>
    </property>
   </action>
  </widget>

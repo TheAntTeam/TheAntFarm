@@ -62,9 +62,6 @@ class Ui_MainWindow(object):
         self.action_debug = QAction(MainWindow)
         self.action_debug.setObjectName(u"action_debug")
         self.action_debug.setCheckable(True)
-        self.action_notset = QAction(MainWindow)
-        self.action_notset.setObjectName(u"action_notset")
-        self.action_notset.setCheckable(True)
         self.central_widget = QWidget(MainWindow)
         self.central_widget.setObjectName(u"central_widget")
         sizePolicy.setHeightForWidth(self.central_widget.sizePolicy().hasHeightForWidth())
@@ -2388,7 +2385,6 @@ class Ui_MainWindow(object):
         self.menu_set_level.addAction(self.action_warning)
         self.menu_set_level.addAction(self.action_info)
         self.menu_set_level.addAction(self.action_debug)
-        self.menu_set_level.addAction(self.action_notset)
 
         self.retranslateUi(MainWindow)
 
@@ -2431,7 +2427,6 @@ class Ui_MainWindow(object):
         self.action_warning.setText(QCoreApplication.translate("MainWindow", u"WARNING", None))
         self.action_info.setText(QCoreApplication.translate("MainWindow", u"INFO", None))
         self.action_debug.setText(QCoreApplication.translate("MainWindow", u"DEBUG", None))
-        self.action_notset.setText(QCoreApplication.translate("MainWindow", u"NOTSET", None))
 #if QT_CONFIG(tooltip)
         self.no_copper_2_pb.setToolTip(QCoreApplication.translate("MainWindow", u"NO-COPPER BOTTOM load layer button", None))
 #endif // QT_CONFIG(tooltip)

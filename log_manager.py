@@ -35,4 +35,3 @@ class LogHandler(logging.Handler):
         ui.action_warning.triggered.connect(lambda: self.setLevel(logging.WARNING))
         ui.action_info.triggered.connect(lambda: self.setLevel(logging.INFO))
         ui.action_debug.triggered.connect(lambda: self.setLevel(logging.DEBUG))
-        ui.action_notset.triggered.connect(lambda: self.setLevel(logging.NOTSET))

@@ -94,5 +94,4 @@ class UiManager(QObject):
         log_level_group.addAction(self.ui.action_warning)
         log_level_group.addAction(self.ui.action_info)
         log_level_group.addAction(self.ui.action_debug)
-        log_level_group.addAction(self.ui.action_notset)
         log_level_group.setExclusive(True)
