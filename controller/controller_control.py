@@ -125,18 +125,6 @@ class ControlController(QObject):
 
         return probe_cmd_s
 
-    # def cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
-    #     [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
-    #                                                                             probe_z_max, probe_feed_rate)
-    #     self.abl_val = []
-    #     self.prb_num_done = 0
-    #     self.prb_activated = False
-    #     self.prb_updated = False
-    #     self.abl_updated = False
-    #     self.abl_activated = True
-    #
-    #     return [self.abl_cmd_ls, self.prb_num_todo]
-
     def cmd_auto_bed_levelling(self, bbox_t, steps_t):
         xy_coord_list = self.get_grid_coords(bbox_t, steps_t)
         travel_z = bbox_t[5]
@@ -245,11 +233,11 @@ class ControlController(QObject):
     def apply_abl(self, gcode_path):
         gcp = self.get_gcode_gcp(gcode_path)
         abl = GCodeLeveler(gcp.gc)
-        abl.get_grid_data(self.abl_val, self.abl_steps)
+        abl.get_grid_data(self.abl_val, self.abl_steps, self.prb_val, self.wco_a)
         abl.interp_grid_data()
         abl.apply_advanced()
-        #print("Leveled")
-        #print(gcp.gc.modified_vectors)
+        # print("Leveled")
+        # print(gcp.gc.modified_vectors)
 
     def remove_abl(self, gcode_path):
         gcp = self.get_gcode_gcp(gcode_path)
