@@ -242,6 +242,8 @@ class ControllerWorker(QObject):
         self.active_gcode_path = gcode_path
         redraw = False
         visible = True
+        print("ABL_val " + str(self.abl_val))
+        print("ABL_active " + str(self.abl_apply_active))
         if self.abl_val and self.abl_apply_active:
             self.control_controller.apply_abl(gcode_path)
             redraw = True

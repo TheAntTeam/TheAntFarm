@@ -492,13 +492,13 @@ class GcodePoint:
         return s
 
     def copy(self):
-        np = GcodePoint()
-        np.coords = self.coords.copy()
-        np.line = self.line
-        np.sub_line = self.sub_line
-        np.type = self.type
-        np.params = self.params.copy()
-        return np
+        cnp = GcodePoint()
+        cnp.coords = self.coords.copy()
+        cnp.line = self.line
+        cnp.sub_line = self.sub_line
+        cnp.type = self.type
+        cnp.params = self.params.copy()
+        return cnp
 
     def get_string(self):
         s = ""
@@ -740,10 +740,10 @@ class GCodeLeveler:
         if self.gc is not None and self.ig is not None:
             mvl = []
             for p in self.gc.original_vectors:
-                np = p.copy()
-                delta = self.ig(np.coords[0], np.coords[1])
-                np.coords[2] += delta
-                mvl.append(np)
+                cnp = p.copy()
+                delta = self.ig(cnp.coords[0], cnp.coords[1])
+                cnp.coords[2] += delta
+                mvl.append(cnp)
         print("Auto Bed Leveler Stop")
 
     def apply_advanced(self):
@@ -788,14 +788,14 @@ class GCodeLeveler:
                                     nip.sub_line = sub_line
                                     np_l.append(nip)
                                     sub_line += 1
-                    np.sub_line = sub_line
-                    np_l.append(np)
+                    nwp.sub_line = sub_line
+                    np_l.append(nwp)
                 else:
-                    np_l = [np]
+                    np_l = [nwp]
                 mvl += np_l
                 pre_pc = np.array(p.coords[:2])
             self.gc.modified_vectors = mvl
-            print("Advancede Auto Bed Leveler Stop")
+            print("Advanced Auto Bed Leveler Stop")
             tb = time.time()
             print("Duration ", tb-ta)
             return True

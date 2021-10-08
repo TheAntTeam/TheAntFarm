@@ -207,6 +207,7 @@ class ControlController(QObject):
             self.prb_val = []
             if self.prb_num_done == self.prb_num_todo:
                 ack_flag = True
+                self.abl_activated = False
             elif self.prb_num_done < self.prb_num_todo:
                 send_next = True
             else:
@@ -247,6 +248,8 @@ class ControlController(QObject):
         abl.get_grid_data(self.abl_val, self.abl_steps)
         abl.interp_grid_data()
         abl.apply_advanced()
+        #print("Leveled")
+        #print(gcp.gc.modified_vectors)
 
     def remove_abl(self, gcode_path):
         gcp = self.get_gcode_gcp(gcode_path)
