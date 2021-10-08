@@ -177,6 +177,7 @@ class ControlController(QObject):
         abl_cmd_ls[-1] += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
                           str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
         abl_cmd_ls[-1] += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
+        prb_num_todo += 1
         abl_cmd_ls[-1] += "G10 P1 L20 Z0\n"  # Set Z zero
         abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
         abl_cmd_ls[-1] += "G00 X" + str(xy_c_l[0][0]) + "Y" + str(xy_c_l[0][1]) + "\n"  # Go 1st XY coordinate
@@ -233,7 +234,8 @@ class ControlController(QObject):
     def apply_abl(self, gcode_path):
         gcp = self.get_gcode_gcp(gcode_path)
         abl = GCodeLeveler(gcp.gc)
-        abl.get_grid_data(self.abl_val, self.abl_steps, self.prb_val, self.wco_a)
+        last_probe = self.abl_val.pop()
+        abl.get_grid_data(self.abl_val, self.abl_steps, last_probe, self.wco_a)
         abl.interp_grid_data()
         abl.apply_advanced()
         # print("Leveled")
