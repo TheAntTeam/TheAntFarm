@@ -173,14 +173,16 @@ class ControlController(QObject):
             abl_cmd_ls.append(abl_cmd_s)
             abl_cmd_s = ""
 
-        abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
-        abl_cmd_ls[-1] += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
+        abl_cmd_s = ""
+        abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+        abl_cmd_s += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
                           str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
-        abl_cmd_ls[-1] += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
+        abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
         prb_num_todo += 1
-        abl_cmd_ls[-1] += "G10 P1 L20 Z0\n"  # Set Z zero
-        abl_cmd_ls[-1] += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
-        abl_cmd_ls[-1] += "G00 X" + str(xy_c_l[0][0]) + "Y" + str(xy_c_l[0][1]) + "\n"  # Go 1st XY coordinate
+        abl_cmd_s += "G10 P1 L20 Z0\n"  # Set Z zero
+        abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+        abl_cmd_s += "G00 X" + str(xy_c_l[0][0]) + "Y" + str(xy_c_l[0][1]) + "\n"  # Go 1st XY coordinate
+        abl_cmd_ls.append(abl_cmd_s)
         logger.debug("ABL routine: " + str(abl_cmd_ls))
         logger.debug("ABL points to do: " + str(prb_num_todo))
 
