@@ -721,11 +721,11 @@ class GCodeLeveler:
                 #plt.show()
                 return X, Y, Z
 
-    def get_grid_data(self, probe_results, steps):
+    def get_grid_data(self, probe_results, steps, last_probe, wco_offset=(0, 0, 0)):
         x, y, z = zip(*probe_results)
-        X = np.array(x).reshape(steps[0], steps[1])
-        Y = np.array(y).reshape(steps[0], steps[1])
-        Z = np.array(z).reshape(steps[0], steps[1])
+        X = np.array(x).reshape(steps[0], steps[1]) - wco_offset[0]
+        Y = np.array(y).reshape(steps[0], steps[1]) - wco_offset[1]
+        Z = np.array(z).reshape(steps[0], steps[1]) - last_probe[2]
         return X, Y, Z
 
     def interp_grid_data(self):
