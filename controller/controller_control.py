@@ -6,7 +6,7 @@ import string
 import random
 import numpy as np
 from collections import OrderedDict
-from shape_core.gcode_manager import GCodeParser, GCodeLeveler
+from shape_core.gcode_manager import GCoder, GCodeParser, GCodeLeveler
 
 logger = logging.getLogger(__name__)
 
@@ -85,14 +85,14 @@ class ControlController(QObject):
                     self.mpos_a = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except:
+                except Exception as e:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "WCO":
                 try:
                     self.wco_a = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except:
+                except Exception as e:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
 
         self.wpos_a = self.mpos_a - self.wco_a
@@ -107,7 +107,7 @@ class ControlController(QObject):
                 self.prb_updated = True
             except (ValueError, IndexError) as e:
                 logging.error(e, exc_info=True)
-            except:
+            except Exception as e:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
         return self.prb_val
@@ -159,30 +159,10 @@ class ControlController(QObject):
 
     @staticmethod
     def make_cmd_auto_bed_levelling(xy_c_l, travel_z, probe_z_max, probe_feed_rate):
-        abl_cmd_ls = []
-        abl_cmd_s = ""
-        abl_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
 
-        prb_num_todo = 0
-        for coord in xy_c_l:
-            prb_num_todo += 1
-            abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
-            abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + "\n"  # Go to XY coordinate
-            abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
-            abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
-            abl_cmd_ls.append(abl_cmd_s)
-            abl_cmd_s = ""
+        gcr = GCoder("dummy", "commander")
+        abl_cmd_ls, prb_num_todo = gcr.get_autobed_leveling_code(xy_c_l, travel_z, probe_z_max, probe_feed_rate)
 
-        abl_cmd_s = ""
-        abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
-        abl_cmd_s += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
-                          str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
-        abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
-        prb_num_todo += 1
-        abl_cmd_s += "G10 P1 L20 Z0\n"  # Set Z zero
-        abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
-        abl_cmd_s += "G00 X" + str(xy_c_l[0][0]) + "Y" + str(xy_c_l[0][1]) + "\n"  # Go 1st XY coordinate
-        abl_cmd_ls.append(abl_cmd_s)
         logger.debug("ABL routine: " + str(abl_cmd_ls))
         logger.debug("ABL points to do: " + str(prb_num_todo))
 

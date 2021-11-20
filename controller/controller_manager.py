@@ -172,9 +172,7 @@ class ControllerWorker(QObject):
                             if self.sent_lines < self.tot_lines and \
                                     (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE:
                                 cmd_to_send = self.file_content[self.sent_lines]
-                                self.serialTxQueue.put(cmd_to_send)
-                                self.serial_tx_available_s.emit()
-                                # self.serial_send_s.emit(cmd_to_send)
+                                self.send_to_tx_queue(cmd_to_send)
                                 self.buffered_cmds.append(cmd_to_send)
                                 logger.debug("TX:" + cmd_to_send)
                                 self.buffered_size += len(cmd_to_send)
@@ -288,9 +286,7 @@ class ControllerWorker(QObject):
             while self.sent_lines < self.tot_lines and \
                     (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE:
                 cmd_to_send = self.file_content[self.sent_lines]
-                self.serialTxQueue.put(cmd_to_send)
-                self.serial_tx_available_s.emit()
-                # self.serial_send_s.emit(cmd_to_send)
+                self.send_to_tx_queue(cmd_to_send)
                 self.buffered_cmds.append(cmd_to_send)
                 logger.debug(cmd_to_send)
                 self.buffered_size += len(cmd_to_send)

@@ -20,9 +20,9 @@ class GCoder:
 
     DIGITS = 4
     STEPS = 3
-    SAFE_Z_PROBE = -1.0
-    CHANGE_TOOL_POS = (6.0, 8.0, 9.0)
-    PROBE_TOOL_POS = (6.0, 8.0, 9.0)
+    SAFE_ABSOLUTE_Z_PROBE = -1.0
+    CHANGE_TOOL_POS = (-41.2, -120.88, -1.0)
+    PROBE_TOOL_POS = (-1.0, -1.0, -11.0)
 
     def __init__(self, tag, machining_type='gerber', parent=None, units='ms'):
 
@@ -33,7 +33,7 @@ class GCoder:
 
         self.change_tool_pos = self.CHANGE_TOOL_POS  # todo: vanno parametrizzati
         self.probe_tool_pos = self.PROBE_TOOL_POS  # todo: vanno parametrizzati
-        self.safe_z_probe = self.SAFE_Z_PROBE
+        self.safe_absolute_z_probe = self.SAFE_ABSOLUTE_Z_PROBE # todo: vanno parametrizzati
 
         # units:
         # ms -> metric system
@@ -102,6 +102,8 @@ class GCoder:
             self.compute_drill()
         elif self.type == 'pocketing':
             self.compute_pocketing()
+        elif self.type == 'commander':
+            print("Nothing to do!")
         else:
             print("Machining Type not supported")
             return False
@@ -174,7 +176,7 @@ class GCoder:
         self.add_job_info()
         self.add_init()
 
-        # todo: aggiungere user head and foot
+        # todo: aggiungere user header and footer
 
         self.go_travel()
         self.spindle_on(True)
@@ -267,37 +269,58 @@ class GCoder:
             gc += "G00 X" + x_str + " Y" + y_str + "\n"
         self.gcode.append(gc)
 
-    def go_tool_change(self):
-
+    def get_tool_change_string(self):
         zero_str = self.format_float(0.0)
-        z_m_one = self.format_float(self.SAFE_Z_PROBE)
+        z_m_one = self.format_float(self.safe_absolute_z_probe)
+
+        x_ct_str = self.format_float(self.change_tool_pos[0])
+        y_ct_str = self.format_float(self.change_tool_pos[1])
+        z_ct_str = self.format_float(self.change_tool_pos[2])
+
         x_str = self.format_float(self.probe_tool_pos[0])
         y_str = self.format_float(self.probe_tool_pos[1])
         z_str = self.format_float(self.probe_tool_pos[2])
 
         gc = ""
         gc += self.gcode_comment("The Ant Tool Change")
-        gc += "G90\n"
-        gc += "G01 Z" + z_m_one + "\n"
+        # super safe Z position
+        gc += "F60\n"
+        gc += "G54\n"
+        gc += "G53 G00 Z" + z_m_one + " F60\n"
+        # go to probe position and performe a probe (G54 WORK SYSTEM COORD)
         gc += "G00 X" + x_str + " Y" + y_str + "\n"
-        gc += "G91\n"
+        gc += "G01 F10\n"
         gc += "G38.2 Z" + z_str + "\n"
+        gc += "G01 F60\n"
+        # change position coordinates system
+        # and zeroing Z
         gc += "G55\n"
         gc += "G10 P2 L20 Z" + zero_str + "\n"
-        gc += "T01\n"
-        gc += "M06\n"
-        gc += "G90\n"
-        gc += "G01 Z" + z_m_one + "\n"
-        gc += "G00 X" + x_str + " Y" + y_str + "\n"
-        gc += "G91\n"
-        gc += "G38.2 Z" + z_str + "\n"
-        gc += "G92 Z" + zero_str + "\n"
+        # move to change tool position (MACHINE SYSTEM COORD)
+        gc += "G53 G00 Z" + z_ct_str + "\n"
+        gc += "G53 G00 X" + x_ct_str + "\n"
+        gc += "G53 G00 Y" + y_ct_str + "\n"
+        # wait for the change tool
+        #gc += "M0\n"
+        # go to probe position and performe a probe (G55 WORK SYSTEM COORD)
+        gc += "G53 G01 Z" + z_m_one + "\n"
         gc += "G54\n"
-        gc += "G90\n"
-        gc += "G01 Z" + z_m_one + "\n"
-        gc += "G91\n"
+        gc += "G00 X" + x_str + " Y" + y_str + "\n"
+        gc += "G01 F10\n"
+        gc += "G38.2 Z" + z_str + "\n"
+        gc += "G01 F60\n"
+        # add tool offset
+        gc += "G55\n"
+        gc += "G92 Z" + zero_str + "\n"
+        # move on original WORKING COORD SYSTEM
+        gc += "G54\n"
+        # return to WP Zero
+        gc += "G53 G01 Z" + z_m_one + " F60\n"
         gc += "G00 X" + zero_str + " Y" + zero_str + "\n"
+        return gc
 
+    def go_tool_change(self):
+        gc = self.get_tool_change_string()
         self.gcode.append(gc)
 
     def make_drill(self):
@@ -420,6 +443,41 @@ class GCoder:
             c += "(" + l + ")\n"
         return c
 
+    def get_autobed_leveling_code(self, xy_c_l, travel_z, probe_z_max, probe_feed_rate):
+        abl_cmd_ls = []
+        abl_cmd_s = ""
+        abl_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
+
+        prb_num_todo = 0
+        for coord in xy_c_l:
+            prb_num_todo += 1
+            abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+            abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + "\n"  # Go to XY coordinate
+            abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
+            abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+            abl_cmd_ls.append(abl_cmd_s)
+            abl_cmd_s = ""
+
+        abl_cmd_s = ""
+        abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+        abl_cmd_s += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
+                          str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
+        abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
+        prb_num_todo += 1
+        abl_cmd_s += "G10 P1 L20 Z0\n"  # Set Z zero
+        abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+        abl_cmd_s += "G00 X" + str(xy_c_l[0][0]) + "Y" + str(xy_c_l[0][1]) + "\n"  # Go 1st XY coordinate
+        abl_cmd_ls.append(abl_cmd_s)
+
+        return abl_cmd_ls, prb_num_todo
+
+    def get_tool_change_code(self, to_comment=""):
+        s = ""
+        if to_comment != "":
+            s += self.gcode_comment(to_comment)
+        s += self.get_tool_change_string()
+        return s
+
     def get_file_name(self):
         return self.tag.lower() + "_" + self.type.lower() + ".gcode"
 
@@ -530,6 +588,7 @@ class GCodeParser:
 
     COORD_TAG = ['x', 'y', 'z']
     PARAM_TAG = ['f', 'p']
+    CHANGE_TOOL_COMMAND = ('m', 6)
 
     def __init__(self, cfg):
         self.gcode_path = ""
@@ -537,21 +596,54 @@ class GCodeParser:
         self.gc = None
 
     def load_gcode_file(self, gcode_path):
+        print("GCoder Loading GCode File:")
+        print(gcode_path)
         if os.path.isfile(gcode_path):
             self.gcode_path = gcode_path
             with open(self.gcode_path) as f:
                 lines = f.readlines()
+                print("Lines")
+                print(lines)
                 if lines:
                     # ha caricato il file gcode
                     # come primo step va tipizzata ogni linea
                     self.gc = GCode(lines)
+                    #self.pre_parsing()
         else:
             print("Invalid GCode File Path")
 
-    def interp(self):
+    def pre_parsing(self):
+        gcode_commander = GCoder("dummy", "commander")
         if self.gc is not None:
+            # per ora individua i cambio tools e li espande
+            # con la corretta procedura
             ls = self.gc.original_lines
-            gcll = []
+            for l in ls:
+                gl = self.interp(single_line=l)
+                nls = []
+                for g in gl:
+                    if g.command:
+                        if g.command[0] == self.CHANGE_TOOL_COMMAND[0] and self.CHANGE_TOOL_COMMAND[1] in g.command[1]:
+                            tool_change_gc = gcode_commander.get_tool_change_code()
+                            d = "\n"
+                            nls = [e + d for e in tool_change_gc.split(d) if e]
+                if not nls:
+                    nls = [l]
+                else:
+                    print("Tool Change Detected!")
+                    print(nls)
+                self.gc.modified_lines += nls
+
+    def interp(self, single_line=None):
+        gcll = []
+        if self.gc is not None or single_line is not None:
+            if single_line is not None:
+                ls = [single_line]
+            else:
+                if self.gc.modified_lines:
+                    ls = self.gc.modified_lines
+                else:
+                    ls = self.gc.original_lines
             for l in ls:
                 d = l.strip()
                 d = d.replace("(", ";")
@@ -579,7 +671,9 @@ class GCodeParser:
                             params[p[0]] = float(p[1::])
                         gcl.params = params
                     gcll.append(gcl)
-            self.gc.gcll = gcll
+            if single_line is None:
+                self.gc.gcll = gcll
+        return gcll
 
     def recode_gcode(self):
         gcls = []
