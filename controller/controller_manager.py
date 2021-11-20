@@ -253,21 +253,6 @@ class ControllerWorker(QObject):
     def get_gcode_data(self, gcode_path):
         return self.control_controller.get_gcode_tag_and_v(gcode_path)
 
-# ***************** ALIGN related functions. ***************** #
-
-    def on_camera_timeout(self):
-        if self.align_active:
-            image = self.align_controller.camera_new_frame()
-            self.update_camera_image_s.emit(QPixmap.fromImage(image))
-
-    @Slot(bool)
-    def set_align_is_active(self, align_is_active):
-        self.align_active = align_is_active
-
-    @Slot(int)
-    def update_threshold_value(self, new_threshold):
-        self.align_controller.update_threshold_value(new_threshold)
-
     @Slot(str)
     def send_gcode_file(self, gcode_path):
         self.file_content = self.control_controller.get_gcode_lines(gcode_path)
@@ -297,8 +282,8 @@ class ControllerWorker(QObject):
 
     def stop_gcode_file(self):
         self.sending_file = False
-        self.serial_send_s.emit(b"!")
-        self.serial_send_s.emit(b'\030')
+        self.execute_gcode_cmd(b"!")
+        self.execute_gcode_cmd(b'\030')
         self.file_progress = 0.0
         self.cmds_to_ack = 0
         self.sent_lines = 0
@@ -307,8 +292,29 @@ class ControllerWorker(QObject):
         self.buffered_cmds = []
         self.buffered_size = 0
 
+    def pause_resume(self):
+        if "hold" in self.control_controller.status.lower():
+            self.execute_gcode_cmd(b"~")
+        else:
+            self.execute_gcode_cmd(b"!")
+
     def get_boundary_box(self):
         if not self.active_gcode_path == "":
             bbox_t = self.control_controller.get_boundary_box(self.active_gcode_path)
             self.update_bbox_s.emit(bbox_t)
 
+
+# ***************** ALIGN related functions. ***************** #
+
+    def on_camera_timeout(self):
+        if self.align_active:
+            image = self.align_controller.camera_new_frame()
+            self.update_camera_image_s.emit(QPixmap.fromImage(image))
+
+    @Slot(bool)
+    def set_align_is_active(self, align_is_active):
+        self.align_active = align_is_active
+
+    @Slot(int)
+    def update_threshold_value(self, new_threshold):
+        self.align_controller.update_threshold_value(new_threshold)

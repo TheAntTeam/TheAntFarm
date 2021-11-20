@@ -25,7 +25,7 @@ class ControlController(QObject):
         super(ControlController, self).__init__()
         self.settings = settings
 
-        self.status_l = []
+        self.status = []
         self.mpos_a = np.array([0, 0, 0])
         self.wco_a = np.array([0, 0, 0])
         self.wpos_a = np.array([0, 0, 0])
@@ -76,7 +76,7 @@ class ControlController(QObject):
     def parse_bracket_angle(self, line):
         line_stripped = line.strip()
         fields = line_stripped[1:-1].split("|")
-        status = fields[0]
+        self.status = fields[0]
 
         for field in fields[1:]:
             word = self.SPLITPAT.split(field.strip())
@@ -96,7 +96,7 @@ class ControlController(QObject):
                     logger.error("Uncaught exception: %s", traceback.format_exc())
 
         self.wpos_a = self.mpos_a - self.wco_a
-        return [status, self.mpos_a, self.wpos_a]
+        return [self.status, self.mpos_a, self.wpos_a]
 
     def parse_bracket_square(self, line):
         word = self.SPLITPAT.split(line[1:-1])

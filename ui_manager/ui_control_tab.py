@@ -43,6 +43,7 @@ class UiControlTab(QObject):
 
         self.send_gcode_s.connect(self.controlWo.send_gcode_file)
         self.stop_gcode_s.connect(self.controlWo.stop_gcode_file)
+        self.pause_resume_gcode_s.connect(self.controlWo.pause_resume)
 
         # From Controller Manager to Serial Manager
         self.controlWo.serial_send_s.connect(self.serialWo.send)
@@ -117,6 +118,7 @@ class UiControlTab(QObject):
         self.controller_connected_s.connect(lambda connected: self.controlWo.on_controller_connection(connected))
         self.ui.play_tb.clicked.connect(self.play_send_file)
         self.ui.stop_tb.clicked.connect(self.stop_send_file)
+        self.ui.pause_resume_tb.clicked.connect(self.pause_resume)
         self.controlWo.stop_send_s.connect(self.stop_send_file)
 
         self.precalc_gcode_s.connect(self.controlWo.vectorize_new_gcode_file)
@@ -127,6 +129,7 @@ class UiControlTab(QObject):
     def update_status(self, status_l):
         self.ui.status_l.setText(status_l[0])
         self.update_status_colors(status_l[0])
+        self.update_status_buttons(status_l[0])
         self.ui.mpos_x_l.setText('{:.3f}'.format(status_l[1][0]))
         self.ui.mpos_y_l.setText('{:.3f}'.format(status_l[1][1]))
         self.ui.mpos_z_l.setText('{:.3f}'.format(status_l[1][2]))
@@ -134,6 +137,24 @@ class UiControlTab(QObject):
         self.ui.wpos_y_l.setText('{:.3f}'.format(status_l[2][1]))
         self.ui.wpos_z_l.setText('{:.3f}'.format(status_l[2][2]))
         self.ctrl_layer.update_pointer(coords=status_l[2])
+
+    def update_status_buttons(self, status):
+        sta = status.lower()
+        enabled = False
+        if "alarm" in sta:
+            pass
+        elif "run" in sta:
+            enabled = True
+        elif "jog" in sta:
+            enabled = True
+        elif "idle" in sta:
+            enabled = True
+        elif "hold" in sta:
+            enabled = True
+        elif "not connected" in sta:
+            pass
+
+        self.ui.pause_resume_tb.setEnabled(enabled)
 
     def update_status_colors(self, status):
         sta = status.lower()
@@ -245,6 +266,9 @@ class UiControlTab(QObject):
         self.ui.homing_tb.setEnabled(True)
         if self.serial_connection_status:
             self.ui.play_tb.setEnabled(True)
+
+    def pause_resume(self):
+        self.pause_resume_gcode_s.emit()
 
     def enable_gcode_rb(self, enabling):
         num_rows = self.ui.gcode_tw.rowCount()

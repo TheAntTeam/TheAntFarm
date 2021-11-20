@@ -372,7 +372,7 @@ class GCoder:
             ten_str = self.format_float(10.0)
             gc += "M3 S" + ten_str + "\n"  # activate splindle
             one_str = self.format_float(1.0)
-            gc += "P" + one_str + "\n"  # just a little pause
+            gc += "G4 P" + one_str + "\n"  # just a little pause
             spindle_speed = self.cfg['spindle']
             spindle_speed_str = self.format_float(spindle_speed)
             gc += "M3 S" + spindle_speed_str + "\n"  # spindle at the full speed
@@ -381,7 +381,7 @@ class GCoder:
             zero_str = self.format_float(0.0)
             gc += "M3 S" + zero_str + "\n"  # set speed to 0
             one_str = self.format_float(1.0)
-            gc += "P" + one_str + "\n"  # just a little pause
+            gc += "G4 P" + one_str + "\n"  # just a little pause
             gc += "M5\n"  # just a little pause
             gc += "\n"
         self.gcode.append(gc)
