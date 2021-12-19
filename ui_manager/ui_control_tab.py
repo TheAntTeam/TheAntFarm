@@ -98,6 +98,8 @@ class UiControlTab(QObject):
         self.ui.abl_active_chb.stateChanged.connect(
             lambda: self.controlWo.set_abl_active(self.ui.abl_active_chb.isChecked()))
         self.ui.get_bbox_pb.clicked.connect(self.controlWo.get_boundary_box)
+        self.ui.x_num_step_sb.valueChanged.connect(self.update_bbox_x_steps)
+        self.ui.y_num_step_sb.valueChanged.connect(self.update_bbox_y_steps)
 
         self.ui.unlock_tb.setEnabled(False)
         self.ui.homing_tb.setEnabled(False)
@@ -503,6 +505,20 @@ class UiControlTab(QObject):
         logger.debug(prog_percentage)
         self.ui.progressBar.setValue(prog_percentage)
 
+    @Slot()
+    def update_bbox_x_steps(self):
+        x_steps = abs(self.ui.x_max_dsb.value() - self.ui.x_min_dsb.value()) / self.ui.x_num_step_sb.value()
+        self.ui.x_step_dsb.setValue(x_steps)
+
+    @Slot()
+    def update_bbox_y_steps(self):
+        y_steps = abs(self.ui.y_max_dsb.value() - self.ui.y_min_dsb.value()) / self.ui.y_num_step_sb.value()
+        self.ui.y_step_dsb.setValue(y_steps)
+
+    def update_bbox_steps(self):
+        self.update_bbox_x_steps()
+        self.update_bbox_y_steps()
+
     @Slot(tuple)
     def update_bbox(self, bbox_t):
         logger.debug(bbox_t)
@@ -512,6 +528,7 @@ class UiControlTab(QObject):
         self.ui.x_max_dsb.setValue(bbox_t[3])
         self.ui.y_max_dsb.setValue(bbox_t[4])
         self.ui.z_max_dsb.setValue(bbox_t[5])
+        self.update_bbox_steps()
 
     def get_abl_inputs(self):
         bbox_t = (
