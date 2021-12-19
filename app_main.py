@@ -79,7 +79,9 @@ if __name__ == "__main__":
     h.setLevel(logging.INFO)
     h.connect_log_actions(window.ui)
 
-    fh = logging.handlers.RotatingFileHandler('./program.log', maxBytes=1000000, backupCount=10)
+    fh = logging.handlers.RotatingFileHandler(window.settings.app_settings.logs_file,
+                                              maxBytes=window.settings.app_settings.logs_max_bytes,
+                                              backupCount=window.settings.app_settings.logs_backup_count)
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
 

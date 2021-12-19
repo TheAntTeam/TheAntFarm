@@ -36,6 +36,10 @@ class SettingsHandler:
 
 class AppSettingsHandler:
     # APP CONFIGURATION DEFAULT VALUES
+    LOGS_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), 'app_logs')
+    LOGS_FILE_DEFAULT = os.path.join(LOGS_DIR_DEFAULT, 'app_logs.log')
+    LOGS_MAX_BYTES = 1000000
+    LOGS_BACKUP_COUNT = 10
     WIN_POS_X_DEFAULT = 200
     WIN_POS_Y_DEFAULT = 200
     WIN_SIZE_W_DEFAULT = 1160
@@ -47,8 +51,15 @@ class AppSettingsHandler:
     GCODE_LAST_DIR_DEFAULT = os.path.join(os.path.dirname(__file__), '.')
 
     def __init__(self, config_folder, main_win):
-        self.app_config_path = config_folder + os.path.sep + 'app_config.ini'
+        self.app_config_path = os.path.join(config_folder, 'app_config.ini')
         self.app_settings = configparser.ConfigParser()
+
+        if not os.path.isdir(self.LOGS_DIR_DEFAULT):
+            os.makedirs(self.LOGS_DIR_DEFAULT)
+        self.logs_folder = self.LOGS_DIR_DEFAULT
+        self.logs_file = self.LOGS_FILE_DEFAULT
+        self.logs_max_bytes = self.LOGS_MAX_BYTES
+        self.logs_backup_count = self.LOGS_BACKUP_COUNT
 
         self.main_win = main_win
         self.pos = QPoint(self.WIN_POS_X_DEFAULT, self.WIN_POS_Y_DEFAULT)
@@ -75,6 +86,9 @@ class AppSettingsHandler:
             self.main_tab_index = app_general.getint("main_tab_index", self.MAIN_TAB_INDEX_DEFAULT)
             self.ctrl_tab_index = app_general.getint("ctrl_tab_index", self.CTRL_TAB_INDEX_DEFAULT)
             self.console_visibility = app_general.getboolean("console_visibility", self.SHOW_CONSOLE_DEFAULT)
+            self.logs_file = app_general.get('logs_file', self.LOGS_FILE_DEFAULT)
+            self.logs_max_bytes = app_general.getint('logs_max_bytes', self.LOGS_MAX_BYTES)
+            self.logs_backup_count = app_general.getint('logs_backup_count', self.LOGS_BACKUP_COUNT)
         # Apply general settings.
         self.main_win.resize(self.size)
         self.main_win.ui.main_tab_widget.setCurrentIndex(self.main_tab_index)
@@ -100,7 +114,10 @@ class AppSettingsHandler:
                                         "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
                                         "console_visibility": self.console_visibility,
                                         "layer_last_dir": self.LAYER_LAST_DIR_DEFAULT,
-                                        "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT}
+                                        "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT,
+                                        "logs_file": self.LOGS_FILE_DEFAULT,
+                                        "logs_max_bytes": self.LOGS_MAX_BYTES,
+                                        "logs_backup_count": self.LOGS_BACKUP_COUNT}
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -112,6 +129,9 @@ class AppSettingsHandler:
         app_general["main_tab_index"] = str(self.main_win.ui.main_tab_widget.currentIndex())
         app_general["ctrl_tab_index"] = str(self.main_win.ui.ctrl_tab_widget.currentIndex())
         app_general["console_visibility"] = str(self.main_win.ui.actionHide_Show_Console.isChecked())
+        app_general["logs_file"] = str(self.LOGS_FILE_DEFAULT)
+        app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
+        app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
