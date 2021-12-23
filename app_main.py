@@ -1,3 +1,4 @@
+import os
 import sys
 from PySide2.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PySide2.QtCore import QThread, QSettings, QPoint, QSize, QThreadPool
@@ -11,6 +12,10 @@ from ui_manager.ui_manager import UiManager
 from settings_manager import SettingsHandler
 from log_manager import LogHandler
 import logging.handlers
+
+# Simple mod to set the QT environment data just for python avoiding conflict with other windiws applications
+if "QT_PLUGIN_PATH" not in os.environ:
+    os.environ["QT_PLUGIN_PATH"] = os.path.join(os.path.dirname(sys.modules['PySide2'].__file__), "plugins")
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):

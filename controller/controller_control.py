@@ -4,6 +4,7 @@ import logging
 import traceback
 import string
 import random
+from collections import deque
 import numpy as np
 from collections import OrderedDict
 from shape_core.gcode_manager import GCoder, GCodeParser, GCodeLeveler
@@ -34,7 +35,7 @@ class ControlController(QObject):
         self.abl_activated = False
         self.prb_updated = False
         self.abl_updated = False
-        self.prb_val = []
+        self.prb_val = deque([[-1.0, -1.0, -1.0], [-1.0, -1.0, -1.0]], maxlen=2)
         self.abl_val = []
         self.abl_steps = ()
         self.abl_cmd_ls = []
@@ -46,7 +47,7 @@ class ControlController(QObject):
         self.gcodes_od = OrderedDict({})
 
     def get_probe_value(self):
-        return self.prb_val
+        return self.prb_val[0]
 
     def get_abl_value(self):
         return self.abl_val
@@ -103,21 +104,21 @@ class ControlController(QObject):
 
         if word[0] == "PRB":
             try:
-                self.prb_val = [float(word[1]), float(word[2]), float(word[3])]
+                self.prb_val.appendleft([float(word[1]), float(word[2]), float(word[3])])
                 self.prb_updated = True
             except (ValueError, IndexError) as e:
                 logging.error(e, exc_info=True)
             except Exception as e:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
-        return self.prb_val
+        return self.prb_val[0]
 
     def cmd_probe(self, probe_z_max, probe_feed_rate):
         probe_cmd_s = ""
         probe_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
         probe_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
 
-        self.prb_val = []
+        #self.prb_val = []  # doesn't need anymore
         self.prb_updated = False
         self.prb_activated = True
         self.prb_num_todo = 1
@@ -135,7 +136,7 @@ class ControlController(QObject):
         [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
                                                                                 probe_z_max, probe_feed_rate)
         self.abl_val = []
-        self.abl_steps = (steps_t[0]+1, steps_t[1]+1)
+        self.abl_steps = (steps_t[0], steps_t[1])
         self.prb_num_done = 0
         self.prb_activated = False
         self.prb_updated = False
@@ -150,8 +151,8 @@ class ControlController(QObject):
         ymin = bbox_t[1]
         xmax = bbox_t[3]
         ymax = bbox_t[4]
-        x_step = steps_t[0] + 1
-        y_step = steps_t[1] + 1
+        x_step = steps_t[0]  # + 1
+        y_step = steps_t[1]  # + 1
         xc = np.linspace(xmin, xmax, x_step)
         yc = np.linspace(ymin, ymax, y_step)
         xi, yi = np.meshgrid(xc, yc)
@@ -174,8 +175,8 @@ class ControlController(QObject):
         if self.prb_updated:
             self.prb_updated = False
             self.prb_num_done += 1
-            self.abl_val.append(self.prb_val)
-            self.prb_val = []
+            self.abl_val.append(self.prb_val[0])
+            # self.prb_val = []  # doesn't need anymore
             if self.prb_num_done == self.prb_num_todo:
                 ack_flag = True
                 self.abl_activated = False

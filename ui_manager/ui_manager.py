@@ -16,8 +16,9 @@ class UiManager(QObject):
     """Manage UI objects, signals and slots"""
     L_TAGS = ("top", "bottom", "profile", "drill", "no_copper_top", "no_copper_bottom")
     L_NAMES = ("TOP", "BOTTOM", "PROFILE", "DRILL", "NO COPPER TOP", "NO COPPER BOTTOM")
-    # L_COLORS = ["red", "blue", "black", "green", "purple", "brown"]
-    L_COLORS = ["#FFC300", "#A3E4D7", "black", "green", "purple", "brown"]
+    # L_COLORS = ["red", "blue", "black", "#444444", "purple", "brown"]
+    # L_COLORS = ["#FFC300", "#A3E4D7", "black", "#444444", "purple", "brown"]
+    L_COLORS = ["#FFC300", "#A3E4D7", "black", "#999999", "purple", "brown"]
     LOG_COLORS = {
         logging.DEBUG:    'white',
         logging.INFO:     'light blue',

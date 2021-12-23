@@ -8,6 +8,8 @@ from .controller_align import AlignController
 import logging
 import traceback
 
+from shape_core.gcode_manager import GCoder
+
 logger = logging.getLogger(__name__)
 
 
@@ -81,6 +83,8 @@ class ControllerWorker(QObject):
 
         self.active_gcode_path = ""
 
+        self.gcr = GCoder("dummy", "commander")
+
     @Slot(bool)
     def on_controller_connection(self, connected):
         if connected:
@@ -120,7 +124,13 @@ class ControllerWorker(QObject):
         self.dro_status_updated = False
 
     def send_to_tx_queue(self, data):
-        self.serialTxQueue.put(data)
+        status = self.control_controller.status
+        probe_data = self.control_controller.prb_val
+        parsered_cmd_str = self.gcr.compute_tag(data, status, probe_data)
+        logger.info(data)
+        if data != parsered_cmd_str:
+            logger.info("Tag Found: " + str(parsered_cmd_str))
+        self.serialTxQueue.put(parsered_cmd_str)
         self.serial_tx_available_s.emit()
 
     def on_poll_timeout(self):
@@ -198,8 +208,13 @@ class ControllerWorker(QObject):
 
     def execute_gcode_cmd(self, cmd_str):
         """ Send generic G-CODE command coming from elsewhere. """
-        logger.debug(cmd_str)
-        self.serial_send_s.emit(cmd_str)
+        print("Execute Gcode")
+        status = self.control_controller.status
+        probe_data = self.control_controller.prb_val
+        parsered_cmd_str = self.gcr.compute_tag(cmd_str, status, probe_data)
+        #logger.debug(parsered_cmd_str)
+        logger.info("Sent GCODE: " + str(parsered_cmd_str))
+        self.serial_send_s.emit(parsered_cmd_str)
 
     def cmd_probe(self, probe_z_max, probe_feed_rate):
         probe_cmd_s = self.control_controller.cmd_probe(probe_z_max, probe_feed_rate)
@@ -293,9 +308,12 @@ class ControllerWorker(QObject):
         self.buffered_size = 0
 
     def pause_resume(self):
+        logger.info("Status: " + str(self.control_controller.status))
         if "hold" in self.control_controller.status.lower():
+            logger.info("UnHold")
             self.execute_gcode_cmd(b"~")
         else:
+            logger.info("Hold")
             self.execute_gcode_cmd(b"!")
 
     def get_boundary_box(self):

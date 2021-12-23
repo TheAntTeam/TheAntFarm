@@ -283,6 +283,7 @@ class GCoder:
 
         gc = ""
         gc += self.gcode_comment("The Ant Tool Change")
+
         # super safe Z position
         gc += "F60\n"
         gc += "G54\n"
@@ -292,17 +293,13 @@ class GCoder:
         gc += "G01 F10\n"
         gc += "G38.2 Z" + z_str + "\n"
         gc += "G01 F60\n"
-        # change position coordinates system
-        # and zeroing Z
-        gc += "G55\n"
-        gc += "G10 P2 L20 Z" + zero_str + "\n"
         # move to change tool position (MACHINE SYSTEM COORD)
         gc += "G53 G00 Z" + z_ct_str + "\n"
         gc += "G53 G00 X" + x_ct_str + "\n"
         gc += "G53 G00 Y" + y_ct_str + "\n"
         # wait for the change tool
-        #gc += "M0\n"
-        # go to probe position and performe a probe (G55 WORK SYSTEM COORD)
+        gc += "M0\n"
+        # go to probe position and performe a probe (G54 WORK SYSTEM COORD)
         gc += "G53 G01 Z" + z_m_one + "\n"
         gc += "G54\n"
         gc += "G00 X" + x_str + " Y" + y_str + "\n"
@@ -310,14 +307,23 @@ class GCoder:
         gc += "G38.2 Z" + z_str + "\n"
         gc += "G01 F60\n"
         # add tool offset
-        gc += "G55\n"
-        gc += "G92 Z" + zero_str + "\n"
-        # move on original WORKING COORD SYSTEM
-        gc += "G54\n"
+        pre_z_probe_tag = self.get_pre_z_probe_tag()
+        gc += "G10 P2 L20 Z" + pre_z_probe_tag + "\n"
         # return to WP Zero
         gc += "G53 G01 Z" + z_m_one + " F60\n"
         gc += "G00 X" + zero_str + " Y" + zero_str + "\n"
         return gc
+
+    def get_pre_z_probe_tag(self):
+        return "@pre_z_probe"
+
+    def compute_tag(self, gc_str, status, probe_data):
+        ret_str = gc_str
+        tag = self.get_pre_z_probe_tag()
+        if tag in gc_str:
+            pre_probe = self.format_float(probe_data[1][2])
+            ret_str = gc_str.replace(tag, pre_probe)
+        return ret_str
 
     def go_tool_change(self):
         gc = self.get_tool_change_string()
@@ -608,7 +614,7 @@ class GCodeParser:
                     # ha caricato il file gcode
                     # come primo step va tipizzata ogni linea
                     self.gc = GCode(lines)
-                    #self.pre_parsing()
+                    self.pre_parsing()
         else:
             print("Invalid GCode File Path")
 
@@ -660,6 +666,9 @@ class GCodeParser:
                         data = data.lower()
                         splitted = re.findall(r'[a-z][-]*[\d.]+', data)
 
+                        # detect tags (remember, tags cannot be used in motion commands)
+                        tags = re.findall(r'[a-z][@]*[a-z_]+', data)
+
                         cmd = splitted.pop(0)
                         ct = cmd[0]
                         cd = [int(x) for x in cmd[1::].split(".")]
@@ -669,7 +678,10 @@ class GCodeParser:
                         params = od({})
                         for p in par:
                             params[p[0]] = float(p[1::])
+                        for t in tags:
+                            params[t[0]] = t[1::]
                         gcl.params = params
+                    print(gcl)
                     gcll.append(gcl)
             if single_line is None:
                 self.gc.gcll = gcll
