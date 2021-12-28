@@ -56,6 +56,7 @@ class ControllerWorker(QObject):
         self.status_to_ack = 0
         self.buffered_cmds = []
         self.cmds_to_ack = 0
+        self.wait_tag_decoding = False
         self.dro_status_updated = False
 
         self.abl_apply_active = True
@@ -124,12 +125,8 @@ class ControllerWorker(QObject):
         self.dro_status_updated = False
 
     def send_to_tx_queue(self, data):
-        status = self.control_controller.status
-        probe_data = self.control_controller.prb_val
-        parsered_cmd_str = self.gcr.compute_tag(data, status, probe_data)
+        parsered_cmd_str = self.decode_tag(data)
         logger.info(data)
-        if data != parsered_cmd_str:
-            logger.info("Tag Found: " + str(parsered_cmd_str))
         self.serialTxQueue.put(parsered_cmd_str)
         self.serial_tx_available_s.emit()
 
@@ -179,19 +176,48 @@ class ControllerWorker(QObject):
                             self.file_progress = (self.ack_lines / self.tot_lines) * 100
                             logger.debug("Acknowledged lines: " + str(self.ack_lines))
                             self.update_file_progress_s.emit(self.file_progress)
-                            if self.sent_lines < self.tot_lines and \
-                                    (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE:
+
+                            # all lines have been sent?
+                            end_of_file = self.sent_lines >= self.tot_lines
+                            print("End Of File: " + str(end_of_file))
+                            if not end_of_file:
                                 cmd_to_send = self.file_content[self.sent_lines]
+                                # check if next command has tags
+                                print("Cmd To Send: " + str(cmd_to_send))
+                                if self.gcr.TAG in cmd_to_send:
+                                    print("TAG Found")
+                                    # if self.cmds_to_ack > 0:
+                                    logger.info(str(self.ack_lines) + " <-> " + str(self.sent_lines))
+                                    if self.ack_lines != self.sent_lines:
+                                        # wait that the machine execute all previous lines
+                                        # to be able to decode the tag
+                                        print("Wait")
+                                        self.wait_tag_decoding = True
+                                    else:
+                                        # machine execution queue is empty, let's go
+                                        print("Run")
+                                        self.wait_tag_decoding = False
+
+                                # does data fit the buffer?
+                                buff_available = (self.buffered_size + len(cmd_to_send)) < self.REMOTE_RX_BUFFER_MAX_SIZE
+                            else:
+                                self.wait_tag_decoding = False
+                                buff_available = False
+
+                            if not end_of_file and buff_available and not self.wait_tag_decoding:
+                                # cmd_to_send = self.file_content[self.sent_lines]
                                 self.send_to_tx_queue(cmd_to_send)
                                 self.buffered_cmds.append(cmd_to_send)
                                 logger.debug("TX:" + cmd_to_send)
                                 self.buffered_size += len(cmd_to_send)
                                 self.sent_lines += 1
                                 self.cmds_to_ack += 1
+
                             if self.ack_lines == self.tot_lines:
                                 self.stop_send_s.emit()
                                 self.sending_file = False
                                 logger.info("End of File sending.")
+
                     elif "error" in element.lower():
                         self.update_console_text_s.emit(element)
                         logger.error(element)
@@ -206,12 +232,21 @@ class ControllerWorker(QObject):
             except:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
+    def decode_tag(self, gcode_str):
+        status = self.control_controller.status
+        probe_data = self.control_controller.prb_val
+        ret_str = self.gcr.compute_tag(gcode_str, status, probe_data)
+        # if self.gcr.TAG in gcode_str:
+        #     if ret_str != gcode_str:
+        #         self.wait_tag_decoding
+        if self.gcr.TAG in gcode_str:
+            logger.info("Tag Found: " + str(ret_str) + " [" + gcode_str + "]" )
+        return ret_str
+
     def execute_gcode_cmd(self, cmd_str):
         """ Send generic G-CODE command coming from elsewhere. """
         print("Execute Gcode")
-        status = self.control_controller.status
-        probe_data = self.control_controller.prb_val
-        parsered_cmd_str = self.gcr.compute_tag(cmd_str, status, probe_data)
+        parsered_cmd_str = self.decode_tag(cmd_str)
         #logger.debug(parsered_cmd_str)
         logger.info("Sent GCODE: " + str(parsered_cmd_str))
         self.serial_send_s.emit(parsered_cmd_str)
@@ -274,6 +309,7 @@ class ControllerWorker(QObject):
         # with open(gcode_path) as f:            # DEBUG: take directly from file
         #     self.file_content = f.readlines()
         logger.debug(self.file_content)
+        logger.info(self.file_content)
         if self.file_content:
             self.file_progress = 0.0
             self.cmds_to_ack = 0
@@ -306,6 +342,7 @@ class ControllerWorker(QObject):
         self.tot_lines = 0
         self.buffered_cmds = []
         self.buffered_size = 0
+        self.wait_tag_decoding = False
 
     def pause_resume(self):
         logger.info("Status: " + str(self.control_controller.status))

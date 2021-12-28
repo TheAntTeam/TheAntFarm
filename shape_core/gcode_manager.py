@@ -23,6 +23,7 @@ class GCoder:
     SAFE_ABSOLUTE_Z_PROBE = -1.0
     CHANGE_TOOL_POS = (-41.2, -120.88, -1.0)
     PROBE_TOOL_POS = (-1.0, -1.0, -11.0)
+    TAG = '@'
 
     def __init__(self, tag, machining_type='gerber', parent=None, units='ms'):
 
@@ -315,14 +316,23 @@ class GCoder:
         return gc
 
     def get_pre_z_probe_tag(self):
-        return "@pre_z_probe"
+        return "@pre_z_probe".upper()
+
+    def check_tag_in_string(self, gc_str):
+        return self.get_pre_z_probe_tag() in gc_str
 
     def compute_tag(self, gc_str, status, probe_data):
         ret_str = gc_str
         tag = self.get_pre_z_probe_tag()
-        if tag in gc_str:
+        print("-> Check TAG")
+        print("--> TAG: " + str(tag))
+        print("--> GCode: " + str(gc_str))
+        if self.check_tag_in_string(gc_str):
+            print("--> TAG in GCode Line")
             pre_probe = self.format_float(probe_data[1][2])
+            print("--> Pre Probe " + str(pre_probe))
             ret_str = gc_str.replace(tag, pre_probe)
+            print("--> Ret " + str(ret_str))
         return ret_str
 
     def go_tool_change(self):
@@ -497,15 +507,20 @@ class GCoder:
 
 class GcodeLine:
     def __init__(self):
-        self.command = ()
+        self.command = []
         self.params = od({})
         self.comment = ""
 
     def get_string(self):
         s = ""
         if self.command:
-            s += self.command[0]
-            s += ".".join([str(x) for x in self.command[1]])
+            sep = ""
+            for cmd in self.command:
+                s += sep
+                s += cmd[0]
+                s += ".".join([str(x) for x in cmd[1]])
+                sep = " "
+
         if self.params:
             for k in self.params.keys():
                 s += " " + k + str(self.params[k])
@@ -531,12 +546,15 @@ class GcodePoint:
 
     TRAVEL = "t"
     WORKING = "w"
+    WORKING_POS = "wp"
+    MACHINE_POS = "mp"
 
     def __init__(self):
         self.coords = np.zeros((3,))
         self.line = -1
         self.sub_line = 0
         self.type = self.WORKING  # w working t travel
+        self.pos = self.WORKING_POS  # wp working mp machine
         self.params = od({})
 
     def __repr__(self):
@@ -561,11 +579,15 @@ class GcodePoint:
         cnp.line = self.line
         cnp.sub_line = self.sub_line
         cnp.type = self.type
+        cnp.pos = self.pos
         cnp.params = self.params.copy()
         return cnp
 
     def get_string(self):
         s = ""
+        if self.pos == self.MACHINE_POS:
+            s += "G53 "
+
         if self.type == self.TRAVEL:
             s += "G0"
         else:
@@ -595,6 +617,7 @@ class GCodeParser:
     COORD_TAG = ['x', 'y', 'z']
     PARAM_TAG = ['f', 'p']
     CHANGE_TOOL_COMMAND = ('m', 6)
+    MACHINE_POS_COMMAND = ('g', 53)
 
     def __init__(self, cfg):
         self.gcode_path = ""
@@ -624,15 +647,23 @@ class GCodeParser:
             # per ora individua i cambio tools e li espande
             # con la corretta procedura
             ls = self.gc.original_lines
+            print("LS")
+            print(ls)
+            print("----")
             for l in ls:
+                print(l)
                 gl = self.interp(single_line=l)
                 nls = []
                 for g in gl:
-                    if g.command:
-                        if g.command[0] == self.CHANGE_TOOL_COMMAND[0] and self.CHANGE_TOOL_COMMAND[1] in g.command[1]:
-                            tool_change_gc = gcode_commander.get_tool_change_code()
-                            d = "\n"
-                            nls = [e + d for e in tool_change_gc.split(d) if e]
+                    print("G " + str(g))
+                    cmd_l = g.command
+                    print(" --> CMD: " + str(cmd_l))
+                    if cmd_l:
+                        for cmd in cmd_l:
+                            if cmd[0] == self.CHANGE_TOOL_COMMAND[0] and self.CHANGE_TOOL_COMMAND[1] in cmd[1]:
+                                tool_change_gc = gcode_commander.get_tool_change_code()
+                                d = "\n"
+                                nls = [e + d for e in tool_change_gc.split(d) if e]
                 if not nls:
                     nls = [l]
                 else:
@@ -672,7 +703,18 @@ class GCodeParser:
                         cmd = splitted.pop(0)
                         ct = cmd[0]
                         cd = [int(x) for x in cmd[1::].split(".")]
-                        gcl.command = (ct, cd)
+                        gcl.command = [(ct, tuple(cd))]
+                        # print("GCL CMD: " + str(gcl.command))
+
+                        if splitted:
+                            if splitted[0].upper().startswith("G"):
+                                # second command
+                                cmd = splitted.pop(0)
+                                ct = cmd[0]
+                                cd = [int(x) for x in cmd[1::].split(".")]
+                                gcl.command += [(ct, tuple(cd))]
+
+                        # print(gcl.command)
 
                         par = splitted
                         params = od({})
@@ -681,7 +723,7 @@ class GCodeParser:
                         for t in tags:
                             params[t[0]] = t[1::]
                         gcl.params = params
-                    print(gcl)
+                    # print(gcl)
                     gcll.append(gcl)
             if single_line is None:
                 self.gc.gcll = gcll
@@ -724,12 +766,20 @@ class GCodeParser:
             bb_min = [1e6, 1e6, 1e6]
             for i, gcl in enumerate(self.gc.gcll):
                 if gcl.command:
-                    # print(gcl)
-                    cn = gcl.command[0]
-                    ci = gcl.command[1][0]
-                    if cn == 'g' and ci < 2:
-                        # e' un comando di movimento vado ad aggiornare la lista
-                        # dei vettori
+                    first_cmd = gcl.command[0]
+                    last_cmd = gcl.command[-1]
+
+                    # check for position command
+                    machine_pos = False
+                    if first_cmd != last_cmd:
+                        if first_cmd[0] == self.MACHINE_POS_COMMAND[0] and self.MACHINE_POS_COMMAND[1] in first_cmd[1]:
+                            machine_pos = True
+
+                    cn = last_cmd[0]
+                    ci = last_cmd[1][0]
+                    if cn == 'g' and ci < 2 and not machine_pos:
+                        # it is a valid position command in working position system
+                        # let's vectorize it
                         a = set(gcl.params.keys())
                         b = set(self.COORD_TAG)
                         c = b.intersection(a)
@@ -743,7 +793,8 @@ class GCodeParser:
                             p = last_coord.copy()
                             px = GcodePoint()
                             px.coords = p
-                            px.type = 't' if ci == 0 else 'w'
+                            px.type = px.TRAVEL if ci == 0 else px.WORKING
+                            px.pos = px.MACHINE_POS if machine_pos else px.WORKING_POS
                             px.line = i
                             if f:
                                 for g in f:
