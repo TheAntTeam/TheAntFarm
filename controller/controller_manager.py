@@ -236,10 +236,8 @@ class ControllerWorker(QObject):
         status = self.control_controller.status
         probe_data = self.control_controller.prb_val
         ret_str = self.gcr.compute_tag(gcode_str, status, probe_data)
-        # if self.gcr.TAG in gcode_str:
-        #     if ret_str != gcode_str:
-        #         self.wait_tag_decoding
-        if self.gcr.TAG in gcode_str:
+
+        if self.gcr.TAG in str(gcode_str):
             logger.info("Tag Found: " + str(ret_str) + " [" + gcode_str + "]" )
         return ret_str
 
@@ -247,7 +245,6 @@ class ControllerWorker(QObject):
         """ Send generic G-CODE command coming from elsewhere. """
         print("Execute Gcode")
         parsered_cmd_str = self.decode_tag(cmd_str)
-        #logger.debug(parsered_cmd_str)
         logger.info("Sent GCODE: " + str(parsered_cmd_str))
         self.serial_send_s.emit(parsered_cmd_str)
 

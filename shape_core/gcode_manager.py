@@ -319,7 +319,7 @@ class GCoder:
         return "@pre_z_probe".upper()
 
     def check_tag_in_string(self, gc_str):
-        return self.get_pre_z_probe_tag() in gc_str
+        return self.get_pre_z_probe_tag() in str(gc_str)
 
     def compute_tag(self, gc_str, status, probe_data):
         ret_str = gc_str
@@ -333,6 +333,7 @@ class GCoder:
             print("--> Pre Probe " + str(pre_probe))
             ret_str = gc_str.replace(tag, pre_probe)
             print("--> Ret " + str(ret_str))
+        print(" -> Ret Val: " + str(ret_str))
         return ret_str
 
     def go_tool_change(self):

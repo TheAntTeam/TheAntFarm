@@ -4,9 +4,8 @@ import logging
 import traceback
 import string
 import random
-from collections import deque
 import numpy as np
-from collections import OrderedDict
+from collections import OrderedDict, deque
 from shape_core.gcode_manager import GCoder, GCodeParser, GCodeLeveler
 
 logger = logging.getLogger(__name__)
