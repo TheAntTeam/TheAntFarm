@@ -10,12 +10,12 @@ from shapely.geometry import LineString
 
 
 class GCoder:
-    # this class could be the parent class
-    # which will then be used to diversify the
-    # gcode based on the controller that will have to interpret it
-    # of course this will be based on The Ant
-    # so it will natively support the grbl mod that
-    # we use as firmware.
+    """ This class could be the parent class
+        which will then be used to diversify the
+        gcode based on the controller that will have to interpret it
+        of course this will be based on The Ant
+        so it will natively support the grbl mod that
+        we use as firmware. """
 
     DIGITS = 4
     STEPS = 3
