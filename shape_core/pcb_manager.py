@@ -9,7 +9,6 @@ from gerber.utils import convex_hull
 from collections import OrderedDict as Od
 
 from .geometry_manager import Geom, merge_polygons
-# from .plot_stuff import plot_vertices, plot_shapely
 
 
 class PcbObj:
@@ -157,13 +156,9 @@ class PcbObj:
             subdivisions = 4
         elif isinstance(primitive.aperture, gbr.primitives.Circle):
             radius = primitive.aperture.radius
-            #print("Radius: " + str(radius))
             subdivisions = 60
 
         if radius != 0.0:
-            # print(radius)
-            # print(start)
-            # print(end)
             sr = abs(complex(*start) - complex(*end))
             if sr == 0.0:
                 sr += 2.0 * math.pi
@@ -181,25 +176,14 @@ class PcbObj:
             end_theta = - math.pi / 2.0 + theta + math.pi
             points += self._arc_segmentation(end, radius, end_theta, start_theta,
                                              forced_divisions=int(subdivisions/2))
-            #print(len(points))
 
-            # if isinstance(primitive.aperture, gbr.primitives.Rectangle) and False:
-            #     fig, ax = plt.subplots(1, 1)
-            #     ax.plot(*zip(*points))
-            #     pts = convex_hull(points)
-            #     ax.plot(*zip(*pts))
-            #     line = [start, end]
-            #     ax.plot(*zip(*line), '-o')
-            #     ax.set_aspect('equal', 'box')
-            #     fig.tight_layout()
-            #     plt.show()
             return convex_hull(points)
         else:
             return [primitive.start, primitive.end]
 
     @staticmethod
     def _get_region_polygon(gdata):
-        # poligono di timpo EAGLE
+        # EAGLE type polygon
         points = []
         for g in gdata:
             points += g["points"]
@@ -209,71 +193,69 @@ class PcbObj:
             gdata = []
             verbose_flag = False
             if isinstance(primitive, gbr.primitives.Outline):
-                # tipo closed line
+                # closed line type
                 if verbose_flag:
                     print("Closed line")
                 points = primitive.vertices
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Line):
                 closed_flag = True
-                # tipo open line
+                # open line type
                 if verbose_flag:
                     print("Open line")
                 points = primitive.vertices
+
                 if isinstance(primitive.aperture, gbr.primitives.Circle):
                     if verbose_flag:
                         print("\t with rounded end")
                         pts = [primitive.start, primitive.end]
                         print(pts)
                     if not region:
-                        # print("\t with flat end")
                         points = self._get_enhanced_line(primitive)
                     else:
                         points = [primitive.start, primitive.end]
                         closed_flag = False
-                    # print("Rounded Line ", len(points))
+
                 if isinstance(primitive.aperture, gbr.primitives.Rectangle):
                     if not region:
-                        # print("\t with flat end")
                         points = self._get_enhanced_line(primitive)
                     else:
                         points = [primitive.start, primitive.end]
                         closed_flag = False
-                        # print("\t with point end")
+
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': closed_flag}]
                 if points is None:
                     points = [primitive.start, primitive.end]
                     gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
+
             elif isinstance(primitive, gbr.primitives.Arc):
-                # tipo open line arc
+                # open line arc type
                 if verbose_flag:
                     print("Arc")
                 p = primitive
                 points = self._arc_segmentation(p.center, p.radius, p.start_angle, p.end_angle)
-                # print("Arc ", len(points))
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
             elif isinstance(primitive, gbr.primitives.Rectangle):
-                # tipo polygon
+                # rectangle type
                 if verbose_flag:
                     print("Rectangle")
                 points = primitive.vertices
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Polygon):
-                # tipo polygon
+                # polygon type
                 if verbose_flag:
                     print("Polygon")
                 points = primitive.vertices
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Circle):
-                # tipo polygon
+                # circle type
                 if verbose_flag:
                     print("Circle")
                 p = primitive
                 points = self._arc_segmentation(p.position, p.radius, 0, 2 * math.pi)
-                # print("Arc ", len(points))
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Obround):
-                # tipo polygon
+                # obround type
                 if verbose_flag:
                     print("Obround")
                 p = primitive
@@ -282,10 +264,9 @@ class PcbObj:
                 points1 = self._arc_segmentation(circle1.position, circle1.radius, 0, 2 * math.pi)
                 points2 = self._arc_segmentation(circle2.position, circle2.radius, 0, 2 * math.pi)
                 points = convex_hull(points1 + points2)
-                # print("Obround ", len(points))
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Region) or isinstance(primitive, gbr.primitives.AMGroup):
-                # tipo group
+                # group type
                 if verbose_flag:
                     if region:
                         print("Region of Region")
@@ -300,7 +281,7 @@ class PcbObj:
                         gdata += self._primitive_paths(p, region=True)
                         lines_flag &= isinstance(p, gbr.primitives.Line)
                     if lines_flag:
-                        # controllo che la linea sia chiusa
+                        # check if the line is closed
                         p0 = primitive.primitives[0]
                         p1 = primitive.primitives[-1]
                         if p0.start != p1.end:
@@ -311,16 +292,15 @@ class PcbObj:
                         points = self._get_region_polygon(gdata)
                         gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
             elif isinstance(primitive, gbr.primitives.Drill):
-                # tipo drill
+                # drill type
                 if verbose_flag:
                     print("Drill")
                 p = primitive
                 points = self._arc_segmentation(p.position, p.radius, 0, 2 * math.pi)
-                # print("Drill ", len(points))
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
 
             # elif isinstance(primitive, gbr.primitives.AMGroup):
-            #     # tipo group
+            #     # group type
             #     if verbose_flag:
             #         print("AMGroup")
             #     if primitive.primitives is not None:

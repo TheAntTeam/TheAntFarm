@@ -1,23 +1,10 @@
-#
 import time
 import pyclipper as pc
 import shapely.geometry as shg
 from shapely.ops import cascaded_union
 
-# import matplotlib.pyplot as plt
-# from collections import OrderedDict as Od
 from .plot_stuff import plot_polygons, plot_shapely
 from .pyclipper2shapely import polytree_to_shapely
-
-#
-#
-#
-
-from OpenGL.GLU import *
-# from OpenGL.GL import *
-# from pygame.locals import *
-# import pygame
-# import sys
 
 
 def merge_polygons_path(poly_set, as_list=False):
@@ -46,12 +33,10 @@ def merge_polygons_path(poly_set, as_list=False):
                 tmp = [geoms.pop(0)]
                 for l in geoms:
                     if not pc.Orientation(l):
-                        # print("trovato FOROOOOO")
+                        # hole detected
                         tmp.append(l)
                     else:
                         g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True).geom
-                        #if len(tmp) > 1:
-                        #    plot_polygons([g], color='green')
                         merged.append(g)
                         tmp = [l]
                 if tmp:
@@ -59,11 +44,8 @@ def merge_polygons_path(poly_set, as_list=False):
                     merged.append(g)
     else:
         for i, p in enumerate(poly_set):
-            #print(list(p.exterior.coords))
             poly_set[i] = p = p.buffer(0)
             if not p.is_valid:
-                # print(list(p.exterior.coords))
-                # print(p.is_valid)
                 plot_shapely([p])
         merged = cascaded_union(poly_set)
         if merged.geom_type != "MultiPolygon":
@@ -107,14 +89,11 @@ def offset_polygon(polyg, offset, shapely_poly=False):
     use_shapely = True
 
     if not use_shapely:
-        # print("Polygon")
-        t0 = time.time()
+        # t0 = time.time()
         if shapely_poly:
             poly = polyg
         else:
             poly = polyg.geom
-        # if len(poly) > 1:
-        #    print("IN MULTIPOLYGONS")
 
         ext = poly.exterior.coords
         mmp = [ext]
@@ -145,6 +124,8 @@ def offset_polygon(polyg, offset, shapely_poly=False):
             opoly = merged[0]
         else:
             opoly = shg.MultiPolygon(merged)
+        # t1 = time.time()
+        # print("\t-Time " + str(t1-t0))
 
     else:
         if shapely_poly:
@@ -152,11 +133,7 @@ def offset_polygon(polyg, offset, shapely_poly=False):
         else:
             opoly = polyg.geom.buffer(offset)
 
-    # print(type(opoly))
     opoly = opoly.simplify(0.001, preserve_topology=True)
-
-    t1 = time.time()
-    # print("\t-Time " + str(t1-t0))
 
     return opoly
 
@@ -181,8 +158,7 @@ def offset_polygon_old(polyg, offset, shapely_poly=False):
     use_shapely = True
 
     if not use_shapely:
-        # print("Polygon")
-        t0 = time.time()
+        # t0 = time.time()
         if shapely_poly:
             poly = polyg
         else:
@@ -206,16 +182,13 @@ def offset_polygon_old(polyg, offset, shapely_poly=False):
             opoly = None
             print("[WARNING] OFFSET JUST HOLES")
             print(oint)
+        # t1 = time.time()
+        # print("\t-Time " + str(t1-t0))
     else:
         if shapely_poly:
             opoly = polyg.buffer(offset)
         else:
             opoly = polyg.geom.buffer(offset)
-
-    # print(type(opoly))
-
-    t1 = time.time()
-    # print("\t-Time " + str(t1-t0))
 
     return opoly
 
@@ -260,7 +233,7 @@ def _offset_polylist(mp, offset_in, scale=True):
 
 def _offset_multiple_polylist(mmp, offset_in, scale=True):
 
-    t0 = time.time()
+    # t0 = time.time()
     pco = pc.PyclipperOffset()
     polysl = mmp
 
@@ -319,57 +292,44 @@ def _merge_poly_set(poly_set, pure_merge=False):
 
         if to_merge or pure_merge:
             to_merge += init_holes
-            # se ci sono immagini clear
-            # mi preparo per il clipping
-            # ai fori che devo fare aggiungo quelli già calcolati dal merge precedente se ce ne sono
+            # if there are clear image
+            # get ready for clipping
+            # of the whole holes
             if dark_poly_sh.geom_type == "MultiPolygon":
                 for dk in dark_poly_sh:
                     dark_poly.append(dk.exterior.coords)
-                    # aggiungo i fori dei darkpoly alle forme da sotrarre
+                    # add the holes of the darkpoly to the shapes to be subtracted
                     for i in dk.interiors:
                         to_merge.append(i.coords)
             else:
                 dark_poly = [dark_poly_sh.exterior.coords]
-                # aggiungo i fori dei darkpoly alle forme da sotrarre
+                # add the holes of the darkpoly to the shapes to be subtracted
                 for i in dark_poly_sh.interiors:
                     to_merge.append(i.coords)
-            # ora in dark_poly ho solo i poligoni esterni
-            # e in to_merge i fori clear + quelli creati nel merge precedente
+            # now in dark_poly there are external polygon only
+            # in to_merge there are clear holes plus the ones from the previous merge
             if to_merge:
-                # print("Son QUI")
                 dark_poly_sh = _clip_polylist_sh(to_merge, dark_poly)
-            # if dark_poly_sh.geom_type == "MultiPolygon":
-            #     plot_shapely(dark_poly_sh, color="green")
-            # else:
-            #     plot_shapely([dark_poly_sh], color="green")
         else:
-            # sono solo immagini dark quindi ho già le geom pronte.
-            # genero quindi i miei geom
-            # if dark_poly_sh.geom_type == "MultiPolygon":
-            #     plot_shapely(dark_poly_sh, color="blue")
-            # else:
-            #     plot_shapely([dark_poly_sh], color="blue")
+            # just dark images so the geoms are ready, no boolean operation needed
             pass
 
         merged = []
         if dark_poly_sh.geom_type == "MultiPolygon":
             for dk in dark_poly_sh:
                 tmp = [dk.exterior.coords]
-                # aggiungo i fori dei darkpoly alle forme da sotrarre
+                # add the holes of the darkpoly to the shapes to be subtracted
                 for i in dk.interiors:
                     tmp.append(i.coords)
                 g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
                 merged.append(g)
         else:
             tmp = [dark_poly_sh.exterior.coords]
-            # aggiungo i fori dei darkpoly alle forme da sotrarre
+            # add the holes of the darkpoly to the shapes to be subtracted
             for i in dark_poly_sh.interiors:
                 tmp.append(i.coords)
             g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
             merged.append(g)
-        # tmp = [g.geom for g in merged]
-        # plot_shapely(tmp, color="red")
-
     return merged
 
 
@@ -386,16 +346,13 @@ def merge_polygons(mp):
 
     for p in mp:
         if p.geom:
-            # plot_shapely([p.geom])
-            # print(p.polarity)
             if p.closed:
-                # appendo nella lista tutti i poligoni chiusi fino a quando non ne incontro uno
-                # clear, a quel punto faccio l'or dei poligoni dark e sottraggo quello clear
-                # metto il risultato nella lista di poligoni trattati
+                # append closed polygon to the list until found a clear one.
+                # at this point, merge all the polygons in the list and subtract
+                # the clear one, putting the result in the treated polygons list
                 if p.polarity == 'dark':
                     if pre_pol == 'clear':
-                        # generare i poligoni qui
-                        # print(poly_set)
+                        # merge all polygons in the list
                         if poly_set:
                             merged += _merge_poly_set(poly_set)
                         poly_set = [[p], []]
@@ -412,12 +369,9 @@ def merge_polygons(mp):
     print("Geom Collected")
     if poly_set[0]:
         merged += _merge_poly_set(poly_set)
-    # tmp_p = [m.geom for m in merged]
-    # plot_shapely(tmp_p, color="orange")
 
     print("Final Merging")
     start_time = time.time()
-    # merged_final = _merge_poly_set([merged, []], pure_merge=True)
 
     merged_final = []
     tmp_p = [m.geom for m in merged]
@@ -425,22 +379,20 @@ def merge_polygons(mp):
     if tmp_final.geom_type == "MultiPolygon":
         for f in tmp_final:
             tmp = [f.exterior.coords]
-            # aggiungo i fori dei darkpoly alle forme da sotrarre
+            # add the holes of the darkpoly to the shapes to be subtracted
             for i in f.interiors:
                 tmp.append(i.coords)
             g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
             merged_final.append(g)
     else:
         tmp = [tmp_final.exterior.coords]
-        # aggiungo i fori dei darkpoly alle forme da sotrarre
+        # add the holes of the darkpoly to the shapes to be subtracted
         for i in tmp_final.interiors:
             tmp.append(i.coords)
         g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
         merged_final.append(g)
 
     layer = merged_final
-    # tmp_p = [m.geom for m in layer]
-    # plot_shapely(tmp_p)
     print("--- %s seconds ---" % (time.time() - start_time))
 
     return layer, others
@@ -489,7 +441,6 @@ def _clip_polylist_sh(clip_in, subj_in, scale=True):
     if scale:
         subj = pc.scale_to_clipper(subj_in)
 
-    results = []
     pco.AddPaths(clip, pc.PT_CLIP, True)
     pco.AddPaths(subj, pc.PT_SUBJECT, True)
     sol_tree = pco.Execute2(pc.CT_DIFFERENCE, pc.PFT_EVENODD, pc.PFT_EVENODD)
@@ -522,7 +473,7 @@ def _clip_polylist(clip_in, subj_in, scale=True):
 
 
 def get_bbox_area_sh(geom):
-    # (minx, miny, maxx, maxy)
+    # (x_min, y_min, x_max, y_max)
     bb = geom.bounds
     a = (bb[2] - bb[0]) * (bb[3] - bb[1])
     return a
@@ -538,12 +489,10 @@ class Geom:
         self.geom = self._make_geom()
 
     def _make_geom(self):
-        # print("Make Geometry")
         geom = None
         if self.points:
             if self.closed:
                 if self.complex:
-                    # print("Complex")
                     pts = self.points[:]
                     ext = pts.pop(0)
                     holes = pts

@@ -5,18 +5,17 @@ import time
 import numpy as np
 from collections import OrderedDict as od
 from datetime import datetime
-#import matplotlib.pyplot as plt
 import scipy.interpolate as spi
 from shapely.geometry import LineString
 
 
 class GCoder:
-    # questa classe potrebbe essere la classe principale
-    # che poi verra' utilizzata per diversificare i
-    # gcode in base al controller che dovra' interpretarlo
-    # naturalmente questa sara' basata su The Ant
-    # quindi nativamente supportera' la mod di grbl che
-    # utilizziamo come firmware.
+    # this class could be the parent class
+    # which will then be used to diversify the
+    # gcode based on the controller that will have to interpret it
+    # of course this will be based on The Ant
+    # so it will natively support the grbl mod that
+    # we use as firmware.
 
     DIGITS = 4
     STEPS = 3
@@ -32,13 +31,15 @@ class GCoder:
 
         self.mill = True
 
-        self.change_tool_pos = self.CHANGE_TOOL_POS  # todo: vanno parametrizzati
-        self.probe_tool_pos = self.PROBE_TOOL_POS  # todo: vanno parametrizzati
-        self.safe_absolute_z_probe = self.SAFE_ABSOLUTE_Z_PROBE # todo: vanno parametrizzati
+        self.change_tool_pos = self.CHANGE_TOOL_POS  # todo: must be parametrized
+        self.probe_tool_pos = self.PROBE_TOOL_POS  # todo: must be parametrized
+        self.safe_absolute_z_probe = self.SAFE_ABSOLUTE_Z_PROBE  # todo: must be parametrized
 
         # units:
         # ms -> metric system
         # is -> imperial system
+        # todo: check the functionalities of unit conversion
+
         self.units = units
 
         self.geom_list = []
@@ -111,8 +112,7 @@ class GCoder:
         return True
 
     def compute_drill(self):
-        # computa il gcode relativo alla
-        # generazione dei fori
+        # compute GCode from a drill path
 
         self.gcode = []
         self.create_header()
@@ -129,30 +129,27 @@ class GCoder:
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-        #self.write(self.get_file_name())
-
     def compute_gerber(self):
-        # essenzialmente si tratta di seguire i punti indicati dai paths
-        # unendoli con movimenti veloci.
-        # il formato del gcode, le info contenute e il tipo di file
-        # potranno essere scelti nei settings
-        # per ora creo il gcode con le sole info utili
+        # essentially it's about following the points indicated by the paths
+        # joining them with fast movements.
+        # the format of the gcode, the info contained and the file type
+        # can be chosen in the settings
 
         self.gcode = []
         self.create_header()
         self.add_job_info()
         self.add_init()
 
-        # todo: aggiungere user head and foot
+        # todo: add user head and foot
 
         self.go_travel()
         self.spindle_on(True)
 
-        # ora per ogni path disponibile
-        # raggiungo il punto iniziale
-        # vado in modalita' mill
-        # seguo il path ed infine mi rimetto
-        # in modalita' travel
+        # for each available path
+        # reach the starting point
+        # go into mill mode
+        # follow the path and finally
+        # return in travel mode
 
         for d in self.path:
             paths = d[1]
@@ -161,32 +158,28 @@ class GCoder:
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-        #self.write(self.get_file_name())
-
     def compute_pocketing(self):
-        # essenzialmente si tratta di seguire i punti indicati dai paths
-        # unendoli con movimenti veloci.
-        # in aggiunta nel caso ci fosse un cfg valido di multipassaggio
-        # eseguo le n passate necessarie
-        # il formato del gcode, le info contenute e il tipo di file
-        # potranno essere scelti nei settings
-        # per ora creo il gcode con le sole info utili
+        # same concept of the milling method
+        # in addition, in case there is a valid multipass cfg
+        # execute the n necessary passes
+        # the format of the gcode, the info contained and the file type
+        # can be chosen in the settings
 
         self.gcode = []
         self.create_header()
         self.add_job_info()
         self.add_init()
 
-        # todo: aggiungere user header and footer
+        # todo: add user header and footer
 
         self.go_travel()
         self.spindle_on(True)
 
-        # ora per ogni path disponibile
-        # raggiungo il punto iniziale
-        # vado in modalita' mill
-        # seguo il path ed infine mi rimetto
-        # in modalita' travel
+        # for each available path
+        # reach the starting point
+        # go into mill mode
+        # follow the path and finally
+        # return in travel mode
 
         multi_pass = False
         if self.cfg['multi_depth']:
@@ -199,12 +192,8 @@ class GCoder:
                 sign = cut/abs(cut)
                 dpp = self.cfg['depth_per_pass']
                 n = int(abs(cut)//dpp)
-                # print("cut " + str(cut))
-                # print("dpp " + str(dpp))
-                # print("N " + str(n))
                 pass_list = [sign * dpp * x for x in range(1, n)] + [cut]
                 pass_list.sort(reverse=True)
-                # print("Pass List: " + str(pass_list))
                 self.compute_pocketing_paths(paths, pass_list)
             else:
                 self.compute_gerber_paths(paths)
@@ -212,14 +201,16 @@ class GCoder:
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-        #self.write(self.get_file_name())
-
     def compute_drill_paths(self, paths):
-        # imposto la velocita' di lavoro
-        # per z
+
+        # set the working feed rate
+        # of the Z axis
         zf = self.cfg['z_feedrate']
         zf_str = self.format_float(zf)
         self.gcode.append("G01 F" + zf_str + "\n")
+
+        # search for a tool change
+        # command
         tool_change = False
         for p in paths:
             cs = list(p.coords)
@@ -232,7 +223,6 @@ class GCoder:
             tool_change = True
 
     def compute_gerber_paths(self, paths):
-        # print(paths)
         for p in paths:
             cs = list(p.coords)
             self.go_to(cs.pop(0))
@@ -242,7 +232,6 @@ class GCoder:
             self.go_travel()
 
     def compute_pocketing_paths(self, paths, pass_list):
-        # print(paths)
         for p in paths:
             rev = True
             orig_cs = list(p.coords)
@@ -255,7 +244,6 @@ class GCoder:
                 cs = orig_cs.copy()
                 if rev:
                     cs.reverse()
-                # cs.pop(0)
                 rev = not rev
             self.go_travel()
 
@@ -289,27 +277,33 @@ class GCoder:
         gc += "F60\n"
         gc += "G54\n"
         gc += "G53 G00 Z" + z_m_one + " F60\n"
-        # go to probe position and performe a probe (G54 WORK SYSTEM COORD)
+
+        # go to probe position and perform a probe (G54 WORK SYSTEM COORD)
         gc += "G00 X" + x_str + " Y" + y_str + "\n"
         gc += "G01 F10\n"
         gc += "G38.2 Z" + z_str + "\n"
         gc += "G01 F60\n"
+
         # move to change tool position (MACHINE SYSTEM COORD)
         gc += "G53 G00 Z" + z_ct_str + "\n"
         gc += "G53 G00 X" + x_ct_str + "\n"
         gc += "G53 G00 Y" + y_ct_str + "\n"
+
         # wait for the change tool
         gc += "M0\n"
-        # go to probe position and performe a probe (G54 WORK SYSTEM COORD)
+
+        # go to probe position and perform a probe (G54 WORK SYSTEM COORD)
         gc += "G53 G01 Z" + z_m_one + "\n"
         gc += "G54\n"
         gc += "G00 X" + x_str + " Y" + y_str + "\n"
         gc += "G01 F10\n"
         gc += "G38.2 Z" + z_str + "\n"
         gc += "G01 F60\n"
+
         # add tool offset
         pre_z_probe_tag = self.get_pre_z_probe_tag()
         gc += "G10 P2 L20 Z" + pre_z_probe_tag + "\n"
+
         # return to WP Zero
         gc += "G53 G01 Z" + z_m_one + " F60\n"
         gc += "G00 X" + zero_str + " Y" + zero_str + "\n"
@@ -324,16 +318,9 @@ class GCoder:
     def compute_tag(self, gc_str, status, probe_data):
         ret_str = gc_str
         tag = self.get_pre_z_probe_tag()
-        print("-> Check TAG")
-        print("--> TAG: " + str(tag))
-        print("--> GCode: " + str(gc_str))
         if self.check_tag_in_string(gc_str):
-            print("--> TAG in GCode Line")
             pre_probe = self.format_float(probe_data[1][2])
-            print("--> Pre Probe " + str(pre_probe))
             ret_str = gc_str.replace(tag, pre_probe)
-            print("--> Ret " + str(ret_str))
-        print(" -> Ret Val: " + str(ret_str))
         return ret_str
 
     def go_tool_change(self):
@@ -344,9 +331,9 @@ class GCoder:
         steps = self.STEPS
         gc = ""
 
-        # eseguo il foro in n steps
-        # forando e tornando a zero per
-        # scaricare la punta
+        # drill the hole in n steps
+        # drilling and returning to zero for
+        # unload the tip
 
         z_zero_str = self.format_float(0.0)
         z_drill = self.cfg['cut']
@@ -461,29 +448,30 @@ class GCoder:
         return c
 
     def get_autobed_leveling_code(self, xy_c_l, travel_z, probe_z_max, probe_feed_rate):
+        # todo: change this part using methods to create the GCode
         abl_cmd_ls = []
         abl_cmd_s = ""
-        abl_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
+        abl_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # set probe feed rate
 
         prb_num_todo = 0
         for coord in xy_c_l:
             prb_num_todo += 1
-            abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
-            abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + "\n"  # Go to XY coordinate
-            abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
-            abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+            abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
+            abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + "\n"  # go to XY coordinate
+            abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # set probe command
+            abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
             abl_cmd_ls.append(abl_cmd_s)
             abl_cmd_s = ""
 
         abl_cmd_s = ""
-        abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
+        abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
         abl_cmd_s += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
                           str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
-        abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # Set probe command
+        abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # set probe command
         prb_num_todo += 1
-        abl_cmd_s += "G10 P1 L20 Z0\n"  # Set Z zero
-        abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # Get to safety Z Travel
-        abl_cmd_s += "G00 X" + str(xy_c_l[0][0]) + "Y" + str(xy_c_l[0][1]) + "\n"  # Go 1st XY coordinate
+        abl_cmd_s += "G10 P1 L20 Z0\n"  # set Z zero
+        abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
+        abl_cmd_s += "G00 X" + str(xy_c_l[0][0]) + "Y" + str(xy_c_l[0][1]) + "\n"  # go 1st XY coordinate
         abl_cmd_ls.append(abl_cmd_s)
 
         return abl_cmd_ls, prb_num_todo
@@ -632,12 +620,11 @@ class GCodeParser:
             self.gcode_path = gcode_path
             with open(self.gcode_path) as f:
                 lines = f.readlines()
-                print("Lines")
-                print(lines)
                 if lines:
-                    # ha caricato il file gcode
-                    # come primo step va tipizzata ogni linea
+                    # GCode file loaded
                     self.gc = GCode(lines)
+                    # preparsing the GCode to pre-analyze
+                    # it and introduce macros
                     self.pre_parsing()
         else:
             print("Invalid GCode File Path")
@@ -645,20 +632,14 @@ class GCodeParser:
     def pre_parsing(self):
         gcode_commander = GCoder("dummy", "commander")
         if self.gc is not None:
-            # per ora individua i cambio tools e li espande
-            # con la corretta procedura
+            # locate the tools change and expand them
+            # with the correct macro introducing tags
             ls = self.gc.original_lines
-            print("LS")
-            print(ls)
-            print("----")
             for l in ls:
-                print(l)
                 gl = self.interp(single_line=l)
                 nls = []
                 for g in gl:
-                    print("G " + str(g))
                     cmd_l = g.command
-                    print(" --> CMD: " + str(cmd_l))
                     if cmd_l:
                         for cmd in cmd_l:
                             if cmd[0] == self.CHANGE_TOOL_COMMAND[0] and self.CHANGE_TOOL_COMMAND[1] in cmd[1]:
@@ -669,7 +650,6 @@ class GCodeParser:
                     nls = [l]
                 else:
                     print("Tool Change Detected!")
-                    print(nls)
                 self.gc.modified_lines += nls
 
     def interp(self, single_line=None):
@@ -691,9 +671,9 @@ class GCodeParser:
                 data, comment = tmp[0:2]
                 if data or comment:
                     gcl = GcodeLine()
-                    # salvo l'eventuale commento
+                    # store the comment if needed
                     gcl.comment = comment.strip()
-                    # decodifico l'eventuale comando
+                    # decode the commands
                     if data:
                         data = data.lower()
                         splitted = re.findall(r'[a-z][-]*[\d.]+', data)
@@ -705,7 +685,6 @@ class GCodeParser:
                         ct = cmd[0]
                         cd = [int(x) for x in cmd[1::].split(".")]
                         gcl.command = [(ct, tuple(cd))]
-                        # print("GCL CMD: " + str(gcl.command))
 
                         if splitted:
                             if splitted[0].upper().startswith("G"):
@@ -715,8 +694,6 @@ class GCodeParser:
                                 cd = [int(x) for x in cmd[1::].split(".")]
                                 gcl.command += [(ct, tuple(cd))]
 
-                        # print(gcl.command)
-
                         par = splitted
                         params = od({})
                         for p in par:
@@ -724,7 +701,6 @@ class GCodeParser:
                         for t in tags:
                             params[t[0]] = t[1::]
                         gcl.params = params
-                    # print(gcl)
                     gcll.append(gcl)
             if single_line is None:
                 self.gc.gcll = gcll
@@ -738,10 +714,9 @@ class GCodeParser:
             gcv = self.gc.original_vectors
         if gcv:
             gcv_len = len(gcv)
-            # in base alla lista delle righe
             gcl = self.gc.gcll
-            #vl = gcv[1].line
-            # parto da uno perche' il primo punto e' 0.0 di default
+            # start from one because the first initial point
+            # is always in origin of the working coords system
             vi = 1
             for l in range(len(gcl)):
                 if gcv[vi].line == l:
@@ -846,12 +821,8 @@ class GCodeLeveler:
         y_max = max(y)
         vectors = []
         for yc in y:
-            #vec = (np.array((x_min, yc)), np.array((x_max, yc)))
-            #vectors.append(vec)
             vectors.append(LineString(((x_min, yc), (x_max, yc))))
         for xc in x:
-            #vec = (np.array((xc, y_min)), np.array((xc, y_max)))
-            #vectors.append(vec)
             vectors.append(LineString(((xc, y_min), (xc, y_max))))
         return vectors, (x_step, y_step)
 
@@ -873,10 +844,6 @@ class GCodeLeveler:
                 Z = np.sqrt(np.square(X) + np.square(Y))/delta_i * delta_z + delta_z0
                 X += x_min
                 Y += y_min
-                #cs = plt.contourf(X, Y, Z, cmap="bone")
-                #cbar = plt.colorbar(cs)
-                #plt.title('Grid Example')
-                #plt.show()
                 return X, Y, Z
 
     def get_grid_data(self, probe_results, steps, last_probe, wco_offset=(0, 0, 0)):
@@ -904,16 +871,14 @@ class GCodeLeveler:
                 mvl.append(cnp)
         print("Auto Bed Leveler Stop")
 
-    def apply_advanced(self):
-        # Rispetto a quello semplice che applica le info di ABL
-        # solo ai vettori originali
-        # questa routine mette in campo strategie per adattare l'intero
-        # gcode alla superficie definita dall'ABL
-        # in questo caso quindi vengono analizzati anche i segmenti del
-        # gcode e non solo i suoi punti. Analizzando quindi l'andamento della
-        # superficie di ABL sotto ogni segmento, nel caso in cui non abbia
-        # un andamento lineare, il segmento viene suddiviso in sub-segmenti
-        # in cui la variazione ABL puo' essere considerata lineare.
+    def apply_abl(self):
+        # this routine puts in place strategies to fit the whole
+        # GCode to the surface defined by the ABL
+        # analyzing the segments of the gcode and not just its points.
+        # following the trend of surface of ABL under each segment,
+        # in case it has not a linear trend, the segment is divided
+        # into sub-segments in which the ABL variation can be considered linear.
+
         if self.gc is not None and self.ig is not None:
             ta = time.time()
             print("Advanced Auto Bed Leveler Start")
@@ -964,7 +929,7 @@ class GCodeLeveler:
         i_l = []
         line1 = LineString([a1, a2])
         for s in self.grid_lines:
-            line2 = s  # LineString([s[0], s[1]])
+            line2 = s
             i = line1.intersection(line2)
             if i:
                 i_l.append(i)
@@ -985,4 +950,4 @@ if __name__ == "__main__":
     #abl = GCodeLeveler(gcp.gc)
     #abl.get_dummy_grid_data()
     #abl.interp_grid_data()
-    #abl.apply_advanced()
+    #abl.apply_abl()

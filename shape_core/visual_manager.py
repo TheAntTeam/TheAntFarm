@@ -106,7 +106,6 @@ class GLUTess:
         new_tris = self.tris[:]
         for i, t in enumerate(self.tris):
             if not isinstance(t, int):
-                # print("locos " + str(t))
                 self.pts.append((t[0], t[1], z))
                 new_tris[i] = id
                 id += 1
@@ -190,8 +189,6 @@ class VisualLayer:
         self.canvas.update()
 
     def on_mouse_double_click(self, event):
-        # print("Double Click")
-        # print(event)
         self.orientation = 0 if self.orientation == 1 else 1
         self.flip_view(orientation=self.orientation)
 
@@ -246,22 +243,17 @@ class VisualLayer:
             order = order_d[tag]
 
         for g in geom_list:
-            # tri, pts = triangulizer.triangulate(g.geom, self.z)
             tri, pts = triangulizer.triangulate(g.geom, 0)
             tri_off = list(np.array(tri[:]) + len(ldata[1]))
             ldata[0] += tri_off
             ldata[1] += pts[:]
             if holes:
-                # tri, pts = triangulizer.triangulate(g.geom, self.DELTA)
                 tri, pts = triangulizer.triangulate(g.geom, 0)
                 tri_off = list(np.array(tri[:]) + len(ldata[1]))
                 ldata[0] += tri_off
                 ldata[1] += pts[:]
                 order = 0
         self.create_mesh(tag, ldata, color, order)
-        # print("END")
-        # self.z -= self.DELTA
-        # self.z += self.DELTA
 
     def add_path(self, tag, geom_list, color=None):
         # todo: add zbuffer controll
@@ -272,17 +264,10 @@ class VisualLayer:
                 gl = d[1]
                 for g in gl:
                     if g.type == "LineString":
-                        # print(">>>>>>>>>> Line String")
-                        # print(list(g.coords))
                         ldata.append(list(g.coords))
                     if g.type == "LinearRing":
-                        # print(list(g.coords))
-                        # print("<<<<<<<<<< Linear Ring")
                         ldata.append(list(g.coords))
                 self.create_line(tag, ldata, color, order)
-            # print("END")
-            # self.z -= self.DELTA
-            # self.z += self.DELTA
         else:
             print("Cannot Visualize an Empty Path")
 
@@ -345,17 +330,12 @@ class VisualLayer:
         coords = np.array(coords)
         connect = np.array(connect)
 
-        # print("Coords")
-        # print(coords)
-        # print(connect)
-
         line = visuals.Line(pos=coords, connect=connect, width=width, color=color, parent=self.canvas.view, antialias=True)
         line.order = order
         if tag in list(self.paths.keys()):
             self.paths[tag] += [line]
         else:
             self.paths[tag] = [line]
-        #self.paths[tag] = line
         self.canvas.view.add(line)
         self.canvas.view.camera.set_range()
         self.canvas.freeze()
@@ -376,12 +356,6 @@ class VisualLayer:
 
         tri = ldata[0]
         pts = ldata[1]
-
-        # print(order)
-        # new_pts = []
-        # for p in pts:
-        #     new_pts.append((p[0], p[1], order))
-        # pts = new_pts
 
         if color:
             mesh_colors = [Color(color).rgba] * int(len(tri) / 3)

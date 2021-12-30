@@ -70,8 +70,6 @@ class Optimizer:
 
     @staticmethod
     def check_pop_intersection(population):
-        # print("Population")
-        # print(population)
         if len(population):
             routes = []
             c = population[0]
@@ -242,8 +240,7 @@ class Optimizer:
         for c in bestRoute:
             optimized_coords.append((c.x, c.y))
 
-        # riordino il path in modo da farlo partire
-        # dal punto più vicino a 0.0
+        # the path is ordered so that it starts from the point closest to 0.0
 
         min_id = 0
         min_d = Point(optimized_coords[0]).distance(Point((0.0, 0.0)))
@@ -273,14 +270,6 @@ class Optimizer:
         for c in optimized_coords:
             x.append(c[0])
             y.append(c[1])
-
-        # fig, ax = plt.subplots(1, 1)
-        # ax.plot(x, y,  '-or')
-        # ax.set_ylabel('Y')
-        # ax.set_xlabel('X')
-        # ax.set_aspect('equal')
-        # fig.tight_layout()
-        # plt.show()
 
         return optimized_coords
 

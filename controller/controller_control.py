@@ -219,7 +219,7 @@ class ControlController(QObject):
         last_probe = self.abl_val.pop()
         abl.get_grid_data(self.abl_val, self.abl_steps, last_probe, self.wco_a)
         abl.interp_grid_data()
-        abl.apply_advanced()
+        abl.apply_abl()
         # print("Leveled")
         # print(gcp.gc.modified_vectors)
 
