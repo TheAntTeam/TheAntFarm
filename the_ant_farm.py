@@ -3,7 +3,7 @@ import sys
 from PySide2.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PySide2.QtCore import QThread, QSettings, QPoint, QSize, QThreadPool
 from queue import Queue
-from ui_newCNC import Ui_MainWindow  # convert like this: pyside2-uic newCNC.ui > ui_newCNC.py
+from ui_the_ant_farm import Ui_MainWindow  # convert like this: pyside2-uic the_ant_farm.ui > ui_the_ant_farm.py
 """ Custom imports """
 from serial_manager import SerialWorker
 from controller.controller_manager import ControllerWorker

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'newCNC.ui'
+## Form generated from reading UI file 'the_ant_farm.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -2399,7 +2399,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"newCNC", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"The Ant Farm", None))
         self.actionLoad.setText(QCoreApplication.translate("MainWindow", u"Open", None))
 #if QT_CONFIG(shortcut)
         self.actionLoad.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+O", None))
