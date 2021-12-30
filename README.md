@@ -24,3 +24,13 @@ The cleanest way to install these packages is using a virtual environment.
 ## Disclaimer  
   
 The providers of this software decline any responsibility for damages to persons or things deriving from its use, and they will not be liable for any damages you may suffer in connection with using, modifying, or distributing this SOFTWARE PRODUCT.  
+
+
+### Donation
+
+Our projects requires a lot of work and often expensive hardware for testing (CNC machines).  
+Please consider a safe, secure and highly appreciated donation via the PayPal link below.  
+  
+  
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTRCVPZUZYW2E)  
+  
