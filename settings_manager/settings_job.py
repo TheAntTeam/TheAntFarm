@@ -17,6 +17,8 @@ class JobSettingsHandler:
     MULTI_PATH_FLAG_DEFAULT = False
     TAPS_LENGTH_DEFAULT = 1.0
     TAPS_TYPE_INDEX_DEFAULT = 3
+    MILLING_TOOL_FLAG = False
+    OPTIMIZE_FLAG_DEFAULT = True
 
     def __init__(self, config_folder):
         self.jobs_config_path = config_folder + os.path.sep + 'jobs_sets_config.ini'
@@ -25,6 +27,10 @@ class JobSettingsHandler:
 
     def read_all_jobs_settings(self):
         """ Read all jobs'settings from ini files """
+        # If app settings file does NOT exist create it with default values
+        if not os.path.isfile(self.jobs_config_path):
+            self.restore_job_settings()
+
         # Read jobs'settings ini file #
         self.jobs_settings.read(self.jobs_config_path)
 
@@ -77,14 +83,14 @@ class JobSettingsHandler:
         if "DRILL" in self.jobs_settings:
             drill_settings = self.jobs_settings["DRILL"]
             drill_set_od = ({})
-            drill_set_od["milling_tool"] = drill_settings.getboolean("milling_tool_flag", False)
+            drill_set_od["milling_tool"] = drill_settings.getboolean("milling_tool_flag", self.MILLING_TOOL_FLAG)
             drill_set_od["tool_diameter"] = drill_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
             drill_set_od["cut"] = drill_settings.getfloat("cut", self.CUT_Z_DEFAULT)
             drill_set_od["travel"] = drill_settings.getfloat("travel", self.TRAVEL_Z_DEFAULT)
             drill_set_od["spindle"] = drill_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             drill_set_od["xy_feedrate"] = drill_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             drill_set_od["z_feedrate"] = drill_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
-            drill_set_od["optimize"] = drill_settings.getboolean("optimize", False)
+            drill_set_od["optimize"] = drill_settings.getboolean("optimize", self.OPTIMIZE_FLAG_DEFAULT)
 
             drill_bits_names_list = []
             drill_bits_diameter_list = []
@@ -226,6 +232,110 @@ class JobSettingsHandler:
         nc_bottom_settings["spindle"] = str(nc_bottom_set_od["spindle"])
         nc_bottom_settings["xy_feedrate"] = str(nc_bottom_set_od["xy_feedrate"])
         nc_bottom_settings["z_feedrate"] = str(nc_bottom_set_od["z_feedrate"])
+
+        # Write application ini file #
+        with open(self.jobs_config_path, 'w') as configfile:
+            self.jobs_settings.write(configfile)
+
+    def restore_job_settings(self):
+        """ Restore all jobs settings to default and create ini file if it doesn't exists """
+        self.jobs_settings['DEFAULT'] = {"tool_diameter": self.TOOL_DIAMETER_DEFAULT,
+                                         "passages": self.PASSAGES_DEFAULT,
+                                         "overlap": self.OVERLAP_DEFAULT,
+                                         "cut": self.CUT_Z_DEFAULT,
+                                         "travel": self.TRAVEL_Z_DEFAULT,
+                                         "spindle": self.SPINDLE_SPEED_DEFAULT,
+                                         "xy_feedrate": self.XY_FEEDRATE_DEFAULT,
+                                         "z_feedrate": self.Z_FEEDRATE_DEFAULT,
+                                         "margin": self.MARGIN_DEFAULT,
+                                         "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
+                                         "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
+                                         "taps_type": self.TAPS_TYPE_INDEX_DEFAULT,
+                                         "taps_length": self.TAPS_LENGTH_DEFAULT}
+
+        # Top job related settings #
+        self.jobs_settings["TOP"] = {}
+        top_settings = self.jobs_settings["TOP"]
+
+        top_settings["tool_diameter"] = str(self.TOOL_DIAMETER_DEFAULT)
+        top_settings["passages"] = str(self.PASSAGES_DEFAULT)
+        top_settings["overlap"] = str(self.OVERLAP_DEFAULT)
+        top_settings["cut"] = str(self.CUT_Z_DEFAULT)
+        top_settings["travel"] = str(self.TRAVEL_Z_DEFAULT)
+        top_settings["spindle"] = str(self.SPINDLE_SPEED_DEFAULT)
+        top_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
+        top_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
+
+        # Bottom job related settings #
+        self.jobs_settings["BOTTOM"] = {}
+        bottom_settings = self.jobs_settings["BOTTOM"]
+
+        bottom_settings["tool_diameter"] = str(self.TOOL_DIAMETER_DEFAULT)
+        bottom_settings["passages"] = str(self.PASSAGES_DEFAULT)
+        bottom_settings["overlap"] = str(self.OVERLAP_DEFAULT)
+        bottom_settings["cut"] = str(self.CUT_Z_DEFAULT)
+        bottom_settings["travel"] = str(self.TRAVEL_Z_DEFAULT)
+        bottom_settings["spindle"] = str(self.SPINDLE_SPEED_DEFAULT)
+        bottom_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
+        bottom_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
+
+        # Profile job related settings #
+        self.jobs_settings["PROFILE"] = {}
+        profile_settings = self.jobs_settings["PROFILE"]
+
+        profile_settings["tool_diameter"] = str(self.TOOL_DIAMETER_DEFAULT)
+        profile_settings["margin"] = str(self.MARGIN_DEFAULT)
+        profile_settings["multi_depth"] = str(self.MULTI_PATH_FLAG_DEFAULT)
+        profile_settings["depth_per_pass"] = str(self.DEPTH_PER_PASS_DEFAULT)
+        profile_settings["cut"] = str(self.CUT_Z_DEFAULT)
+        profile_settings["passages"] = str(self.PASSAGES_DEFAULT)
+        profile_settings["travel"] = str(self.TRAVEL_Z_DEFAULT)
+        profile_settings["spindle"] = str(self.SPINDLE_SPEED_DEFAULT)
+        profile_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
+        profile_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
+        profile_settings["taps_type"] = str(self.TAPS_TYPE_INDEX_DEFAULT)
+        profile_settings["taps_length"] = str(self.TAPS_LENGTH_DEFAULT)
+
+        # Drill job related settings #
+        self.jobs_settings["DRILL"] = {}
+        drill_settings = self.jobs_settings["DRILL"]
+
+        drill_settings["milling_tool_flag"] = str(self.MILLING_TOOL_FLAG)
+        drill_settings["tool_diameter"] = str(self.TOOL_DIAMETER_DEFAULT)
+        drill_settings["cut"] = str(self.CUT_Z_DEFAULT)
+        drill_settings["travel"] = str(self.TRAVEL_Z_DEFAULT)
+        drill_settings["spindle"] = str(self.SPINDLE_SPEED_DEFAULT)
+        drill_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
+        drill_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
+        drill_settings["optimize"] = str(self.OPTIMIZE_FLAG_DEFAULT)
+
+        # Section dedicated to drill bits #
+        self.jobs_settings["DRILL_BITS"] = {}
+        drill_bits_settings = self.jobs_settings["DRILL_BITS"]
+
+        # No-Copper Top job related settings #
+        self.jobs_settings["NC_TOP"] = {}
+        nc_top_settings = self.jobs_settings["NC_TOP"]
+
+        nc_top_settings["tool_diameter"] = str(self.TOOL_DIAMETER_DEFAULT)
+        nc_top_settings["overlap"] = str(self.OVERLAP_DEFAULT)
+        nc_top_settings["cut"] = str(self.CUT_Z_DEFAULT)
+        nc_top_settings["travel"] = str(self.TRAVEL_Z_DEFAULT)
+        nc_top_settings["spindle"] = str(self.SPINDLE_SPEED_DEFAULT)
+        nc_top_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
+        nc_top_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
+
+        # No-Copper Bottom job related settings #
+        self.jobs_settings["NC_BOTTOM"] = {}
+        nc_bottom_settings = self.jobs_settings["NC_BOTTOM"]
+
+        nc_bottom_settings["tool_diameter"] = str(self.TOOL_DIAMETER_DEFAULT)
+        nc_bottom_settings["overlap"] = str(self.OVERLAP_DEFAULT)
+        nc_bottom_settings["cut"] = str(self.CUT_Z_DEFAULT)
+        nc_bottom_settings["travel"] = str(self.TRAVEL_Z_DEFAULT)
+        nc_bottom_settings["spindle"] = str(self.SPINDLE_SPEED_DEFAULT)
+        nc_bottom_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
+        nc_bottom_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
 
         # Write application ini file #
         with open(self.jobs_config_path, 'w') as configfile:

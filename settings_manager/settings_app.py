@@ -41,6 +41,10 @@ class AppSettingsHandler:
 
     def read_all_app_settings(self):
         """ Read all application settings from ini files """
+        # If app settings file does NOT exist create it with default values
+        if not os.path.isfile(self.app_config_path):
+            self.restore_app_settings()
+
         # Read application ini file #
         self.app_settings.read(self.app_config_path)
 
@@ -111,6 +115,49 @@ class AppSettingsHandler:
         self.app_settings["GCODES"] = {}
         app_layers = self.app_settings["GCODES"]
         app_layers["gcode_last_dir"] = self.gcode_last_dir
+
+        # Write application ini file #
+        with open(self.app_config_path, 'w') as configfile:
+            self.app_settings.write(configfile)
+
+    def restore_app_settings(self):
+        """ Restore all application settings to default and create ini file if it doesn't exists """
+        self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
+                                        "win_position_y": self.WIN_POS_Y_DEFAULT,
+                                        "win_width": self.WIN_SIZE_W_DEFAULT,
+                                        "win_height": self.WIN_SIZE_H_DEFAULT,
+                                        "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
+                                        "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
+                                        "console_visibility": self.console_visibility,
+                                        "layer_last_dir": self.LAYER_LAST_DIR_DEFAULT,
+                                        "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT,
+                                        "logs_file": self.LOGS_FILE_DEFAULT,
+                                        "logs_max_bytes": self.LOGS_MAX_BYTES,
+                                        "logs_backup_count": self.LOGS_BACKUP_COUNT}
+
+        # GENERAL application settings #
+        self.app_settings["GENERAL"] = {}
+        app_general = self.app_settings["GENERAL"]
+        app_general["win_position_x"] = str(self.WIN_POS_X_DEFAULT)
+        app_general["win_position_y"] = str(self.WIN_POS_Y_DEFAULT)
+        app_general["win_width"] = str(self.WIN_SIZE_W_DEFAULT)
+        app_general["win_height"] = str(self.WIN_SIZE_H_DEFAULT)
+        app_general["main_tab_index"] = str(self.MAIN_TAB_INDEX_DEFAULT)
+        app_general["ctrl_tab_index"] = str(self.CTRL_TAB_INDEX_DEFAULT)
+        app_general["console_visibility"] = str(self.SHOW_CONSOLE_DEFAULT)
+        app_general["logs_file"] = str(self.LOGS_FILE_DEFAULT)
+        app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
+        app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
+
+        # Layers related application settings #
+        self.app_settings["LAYERS"] = {}
+        app_layers = self.app_settings["LAYERS"]
+        app_layers["layer_last_dir"] = str(self.LAYER_LAST_DIR_DEFAULT)
+
+        # Layers related application settings #
+        self.app_settings["GCODES"] = {}
+        app_layers = self.app_settings["GCODES"]
+        app_layers["gcode_last_dir"] = str(self.GCODE_LAST_DIR_DEFAULT)
 
         # Write application ini file #
         with open(self.app_config_path, 'w') as configfile:
