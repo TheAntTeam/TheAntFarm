@@ -3,17 +3,17 @@ import sys
 from PySide2.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PySide2.QtCore import QThread, QSettings, QPoint, QSize, QThreadPool
 from queue import Queue
-from ui_the_ant_farm import Ui_MainWindow  # convert like this: pyside2-uic the_ant_farm.ui > ui_the_ant_farm.py
+from ui_the_ant_farm import Ui_MainWindow  # convert ui to py: pyside2-uic the_ant_farm.ui > ui_the_ant_farm.py
 """ Custom imports """
 from serial_manager import SerialWorker
 from controller.controller_manager import ControllerWorker
 from style_manager import StyleManager
 from ui_manager.ui_manager import UiManager
-from settings_manager import SettingsHandler
+from settings_manager.settings_manager import SettingsHandler
 from log_manager import LogHandler
 import logging.handlers
 
-# Simple mod to set the QT environment data just for python avoiding conflict with other windiws applications
+# Simple mod to set the QT environment data just for python avoiding conflict with other windows applications
 if "QT_PLUGIN_PATH" not in os.environ:
     os.environ["QT_PLUGIN_PATH"] = os.path.join(os.path.dirname(sys.modules['PySide2'].__file__), "plugins")
 
