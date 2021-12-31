@@ -4,7 +4,7 @@ import numpy as np
 import random
 import operator
 from shapely.geometry import LineString, Point
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 
 class City:
