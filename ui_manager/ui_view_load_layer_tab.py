@@ -63,6 +63,14 @@ class UiViewLoadLayerTab(QObject):
         self.ui.all_view_chb.stateChanged.connect(lambda: self.hide_show_layers(self.ui.all_view_chb.isChecked()))
         self.ui.clear_views_pb.clicked.connect(self.remove_all_vis_layers)
 
+        # Temporarily hide the not implemented parts # Todo: remove the following hide code when the NC are implemented.
+        self.ui.no_copper_1_chb.hide()
+        self.ui.no_copper_1_le.hide()
+        self.ui.no_copper_1_pb.hide()
+        self.ui.no_copper_2_chb.hide()
+        self.ui.no_copper_2_le.hide()
+        self.ui.no_copper_2_pb.hide()
+
     def load_gerber_file(self, layer="top", load_text="Load File", extensions=""):
         filters = extensions + ";;All files (*.*)"
         load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.app_settings.layer_last_dir, filters)
