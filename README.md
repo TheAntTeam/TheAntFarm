@@ -4,7 +4,10 @@ The Ant Farm is a program that aims to simplify the process of PCB-making using 
 In this software we included both the necessary CAM features and the CNC machine control capabilities, trying to simplify the user operations as much as possible.  
 
 # Actual status  
-This software is a pre-alpha, meaning that there are no warranties and safety of the software and its use.
+This software is a pre-alpha, meaning that not all the functionalities are implemented, and the implemented ones may not work or not work properly.  
+The **View** tab can be used and it's capable to generate gcode files from gerbers.  
+The **Control** tab is currently under development, and its functionalities may have some issues.  
+The **Align** tab is not developed at all.  
 Up to now, the application is compatible only with CNC machines using GRBL v1.1 firmware, and it has been tested using only some gerber and drill files generated using Autodesk's Eagle and KiCad EDA.  
 If you want to have some more information about the actual implemented features, you could watch this video:  
   
