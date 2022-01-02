@@ -36,10 +36,14 @@ class SerialWorker(QObject):
             logger.debug("Opening " + port)
             self.update_console_text_s.emit("Opening " + port)
             try:
+                # self.serial_port.setPortName("/dev/" + port)
                 self.serial_port.setPortName(port)
-                self.serial_port.open(QIODevice.ReadWrite)
-                self.serial_port.setBaudRate(QSerialPort.Baud115200)  #todo: pass baudrate
-                return True
+                if self.serial_port.open(QIODevice.ReadWrite):
+                    self.serial_port.setBaudRate(QSerialPort.Baud115200)  #todo: pass baudrate
+                    return True
+                else:
+                    self.update_console_text_s.emit("COM port could not be opened." + self.serial_port.errorString())
+                    return False
             except IOError:
                 logger.debug("COM port already in use.")
                 self.update_console_text_s.emit("COM port already in use.")
