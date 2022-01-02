@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class SerialWorker(QObject):
+    open_port_s = Signal(bool)
     update_console_text_s = Signal(str)
     rx_queue_not_empty_s = Signal()
 
@@ -36,21 +37,20 @@ class SerialWorker(QObject):
             logger.debug("Opening " + port)
             self.update_console_text_s.emit("Opening " + port)
             try:
-                # self.serial_port.setPortName("/dev/" + port)
                 self.serial_port.setPortName(port)
                 if self.serial_port.open(QIODevice.ReadWrite):
                     self.serial_port.setBaudRate(QSerialPort.Baud115200)  #todo: pass baudrate
-                    return True
+                    self.open_port_s.emit(True)
                 else:
                     self.update_console_text_s.emit("COM port could not be opened." + self.serial_port.errorString())
-                    return False
+                    self.open_port_s.emit(False)
             except IOError:
                 logger.debug("COM port already in use.")
                 self.update_console_text_s.emit("COM port already in use.")
-                return False
+                self.open_port_s.emit(False)
         else:
             self.update_console_text_s.emit("No port selected.")
-            return False
+            self.open_port_s.emit(False)
 
     def close_port(self):
         """Close serial port."""

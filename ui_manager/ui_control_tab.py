@@ -12,6 +12,8 @@ class UiControlTab(QObject):
     """Class dedicated to UI <--> Control interactions on Control Tab. """
     controller_connected_s = Signal(bool)
     ui_serial_send_s = Signal(str)
+    ui_serial_open_s = Signal(str)
+    ui_serial_close_s = Signal()
 
     send_gcode_s = Signal(str)                   # Signal to start sending a gcode file
     stop_gcode_s = Signal()                      # Signal to stop sending a gcode file
@@ -33,6 +35,8 @@ class UiControlTab(QObject):
 
         self.serial_connection_status = False
         self.ui_serial_send_s.connect(self.serialWo.send)
+        self.ui_serial_open_s.connect(self.serialWo.open_port)
+        self.ui_serial_close_s.connect(self.serialWo.close_port)
         self.controlWo.reset_controller_status_s.connect(self.controlWo.reset_dro_status_updated)
         self.controlWo.update_status_s.connect(self.update_status)
         self.controlWo.update_probe_s.connect(self.update_probe)
@@ -50,6 +54,7 @@ class UiControlTab(QObject):
         self.controlWo.serial_tx_available_s.connect(self.serialWo.send_from_queue)
 
         # From Serial Manager to UI Manager
+        self.serialWo.open_port_s.connect(self.act_on_connection)
         self.serialWo.update_console_text_s.connect(self.update_console_text)
 
         # From Serial Manager to Control Manager
@@ -315,39 +320,47 @@ class UiControlTab(QObject):
            creates the serial worker thread. If the thread was
            already created previously and paused, it revives it."""
         if not self.serial_connection_status:
-            if self.serialWo.open_port(self.ui.serial_ports_cb.currentText()):
-                self.serial_connection_status = True
-                self.controlWo.reset_controller_status_s.emit()
-                self.ui.connect_pb.setText("Disconnect")
-                self.ui.serial_ports_cb.hide()
-                self.ui.serial_baud_cb.hide()
-                self.ui.refresh_pb.hide()
-                self.ui.send_te.show()
-                self.ui.send_pb.show()
-                self.ui.unlock_tb.setEnabled(True)
-                self.ui.homing_tb.setEnabled(True)
-                if self.is_gcode_rb_selected():
-                    self.ui.play_tb.setEnabled(True)
-                self.controller_connected_s.emit(True)
-                self.ctrl_layer.create_pointer(coords=(0, 0, 0))
+            self.ui_serial_open_s.emit(self.ui.serial_ports_cb.currentText())
         else:
-            self.serialWo.close_port()
+            self.ui_serial_close_s.emit()
+            self.act_on_disconnection()
+
+    @Slot(bool)
+    def act_on_connection(self, connection_status):
+        if connection_status:
+            self.serial_connection_status = True
             self.controlWo.reset_controller_status_s.emit()
-            self.serial_connection_status = False
-            self.ui.connect_pb.setText("Connect")
-            self.ui.serial_ports_cb.show()
-            self.ui.serial_baud_cb.show()
-            self.ui.refresh_pb.show()
-            self.ui.send_te.hide()
-            self.ui.send_pb.hide()
-            self.ui.status_l.setText("Not Connected")
-            self.update_status_colors("Not Connected")
-            self.ui.unlock_tb.setEnabled(False)
-            self.ui.homing_tb.setEnabled(False)
-            self.ui.play_tb.setEnabled(False)
-            self.ui.stop_tb.setEnabled(False)
-            self.controller_connected_s.emit(False)
-            self.ctrl_layer.remove_pointer()
+            self.ui.connect_pb.setText("Disconnect")
+            self.ui.serial_ports_cb.hide()
+            self.ui.serial_baud_cb.hide()
+            self.ui.refresh_pb.hide()
+            self.ui.send_te.show()
+            self.ui.send_pb.show()
+            self.ui.unlock_tb.setEnabled(True)
+            self.ui.homing_tb.setEnabled(True)
+            if self.is_gcode_rb_selected():
+                self.ui.play_tb.setEnabled(True)
+            self.controller_connected_s.emit(True)
+            self.ctrl_layer.create_pointer(coords=(0, 0, 0))
+
+    def act_on_disconnection(self):
+        self.controlWo.reset_controller_status_s.emit()
+        self.serial_connection_status = False
+        self.ui.connect_pb.setText("Connect")
+        self.ui.serial_ports_cb.show()
+        self.ui.serial_baud_cb.show()
+        self.ui.refresh_pb.show()
+        self.ui.send_te.hide()
+        self.ui.send_pb.hide()
+        self.ui.status_l.setText("Not Connected")
+        self.update_status_colors("Not Connected")
+        self.ui.unlock_tb.setEnabled(False)
+        self.ui.homing_tb.setEnabled(False)
+        self.ui.play_tb.setEnabled(False)
+        self.ui.stop_tb.setEnabled(False)
+        self.ui.pause_resume_tb.setEnabled(False)
+        self.controller_connected_s.emit(False)
+        self.ctrl_layer.remove_pointer()
 
     def handle_clear_terminal(self):
         self.ui.serial_te.clear()
