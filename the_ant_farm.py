@@ -13,9 +13,23 @@ from settings_manager.settings_manager import SettingsHandler
 from log_manager import LogHandler
 import logging.handlers
 
-# Simple mod to set the QT environment data just for python avoiding conflict with other windows applications
-if "QT_PLUGIN_PATH" not in os.environ:
-    os.environ["QT_PLUGIN_PATH"] = os.path.join(os.path.dirname(sys.modules['PySide2'].__file__), "plugins")
+
+pys2_path = os.path.dirname(sys.modules['PySide2'].__file__)
+if os.path.isdir(os.path.join(pys2_path, "Qt")):
+    pys2_path = os.path.join(pys2_path, "Qt")
+
+# Simple mod to set the QT environment data just for python
+# avoiding conflict with other applications using Qt
+if os.name == "nt":
+    print("Windows Env")
+    if "QT_PLUGIN_PATH" not in os.environ:
+        os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
+    print(os.environ["QT_PLUGIN_PATH"])
+else:
+    print("Linux Env")
+    os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
+    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
+    os.environ["QT_QPA_PLATFORM"] = "xcb"
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
