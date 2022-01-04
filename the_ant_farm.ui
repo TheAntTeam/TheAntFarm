@@ -26,8 +26,8 @@
    <string>TheAntFarm</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>resources/logo/the_ant_logo.png</normaloff>resources/logo/the_ant_logo.png</iconset>
+   <iconset resource="app_resources.qrc">
+    <normaloff>:/resources/resources/logo/the_ant_logo.png</normaloff>:/resources/resources/logo/the_ant_logo.png</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>
@@ -52,7 +52,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -1759,8 +1759,8 @@
                    <string>...</string>
                   </property>
                   <property name="icon">
-                   <iconset>
-                    <normaloff>resources/icons/white-open-folder.svg</normaloff>resources/icons/white-open-folder.svg</iconset>
+                   <iconset resource="app_resources.qrc">
+                    <normaloff>:/resources/resources/icons/white-open-folder.svg</normaloff>:/resources/resources/icons/white-open-folder.svg</iconset>
                   </property>
                   <property name="shortcut">
                    <string>Ctrl+G</string>
@@ -2659,8 +2659,8 @@
                        <string>Z+</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_north_arrow.svg</normaloff>resources/icons/white_north_arrow.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_north_arrow.svg</normaloff>:/resources/resources/icons/white_north_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2688,8 +2688,8 @@
                        <string>Z-</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_south_arrow.svg</normaloff>resources/icons/white_south_arrow.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_south_arrow.svg</normaloff>:/resources/resources/icons/white_south_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2733,8 +2733,8 @@
                        <string>X- Y+</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_north_west_arrow.svg</normaloff>resources/icons/white_north_west_arrow.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_north_west_arrow.svg</normaloff>:/resources/resources/icons/white_north_west_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2762,8 +2762,8 @@
                        <string>X+ Y-</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_south_east_arrow.svg</normaloff>resources/icons/white_south_east_arrow.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_south_east_arrow.svg</normaloff>:/resources/resources/icons/white_south_east_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2791,8 +2791,8 @@
                        <string>X-</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_west_arrow.svg</normaloff>resources/icons/white_west_arrow.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_west_arrow.svg</normaloff>:/resources/resources/icons/white_west_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2820,8 +2820,8 @@
                        <string>X- Y-</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_south_west_arrow.svg</normaloff>resources/icons/white_south_west_arrow.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_south_west_arrow.svg</normaloff>:/resources/resources/icons/white_south_west_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2849,8 +2849,8 @@
                        <string>Y+</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_north_arrow.svg</normaloff>resources/icons/white_north_arrow.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_north_arrow.svg</normaloff>:/resources/resources/icons/white_north_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2878,8 +2878,8 @@
                        <string>Center</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_circle.svg</normaloff>resources/icons/white_circle.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_circle.svg</normaloff>:/resources/resources/icons/white_circle.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2907,8 +2907,8 @@
                        <string>Y-</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_south_arrow.svg</normaloff>resources/icons/white_south_arrow.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_south_arrow.svg</normaloff>:/resources/resources/icons/white_south_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2936,8 +2936,8 @@
                        <string>X+ Y+</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_north_east_arrow.svg</normaloff>resources/icons/white_north_east_arrow.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_north_east_arrow.svg</normaloff>:/resources/resources/icons/white_north_east_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -2965,8 +2965,8 @@
                        <string>X+</string>
                       </property>
                       <property name="icon">
-                       <iconset>
-                        <normaloff>resources/icons/white_east_arrow.svg</normaloff>resources/icons/white_east_arrow.svg</iconset>
+                       <iconset resource="app_resources.qrc">
+                        <normaloff>:/resources/resources/icons/white_east_arrow.svg</normaloff>:/resources/resources/icons/white_east_arrow.svg</iconset>
                       </property>
                      </widget>
                     </item>
@@ -4209,10 +4209,10 @@
              <string>UNLOCK</string>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>resources/icons/white-unlock-padlock.svg</normaloff>
-              <disabledoff>resources/icons/gray-unlock-padlock.svg</disabledoff>
-              <disabledon>resources/icons/gray-unlock-padlock.svg</disabledon>resources/icons/white-unlock-padlock.svg</iconset>
+             <iconset resource="app_resources.qrc">
+              <normaloff>:/resources/resources/icons/white-unlock-padlock.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/gray-unlock-padlock.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/gray-unlock-padlock.svg</disabledon>:/resources/resources/icons/white-unlock-padlock.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4249,11 +4249,10 @@
              <string>HOME</string>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>resources/icons/white-home.svg</normaloff>
-              <normalon>resources/icons/white-home.svg</normalon>
-              <disabledoff>resources/icons/gray-home.svg</disabledoff>
-              <disabledon>resources/icons/gray-home.svg</disabledon>resources/icons/white-home.svg</iconset>
+             <iconset resource="app_resources.qrc">
+              <normaloff>:/resources/resources/icons/white-home.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/gray-home.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/gray-home.svg</disabledon>:/resources/resources/icons/white-home.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4290,10 +4289,10 @@
              <string>PLAY</string>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>resources/icons/white-play-button-arrowhead.svg</normaloff>
-              <disabledoff>resources/icons/gray-play-button-arrowhead.svg</disabledoff>
-              <disabledon>resources/icons/gray-play-button-arrowhead.svg</disabledon>resources/icons/white-play-button-arrowhead.svg</iconset>
+             <iconset resource="app_resources.qrc">
+              <normaloff>:/resources/resources/icons/white-play-button-arrowhead.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/gray-play-button-arrowhead.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/gray-play-button-arrowhead.svg</disabledon>:/resources/resources/icons/white-play-button-arrowhead.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4330,10 +4329,10 @@
              <string>PAUSE/RESUME</string>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</normaloff>
-              <disabledoff>resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg</disabledoff>
-              <disabledon>resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg</disabledon>resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</iconset>
+             <iconset resource="app_resources.qrc">
+              <normaloff>:/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg</disabledon>:/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4370,10 +4369,10 @@
              <string>STOP</string>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>resources/icons/white-stop-button-black-rounded-square.svg</normaloff>
-              <disabledoff>resources/icons/gray-stop-button-black-rounded-square.svg</disabledoff>
-              <disabledon>resources/icons/gray-stop-button-black-rounded-square.svg</disabledon>resources/icons/white-stop-button-black-rounded-square.svg</iconset>
+             <iconset resource="app_resources.qrc">
+              <normaloff>:/resources/resources/icons/white-stop-button-black-rounded-square.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/gray-stop-button-black-rounded-square.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/gray-stop-button-black-rounded-square.svg</disabledon>:/resources/resources/icons/white-stop-button-black-rounded-square.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4410,10 +4409,10 @@
              <string>TOOL CHANGE</string>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>resources/icons/white-milling-machine.svg</normaloff>
-              <disabledoff>resources/icons/gray-milling-machine.svg</disabledoff>
-              <disabledon>resources/icons/gray-milling-machine.svg</disabledon>resources/icons/white-milling-machine.svg</iconset>
+             <iconset resource="app_resources.qrc">
+              <normaloff>:/resources/resources/icons/white-milling-machine.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/gray-milling-machine.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/gray-milling-machine.svg</disabledon>:/resources/resources/icons/white-milling-machine.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -4775,6 +4774,8 @@
   <tabstop>logging_plain_te</tabstop>
   <tabstop>verticalSlider</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="app_resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
