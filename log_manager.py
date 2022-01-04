@@ -1,5 +1,7 @@
-from PySide2.QtCore import Signal, Slot, QObject
+from PySide2.QtCore import Signal, QObject
 import logging
+import logging.handlers
+
 
 logger = logging.getLogger(__name__)
 
@@ -29,9 +31,27 @@ class LogHandler(logging.Handler):
         s = self.format(record)
         self.signaller.signal.emit(s, record)
 
+    def set_handler_features(self):
+        formatter = logging.Formatter('%(asctime)s %(levelname)s %(threadName)s %(module)s %(funcName)s %(message)s')
+        self.setFormatter(formatter)
+        self.setLevel(logging.INFO)
+
     def connect_log_actions(self, ui):
         ui.action_critical.triggered.connect(lambda: self.setLevel(logging.CRITICAL))
         ui.action_error.triggered.connect(lambda: self.setLevel(logging.ERROR))
         ui.action_warning.triggered.connect(lambda: self.setLevel(logging.WARNING))
         ui.action_info.triggered.connect(lambda: self.setLevel(logging.INFO))
         ui.action_debug.triggered.connect(lambda: self.setLevel(logging.DEBUG))
+
+
+class FileLogHandler(logging.handlers.RotatingFileHandler):
+    def __init__(self, app_settings):
+        super(FileLogHandler, self).__init__(app_settings.logs_file,
+                                             maxBytes=app_settings.logs_max_bytes,
+                                             backupCount=app_settings.logs_backup_count)
+
+    def set_handler_features(self):
+        formatter = logging.Formatter(
+            '%(asctime)s %(levelname)s %(threadName)s %(module)s %(funcName)s %(message)s')
+        self.setFormatter(formatter)
+        self.setLevel(logging.DEBUG)

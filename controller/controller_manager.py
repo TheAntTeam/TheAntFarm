@@ -126,7 +126,7 @@ class ControllerWorker(QObject):
 
     def send_to_tx_queue(self, data):
         parsered_cmd_str = self.decode_tag(data)
-        logger.info(data)
+        # logger.info(data)
         self.serialTxQueue.put(parsered_cmd_str)
         self.serial_tx_available_s.emit()
 
@@ -179,23 +179,23 @@ class ControllerWorker(QObject):
 
                             # all lines have been sent?
                             end_of_file = self.sent_lines >= self.tot_lines
-                            print("End Of File: " + str(end_of_file))
+                            # print("End Of File: " + str(end_of_file))
                             if not end_of_file:
                                 cmd_to_send = self.file_content[self.sent_lines]
                                 # check if next command has tags
-                                print("Cmd To Send: " + str(cmd_to_send))
+                                # print("Cmd To Send: " + str(cmd_to_send))
                                 if self.gcr.TAG in cmd_to_send:
-                                    print("TAG Found")
+                                    # print("TAG Found")
                                     # if self.cmds_to_ack > 0:
                                     logger.info(str(self.ack_lines) + " <-> " + str(self.sent_lines))
                                     if self.ack_lines != self.sent_lines:
                                         # wait that the machine execute all previous lines
                                         # to be able to decode the tag
-                                        print("Wait")
+                                        # print("Wait")
                                         self.wait_tag_decoding = True
                                     else:
                                         # machine execution queue is empty, let's go
-                                        print("Run")
+                                        # print("Run")
                                         self.wait_tag_decoding = False
 
                                 # does data fit the buffer?

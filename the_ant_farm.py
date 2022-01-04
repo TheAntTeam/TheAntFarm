@@ -10,7 +10,7 @@ from controller.controller_manager import ControllerWorker
 from style_manager import StyleManager
 from ui_manager.ui_manager import UiManager
 from settings_manager.settings_manager import SettingsHandler
-from log_manager import LogHandler
+from log_manager import LogHandler, FileLogHandler
 import logging.handlers
 
 
@@ -93,16 +93,11 @@ if __name__ == "__main__":
     window = MainWindow()
 
     h = LogHandler(window.ui_manager.update_logging_status)
-    formatter = logging.Formatter('%(asctime)s %(levelname)s %(threadName)s %(module)s %(funcName)s %(message)s')
-    h.setFormatter(formatter)
-    h.setLevel(logging.INFO)
+    h.set_handler_features()
     h.connect_log_actions(window.ui)
 
-    fh = logging.handlers.RotatingFileHandler(window.settings.app_settings.logs_file,
-                                              maxBytes=window.settings.app_settings.logs_max_bytes,
-                                              backupCount=window.settings.app_settings.logs_backup_count)
-    fh.setLevel(logging.DEBUG)
-    fh.setFormatter(formatter)
+    fh = FileLogHandler(window.settings.app_settings)
+    fh.set_handler_features()
 
     root = logging.getLogger()
     root.addHandler(h)

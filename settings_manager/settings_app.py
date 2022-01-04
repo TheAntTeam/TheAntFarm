@@ -8,7 +8,7 @@ class AppSettingsHandler:
     LOGS_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '../app_logs'))
     LOGS_FILE_DEFAULT = os.path.normpath(os.path.join(LOGS_DIR_DEFAULT, 'app_logs.log'))
     LOGS_MAX_BYTES = 1000000
-    LOGS_BACKUP_COUNT = 10
+    LOGS_BACKUP_COUNT = 2
     WIN_POS_X_DEFAULT = 200
     WIN_POS_Y_DEFAULT = 200
     WIN_SIZE_W_DEFAULT = 1160
