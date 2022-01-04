@@ -47,8 +47,24 @@ It could be also necessary to install an additional library:
   
 > sudo apt install libxcb-xinerama0  
   
+### Troubleshooting  
   
+In some linux distribution the access to usb serial port may be denied (permission denied).  
+In this case, a possible solution may be to add your user to the *dialout* group and disable the *modemmanager* service at startup.  
+To add your user to the dialout group you may use the following command:  
+
+> sudo usermod -a -G dialout $USER  
   
+To check that your user has been added to the *dialout* group run this command:  
+  
+> groups ${USER}
+  
+To disable the *modemmanager* service run:  
+  
+> systemctl disable ModemManager.service  
+  
+For this last modification to be effective, you may need to reboot.  
+
 ### Windows  
 
 Either download the zip of the repository sources or use git:  
