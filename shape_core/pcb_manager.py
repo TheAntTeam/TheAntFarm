@@ -4,7 +4,7 @@ import time
 import gerber as gbr
 import gerber.primitives
 from gerber.render import theme
-from gerber.render.cairo_backend import GerberCairoContext
+# from gerber.render.cairo_backend import GerberCairoContext
 
 import numpy as np
 import math
@@ -88,21 +88,21 @@ class PcbObj:
         self.excellons[tag] = gbr.read(path)
         self.excellons[tag].to_metric()
 
-    def render_layer(self, layer):
-
-        # Create a new drawing context
-        ctx = GerberCairoContext(1200)
-        ctx.color = (80. / 255, 80 / 255., 154 / 255.)
-        ctx.drill_color = ctx.color
-
-        # Draw the layer, and specify the rendering settings to use
-        layer.render(ctx)
-
-        outfile = os.path.join(os.path.dirname(__file__), 'pcb_top.png')
-
-        # Write output to png file
-        print("Writing output to: {}".format(outfile))
-        ctx.dump(os.path.join(os.path.dirname(__file__), 'outputs', outfile))
+    # def render_layer(self, layer):
+    #
+    #     # Create a new drawing context
+    #     ctx = GerberCairoContext(1200)
+    #     ctx.color = (80. / 255, 80 / 255., 154 / 255.)
+    #     ctx.drill_color = ctx.color
+    #
+    #     # Draw the layer, and specify the rendering settings to use
+    #     layer.render(ctx)
+    #
+    #     outfile = os.path.join(os.path.dirname(__file__), 'pcb_top.png')
+    #
+    #     # Write output to png file
+    #     print("Writing output to: {}".format(outfile))
+    #     ctx.dump(os.path.join(os.path.dirname(__file__), 'outputs', outfile))
 
     def get_gerber_layer(self, tag):
         print("Get Gerber Layer")
