@@ -3,12 +3,16 @@ import os
 import time
 import gerber as gbr
 import gerber.primitives
+from gerber.render import theme
+from gerber.render.cairo_backend import GerberCairoContext
+
 import numpy as np
 import math
 from gerber.utils import convex_hull
 from collections import OrderedDict as Od
 
 from .geometry_manager import Geom, merge_polygons
+# import matplotlib.pyplot as plt
 
 
 class PcbObj:
@@ -71,6 +75,8 @@ class PcbObj:
         self.gerbers[tag] = tmp
         self.gerbers[tag].to_metric()
 
+        # self.render_layer(tmp)
+
     def load_excellon(self, path, tag):
         if tag not in self.EXN_KEYS:
             print("[ERROR] EXCELLON TAG NOT RECOGNIZED")
@@ -81,6 +87,22 @@ class PcbObj:
 
         self.excellons[tag] = gbr.read(path)
         self.excellons[tag].to_metric()
+
+    def render_layer(self, layer):
+
+        # Create a new drawing context
+        ctx = GerberCairoContext(1200)
+        ctx.color = (80. / 255, 80 / 255., 154 / 255.)
+        ctx.drill_color = ctx.color
+
+        # Draw the layer, and specify the rendering settings to use
+        layer.render(ctx)
+
+        outfile = os.path.join(os.path.dirname(__file__), 'pcb_top.png')
+
+        # Write output to png file
+        print("Writing output to: {}".format(outfile))
+        ctx.dump(os.path.join(os.path.dirname(__file__), 'outputs', outfile))
 
     def get_gerber_layer(self, tag):
         print("Get Gerber Layer")
@@ -94,6 +116,7 @@ class PcbObj:
                 g = Geom(gd)
                 if g.closed:
                     mp.append(g)
+
         print("**- %s seconds ---" % (time.time() - start_time))
         self.layers[tag] = merge_polygons(mp)
         print("*-- %s seconds ---" % (time.time() - start_time))
@@ -111,10 +134,29 @@ class PcbObj:
         self.layers[tag] = merge_polygons(mp)
         return self.layers[tag]
 
-    def _arc_segmentation(self, center, radius, start_angle, end_angle, forced_divisions=None):
+    def _arc_segmentation(self, center, radius, arc_start_angle, arc_end_angle, direction='clockwise', forced_divisions=None):
+
+        start_angle = arc_start_angle
+        end_angle = arc_end_angle
+
+        if direction == 'clockwise':
+            if start_angle < end_angle:
+                start_angle += 2 * math.pi
+        else:
+            # counterclockwise doesn't check
+            if start_angle > end_angle:
+                end_angle += 2 * math.pi
+
+        circle = False
+        if start_angle == end_angle:
+            # bad circle definition
+            circle = True
 
         if forced_divisions is None:
-            divisions = int(abs(end_angle - start_angle) / self.arc_angle)
+            if not circle:
+                divisions = int(abs(end_angle - start_angle) / self.arc_angle)
+            else:
+                divisions = int(2.0 * math.pi / self.arc_angle)
 
             # The coordinates of the arc
             # theta = np.radians(np.linspace(start_angle, end_angle, self.arc_subdivisions))
@@ -124,17 +166,26 @@ class PcbObj:
 
             if clen < self.arc_min_len:
                 min_theta = self.arc_min_len / radius
-                divisions = int(abs(end_angle - start_angle) / min_theta)
+                if not circle:
+                    divisions = int(abs(end_angle - start_angle) / min_theta)
+                else:
+                    divisions = int(2.0 * math.pi / min_theta)
 
             elif clen > self.arc_max_len:
                 max_theta = self.arc_max_len / radius
-                divisions = int(abs(end_angle - start_angle) / max_theta)
+                if not circle:
+                    divisions = int(abs(end_angle - start_angle) / max_theta)
+                else:
+                    divisions = int(2.0 * math.pi / max_theta)
 
             divisions = max(divisions, 4)
         else:
             divisions = forced_divisions
 
-        theta = np.linspace(start_angle, end_angle, divisions)
+        if not circle:
+            theta = np.linspace(start_angle, end_angle, divisions)
+        else:
+            theta = np.linspace(0, 2.0 * math.pi, divisions)
 
         x = center[0] + radius * np.cos(theta)
         y = center[1] + radius * np.sin(theta)
@@ -142,20 +193,24 @@ class PcbObj:
         arc_discretization = [tuple(x) for x in arc_discretization]
         return arc_discretization
 
-    def _get_enhanced_line(self, primitive):
-        if primitive.start[0] - primitive.end[0] >= 0:
-            start = primitive.start
-            end = primitive.end
+    def _get_enhanced_line(self, l_start, l_end, aperture):
+        if l_start[0] - l_end[0] >= 0:
+            start = l_start
+            end = l_end
         else:
-            start = primitive.end
-            end = primitive.start
+            start = l_end
+            end = l_start
 
         radius = 0.0
-        if isinstance(primitive.aperture, gbr.primitives.Rectangle):
-            radius = primitive.aperture.height / 4.0
+
+        if isinstance(aperture, gbr.primitives.Rectangle):
+            #radius = max(aperture.height, aperture.width) / 4.0
+            print(aperture.height)
+            print(aperture.width)
+            radius = aperture.height / 4.0
             subdivisions = 4
-        elif isinstance(primitive.aperture, gbr.primitives.Circle):
-            radius = primitive.aperture.radius
+        elif isinstance(aperture, gbr.primitives.Circle):
+            radius = aperture.radius
             subdivisions = 60
 
         if radius != 0.0:
@@ -172,14 +227,15 @@ class PcbObj:
             end_theta = - math.pi / 2.0 + theta
             points = self._arc_segmentation(start, radius, start_theta, end_theta,
                                             forced_divisions=int(subdivisions/2))
-            start_theta = math.pi / 2.0 + theta + math.pi
-            end_theta = - math.pi / 2.0 + theta + math.pi
+            # sign inverted (Geekoid testcase)
+            start_theta = - math.pi / 2.0 + theta + math.pi
+            end_theta = math.pi / 2.0 + theta + math.pi
             points += self._arc_segmentation(end, radius, end_theta, start_theta,
                                              forced_divisions=int(subdivisions/2))
 
             return convex_hull(points)
         else:
-            return [primitive.start, primitive.end]
+            return [l_start, l_end]
 
     @staticmethod
     def _get_region_polygon(gdata):
@@ -192,36 +248,41 @@ class PcbObj:
     def _primitive_paths(self, primitive, region=False):
             gdata = []
             verbose_flag = False
+
             if isinstance(primitive, gbr.primitives.Outline):
                 # closed line type
                 if verbose_flag:
                     print("Closed line")
                 points = primitive.vertices
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+
             elif isinstance(primitive, gbr.primitives.Line):
                 closed_flag = True
                 # open line type
                 if verbose_flag:
                     print("Open line")
                 points = primitive.vertices
-
-                if isinstance(primitive.aperture, gbr.primitives.Circle):
-                    if verbose_flag:
-                        print("\t with rounded end")
-                        pts = [primitive.start, primitive.end]
-                        print(pts)
+                avaible_type = ()
+                if isinstance(primitive.aperture, gbr.primitives.Circle) or \
+                        isinstance(primitive.aperture, gbr.primitives.Rectangle):
+                    # if verbose_flag:
+                    #     print("\t with rounded end")
+                    #     pts = [primitive.start, primitive.end]
+                    #     print(pts)
                     if not region:
-                        points = self._get_enhanced_line(primitive)
+                        points = self._get_enhanced_line(primitive.start, primitive.end, primitive.aperture)
                     else:
                         points = [primitive.start, primitive.end]
                         closed_flag = False
+                    #print(points)
 
-                if isinstance(primitive.aperture, gbr.primitives.Rectangle):
-                    if not region:
-                        points = self._get_enhanced_line(primitive)
-                    else:
-                        points = [primitive.start, primitive.end]
-                        closed_flag = False
+                # if isinstance(primitive.aperture, gbr.primitives.Rectangle):
+                #     if not region:
+                #         points = self._get_enhanced_line(primitive.start, primitive.end, primitive.aperture)
+                #     else:
+                #         points = [primitive.start, primitive.end]
+                #         closed_flag = False
+                #     #print(points)
 
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': closed_flag}]
                 if points is None:
@@ -233,8 +294,20 @@ class PcbObj:
                 if verbose_flag:
                     print("Arc")
                 p = primitive
-                points = self._arc_segmentation(p.center, p.radius, p.start_angle, p.end_angle)
-                gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
+                points = self._arc_segmentation(p.center, p.radius, p.start_angle, p.end_angle, direction=p.direction)
+
+                if isinstance(primitive.aperture, gbr.primitives.Circle) or \
+                        isinstance(primitive.aperture, gbr.primitives.Rectangle) and not region:
+                        pts = points.copy()
+                        pp = pts.pop(0)
+                        gdata = []
+                        for np in pts:
+                            l_points = self._get_enhanced_line(pp, np, primitive.aperture)
+                            gdata.append({'points': l_points, 'polarity': primitive.level_polarity, 'closed': True})
+                            pp = np
+                else:
+                    gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
+
             elif isinstance(primitive, gbr.primitives.Rectangle):
                 # rectangle type
                 if verbose_flag:
@@ -279,7 +352,7 @@ class PcbObj:
                     lines_flag = True
                     for p in primitive.primitives:
                         gdata += self._primitive_paths(p, region=True)
-                        lines_flag &= isinstance(p, gbr.primitives.Line)
+                        lines_flag &= isinstance(p, gbr.primitives.Line) or isinstance(p, gbr.primitives.Arc)
                     if lines_flag:
                         # check if the line is closed
                         p0 = primitive.primitives[0]
@@ -291,6 +364,7 @@ class PcbObj:
 
                         points = self._get_region_polygon(gdata)
                         gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+
             elif isinstance(primitive, gbr.primitives.Drill):
                 # drill type
                 if verbose_flag:
@@ -314,8 +388,9 @@ class PcbObj:
 
             else:
                 print("[ERROR] PRIMITIVE NOT RECOGNIZED")
-                print(primitive)
+
             return gdata
+
 
 # -----------------------------------------------------------------------------
 
@@ -327,6 +402,7 @@ if __name__ == '__main__':
     gerber_path = "C:\\Users\\mmatt\\Documents\\prj\\new_cnc\\cam_data\\test2\\gerbers_file\\copper_bottom.gbr"
     gerber_path = "C:\\Users\\mmatt\\Documents\\prj\\new_cnc\\cam_data\\test2\\gerbers_file\\profile.gbr"
     gerber_path = "C:\\Users\\mmatt\\Documents\\prj\\new_cnc\\cam_data\\test3\\gerbers_file\\JST_motor_breakout_board-F_Cu.gbr"
+    gerber_path = "C:\\Users\\mmatt\\Desktop\\Gerber\\LedKeyring-F_Cu.gbr"
 
     pcb = PcbObj()
     pcb.load_gerber(gerber_path, 'top')

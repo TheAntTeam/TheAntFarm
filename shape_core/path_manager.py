@@ -33,8 +33,10 @@ class Gapper:
         return self.DEFAULT_STRATEGIES
 
     def add_taps_on_external_path(self, strategy='4p'):
+        # print("Add TAPS on EXTERNAL PATH")
         ex_path = self.in_path
         b = ex_path.bounds
+        # print(b)
 
         xm = (b[2] + b[0]) / 2.0
         ym = (b[3] + b[1]) / 2.0
@@ -117,7 +119,7 @@ class Gapper:
 
         if strategy == '2h':
             # find intersection points between
-            # vl hl and the external perimeter.
+            # hl and the external perimeter.
             # extract indices of the segments crossed by.
             # following the external linestring create the segment with
             # the length of taps_length
@@ -145,7 +147,7 @@ class Gapper:
 
         if strategy == '2v':
             # find intersection points between
-            # vl hl and the external perimeter.
+            # vl and the external perimeter.
             # extract indices of the segments crossed by.
             # following the external linestring create the segment with
             # the length of taps_length
