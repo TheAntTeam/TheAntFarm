@@ -76,6 +76,7 @@ class UiViewLoadLayerTab(QObject):
         load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.app_settings.layer_last_dir, filters)
         if load_file_path[0]:
             self.vis_layer.remove_layer(layer)
+            self.vis_layer.remove_path(layer)
             self.app_settings.layer_last_dir = os.path.dirname(load_file_path[0])
             logger.info("Loading " + load_file_path[0])
             self.load_layer_s.emit(layer, load_file_path[0])
@@ -97,8 +98,10 @@ class UiViewLoadLayerTab(QObject):
         loaded_views = list(self.vis_layer.get_layers_tag())
         for view in loaded_views:
             self.vis_layer.remove_layer(view)
+            self.vis_layer.remove_path(view)
         for layer_tag in self.layers_te:
             self.layers_te[layer_tag].setText("")
+        self.ui.jobs_sw.setCurrentIndex(0)
 
     def hide_show_layers(self, checked):
         for chb in self.layers_chb:
