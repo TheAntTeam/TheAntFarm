@@ -1,6 +1,7 @@
 #
 import time
-from shapely.geometry import Polygon, LinearRing, LineString, MultiLineString, Point, MultiPoint
+from shapely.geometry import Polygon, LineString, MultiLineString, Point, MultiPoint
+from shapely.ops import substring
 from collections import OrderedDict
 from .geometry_manager import merge_polygons_path, offset_polygon, offset_polygon_holes, get_bbox_area_sh, fill_holes_sh, get_poly_diameter
 from .path_optimizer import Optimizer
@@ -33,10 +34,8 @@ class Gapper:
         return self.DEFAULT_STRATEGIES
 
     def add_taps_on_external_path(self, strategy='4p'):
-        # print("Add TAPS on EXTERNAL PATH")
         ex_path = self.in_path
         b = ex_path.bounds
-        # print(b)
 
         xm = (b[2] + b[0]) / 2.0
         ym = (b[3] + b[1]) / 2.0
@@ -44,15 +43,15 @@ class Gapper:
         x2 = np.linspace(b[0], b[2], 4)[1:3]
         y2 = np.linspace(b[1], b[3], 4)[1:3]
 
-        v2l = (
+        v2l = [
             LineString(((x2[0], b[1]), (x2[0], b[3]))),
             LineString(((x2[1], b[1]), (x2[1], b[3])))
-        )
+        ]
 
-        h2l = (
+        h2l = [
             LineString(((b[0], y2[0]), (b[2], y2[0]))),
             LineString(((b[0], y2[1]), (b[2], y2[1])))
-        )
+        ]
 
         # straight cross
         vl = LineString(((xm, b[1]), (xm, b[3])))
@@ -62,7 +61,7 @@ class Gapper:
         lrl = LineString(((b[0], b[1]), (b[2], b[3])))
         rll = LineString(((b[2], b[1]), (b[0], b[3])))
 
-        taps = None
+        lines_list = None
 
         if strategy == '8p':
             # find intersection points between
@@ -70,20 +69,8 @@ class Gapper:
             # extract indices of the segments crossed by.
             # following the external linestring create the segment with
             # the length of taps_length
-            vpts0 = ex_path.intersection(v2l[0])
-            vpts1 = ex_path.intersection(v2l[1])
-            vpts = MultiPoint(list(vpts0) + list(vpts1))
-            points = list(ex_path.coords)
-            vtaps = self.get_tap(points, vpts)
 
-            hpts0 = ex_path.intersection(h2l[0])
-            hpts1 = ex_path.intersection(h2l[1])
-            hpts = MultiPoint(list(hpts0) + list(hpts1))
-            points = list(ex_path.coords)
-            htaps = self.get_tap(points, hpts)
-
-            taps = MultiLineString(vtaps + htaps)
-            # plot_lines([ex_path], taps)
+            lines_list = v2l + h2l
 
         if strategy == '4p':
             # find intersection points between
@@ -91,15 +78,8 @@ class Gapper:
             # extract indices of the segments crossed by.
             # following the external linestring create the segment with
             # the length of taps_length
-            vpts = ex_path.intersection(vl)
-            points = list(ex_path.coords)
-            vtaps = self.get_tap(points, vpts)
 
-            hpts = ex_path.intersection(hl)
-            points = list(ex_path.coords)
-            htaps = self.get_tap(points, hpts)
-
-            taps = MultiLineString(vtaps + htaps)
+            lines_list = [vl, hl]
 
         if strategy == '4x':
             # find intersection points between
@@ -107,15 +87,8 @@ class Gapper:
             # extract indices of the segments crossed by.
             # following the external linestring create the segment with
             # the length of taps_length
-            vpts = ex_path.intersection(lrl)
-            points = list(ex_path.coords)
-            vtaps = self.get_tap(points, vpts)
 
-            hpts = ex_path.intersection(rll)
-            points = list(ex_path.coords)
-            htaps = self.get_tap(points, hpts)
-
-            taps = MultiLineString(vtaps + htaps)
+            lines_list = [lrl, rll]
 
         if strategy == '2h':
             # find intersection points between
@@ -124,26 +97,16 @@ class Gapper:
             # following the external linestring create the segment with
             # the length of taps_length
 
-            hpts = ex_path.intersection(hl)
-            points = list(ex_path.coords)
-            htaps = self.get_tap(points, hpts)
-
-            taps = MultiLineString(htaps)
+            lines_list = [hl]
 
         if strategy == '4h':
             # find intersection points between
-            # v2l h2l and the external perimeter.
+            # h2l and the external perimeter.
             # extract indices of the segments crossed by.
             # following the external linestring create the segment with
             # the length of taps_length
 
-            hpts0 = ex_path.intersection(h2l[0])
-            hpts1 = ex_path.intersection(h2l[1])
-            hpts = MultiPoint(list(hpts0) + list(hpts1))
-            points = list(ex_path.coords)
-            htaps = self.get_tap(points, hpts)
-
-            taps = MultiLineString(htaps)
+            lines_list = h2l
 
         if strategy == '2v':
             # find intersection points between
@@ -151,113 +114,77 @@ class Gapper:
             # extract indices of the segments crossed by.
             # following the external linestring create the segment with
             # the length of taps_length
-            vpts = ex_path.intersection(vl)
-            points = list(ex_path.coords)
-            vtaps = self.get_tap(points, vpts)
 
-            taps = MultiLineString(vtaps)
+            lines_list = [vl]
 
         if strategy == '4v':
             # find intersection points between
-            # v2l h2l and the external perimeter.
+            # v2l and the external perimeter.
             # extract indices of the segments crossed by.
             # following the external linestring create the segment with
             # the length of taps_length
-            vpts0 = ex_path.intersection(v2l[0])
-            vpts1 = ex_path.intersection(v2l[1])
-            vpts = MultiPoint(list(vpts0) + list(vpts1))
-            points = list(ex_path.coords)
-            vtaps = self.get_tap(points, vpts)
 
-            taps = MultiLineString(vtaps)
+            lines_list = v2l
 
-        if taps is not None:
-            npaths = ex_path.difference(taps)
-            if npaths.type == "MultiLineString":
-                return list(npaths.geoms)
-            else:
-                return [npaths]
+        if lines_list is not None:
+            tappered = self.get_tappered_path(ex_path, lines_list)
+            return tappered
         else:
             return [ex_path]
 
-    def get_tap(self, points, vpts):
-        taps = []
-        for pt in vpts.geoms:
-            start_id = 0
+    def get_tappered_path(self, ex_path, intersect_line):
+        points = list(ex_path.coords)
+        pts = []
+        for line in intersect_line:
+            lb = line.boundary
+            pts += [lb[0], lb[1]]
+        pts_ll = []
+        ids = []
+        pids = []
+        lids = []
+        for p in pts:
+            d = ex_path.project(p)
+            pt = ex_path.interpolate(d)
+            pts_ll.append(pt)
             c = 0
-            prev_len = [(tuple(pt.coords[0]), 0)]
-            post_len = [(tuple(pt.coords[0]), 0)]
             for i, j in zip(points, points[1:]):
                 if LineString((i, j)).distance(pt) < 1e-8:
-                    start_id = c
-                    prev_len.append((i, Point(i).distance(pt)))
-                    post_len.append((j, Point(j).distance(pt)))
+                    ids.append(c)
+                    pids.append(pt)
+                    lids.append(d)
                 c += 1
-            htl = self.gap_dim / 2.0
 
-            # right half tap segment
-            # the dimension of the perimeter segment isn't enough
-            # so jump to the next perimeter segment
-            pts = self.rotate(points, start_id)
-            # now the start point is at the end
-            flag = post_len[1][1] <= htl
-            c = 1
-            d = post_len[-1][1]
-            while flag and c < len(pts):
-                di = Point(post_len[-1][0]).distance(Point(pts[c]))
-                post_len.append((pts[c], di))
-                if d + di > htl:
-                    flag = False
-                else:
-                    d += di
+        temp = sorted(zip(lids, ids, pids), key=lambda x: x[0])
+        lids, ids, pids = map(list, zip(*temp))
+
+        ids.append(ids[0])
+        pids.append(pids[0])
+
+        c = 0
+        lsl = []
+        ls = []
+        points.pop()
+        for j, p in enumerate(points):
+            ls.append(p)
+            if j == ids[c]:
+                ls.append(pids[c])
+                lsl.append(ls)
+                ls = [pids[c]]
                 c += 1
-            if not flag:
-                # found the segments of the perimeter to build half of the tap
-                if post_len[-1][1] != htl:
-                    # the length is grater
-                    p1 = post_len[-2][0]
-                    p2 = post_len[-1][0]
-                    l = LineString((p1, p2))
-                    r = htl - post_len[-2][1]
-                    ps = l.intersection(Point(p1).buffer(r))
-                    post_len.pop()
-                    post_len.append((ps.coords[1], htl))
+                while ids[c-1] == ids[c]:
+                    lsl.append(ls + [pids[c]])
+                    ls = [pids[c]]
+                    c += 1
 
-            # left half tap segment
-            # the dimension of the perimeter segment isn't enough
-            # so jump to the next perimeter segment
-            pts = self.rotate(points, start_id)
-            # now the start point is at the end
-            flag = prev_len[1][1] <= htl
-            c = -1
-            d = prev_len[-1][1]
-            while flag and c > - (len(pts)-1):
-                di = Point(prev_len[-1][0]).distance(Point(pts[c]))
-                prev_len.append((pts[c], di))
-                if d + di > htl:
-                    flag = False
-                else:
-                    d += di
-                c -= 1
-            if not flag:
-                # found the segments of the perimeter to build half of the tap
-                if prev_len[-1][1] != htl:
-                    # the length is grater
-                    p1 = prev_len[-2][0]
-                    p2 = prev_len[-1][0]
-                    l = LineString((p1, p2))
-                    r = htl - prev_len[-2][1]
-                    ps = l.intersection(Point(p1).buffer(r))
-                    prev_len.pop()
-                    prev_len.append((ps.coords[1], htl))
+        lsl[0] = ls + lsl[0]
+        nl = []
+        for ll in lsl:
+            ls = LineString(ll)
+            if self.gap_dim < ls.length:
+                nls = substring(ls, start_dist=self.gap_dim / 2.0, end_dist=ls.length - self.gap_dim / 2.0)
+                nl.append(nls)
 
-            pre_pts = [p[0] for p in prev_len]
-            pre_pts.reverse()
-            pre_pts.pop()
-            post_pts = [p[0] for p in post_len]
-            tap_pts = pre_pts + post_pts
-            taps.append(LineString(tap_pts))
-        return taps
+        return nl
 
 
 class MachinePath:
