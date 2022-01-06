@@ -36,18 +36,19 @@ class UiViewLoadLayerTab(QObject):
         # Load Layer TAB related controls.
         self.load_layer_s.connect(self.controlWo.load_new_layer)
         self.controlWo.update_layer_s.connect(self.visualize_new_layer)
+        gerber_extensions = "Gerber (*.gbr *.GBR);;Gerber bottom (*.gbl *.GBL);;Gerber (*.gtl *.GTL)"
         self.ui.top_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[0], "Load Top Gerber File", "Gerber (*.gbr *.GBR)"))
+            lambda: self.load_gerber_file(self.lay_tags[0], "Load Top Gerber File", gerber_extensions))
         self.ui.bottom_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[1], "Load Bottom Gerber File", "Gerber (*.gbr *.GBR)"))
+            lambda: self.load_gerber_file(self.lay_tags[1], "Load Bottom Gerber File", gerber_extensions))
         self.ui.profile_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[2], "Load Profile Gerber File", "Gerber (*.gbr *.GBR)"))
+            lambda: self.load_gerber_file(self.lay_tags[2], "Load Profile Gerber File", gerber_extensions))
         self.ui.drill_load_pb.clicked.connect(
             lambda: self.load_gerber_file(self.lay_tags[3], "Load Drill Excellon File", "Excellon (*.xln *.XLN)"))
         self.ui.no_copper_1_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[4], "Load No Copper TOP Gerber File", "Gerber (*.gbr *.GBR)"))
+            lambda: self.load_gerber_file(self.lay_tags[4], "Load No Copper TOP Gerber File", gerber_extensions))
         self.ui.no_copper_2_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[5], "Load No Copper BOTTOM Gerber File", "Gerber (*.gbr *.GBR)"))
+            lambda: self.load_gerber_file(self.lay_tags[5], "Load No Copper BOTTOM Gerber File", gerber_extensions))
         self.ui.top_view_chb.stateChanged.connect(
             lambda: self.set_layer_visible(self.lay_tags[0], self.ui.top_view_chb.isChecked()))
         self.ui.bottom_view_chb.stateChanged.connect(
