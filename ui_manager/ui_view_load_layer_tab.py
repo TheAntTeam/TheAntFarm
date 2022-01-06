@@ -36,7 +36,7 @@ class UiViewLoadLayerTab(QObject):
         # Load Layer TAB related controls.
         self.load_layer_s.connect(self.controlWo.load_new_layer)
         self.controlWo.update_layer_s.connect(self.visualize_new_layer)
-        gerber_extensions = "Gerber (*.gbr *.GBR);;Gerber bottom (*.gbl *.GBL);;Gerber (*.gtl *.GTL)"
+        gerber_extensions = "Gerber (*.gbr *.GBR *.gbl *.GBL *.gtl *.GTL)"
         self.ui.top_load_pb.clicked.connect(
             lambda: self.load_gerber_file(self.lay_tags[0], "Load Top Gerber File", gerber_extensions))
         self.ui.bottom_load_pb.clicked.connect(
