@@ -3,7 +3,6 @@ import os
 import time
 import gerber as gbr
 import gerber.primitives
-from gerber.render import theme
 # from gerber.render.cairo_backend import GerberCairoContext
 
 import numpy as np
@@ -32,6 +31,7 @@ class PcbObj:
         self.arc_max_len = self.MAX_ARC_CHORD_LEN
         self.arc_min_len = self.MIN_ARC_CHORD_LEN
         self.layers = Od({})
+        self.am_group = False
 
     def get_arc_subdivisions(self):
         return int(2.0 * math.pi / self.arc_angle)
@@ -73,9 +73,22 @@ class PcbObj:
             return False
         tmp = gbr.read(path)
         self.gerbers[tag] = tmp
-        self.gerbers[tag].to_metric()
+        # unit conversion used to FIX bug in pcb-tools
+        if tmp.units == 'inch':
+            self.gerbers[tag].to_metric()
+            self.gerbers[tag] = gbr.loads(self.dump_str(tmp))
 
         # self.render_layer(tmp)
+
+    @staticmethod
+    def dump_str(gerber):
+        # used to FIX bug in pcb-tools that doesn't work properly
+        # tip: file conversion to metric before geom parser
+        print("Converting file units to metric")
+        string = ""
+        for stmt in gerber.statements:
+            string += str(stmt.to_gerber(gerber.settings)) + "\n"
+        return string
 
     def load_excellon(self, path, tag):
         if tag not in self.EXN_KEYS:
@@ -111,6 +124,7 @@ class PcbObj:
         mp = []
         print("*** %s seconds ---" % (time.time() - start_time))
         for primitive in g.primitives:
+            primitive.to_metric()
             gdata = self._primitive_paths(primitive)
             for gd in gdata:
                 g = Geom(gd)
@@ -227,6 +241,7 @@ class PcbObj:
             end_theta = - math.pi / 2.0 + theta
             points = self._arc_segmentation(start, radius, start_theta, end_theta,
                                             forced_divisions=int(subdivisions/2))
+
             # sign inverted (Geekoid testcase)
             start_theta = - math.pi / 2.0 + theta + math.pi
             end_theta = math.pi / 2.0 + theta + math.pi
@@ -238,38 +253,51 @@ class PcbObj:
             return [l_start, l_end]
 
     @staticmethod
-    def _get_region_polygon(gdata):
-        # EAGLE type polygon
+    def _get_region_polygon(gdata, vectors=False):
         points = []
-        for g in gdata:
-            points += g["points"]
+        if not vectors:
+            # EAGLE type polygon
+            flag = False
+            for g in gdata:
+                if flag:
+                    if points[-1] == g["points"][0]:
+                        points += g["points"][1:]
+                    else:
+                        points += g["points"]
+                else:
+                    points += g["points"]
+                flag = True
+        else:
+            # AM Group Outline Vectors Description
+            gd = gdata.copy()
+            last = gd.pop()["points"][-1]
+            for g in gd:
+                for p in g["points"]:
+                    if p != last:
+                        points.append(p)
+            points += [last]
+            points.append(last)
         return points
 
     def _primitive_paths(self, primitive, region=False):
             gdata = []
             verbose_flag = False
 
-            if isinstance(primitive, gbr.primitives.Outline):
-                # closed line type
-                if verbose_flag:
-                    print("Closed line")
-                points = primitive.vertices
-                gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
-
-            elif isinstance(primitive, gbr.primitives.Line):
+            if isinstance(primitive, gbr.primitives.Line):
                 closed_flag = True
                 # open line type
                 if verbose_flag:
                     print("Open line")
                 points = primitive.vertices
                 avaible_type = ()
+
                 if isinstance(primitive.aperture, gbr.primitives.Circle) or \
                         isinstance(primitive.aperture, gbr.primitives.Rectangle):
                     # if verbose_flag:
                     #     print("\t with rounded end")
                     #     pts = [primitive.start, primitive.end]
                     #     print(pts)
-                    if not region:
+                    if not region or self.am_group:
                         points = self._get_enhanced_line(primitive.start, primitive.end, primitive.aperture)
                     else:
                         points = [primitive.start, primitive.end]
@@ -338,19 +366,31 @@ class PcbObj:
                 points2 = self._arc_segmentation(circle2.position, circle2.radius, 0, 2 * math.pi)
                 points = convex_hull(points1 + points2)
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
-            elif isinstance(primitive, gbr.primitives.Region) or isinstance(primitive, gbr.primitives.AMGroup):
+
+            elif isinstance(primitive, gbr.primitives.Region) or \
+                    isinstance(primitive, gbr.primitives.AMGroup) \
+                    or isinstance(primitive, gbr.primitives.Outline):
                 # group type
+
+                am_group = False
+                if isinstance(primitive, gbr.primitives.AMGroup):
+                    self.am_group = True
+                    am_group = True
+
                 if verbose_flag:
                     if region:
                         print("Region of Region")
                     else:
                         if isinstance(primitive, gbr.primitives.AMGroup):
                             print("AMGroup")
+                            print("Primitives: " + str(primitive.primitives))
                         else:
                             print("REGION")
+
                 if primitive.primitives is not None:
                     lines_flag = True
-                    for p in primitive.primitives:
+                    pp = primitive.primitives.copy()
+                    for p in pp:
                         gdata += self._primitive_paths(p, region=True)
                         lines_flag &= isinstance(p, gbr.primitives.Line) or isinstance(p, gbr.primitives.Arc)
                     if lines_flag:
@@ -362,8 +402,14 @@ class PcbObj:
                             gd = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
                             gdata += gd
 
-                        points = self._get_region_polygon(gdata)
+                        vectors = False
+                        if self.am_group and isinstance(primitive, gbr.primitives.Outline):
+                            vectors = p1.start == p1.end
+
+                        points = self._get_region_polygon(gdata, vectors)
                         gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+                if am_group:
+                    self.am_group = False
 
             elif isinstance(primitive, gbr.primitives.Drill):
                 # drill type
