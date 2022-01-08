@@ -125,9 +125,9 @@ class ControllerWorker(QObject):
         self.dro_status_updated = False
 
     def send_to_tx_queue(self, data):
-        parsered_cmd_str = self.decode_tag(data)
+        parsed_cmd_str = self.decode_tag(data)
         # logger.info(data)
-        self.serialTxQueue.put(parsered_cmd_str)
+        self.serialTxQueue.put(parsed_cmd_str)
         self.serial_tx_available_s.emit()
 
     def on_poll_timeout(self):
@@ -229,7 +229,7 @@ class ControllerWorker(QObject):
                         logger.debug(element)
             except BlockingIOError as e:
                 logger.error(e, exc_info=True)
-            except:
+            except Exception as e:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
     def decode_tag(self, gcode_str):
@@ -355,6 +355,8 @@ class ControllerWorker(QObject):
             bbox_t = self.control_controller.get_boundary_box(self.active_gcode_path)
             self.update_bbox_s.emit(bbox_t)
 
+    def get_workspace_parameters(self):
+        return self.control_controller.workspace_params_od
 
 # ***************** ALIGN related functions. ***************** #
 

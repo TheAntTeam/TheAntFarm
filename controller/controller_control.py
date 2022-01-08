@@ -43,6 +43,8 @@ class ControlController(QObject):
         self.prb_reps_todo = 1
         self.prb_reps_done = 0
 
+        self.workspace_params_od = OrderedDict({})
+
         self.gcodes_od = OrderedDict({})
 
     def get_probe_value(self):
@@ -99,7 +101,7 @@ class ControlController(QObject):
         return [self.status, self.mpos_a, self.wpos_a]
 
     def parse_bracket_square(self, line):
-        word = self.SPLITPAT.split(line[1:-1])
+        word = self.SPLITPAT.split(line.rstrip()[1:-1])
 
         if word[0] == "PRB":
             try:
@@ -109,6 +111,26 @@ class ControlController(QObject):
                 logging.error(e, exc_info=True)
             except Exception as e:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
+        elif word[0] == "G54":
+            self.workspace_params_od["G54"] = np.array([float(word[1]), float(word[2]), float(word[3])])
+        elif word[0] == "G55":
+            self.workspace_params_od["G55"] = np.array([float(word[1]), float(word[2]), float(word[3])])
+        elif word[0] == "G56":
+            self.workspace_params_od["G56"] = np.array([float(word[1]), float(word[2]), float(word[3])])
+        elif word[0] == "G57":
+            self.workspace_params_od["G57"] = np.array([float(word[1]), float(word[2]), float(word[3])])
+        elif word[0] == "G58":
+            self.workspace_params_od["G58"] = np.array([float(word[1]), float(word[2]), float(word[3])])
+        elif word[0] == "G59":
+            self.workspace_params_od["G59"] = np.array([float(word[1]), float(word[2]), float(word[3])])
+        elif word[0] == "G28":
+            self.workspace_params_od["G28"] = np.array([float(word[1]), float(word[2]), float(word[3])])
+        elif word[0] == "G30":
+            self.workspace_params_od["G30"] = np.array([float(word[1]), float(word[2]), float(word[3])])
+        elif word[0] == "G92":
+            self.workspace_params_od["G92"] = np.array([float(word[1]), float(word[2]), float(word[3])])
+        elif word[0] == "TLO":
+            self.workspace_params_od["TLO"] = float(word[1])
 
         return self.prb_val[0]
 
@@ -117,7 +139,6 @@ class ControlController(QObject):
         probe_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
         probe_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
 
-        #self.prb_val = []  # doesn't need anymore
         self.prb_updated = False
         self.prb_activated = True
         self.prb_num_todo = 1

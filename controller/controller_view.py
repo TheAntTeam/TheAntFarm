@@ -31,7 +31,7 @@ class ViewController(QObject):
                 return [loaded_layer, True]
         except (AttributeError, ValueError, ZeroDivisionError, IndexError) as e:
             logging.error(e, exc_info=True)
-        except:
+        except Exception as e:
             logger.error("Uncaught exception: %s", traceback.format_exc())
         return [None, None]
 
