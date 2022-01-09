@@ -13,9 +13,12 @@ logger = logging.getLogger(__name__)
 
 class ControlController(QObject):
     STATUSPAT = re.compile(
-        r"^<(\w*?),MPos:([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),WPos:([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),?(.*)>$")
+        r"^<(\w*?),MPos:([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),"
+        r"([+\-]?\d*\.\d*),WPos:([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),"
+        r"([+\-]?\d*\.\d*),?(.*)>$")
     POSPAT = re.compile(
-        r"^\[(...):([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*):?(\d*)\]$")
+        r"^\[(...):([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),"
+        r"([+\-]?\d*\.\d*):?(\d*)\]$")
     TLOPAT = re.compile(r"^\[(...):([+\-]?\d*\.\d*)\]$")
     DOLLARPAT = re.compile(r"^\[G\d* .*\]$")
     SPLITPAT = re.compile(r"[:,]")
@@ -43,6 +46,7 @@ class ControlController(QObject):
         self.prb_reps_todo = 1
         self.prb_reps_done = 0
 
+        self.status_report_od = OrderedDict({})
         self.workspace_params_od = OrderedDict({})
 
         self.gcodes_od = OrderedDict({})
@@ -79,25 +83,68 @@ class ControlController(QObject):
         line_stripped = line.strip()
         fields = line_stripped[1:-1].split("|")
         self.status = fields[0]
+        self.status_report_od["state"] = fields[0]
 
         for field in fields[1:]:
             word = self.SPLITPAT.split(field.strip())
             if word[0] == "MPos":
                 try:
                     self.mpos_a = np.array([float(word[1]), float(word[2]), float(word[3])])
+                    self.status_report_od["mpos"] = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
+                    logging.error(e, exc_info=True)
+                except Exception as e:
+                    logger.error("Uncaught exception: %s", traceback.format_exc())
+            elif word[0] == "F":
+                try:
+                    self.status_report_od["curfeed"] = float(word[1])
+                except (ValueError, IndexError):
+                    logging.error(e, exc_info=True)
+                except Exception as e:
+                    logger.error("Uncaught exception: %s", traceback.format_exc())
+            elif word[0] == "FS":
+                try:
+                    self.status_report_od["curfeed"] = float(word[1])
+                    self.status_report_od["curspindle"] = float(word[2])
+                except (ValueError, IndexError):
+                    logging.error(e, exc_info=True)
+                except Exception as e:
+                    logger.error("Uncaught exception: %s", traceback.format_exc())
+            elif word[0] == "Bf":
+                try:
+                    self.status_report_od["planner"] = int(word[1])
+                    self.status_report_od["rxbytes"] = int(word[2])
+                except (ValueError, IndexError):
+                    logging.error(e, exc_info=True)
+                except Exception as e:
+                    logger.error("Uncaught exception: %s", traceback.format_exc())
+            elif word[0] == "Ov":
+                try:
+                    self.status_report_od["OvFeed"] = int(word[1])
+                    self.status_report_od["OvRapid"] = int(word[2])
+                    self.status_report_od["OvSpindle"] = int(word[3])
+                except (ValueError, IndexError):
                     logging.error(e, exc_info=True)
                 except Exception as e:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "WCO":
                 try:
                     self.wco_a = np.array([float(word[1]), float(word[2]), float(word[3])])
+                    self.status_report_od["wco"] = np.array([float(word[1]), float(word[2]), float(word[3])])
+                except (ValueError, IndexError) as e:
+                    logging.error(e, exc_info=True)
+                except Exception as e:
+                    logger.error("Uncaught exception: %s", traceback.format_exc())
+            elif word[0] == "Pn":
+                try:
+                    self.status_report_od["pins"] = word[1]
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
                 except Exception as e:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
 
         self.wpos_a = self.mpos_a - self.wco_a
+        self.status_report_od["wpos"] = self.wpos_a
         return [self.status, self.mpos_a, self.wpos_a]
 
     def parse_bracket_square(self, line):

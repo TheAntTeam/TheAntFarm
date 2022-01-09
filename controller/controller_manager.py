@@ -355,6 +355,9 @@ class ControllerWorker(QObject):
             bbox_t = self.control_controller.get_boundary_box(self.active_gcode_path)
             self.update_bbox_s.emit(bbox_t)
 
+    def get_status_report(self):
+        return self.control_controller.status_report_od
+
     def get_workspace_parameters(self):
         return self.control_controller.workspace_params_od
 
