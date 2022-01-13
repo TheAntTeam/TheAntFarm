@@ -132,6 +132,8 @@ class UiControlTab(QObject):
         self.select_gcode_s.connect(self.controlWo.select_active_gcode)
         self.controlWo.update_gcode_s.connect(self.visualize_gcode)
 
+        self.handle_refresh_button()  # Initialize the serial ports list combo-box.
+
     @Slot(list)
     def update_status(self, status_l):
         self.ui.status_l.setText(status_l[0])
