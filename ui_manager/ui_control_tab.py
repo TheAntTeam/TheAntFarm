@@ -23,15 +23,28 @@ class UiControlTab(QObject):
     select_gcode_s = Signal(str)
 
     def __init__(self, ui, control_worker, serial_worker, ctrl_layer, app_settings):
+        """
+        Initialize ui elements of Control tab and connect signals coming and going to other classes/workers.
+
+        Parameters
+        ----------
+        ui: Ui_MainWindow
+            User interface object. Contains all user interface's children objects.
+        control_worker: ControllerWorker
+            Control thread worker object.
+        serial_worker: SerialWorker
+            Serial thread worker object.
+        ctrl_layer: VisualLayer
+            VisualLayer object that contain the openGL canvas.
+        app_settings: SettingsHandler
+            Handler object that allows the access to the application settings.
+        """
         super(UiControlTab, self).__init__()
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
         self.ctrl_layer = ctrl_layer
         self.app_settings = app_settings
-
-        self.ui.xy_jog_l.setText("XY [" + str(self.ui.xy_step_val_dsb.value()) + " mm]")
-        self.ui.z_jog_l.setText("Z [" + str(self.ui.z_step_val_dsb.value()) + " mm]")
 
         self.serial_connection_status = False
         self.ui_serial_send_s.connect(self.serialWo.send)
@@ -133,6 +146,11 @@ class UiControlTab(QObject):
         self.controlWo.update_gcode_s.connect(self.visualize_gcode)
 
         self.handle_refresh_button()  # Initialize the serial ports list combo-box.
+
+        self.ui.xy_step_cb.currentTextChanged.connect(self.xy_update_step)
+        self.ui.z_step_cb.currentTextChanged.connect(self.z_update_step)
+        self.ui.xy_step_val_dsb.setSingleStep(float(self.ui.xy_step_cb.currentText()))
+        self.ui.z_step_val_dsb.setSingleStep(float(self.ui.z_step_cb.currentText()))
 
     @Slot(list)
     def update_status(self, status_l):
@@ -401,6 +419,13 @@ class UiControlTab(QObject):
         logging.debug("Go to XY working 0")
         self.ui_serial_send_s.emit("G90 G0 X0 Y0\n")
 
+    def z_update_step(self):
+        new_step_str = self.ui.z_step_cb.currentText()
+        new_step_fl = float(new_step_str)  # try-except for the cast? No, because cb is not editable, up to now.
+        self.ui.z_step_val_dsb.setSingleStep(new_step_fl)
+        self.ui.z_plus_1_pb.setText("+" + new_step_str)
+        self.ui.z_minus_1_pb.setText("-" + new_step_str)
+
     def handle_x_minus(self):
         logging.debug("X_minus Command")
         x_min_val = self.ui.xy_step_val_dsb.value()
@@ -451,6 +476,13 @@ class UiControlTab(QObject):
         z_plus_val = self.ui.z_step_val_dsb.value()
         self.ui_serial_send_s.emit("$J=G91 Z" + str(z_plus_val) + " F100000\n")
 
+    def xy_update_step(self):
+        new_step_str = self.ui.xy_step_cb.currentText()
+        new_step_fl = float(new_step_str)  # try-except for the cast? No, because cb is not editable, up to now.
+        self.ui.xy_step_val_dsb.setSingleStep(new_step_fl)
+        self.ui.xy_plus_1_pb.setText("+" + new_step_str)
+        self.ui.xy_minus_1_pb.setText("-" + new_step_str)
+
     def handle_xy_plus_1(self):
         xy_val = self.ui.xy_step_val_dsb.value() + self.ui.xy_step_val_dsb.singleStep()
         self.ui.xy_step_val_dsb.setValue(xy_val)
@@ -460,18 +492,14 @@ class UiControlTab(QObject):
         self.ui.xy_step_val_dsb.setValue(xy_val)
 
     def handle_xy_div_10(self):
-        xy_step_val = self.ui.xy_step_val_dsb.singleStep()
-        if not xy_step_val == 0.01:  # Minimum step is 0.01
-            xy_step_val /= 10.0  # self.xy_step_val / 10.0
-            self.ui.xy_step_val_dsb.setSingleStep(xy_step_val)
-            self.ui.xy_jog_l.setText("XY [" + str(xy_step_val) + " mm]")
+        xy_value = self.ui.xy_step_val_dsb.value()
+        xy_value /= 10.0  # self.xy_value / 10.0
+        # if not xy_value < 0.01:  # Minimum step is 0.01
+        self.ui.xy_step_val_dsb.setValue(xy_value)
 
     def handle_xy_mul_10(self):
-        xy_step_val = self.ui.xy_step_val_dsb.singleStep()
-        if not xy_step_val == 100.0:  # Maximum step is 100.0
-            xy_step_val = self.ui.xy_step_val_dsb.singleStep() * 10.0  # xy_step_val * 10.0
-            self.ui.xy_step_val_dsb.setSingleStep(xy_step_val)
-            self.ui.xy_jog_l.setText("XY [" + str(xy_step_val) + " mm]")
+        xy_value = self.ui.xy_step_val_dsb.value()
+        self.ui.xy_step_val_dsb.setValue(xy_value*10.0)
 
     def handle_z_plus_1(self):
         z_val = self.ui.z_step_val_dsb.value() + self.ui.z_step_val_dsb.singleStep()
@@ -482,18 +510,12 @@ class UiControlTab(QObject):
         self.ui.z_step_val_dsb.setValue(z_val)
 
     def handle_z_div_10(self):
-        z_step_val = self.ui.z_step_val_dsb.singleStep()
-        if not z_step_val == 0.01:  # Minimum step is 0.01
-            z_step_val /= 10.0
-            self.ui.z_step_val_dsb.setSingleStep(z_step_val)
-            self.ui.z_jog_l.setText("Z [" + str(z_step_val) + " mm]")
+        z_value = self.ui.z_step_val_dsb.value()
+        self.ui.z_step_val_dsb.setValue(z_value/10.0)
 
     def handle_z_mul_10(self):
-        z_step_val = self.ui.z_step_val_dsb.singleStep()
-        if not z_step_val == 100.0:  # Maximum step is 100.0
-            z_step_val *= 10.0
-            self.ui.z_step_val_dsb.setSingleStep(z_step_val)
-            self.ui.z_jog_l.setText("Z [" + str(z_step_val) + " mm]")
+        z_value = self.ui.z_step_val_dsb.value()
+        self.ui.z_step_val_dsb.setValue(z_value*10.0)
 
     def handle_probe_cmd(self):
         logging.debug("Probe Command")

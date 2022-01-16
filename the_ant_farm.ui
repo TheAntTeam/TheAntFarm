@@ -52,7 +52,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -1855,10 +1855,22 @@
                   <item row="3" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QPushButton" name="zero_xy_pb">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -1874,10 +1886,22 @@
                   <item row="3" column="2" alignment="Qt::AlignHCenter">
                    <widget class="QPushButton" name="zero_y_pb">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -1893,10 +1917,22 @@
                   <item row="0" column="3" alignment="Qt::AlignHCenter">
                    <widget class="QLabel" name="z_axis_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -1924,10 +1960,22 @@
                   <item row="2" column="2" alignment="Qt::AlignHCenter">
                    <widget class="QLabel" name="wpos_y_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="layoutDirection">
                      <enum>Qt::LeftToRight</enum>
@@ -1949,10 +1997,22 @@
                   <item row="2" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QLabel" name="wpos_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -1980,10 +2040,22 @@
                   <item row="3" column="3" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QPushButton" name="zero_z_pb">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -1999,10 +2071,22 @@
                   <item row="1" column="2" alignment="Qt::AlignHCenter">
                    <widget class="QLabel" name="mpos_y_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="layoutDirection">
                      <enum>Qt::LeftToRight</enum>
@@ -2024,10 +2108,22 @@
                   <item row="1" column="3" alignment="Qt::AlignHCenter">
                    <widget class="QLabel" name="mpos_z_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="layoutDirection">
                      <enum>Qt::LeftToRight</enum>
@@ -2049,10 +2145,22 @@
                   <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QLabel" name="x_axis_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -2080,10 +2188,22 @@
                   <item row="2" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QLabel" name="wpos_x_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="layoutDirection">
                      <enum>Qt::LeftToRight</enum>
@@ -2105,10 +2225,22 @@
                   <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QLabel" name="axis_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -2136,10 +2268,22 @@
                   <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QLabel" name="mpos_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -2167,10 +2311,22 @@
                   <item row="2" column="3" alignment="Qt::AlignHCenter">
                    <widget class="QLabel" name="wpos_z_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="layoutDirection">
                      <enum>Qt::LeftToRight</enum>
@@ -2192,10 +2348,22 @@
                   <item row="3" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QPushButton" name="zero_x_pb">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -2211,10 +2379,22 @@
                   <item row="0" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QLabel" name="y_axis_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -2242,10 +2422,22 @@
                   <item row="1" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QLabel" name="mpos_x_l">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>12</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>13</height>
+                     </size>
                     </property>
                     <property name="layoutDirection">
                      <enum>Qt::LeftToRight</enum>
@@ -2290,10 +2482,22 @@
                   <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QPushButton" name="probe_pb">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
                     </property>
                     <property name="text">
                      <string>PROBE</string>
@@ -2303,10 +2507,22 @@
                   <item row="0" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QPushButton" name="get_bbox_pb">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -2324,10 +2540,22 @@
                     <item>
                      <widget class="QPushButton" name="ABL_pb">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>23</height>
+                       </size>
                       </property>
                       <property name="font">
                        <font>
@@ -2342,6 +2570,24 @@
                     </item>
                     <item>
                      <widget class="QCheckBox" name="abl_active_chb">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>23</height>
+                       </size>
+                      </property>
                       <property name="toolTip">
                        <string>Apply ABL if checked</string>
                       </property>
@@ -2361,6 +2607,24 @@
                  <layout class="QGridLayout" name="gridLayout_11">
                   <item row="0" column="1">
                    <widget class="QLabel" name="label_6">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <weight>75</weight>
@@ -2377,6 +2641,24 @@
                   </item>
                   <item row="0" column="2">
                    <widget class="QLabel" name="label_7">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <weight>75</weight>
@@ -2393,6 +2675,24 @@
                   </item>
                   <item row="0" column="3">
                    <widget class="QLabel" name="label_8">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <weight>75</weight>
@@ -2409,6 +2709,24 @@
                   </item>
                   <item row="0" column="4">
                    <widget class="QLabel" name="label_9">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <weight>75</weight>
@@ -2425,6 +2743,24 @@
                   </item>
                   <item row="1" column="0">
                    <widget class="QLabel" name="label_10">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <weight>75</weight>
@@ -2441,6 +2777,24 @@
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="x_min_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
@@ -2457,6 +2811,24 @@
                   </item>
                   <item row="1" column="2">
                    <widget class="QDoubleSpinBox" name="x_max_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
@@ -2476,6 +2848,24 @@
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
@@ -2489,6 +2879,24 @@
                   </item>
                   <item row="1" column="4">
                    <widget class="QSpinBox" name="x_num_step_sb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
@@ -2499,6 +2907,24 @@
                   </item>
                   <item row="2" column="0">
                    <widget class="QLabel" name="label_11">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <weight>75</weight>
@@ -2515,6 +2941,24 @@
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="y_min_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
@@ -2531,6 +2975,24 @@
                   </item>
                   <item row="2" column="2">
                    <widget class="QDoubleSpinBox" name="y_max_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
@@ -2550,6 +3012,24 @@
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
@@ -2563,6 +3043,24 @@
                   </item>
                   <item row="2" column="4">
                    <widget class="QSpinBox" name="y_num_step_sb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
@@ -2573,6 +3071,24 @@
                   </item>
                   <item row="3" column="0">
                    <widget class="QLabel" name="label_12">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <weight>75</weight>
@@ -2589,6 +3105,24 @@
                   </item>
                   <item row="3" column="1">
                    <widget class="QDoubleSpinBox" name="z_min_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
@@ -2605,6 +3139,24 @@
                   </item>
                   <item row="3" column="2">
                    <widget class="QDoubleSpinBox" name="z_max_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>23</height>
+                     </size>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
@@ -2974,21 +3526,105 @@
                   </item>
                   <item row="2" column="1">
                    <layout class="QVBoxLayout" name="verticalLayout_15">
-                    <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                     <widget class="QLabel" name="z_jog_l">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_14">
+                      <property name="sizeConstraint">
+                       <enum>QLayout::SetDefaultConstraint</enum>
                       </property>
-                      <property name="text">
-                       <string> Z [0.1 mm]</string>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
+                      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                       <widget class="QLabel" name="z_jog_l_2">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Z step [mm]</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                       <widget class="QComboBox" name="z_step_cb">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>75</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>75</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="currentIndex">
+                         <number>3</number>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string>100.0</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>10.0</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>5.0</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>1.0</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>0.5</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>0.1</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>0.05</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>0.01</string>
+                         </property>
+                        </item>
+                       </widget>
+                      </item>
+                     </layout>
                     </item>
                     <item>
                      <layout class="QGridLayout" name="gridLayout_18">
@@ -3128,7 +3764,7 @@
                          </font>
                         </property>
                         <property name="text">
-                         <string>-1</string>
+                         <string>-1.0</string>
                         </property>
                         <property name="autoRepeat">
                          <bool>true</bool>
@@ -3162,7 +3798,7 @@
                          </font>
                         </property>
                         <property name="text">
-                         <string>+1</string>
+                         <string>+1.0</string>
                         </property>
                         <property name="autoRepeat">
                          <bool>true</bool>
@@ -3175,21 +3811,105 @@
                   </item>
                   <item row="0" column="1">
                    <layout class="QVBoxLayout" name="verticalLayout_14">
-                    <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                     <widget class="QLabel" name="xy_jog_l">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_12">
+                      <property name="sizeConstraint">
+                       <enum>QLayout::SetDefaultConstraint</enum>
                       </property>
-                      <property name="text">
-                       <string>XY [0.1 mm]</string>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
+                      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                       <widget class="QLabel" name="xy_jog_l">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>23</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>XY step [mm]</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                       <widget class="QComboBox" name="xy_step_cb">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>75</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>75</width>
+                          <height>23</height>
+                         </size>
+                        </property>
+                        <property name="currentIndex">
+                         <number>3</number>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string>100.0</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>10.0</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>5.0</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>1.0</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>0.5</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>0.1</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>0.05</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>0.01</string>
+                         </property>
+                        </item>
+                       </widget>
+                      </item>
+                     </layout>
                     </item>
                     <item>
                      <layout class="QGridLayout" name="gridLayout_16">
@@ -3203,14 +3923,14 @@
                         </property>
                         <property name="minimumSize">
                          <size>
-                          <width>0</width>
+                          <width>50</width>
                           <height>23</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
-                          <height>16777215</height>
+                          <height>23</height>
                          </size>
                         </property>
                         <property name="font">
@@ -3220,7 +3940,7 @@
                          </font>
                         </property>
                         <property name="text">
-                         <string>+1</string>
+                         <string>+1.0</string>
                         </property>
                         <property name="autoRepeat">
                          <bool>true</bool>
@@ -3237,14 +3957,14 @@
                         </property>
                         <property name="minimumSize">
                          <size>
-                          <width>0</width>
+                          <width>50</width>
                           <height>23</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
-                          <height>16777215</height>
+                          <height>23</height>
                          </size>
                         </property>
                         <property name="font">
@@ -3271,14 +3991,14 @@
                         </property>
                         <property name="minimumSize">
                          <size>
-                          <width>0</width>
-                          <height>20</height>
+                          <width>50</width>
+                          <height>23</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
-                          <height>16777215</height>
+                          <height>23</height>
                          </size>
                         </property>
                         <property name="font">
@@ -3317,14 +4037,14 @@
                         </property>
                         <property name="minimumSize">
                          <size>
-                          <width>0</width>
+                          <width>50</width>
                           <height>23</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
-                          <height>16777215</height>
+                          <height>23</height>
                          </size>
                         </property>
                         <property name="font">
@@ -3352,14 +4072,14 @@
                         </property>
                         <property name="minimumSize">
                          <size>
-                          <width>0</width>
+                          <width>50</width>
                           <height>23</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
                           <width>50</width>
-                          <height>16777215</height>
+                          <height>23</height>
                          </size>
                         </property>
                         <property name="font">
@@ -3369,7 +4089,7 @@
                          </font>
                         </property>
                         <property name="text">
-                         <string>-1</string>
+                         <string>-1.0</string>
                         </property>
                         <property name="autoRepeat">
                          <bool>true</bool>
