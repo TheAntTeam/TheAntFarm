@@ -16,6 +16,7 @@ class AppSettingsHandler:
     MAIN_TAB_INDEX_DEFAULT = 0
     CTRL_TAB_INDEX_DEFAULT = 0
     SHOW_CONSOLE_DEFAULT = False
+    LAST_SERIAL_PORT_DEFAULT = ""
     LAYER_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
     GCODE_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -36,6 +37,7 @@ class AppSettingsHandler:
         self.main_tab_index = self.MAIN_TAB_INDEX_DEFAULT
         self.ctrl_tab_index = self.CTRL_TAB_INDEX_DEFAULT
         self.console_visibility = self.SHOW_CONSOLE_DEFAULT
+        self.last_serial_port = self.LAST_SERIAL_PORT_DEFAULT
         self.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
         self.gcode_last_dir = self.GCODE_LAST_DIR_DEFAULT
 
@@ -62,6 +64,7 @@ class AppSettingsHandler:
             self.logs_file = app_general.get('logs_file', self.LOGS_FILE_DEFAULT)
             self.logs_max_bytes = app_general.getint('logs_max_bytes', self.LOGS_MAX_BYTES)
             self.logs_backup_count = app_general.getint('logs_backup_count', self.LOGS_BACKUP_COUNT)
+            self.last_serial_port = app_general.get("last_serial_port", self.LAST_SERIAL_PORT_DEFAULT)
         # Apply general settings.
         self.main_win.resize(self.size)
         self.main_win.ui.main_tab_widget.setCurrentIndex(self.main_tab_index)
@@ -105,6 +108,7 @@ class AppSettingsHandler:
         app_general["logs_file"] = str(self.LOGS_FILE_DEFAULT)
         app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
+        app_general["last_serial_port"] = str(self.main_win.ui.serial_ports_cb.currentText())
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}

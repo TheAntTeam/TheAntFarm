@@ -145,12 +145,27 @@ class UiControlTab(QObject):
         self.select_gcode_s.connect(self.controlWo.select_active_gcode)
         self.controlWo.update_gcode_s.connect(self.visualize_gcode)
 
-        self.handle_refresh_button()  # Initialize the serial ports list combo-box.
+        self.init_serial_port_cb()
 
         self.ui.xy_step_cb.currentTextChanged.connect(self.xy_update_step)
         self.ui.z_step_cb.currentTextChanged.connect(self.z_update_step)
         self.ui.xy_step_val_dsb.setSingleStep(float(self.ui.xy_step_cb.currentText()))
         self.ui.z_step_val_dsb.setSingleStep(float(self.ui.z_step_cb.currentText()))
+
+    def init_serial_port_cb(self):
+        """
+        Initialize the serial ports list combo-box.
+
+        Returns
+        -------
+
+        """
+        self.handle_refresh_button()
+        lsp = self.app_settings.last_serial_port
+        idx_last_serial = self.ui.serial_ports_cb.findText(self.app_settings.last_serial_port)
+        if idx_last_serial != -1:
+            self.ui.serial_ports_cb.setCurrentIndex(idx_last_serial)
+
 
     @Slot(list)
     def update_status(self, status_l):
@@ -206,10 +221,19 @@ class UiControlTab(QObject):
         self.ui.status_l.setStyleSheet("QLabel { background-color : " + bkg_c + "; color : " + txt_c + "; }")
 
     def element_not_in_table(self, element):
-        """ Search if there is an element in the gcode table.
-            The element shall be the gcode path, a string.
-            :returns True if element is not in table
-            :returns False if element is in table. """
+        """
+        Search if there is an element in the gcode table.
+
+        Parameters
+        ----------
+        element: str
+            gcode path string.
+
+        Returns
+        -------
+        bool
+                True if element is not in table, False if element is in table.
+        """
         num_rows = self.ui.gcode_tw.rowCount()
         for row in range(0, num_rows):
             if element == self.ui.gcode_tw.cellWidget(row, 0).toolTip():
