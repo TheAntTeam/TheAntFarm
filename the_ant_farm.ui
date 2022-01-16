@@ -4246,9 +4246,6 @@
                           <bold>true</bold>
                          </font>
                         </property>
-                        <property name="toolTip">
-                         <string extracomment="Refresh serial port list.">Refresh serial port list.</string>
-                        </property>
                         <property name="statusTip">
                          <string>Refresh serial port list.</string>
                         </property>
@@ -4314,9 +4311,6 @@
                         <weight>75</weight>
                         <bold>true</bold>
                        </font>
-                      </property>
-                      <property name="toolTip">
-                       <string>Connect to selected serial port.</string>
                       </property>
                       <property name="statusTip">
                        <string>Connect to selected serial port.</string>
@@ -4925,14 +4919,8 @@
               <height>16777215</height>
              </size>
             </property>
-            <property name="toolTip">
-             <string>UNLOCK ($X)</string>
-            </property>
-            <property name="toolTipDuration">
-             <number>1000</number>
-            </property>
             <property name="statusTip">
-             <string>Sends the unlock command to the machine.</string>
+             <string>Send the unlock command to the machine.</string>
             </property>
             <property name="text">
              <string>UNLOCK</string>
@@ -4973,12 +4961,6 @@
               <width>120</width>
               <height>16777215</height>
              </size>
-            </property>
-            <property name="toolTip">
-             <string>HOMING ($H)</string>
-            </property>
-            <property name="toolTipDuration">
-             <number>1000</number>
             </property>
             <property name="statusTip">
              <string>Execute homing procedure.</string>
@@ -5023,14 +5005,8 @@
               <height>16777215</height>
              </size>
             </property>
-            <property name="toolTip">
-             <string>SEND FILE</string>
-            </property>
-            <property name="toolTipDuration">
-             <number>1000</number>
-            </property>
             <property name="statusTip">
-             <string>Sends the selected gcode file.</string>
+             <string>Send the selected gcode file.</string>
             </property>
             <property name="text">
              <string>PLAY</string>
@@ -5071,12 +5047,6 @@
               <width>120</width>
               <height>16777215</height>
              </size>
-            </property>
-            <property name="toolTip">
-             <string>PAUSE/HOLD (!)</string>
-            </property>
-            <property name="toolTipDuration">
-             <number>1000</number>
             </property>
             <property name="statusTip">
              <string>Pause/Hold the machine.</string>
@@ -5121,12 +5091,6 @@
               <height>16777215</height>
              </size>
             </property>
-            <property name="toolTip">
-             <string>STOP SENDING FILE</string>
-            </property>
-            <property name="toolTipDuration">
-             <number>1000</number>
-            </property>
             <property name="statusTip">
              <string>Stop sending the gcode file.</string>
             </property>
@@ -5169,12 +5133,6 @@
               <width>120</width>
               <height>16777215</height>
              </size>
-            </property>
-            <property name="toolTip">
-             <string>TOOL CHANGE</string>
-            </property>
-            <property name="toolTipDuration">
-             <number>1000</number>
             </property>
             <property name="statusTip">
              <string>Execute a tool change procedure.</string>
@@ -5356,7 +5314,7 @@
    <addaction name="menuFile"/>
    <addaction name="menuConsole"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="status_bar"/>
   <action name="actionLoad">
    <property name="text">
     <string>Open</string>
