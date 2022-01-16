@@ -3539,6 +3539,18 @@
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>23</height>
+                         </size>
+                        </property>
                         <property name="font">
                          <font>
                           <weight>75</weight>
@@ -3564,13 +3576,13 @@
                         <property name="minimumSize">
                          <size>
                           <width>75</width>
-                          <height>0</height>
+                          <height>18</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
                           <width>75</width>
-                          <height>16777215</height>
+                          <height>23</height>
                          </size>
                         </property>
                         <property name="font">
@@ -3632,13 +3644,13 @@
                        <widget class="QDoubleSpinBox" name="z_step_val_dsb">
                         <property name="minimumSize">
                          <size>
-                          <width>0</width>
+                          <width>70</width>
                           <height>20</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>50</width>
+                          <width>70</width>
                           <height>16777215</height>
                          </size>
                         </property>
@@ -3747,13 +3759,13 @@
                         </property>
                         <property name="minimumSize">
                          <size>
-                          <width>0</width>
+                          <width>70</width>
                           <height>23</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>50</width>
+                          <width>70</width>
                           <height>16777215</height>
                          </size>
                         </property>
@@ -3781,13 +3793,13 @@
                         </property>
                         <property name="minimumSize">
                          <size>
-                          <width>0</width>
+                          <width>70</width>
                           <height>23</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>50</width>
+                          <width>70</width>
                           <height>16777215</height>
                          </size>
                         </property>
@@ -3923,13 +3935,13 @@
                         </property>
                         <property name="minimumSize">
                          <size>
-                          <width>50</width>
-                          <height>23</height>
+                          <width>70</width>
+                          <height>20</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>50</width>
+                          <width>70</width>
                           <height>23</height>
                          </size>
                         </property>
@@ -3991,13 +4003,13 @@
                         </property>
                         <property name="minimumSize">
                          <size>
-                          <width>50</width>
+                          <width>70</width>
                           <height>23</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>50</width>
+                          <width>70</width>
                           <height>23</height>
                          </size>
                         </property>
@@ -4072,13 +4084,13 @@
                         </property>
                         <property name="minimumSize">
                          <size>
-                          <width>50</width>
+                          <width>70</width>
                           <height>23</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>50</width>
+                          <width>70</width>
                           <height>23</height>
                          </size>
                         </property>
@@ -4358,6 +4370,43 @@
           <property name="spacing">
            <number>6</number>
           </property>
+          <item>
+           <widget class="QToolButton" name="soft_reset_tb">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="statusTip">
+             <string>Send a soft reset command to the machine.</string>
+            </property>
+            <property name="text">
+             <string>SOFT RESET</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonIconOnly</enum>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QLabel" name="status_l">
             <property name="sizePolicy">

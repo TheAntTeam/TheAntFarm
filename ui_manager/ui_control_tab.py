@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 class UiControlTab(QObject):
     """Class dedicated to UI <--> Control interactions on Control Tab. """
     controller_connected_s = Signal(bool)
+    ui_serial_send_bytes_s = Signal(bytes)
     ui_serial_send_s = Signal(str)
     ui_serial_open_s = Signal(str)
     ui_serial_close_s = Signal()
@@ -48,6 +49,7 @@ class UiControlTab(QObject):
 
         self.serial_connection_status = False
         self.ui_serial_send_s.connect(self.serialWo.send)
+        self.ui_serial_send_bytes_s.connect(self.serialWo.send)
         self.ui_serial_open_s.connect(self.serialWo.open_port)
         self.ui_serial_close_s.connect(self.serialWo.close_port)
         self.controlWo.reset_controller_status_s.connect(self.controlWo.reset_dro_status_updated)
@@ -84,6 +86,7 @@ class UiControlTab(QObject):
         self.ui.clear_terminal_pb.clicked.connect(self.handle_clear_terminal)
         self.ui.send_pb.clicked.connect(self.send_input)
         self.ui.send_te.returnPressed.connect(self.send_input)
+        self.ui.soft_reset_tb.clicked.connect(self.handle_soft_reset)
         self.ui.unlock_tb.clicked.connect(self.handle_unlock)
         self.ui.homing_tb.clicked.connect(self.handle_homing)
         self.ui.zero_xy_pb.clicked.connect(self.handle_xy_0)
@@ -119,6 +122,7 @@ class UiControlTab(QObject):
         self.ui.x_num_step_sb.valueChanged.connect(self.update_bbox_x_steps)
         self.ui.y_num_step_sb.valueChanged.connect(self.update_bbox_y_steps)
 
+        self.ui.soft_reset_tb.setEnabled(False)
         self.ui.unlock_tb.setEnabled(False)
         self.ui.homing_tb.setEnabled(False)
         self.ui.play_tb.setEnabled(False)
@@ -162,10 +166,9 @@ class UiControlTab(QObject):
         """
         self.handle_refresh_button()
         lsp = self.app_settings.last_serial_port
-        idx_last_serial = self.ui.serial_ports_cb.findText(self.app_settings.last_serial_port)
+        idx_last_serial = self.ui.serial_ports_cb.findText(lsp)
         if idx_last_serial != -1:
             self.ui.serial_ports_cb.setCurrentIndex(idx_last_serial)
-
 
     @Slot(list)
     def update_status(self, status_l):
@@ -349,6 +352,7 @@ class UiControlTab(QObject):
 
     def handle_refresh_button(self):
         """Get list of serial ports available."""
+        current_port = self.ui.serial_ports_cb.currentText()
         ls = self.serialWo.get_port_list()
         if ls:
             logger.debug("Available ports: " + str(ls))
@@ -358,6 +362,9 @@ class UiControlTab(QObject):
             logger.info('No serial ports available.')
             self.ui.serial_te.append('No serial ports available.')
             self.ui.serial_ports_cb.clear()
+        idx_last_serial = self.ui.serial_ports_cb.findText(current_port)
+        if idx_last_serial != -1:
+            self.ui.serial_ports_cb.setCurrentIndex(idx_last_serial)
 
     def handle_connect_button(self):
         """Connect/Disconnect button opens/closes the selected serial port and
@@ -380,6 +387,7 @@ class UiControlTab(QObject):
             self.ui.refresh_pb.hide()
             self.ui.send_te.show()
             self.ui.send_pb.show()
+            self.ui.soft_reset_tb.setEnabled(True)
             self.ui.unlock_tb.setEnabled(True)
             self.ui.homing_tb.setEnabled(True)
             if self.is_gcode_rb_selected():
@@ -398,6 +406,7 @@ class UiControlTab(QObject):
         self.ui.send_pb.hide()
         self.ui.status_l.setText("Not Connected")
         self.update_status_colors("Not Connected")
+        self.ui.soft_reset_tb.setEnabled(False)
         self.ui.unlock_tb.setEnabled(False)
         self.ui.homing_tb.setEnabled(False)
         self.ui.play_tb.setEnabled(False)
@@ -414,6 +423,10 @@ class UiControlTab(QObject):
             self.ui.logging_plain_te.show()
         else:
             self.ui.logging_plain_te.hide()
+
+    def handle_soft_reset(self):
+        logging.info("Soft Reset Command")
+        self.ui_serial_send_bytes_s.emit(b'\x18')
 
     def handle_unlock(self):
         logging.debug("Unlock Command")

@@ -65,7 +65,7 @@ class SerialWorker(QObject):
             if data_out:
                 logger.debug("data in: " + data_out)
                 self.residual_string = self.residual_string + data_out
-                logger.debug("Residual string: " + self.residual_string)
+                # logger.debug("Residual string: " + self.residual_string)
                 res_split = self.residual_string.splitlines(True)
                 self.residual_string = ""
                 while res_split:
@@ -76,7 +76,7 @@ class SerialWorker(QObject):
                         self.rx_queue_not_empty_s.emit()
                     else:
                         self.residual_string = element
-                logger.debug("Final residual string: " + self.residual_string)
+                # logger.debug("Final residual string: " + self.residual_string)
 
     @Slot(bytes)
     def send(self, data):
