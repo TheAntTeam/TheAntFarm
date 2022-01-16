@@ -4925,6 +4925,15 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>UNLOCK ($X)</string>
+            </property>
+            <property name="toolTipDuration">
+             <number>1000</number>
+            </property>
+            <property name="statusTip">
+             <string>Sends the unlock command to the machine.</string>
+            </property>
             <property name="text">
              <string>UNLOCK</string>
             </property>
@@ -4964,6 +4973,15 @@
               <width>120</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>HOMING ($H)</string>
+            </property>
+            <property name="toolTipDuration">
+             <number>1000</number>
+            </property>
+            <property name="statusTip">
+             <string>Execute homing procedure.</string>
             </property>
             <property name="text">
              <string>HOME</string>
@@ -5005,6 +5023,15 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>SEND FILE</string>
+            </property>
+            <property name="toolTipDuration">
+             <number>1000</number>
+            </property>
+            <property name="statusTip">
+             <string>Sends the selected gcode file.</string>
+            </property>
             <property name="text">
              <string>PLAY</string>
             </property>
@@ -5044,6 +5071,15 @@
               <width>120</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>PAUSE/HOLD (!)</string>
+            </property>
+            <property name="toolTipDuration">
+             <number>1000</number>
+            </property>
+            <property name="statusTip">
+             <string>Pause/Hold the machine.</string>
             </property>
             <property name="text">
              <string>PAUSE/RESUME</string>
@@ -5085,6 +5121,15 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>STOP SENDING FILE</string>
+            </property>
+            <property name="toolTipDuration">
+             <number>1000</number>
+            </property>
+            <property name="statusTip">
+             <string>Stop sending the gcode file.</string>
+            </property>
             <property name="text">
              <string>STOP</string>
             </property>
@@ -5124,6 +5169,15 @@
               <width>120</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>TOOL CHANGE</string>
+            </property>
+            <property name="toolTipDuration">
+             <number>1000</number>
+            </property>
+            <property name="statusTip">
+             <string>Execute a tool change procedure.</string>
             </property>
             <property name="text">
              <string>TOOL CHANGE</string>
