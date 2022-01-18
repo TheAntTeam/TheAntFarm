@@ -13,7 +13,7 @@ class UiControlTab(QObject):
     controller_connected_s = Signal(bool)
     ui_serial_send_bytes_s = Signal(bytes)
     ui_serial_send_s = Signal(str)
-    ui_serial_open_s = Signal(str)
+    ui_serial_open_s = Signal(str, int)
     ui_serial_close_s = Signal()
 
     send_gcode_s = Signal(str)                   # Signal to start sending a gcode file
@@ -48,6 +48,8 @@ class UiControlTab(QObject):
         self.app_settings = app_settings
 
         self.serial_connection_status = False
+        self.serial_ports_name_ls = []
+        self.serial_ports_baudrate_ls = []
         self.ui_serial_send_s.connect(self.serialWo.send)
         self.ui_serial_send_bytes_s.connect(self.serialWo.send)
         self.ui_serial_open_s.connect(self.serialWo.open_port)
@@ -69,6 +71,7 @@ class UiControlTab(QObject):
         self.controlWo.serial_tx_available_s.connect(self.serialWo.send_from_queue)
 
         # From Serial Manager to UI Manager
+        self.serialWo.get_port_list_s.connect(self.get_ports_and_bauds)
         self.serialWo.open_port_s.connect(self.act_on_connection)
         self.serialWo.update_console_text_s.connect(self.update_console_text)
 
@@ -162,17 +165,13 @@ class UiControlTab(QObject):
 
     def init_serial_port_cb(self):
         """
-        Initialize the serial ports list combo-box.
+        Initialize the serial ports ui elements.
 
         Returns
         -------
 
         """
         self.handle_refresh_button()
-        lsp = self.app_settings.last_serial_port
-        idx_last_serial = self.ui.serial_ports_cb.findText(lsp)
-        if idx_last_serial != -1:
-            self.ui.serial_ports_cb.setCurrentIndex(idx_last_serial)
 
     @Slot(list)
     def update_status(self, status_l):
@@ -357,28 +356,52 @@ class UiControlTab(QObject):
         self.ui_serial_send_s.emit(self.ui.send_te.text() + "\n")
         self.ui.send_te.clear()
 
-    def handle_refresh_button(self):
-        """Get list of serial ports available."""
+    @Slot(list, list)
+    def get_ports_and_bauds(self, port_names, baudrates):
+        self.serial_ports_name_ls = port_names
+        self.serial_ports_baudrate_ls = baudrates
         current_port = self.ui.serial_ports_cb.currentText()
-        ls = self.serialWo.get_port_list()
-        if ls:
-            logger.debug("Available ports: " + str(ls))
+        current_baud = self.ui.serial_baud_cb.currentText()
+        idx_last_serial = self.ui.serial_ports_cb.findText(current_port)
+        idx_last_baud = self.ui.serial_baud_cb.findText(current_baud)
+        if self.serial_ports_name_ls:
+            logger.debug("Available ports: " + str(self.serial_ports_name_ls))
             self.ui.serial_ports_cb.clear()
-            self.ui.serial_ports_cb.addItems(ls)
+            self.ui.serial_ports_cb.addItems(self.serial_ports_name_ls)
+            self.ui.serial_baud_cb.clear()
+            self.ui.serial_baud_cb.addItems([str(baud) for baud in baudrates])
         else:
             logger.info('No serial ports available.')
             self.ui.serial_te.append('No serial ports available.')
             self.ui.serial_ports_cb.clear()
-        idx_last_serial = self.ui.serial_ports_cb.findText(current_port)
+            self.ui.serial_baud_cb.clear()
+
         if idx_last_serial != -1:
             self.ui.serial_ports_cb.setCurrentIndex(idx_last_serial)
+        else:
+            lsp = self.app_settings.last_serial_port
+            idx_last_serial = self.ui.serial_ports_cb.findText(lsp)
+            if idx_last_serial != -1:
+                self.ui.serial_ports_cb.setCurrentIndex(idx_last_serial)
+
+        if idx_last_baud != -1:
+            self.ui.serial_baud_cb.setCurrentIndex(idx_last_baud)
+        else:
+            idx_default_baud = self.ui.serial_baud_cb.findText(self.app_settings.last_serial_baud)
+            if idx_default_baud != -1:
+                self.ui.serial_baud_cb.setCurrentIndex(idx_default_baud)
+
+    def handle_refresh_button(self):
+        """Get list of serial ports available."""
+        self.serialWo.refresh_port_list_s.emit()
 
     def handle_connect_button(self):
         """Connect/Disconnect button opens/closes the selected serial port and
            creates the serial worker thread. If the thread was
            already created previously and paused, it revives it."""
         if not self.serial_connection_status:
-            self.ui_serial_open_s.emit(self.ui.serial_ports_cb.currentText())
+            self.ui_serial_open_s.emit(self.ui.serial_ports_cb.currentText(),
+                                       int(self.ui.serial_baud_cb.currentText()))
         else:
             self.ui_serial_close_s.emit()
             self.act_on_disconnection()

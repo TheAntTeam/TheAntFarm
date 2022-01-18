@@ -10,11 +10,14 @@ class SerialWorker(QObject):
     open_port_s = Signal(bool)
     update_console_text_s = Signal(str)
     rx_queue_not_empty_s = Signal()
+    refresh_port_list_s = Signal()
+    get_port_list_s = Signal(list, list)
 
     def __init__(self, serial_rx_queue, serial_tx_queue):
         super(SerialWorker, self).__init__()
         self.serial_port = QSerialPort(self)
         self.serial_port.readyRead.connect(self.receive)
+        self.refresh_port_list_s.connect(self.get_port_list)
 
         self.serialRxQueue = serial_rx_queue  # FIFO RX Queue to pass data to control thread
         self.serialTxQueue = serial_tx_queue  # FIFO TX Queue to get data from control thread
@@ -23,15 +26,16 @@ class SerialWorker(QObject):
         self.count_queue_sent = 0
         self.count_sent = 0
 
-    @staticmethod
-    def get_port_list():
+    @Slot()
+    def get_port_list(self):
         """Return serial port list."""
         port_l = QSerialPortInfo().availablePorts()
         port_name_l = [port.portName() for port in port_l]
         port_name_l.sort()
-        return port_name_l
+        bauds_ls = port_l[0].standardBaudRates()
+        self.get_port_list_s.emit(port_name_l, bauds_ls)
 
-    def open_port(self, port):
+    def open_port(self, port, baud_rate):
         """Open passed serial port. Return outcome of operation. True if success, otherwise False. """
         if port:
             logger.debug("Opening " + port)
@@ -39,7 +43,7 @@ class SerialWorker(QObject):
             try:
                 self.serial_port.setPortName(port)
                 if self.serial_port.open(QIODevice.ReadWrite):
-                    self.serial_port.setBaudRate(QSerialPort.Baud115200)  #todo: pass baudrate
+                    self.serial_port.setBaudRate(baud_rate)
                     self.open_port_s.emit(True)
                 else:
                     self.update_console_text_s.emit("COM port could not be opened." + self.serial_port.errorString())
