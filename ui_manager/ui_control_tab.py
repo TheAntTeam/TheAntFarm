@@ -387,7 +387,7 @@ class UiControlTab(QObject):
         if idx_last_baud != -1:
             self.ui.serial_baud_cb.setCurrentIndex(idx_last_baud)
         else:
-            idx_default_baud = self.ui.serial_baud_cb.findText(self.app_settings.last_serial_baud)
+            idx_default_baud = self.ui.serial_baud_cb.findText(str(self.app_settings.last_serial_baud))
             if idx_default_baud != -1:
                 self.ui.serial_baud_cb.setCurrentIndex(idx_default_baud)
 
