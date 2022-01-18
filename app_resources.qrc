@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="resources">
+    <file>resources/icons/gray-play-and-pause-button.svg</file>
     <file>resources/icons/black_east_arrow.svg</file>
     <file>resources/icons/black_north_arrow.svg</file>
     <file>resources/icons/play-and-pause-button.svg</file>

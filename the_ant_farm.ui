@@ -2589,9 +2589,6 @@
                        </size>
                       </property>
                       <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="statusTip">
                        <string>Apply ABL if checked</string>
                       </property>
                       <property name="text">
@@ -3579,13 +3576,13 @@
                         <property name="minimumSize">
                          <size>
                           <width>75</width>
-                          <height>18</height>
+                          <height>20</height>
                          </size>
                         </property>
                         <property name="maximumSize">
                          <size>
                           <width>75</width>
-                          <height>23</height>
+                          <height>16777215</height>
                          </size>
                         </property>
                         <property name="font">
@@ -5117,6 +5114,9 @@
               <width>64</width>
               <height>64</height>
              </size>
+            </property>
+            <property name="checkable">
+             <bool>false</bool>
             </property>
             <property name="toolButtonStyle">
              <enum>Qt::ToolButtonIconOnly</enum>

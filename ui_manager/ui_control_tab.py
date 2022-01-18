@@ -1,6 +1,7 @@
 from PySide2.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelIndex
 from PySide2.QtWidgets import QFileDialog, QLineEdit, QRadioButton, QTableWidgetItem, \
                               QHeaderView, QCheckBox, QButtonGroup
+from PySide2.QtGui import QIcon
 from style_manager import StyleManager
 import os
 import logging
@@ -47,6 +48,7 @@ class UiControlTab(QObject):
         self.ctrl_layer = ctrl_layer
         self.app_settings = app_settings
 
+        self.holding_status = False
         self.serial_connection_status = False
         self.serial_ports_name_ls = []
         self.serial_ports_baudrate_ls = []
@@ -189,6 +191,7 @@ class UiControlTab(QObject):
     def update_status_buttons(self, status):
         sta = status.lower()
         enabled = False
+        holding = False
         if "alarm" in sta:
             pass
         elif "run" in sta:
@@ -199,8 +202,36 @@ class UiControlTab(QObject):
             enabled = True
         elif "hold" in sta:
             enabled = True
+            holding = True
         elif "not connected" in sta:
             pass
+
+        if holding:
+            if not self.holding_status:
+                self.holding_status = True
+                icon = QIcon()
+                icon.addFile(u":/resources/resources/icons/white-play-and-pause-button.svg", QSize(), QIcon.Normal,
+                             QIcon.Off)
+                icon.addFile(u":/resources/resources/icons/gray-play-and-pause-button.svg", QSize(), QIcon.Disabled,
+                             QIcon.Off)
+                icon.addFile(u":/resources/resources/icons/gray-play-and-pause-button.svg", QSize(), QIcon.Disabled,
+                             QIcon.On)
+                self.ui.pause_resume_tb.setIcon(icon)
+                self.ui.pause_resume_tb.setIconSize(QSize(64, 64))
+                self.ui.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        else:
+            if self.holding_status:
+                self.holding_status = False
+                icon = QIcon()
+                icon.addFile(u":/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Normal,
+                             QIcon.Off)
+                icon.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Disabled,
+                             QIcon.Off)
+                icon.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Disabled,
+                             QIcon.On)
+                self.ui.pause_resume_tb.setIcon(icon)
+                self.ui.pause_resume_tb.setIconSize(QSize(64, 64))
+                self.ui.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
 
         self.ui.pause_resume_tb.setEnabled(enabled)
 
