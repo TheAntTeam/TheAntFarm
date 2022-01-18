@@ -2589,6 +2589,9 @@
                        </size>
                       </property>
                       <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="statusTip">
                        <string>Apply ABL if checked</string>
                       </property>
                       <property name="text">

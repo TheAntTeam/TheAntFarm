@@ -130,6 +130,10 @@ class UiControlTab(QObject):
         self.ui.stop_tb.setEnabled(False)
         self.ui.tool_change_tb.setEnabled(False)
 
+        self.ui.ABL_pb.setEnabled(False)
+        self.ui.abl_active_chb.setEnabled(False)
+        self.ui.get_bbox_pb.setEnabled(False)
+
         # todo: place the column behavior settings somewhere else
         self.ui.gcode_tw.setColumnWidth(0, 200)
         self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
@@ -282,6 +286,9 @@ class UiControlTab(QObject):
                 # read the tooltip
                 logging.debug(gcode_path)
                 self.select_gcode_s.emit(gcode_path)
+                self.ui.ABL_pb.setEnabled(True)
+                self.ui.abl_active_chb.setEnabled(True)
+                self.ui.get_bbox_pb.setEnabled(True)
                 if self.serial_connection_status:
                     self.ui.play_tb.setEnabled(True)
             else:
