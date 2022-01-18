@@ -2,6 +2,8 @@
   <qresource prefix="resources">
     <file>resources/icons/black_east_arrow.svg</file>
     <file>resources/icons/black_north_arrow.svg</file>
+    <file>resources/icons/play-and-pause-button.svg</file>
+    <file>resources/icons/white-play-and-pause-button.svg</file>
     <file>resources/icons/black_north_east_arrow.svg</file>
     <file>resources/icons/black_north_west_arrow.svg</file>
     <file>resources/icons/black_south_arrow.svg</file>

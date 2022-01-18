@@ -258,9 +258,6 @@ class ControllerWorker(QObject):
         logger.info("Probe: " + str(prb_val))
         self.update_probe_s.emit(prb_val)
 
-    # def cmd_auto_bed_levelling(self, xy_coord_list, travel_z, probe_z_max, probe_feed_rate):
-    #     self.control_controller.cmd_auto_bed_levelling(xy_coord_list, travel_z, probe_z_max, probe_feed_rate)
-    #     self.send_next_abl()  # Send first probe command.
     def cmd_auto_bed_levelling(self, bbox_t, steps_t):
         self.control_controller.cmd_auto_bed_levelling(bbox_t, steps_t)
         self.send_next_abl()  # Send first probe command.
@@ -287,8 +284,8 @@ class ControllerWorker(QObject):
         self.active_gcode_path = gcode_path
         redraw = False
         visible = True
-        print("ABL_val " + str(self.abl_val))
-        print("ABL_active " + str(self.abl_apply_active))
+        logger.debug("ABL_val " + str(self.abl_val))
+        logger.debug("ABL_active " + str(self.abl_apply_active))
         if self.abl_val and self.abl_apply_active:
             self.control_controller.apply_abl(gcode_path)
             redraw = True
@@ -306,7 +303,6 @@ class ControllerWorker(QObject):
         # with open(gcode_path) as f:            # DEBUG: take directly from file
         #     self.file_content = f.readlines()
         logger.debug(self.file_content)
-        logger.info(self.file_content)
         if self.file_content:
             self.file_progress = 0.0
             self.cmds_to_ack = 0

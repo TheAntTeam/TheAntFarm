@@ -4,6 +4,7 @@ from PySide2.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PySide2.QtCore import QThread, QSettings, QPoint, QSize, QThreadPool
 from queue import Queue
 from ui_the_ant_farm import Ui_MainWindow  # convert ui to py: pyside2-uic the_ant_farm.ui > ui_the_ant_farm.py
+# Whenever you change resources in qrc, convert qrc to py: pyside2-rcc app_resources.qrc -o app_resources_rc.py
 """ Custom imports """
 from serial_manager import SerialWorker
 from controller.controller_manager import ControllerWorker
