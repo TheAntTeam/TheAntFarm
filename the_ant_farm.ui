@@ -4396,6 +4396,12 @@
             <property name="text">
              <string>SOFT RESET</string>
             </property>
+            <property name="icon">
+             <iconset resource="app_resources.qrc">
+              <normaloff>:/resources/resources/icons/white-reset-hard.svg</normaloff>
+              <normalon>:/resources/resources/icons/white-reset-hard.svg</normalon>
+              <disabledoff>:/resources/resources/icons/gray-reset-hard.svg</disabledoff>:/resources/resources/icons/white-reset-hard.svg</iconset>
+            </property>
             <property name="iconSize">
              <size>
               <width>64</width>
@@ -5114,9 +5120,6 @@
               <width>64</width>
               <height>64</height>
              </size>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
             </property>
             <property name="toolButtonStyle">
              <enum>Qt::ToolButtonIconOnly</enum>
