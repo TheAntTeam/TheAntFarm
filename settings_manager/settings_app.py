@@ -103,10 +103,11 @@ class AppSettingsHandler:
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
         app_general = self.app_settings["GENERAL"]
-        app_general["win_position_x"] = str(self.main_win.pos().x())
-        app_general["win_position_y"] = str(self.main_win.pos().y())
-        app_general["win_width"] = str(self.main_win.width())
-        app_general["win_height"] = str(self.main_win.height())
+        window_geo = self.main_win.normalGeometry()
+        app_general["win_position_x"] = str(window_geo.x())
+        app_general["win_position_y"] = str(window_geo.y())
+        app_general["win_width"] = str(window_geo.width())
+        app_general["win_height"] = str(window_geo.height())
         app_general["main_tab_index"] = str(self.main_win.ui.main_tab_widget.currentIndex())
         app_general["ctrl_tab_index"] = str(self.main_win.ui.ctrl_tab_widget.currentIndex())
         app_general["console_visibility"] = str(self.main_win.ui.actionHide_Show_Console.isChecked())

@@ -1676,7 +1676,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="gcode_load">
              <property name="sizePolicy">
@@ -1778,6 +1778,10 @@
                   <property name="text">
                    <string>...</string>
                   </property>
+                  <property name="icon">
+                   <iconset resource="app_resources.qrc">
+                    <normaloff>:/resources/resources/icons/white-refresh.svg</normaloff>:/resources/resources/icons/white-refresh.svg</iconset>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -1790,6 +1794,10 @@
                   </property>
                   <property name="text">
                    <string>...</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="app_resources.qrc">
+                    <normaloff>:/resources/resources/icons/white-delete.svg</normaloff>:/resources/resources/icons/white-delete.svg</iconset>
                   </property>
                  </widget>
                 </item>
@@ -5342,7 +5350,6 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionLoad"/>
     <addaction name="actionSettings_Preferences"/>
     <addaction name="actionSave_Settings"/>
    </widget>
@@ -5370,20 +5377,6 @@
    <addaction name="menuConsole"/>
   </widget>
   <widget class="QStatusBar" name="status_bar"/>
-  <action name="actionLoad">
-   <property name="text">
-    <string>Open</string>
-   </property>
-   <property name="font">
-    <font>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
-   </property>
-  </action>
   <action name="actionHide_Show_Console">
    <property name="checkable">
     <bool>true</bool>
