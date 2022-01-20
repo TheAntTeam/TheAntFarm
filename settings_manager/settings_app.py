@@ -96,7 +96,9 @@ class AppSettingsHandler:
                                         "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT,
                                         "logs_file": self.LOGS_FILE_DEFAULT,
                                         "logs_max_bytes": self.LOGS_MAX_BYTES,
-                                        "logs_backup_count": self.LOGS_BACKUP_COUNT}
+                                        "logs_backup_count": self.LOGS_BACKUP_COUNT,
+                                        "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
+                                        "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT}
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -141,7 +143,9 @@ class AppSettingsHandler:
                                         "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT,
                                         "logs_file": self.LOGS_FILE_DEFAULT,
                                         "logs_max_bytes": self.LOGS_MAX_BYTES,
-                                        "logs_backup_count": self.LOGS_BACKUP_COUNT}
+                                        "logs_backup_count": self.LOGS_BACKUP_COUNT,
+                                        "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
+                                        "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT}
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -156,6 +160,8 @@ class AppSettingsHandler:
         app_general["logs_file"] = str(self.LOGS_FILE_DEFAULT)
         app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
+        app_general["last_serial_port"] = str(self.LAST_SERIAL_PORT_DEFAULT)
+        app_general["last_serial_baud"] = str(self.LAST_SERIAL_BAUD_DEFAULT)
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}

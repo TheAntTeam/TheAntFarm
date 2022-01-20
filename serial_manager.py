@@ -12,11 +12,13 @@ class SerialWorker(QObject):
     rx_queue_not_empty_s = Signal()
     refresh_port_list_s = Signal()
     get_port_list_s = Signal(list, list)
+    close_for_error_s = Signal()
 
     def __init__(self, serial_rx_queue, serial_tx_queue):
         super(SerialWorker, self).__init__()
         self.serial_port = QSerialPort(self)
         self.serial_port.readyRead.connect(self.receive)
+        self.serial_port.errorOccurred.connect(self.serial_error_manager)
         self.refresh_port_list_s.connect(self.get_port_list)
 
         self.serialRxQueue = serial_rx_queue  # FIFO RX Queue to pass data to control thread
@@ -127,3 +129,12 @@ class SerialWorker(QObject):
                 logger.error(e, exc_info=True)
             except Exception as e:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
+
+    @Slot()
+    def serial_error_manager(self):
+        error_type = self.serial_port.error()
+        if error_type != 0:
+            logger.error(self.serial_port.error())
+            logger.error(self.serial_port.errorString())
+            if error_type == QSerialPort.ResourceError:
+                self.close_for_error_s.emit()

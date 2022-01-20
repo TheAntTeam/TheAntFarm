@@ -75,6 +75,7 @@ class UiControlTab(QObject):
         # From Serial Manager to UI Manager
         self.serialWo.get_port_list_s.connect(self.get_ports_and_bauds)
         self.serialWo.open_port_s.connect(self.act_on_connection)
+        self.serialWo.close_for_error_s.connect(self.handle_connect_button)
         self.serialWo.update_console_text_s.connect(self.update_console_text)
 
         # From Serial Manager to Control Manager
@@ -624,16 +625,8 @@ class UiControlTab(QObject):
 
     def handle_auto_bed_levelling(self):
         logging.debug("Auto Bed Levelling Command")
-        # todo: fake parameters just for testing ABL
-        xy_coord_list = [(0.0, 0.0), (0.0, 10.0), (0.0, 20.0),
-                         (10.0, 0.0), (10.0, 10.0), (10.0, 20.0),
-                         (20.0, 0.0), (20.0, 10.0), (20.0, 20.0)]
-        travel_z = 1.0
-        probe_z_max = -11.0
-        probe_feed_rate = 10.0
         bbox_t, steps_t = self.get_abl_inputs()
         self.controlWo.send_abl_s.emit(bbox_t, steps_t)
-        # self.controlWo.cmd_auto_bed_levelling(xy_coord_list, travel_z, probe_z_max, probe_feed_rate)
 
     @Slot(float)
     def update_progress_bar(self, prog_percentage):
