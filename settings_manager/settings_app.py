@@ -13,6 +13,7 @@ class AppSettingsHandler:
     WIN_POS_Y_DEFAULT = 200
     WIN_SIZE_W_DEFAULT = 1160
     WIN_SIZE_H_DEFAULT = 720
+    WIN_MAXIMIZED_DEFAULT = False
     MAIN_TAB_INDEX_DEFAULT = 0
     CTRL_TAB_INDEX_DEFAULT = 0
     SHOW_CONSOLE_DEFAULT = False
@@ -35,6 +36,7 @@ class AppSettingsHandler:
         self.main_win = main_win
         self.pos = QPoint(self.WIN_POS_X_DEFAULT, self.WIN_POS_Y_DEFAULT)
         self.size = QSize(self.WIN_SIZE_W_DEFAULT, self.WIN_SIZE_H_DEFAULT)
+        self.win_maximized = self.WIN_MAXIMIZED_DEFAULT
         self.main_tab_index = self.MAIN_TAB_INDEX_DEFAULT
         self.ctrl_tab_index = self.CTRL_TAB_INDEX_DEFAULT
         self.console_visibility = self.SHOW_CONSOLE_DEFAULT
@@ -60,6 +62,9 @@ class AppSettingsHandler:
             self.main_win.move(self.pos)  # Restore position
             self.size = QSize(app_general.getint("win_width", self.WIN_SIZE_W_DEFAULT),
                               app_general.getint("win_height", self.WIN_SIZE_H_DEFAULT))
+            self.win_maximized = app_general.getboolean("win_maximized", self.WIN_MAXIMIZED_DEFAULT)
+            if self.win_maximized:
+                self.main_win.showMaximized()
             self.main_tab_index = app_general.getint("main_tab_index", self.MAIN_TAB_INDEX_DEFAULT)
             self.ctrl_tab_index = app_general.getint("ctrl_tab_index", self.CTRL_TAB_INDEX_DEFAULT)
             self.console_visibility = app_general.getboolean("console_visibility", self.SHOW_CONSOLE_DEFAULT)
@@ -89,6 +94,7 @@ class AppSettingsHandler:
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
                                         "win_height": self.WIN_SIZE_H_DEFAULT,
+                                        "win_maximized": self.WIN_MAXIMIZED_DEFAULT,
                                         "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
                                         "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
                                         "console_visibility": self.console_visibility,
@@ -108,6 +114,7 @@ class AppSettingsHandler:
         app_general["win_position_y"] = str(window_geo.y())
         app_general["win_width"] = str(window_geo.width())
         app_general["win_height"] = str(window_geo.height())
+        app_general["win_maximized"] = str(self.main_win.isMaximized())
         app_general["main_tab_index"] = str(self.main_win.ui.main_tab_widget.currentIndex())
         app_general["ctrl_tab_index"] = str(self.main_win.ui.ctrl_tab_widget.currentIndex())
         app_general["console_visibility"] = str(self.main_win.ui.actionHide_Show_Console.isChecked())
@@ -137,6 +144,7 @@ class AppSettingsHandler:
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
                                         "win_height": self.WIN_SIZE_H_DEFAULT,
+                                        "win_maximized": self.WIN_MAXIMIZED_DEFAULT,
                                         "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
                                         "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
                                         "console_visibility": self.console_visibility,
@@ -155,6 +163,7 @@ class AppSettingsHandler:
         app_general["win_position_y"] = str(self.WIN_POS_Y_DEFAULT)
         app_general["win_width"] = str(self.WIN_SIZE_W_DEFAULT)
         app_general["win_height"] = str(self.WIN_SIZE_H_DEFAULT)
+        app_general["win_maximized"] = str(self.WIN_MAXIMIZED_DEFAULT)
         app_general["main_tab_index"] = str(self.MAIN_TAB_INDEX_DEFAULT)
         app_general["ctrl_tab_index"] = str(self.CTRL_TAB_INDEX_DEFAULT)
         app_general["console_visibility"] = str(self.SHOW_CONSOLE_DEFAULT)

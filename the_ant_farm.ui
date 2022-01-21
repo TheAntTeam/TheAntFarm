@@ -1755,6 +1755,9 @@
                     <height>50</height>
                    </size>
                   </property>
+                  <property name="statusTip">
+                   <string>Load gcode files.</string>
+                  </property>
                   <property name="text">
                    <string>...</string>
                   </property>
@@ -1775,6 +1778,9 @@
                     <height>50</height>
                    </size>
                   </property>
+                  <property name="statusTip">
+                   <string>Reload gcode files generated.</string>
+                  </property>
                   <property name="text">
                    <string>...</string>
                   </property>
@@ -1791,6 +1797,9 @@
                     <width>50</width>
                     <height>50</height>
                    </size>
+                  </property>
+                  <property name="statusTip">
+                   <string>Remove gcode files.</string>
                   </property>
                   <property name="text">
                    <string>...</string>

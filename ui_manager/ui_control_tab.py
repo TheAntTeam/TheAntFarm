@@ -306,10 +306,10 @@ class UiControlTab(QObject):
                     index = QPersistentModelIndex(
                         self.ui.gcode_tw.model().index(row, column))
                     new_rb.toggled.connect(
-                        lambda *args, index=index: self.print_button_item_clicked(index))
+                        lambda *args, index=index: self.gcode_item_selected(index))
 
-    @Slot(QTableWidgetItem)
-    def print_button_item_clicked(self, index):
+    @Slot(int)
+    def gcode_item_selected(self, index):
         if index.isValid():
             row = index.row()
             gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
