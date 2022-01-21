@@ -109,9 +109,10 @@ class AppSettingsHandler:
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
         app_general = self.app_settings["GENERAL"]
+        window_pos = self.main_win.pos()
         window_geo = self.main_win.normalGeometry()
-        app_general["win_position_x"] = str(window_geo.x())
-        app_general["win_position_y"] = str(window_geo.y())
+        app_general["win_position_x"] = str(window_pos.x())
+        app_general["win_position_y"] = str(window_pos.y())
         app_general["win_width"] = str(window_geo.width())
         app_general["win_height"] = str(window_geo.height())
         app_general["win_maximized"] = str(self.main_win.isMaximized())
