@@ -1141,14 +1141,14 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_10.addWidget(self.toolButton_6)
 
-        self.toolButton_8 = QToolButton(self.gcode_load)
-        self.toolButton_8.setObjectName(u"toolButton_8")
-        self.toolButton_8.setMinimumSize(QSize(50, 50))
+        self.remove_gcode_tb = QToolButton(self.gcode_load)
+        self.remove_gcode_tb.setObjectName(u"remove_gcode_tb")
+        self.remove_gcode_tb.setMinimumSize(QSize(50, 50))
         icon3 = QIcon()
         icon3.addFile(u":/resources/resources/icons/white-delete.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.toolButton_8.setIcon(icon3)
+        self.remove_gcode_tb.setIcon(icon3)
 
-        self.horizontalLayout_10.addWidget(self.toolButton_8)
+        self.horizontalLayout_10.addWidget(self.remove_gcode_tb)
 
 
         self.verticalLayout_11.addLayout(self.horizontalLayout_10)
@@ -2180,9 +2180,7 @@ class Ui_MainWindow(object):
         self.soft_reset_tb.setMinimumSize(QSize(120, 25))
         self.soft_reset_tb.setMaximumSize(QSize(120, 16777215))
         icon13 = QIcon()
-        icon13.addFile(u":/resources/resources/icons/white-reset-hard.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon13.addFile(u":/resources/resources/icons/white-reset-hard.svg", QSize(), QIcon.Normal, QIcon.On)
-        icon13.addFile(u":/resources/resources/icons/gray-reset-hard.svg", QSize(), QIcon.Disabled, QIcon.Off)
+        icon13.addFile(u":/resources/resources/icons/white-new-reset.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.soft_reset_tb.setIcon(icon13)
         self.soft_reset_tb.setIconSize(QSize(64, 64))
         self.soft_reset_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2727,9 +2725,9 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(statustip)
         self.toolButton_6.setText(QCoreApplication.translate("MainWindow", u"...", None))
 #if QT_CONFIG(statustip)
-        self.toolButton_8.setStatusTip(QCoreApplication.translate("MainWindow", u"Remove gcode files.", None))
+        self.remove_gcode_tb.setStatusTip(QCoreApplication.translate("MainWindow", u"Remove gcode files.", None))
 #endif // QT_CONFIG(statustip)
-        self.toolButton_8.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.remove_gcode_tb.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.ctrl_tab_widget.setTabText(self.ctrl_tab_widget.indexOf(self.gcode_load), QCoreApplication.translate("MainWindow", u"GCode", None))
         self.zero_xy_pb.setText(QCoreApplication.translate("MainWindow", u"XY = 0", None))
         self.zero_y_pb.setText(QCoreApplication.translate("MainWindow", u"Y = 0", None))

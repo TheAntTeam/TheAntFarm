@@ -1791,7 +1791,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QToolButton" name="toolButton_8">
+                 <widget class="QToolButton" name="remove_gcode_tb">
                   <property name="minimumSize">
                    <size>
                     <width>50</width>
