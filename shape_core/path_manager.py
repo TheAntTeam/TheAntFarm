@@ -476,7 +476,7 @@ class MachinePath:
 
             for i, g in enumerate(self.geom_list):
                 if i != id:
-                    og = offset_polygon_holes(g, - td / 2.0 + self.cfg['margin'])
+                    og = offset_polygon_holes(g, - (td / 2.0 + self.cfg['margin']))
                     if og is not None:
                         og_list.append(og)
 
