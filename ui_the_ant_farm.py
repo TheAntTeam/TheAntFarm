@@ -2427,12 +2427,78 @@ class Ui_MainWindow(object):
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
         self.settings_sub_tab = QTabWidget(self.settings_tab)
         self.settings_sub_tab.setObjectName(u"settings_sub_tab")
-        self.tab_3 = QWidget()
-        self.tab_3.setObjectName(u"tab_3")
-        self.gridLayout_9 = QGridLayout(self.tab_3)
+        self.application_settings_tab = QWidget()
+        self.application_settings_tab.setObjectName(u"application_settings_tab")
+        self.gridLayout_9 = QGridLayout(self.application_settings_tab)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.placeholder_pb = QPushButton(self.tab_3)
-        self.placeholder_pb.setObjectName(u"placeholder_pb")
+        self.gridLayout_12 = QGridLayout()
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.top_layer_color_pb = QPushButton(self.application_settings_tab)
+        self.top_layer_color_pb.setObjectName(u"top_layer_color_pb")
+
+        self.gridLayout_12.addWidget(self.top_layer_color_pb, 0, 0, 1, 1)
+
+        self.bottom_layer_color_pb = QPushButton(self.application_settings_tab)
+        self.bottom_layer_color_pb.setObjectName(u"bottom_layer_color_pb")
+
+        self.gridLayout_12.addWidget(self.bottom_layer_color_pb, 1, 0, 1, 1)
+
+        self.bottom_layer_color_la = QLabel(self.application_settings_tab)
+        self.bottom_layer_color_la.setObjectName(u"bottom_layer_color_la")
+        self.bottom_layer_color_la.setMinimumSize(QSize(150, 0))
+
+        self.gridLayout_12.addWidget(self.bottom_layer_color_la, 1, 1, 1, 1)
+
+        self.drill_layer_color_pb = QPushButton(self.application_settings_tab)
+        self.drill_layer_color_pb.setObjectName(u"drill_layer_color_pb")
+
+        self.gridLayout_12.addWidget(self.drill_layer_color_pb, 3, 0, 1, 1)
+
+        self.nc_top_layer_color_pb = QPushButton(self.application_settings_tab)
+        self.nc_top_layer_color_pb.setObjectName(u"nc_top_layer_color_pb")
+
+        self.gridLayout_12.addWidget(self.nc_top_layer_color_pb, 4, 0, 1, 1)
+
+        self.top_layer_color_la = QLabel(self.application_settings_tab)
+        self.top_layer_color_la.setObjectName(u"top_layer_color_la")
+        self.top_layer_color_la.setMinimumSize(QSize(150, 0))
+
+        self.gridLayout_12.addWidget(self.top_layer_color_la, 0, 1, 1, 1)
+
+        self.profile_layer_color_pb = QPushButton(self.application_settings_tab)
+        self.profile_layer_color_pb.setObjectName(u"profile_layer_color_pb")
+
+        self.gridLayout_12.addWidget(self.profile_layer_color_pb, 2, 0, 1, 1)
+
+        self.nc_bottom_layer_color_pb = QPushButton(self.application_settings_tab)
+        self.nc_bottom_layer_color_pb.setObjectName(u"nc_bottom_layer_color_pb")
+
+        self.gridLayout_12.addWidget(self.nc_bottom_layer_color_pb, 5, 0, 1, 1)
+
+        self.profile_layer_color_la = QLabel(self.application_settings_tab)
+        self.profile_layer_color_la.setObjectName(u"profile_layer_color_la")
+        self.profile_layer_color_la.setMinimumSize(QSize(150, 0))
+
+        self.gridLayout_12.addWidget(self.profile_layer_color_la, 2, 1, 1, 1)
+
+        self.drill_layer_color_la = QLabel(self.application_settings_tab)
+        self.drill_layer_color_la.setObjectName(u"drill_layer_color_la")
+        self.drill_layer_color_la.setMinimumSize(QSize(150, 0))
+
+        self.gridLayout_12.addWidget(self.drill_layer_color_la, 3, 1, 1, 1)
+
+        self.nc_top_layer_color_la = QLabel(self.application_settings_tab)
+        self.nc_top_layer_color_la.setObjectName(u"nc_top_layer_color_la")
+        self.nc_top_layer_color_la.setMinimumSize(QSize(150, 0))
+
+        self.gridLayout_12.addWidget(self.nc_top_layer_color_la, 4, 1, 1, 1)
+
+        self.nc_bottom_layer_color_la = QLabel(self.application_settings_tab)
+        self.nc_bottom_layer_color_la.setObjectName(u"nc_bottom_layer_color_la")
+        self.nc_bottom_layer_color_la.setMinimumSize(QSize(150, 0))
+
+        self.gridLayout_12.addWidget(self.nc_bottom_layer_color_la, 5, 1, 1, 1)
+
 
         self.gridLayout_9.addLayout(self.gridLayout_12, 0, 0, 1, 1)
 
@@ -2864,8 +2930,19 @@ class Ui_MainWindow(object):
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.control_tab), QCoreApplication.translate("MainWindow", u"CONTROL", None))
         self.label_2.setText("")
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.align_tab), QCoreApplication.translate("MainWindow", u"ALIGN", None))
-        self.placeholder_pb.setText(QCoreApplication.translate("MainWindow", u"place holder", None))
-        self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.tab_3), QCoreApplication.translate("MainWindow", u"Tab 1", None))
+        self.top_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"TOP LAYER COLOR", None))
+        self.bottom_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"BOTTOM LAYER COLOR", None))
+        self.bottom_layer_color_la.setText("")
+        self.drill_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"DRILL LAYER COLOR", None))
+        self.nc_top_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"NC TOP LAYER COLOR", None))
+        self.top_layer_color_la.setText("")
+        self.profile_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"PROFILE LAYER COLOR", None))
+        self.nc_bottom_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"NC BOTTOM LAYER COLOR", None))
+        self.profile_layer_color_la.setText("")
+        self.drill_layer_color_la.setText("")
+        self.nc_top_layer_color_la.setText("")
+        self.nc_bottom_layer_color_la.setText("")
+        self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.application_settings_tab), QCoreApplication.translate("MainWindow", u"Application Settings", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"place holder 2", None))
         self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"Tab 2", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.settings_tab), QCoreApplication.translate("MainWindow", u"Settings/Preferences", None))
