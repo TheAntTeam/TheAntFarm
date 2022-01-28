@@ -2180,7 +2180,9 @@ class Ui_MainWindow(object):
         self.soft_reset_tb.setMinimumSize(QSize(120, 25))
         self.soft_reset_tb.setMaximumSize(QSize(120, 16777215))
         icon13 = QIcon()
-        icon13.addFile(u":/resources/resources/icons/white-new-reset.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon13.addFile(u":/resources/resources/icons/white-reset-hard.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon13.addFile(u":/resources/resources/icons/white-reset-hard.svg", QSize(), QIcon.Normal, QIcon.On)
+        icon13.addFile(u":/resources/resources/icons/gray-reset-hard.svg", QSize(), QIcon.Disabled, QIcon.Off)
         self.soft_reset_tb.setIcon(icon13)
         self.soft_reset_tb.setIconSize(QSize(64, 64))
         self.soft_reset_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2432,9 +2434,17 @@ class Ui_MainWindow(object):
         self.placeholder_pb = QPushButton(self.tab_3)
         self.placeholder_pb.setObjectName(u"placeholder_pb")
 
-        self.gridLayout_9.addWidget(self.placeholder_pb, 0, 0, 1, 1)
+        self.gridLayout_9.addLayout(self.gridLayout_12, 0, 0, 1, 1)
 
-        self.settings_sub_tab.addTab(self.tab_3, "")
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_9.addItem(self.horizontalSpacer_3, 0, 1, 1, 1)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_9.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
+
+        self.settings_sub_tab.addTab(self.application_settings_tab, "")
         self.tab_4 = QWidget()
         self.tab_4.setObjectName(u"tab_4")
         self.gridLayout_13 = QGridLayout(self.tab_4)
@@ -2575,7 +2585,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(1)
+        self.main_tab_widget.setCurrentIndex(3)
         self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
         self.ctrl_tab_widget.setCurrentIndex(0)
