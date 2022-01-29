@@ -5,6 +5,10 @@
 # Ingore the venv
 env/
 
+# Files created by building locally
+#app_resources_rc.py
+#ui_the_ant_farm.py
+
 # Files created by running
 app_logs/
 gcode_temp_dir/

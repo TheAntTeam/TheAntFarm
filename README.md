@@ -19,7 +19,7 @@ If you want to have some more information about the actual implemented features,
 
 The application requires an installation of python version 3.7 or greater.  
 
-## Installation  
+## Building & Running
   
 The python packages needed are listed in the file "requirements.txt", that could be used to install them by command line.  
 The cleanest way to install these packages is using a virtual environment.
@@ -30,23 +30,22 @@ Either download the zip of the repository sources or use git:
   
 > git clone https://github.com/TheAntTeam/TheAntFarm.git  
 
-Enter the folder where there is the code, create a virtual environment and activate it:  
+Enter the folder where the code is:  
   
 > cd TheAntFarm  
-> python3 -m venv ./env  
-  
-Activate the virtual environment:  
-    
-> source ./env/bin/activate
+> make  
 
-Install all the required packages:
-  
-> pip3 install -r requirements.txt  
+This will setup the environment, compile resources, and run the application.
 
-It could be also necessary to install an additional library:
-  
+In some cases, you may need to install an additional library:  
 > sudo apt install libxcb-xinerama0  
-  
+
+To edit the [UI design](the_ant_farm.ui) you will need to install QT Designer:
+> sudo apt install qttools5-dev-tools 
+> deisgner the_ant_farm.ui
+
+Once you've made changes to the UI or Any Resources, running 'make' will rebuild and run the application. 
+
 ### Troubleshooting  
   
 In some linux distribution the access to usb serial port may be denied (permission denied).  
@@ -83,7 +82,11 @@ Activate the virtual environment:
 Install all the required packages:
   
 > pip3 install -r requirements.txt  
-
+  
+Compile Resources & UI Definitions:
+> pyside2-rcc app_resources.qrc -o app_resources_rc.py
+> pyside2-uic the_ant_farm.ui > ui_the_ant_farm.py
+  
 ## Running the software  
   
 The software must be run from the project directory, after the virtual environment has been activated (see installation paragraph), using the following command:
