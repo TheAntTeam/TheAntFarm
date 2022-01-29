@@ -299,7 +299,7 @@ class MachinePath:
                 if ex_path.type == "LinearRing" or ex_path.type == "LineString":
                     path.append(i)
         t_d = self.cfg['tool_diameter']
-        self.path = [(t_d, path)]
+        self.path = [((t_d, "gerber"), path)]
 
     def check_min_area(self, og_list):
         big_poly = []
@@ -361,12 +361,13 @@ class MachinePath:
                 if ex_path.type == "LinearRing" or ex_path.type == "LineString":
                     path.append(i)
         t_d = self.cfg['tool_diameter']
-        self.path = [(t_d, path)]
+        self.path = [((t_d, "pocketing"), path)]
 
         return milled_list
 
     def execute_drill(self, not_to_drill=None):
         print("Drilling")
+        t0 = time.time()
         bd = self.cfg['bits_diameter'][:]
         bd.sort(reverse=True)
 
@@ -412,13 +413,14 @@ class MachinePath:
                     opt = Optimizer(bit_points)
                     optimized_bit_points = opt.get_optimized_path()
                     drill_per_bit[bit_k] = optimized_bit_points
-                    print("Bit " + str(bit_k) + " " + str(optimized_bit_points))
+                    #print("Bit " + str(bit_k) + " " + str(optimized_bit_points))
                 else:
-                    print("Bit " + str(bit_k) + " " + str(bit_points))
+                    #print("Bit " + str(bit_k) + " " + str(bit_points))
+                    pass
 
         paths = []
         for k in drill_per_bit:
-            paths.append((k, [LineString(drill_per_bit[k])]))
+            paths.append(((k, "drill"), [LineString(drill_per_bit[k])]))
 
         # if holes have already been performed by the pocketing procedure,
         # the drilling path will be append to the pocketing one
@@ -430,6 +432,9 @@ class MachinePath:
                 self.path = paths
         else:
             self.path = paths
+
+        t1 = time.time()
+        print("Path Generation Done in " + str(t1-t0) + " sec")
 
         return drilled_list
 
@@ -510,7 +515,7 @@ class MachinePath:
         # parameter could be set by GUI or settings page
 
         t_d = self.cfg['tool_diameter']
-        self.path = [(t_d, path)]
+        self.path = [((t_d, "profile"), path)]
 
     def _subpath_execute(self, ppg_list):
 

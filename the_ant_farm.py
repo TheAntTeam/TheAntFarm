@@ -23,8 +23,7 @@ if os.path.isdir(os.path.join(pys2_path, "Qt")):
 # avoiding conflict with other applications using Qt
 if os.name == "nt":
     print("Windows Env")
-    if "QT_PLUGIN_PATH" not in os.environ:
-        os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
+    os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
 else:
     print("Linux Env")
     os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")

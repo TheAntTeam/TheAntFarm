@@ -8,7 +8,7 @@ from .controller_align import AlignController
 import logging
 import traceback
 
-from shape_core.gcode_manager import GCoder
+from shape_core.gcode_manager import GCoder, GCodeMacro
 
 logger = logging.getLogger(__name__)
 
@@ -85,6 +85,8 @@ class ControllerWorker(QObject):
         self.active_gcode_path = ""
 
         self.gcr = GCoder("dummy", "commander")
+        self.macro_on = False
+        self.macro_obj = None
 
     @Slot(bool)
     def on_controller_connection(self, connected):
@@ -145,7 +147,7 @@ class ControllerWorker(QObject):
             try:
                 element = self.serialRxQueue.get(block=False)
                 if element:
-                    logger.debug("Element received: " + str(element))
+                    # logger.debug("Element received: " + str(element))
                     if re.match("^<.*>\s*$\s", element):
                         self.update_status_s.emit(self.control_controller.parse_bracket_angle(element))
                         # This variable should be set to true the first time an ack is received.
@@ -181,28 +183,30 @@ class ControllerWorker(QObject):
                             end_of_file = self.sent_lines >= self.tot_lines
                             # print("End Of File: " + str(end_of_file))
                             if not end_of_file:
-                                cmd_to_send = self.file_content[self.sent_lines]
-                                # check if next command has tags
-                                # print("Cmd To Send: " + str(cmd_to_send))
-                                if self.gcr.TAG in cmd_to_send:
-                                    # print("TAG Found")
-                                    # if self.cmds_to_ack > 0:
-                                    logger.info(str(self.ack_lines) + " <-> " + str(self.sent_lines))
-                                    if self.ack_lines != self.sent_lines:
-                                        # wait that the machine execute all previous lines
-                                        # to be able to decode the tag
-                                        # print("Wait")
-                                        self.wait_tag_decoding = True
-                                    else:
-                                        # machine execution queue is empty, let's go
-                                        # print("Run")
+                                if self.macro_on:
+                                    probe_data = self.control_controller.prb_val
+                                    wsp = self.get_workspace_parameters()
+                                    cmd_to_send = self.macro_obj.get_next_line(wsp, probe_data)
+                                    print(cmd_to_send)
+                                    if cmd_to_send is None:
+                                        self.macro_on = False
+                                        self.macro_obj = None
                                         self.wait_tag_decoding = False
+                                    else:
+                                        self.tot_lines += 1
 
+                                if not self.macro_on:
+                                    cmd_to_send = self.file_content[self.sent_lines]
+                                    cmd_to_send = self.macro_check(cmd_to_send)
+
+                                logger.info(str(self.ack_lines) + " <-> " + str(self.sent_lines))
                                 # does data fit the buffer?
                                 buff_available = (self.buffered_size + len(cmd_to_send)) < self.REMOTE_RX_BUFFER_MAX_SIZE
                             else:
                                 self.wait_tag_decoding = False
                                 buff_available = False
+
+                            logger.info("wait: " + str(self.wait_tag_decoding))
 
                             if not end_of_file and buff_available and not self.wait_tag_decoding:
                                 # cmd_to_send = self.file_content[self.sent_lines]
@@ -232,14 +236,45 @@ class ControllerWorker(QObject):
             except Exception as e:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
-    def decode_tag(self, gcode_str):
-        status = self.control_controller.status
+    def macro_check(self, cmd_to_send):
+        macro_type = self.gcr.is_macro(cmd_to_send)
         probe_data = self.control_controller.prb_val
-        ret_str = self.gcr.compute_tag(gcode_str, status, probe_data)
+        wsp = self.get_workspace_parameters()
+        ret_cmd_to_send = cmd_to_send
 
-        if self.gcr.TAG in str(gcode_str):
-            logger.info("Tag Found: " + str(ret_str) + " [" + gcode_str + "]" )
-        return ret_str
+        if macro_type:
+            if self.ack_lines != self.sent_lines:
+                # wait that the machine execute all previous lines
+                # to be able to decode the tag
+                # print("Wait")
+                self.wait_tag_decoding = True
+            else:
+                # machine execution queue is empty, let's go
+                # print("Run")
+
+                # DUMMY ELEMENT FREEZE WPO and MPO
+                freeze_dro = {
+                    "WPO": self.control_controller.wpos_a.copy(),
+                    "MPO": self.control_controller.mpos_a.copy()
+                }
+
+                self.wait_tag_decoding = False
+                self.macro_obj = GCodeMacro(freeze_dro, macro_type)
+                ret_cmd_to_send = "$#\n"
+                # ret_cmd_to_send = self.macro_obj.get_next_line(probe_data, wsp)
+                self.tot_lines += 1
+                self.macro_on = True
+        return ret_cmd_to_send
+
+    def decode_tag(self, gcode_str):
+        # status = self.control_controller.status
+        # probe_data = self.control_controller.prb_val
+        # wsp = self.get_workspace_parameters()
+        # ret_str = self.gcr.compute_tag(gcode_str, wsp, probe_data)
+        #
+        # if self.gcr.TAG in str(gcode_str):
+        #     logger.info("Tag Found: " + str(ret_str) + " [" + gcode_str + "]" )
+        return gcode_str
 
     def execute_gcode_cmd(self, cmd_str):
         """ Send generic G-CODE command coming from elsewhere. """
@@ -309,11 +344,14 @@ class ControllerWorker(QObject):
             self.sent_lines = 0
             self.ack_lines = 0
             self.tot_lines = len(self.file_content)
+            self.macro_on = False
+            self.macro_obj = None
             logger.info("Sending file: " + str(gcode_path))
             logger.info("Total lines: " + str(self.tot_lines))
 
             while self.sent_lines < self.tot_lines and \
-                    (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE:
+                    (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE\
+                    and not self.wait_tag_decoding:
                 cmd_to_send = self.file_content[self.sent_lines]
                 self.send_to_tx_queue(cmd_to_send)
                 self.buffered_cmds.append(cmd_to_send)
@@ -321,6 +359,10 @@ class ControllerWorker(QObject):
                 self.buffered_size += len(cmd_to_send)
                 self.sent_lines += 1
                 self.cmds_to_ack += 1
+
+                if self.sent_lines < self.tot_lines:
+                    self.macro_check(self.file_content[self.sent_lines])
+
             logger.debug("Buffered size: " + str(self.buffered_size))
             self.sending_file = True
 

@@ -81,13 +81,13 @@ class PcbObj:
         # self.render_layer(tmp)
 
     @staticmethod
-    def dump_str(gerber):
+    def dump_str(gerber_obj):
         # used to FIX bug in pcb-tools that doesn't work properly
         # tip: file conversion to metric before geom parser
         print("Converting file units to metric")
         string = ""
-        for stmt in gerber.statements:
-            string += str(stmt.to_gerber(gerber.settings)) + "\n"
+        for stmt in gerber_obj.statements:
+            string += str(stmt.to_gerber(gerber_obj.settings)) + "\n"
         return string
 
     def load_excellon(self, path, tag):
@@ -98,8 +98,13 @@ class PcbObj:
             print("[ERROR] EXCELLON FILE NOT FOUND")
             return False
 
-        self.excellons[tag] = gbr.read(path)
-        self.excellons[tag].to_metric()
+        tmp = gbr.read(path)
+        self.excellons[tag] = tmp
+        if tmp.units == 'inch':
+            self.gerbers[tag].to_metric()
+            self.gerbers[tag] = gbr.loads(self.dump_str(tmp))
+
+        #self.excellons[tag].to_metric()
 
     # def render_layer(self, layer):
     #

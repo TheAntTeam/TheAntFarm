@@ -69,7 +69,7 @@ class SerialWorker(QObject):
         if self.serial_port.canReadLine():
             data_out = self.serial_port.readAll().data().decode()
             if data_out:
-                logger.debug("data in: " + data_out)
+                # logger.debug("data in: " + data_out)
                 self.residual_string = self.residual_string + data_out
                 # logger.debug("Residual string: " + self.residual_string)
                 res_split = self.residual_string.splitlines(True)
@@ -78,7 +78,7 @@ class SerialWorker(QObject):
                     element = res_split.pop(0)
                     if '\n' in element:
                         self.serialRxQueue.put(element)
-                        logger.debug("RXelem: " + element)
+                        # logger.debug("RXelem: " + element)
                         self.rx_queue_not_empty_s.emit()
                     else:
                         self.residual_string = element
@@ -110,7 +110,7 @@ class SerialWorker(QObject):
             try:
                 if not self.serialTxQueue.empty():
                     data = self.serialTxQueue.get()
-                    logger.debug("data sent: " + str(data))
+                    # logger.debug("data sent: " + str(data))
                     self.count_queue_sent += 1
                     logger.debug("Sent count: " + str(self.count_queue_sent))
                     if isinstance(data, bytes):
@@ -122,8 +122,8 @@ class SerialWorker(QObject):
                     else:
                         self.serial_port.write(data.encode("utf-8"))
                         self.serial_port.waitForBytesWritten(msecs=1000)
-                    if not self.serial_port.waitForBytesWritten(msecs=10):
-                        logger.debug("data not completely sent: " + str(data))
+                    # if not self.serial_port.waitForBytesWritten(msecs=10):
+                    #     logger.debug("data not completely sent: " + str(data))
                     self.serial_port.flush()
             except AttributeError as e:
                 logger.error(e, exc_info=True)
