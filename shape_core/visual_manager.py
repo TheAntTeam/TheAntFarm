@@ -118,8 +118,8 @@ class GLUTess:
 class VisualLayer:
 
     DELTA = 1
-    TOP_ORDER = {'drill': 0, 'profile': 1, 'top': 3, 'bottom': 4, 'nc_top': 2, 'nc_bottom': 5}
-    BTM_ORDER = {'drill': 0, 'profile': 1, 'top': 4, 'bottom': 3, 'nc_top': 5, 'nc_bottom': 2}
+    TOP_ORDER = {'drill': 1, 'profile': 2, 'top': 4, 'bottom': 5, 'nc_top': 3, 'nc_bottom': 6}
+    BTM_ORDER = {'drill': 1, 'profile': 2, 'top': 5, 'bottom': 4, 'nc_top': 6, 'nc_bottom': 3}
     POINTER_RADIUS = 0.5
     POINTER_TAG = "POINTER"
     POINTER_COLOR = "orange"
@@ -167,6 +167,12 @@ class VisualLayer:
     def set_pointer_visible(self, visible):
         if self.pointer_tag:
             self.set_path_visible(self.pointer_tag, visible)
+
+    def update_order(self):
+        if self.canvas.view.camera.up == "+z":
+            self.top_view()
+        else:
+            self.bottom_view()
 
     def top_view(self):
         self.canvas.view.camera.up = "+z"
@@ -247,12 +253,12 @@ class VisualLayer:
             tri_off = list(np.array(tri[:]) + len(ldata[1]))
             ldata[0] += tri_off
             ldata[1] += pts[:]
-            if holes:
-                tri, pts = triangulizer.triangulate(g.geom, 0)
-                tri_off = list(np.array(tri[:]) + len(ldata[1]))
-                ldata[0] += tri_off
-                ldata[1] += pts[:]
-                order = 0
+            # if holes:
+            #     tri, pts = triangulizer.triangulate(g.geom, 0)
+            #     tri_off = list(np.array(tri[:]) + len(ldata[1]))
+            #     ldata[0] += tri_off
+            #     ldata[1] += pts[:]
+                #order = 0
         self.create_mesh(tag, ldata, color, order)
 
     def add_path(self, tag, geom_list, color=None):
@@ -270,6 +276,8 @@ class VisualLayer:
                 self.create_line(tag, ldata, color, order)
         else:
             print("Cannot Visualize an Empty Path")
+
+        self.update_order()
 
     def add_gcode(self, tag, gcode_list, color=('white', 'orange')):
         if gcode_list:
