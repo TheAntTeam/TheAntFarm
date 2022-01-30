@@ -298,7 +298,8 @@ class UiControlTab(QObject):
         """
         num_rows = self.ui.gcode_tw.rowCount()
         for row in range(0, num_rows):
-            if element == self.ui.gcode_tw.cellWidget(row, 0).toolTip():
+            tool_t = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
+            if element == tool_t:
                 return row
         return -1
 
@@ -309,12 +310,14 @@ class UiControlTab(QObject):
                                                   "G-Code Files (*.gcode)" + ";;All files (*.*)")  # todo: add other file extensions
         logging.debug(load_gcode)
         load_gcode_paths = load_gcode[0]
-        self._open_gcode_file(load_gcode_paths)
+        if load_gcode_paths:
+            self.app_settings.gcode_last_dir = os.path.dirname(load_gcode_paths[0])  # update setting
+            self._open_gcode_file(load_gcode_paths)
 
     def _open_gcode_file(self, load_gcode_paths):
         if load_gcode_paths:
-            self.app_settings.gcode_last_dir = os.path.dirname(load_gcode_paths[0])  # update setting
-            for elem in load_gcode_paths:
+            for elem_not_norm in load_gcode_paths:
+                elem = os.path.normpath(elem_not_norm)
                 self.precalc_gcode_s.emit(elem)
                 elem_row = self.element_in_table(elem)
                 if elem_row < 0:
