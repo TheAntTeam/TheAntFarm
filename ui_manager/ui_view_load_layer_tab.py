@@ -44,7 +44,7 @@ class UiViewLoadLayerTab(QObject):
         self.ui.profile_load_pb.clicked.connect(
             lambda: self.load_gerber_file(self.lay_tags[2], "Load Profile Gerber File", gerber_extensions))
         self.ui.drill_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[3], "Load Drill Excellon File", "Excellon (*.xln *.XLN)"))
+            lambda: self.load_gerber_file(self.lay_tags[3], "Load Drill Excellon File", "Excellon (*.xln *.XLN *.drl *.DRL)"))
         self.ui.no_copper_1_pb.clicked.connect(
             lambda: self.load_gerber_file(self.lay_tags[4], "Load No Copper TOP Gerber File", gerber_extensions))
         self.ui.no_copper_2_pb.clicked.connect(

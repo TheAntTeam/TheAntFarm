@@ -1,0 +1,11 @@
+# Ignore all IntelliJ Files
+.idea/**
+**/__pycache__/
+
+# Ingore the venv
+env/
+
+# Files created by running
+app_logs/
+gcode_temp_dir/
+configurations/
