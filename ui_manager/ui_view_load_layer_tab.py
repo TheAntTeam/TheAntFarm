@@ -12,7 +12,7 @@ class UiViewLoadLayerTab(QObject):
 
     load_layer_s = Signal(str, str)
 
-    def __init__(self, main_win, control_worker, vis_layer, lay_tags, lay_names, lay_colors, app_settings):
+    def __init__(self, main_win, control_worker, vis_layer, lay_tags, lay_names, app_settings):
         super(UiViewLoadLayerTab, self).__init__()
         self.main_win = main_win
         self.ui = main_win.ui
@@ -21,6 +21,10 @@ class UiViewLoadLayerTab(QObject):
         self.lay_tags = lay_tags
         self.lay_names = lay_names
         self.app_settings = app_settings
+
+        lay_colors = [app_settings.top_layer_color, app_settings.bottom_layer_color,
+                      app_settings.profile_layer_color, app_settings.drill_layer_color,
+                      app_settings.nc_top_layer_color, app_settings.nc_bottom_layer_color]
 
         self.layer_colors = Od([(k, v) for k, v in zip(self.lay_tags, lay_colors)])
         self.L_TEXT = [self.ui.top_file_le, self.ui.bottom_file_le, self.ui.profile_file_le,
@@ -37,6 +41,7 @@ class UiViewLoadLayerTab(QObject):
         self.load_layer_s.connect(self.controlWo.load_new_layer)
         self.controlWo.update_layer_s.connect(self.visualize_new_layer)
         gerber_extensions = "Gerber (*.gbr *.GBR *.gbl *.GBL *.gtl *.GTL)"
+        excellon_extensions = "Excellon (*.xln *.XLN *.drl *.DRL)"
         self.ui.top_load_pb.clicked.connect(
             lambda: self.load_gerber_file(self.lay_tags[0], "Load Top Gerber File", gerber_extensions))
         self.ui.bottom_load_pb.clicked.connect(
@@ -44,7 +49,7 @@ class UiViewLoadLayerTab(QObject):
         self.ui.profile_load_pb.clicked.connect(
             lambda: self.load_gerber_file(self.lay_tags[2], "Load Profile Gerber File", gerber_extensions))
         self.ui.drill_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[3], "Load Drill Excellon File", "Excellon (*.xln *.XLN *.drl *.DRL)"))
+            lambda: self.load_gerber_file(self.lay_tags[3], "Load Drill Excellon File", excellon_extensions))
         self.ui.no_copper_1_pb.clicked.connect(
             lambda: self.load_gerber_file(self.lay_tags[4], "Load No Copper TOP Gerber File", gerber_extensions))
         self.ui.no_copper_2_pb.clicked.connect(

@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="resources">
+    <file>resources/icons/white-upload-file.svg</file>
+    <file>resources/icons/gray-upload-file.svg</file>
     <file>resources/icons/white-refresh.svg</file>
     <file>resources/icons/white-delete.svg</file>
     <file>resources/icons/gray-play-and-pause-button.svg</file>

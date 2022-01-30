@@ -21,6 +21,12 @@ class AppSettingsHandler:
     LAST_SERIAL_BAUD_DEFAULT = 115200
     LAYER_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
     GCODE_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
+    TOP_LAYER_COLOR_DEFAULT = "#FFC300"
+    BOTTOM_LAYER_COLOR_DEFAULT = "#A3E4D7"
+    PROFILE_LAYER_COLOR_DEFAULT = "#000000"
+    DRILL_LAYER_COLOR_DEFAULT = "#999999"
+    NC_TOP_LAYER_COLOR_DEFAULT = "#800080"
+    NC_BOTTOM_LAYER_COLOR_DEFAULT = "#A52A2A"
 
     def __init__(self, config_folder, main_win):
         self.app_config_path = os.path.normpath(os.path.join(config_folder, 'app_config.ini'))
@@ -44,6 +50,12 @@ class AppSettingsHandler:
         self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
         self.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
         self.gcode_last_dir = self.GCODE_LAST_DIR_DEFAULT
+        self.top_layer_color = self.TOP_LAYER_COLOR_DEFAULT
+        self.bottom_layer_color = self.BOTTOM_LAYER_COLOR_DEFAULT
+        self.profile_layer_color = self.PROFILE_LAYER_COLOR_DEFAULT
+        self.drill_layer_color = self.DRILL_LAYER_COLOR_DEFAULT
+        self.nc_top_layer_color = self.NC_TOP_LAYER_COLOR_DEFAULT
+        self.nc_bottom_layer_color = self.NC_BOTTOM_LAYER_COLOR_DEFAULT
 
     def read_all_app_settings(self):
         """ Read all application settings from ini files """
@@ -57,6 +69,9 @@ class AppSettingsHandler:
         # GENERAL application settings #
         if "GENERAL" in self.app_settings:
             app_general = self.app_settings["GENERAL"]
+            # self.win_maximized = app_general.getboolean("win_maximized", self.WIN_MAXIMIZED_DEFAULT)
+            # if self.win_maximized:
+            #     self.main_win.showMaximized()
             self.pos = QPoint(app_general.getint("win_position_x", self.WIN_POS_X_DEFAULT),
                               app_general.getint("win_position_y", self.WIN_POS_Y_DEFAULT))
             self.main_win.move(self.pos)  # Restore position
@@ -83,6 +98,12 @@ class AppSettingsHandler:
         if "LAYERS" in self.app_settings:
             app_layers_settings = self.app_settings["LAYERS"]
             self.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
+            self.top_layer_color = app_layers_settings.get("top_layer_color", self.TOP_LAYER_COLOR_DEFAULT)
+            self.bottom_layer_color = app_layers_settings.get("bottom_layer_color", self.BOTTOM_LAYER_COLOR_DEFAULT)
+            self.profile_layer_color = app_layers_settings.get("profile_layer_color", self.PROFILE_LAYER_COLOR_DEFAULT)
+            self.drill_layer_color = app_layers_settings.get("drill_layer_color", self.DRILL_LAYER_COLOR_DEFAULT)
+            self.nc_top_layer_color = app_layers_settings.get("nc_top_layer_color", self.NC_TOP_LAYER_COLOR_DEFAULT)
+            self.nc_bottom_layer_color = app_layers_settings.get("nc_bottom_layer_color", self.NC_BOTTOM_LAYER_COLOR_DEFAULT)
 
         if "GCODES" in self.app_settings:
             app_gcode_settings = self.app_settings["GCODES"]
@@ -99,6 +120,12 @@ class AppSettingsHandler:
                                         "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
                                         "console_visibility": self.console_visibility,
                                         "layer_last_dir": self.LAYER_LAST_DIR_DEFAULT,
+                                        "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
+                                        "bottom_layer_color": self.BOTTOM_LAYER_COLOR_DEFAULT,
+                                        "profile_layer_color": self.PROFILE_LAYER_COLOR_DEFAULT,
+                                        "drill_layer_color": self.DRILL_LAYER_COLOR_DEFAULT,
+                                        "nc_top_layer_color": self.NC_TOP_LAYER_COLOR_DEFAULT,
+                                        "nc_bottom_layer_color": self.NC_BOTTOM_LAYER_COLOR_DEFAULT,
                                         "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT,
                                         "logs_file": self.LOGS_FILE_DEFAULT,
                                         "logs_max_bytes": self.LOGS_MAX_BYTES,
@@ -129,11 +156,17 @@ class AppSettingsHandler:
         self.app_settings["LAYERS"] = {}
         app_layers = self.app_settings["LAYERS"]
         app_layers["layer_last_dir"] = self.layer_last_dir
+        app_layers["top_layer_color"] = self.top_layer_color
+        app_layers["bottom_layer_color"] = self.bottom_layer_color
+        app_layers["profile_layer_color"] = self.profile_layer_color
+        app_layers["drill_layer_color"] = self.drill_layer_color
+        app_layers["nc_top_layer_color"] = self.nc_top_layer_color
+        app_layers["nc_bottom_layer_color"] = self.nc_bottom_layer_color
 
         # Layers related application settings #
         self.app_settings["GCODES"] = {}
-        app_layers = self.app_settings["GCODES"]
-        app_layers["gcode_last_dir"] = self.gcode_last_dir
+        app_gcodes = self.app_settings["GCODES"]
+        app_gcodes["gcode_last_dir"] = self.gcode_last_dir
 
         # Write application ini file #
         with open(self.app_config_path, 'w') as configfile:
@@ -150,6 +183,12 @@ class AppSettingsHandler:
                                         "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
                                         "console_visibility": self.console_visibility,
                                         "layer_last_dir": self.LAYER_LAST_DIR_DEFAULT,
+                                        "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
+                                        "bottom_layer_color": self.BOTTOM_LAYER_COLOR_DEFAULT,
+                                        "profile_layer_color": self.PROFILE_LAYER_COLOR_DEFAULT,
+                                        "drill_layer_color": self.DRILL_LAYER_COLOR_DEFAULT,
+                                        "nc_top_layer_color": self.NC_TOP_LAYER_COLOR_DEFAULT,
+                                        "nc_bottom_layer_color": self.NC_BOTTOM_LAYER_COLOR_DEFAULT,
                                         "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT,
                                         "logs_file": self.LOGS_FILE_DEFAULT,
                                         "logs_max_bytes": self.LOGS_MAX_BYTES,

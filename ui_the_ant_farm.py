@@ -1121,25 +1121,28 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_10 = QHBoxLayout()
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+        self.upload_temp_tb = QToolButton(self.gcode_load)
+        self.upload_temp_tb.setObjectName(u"upload_temp_tb")
+        self.upload_temp_tb.setMinimumSize(QSize(50, 50))
+        icon1 = QIcon()
+        icon1.addFile(u":/resources/resources/icons/white-upload-file.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/resources/resources/icons/white-upload-file.svg", QSize(), QIcon.Normal, QIcon.On)
+        icon1.addFile(u":/resources/resources/icons/gray-upload-file.svg", QSize(), QIcon.Disabled, QIcon.Off)
+        icon1.addFile(u":/resources/resources/icons/gray-upload-file.svg", QSize(), QIcon.Disabled, QIcon.On)
+        self.upload_temp_tb.setIcon(icon1)
+
+        self.horizontalLayout_10.addWidget(self.upload_temp_tb)
+
         self.open_gcode_tb = QToolButton(self.gcode_load)
         self.open_gcode_tb.setObjectName(u"open_gcode_tb")
         sizePolicy3.setHeightForWidth(self.open_gcode_tb.sizePolicy().hasHeightForWidth())
         self.open_gcode_tb.setSizePolicy(sizePolicy3)
         self.open_gcode_tb.setMinimumSize(QSize(50, 50))
-        icon1 = QIcon()
-        icon1.addFile(u":/resources/resources/icons/white-open-folder.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.open_gcode_tb.setIcon(icon1)
+        icon2 = QIcon()
+        icon2.addFile(u":/resources/resources/icons/white-open-folder.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.open_gcode_tb.setIcon(icon2)
 
         self.horizontalLayout_10.addWidget(self.open_gcode_tb)
-
-        self.toolButton_6 = QToolButton(self.gcode_load)
-        self.toolButton_6.setObjectName(u"toolButton_6")
-        self.toolButton_6.setMinimumSize(QSize(50, 50))
-        icon2 = QIcon()
-        icon2.addFile(u":/resources/resources/icons/white-refresh.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.toolButton_6.setIcon(icon2)
-
-        self.horizontalLayout_10.addWidget(self.toolButton_6)
 
         self.remove_gcode_tb = QToolButton(self.gcode_load)
         self.remove_gcode_tb.setObjectName(u"remove_gcode_tb")
@@ -2180,9 +2183,8 @@ class Ui_MainWindow(object):
         self.soft_reset_tb.setMinimumSize(QSize(120, 25))
         self.soft_reset_tb.setMaximumSize(QSize(120, 16777215))
         icon13 = QIcon()
-        icon13.addFile(u":/resources/resources/icons/white-reset-hard.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon13.addFile(u":/resources/resources/icons/white-reset-hard.svg", QSize(), QIcon.Normal, QIcon.On)
-        icon13.addFile(u":/resources/resources/icons/gray-reset-hard.svg", QSize(), QIcon.Disabled, QIcon.Off)
+        icon13.addFile(u":/resources/resources/icons/white-refresh.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon13.addFile(u":/resources/resources/icons/white-refresh.svg", QSize(), QIcon.Normal, QIcon.On)
         self.soft_reset_tb.setIcon(icon13)
         self.soft_reset_tb.setIconSize(QSize(64, 64))
         self.soft_reset_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2446,6 +2448,7 @@ class Ui_MainWindow(object):
         self.bottom_layer_color_la = QLabel(self.application_settings_tab)
         self.bottom_layer_color_la.setObjectName(u"bottom_layer_color_la")
         self.bottom_layer_color_la.setMinimumSize(QSize(150, 0))
+        self.bottom_layer_color_la.setFrameShape(QFrame.WinPanel)
 
         self.gridLayout_12.addWidget(self.bottom_layer_color_la, 1, 1, 1, 1)
 
@@ -2462,6 +2465,7 @@ class Ui_MainWindow(object):
         self.top_layer_color_la = QLabel(self.application_settings_tab)
         self.top_layer_color_la.setObjectName(u"top_layer_color_la")
         self.top_layer_color_la.setMinimumSize(QSize(150, 0))
+        self.top_layer_color_la.setFrameShape(QFrame.WinPanel)
 
         self.gridLayout_12.addWidget(self.top_layer_color_la, 0, 1, 1, 1)
 
@@ -2478,24 +2482,28 @@ class Ui_MainWindow(object):
         self.profile_layer_color_la = QLabel(self.application_settings_tab)
         self.profile_layer_color_la.setObjectName(u"profile_layer_color_la")
         self.profile_layer_color_la.setMinimumSize(QSize(150, 0))
+        self.profile_layer_color_la.setFrameShape(QFrame.WinPanel)
 
         self.gridLayout_12.addWidget(self.profile_layer_color_la, 2, 1, 1, 1)
 
         self.drill_layer_color_la = QLabel(self.application_settings_tab)
         self.drill_layer_color_la.setObjectName(u"drill_layer_color_la")
         self.drill_layer_color_la.setMinimumSize(QSize(150, 0))
+        self.drill_layer_color_la.setFrameShape(QFrame.WinPanel)
 
         self.gridLayout_12.addWidget(self.drill_layer_color_la, 3, 1, 1, 1)
 
         self.nc_top_layer_color_la = QLabel(self.application_settings_tab)
         self.nc_top_layer_color_la.setObjectName(u"nc_top_layer_color_la")
         self.nc_top_layer_color_la.setMinimumSize(QSize(150, 0))
+        self.nc_top_layer_color_la.setFrameShape(QFrame.WinPanel)
 
         self.gridLayout_12.addWidget(self.nc_top_layer_color_la, 4, 1, 1, 1)
 
         self.nc_bottom_layer_color_la = QLabel(self.application_settings_tab)
         self.nc_bottom_layer_color_la.setObjectName(u"nc_bottom_layer_color_la")
         self.nc_bottom_layer_color_la.setMinimumSize(QSize(150, 0))
+        self.nc_bottom_layer_color_la.setFrameShape(QFrame.WinPanel)
 
         self.gridLayout_12.addWidget(self.nc_bottom_layer_color_la, 5, 1, 1, 1)
 
@@ -2542,7 +2550,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.central_widget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1160, 21))
+        self.menubar.setGeometry(QRect(0, 0, 1160, 26))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuFile.setFont(font)
@@ -2651,7 +2659,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(3)
+        self.main_tab_widget.setCurrentIndex(1)
         self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
         self.ctrl_tab_widget.setCurrentIndex(0)
@@ -2790,16 +2798,16 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem3 = self.gcode_tw.horizontalHeaderItem(1)
         ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Select", None));
 #if QT_CONFIG(statustip)
+        self.upload_temp_tb.setStatusTip(QCoreApplication.translate("MainWindow", u"Reload gcode files generated.", None))
+#endif // QT_CONFIG(statustip)
+        self.upload_temp_tb.setText(QCoreApplication.translate("MainWindow", u"...", None))
+#if QT_CONFIG(statustip)
         self.open_gcode_tb.setStatusTip(QCoreApplication.translate("MainWindow", u"Load gcode files.", None))
 #endif // QT_CONFIG(statustip)
         self.open_gcode_tb.setText(QCoreApplication.translate("MainWindow", u"...", None))
 #if QT_CONFIG(shortcut)
         self.open_gcode_tb.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+G", None))
 #endif // QT_CONFIG(shortcut)
-#if QT_CONFIG(statustip)
-        self.toolButton_6.setStatusTip(QCoreApplication.translate("MainWindow", u"Reload gcode files generated.", None))
-#endif // QT_CONFIG(statustip)
-        self.toolButton_6.setText(QCoreApplication.translate("MainWindow", u"...", None))
 #if QT_CONFIG(statustip)
         self.remove_gcode_tb.setStatusTip(QCoreApplication.translate("MainWindow", u"Remove gcode files.", None))
 #endif // QT_CONFIG(statustip)

@@ -1742,6 +1742,29 @@
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_10">
                 <item>
+                 <widget class="QToolButton" name="upload_temp_tb">
+                  <property name="minimumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="statusTip">
+                   <string>Reload gcode files generated.</string>
+                  </property>
+                  <property name="text">
+                   <string>...</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="app_resources.qrc">
+                    <normaloff>:/resources/resources/icons/white-upload-file.svg</normaloff>
+                    <normalon>:/resources/resources/icons/white-upload-file.svg</normalon>
+                    <disabledoff>:/resources/resources/icons/gray-upload-file.svg</disabledoff>
+                    <disabledon>:/resources/resources/icons/gray-upload-file.svg</disabledon>:/resources/resources/icons/white-upload-file.svg</iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QToolButton" name="open_gcode_tb">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1767,26 +1790,6 @@
                   </property>
                   <property name="shortcut">
                    <string>Ctrl+G</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QToolButton" name="toolButton_6">
-                  <property name="minimumSize">
-                   <size>
-                    <width>50</width>
-                    <height>50</height>
-                   </size>
-                  </property>
-                  <property name="statusTip">
-                   <string>Reload gcode files generated.</string>
-                  </property>
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="app_resources.qrc">
-                    <normaloff>:/resources/resources/icons/white-refresh.svg</normaloff>:/resources/resources/icons/white-refresh.svg</iconset>
                   </property>
                  </widget>
                 </item>
@@ -4415,9 +4418,8 @@
             </property>
             <property name="icon">
              <iconset resource="app_resources.qrc">
-              <normaloff>:/resources/resources/icons/white-reset-hard.svg</normaloff>
-              <normalon>:/resources/resources/icons/white-reset-hard.svg</normalon>
-              <disabledoff>:/resources/resources/icons/gray-reset-hard.svg</disabledoff>:/resources/resources/icons/white-reset-hard.svg</iconset>
+              <normaloff>:/resources/resources/icons/white-refresh.svg</normaloff>
+              <normalon>:/resources/resources/icons/white-refresh.svg</normalon>:/resources/resources/icons/white-refresh.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5305,6 +5307,9 @@
                   <height>0</height>
                  </size>
                 </property>
+                <property name="frameShape">
+                 <enum>QFrame::WinPanel</enum>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -5331,6 +5336,9 @@
                   <width>150</width>
                   <height>0</height>
                  </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::WinPanel</enum>
                 </property>
                 <property name="text">
                  <string/>
@@ -5359,6 +5367,9 @@
                   <height>0</height>
                  </size>
                 </property>
+                <property name="frameShape">
+                 <enum>QFrame::WinPanel</enum>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -5371,6 +5382,9 @@
                   <width>150</width>
                   <height>0</height>
                  </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::WinPanel</enum>
                 </property>
                 <property name="text">
                  <string/>
@@ -5385,6 +5399,9 @@
                   <height>0</height>
                  </size>
                 </property>
+                <property name="frameShape">
+                 <enum>QFrame::WinPanel</enum>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -5397,6 +5414,9 @@
                   <width>150</width>
                   <height>0</height>
                  </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::WinPanel</enum>
                 </property>
                 <property name="text">
                  <string/>
@@ -5489,7 +5509,7 @@
      <x>0</x>
      <y>0</y>
      <width>1160</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

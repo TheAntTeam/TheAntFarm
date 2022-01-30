@@ -16,9 +16,6 @@ class UiManager(QObject):
     """Manage UI objects, signals and slots"""
     L_TAGS = ("top", "bottom", "profile", "drill", "no_copper_top", "no_copper_bottom")
     L_NAMES = ("TOP", "BOTTOM", "PROFILE", "DRILL", "NO COPPER TOP", "NO COPPER BOTTOM")
-    # L_COLORS = ["red", "blue", "black", "#444444", "purple", "brown"]
-    # L_COLORS = ["#FFC300", "#A3E4D7", "black", "#444444", "purple", "brown"]
-    L_COLORS = ["#FFC300", "#A3E4D7", "black", "#999999", "purple", "brown"]
     LOG_COLORS = {
         logging.DEBUG:    'white',
         logging.INFO:     'light blue',
@@ -43,9 +40,10 @@ class UiManager(QObject):
 
         # UI Sub-Managers
         self.ui_load_layer_m = UiViewLoadLayerTab(main_win, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES,
-                                                  self.L_COLORS, self.settings.app_settings)
+                                                  self.settings.app_settings)
         self.ui_create_job_m = UiCreateJobLayerTab(ui, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES, self.settings.jobs_settings)
-        self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker, self.ctrl_layer, self.settings.app_settings)
+        self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker, self.ctrl_layer,
+                                             self.settings.app_settings, self.settings.gcf_settings)
         self.ui_align_tab_m = UiAlignTab(ui, control_worker)
 
         self.ui.prepare_widget.currentChanged.connect(self.from_load_to_create)

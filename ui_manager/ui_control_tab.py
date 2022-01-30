@@ -24,7 +24,7 @@ class UiControlTab(QObject):
     precalc_gcode_s = Signal(str)
     select_gcode_s = Signal(str)
 
-    def __init__(self, ui, control_worker, serial_worker, ctrl_layer, app_settings):
+    def __init__(self, ui, control_worker, serial_worker, ctrl_layer, app_settings, gcf_settings):
         """
         Initialize ui elements of Control tab and connect signals coming and going to other classes/workers.
 
@@ -47,6 +47,7 @@ class UiControlTab(QObject):
         self.serialWo = serial_worker
         self.ctrl_layer = ctrl_layer
         self.app_settings = app_settings
+        self.gcf_settings = gcf_settings
 
         self.holding_status = False
         self.serial_connection_status = False
@@ -145,6 +146,9 @@ class UiControlTab(QObject):
         self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
         self.ui.gcode_tw.setColumnWidth(1, 100)
         self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+
+        self.ui.upload_temp_tb.clicked.connect(self.update_temporary_gcode_files)
+        self.ui.remove_gcode_tb.clicked.connect(self.remove_gcode_files)
 
         self.gcode_rb_group = QButtonGroup()
         self.gcode_rb_group.setExclusive(True)
@@ -278,6 +282,26 @@ class UiControlTab(QObject):
                 return False
         return True
 
+    def element_in_table(self, element):
+        """
+        Search if there is an element in the gcode table.
+
+        Parameters
+        ----------
+        element: str
+            gcode path string.
+
+        Returns
+        -------
+        bool
+                True if element is not in table, False if element is in table.
+        """
+        num_rows = self.ui.gcode_tw.rowCount()
+        for row in range(0, num_rows):
+            if element == self.ui.gcode_tw.cellWidget(row, 0).toolTip():
+                return row
+        return -1
+
     def open_gcode_files(self):
         load_gcode = QFileDialog.getOpenFileNames(None,
                                                   "Load G-Code File(s)",
@@ -285,11 +309,15 @@ class UiControlTab(QObject):
                                                   "G-Code Files (*.gcode)" + ";;All files (*.*)")  # todo: add other file extensions
         logging.debug(load_gcode)
         load_gcode_paths = load_gcode[0]
+        self._open_gcode_file(load_gcode_paths)
+
+    def _open_gcode_file(self, load_gcode_paths):
         if load_gcode_paths:
             self.app_settings.gcode_last_dir = os.path.dirname(load_gcode_paths[0])  # update setting
             for elem in load_gcode_paths:
-                if self.element_not_in_table(elem):
-                    self.precalc_gcode_s.emit(elem)
+                self.precalc_gcode_s.emit(elem)
+                elem_row = self.element_in_table(elem)
+                if elem_row < 0:
                     num_rows = self.ui.gcode_tw.rowCount()
                     self.ui.gcode_tw.insertRow(num_rows)
                     # The total path is just in the ToolTip while the name shown is only the name
@@ -307,6 +335,10 @@ class UiControlTab(QObject):
                         self.ui.gcode_tw.model().index(row, column))
                     new_rb.toggled.connect(
                         lambda *args, index=index: self.gcode_item_selected(index))
+                else:
+                    if self.ui.gcode_tw.cellWidget(elem_row, 1).isChecked():
+                        tag, ov = self.controlWo.get_gcode_data(elem)
+                        self.visualize_gcode(tag, ov, visible=True, redraw=True)
 
     @Slot(int)
     def gcode_item_selected(self, index):
@@ -325,6 +357,24 @@ class UiControlTab(QObject):
             else:
                 tag, ov = self.controlWo.get_gcode_data(gcode_path)
                 self.visualize_gcode(tag, ov, visible=False)
+
+    def update_temporary_gcode_files(self):
+        temp_dir = self.gcf_settings.gcode_folder
+        gcode_l = []
+        for file in os.listdir(temp_dir):
+            if file.endswith(".gcode"):
+                gcode_l.append(os.path.join(temp_dir, file))
+
+        if gcode_l:
+            self._open_gcode_file(gcode_l)
+
+    def remove_gcode_files(self):
+        rows = set([x.row() for x in self.ui.gcode_tw.selectedIndexes()])
+        for row in sorted(rows, reverse=True):
+            gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
+            tag, _ = self.controlWo.get_gcode_data(gcode_path)
+            self.ctrl_layer.remove_gcode(tag)
+            self.ui.gcode_tw.removeRow(row)
 
     def visualize_gcode(self, tag, ov, visible=True, redraw=False):
         if tag not in list(self.ctrl_layer.get_paths_tag()):
