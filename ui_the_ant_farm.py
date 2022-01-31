@@ -2185,6 +2185,8 @@ class Ui_MainWindow(object):
         icon13 = QIcon()
         icon13.addFile(u":/resources/resources/icons/white-refresh.svg", QSize(), QIcon.Normal, QIcon.Off)
         icon13.addFile(u":/resources/resources/icons/white-refresh.svg", QSize(), QIcon.Normal, QIcon.On)
+        icon13.addFile(u":/resources/resources/icons/gray-refresh.svg", QSize(), QIcon.Disabled, QIcon.Off)
+        icon13.addFile(u":/resources/resources/icons/gray-refresh.svg", QSize(), QIcon.Disabled, QIcon.On)
         self.soft_reset_tb.setIcon(icon13)
         self.soft_reset_tb.setIconSize(QSize(64, 64))
         self.soft_reset_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
