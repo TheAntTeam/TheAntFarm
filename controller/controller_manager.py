@@ -27,6 +27,7 @@ class ControllerWorker(QObject):
     update_abl_s = Signal(list)                  # Signal to update Auto-Bed-Levelling value
     update_bbox_s = Signal(tuple)
     update_gcode_s = Signal(str, list, bool, bool)
+    gcode_vectorized_s = Signal(str)
 
     update_file_progress_s = Signal(float)
 
@@ -314,6 +315,7 @@ class ControllerWorker(QObject):
 
     def vectorize_new_gcode_file(self, gcode_path):
         self.control_controller.load_gcode_file({}, gcode_path)
+        self.gcode_vectorized_s.emit(gcode_path)
 
     def select_active_gcode(self, gcode_path):
         self.active_gcode_path = gcode_path
