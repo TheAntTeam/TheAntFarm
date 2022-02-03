@@ -4419,7 +4419,9 @@
             <property name="icon">
              <iconset resource="app_resources.qrc">
               <normaloff>:/resources/resources/icons/white-refresh.svg</normaloff>
-              <normalon>:/resources/resources/icons/white-refresh.svg</normalon>:/resources/resources/icons/white-refresh.svg</iconset>
+              <normalon>:/resources/resources/icons/white-refresh.svg</normalon>
+              <disabledoff>:/resources/resources/icons/gray-refresh.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/gray-refresh.svg</disabledon>:/resources/resources/icons/white-refresh.svg</iconset>
             </property>
             <property name="iconSize">
              <size>

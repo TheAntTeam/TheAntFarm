@@ -70,6 +70,7 @@ class UiControlTab(QObject):
         self.pause_resume_gcode_s.connect(self.controlWo.pause_resume)
 
         # From Controller Manager to Serial Manager
+        self.controlWo.gcode_vectorized_s.connect(self.enable_gcode_cb)
         self.controlWo.serial_send_s.connect(self.serialWo.send)
         self.controlWo.serial_tx_available_s.connect(self.serialWo.send_from_queue)
 
@@ -318,7 +319,6 @@ class UiControlTab(QObject):
         if load_gcode_paths:
             for elem_not_norm in load_gcode_paths:
                 elem = os.path.normpath(elem_not_norm)
-                self.precalc_gcode_s.emit(elem)
                 elem_row = self.element_in_table(elem)
                 if elem_row < 0:
                     num_rows = self.ui.gcode_tw.rowCount()
@@ -332,6 +332,7 @@ class UiControlTab(QObject):
                     row = num_rows
                     new_rb = QRadioButton()
                     new_rb.setStyleSheet(StyleManager.set_radio_btn_style_sheet())
+                    new_rb.setEnabled(False)
                     self.gcode_rb_group.addButton(new_rb)
                     self.ui.gcode_tw.setCellWidget(row, column, new_rb)
                     index = QPersistentModelIndex(
@@ -342,6 +343,14 @@ class UiControlTab(QObject):
                     if self.ui.gcode_tw.cellWidget(elem_row, 1).isChecked():
                         tag, ov = self.controlWo.get_gcode_data(elem)
                         self.visualize_gcode(tag, ov, visible=True, redraw=True)
+
+                self.precalc_gcode_s.emit(elem)
+
+    @Slot(str)
+    def enable_gcode_cb(self, gcode_path):
+        row = self.element_in_table(gcode_path)
+        if row >= 0:
+            self.ui.gcode_tw.cellWidget(row, 1).setEnabled(True)
 
     @Slot(int)
     def gcode_item_selected(self, index):
@@ -387,9 +396,6 @@ class UiControlTab(QObject):
             self.ctrl_layer.add_gcode(tag, ov)
 
         self.ctrl_layer.set_gcode_visible(tag, visible)
-
-    def gcode_cb_update(self):
-        pass  # todo: to be implemented.
 
     def play_send_file(self):
         if self.serial_connection_status:
