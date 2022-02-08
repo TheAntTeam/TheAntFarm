@@ -53,7 +53,6 @@ class ControllerWorker(QObject):
 
         self.align_active = False
 
-        self.status_l = []
         self.status_to_ack = 0
         self.buffered_cmds = []
         self.cmds_to_ack = 0
@@ -82,6 +81,7 @@ class ControllerWorker(QObject):
         self.buffered_size = 0
         self.max_buffered_lines = 100
         self.min_buffer_threshold = 80
+        self.eof_wait_for_idle = False
 
         self.active_gcode_path = ""
 
@@ -124,6 +124,13 @@ class ControllerWorker(QObject):
         self.update_path_s.emit(tag, new_paths)
 
     # ***************** CONTROL related functions. ***************** #
+    def check_eof_and_idle(self):
+        if self.eof_wait_for_idle and self.cmds_to_ack == 0:
+            sta = self.control_controller.status_report_od["state"].lower()
+            if "idle" in sta:
+                self.stop_send_s.emit()
+                self.eof_wait_for_idle = False
+
     def reset_dro_status_updated(self):
         self.dro_status_updated = False
 
@@ -154,6 +161,7 @@ class ControllerWorker(QObject):
                         # This variable should be set to true the first time an ack is received.
                         if not self.dro_status_updated:
                             self.dro_status_updated = True
+                        self.check_eof_and_idle()
                     elif re.match("^\[.*\]\s*$\s", element):
                         self.control_controller.parse_bracket_square(element)
                         [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = \
@@ -170,6 +178,7 @@ class ControllerWorker(QObject):
                                 logger.debug(element)
                     elif re.match("ok\s*$\s", element):
                         logger.debug("buffered size: " + str(self.buffered_size))
+                        self.update_console_text_s.emit(element)
                         if self.sending_file and self.cmds_to_ack > 0:
                             # Update progress #
                             self.cmds_to_ack -= 1
@@ -214,12 +223,13 @@ class ControllerWorker(QObject):
                                 self.send_to_tx_queue(cmd_to_send)
                                 self.buffered_cmds.append(cmd_to_send)
                                 logger.debug("TX:" + cmd_to_send)
+                                self.update_console_text_s.emit(cmd_to_send)
                                 self.buffered_size += len(cmd_to_send)
                                 self.sent_lines += 1
                                 self.cmds_to_ack += 1
 
                             if self.ack_lines == self.tot_lines:
-                                self.stop_send_s.emit()
+                                self.eof_wait_for_idle = True
                                 self.sending_file = False
                                 logger.info("End of File sending.")
 
@@ -348,15 +358,17 @@ class ControllerWorker(QObject):
             self.tot_lines = len(self.file_content)
             self.macro_on = False
             self.macro_obj = None
+            self.eof_wait_for_idle = False
             logger.info("Sending file: " + str(gcode_path))
             logger.info("Total lines: " + str(self.tot_lines))
 
-            while self.sent_lines < self.tot_lines and \
+            if self.sent_lines < self.tot_lines and \
                     (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE\
                     and not self.wait_tag_decoding:
                 cmd_to_send = self.file_content[self.sent_lines]
                 self.send_to_tx_queue(cmd_to_send)
                 self.buffered_cmds.append(cmd_to_send)
+                self.update_console_text_s.emit(cmd_to_send)
                 logger.debug(cmd_to_send)
                 self.buffered_size += len(cmd_to_send)
                 self.sent_lines += 1
