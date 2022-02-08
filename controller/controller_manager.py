@@ -65,7 +65,6 @@ class ControllerWorker(QObject):
         self.prb_updated = False
         self.abl_updated = False
         self.prb_val = []
-        self.abl_val = []
         self.abl_cmd_ls = []
         self.prb_num_todo = 0
         self.prb_num_done = 0
@@ -314,9 +313,9 @@ class ControllerWorker(QObject):
         self.serial_send_s.emit(next_abl_cmd)  # Execute next Probe of Auto-Bed-Levelling
 
     def ack_auto_bed_levelling(self):
-        self.abl_val = self.control_controller.get_abl_value()
-        logger.info("ABL values: " + str(self.abl_val))
-        # self.update_abl_s.emit(self.abl_val)
+        abl_val = self.control_controller.get_abl_value()
+        logger.debug("ABL values: " + str(abl_val))
+        # self.update_abl_s.emit(abl_val)
         self.select_active_gcode(self.active_gcode_path)
 
     def set_abl_active(self, abl_active=True):
@@ -331,13 +330,17 @@ class ControllerWorker(QObject):
         self.active_gcode_path = gcode_path
         redraw = False
         visible = True
-        logger.debug("ABL_val " + str(self.abl_val))
+        abl_val = self.control_controller.get_abl_value()
+        logger.debug("ABL_val " + str(abl_val))
         logger.debug("ABL_active " + str(self.abl_apply_active))
-        if self.abl_val and self.abl_apply_active:
+        if abl_val != [] and self.abl_apply_active:
+            logger.debug("Apply ABL")
             self.control_controller.apply_abl(gcode_path)
             redraw = True
         else:
+            logger.debug("Remove ABL")
             redraw = self.control_controller.remove_abl(gcode_path)
+        logger.debug("ABL Done")
         (tag, v) = self.control_controller.get_gcode_tag_and_v(gcode_path)
         self.update_gcode_s.emit(tag, v, visible, redraw)
 
@@ -347,6 +350,8 @@ class ControllerWorker(QObject):
     @Slot(str)
     def send_gcode_file(self, gcode_path):
         self.file_content = self.control_controller.get_gcode_lines(gcode_path)
+        # with open(gcode_path+".abl", "w") as f:
+        #     f.writelines(self.file_content)
         # with open(gcode_path) as f:            # DEBUG: take directly from file
         #     self.file_content = f.readlines()
         logger.debug(self.file_content)

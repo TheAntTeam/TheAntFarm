@@ -282,16 +282,19 @@ class ControlController(QObject):
         return tag, v
 
     def apply_abl(self, gcode_path):
+        print("Apply ABL")
         gcp = self.get_gcode_gcp(gcode_path)
         abl = GCodeLeveler(gcp.gc)
-        last_probe = self.abl_val.pop()
-        abl.get_grid_data(self.abl_val, self.abl_steps, last_probe, self.wco_a)
+        abl_val = self.abl_val.copy()
+        last_probe = abl_val.pop()
+        abl.get_grid_data(abl_val, self.abl_steps, last_probe, self.wco_a)
         abl.interp_grid_data()
         abl.apply_abl()
         # print("Leveled")
         # print(gcp.gc.modified_vectors)
 
     def remove_abl(self, gcode_path):
+        print("Remove ABL")
         gcp = self.get_gcode_gcp(gcode_path)
         if gcp.gc.modified_vectors:
             gcp.gc.modified_vectors = []

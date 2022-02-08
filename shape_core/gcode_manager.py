@@ -586,8 +586,6 @@ class GCoder:
 
     def is_macro(self, cmd):
         splitted = re.findall(r'[a-zA-Z][-]*[\d.]+', cmd.strip().upper())
-        print("splitted")
-        print(splitted)
         if self.CHANGE_TOOL_COMMAND in splitted:
             return True
         else:
@@ -700,9 +698,10 @@ class GcodePoint:
             s += "G0"
         else:
             s += "G1"
-        s += " X" + str(self.coords[0])
-        s += " Y" + str(self.coords[1])
-        s += " Z" + str(self.coords[2])
+        s += " X" + "{:.3f}".format(self.coords[0])
+        s += " Y" + "{:.3f}".format(self.coords[1])
+        if len(self.coords) > 2:
+            s += " Z" + "{:.3f}".format(self.coords[2])
         for k in self.params.keys():
             s += " " + str(k).upper() + str(self.params[k])
         s += "\n"
@@ -831,28 +830,27 @@ class GCodeParser:
         return gcll
 
     def recode_gcode(self):
+        # Recode Gcode
         gcls = []
         if self.gc.modified_vectors:
+            # - Modified Loaded
             gcv = self.gc.modified_vectors
         else:
+            # - Original Loaded
             gcv = self.gc.original_vectors
-        print("gcv")
-        print(gcv)
         gcl = self.gc.gcll
         if gcv or gcl:
             gcv_len = len(gcv)
-
             # start from one because the first initial point
             # is always in origin of the working coords system
             vi = 1
             for l in range(len(gcl)):
                 if vi < len(gcv):
-                    nl = gcv[vi]
+                    nl = gcv[vi].line
                 else:
                     nl = -1
                 if nl == l:
                     cl_flag = True
-                    # print the gcode vector line
                     gcls.append(gcv[vi].get_string())
                     while cl_flag and vi < gcv_len - 1:
                         vi += 1
@@ -989,10 +987,8 @@ class GCodeLeveler:
 
     def interp_grid_data(self):
         if self.grid_data is not None:
-            print("Grid Data Interpolation...")
             X, Y, Z = self.grid_data
             self.ig = spi.interp2d(X, Y, Z, kind='cubic')
-            print("Done")
 
     def apply(self):
         print("Auto Bed Leveler Start")
@@ -1054,7 +1050,7 @@ class GCodeLeveler:
             self.gc.modified_vectors = mvl
             print("Advanced Auto Bed Leveler Stop")
             tb = time.time()
-            print("Duration ", tb-ta)
+            print("Done in " + "{:.3f}".format(tb-ta) + " sec")
             return True
         else:
             return False
