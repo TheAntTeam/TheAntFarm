@@ -1,5 +1,5 @@
-from PySide2.QtCore import Signal, Slot, QObject
-from PySide2.QtGui import QPixmap
+from PySide6.QtCore import Signal, Slot, QObject
+from PySide6.QtGui import QPixmap
 import logging
 
 logger = logging.getLogger(__name__)

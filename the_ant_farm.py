@@ -1,10 +1,10 @@
 import os
 import sys
-from PySide2.QtWidgets import QMainWindow, QApplication, QMessageBox
-from PySide2.QtCore import QThread, QSettings, QPoint, QSize, QThreadPool
+from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PySide6.QtCore import QThread, QSettings, QPoint, QSize, QThreadPool
 from queue import Queue
-from ui_the_ant_farm import Ui_MainWindow  # convert ui to py: pyside2-uic the_ant_farm.ui > ui_the_ant_farm.py
-# Whenever you change resources in qrc, convert qrc to py: pyside2-rcc app_resources.qrc -o app_resources_rc.py
+from ui_the_ant_farm import Ui_MainWindow  # convert ui to py: pyside6-uic the_ant_farm.ui > ui_the_ant_farm.py
+# Whenever you change resources in qrc, convert qrc to py: pyside6-rcc app_resources.qrc -o app_resources_rc.py
 """ Custom imports """
 from serial_manager import SerialWorker
 from controller.controller_manager import ControllerWorker
@@ -15,7 +15,7 @@ from log_manager import LogHandler, FileLogHandler
 import logging.handlers
 
 
-pys2_path = os.path.dirname(sys.modules['PySide2'].__file__)
+pys2_path = os.path.dirname(sys.modules['PySide6'].__file__)
 if os.path.isdir(os.path.join(pys2_path, "Qt")):
     pys2_path = os.path.join(pys2_path, "Qt")
 

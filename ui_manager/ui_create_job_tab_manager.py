@@ -1,6 +1,6 @@
-from PySide2.QtWidgets import QLabel, QDoubleSpinBox, QHeaderView
-from PySide2.QtCore import Signal, Slot, QObject
-from PySide2.QtGui import Qt
+from PySide6.QtWidgets import QLabel, QDoubleSpinBox, QHeaderView
+from PySide6.QtCore import Signal, Slot, QObject
+from PySide6.QtGui import Qt
 from collections import OrderedDict as Od
 import math
 import logging

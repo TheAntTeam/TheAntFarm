@@ -1,4 +1,4 @@
-from PySide2.QtCore import QObject
+from PySide6.QtCore import QObject
 from shape_core.pcb_manager import PcbObj
 from shape_core.path_manager import MachinePath
 from shape_core.gcode_manager import GCoder

@@ -1,4 +1,4 @@
-from PySide2.QtCore import QPoint, QSize
+from PySide6.QtCore import QPoint, QSize
 import configparser
 import os
 

@@ -1,5 +1,5 @@
-from PySide2.QtCore import Slot, QObject, Signal, QTimer
-from PySide2.QtGui import QPixmap
+from PySide6.QtCore import Slot, QObject, Signal, QTimer
+from PySide6.QtGui import QPixmap
 import re
 from collections import OrderedDict as Od
 from .controller_view import ViewController
