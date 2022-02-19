@@ -1718,6 +1718,9 @@
                 <property name="selectionMode">
                  <enum>QAbstractItemView::MultiSelection</enum>
                 </property>
+                <property name="selectionBehavior">
+                 <enum>QAbstractItemView::SelectRows</enum>
+                </property>
                 <property name="showGrid">
                  <bool>false</bool>
                 </property>
@@ -5511,7 +5514,7 @@
      <x>0</x>
      <y>0</y>
      <width>1160</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
