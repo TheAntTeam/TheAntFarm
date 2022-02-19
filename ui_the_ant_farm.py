@@ -3,17 +3,30 @@
 ################################################################################
 ## Form generated from reading UI file 'the_ant_farm.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.2.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
+from PySide6.QtOpenGLWidgets import QOpenGLWidget
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
+    QComboBox, QDoubleSpinBox, QFrame, QGridLayout,
+    QHBoxLayout, QHeaderView, QLabel, QLayout,
+    QLineEdit, QMainWindow, QMenu, QMenuBar,
+    QPlainTextEdit, QProgressBar, QPushButton, QSizePolicy,
+    QSlider, QSpacerItem, QSpinBox, QStackedWidget,
+    QStatusBar, QTabWidget, QTableWidget, QTableWidgetItem,
+    QTextEdit, QToolButton, QVBoxLayout, QWidget)
 
 from vispy_qt_widget import VispyCanvas
-
 import app_resources_rc
 
 class Ui_MainWindow(object):
@@ -67,7 +80,6 @@ class Ui_MainWindow(object):
         self.main_tab_widget.setObjectName(u"main_tab_widget")
         font = QFont()
         font.setBold(True)
-        font.setWeight(75)
         self.main_tab_widget.setFont(font)
         self.main_tab_widget.setTabShape(QTabWidget.Rounded)
         self.main_tab_widget.setTabsClosable(False)
@@ -1870,7 +1882,6 @@ class Ui_MainWindow(object):
         font1 = QFont()
         font1.setPointSize(8)
         font1.setBold(True)
-        font1.setWeight(75)
         self.z_mul_10_pb.setFont(font1)
         self.z_mul_10_pb.setAutoRepeat(False)
 
@@ -2291,10 +2302,9 @@ class Ui_MainWindow(object):
 #endif
         self.status_l.setPalette(palette)
         font2 = QFont()
-        font2.setFamily(u"MS Shell Dlg 2")
+        font2.setFamilies([u"MS Shell Dlg 2"])
         font2.setPointSize(10)
         font2.setBold(True)
-        font2.setWeight(75)
         self.status_l.setFont(font2)
         self.status_l.setFrameShape(QFrame.StyledPanel)
         self.status_l.setFrameShadow(QFrame.Plain)

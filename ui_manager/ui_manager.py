@@ -1,5 +1,5 @@
-from PySide2.QtCore import Signal, Slot, QObject
-from PySide2.QtWidgets import QActionGroup
+from PySide6.QtCore import Signal, Slot, QObject
+from PySide6.QtGui import QActionGroup
 from shape_core.visual_manager import VisualLayer
 
 from .ui_align_tab import UiAlignTab

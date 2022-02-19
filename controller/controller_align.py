@@ -1,5 +1,5 @@
-from PySide2.QtCore import QObject
-import qimage2ndarray
+from PySide6.QtCore import QObject
+from PySide6.QtGui import QImage
 from double_side_manager import DoubleSideManager
 import logging
 import traceback
@@ -22,5 +22,8 @@ class AlignController(QObject):
         frame = self.double_side_manager.get_webcam_frame()
         logger.debug(str(self.threshold_value))
         frame = self.double_side_manager.detect_holes(frame, self.threshold_value)
-        image = qimage2ndarray.array2qimage(frame)
+
+        # frame is a numpy array expected to be 640x480, RGB - (see double_side_manager.py)
+        height, width, channel = frame.shape
+        image = QImage(frame.data, width, height, width * 3, QImage.Format_RGB888)
         return image

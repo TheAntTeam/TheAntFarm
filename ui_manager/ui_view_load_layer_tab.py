@@ -1,6 +1,6 @@
 import os
-from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import Signal, Slot, QObject
+from PySide6.QtWidgets import QFileDialog
+from PySide6.QtCore import Signal, Slot, QObject
 from collections import OrderedDict as Od
 import logging
 
