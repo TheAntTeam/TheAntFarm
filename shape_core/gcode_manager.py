@@ -342,6 +342,7 @@ class GCoder:
 
         # return to WP Zero
         gc += "G53 G01 Z" + z_m_one + " " + fast_str + "\n"
+        gc += "G54\n"
         gc += "G00 X" + posx_tag + " Y" + posy_tag + "\n"
         gc += "G00 Z" + posz_tag + "\n"
         return gc
@@ -861,6 +862,11 @@ class GCodeParser:
                     if gcl[l].command:
                         gcls.append(gcl[l].get_string())
         return gcls
+
+    def get_change_tool_gcode(self):
+        ctc = self.CHANGE_TOOL_COMMAND
+        ctc_str = ctc[0].upper() + str(ctc[1]) + "\n"
+        return ["T0\n", ctc_str]
 
     def vectorize(self):
         if self.gc.gcll:

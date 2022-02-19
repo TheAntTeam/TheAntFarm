@@ -9,7 +9,7 @@ class DoubleSideManager:
 
 		self.detected_holes = []
 		# grab webcam
-		self.cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+		self.cap = cv2.VideoCapture(4, cv2.CAP_DSHOW)
 		self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 		self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 

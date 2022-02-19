@@ -308,6 +308,10 @@ class ControlController(QObject):
     def get_gcode_lines(self, gcode_path):
         return self.gcodes_od[gcode_path]["gcode"].recode_gcode()
 
+    def get_change_tool_lines(self):
+        gcp = GCodeParser(None)
+        return gcp.get_change_tool_gcode()
+
     def get_boundary_box(self, gcode_path):
         logger.debug(gcode_path)
         return self.gcodes_od[gcode_path]["gcode"].get_bbox()

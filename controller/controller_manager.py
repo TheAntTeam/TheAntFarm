@@ -76,6 +76,7 @@ class ControllerWorker(QObject):
 
         self.sending_file = False
         self.file_content = []
+        self.content_line = 0
         self.file_progress = 0.0
         self.sent_lines = 0
         self.ack_lines = 0
@@ -187,29 +188,36 @@ class ControllerWorker(QObject):
                             self.ack_lines += 1
                             self.buffered_size -= len(self.buffered_cmds[0])
                             self.buffered_cmds.pop(0)
-                            self.file_progress = (self.ack_lines / self.tot_lines) * 100
+                            self.file_progress = (self.content_line / self.tot_lines) * 100
                             logger.debug("Acknowledged lines: " + str(self.ack_lines))
                             self.update_file_progress_s.emit(self.file_progress)
 
                             # all lines have been sent?
-                            end_of_file = self.sent_lines >= self.tot_lines
-                            # print("End Of File: " + str(end_of_file))
-                            if not end_of_file:
-                                if self.macro_on:
-                                    probe_data = self.control_controller.prb_val
-                                    wsp = self.get_workspace_parameters()
-                                    cmd_to_send = self.macro_obj.get_next_line(wsp, probe_data)
-                                    print(cmd_to_send)
-                                    if cmd_to_send is None:
-                                        self.macro_on = False
-                                        self.macro_obj = None
-                                        self.wait_tag_decoding = False
-                                    else:
-                                        self.tot_lines += 1
 
+                            # print("End Of File: " + str(end_of_file))
+
+                            if self.macro_on:
+                                probe_data = self.control_controller.prb_val
+                                wsp = self.get_workspace_parameters()
+                                cmd_to_send = self.macro_obj.get_next_line(wsp, probe_data)
+                                print(cmd_to_send)
+                                if cmd_to_send is None:
+                                    self.macro_on = False
+                                    self.macro_obj = None
+                                    self.wait_tag_decoding = False
+                                    self.tot_lines -= 1
+                                else:
+                                    # self.tot_lines += 1
+                                    buff_available = (self.buffered_size + len(
+                                        cmd_to_send)) < self.REMOTE_RX_BUFFER_MAX_SIZE
+
+                            end_of_file = self.content_line >= self.tot_lines
+
+                            if not end_of_file:
                                 if not self.macro_on:
-                                    cmd_to_send = self.file_content[self.sent_lines]
+                                    cmd_to_send = self.file_content[self.content_line]
                                     cmd_to_send = self.macro_check(cmd_to_send)
+                                    self.content_line += 1
 
                                 logger.info(str(self.ack_lines) + " <-> " + str(self.sent_lines))
                                 # does data fit the buffer?
@@ -230,9 +238,14 @@ class ControllerWorker(QObject):
                                 self.sent_lines += 1
                                 self.cmds_to_ack += 1
 
-                            if self.ack_lines == self.tot_lines:
+                            # if self.ack_lines == self.tot_lines:
+                            if end_of_file:
                                 self.eof_wait_for_idle = True
                                 self.sending_file = False
+
+                                self.file_progress = (self.content_line / self.tot_lines) * 100
+                                self.update_file_progress_s.emit(self.file_progress)
+
                                 logger.info("End of File sending.")
 
                     elif "error" in element.lower():
@@ -352,7 +365,12 @@ class ControllerWorker(QObject):
 
     @Slot(str)
     def send_gcode_file(self, gcode_path):
-        self.file_content = self.control_controller.get_gcode_lines(gcode_path)
+        lines = self.control_controller.get_gcode_lines(gcode_path)
+        logger.info("Sending file: " + str(gcode_path))
+        self.send_gcode_lines(lines)
+
+    def send_gcode_lines(self, lines):
+        self.file_content = lines
         # with open(gcode_path+".abl", "w") as f:
         #     f.writelines(self.file_content)
         # with open(gcode_path) as f:            # DEBUG: take directly from file
@@ -362,28 +380,27 @@ class ControllerWorker(QObject):
             self.file_progress = 0.0
             self.cmds_to_ack = 0
             self.sent_lines = 0
+            self.content_line = 0
             self.ack_lines = 0
             self.tot_lines = len(self.file_content)
             self.macro_on = False
             self.macro_obj = None
             self.eof_wait_for_idle = False
-            logger.info("Sending file: " + str(gcode_path))
+            self.wait_tag_decoding = False
             logger.info("Total lines: " + str(self.tot_lines))
 
             if self.sent_lines < self.tot_lines and \
-                    (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE\
-                    and not self.wait_tag_decoding:
-                cmd_to_send = self.file_content[self.sent_lines]
+                    (self.buffered_size + len(self.file_content[self.content_line])) < self.REMOTE_RX_BUFFER_MAX_SIZE:
+                cmd_to_send = self.file_content[self.content_line]
+                cmd_to_send = self.macro_check(cmd_to_send)
                 self.send_to_tx_queue(cmd_to_send)
                 self.buffered_cmds.append(cmd_to_send)
                 self.update_console_text_s.emit(cmd_to_send)
                 logger.debug(cmd_to_send)
                 self.buffered_size += len(cmd_to_send)
                 self.sent_lines += 1
+                self.content_line += 1
                 self.cmds_to_ack += 1
-
-                if self.sent_lines < self.tot_lines:
-                    self.macro_check(self.file_content[self.sent_lines])
 
             logger.debug("Buffered size: " + str(self.buffered_size))
             self.sending_file = True
@@ -421,8 +438,11 @@ class ControllerWorker(QObject):
     def get_workspace_parameters(self):
         return self.control_controller.workspace_params_od
 
+    @Slot()
     def start_tool_change(self):
         logger.info("Tool change is starting!")
+        lines = self.control_controller.get_change_tool_lines()
+        self.send_gcode_lines(lines)
 
 # ***************** ALIGN related functions. ***************** #
 
