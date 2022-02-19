@@ -33,6 +33,7 @@ class ControllerWorker(QObject):
 
     reset_controller_status_s = Signal()
     stop_send_s = Signal()
+    send_tool_change_s = Signal()                # Signal to start the tool change procedure
 
     REMOTE_RX_BUFFER_MAX_SIZE = 128
 
@@ -46,6 +47,8 @@ class ControllerWorker(QObject):
         self.view_controller = ViewController(self.settings)
         self.control_controller = ControlController(self.settings)
         self.align_controller = AlignController(self.settings)
+
+        self.send_tool_change_s.connect(self.start_tool_change)
 
         self.poll_timer = None
         self.alive_timer = None
@@ -417,6 +420,9 @@ class ControllerWorker(QObject):
 
     def get_workspace_parameters(self):
         return self.control_controller.workspace_params_od
+
+    def start_tool_change(self):
+        logger.info("Tool change is starting!")
 
 # ***************** ALIGN related functions. ***************** #
 

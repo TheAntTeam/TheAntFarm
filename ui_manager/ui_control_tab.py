@@ -97,6 +97,7 @@ class UiControlTab(QObject):
         self.ui.soft_reset_tb.clicked.connect(self.handle_soft_reset)
         self.ui.unlock_tb.clicked.connect(self.handle_unlock)
         self.ui.homing_tb.clicked.connect(self.handle_homing)
+        self.ui.tool_change_tb.clicked.connect(self.tool_change_start)
         self.ui.zero_xy_pb.clicked.connect(self.handle_xy_0)
         self.ui.zero_x_pb.clicked.connect(self.handle_x_0)
         self.ui.zero_y_pb.clicked.connect(self.handle_y_0)
@@ -511,6 +512,7 @@ class UiControlTab(QObject):
             self.ui.soft_reset_tb.setEnabled(True)
             self.ui.unlock_tb.setEnabled(True)
             self.ui.homing_tb.setEnabled(True)
+            self.ui.tool_change_tb.setEnabled(True)
             if self.is_gcode_rb_selected():
                 self.ui.play_tb.setEnabled(True)
             self.controller_connected_s.emit(True)
@@ -533,6 +535,7 @@ class UiControlTab(QObject):
         self.ui.play_tb.setEnabled(False)
         self.ui.stop_tb.setEnabled(False)
         self.ui.pause_resume_tb.setEnabled(False)
+        self.ui.tool_change_tb.setEnabled(False)
         self.controller_connected_s.emit(False)
         self.ctrl_layer.remove_pointer()
 
@@ -556,6 +559,10 @@ class UiControlTab(QObject):
     def handle_homing(self):
         logging.debug("Homing Command")
         self.ui_serial_send_s.emit("$H\n")
+
+    def tool_change_start(self):
+        logger.debug("Tool change")
+        self.controlWo.send_tool_change_s.emit()
 
     def handle_xy_0(self):
         logging.debug("XY = 0")
