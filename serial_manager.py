@@ -136,5 +136,5 @@ class SerialWorker(QObject):
         if error_type != 0:
             logger.error(self.serial_port.error())
             logger.error(self.serial_port.errorString())
-            if error_type == QSerialPort.ResourceError:
-                self.close_for_error_s.emit()
+            # if error_type == QSerialPort.ResourceError:
+            #     self.close_for_error_s.emit()
