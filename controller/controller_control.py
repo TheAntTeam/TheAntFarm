@@ -114,7 +114,7 @@ class ControlController(QObject):
                 try:
                     self.status_report_od["planner"] = int(word[1])
                     self.status_report_od["rxbytes"] = int(word[2])
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
                 except Exception as e:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
