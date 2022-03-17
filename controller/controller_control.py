@@ -98,7 +98,7 @@ class ControlController(QObject):
             elif word[0] == "F":
                 try:
                     self.status_report_od["curfeed"] = float(word[1])
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
                 except Exception as e:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
@@ -106,7 +106,7 @@ class ControlController(QObject):
                 try:
                     self.status_report_od["curfeed"] = float(word[1])
                     self.status_report_od["curspindle"] = float(word[2])
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
                 except Exception as e:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
@@ -123,7 +123,7 @@ class ControlController(QObject):
                     self.status_report_od["OvFeed"] = int(word[1])
                     self.status_report_od["OvRapid"] = int(word[2])
                     self.status_report_od["OvSpindle"] = int(word[3])
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
                 except Exception as e:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
