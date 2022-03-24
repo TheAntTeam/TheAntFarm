@@ -48,10 +48,27 @@ class UiManager(QObject):
 
         self.ui.prepare_widget.currentChanged.connect(self.from_load_to_create)
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
-        self.ui.actionSettings_Preferences.triggered.connect(self.hide_show_preferences_tab)
+        # self.ui.actionSettings_Preferences.triggered.connect(self.hide_show_preferences_tab)
         self.ui.actionSave_Settings.triggered.connect(self.save_all_settings)
 
         self.make_log_action_mutually_exclusive()
+        self.apply_initial_window_settings(self.settings.app_settings)
+
+    def apply_initial_window_settings(self, app_settings):
+        """Apply initial window settings."""
+        if app_settings.win_maximized:
+            self.main_win.showMaximized()
+        self.main_win.move(app_settings.pos)  # Restore position
+        self.main_win.resize(app_settings.size)
+        setting_tab_idx = self.ui.main_tab_widget.indexOf(self.ui.settings_tab)
+        if app_settings.main_tab_index == setting_tab_idx:
+            self.main_win.ui.actionSettings_Preferences.setChecked(True)
+            self.hide_show_preferences_tab()
+        # Connect the hide show action after the initial state has been set.
+        self.ui.actionSettings_Preferences.triggered.connect(self.hide_show_preferences_tab)
+        self.main_win.ui.main_tab_widget.setCurrentIndex(app_settings.main_tab_index)
+        self.main_win.ui.ctrl_tab_widget.setCurrentIndex(app_settings.ctrl_tab_index)
+        self.main_win.ui.actionHide_Show_Console.setChecked(app_settings.console_visibility)
 
     def save_all_settings(self):
         all_settings_od = {"jobs_settings": self.ui_create_job_m.get_all_settings()}

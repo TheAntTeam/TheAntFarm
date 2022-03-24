@@ -69,17 +69,11 @@ class AppSettingsHandler:
         # GENERAL application settings #
         if "GENERAL" in self.app_settings:
             app_general = self.app_settings["GENERAL"]
-            # self.win_maximized = app_general.getboolean("win_maximized", self.WIN_MAXIMIZED_DEFAULT)
-            # if self.win_maximized:
-            #     self.main_win.showMaximized()
             self.pos = QPoint(app_general.getint("win_position_x", self.WIN_POS_X_DEFAULT),
                               app_general.getint("win_position_y", self.WIN_POS_Y_DEFAULT))
-            self.main_win.move(self.pos)  # Restore position
             self.size = QSize(app_general.getint("win_width", self.WIN_SIZE_W_DEFAULT),
                               app_general.getint("win_height", self.WIN_SIZE_H_DEFAULT))
             self.win_maximized = app_general.getboolean("win_maximized", self.WIN_MAXIMIZED_DEFAULT)
-            if self.win_maximized:
-                self.main_win.showMaximized()
             self.main_tab_index = app_general.getint("main_tab_index", self.MAIN_TAB_INDEX_DEFAULT)
             self.ctrl_tab_index = app_general.getint("ctrl_tab_index", self.CTRL_TAB_INDEX_DEFAULT)
             self.console_visibility = app_general.getboolean("console_visibility", self.SHOW_CONSOLE_DEFAULT)
@@ -87,12 +81,7 @@ class AppSettingsHandler:
             self.logs_max_bytes = app_general.getint('logs_max_bytes', self.LOGS_MAX_BYTES)
             self.logs_backup_count = app_general.getint('logs_backup_count', self.LOGS_BACKUP_COUNT)
             self.last_serial_port = app_general.get("last_serial_port", self.LAST_SERIAL_PORT_DEFAULT)
-            self.last_serial_baud = app_general.get("last_serial_baud", self.LAST_SERIAL_BAUD_DEFAULT)
-        # Apply general settings.
-        self.main_win.resize(self.size)
-        self.main_win.ui.main_tab_widget.setCurrentIndex(self.main_tab_index)
-        self.main_win.ui.ctrl_tab_widget.setCurrentIndex(self.ctrl_tab_index)
-        self.main_win.ui.actionHide_Show_Console.setChecked(self.console_visibility)
+            self.last_serial_baud = app_general.getint("last_serial_baud", self.LAST_SERIAL_BAUD_DEFAULT)
 
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
@@ -103,7 +92,8 @@ class AppSettingsHandler:
             self.profile_layer_color = app_layers_settings.get("profile_layer_color", self.PROFILE_LAYER_COLOR_DEFAULT)
             self.drill_layer_color = app_layers_settings.get("drill_layer_color", self.DRILL_LAYER_COLOR_DEFAULT)
             self.nc_top_layer_color = app_layers_settings.get("nc_top_layer_color", self.NC_TOP_LAYER_COLOR_DEFAULT)
-            self.nc_bottom_layer_color = app_layers_settings.get("nc_bottom_layer_color", self.NC_BOTTOM_LAYER_COLOR_DEFAULT)
+            self.nc_bottom_layer_color = app_layers_settings.get("nc_bottom_layer_color",
+                                                                 self.NC_BOTTOM_LAYER_COLOR_DEFAULT)
 
         if "GCODES" in self.app_settings:
             app_gcode_settings = self.app_settings["GCODES"]
@@ -226,4 +216,3 @@ class AppSettingsHandler:
         # Write application ini file #
         with open(self.app_config_path, 'w') as configfile:
             self.app_settings.write(configfile)
-
