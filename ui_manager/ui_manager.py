@@ -60,14 +60,14 @@ class UiManager(QObject):
             self.main_win.showMaximized()
         self.main_win.move(app_settings.pos)  # Restore position
         self.main_win.resize(app_settings.size)
-        setting_tab_idx = self.ui.main_tab_widget.indexOf(self.ui.settings_tab)
-        if app_settings.main_tab_index == setting_tab_idx:
+        if app_settings.settings_tab_visibility:
             self.main_win.ui.actionSettings_Preferences.setChecked(True)
             self.hide_show_preferences_tab()
         # Connect the hide show action after the initial state has been set.
         self.ui.actionSettings_Preferences.triggered.connect(self.hide_show_preferences_tab)
         self.main_win.ui.main_tab_widget.setCurrentIndex(app_settings.main_tab_index)
         self.main_win.ui.ctrl_tab_widget.setCurrentIndex(app_settings.ctrl_tab_index)
+        self.main_win.ui.settings_sub_tab.setCurrentIndex(app_settings.settings_tab_index)
         self.main_win.ui.actionHide_Show_Console.setChecked(app_settings.console_visibility)
 
     def save_all_settings(self):
@@ -100,8 +100,10 @@ class UiManager(QObject):
         setting_tab_idx = self.ui.main_tab_widget.indexOf(self.ui.settings_tab)
         if self.ui.actionSettings_Preferences.isChecked():
             self.ui.main_tab_widget.setTabVisible(setting_tab_idx, True)
+            self.ui.main_tab_widget.setCurrentIndex(setting_tab_idx)
         else:
             self.ui.main_tab_widget.setTabVisible(setting_tab_idx, False)
+            self.ui.main_tab_widget.setCurrentIndex(0)
 
     def make_log_action_mutually_exclusive(self):
         log_level_group = QActionGroup(self.main_win)
