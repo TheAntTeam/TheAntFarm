@@ -1,4 +1,4 @@
-from PySide2.QtCore import Signal, Slot, QObject
+from PySide2.QtCore import QObject
 import logging
 
 logger = logging.getLogger(__name__)
@@ -19,6 +19,7 @@ class UiSettingsPreferencesTab(QObject):
         settings: SettingsHandler
             Handler object that allows the access all the settings.
         """
+        super(UiSettingsPreferencesTab, self).__init__()
         self.ui = ui
         self.control_wo = control_worker
         self.settings = settings
@@ -57,4 +58,3 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.tool_change_x_wpos_dsb.setValue(tool_change_wpos[0])
         self.ui.tool_change_y_wpos_dsb.setValue(tool_change_wpos[1])
         self.ui.tool_change_z_wpos_dsb.setValue(tool_change_wpos[2])
-
