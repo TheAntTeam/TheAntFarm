@@ -6,6 +6,7 @@ from .ui_align_tab import UiAlignTab
 from .ui_control_tab import UiControlTab
 from .ui_create_job_tab_manager import UiCreateJobLayerTab
 from .ui_view_load_layer_tab import UiViewLoadLayerTab
+from .ui_settings_preferences import UiSettingsPreferencesTab
 
 import logging
 
@@ -45,6 +46,7 @@ class UiManager(QObject):
         self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker, self.ctrl_layer,
                                              self.settings.app_settings, self.settings.gcf_settings)
         self.ui_align_tab_m = UiAlignTab(ui, control_worker)
+        self.ui_settings_tab_m = UiSettingsPreferencesTab(ui, control_worker, self.settings)
 
         self.ui.prepare_widget.currentChanged.connect(self.from_load_to_create)
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
