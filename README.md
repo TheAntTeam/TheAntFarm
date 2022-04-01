@@ -84,6 +84,12 @@ Install all the required packages:
   
 > pip3 install -r requirements.txt  
 
+## Running the software  
+  
+The software must be run from the project directory, after the virtual environment has been activated (see installation paragraph), using the following command:
+
+> python3 the_ant_farm.py  
+
 ### Windows using VS Code
 
 Either download the zip of the repository sources or use git:  
@@ -114,12 +120,9 @@ Install all the required packages:
   
 > pip3 install -r requirements.txt  
 
-## Running the software  
-  
-The software must be run from the project directory, after the virtual environment has been activated (see installation paragraph), using the following command:
+Running the software  
 
 > python .\the_ant_farm.py  
-  
     
 # Disclaimer  
   
