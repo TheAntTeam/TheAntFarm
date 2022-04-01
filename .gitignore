@@ -4,6 +4,7 @@
 
 # Ingore the venv
 env/
+venv/
 
 # Files created by running
 app_logs/
