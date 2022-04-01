@@ -88,7 +88,10 @@ class AppSettingsHandler:
             self.logs_max_bytes = app_general.getint('logs_max_bytes', self.LOGS_MAX_BYTES)
             self.logs_backup_count = app_general.getint('logs_backup_count', self.LOGS_BACKUP_COUNT)
             self.last_serial_port = app_general.get("last_serial_port", self.LAST_SERIAL_PORT_DEFAULT)
-            self.last_serial_baud = app_general.getint("last_serial_baud", self.LAST_SERIAL_BAUD_DEFAULT)
+            try:
+                self.last_serial_baud = app_general.getint("last_serial_baud", self.LAST_SERIAL_BAUD_DEFAULT)
+            except:
+                self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
 
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
