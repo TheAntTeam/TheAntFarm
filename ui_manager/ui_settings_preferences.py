@@ -23,6 +23,7 @@ class UiSettingsPreferencesTab(QObject):
         self.ui = ui
         self.control_wo = control_worker
         self.settings = settings
+        self.machine_settings = settings.machine_settings
 
         self.ui.get_tool_offset_pb.clicked.connect(self.get_tool_offset)
         self.ui.get_tool_change_pb.clicked.connect(self.get_tool_change)
@@ -36,9 +37,16 @@ class UiSettingsPreferencesTab(QObject):
         actual_status_report = self.control_wo.get_status_report()
         tool_offset_mpos = actual_status_report["mpos"]
         tool_offset_wpos = actual_status_report["wpos"]
+        self.machine_settings.tool_probe_offset_x_mpos = tool_offset_mpos[0]
+        self.machine_settings.tool_probe_offset_y_mpos = tool_offset_mpos[1]
+        self.machine_settings.tool_probe_offset_z_mpos = tool_offset_mpos[2]
         self.ui.tool_offset_x_mpos_dsb.setValue(tool_offset_mpos[0])
         self.ui.tool_offset_y_mpos_dsb.setValue(tool_offset_mpos[1])
         self.ui.tool_offset_z_mpos_dsb.setValue(tool_offset_mpos[2])
+
+        self.machine_settings.tool_probe_offset_x_wpos = tool_offset_wpos[0]
+        self.machine_settings.tool_probe_offset_y_wpos = tool_offset_wpos[1]
+        self.machine_settings.tool_probe_offset_z_wpos = tool_offset_wpos[2]
         self.ui.tool_offset_x_wpos_dsb.setValue(tool_offset_wpos[0])
         self.ui.tool_offset_y_wpos_dsb.setValue(tool_offset_wpos[1])
         self.ui.tool_offset_z_wpos_dsb.setValue(tool_offset_wpos[2])
@@ -51,10 +59,9 @@ class UiSettingsPreferencesTab(QObject):
         """
         actual_status_report = self.control_wo.get_status_report()
         tool_change_mpos = actual_status_report["mpos"]
-        tool_change_wpos = actual_status_report["wpos"]
+        self.machine_settings.tool_probe_offset_x_mpos = tool_change_mpos[0]
+        self.machine_settings.tool_probe_offset_y_mpos = tool_change_mpos[1]
+        self.machine_settings.tool_probe_offset_z_mpos = tool_change_mpos[2]
         self.ui.tool_change_x_mpos_dsb.setValue(tool_change_mpos[0])
         self.ui.tool_change_y_mpos_dsb.setValue(tool_change_mpos[1])
         self.ui.tool_change_z_mpos_dsb.setValue(tool_change_mpos[2])
-        self.ui.tool_change_x_wpos_dsb.setValue(tool_change_wpos[0])
-        self.ui.tool_change_y_wpos_dsb.setValue(tool_change_wpos[1])
-        self.ui.tool_change_z_wpos_dsb.setValue(tool_change_wpos[2])
