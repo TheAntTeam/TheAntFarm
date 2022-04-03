@@ -458,3 +458,10 @@ class ControllerWorker(QObject):
     @Slot(int)
     def update_threshold_value(self, new_threshold):
         self.align_controller.update_threshold_value(new_threshold)
+
+    # ******* SETTINGS/PREFERENCES related functions. ******** #
+
+    @Slot()
+    def update_gerber_cfg(self):
+        machine_sets = self.settings.machine_settings
+

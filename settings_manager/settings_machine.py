@@ -4,16 +4,18 @@ import os
 
 class MachineSettingsHandler:
     # MACHINE CONFIGURATION DEFAULT VALUES
-    TOOL_PROBE_OFFSET_MPOS_X_DEFAULT = 0
-    TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT = 0
-    TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT = 0
-    TOOL_PROBE_OFFSET_WPOS_X_DEFAULT = 0
-    TOOL_PROBE_OFFSET_WPOS_Y_DEFAULT = 0
-    TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT = 0
+    TOOL_PROBE_OFFSET_MPOS_X_DEFAULT = 0.0
+    TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT = 0.0
+    TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT = 0.0
+    TOOL_PROBE_OFFSET_WPOS_X_DEFAULT = 0.0
+    TOOL_PROBE_OFFSET_WPOS_Y_DEFAULT = 0.0
+    TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT = 0.0
 
-    TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT = 0
-    TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT = 0
-    TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT = 0
+    TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT = 0.0
+    TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT = 0.0
+    TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT = 0.0
+
+    TOOL_PROBE_Z_LIMIT = -11.0
 
     TOOL_CHANGE_REL_FLAG = False
 
@@ -35,6 +37,8 @@ class MachineSettingsHandler:
 
         self.tool_probe_rel_flag = self.TOOL_CHANGE_REL_FLAG
 
+        self.tool_probe_z_limit = self.TOOL_PROBE_Z_LIMIT
+
     def read_all_machine_settings(self):
         """ Read all machine settings from ini files """
         # If app settings file does NOT exist create it with default values
@@ -48,26 +52,28 @@ class MachineSettingsHandler:
         if "GENERAL" in self.machine_settings:
             machine_general = self.machine_settings["GENERAL"]
             self.tool_probe_rel_flag = machine_general.getboolean("tool_probe_relative_flag", self.TOOL_CHANGE_REL_FLAG)
-            self.tool_probe_offset_x_mpos = machine_general.getint("tool_probe_x_mpos",
-                                                                   self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT)
-            self.tool_probe_offset_y_mpos = machine_general.getint("tool_probe_y_mpos",
-                                                                   self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT)
-            self.tool_probe_offset_z_mpos = machine_general.getint("tool_probe_z_mpos",
-                                                                   self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT)
+            self.tool_probe_offset_x_mpos = machine_general.getfloat("tool_probe_x_mpos",
+                                                                     self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT)
+            self.tool_probe_offset_y_mpos = machine_general.getfloat("tool_probe_y_mpos",
+                                                                     self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT)
+            self.tool_probe_offset_z_mpos = machine_general.getfloat("tool_probe_z_mpos",
+                                                                     self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT)
 
-            self.tool_probe_offset_x_wpos = machine_general.getint("tool_probe_x_wpos",
-                                                                   self.TOOL_PROBE_OFFSET_WPOS_X_DEFAULT)
-            self.tool_probe_offset_y_wpos = machine_general.getint("tool_probe_y_wpos",
-                                                                   self.TOOL_PROBE_OFFSET_WPOS_Y_DEFAULT)
-            self.tool_probe_offset_z_wpos = machine_general.getint("tool_probe_z_wpos",
-                                                                   self.TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT)
+            self.tool_probe_offset_x_wpos = machine_general.getfloat("tool_probe_x_wpos",
+                                                                     self.TOOL_PROBE_OFFSET_WPOS_X_DEFAULT)
+            self.tool_probe_offset_y_wpos = machine_general.getfloat("tool_probe_y_wpos",
+                                                                     self.TOOL_PROBE_OFFSET_WPOS_Y_DEFAULT)
+            self.tool_probe_offset_z_wpos = machine_general.getfloat("tool_probe_z_wpos",
+                                                                     self.TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT)
 
-            self.tool_change_offset_x_mpos = machine_general.getint("tool_change_x_mpos",
-                                                                    self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT)
-            self.tool_change_offset_y_mpos = machine_general.getint("tool_change_y_mpos",
-                                                                    self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT)
-            self.tool_change_offset_z_mpos = machine_general.getint("tool_change_z_mpos",
-                                                                    self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT)
+            self.tool_change_offset_x_mpos = machine_general.getfloat("tool_change_x_mpos",
+                                                                      self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT)
+            self.tool_change_offset_y_mpos = machine_general.getfloat("tool_change_y_mpos",
+                                                                      self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT)
+            self.tool_change_offset_z_mpos = machine_general.getfloat("tool_change_z_mpos",
+                                                                      self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT)
+
+            self.tool_probe_z_limit = machine_general.getfloat("tool_probe_z_limit", self.TOOL_PROBE_Z_LIMIT)
 
     def write_all_machine_settings(self):
         """ Write all machine settings to ini files """
@@ -80,7 +86,8 @@ class MachineSettingsHandler:
                                             "tool_probe_z_wpos": self.TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT,
                                             "tool_change_x_mpos": self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_change_y_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT,
-                                            "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT}
+                                            "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT,
+                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT}
 
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
@@ -95,6 +102,7 @@ class MachineSettingsHandler:
         machine_general["tool_change_x_mpos"] = str(self.tool_change_offset_x_mpos)
         machine_general["tool_change_y_mpos"] = str(self.tool_change_offset_y_mpos)
         machine_general["tool_change_z_mpos"] = str(self.tool_change_offset_z_mpos)
+        machine_general["tool_probe_z_limit"] = str(self.tool_probe_z_limit)
 
         # Write machine ini file #
         with open(self.machine_config_path, 'w') as configfile:
@@ -111,7 +119,8 @@ class MachineSettingsHandler:
                                             "tool_probe_z_wpos": self.TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT,
                                             "tool_change_x_mpos": self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_change_y_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT,
-                                            "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT}
+                                            "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT,
+                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT}
 
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
@@ -126,6 +135,7 @@ class MachineSettingsHandler:
         machine_general["tool_change_x_mpos"] = str(self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT)
         machine_general["tool_change_y_mpos"] = str(self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT)
         machine_general["tool_change_z_mpos"] = str(self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT)
+        machine_general["tool_probe_z_limit"] = str(self.TOOL_PROBE_Z_LIMIT)
 
         # Write machine ini file #
         with open(self.machine_config_path, 'w') as configfile:

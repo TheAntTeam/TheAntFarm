@@ -27,13 +27,14 @@ class SettingsHandler:
         self.gcf_settings.read_all_gcf_settings()
         self.machine_settings.read_all_machine_settings()
 
-    def write_all_settings(self, all_settings_od):
+    def write_all_settings(self, all_settings_od=None):
         """ Write all settings to ini files """
         # if "app_settings" in all_settings_od:
         #    self.app_settings.write_all_app_settings(all_settings_od["app_settings"])
 
         self.app_settings.write_all_app_settings()
-        if "jobs_settings" in all_settings_od:
-            self.jobs_settings.write_all_jobs_settings(all_settings_od["jobs_settings"])
+        if all_settings_od:
+            if "jobs_settings" in all_settings_od:
+                self.jobs_settings.write_all_jobs_settings(all_settings_od["jobs_settings"])
         self.gcf_settings.write_all_gcf_settings()
         self.machine_settings.write_all_machine_settings()
