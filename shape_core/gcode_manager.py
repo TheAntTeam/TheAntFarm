@@ -20,15 +20,6 @@ class GCoder:
 
     DIGITS = 4
     STEPS = 3
-    SAFE_ABSOLUTE_Z_PROBE = -1.0
-    CHANGE_TOOL_POS = (-41.2, -120.88, -1.0)
-    PROBE_TOOL_POS = (-1.0, -1.0, -11.0)
-    TAG = '@'
-    TAGS = {
-        "tlo": "TLO",
-        "position": "POSITION"
-    }
-
     CHANGE_TOOL_COMMAND = "M6"
 
     def __init__(self, tag, machining_type='gerber', parent=None, units='ms'):
@@ -37,10 +28,6 @@ class GCoder:
         self.tag = tag
 
         self.mill = True
-
-        self.change_tool_pos = self.CHANGE_TOOL_POS  # todo: must be parametrized
-        self.probe_tool_pos = self.PROBE_TOOL_POS  # todo: must be parametrized
-        self.safe_absolute_z_probe = self.SAFE_ABSOLUTE_Z_PROBE  # todo: must be parametrized
 
         # units:
         # ms -> metric system
@@ -426,7 +413,7 @@ class GCoder:
     def insert_comment(self, txt):
         self.gcode.append(self.gcode_comment(txt))
 
-    def get_autobed_leveling_code(self, xy_c_l, travel_z, probe_z_max, probe_feed_rate):
+    def get_autobed_leveling_code(self, xy_c_l, travel_z, probe_z_min, probe_feed_rate):
         # todo: change this part using methods to create the GCode
         abl_cmd_ls = []
         abl_cmd_s = ""
@@ -437,7 +424,7 @@ class GCoder:
             prb_num_todo += 1
             abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
             abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + "\n"  # go to XY coordinate
-            abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # set probe command
+            abl_cmd_s += "G38.2 Z" + str(probe_z_min) + "F" + str(probe_feed_rate) + "\n"  # set probe command
             abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
             abl_cmd_ls.append(abl_cmd_s)
             abl_cmd_s = ""
@@ -446,7 +433,7 @@ class GCoder:
         abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
         abl_cmd_s += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
                           str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
-        abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # set probe command
+        abl_cmd_s += "G38.2 Z" + str(probe_z_min) + "F" + str(probe_feed_rate) + "\n"  # set probe command
         prb_num_todo += 1
         abl_cmd_s += "G10 P1 L20 Z0\n"  # set Z zero
         abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel

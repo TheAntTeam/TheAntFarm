@@ -446,7 +446,8 @@ class UiControlTab(QObject):
 
     @Slot(str)
     def update_console_text(self, new_text):
-        self.ui.serial_te.append(new_text)
+        pruned_text = new_text.strip()
+        self.ui.serial_te.append(pruned_text)
 
     def send_input(self):
         """Send input to the serial port."""

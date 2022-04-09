@@ -181,10 +181,10 @@ class ControlController(QObject):
 
         return self.prb_val[0]
 
-    def cmd_probe(self, probe_z_max, probe_feed_rate):
+    def cmd_probe(self, probe_z_min, probe_feed_rate):
         probe_cmd_s = ""
         probe_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
-        probe_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
+        probe_cmd_s += "G38.2 Z" + str(probe_z_min) + "\n"  # Set probe command
 
         self.prb_updated = False
         self.prb_activated = True
@@ -196,12 +196,12 @@ class ControlController(QObject):
     def cmd_auto_bed_levelling(self, bbox_t, steps_t):
         xy_coord_list = self.get_grid_coords(bbox_t, steps_t)
         travel_z = bbox_t[5]
-        probe_z_max = bbox_t[2]
+        probe_z_min = bbox_t[2]
         probe_feed_rate = 30
         logger.debug(xy_coord_list)
 
         [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
-                                                                                probe_z_max, probe_feed_rate)
+                                                                                probe_z_min, probe_feed_rate)
         self.abl_val = []
         self.abl_steps = (steps_t[0], steps_t[1])
         self.prb_num_done = 0
@@ -226,10 +226,10 @@ class ControlController(QObject):
         return list(zip(xi.ravel().tolist(), yi.ravel().tolist()))
 
     @staticmethod
-    def make_cmd_auto_bed_levelling(xy_c_l, travel_z, probe_z_max, probe_feed_rate):
+    def make_cmd_auto_bed_levelling(xy_c_l, travel_z, probe_z_min, probe_feed_rate):
 
         gcr = GCoder("dummy", "commander")
-        abl_cmd_ls, prb_num_todo = gcr.get_autobed_leveling_code(xy_c_l, travel_z, probe_z_max, probe_feed_rate)
+        abl_cmd_ls, prb_num_todo = gcr.get_autobed_leveling_code(xy_c_l, travel_z, probe_z_min, probe_feed_rate)
 
         logger.debug("ABL routine: " + str(abl_cmd_ls))
         logger.debug("ABL points to do: " + str(prb_num_todo))

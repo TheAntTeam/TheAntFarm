@@ -92,6 +92,8 @@ class ControllerWorker(QObject):
         self.macro_on = False
         self.macro_obj = None
 
+        self.send_soft_reset = True
+
     @Slot(bool)
     def on_controller_connection(self, connected):
         if connected:
@@ -219,14 +221,14 @@ class ControllerWorker(QObject):
                                     cmd_to_send = self.macro_check(cmd_to_send)
                                     self.content_line += 1
 
-                                logger.info(str(self.ack_lines) + " <-> " + str(self.sent_lines))
+                                logger.debug(str(self.ack_lines) + " <-> " + str(self.sent_lines))
                                 # does data fit the buffer?
                                 buff_available = (self.buffered_size + len(cmd_to_send)) < self.REMOTE_RX_BUFFER_MAX_SIZE
                             else:
                                 self.wait_tag_decoding = False
                                 buff_available = False
 
-                            logger.info("wait: " + str(self.wait_tag_decoding))
+                            logger.debug("wait: " + str(self.wait_tag_decoding))
 
                             if not end_of_file and buff_available and not self.wait_tag_decoding:
                                 # cmd_to_send = self.file_content[self.sent_lines]
@@ -309,8 +311,8 @@ class ControllerWorker(QObject):
         logger.info("Sent GCODE: " + str(parsered_cmd_str))
         self.serial_send_s.emit(parsered_cmd_str)
 
-    def cmd_probe(self, probe_z_max, probe_feed_rate):
-        probe_cmd_s = self.control_controller.cmd_probe(probe_z_max, probe_feed_rate)
+    def cmd_probe(self, probe_z_min, probe_feed_rate):
+        probe_cmd_s = self.control_controller.cmd_probe(probe_z_min, probe_feed_rate)
         logger.info(probe_cmd_s)
         self.serial_send_s.emit(probe_cmd_s)  # Execute probe
 
@@ -407,8 +409,11 @@ class ControllerWorker(QObject):
 
     def stop_gcode_file(self):
         self.sending_file = False
-        self.execute_gcode_cmd(b"!")
-        self.execute_gcode_cmd(b'\030')
+        if self.send_soft_reset:
+            # send soft reset
+            self.execute_gcode_cmd(b"!")
+            self.execute_gcode_cmd(b'\030')
+        self.send_soft_reset = True
         self.file_progress = 0.0
         self.cmds_to_ack = 0
         self.sent_lines = 0
@@ -443,6 +448,8 @@ class ControllerWorker(QObject):
     def start_tool_change(self):
         logger.info("Tool change is starting!")
         lines = self.control_controller.get_change_tool_lines()
+        print(lines)
+        self.send_soft_reset = False
         self.send_gcode_lines(lines)
 
 # ***************** ALIGN related functions. ***************** #
