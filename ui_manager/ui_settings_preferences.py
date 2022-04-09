@@ -58,6 +58,10 @@ class UiSettingsPreferencesTab(QObject):
 
         self.ui.tool_probe_z_limit_dsb.setValue(self.machine_settings.tool_probe_z_limit)
 
+        self.ui.feedrate_xy_dsb.setValue(self.machine_settings.feedrate_xy)
+        self.ui.feedrate_z_dsb.setValue(self.machine_settings.feedrate_z)
+        self.ui.feedrate_probe_dsb.setValue(self.machine_settings.feedrate_probe)
+
     def ui_tool_probe_set_enabling(self, enable=False):
         """Enable or disable tool probe get button. """
         self.ui.get_tool_offset_pb.setEnabled(enable)
@@ -139,7 +143,11 @@ class UiSettingsPreferencesTab(QObject):
 
         self.machine_settings.tool_probe_z_limit = self.ui.tool_probe_z_limit_dsb.value()
 
+        self.machine_settings.feedrate_xy = self.ui.feedrate_xy_dsb.value()
+        self.machine_settings.feedrate_z = self.ui.feedrate_z_dsb.value()
+        self.machine_settings.feedrate_probe = self.ui.feedrate_probe_dsb.value()
+
         self.load_gcoder_cfg_s.emit()
 
-        #self.settings.write_all_settings()
+        # self.settings.write_all_settings()
         self.save_all_settings_s.emit()

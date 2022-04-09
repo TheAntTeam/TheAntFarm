@@ -6,6 +6,9 @@ class MachineSettingsHandler:
     # MACHINE CONFIGURATION DEFAULT VALUES
     PROBE_Z_MAX_DEFAULT = 1.0
     PROBE_Z_MIN_DEFAULT = -11.0
+    FEEDRATE_XY_DEFAULT = 300.0
+    FEEDRATE_Z_DEFAULT = 40.0
+    FEEDRATE_PROBE_DEFAULT = 40.0
 
     TOOL_PROBE_OFFSET_MPOS_X_DEFAULT = 0.0
     TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT = 0.0
@@ -29,6 +32,9 @@ class MachineSettingsHandler:
 
         self.probe_z_min = self.PROBE_Z_MIN_DEFAULT
         self.probe_z_max = self.PROBE_Z_MAX_DEFAULT
+        self.feedrate_xy = self.FEEDRATE_XY_DEFAULT
+        self.feedrate_z = self.FEEDRATE_Z_DEFAULT
+        self.feedrate_probe = self.FEEDRATE_PROBE_DEFAULT
 
         self.tool_probe_offset_x_mpos = self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT
         self.tool_probe_offset_y_mpos = self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT
@@ -59,6 +65,9 @@ class MachineSettingsHandler:
             machine_general = self.machine_settings["GENERAL"]
             self.probe_z_min = machine_general.getfloat("probe_z_min", self.PROBE_Z_MIN_DEFAULT)
             self.probe_z_max = machine_general.getfloat("probe_z_max", self.PROBE_Z_MAX_DEFAULT)
+            self.feedrate_xy = machine_general.getfloat("feedrate_xy", self.FEEDRATE_XY_DEFAULT)
+            self.feedrate_z = machine_general.getfloat("feedrate_z", self.FEEDRATE_Z_DEFAULT)
+            self.feedrate_probe = machine_general.getfloat("feedrate_probe", self.FEEDRATE_PROBE_DEFAULT)
 
             self.tool_probe_rel_flag = machine_general.getboolean("tool_probe_relative_flag", self.TOOL_CHANGE_REL_FLAG)
             self.tool_probe_offset_x_mpos = machine_general.getfloat("tool_probe_x_mpos",
@@ -88,6 +97,9 @@ class MachineSettingsHandler:
         """ Write all machine settings to ini files """
         self.machine_settings["DEFAULT"] = {"probe_z_min": self.PROBE_Z_MIN_DEFAULT,
                                             "probe_z_max": self.PROBE_Z_MAX_DEFAULT,
+                                            "feedrate_xy": self.FEEDRATE_XY_DEFAULT,
+                                            "feedrate_z": self.FEEDRATE_Z_DEFAULT,
+                                            "feedrate_probe": self.FEEDRATE_PROBE_DEFAULT,
                                             "tool_probe_relative_flag": self.TOOL_CHANGE_REL_FLAG,
                                             "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
@@ -106,6 +118,9 @@ class MachineSettingsHandler:
 
         machine_general["probe_z_min"] = str(self.probe_z_min)
         machine_general["probe_z_max"] = str(self.probe_z_max)
+        machine_general["feedrate_xy"] = str(self.feedrate_xy)
+        machine_general["feedrate_z"] = str(self.feedrate_z)
+        machine_general["feedrate_probe"] = str(self.feedrate_probe)
         machine_general["tool_probe_relative_flag"] = str(self.tool_probe_rel_flag)  # todo: substitute with check value
         machine_general["tool_probe_x_mpos"] = str(self.tool_probe_offset_x_mpos)
         machine_general["tool_probe_y_mpos"] = str(self.tool_probe_offset_y_mpos)
@@ -126,6 +141,9 @@ class MachineSettingsHandler:
         """ Restore all machine settings to default and create ini file if it doesn't exists """
         self.machine_settings["DEFAULT"] = {"probe_z_min": self.PROBE_Z_MIN_DEFAULT,
                                             "probe_z_max": self.PROBE_Z_MAX_DEFAULT,
+                                            "feedrate_xy": self.FEEDRATE_XY_DEFAULT,
+                                            "feedrate_z": self.FEEDRATE_Z_DEFAULT,
+                                            "feedrate_probe": self.FEEDRATE_PROBE_DEFAULT,
                                             "tool_probe_relative_flag": self.TOOL_CHANGE_REL_FLAG,
                                             "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
@@ -143,6 +161,9 @@ class MachineSettingsHandler:
         machine_general = self.machine_settings["GENERAL"]
         machine_general["probe_z_min"] = str(self.PROBE_Z_MIN_DEFAULT)
         machine_general["probe_z_max"] = str(self.PROBE_Z_MAX_DEFAULT)
+        machine_general["feedrate_xy"] = str(self.FEEDRATE_XY_DEFAULT)
+        machine_general["feedrate_z"] = str(self.FEEDRATE_Z_DEFAULT)
+        machine_general["feedrate_probe"] = str(self.FEEDRATE_PROBE_DEFAULT)
         machine_general["tool_probe_relative_flag"] = str(self.tool_probe_rel_flag)  # todo: substitute with check value
         machine_general["tool_probe_x_mpos"] = str(self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT)
         machine_general["tool_probe_y_mpos"] = str(self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT)
