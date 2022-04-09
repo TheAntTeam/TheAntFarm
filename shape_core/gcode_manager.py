@@ -7,6 +7,7 @@ from collections import OrderedDict as od
 from datetime import datetime
 import scipy.interpolate as spi
 from shapely.geometry import LineString
+from .macros_manager import Macros
 
 
 class GCoder:
@@ -47,6 +48,7 @@ class GCoder:
         # todo: check the functionalities of unit conversion
 
         self.units = units
+        self.macro = None
 
         self.geom_list = []
         if machining_type == 'gerber':
@@ -83,6 +85,14 @@ class GCoder:
                 'z_feedrate': 40.0,
                 'spindle': 1000.0
             }
+        elif machining_type == 'commander':
+            self.cfg = {
+                'tool_probe_pos': (-1.0, -1.0, -11.0),
+                'tool_probe_working': True,  # False: machine pos or True: working pos
+                'tool_probe_min': -11.0,
+                'tool_change_pos': (-41.2, -120.88, -1.0)
+            }
+            self.macro = Macros(self.cfg, digits=self.DIGITS, parent=self)
         else:
             self.cfg = {}
         self.type = machining_type
@@ -282,136 +292,15 @@ class GCoder:
             gc += "G00 X" + x_str + " Y" + y_str + "\n"
         self.gcode.append(gc)
 
-    def get_tool_change_string(self):
-
-        zero_str = self.format_float(0.0)
-        z_safe_str = self.format_float(1.0)
-        z_m_one = self.format_float(self.safe_absolute_z_probe)
-
-        x_ct_str = self.format_float(self.change_tool_pos[0])
-        y_ct_str = self.format_float(self.change_tool_pos[1])
-        z_ct_str = self.format_float(self.change_tool_pos[2])
-
-        x_str = self.format_float(self.probe_tool_pos[0])
-        y_str = self.format_float(self.probe_tool_pos[1])
-        z_str = self.format_float(self.probe_tool_pos[2])
-
-        posx_tag = self.get_tag(key="position", params=["x"])
-        posy_tag = self.get_tag(key="position", params=["y"])
-        posz_tag = self.get_tag(key="position", params=["z"])
-
-        fast_str = "F60"
-        slow_str = "F20"
-
-        gc = ""
-        gc += self.gcode_comment("The Ant Tool Change")
-
-        ## get previous status
-        #gc += "$#\n"
-
-        # super safe Z position
-        gc += fast_str + "\n"
-        gc += "G53 G00 Z" + z_m_one + " " + fast_str + "\n"
-
-        # go to probe position and perform a probe (G54 WORK SYSTEM COORD)
-        gc += "G54\n"
-        gc += "G00 X" + x_str + " Y" + y_str + " Z" + z_safe_str + " " + fast_str + "\n"
-        gc += "G01 " + slow_str + "\n"
-        gc += "G38.2 Z" + z_str + "\n"
-        gc += "G01 " + fast_str + "\n"
-
-        # move to change tool position (MACHINE SYSTEM COORD)
-        gc += "G53 G00 Z" + z_ct_str + "\n"
-        gc += "G53 G00 X" + x_ct_str + "\n"
-        gc += "G53 G00 Y" + y_ct_str + "\n"
-
-        # wait for the change tool
-        gc += "M0\n"
-
-        # go to probe position and perform a probe (G54 WORK SYSTEM COORD)
-        gc += "G53 G01 Z" + z_m_one + " " + fast_str + "\n"
-        gc += "G54\n"
-        gc += "G00 X" + x_str + " Y" + y_str + "\n"
-        gc += "G01 " + slow_str + "\n"
-        gc += "G38.2 Z" + z_str + "\n"
-        gc += "G01 " + fast_str + "\n"
-
-        # add tool offset
-        probe_diff_tag = self.get_tag(key="tlo", params=["a"])
-        gc += "G43.1 Z" + probe_diff_tag + "\n"
-
-        # return to WP Zero
-        gc += "G53 G01 Z" + z_m_one + " " + fast_str + "\n"
-        gc += "G54\n"
-        gc += "G00 X" + posx_tag + " Y" + posy_tag + "\n"
-        gc += "G00 Z" + posz_tag + "\n"
-        return gc
-
-    def get_tag(self, key="tlo", params=()):
-        if key in list(self.TAGS.keys()):
-            insert = ""
-            if params:
-                insert = "_" + "_".join(params)
-            return self.TAG + self.TAGS[key] + insert.upper() + self.TAG
-
-    def check_tag_in_string(self, gc_str):
-        return self.TAG in str(gc_str)
-
     def compute_tag(self, gc_str, wsp, probe_data, dro):
-        splitted_str = gc_str.split(self.TAG)
-        replaces_l = splitted_str.copy()
-        for k in self.TAGS.keys():
-            for i, tag in enumerate(splitted_str):
-                if tag.upper().startswith(self.TAGS[k]):
-                    if k == "position":
-                        spl_tag = tag.split("_")
-                        if len(spl_tag) > 1:
-                            coords = spl_tag[1:]
-                            for c in coords:
-                                v_str = ""
-                                wpo = dro["WPO"]
-                                if c.lower() == "x":
-                                    v_str = self.format_float(wpo[0])
-                                if c.lower() == "y":
-                                    v_str = self.format_float(wpo[1])
-                                if c.lower() == "z":
-                                    v_str = self.format_float(wpo[2])
-                                if v_str:
-                                    replaces_l[i] = v_str
-                                else:
-                                    print("WARNING WRONG POSITION TAG (1)")
-                        else:
-                            print("WARNING WRONG POSITION TAG (2)")
-
-                    elif k == "tlo":
-                        spl_tag = tag.split("_")
-                        if len(spl_tag) > 1:
-                            probe_type = spl_tag[1:]
-                            for c in probe_type:
-                                v_str = ""
-                                last = probe_data[0][2]
-                                prev = probe_data[1][2]
-                                difference = last - prev
-                                if c.lower() == "n":
-                                    # replace TLO
-                                    v_str = self.format_float(difference)
-                                if c.lower() == "a":
-                                    # add to actual TLO
-                                    v_str = self.format_float(wsp["TLO"] + difference)
-                                if v_str:
-                                    replaces_l[i] = v_str
-                                else:
-                                    print("WARNING WRONG TLO TAG (1)")
-                        else:
-                            print("WARNING WRONG PROBE TLO (2)")
-
-        replaced = "".join(replaces_l)
+        replaced = gc_str
+        if self.macro is not None:
+            replaced = self.macro.compute_tag(gc_str, wsp, probe_data, dro)
         return replaced
 
     def go_tool_change(self, tool_id=0):
-        #gc = self.get_tool_change_string()
         gc = "T" + str(int(tool_id)) + "\n"
-        gc += self.CHANGE_TOOL_COMMAND  + "\n"
+        gc += self.CHANGE_TOOL_COMMAND + "\n"
         self.gcode.append(gc)
 
     def make_drill(self):
@@ -566,11 +455,14 @@ class GCoder:
 
         return abl_cmd_ls, prb_num_todo
 
-    def get_tool_change_code(self, to_comment=""):
+    def get_macro_code(self, macro_type="M6", to_comment=""):
+        print("Get Macro Code")
+        print(macro_type)
         s = ""
         if to_comment != "":
             s += self.gcode_comment(to_comment)
-        s += self.get_tool_change_string()
+        if self.macro is not None:
+            s += self.macro.get_macro_string(macro_type)
         return s
 
     def get_file_name(self):
@@ -586,9 +478,10 @@ class GCoder:
     # macro section
 
     def is_macro(self, cmd):
-        splitted = re.findall(r'[a-zA-Z][-]*[\d.]+', cmd.strip().upper())
-        if self.CHANGE_TOOL_COMMAND in splitted:
-            return True
+        print("Is Macro")
+        print(cmd)
+        if self.macro is not None:
+            return self.macro.is_macro(cmd)
         else:
             return False
 
@@ -598,8 +491,8 @@ class GCodeMacro:
     def __init__(self, freezed_dro, macro_type="M6"):
         self.id = 0
         self.freezed_dro = freezed_dro
-        self.gcc = GCoder("dummy",machining_type="commander")
-        self.macro_lines = self.gcc.get_tool_change_code().split("\n")
+        self.gcc = GCoder("dummy", machining_type="commander")
+        self.macro_lines = self.gcc.get_macro_code(macro_type).split("\n")
 
     def get_next_line(self, wsp, probe_data):
         if self.id < len(self.macro_lines):
@@ -742,35 +635,8 @@ class GCodeParser:
                 if lines:
                     # GCode file loaded
                     self.gc = GCode(lines)
-                    # preparsing the GCode to pre-analyze
-                    # it and introduce macros
-                    # self.pre_parsing()
         else:
             print("Invalid GCode File Path")
-
-    def pre_parsing(self):
-        gcode_commander = GCoder("dummy", "commander")
-        if self.gc is not None:
-            # locate the tools change and expand them
-            # with the correct macro introducing tags
-            ls = self.gc.original_lines
-            for l in ls:
-                gl = self.interp(single_line=l)
-                nls = []
-                for g in gl:
-                    cmd_l = g.command
-                    if cmd_l:
-                        for cmd in cmd_l:
-                            if cmd[0] == self.CHANGE_TOOL_COMMAND[0] and self.CHANGE_TOOL_COMMAND[1] in cmd[1]:
-                                tool_change_gc = gcode_commander.get_tool_change_code()
-                                d = "\n"
-                                nls = [e + d for e in tool_change_gc.split(d) if e]
-                if not nls:
-                    nls = [l]
-                else:
-                    print("Tool Change Detected!")
-                    # print(nls)
-                self.gc.modified_lines += nls
 
     def interp(self, single_line=None):
         gcll = []

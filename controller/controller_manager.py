@@ -263,12 +263,12 @@ class ControllerWorker(QObject):
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
     def macro_check(self, cmd_to_send):
-        macro_type = self.gcr.is_macro(cmd_to_send)
         probe_data = self.control_controller.prb_val
         wsp = self.get_workspace_parameters()
         ret_cmd_to_send = cmd_to_send
 
-        if macro_type:
+        if self.gcr.is_macro(cmd_to_send):
+            macro_type = cmd_to_send.strip()
             if self.ack_lines != self.sent_lines:
                 # wait that the machine execute all previous lines
                 # to be able to decode the tag
@@ -430,7 +430,8 @@ class ControllerWorker(QObject):
     def get_boundary_box(self):
         if not self.active_gcode_path == "":
             bbox_t = self.control_controller.get_boundary_box(self.active_gcode_path)
-            self.update_bbox_s.emit(bbox_t)
+            if bbox_t is not None:
+                self.update_bbox_s.emit(bbox_t)
 
     def get_status_report(self):
         return self.control_controller.status_report_od
@@ -464,4 +465,29 @@ class ControllerWorker(QObject):
     @Slot()
     def update_gerber_cfg(self):
         machine_sets = self.settings.machine_settings
+        probe_working = machine_sets.tool_probe_rel_flag
+        if probe_working:
+            probe_pos = (
+                machine_sets.tool_probe_offset_x_wpos,
+                machine_sets.tool_probe_offset_y_wpos,
+                machine_sets.tool_probe_offset_z_wpos,
+            )
+        else:
+            probe_pos = (
+                machine_sets.tool_probe_offset_x_mpos,
+                machine_sets.tool_probe_offset_y_mpos,
+                machine_sets.tool_probe_offset_z_mpos,
+            )
+        change_pos = (
+            machine_sets.tool_change_offset_x_mpos,
+            machine_sets.tool_change_offset_y_mpos,
+            machine_sets.tool_change_offset_z_mpos,
+        )
+        cfg = Od({
+            'tool_probe_pos': probe_pos,
+            'tool_probe_working': probe_working,  # False: machine pos or True: working pos
+            'tool_probe_min': machine_sets.tool_probe_z_limit,
+            'tool_change_pos': change_pos
+        })
+        self.gcr.load_cfg(cfg)
 
