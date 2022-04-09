@@ -98,7 +98,7 @@ class UiControlTab(QObject):
         self.ui.soft_reset_tb.clicked.connect(self.handle_soft_reset)
         self.ui.unlock_tb.clicked.connect(self.handle_unlock)
         self.ui.homing_tb.clicked.connect(self.handle_homing)
-        self.ui.tool_change_tb.clicked.connect(self.tool_change_start)
+        self.ui.tool_change_tb.clicked.connect(self.handle_tool_change_start)
         self.ui.zero_xy_pb.clicked.connect(self.handle_xy_0)
         self.ui.zero_x_pb.clicked.connect(self.handle_x_0)
         self.ui.zero_y_pb.clicked.connect(self.handle_y_0)
@@ -404,26 +404,42 @@ class UiControlTab(QObject):
 
         self.ctrl_layer.set_gcode_visible(tag, visible)
 
+    def get_selected_file(self):
+        num_rows = self.ui.gcode_tw.rowCount()
+        checked_row = -1
+        for row in range(0, num_rows):
+            if self.ui.gcode_tw.cellWidget(row, 1).isChecked() and checked_row < 0:
+                checked_row = row
+        return checked_row
+
+    def disable_during_send(self):
+        self.ui.play_tb.setEnabled(False)
+        self.ui.stop_tb.setEnabled(True)
+        self.ui.unlock_tb.setEnabled(False)
+        self.ui.homing_tb.setEnabled(False)
+        self.ui.tool_change_tb.setEnabled(False)
+        self.enable_gcode_rb(False)
+
+    def enable_after_send(self):
+        self.ui.stop_tb.setEnabled(False)
+        self.ui.unlock_tb.setEnabled(True)
+        self.ui.homing_tb.setEnabled(True)
+        self.ui.tool_change_tb.setEnabled(True)
+        checked_row = self.get_selected_file()
+        if self.serial_connection_status and checked_row >= 0:
+            self.ui.play_tb.setEnabled(True)
+
     def play_send_file(self):
         if self.serial_connection_status:
-            num_rows = self.ui.gcode_tw.rowCount()
-            for row in range(0, num_rows):
-                if self.ui.gcode_tw.cellWidget(row, 1).isChecked():
-                    self.send_gcode_s.emit(self.ui.gcode_tw.cellWidget(row, 0).toolTip())
-                    self.ui.play_tb.setEnabled(False)
-                    self.ui.stop_tb.setEnabled(True)
-                    self.ui.unlock_tb.setEnabled(False)
-                    self.ui.homing_tb.setEnabled(False)
-                    self.enable_gcode_rb(False)
+            checked_row = self.get_selected_file()
+            if checked_row >= 0:
+                self.send_gcode_s.emit(self.ui.gcode_tw.cellWidget(checked_row, 0).toolTip())
+                self.disable_during_send()
 
     def stop_send_file(self):
         self.stop_gcode_s.emit()
         self.enable_gcode_rb(True)
-        self.ui.stop_tb.setEnabled(False)
-        self.ui.unlock_tb.setEnabled(True)
-        self.ui.homing_tb.setEnabled(True)
-        if self.serial_connection_status:
-            self.ui.play_tb.setEnabled(True)
+        self.enable_after_send()
 
     def pause_resume(self):
         self.pause_resume_gcode_s.emit()
@@ -573,9 +589,10 @@ class UiControlTab(QObject):
         logging.debug("Homing Command")
         self.ui_serial_send_s.emit("$H\n")
 
-    def tool_change_start(self):
+    def handle_tool_change_start(self):
         logger.debug("Tool change")
         self.controlWo.send_tool_change_s.emit()
+        self.disable_during_send()
 
     def handle_xy_0(self):
         logging.debug("XY = 0")
@@ -704,9 +721,8 @@ class UiControlTab(QObject):
     def handle_probe_cmd(self):
         logging.debug("Probe Command")
         # todo: fake parameters just to test probe
-        probe_z_min = self.z_min_dsb.value()
-        probe_feed_rate = 10.0
-        self.controlWo.cmd_probe(probe_z_min, probe_feed_rate)
+        probe_z_min = self.ui.z_min_dsb.value()
+        self.controlWo.cmd_probe(probe_z_min)
 
     def handle_auto_bed_levelling(self):
         logging.debug("Auto Bed Levelling Command")

@@ -77,7 +77,8 @@ class GCoder:
                 'tool_probe_pos': (-1.0, -1.0, -11.0),
                 'tool_probe_working': True,  # False: machine pos or True: working pos
                 'tool_probe_min': -11.0,
-                'tool_change_pos': (-41.2, -120.88, -1.0)
+                'tool_change_pos': (-41.2, -120.88, -1.0),
+                'tool_probe_feedrate': (50.0, 80.0, 300.0) # SLOW FAST XY
             }
             self.macro = Macros(self.cfg, digits=self.DIGITS, parent=self)
         else:
@@ -88,6 +89,8 @@ class GCoder:
 
     def load_cfg(self, cfg):
         self.cfg = cfg
+        if self.macro is not None:
+            self.macro.load_cfg(self.cfg)
 
     def format_float(self, f):
         ff = round(f, self.DIGITS)
@@ -475,10 +478,13 @@ class GCoder:
 
 class GCodeMacro:
 
-    def __init__(self, freezed_dro, macro_type="M6"):
+    def __init__(self, freezed_dro, macro_type="M6", gcr=None):
         self.id = 0
         self.freezed_dro = freezed_dro
-        self.gcc = GCoder("dummy", machining_type="commander")
+        if gcr is None:
+            self.gcc = GCoder("dummy", machining_type="commander")
+        else:
+            self.gcc = gcr
         self.macro_lines = self.gcc.get_macro_code(macro_type).split("\n")
 
     def get_next_line(self, wsp, probe_data):

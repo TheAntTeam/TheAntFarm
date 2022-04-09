@@ -19,17 +19,8 @@ class Macros:
 
         self.parent = parent
 
-        if cfg is not None:
-            self.cfg = cfg
-        else:
-            self.cfg = {
-                'tool_probe_pos': (-1.0, -1.0, -11.0),
-                'tool_probe_working': True,  # False: machine pos or True: working pos
-                'tool_probe_min': -11.0,
-                'tool_change_pos': (-41.2, -120.88, -1.0),
-            }
-        self.cfg['tool_probe_feedrate'] = (50.0, 80.0)
-        self.cfg["safe_pos"] = (-1.0, -1.0, -1.0)
+        self.cfg = None
+        self.load_cfg()
 
         self.digits = digits
         self.macros_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../macros"))
@@ -61,6 +52,20 @@ class Macros:
             "PRE_POS_Z",
             "TLO_TYPE_A",
         ]
+
+    def load_cfg(self, cfg=None):
+        if cfg is not None:
+            self.cfg = cfg
+        else:
+            self.cfg = {
+                'tool_probe_pos': (-1.0, -1.0, -11.0),
+                'tool_probe_working': True,  # False: machine pos or True: working pos
+                'tool_probe_min': -11.0,
+                'tool_change_pos': (-41.2, -120.88, -1.0),
+                'tool_probe_feedrate': (50.0, 80.0, 300.0),
+            }
+        # self.cfg['tool_probe_feedrate'] = (50.0, 80.0)
+        self.cfg["safe_pos"] = (-1.0, -1.0, -1.0)
 
     def is_macro(self, cmd):
         # splitted = re.findall(r'[a-zA-Z][-]*[\d.]+', cmd.strip().upper())
@@ -157,6 +162,8 @@ class Macros:
                 tag_str = self.format_float(self.cfg["tool_probe_feedrate"][0])
             elif stag[2] == "FAST":
                 tag_str = self.format_float(self.cfg["tool_probe_feedrate"][1])
+            elif stag[2] == "XY":
+                tag_str = self.format_float(self.cfg["tool_probe_feedrate"][2])
         return tag_str
 
     def compute_change_tag(self, stag):

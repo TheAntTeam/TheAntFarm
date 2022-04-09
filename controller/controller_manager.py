@@ -89,6 +89,7 @@ class ControllerWorker(QObject):
         self.active_gcode_path = ""
 
         self.gcr = GCoder("dummy", "commander")
+        self.update_gerber_cfg()
         self.macro_on = False
         self.macro_obj = None
 
@@ -287,7 +288,7 @@ class ControllerWorker(QObject):
                 }
 
                 self.wait_tag_decoding = False
-                self.macro_obj = GCodeMacro(freeze_dro, macro_type)
+                self.macro_obj = GCodeMacro(freeze_dro, macro_type, self.gcr)
                 ret_cmd_to_send = "$#\n"
                 # ret_cmd_to_send = self.macro_obj.get_next_line(probe_data, wsp)
                 self.tot_lines += 1
@@ -311,7 +312,8 @@ class ControllerWorker(QObject):
         logger.info("Sent GCODE: " + str(parsered_cmd_str))
         self.serial_send_s.emit(parsered_cmd_str)
 
-    def cmd_probe(self, probe_z_min, probe_feed_rate):
+    def cmd_probe(self, probe_z_min):
+        probe_feed_rate = self.settings.machine_settings.feedrate_probe
         probe_cmd_s = self.control_controller.cmd_probe(probe_z_min, probe_feed_rate)
         logger.info(probe_cmd_s)
         self.serial_send_s.emit(probe_cmd_s)  # Execute probe
@@ -322,7 +324,8 @@ class ControllerWorker(QObject):
         self.update_probe_s.emit(prb_val)
 
     def cmd_auto_bed_levelling(self, bbox_t, steps_t):
-        self.control_controller.cmd_auto_bed_levelling(bbox_t, steps_t)
+        probe_feed_rate = self.settings.machine_settings.feedrate_probe
+        self.control_controller.cmd_auto_bed_levelling(bbox_t, steps_t, probe_feed_rate)
         self.send_next_abl()  # Send first probe command.
 
     def send_next_abl(self):
@@ -494,7 +497,8 @@ class ControllerWorker(QObject):
             'tool_probe_pos': probe_pos,
             'tool_probe_working': probe_working,  # False: machine pos or True: working pos
             'tool_probe_min': machine_sets.tool_probe_z_limit,
-            'tool_change_pos': change_pos
+            'tool_change_pos': change_pos,
+            'tool_probe_feedrate': (machine_sets.feedrate_probe, machine_sets.feedrate_z, machine_sets.feedrate_xy)
         })
         self.gcr.load_cfg(cfg)
 

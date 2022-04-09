@@ -193,15 +193,14 @@ class ControlController(QObject):
 
         return probe_cmd_s
 
-    def cmd_auto_bed_levelling(self, bbox_t, steps_t):
+    def cmd_auto_bed_levelling(self, bbox_t, steps_t, feedrate_probe):
         xy_coord_list = self.get_grid_coords(bbox_t, steps_t)
         travel_z = bbox_t[5]
         probe_z_min = bbox_t[2]
-        probe_feed_rate = 30
         logger.debug(xy_coord_list)
 
         [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
-                                                                                probe_z_min, probe_feed_rate)
+                                                                                probe_z_min, feedrate_probe)
         self.abl_val = []
         self.abl_steps = (steps_t[0], steps_t[1])
         self.prb_num_done = 0
