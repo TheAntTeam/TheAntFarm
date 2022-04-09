@@ -24,7 +24,7 @@ class UiControlTab(QObject):
     precalc_gcode_s = Signal(str)
     select_gcode_s = Signal(str)
 
-    def __init__(self, ui, control_worker, serial_worker, ctrl_layer, app_settings, gcf_settings):
+    def __init__(self, ui, control_worker, serial_worker, ctrl_layer, settings):
         """
         Initialize ui elements of Control tab and connect signals coming and going to other classes/workers.
 
@@ -38,16 +38,17 @@ class UiControlTab(QObject):
             Serial thread worker object.
         ctrl_layer: VisualLayer
             VisualLayer object that contain the openGL canvas.
-        app_settings: SettingsHandler
-            Handler object that allows the access to the application settings.
+        settings: SettingsHandler
+            Handler object that allows the access to all the settings.
         """
         super(UiControlTab, self).__init__()
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
         self.ctrl_layer = ctrl_layer
-        self.app_settings = app_settings
-        self.gcf_settings = gcf_settings
+        self.app_settings = settings.app_settings
+        self.gcf_settings = settings.gcf_settings
+        self.machine_settings = settings.machine_settings
 
         self.holding_status = False
         self.serial_connection_status = False
@@ -171,6 +172,11 @@ class UiControlTab(QObject):
         self.ui.z_step_cb.currentTextChanged.connect(self.z_update_step)
         self.ui.xy_step_val_dsb.setSingleStep(float(self.ui.xy_step_cb.currentText()))
         self.ui.z_step_val_dsb.setSingleStep(float(self.ui.z_step_cb.currentText()))
+
+        self.ui.z_min_dsb.setValue(self.machine_settings.probe_z_min)
+        self.ui.z_max_dsb.setValue(self.machine_settings.probe_z_max)
+        self.ui.z_min_dsb.valueChanged.connect(self.handle_z_min_changed)
+        self.ui.z_max_dsb.valueChanged.connect(self.handle_z_max_changed)
 
     def init_serial_port_cb(self):
         """
@@ -688,12 +694,18 @@ class UiControlTab(QObject):
         z_value = self.ui.z_step_val_dsb.value()
         self.ui.z_step_val_dsb.setValue(z_value*10.0)
 
+    def handle_z_min_changed(self):
+        self.machine_settings.probe_z_min = self.ui.z_min_dsb.value()
+
+    def handle_z_max_changed(self):
+        self.machine_settings.probe_z_max = self.ui.z_max_dsb.value()
+
     def handle_probe_cmd(self):
         logging.debug("Probe Command")
         # todo: fake parameters just to test probe
-        probe_z_max = -11.0
+        probe_z_min = self.z_min_dsb.value()
         probe_feed_rate = 10.0
-        self.controlWo.cmd_probe(probe_z_max, probe_feed_rate)
+        self.controlWo.cmd_probe(probe_z_min, probe_feed_rate)
 
     def handle_auto_bed_levelling(self):
         logging.debug("Auto Bed Levelling Command")
@@ -724,10 +736,8 @@ class UiControlTab(QObject):
         logger.debug(bbox_t)
         self.ui.x_min_dsb.setValue(bbox_t[0])
         self.ui.y_min_dsb.setValue(bbox_t[1])
-        self.ui.z_min_dsb.setValue(-11.0)
         self.ui.x_max_dsb.setValue(bbox_t[3])
         self.ui.y_max_dsb.setValue(bbox_t[4])
-        self.ui.z_max_dsb.setValue(bbox_t[5])
         self.update_bbox_steps()
 
     def get_abl_inputs(self):

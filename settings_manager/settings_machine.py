@@ -4,6 +4,9 @@ import os
 
 class MachineSettingsHandler:
     # MACHINE CONFIGURATION DEFAULT VALUES
+    PROBE_Z_MAX_DEFAULT = 1.0
+    PROBE_Z_MIN_DEFAULT = -11.0
+
     TOOL_PROBE_OFFSET_MPOS_X_DEFAULT = 0.0
     TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT = 0.0
     TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT = 0.0
@@ -23,6 +26,9 @@ class MachineSettingsHandler:
         self.machine_config_path = os.path.normpath(os.path.join(config_folder, 'machine_config.ini'))
         self.machine_settings = configparser.ConfigParser()
         self.main_win = main_win
+
+        self.probe_z_min = self.PROBE_Z_MIN_DEFAULT
+        self.probe_z_max = self.PROBE_Z_MAX_DEFAULT
 
         self.tool_probe_offset_x_mpos = self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT
         self.tool_probe_offset_y_mpos = self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT
@@ -51,6 +57,9 @@ class MachineSettingsHandler:
         # GENERAL application settings #
         if "GENERAL" in self.machine_settings:
             machine_general = self.machine_settings["GENERAL"]
+            self.probe_z_min = machine_general.getfloat("probe_z_min", self.PROBE_Z_MIN_DEFAULT)
+            self.probe_z_max = machine_general.getfloat("probe_z_max", self.PROBE_Z_MAX_DEFAULT)
+
             self.tool_probe_rel_flag = machine_general.getboolean("tool_probe_relative_flag", self.TOOL_CHANGE_REL_FLAG)
             self.tool_probe_offset_x_mpos = machine_general.getfloat("tool_probe_x_mpos",
                                                                      self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT)
@@ -77,7 +86,9 @@ class MachineSettingsHandler:
 
     def write_all_machine_settings(self):
         """ Write all machine settings to ini files """
-        self.machine_settings["DEFAULT"] = {"tool_probe_relative_flag": self.TOOL_CHANGE_REL_FLAG,
+        self.machine_settings["DEFAULT"] = {"probe_z_min": self.PROBE_Z_MIN_DEFAULT,
+                                            "probe_z_max": self.PROBE_Z_MAX_DEFAULT,
+                                            "tool_probe_relative_flag": self.TOOL_CHANGE_REL_FLAG,
                                             "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
                                             "tool_probe_z_mpos": self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT,
@@ -92,6 +103,9 @@ class MachineSettingsHandler:
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
         machine_general = self.machine_settings["GENERAL"]
+
+        machine_general["probe_z_min"] = str(self.probe_z_min)
+        machine_general["probe_z_max"] = str(self.probe_z_max)
         machine_general["tool_probe_relative_flag"] = str(self.tool_probe_rel_flag)  # todo: substitute with check value
         machine_general["tool_probe_x_mpos"] = str(self.tool_probe_offset_x_mpos)
         machine_general["tool_probe_y_mpos"] = str(self.tool_probe_offset_y_mpos)
@@ -110,7 +124,9 @@ class MachineSettingsHandler:
 
     def restore_machine_settings(self):
         """ Restore all machine settings to default and create ini file if it doesn't exists """
-        self.machine_settings["DEFAULT"] = {"tool_probe_relative_flag": self.TOOL_CHANGE_REL_FLAG,
+        self.machine_settings["DEFAULT"] = {"probe_z_min": self.PROBE_Z_MIN_DEFAULT,
+                                            "probe_z_max": self.PROBE_Z_MAX_DEFAULT,
+                                            "tool_probe_relative_flag": self.TOOL_CHANGE_REL_FLAG,
                                             "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
                                             "tool_probe_z_mpos": self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT,
@@ -125,6 +141,8 @@ class MachineSettingsHandler:
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
         machine_general = self.machine_settings["GENERAL"]
+        machine_general["probe_z_min"] = str(self.PROBE_Z_MIN_DEFAULT)
+        machine_general["probe_z_max"] = str(self.PROBE_Z_MAX_DEFAULT)
         machine_general["tool_probe_relative_flag"] = str(self.tool_probe_rel_flag)  # todo: substitute with check value
         machine_general["tool_probe_x_mpos"] = str(self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT)
         machine_general["tool_probe_y_mpos"] = str(self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT)
