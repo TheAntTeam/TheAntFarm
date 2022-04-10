@@ -1,6 +1,5 @@
 from PySide2.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelIndex
-from PySide2.QtWidgets import QFileDialog, QLineEdit, QRadioButton, QTableWidgetItem, \
-                              QHeaderView, QCheckBox, QButtonGroup
+from PySide2.QtWidgets import QFileDialog, QLineEdit, QRadioButton, QHeaderView, QButtonGroup
 from PySide2.QtGui import QIcon
 from style_manager import StyleManager
 import os
@@ -170,26 +169,34 @@ class UiControlTab(QObject):
         self.select_gcode_s.connect(self.controlWo.select_active_gcode)
         self.controlWo.update_gcode_s.connect(self.visualize_gcode)
 
-        self.init_serial_port_cb()
+        self.init_xy_jog_step_value()
+        self.init_z_jog_step_value()
 
-        self.ui.xy_step_cb.currentTextChanged.connect(self.xy_update_step)
-        self.ui.z_step_cb.currentTextChanged.connect(self.z_update_step)
-        self.ui.xy_step_val_dsb.setSingleStep(float(self.ui.xy_step_cb.currentText()))
-        self.ui.z_step_val_dsb.setSingleStep(float(self.ui.z_step_cb.currentText()))
+        self.init_serial_port_cb()
 
         self.ui.z_min_dsb.setValue(self.machine_settings.probe_z_min)
         self.ui.z_max_dsb.setValue(self.machine_settings.probe_z_max)
         self.ui.z_min_dsb.valueChanged.connect(self.handle_z_min_changed)
         self.ui.z_max_dsb.valueChanged.connect(self.handle_z_max_changed)
 
+    def init_xy_jog_step_value(self):
+        """ Initialize XY step and value ui fields. """
+        self.ui.xy_step_cb.setCurrentIndex(self.machine_settings.xy_step_idx)
+        self.xy_update_step()
+        self.ui.xy_step_val_dsb.setValue(self.machine_settings.xy_step_value)
+        self.ui.xy_step_cb.currentTextChanged.connect(self.xy_update_step)
+        self.ui.xy_step_val_dsb.valueChanged.connect(self.xy_update_value)
+
+    def init_z_jog_step_value(self):
+        """ Initialize Z step and value ui fields. """
+        self.ui.z_step_cb.setCurrentIndex(self.machine_settings.z_step_idx)
+        self.z_update_step()
+        self.ui.z_step_val_dsb.setValue(self.machine_settings.z_step_value)
+        self.ui.z_step_cb.currentTextChanged.connect(self.z_update_step)
+        self.ui.z_step_val_dsb.valueChanged.connect(self.z_update_value)
+
     def init_serial_port_cb(self):
-        """
-        Initialize the serial ports' ui elements.
-
-        Returns
-        -------
-
-        """
+        """ Initialize the serial ports' ui elements. """
         self.handle_refresh_button()
 
     @Slot(list)
@@ -240,12 +247,12 @@ class UiControlTab(QObject):
             if self.holding_status:
                 self.holding_status = False
                 icon = QIcon()
-                icon.addFile(u":/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Normal,
-                             QIcon.Off)
-                icon.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Disabled,
-                             QIcon.Off)
-                icon.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Disabled,
-                             QIcon.On)
+                icon.addFile(u":/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg", QSize(),
+                             QIcon.Normal, QIcon.Off)
+                icon.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(),
+                             QIcon.Disabled, QIcon.Off)
+                icon.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(),
+                             QIcon.Disabled, QIcon.On)
                 self.ui.pause_resume_tb.setIcon(icon)
                 self.ui.pause_resume_tb.setIconSize(QSize(64, 64))
                 self.ui.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -619,11 +626,17 @@ class UiControlTab(QObject):
         self.ui_serial_send_s.emit("G90 G0 X0 Y0\n")
 
     def z_update_step(self):
+        self.machine_settings.z_step_idx = self.ui.z_step_cb.currentIndex()
         new_step_str = self.ui.z_step_cb.currentText()
         new_step_fl = float(new_step_str)  # try-except for the cast? No, because cb is not editable, up to now.
         self.ui.z_step_val_dsb.setSingleStep(new_step_fl)
         self.ui.z_plus_1_pb.setText("+" + new_step_str)
         self.ui.z_minus_1_pb.setText("-" + new_step_str)
+
+    @Slot()
+    def z_update_value(self):
+        """ Update current value of Z STEP in the machine settings. """
+        self.machine_settings.z_step_value = self.ui.z_step_val_dsb.value()
 
     def handle_x_minus(self):
         logging.debug("X_minus Command")
@@ -676,11 +689,17 @@ class UiControlTab(QObject):
         self.ui_serial_send_s.emit("$J=G91 Z" + str(z_plus_val) + " F100000\n")
 
     def xy_update_step(self):
+        self.machine_settings.xy_step_idx = self.ui.xy_step_cb.currentIndex()
         new_step_str = self.ui.xy_step_cb.currentText()
         new_step_fl = float(new_step_str)  # try-except for the cast? No, because cb is not editable, up to now.
         self.ui.xy_step_val_dsb.setSingleStep(new_step_fl)
         self.ui.xy_plus_1_pb.setText("+" + new_step_str)
         self.ui.xy_minus_1_pb.setText("-" + new_step_str)
+
+    @Slot()
+    def xy_update_value(self):
+        """ Update current value of XY STEP in the machine settings. """
+        self.machine_settings.xy_step_value = self.ui.xy_step_val_dsb.value()
 
     def handle_xy_plus_1(self):
         xy_val = self.ui.xy_step_val_dsb.value() + self.ui.xy_step_val_dsb.singleStep()
@@ -692,9 +711,7 @@ class UiControlTab(QObject):
 
     def handle_xy_div_10(self):
         xy_value = self.ui.xy_step_val_dsb.value()
-        xy_value /= 10.0  # self.xy_value / 10.0
-        # if not xy_value < 0.01:  # Minimum step is 0.01
-        self.ui.xy_step_val_dsb.setValue(xy_value)
+        self.ui.xy_step_val_dsb.setValue(round(xy_value/10.0, 2))
 
     def handle_xy_mul_10(self):
         xy_value = self.ui.xy_step_val_dsb.value()
@@ -710,7 +727,7 @@ class UiControlTab(QObject):
 
     def handle_z_div_10(self):
         z_value = self.ui.z_step_val_dsb.value()
-        self.ui.z_step_val_dsb.setValue(z_value/10.0)
+        self.ui.z_step_val_dsb.setValue(round(z_value/10.0, 2))
 
     def handle_z_mul_10(self):
         z_value = self.ui.z_step_val_dsb.value()
