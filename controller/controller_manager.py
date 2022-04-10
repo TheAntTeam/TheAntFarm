@@ -35,6 +35,8 @@ class ControllerWorker(QObject):
     stop_send_s = Signal()
     send_tool_change_s = Signal()                # Signal to start the tool change procedure
 
+    report_status_report_s = Signal(Od)
+
     REMOTE_RX_BUFFER_MAX_SIZE = 128
 
     def __init__(self, serial_rx_queue, serial_tx_queue, settings):
@@ -443,6 +445,10 @@ class ControllerWorker(QObject):
 
     def get_status_report(self):
         return self.control_controller.status_report_od
+
+    @Slot()
+    def report_status_report(self):
+        self.report_status_report_s.emit(self.control_controller.status_report_od)
 
     def get_workspace_parameters(self):
         return self.control_controller.workspace_params_od

@@ -1,4 +1,5 @@
 from PySide2.QtCore import QObject, Signal, Slot
+from collections import OrderedDict as Od
 import logging
 
 logger = logging.getLogger(__name__)
@@ -7,6 +8,7 @@ logger = logging.getLogger(__name__)
 class UiSettingsPreferencesTab(QObject):
     """Class dedicated to UI <--> Settings interactions on Settings/Preferences Tab. """
 
+    ask_status_report_s = Signal()
     load_gcoder_cfg_s = Signal()
     save_all_settings_s = Signal()
 
@@ -29,12 +31,17 @@ class UiSettingsPreferencesTab(QObject):
         self.settings = settings
         self.machine_settings = settings.machine_settings
 
+        self.get_tool_change_flag = False
+        self.get_tool_probe_flag = False
+
         self.ui.tool_probe_wm_pos_chb.setChecked(self.machine_settings.tool_probe_rel_flag)
         self.tool_probe_wm_pos_checked()
 
         self.ui.tool_probe_wm_pos_chb.clicked.connect(self.tool_probe_wm_pos_checked)
-        self.ui.get_tool_offset_pb.clicked.connect(self.get_tool_probe_position)
-        self.ui.get_tool_change_pb.clicked.connect(self.get_tool_change_position)
+        self.ui.get_tool_offset_pb.clicked.connect(self.ask_tool_probe_position)
+        self.ask_status_report_s.connect(self.control_wo.report_status_report)
+        self.control_wo.report_status_report_s.connect(self.get_and_manage_status_report)
+        self.ui.get_tool_change_pb.clicked.connect(self.ask_tool_change_position)
         self.load_gcoder_cfg_s.connect(self.control_wo.update_gerber_cfg)
         self.ui.save_settings_preferences_pb.clicked.connect(self.save_settings_preferences)
 
@@ -89,14 +96,34 @@ class UiSettingsPreferencesTab(QObject):
             self.ui.tool_offset_y_wpos_dsb.setEnabled(False)
             self.ui.tool_offset_z_wpos_dsb.setEnabled(False)
 
-    def get_tool_probe_position(self):
-        """
-        Get tool offset mpos and wpos and update corresponding ui fields.
-        This should be done with signals/slots because of the access to
-        another thread, momentarily made with function calls to control_wo.
-        """
-        actual_status_report = self.control_wo.get_status_report()
-        wpos_flag = self.machine_settings.tool_probe_rel_flag
+    def ask_tool_probe_position(self):
+        """ Set get_tool_probe_flag at true and ask controller status report. """
+        self.get_tool_probe_flag = True
+        self.ask_status_report()
+
+    def ask_tool_change_position(self):
+        """ Set get_tool_probe_flag at true and ask controller status report. """
+        self.get_tool_change_flag = True
+        self.ask_status_report()
+
+    def ask_status_report(self):
+        """ Emit a signal asking asynchronously the controller status report. """
+        self.ask_status_report_s.emit()
+
+    @Slot(Od)
+    def get_and_manage_status_report(self, actual_status_report):
+        """ Asynchronously get status report and call function relative to function that asked for it. """
+        if self.get_tool_probe_flag:
+            self.get_tool_probe_flag = False
+            self.get_tool_probe_position(actual_status_report)
+        elif self.get_tool_change_flag:
+            self.get_tool_change_flag = False
+            self.get_tool_change_position(actual_status_report)
+
+    def get_tool_probe_position(self, actual_status_report):
+        """ Get tool offset mpos and wpos and update corresponding ui fields. """
+        # wpos_flag = self.machine_settings.tool_probe_rel_flag
+        wpos_flag = self.ui.tool_probe_wm_pos_chb.isChecked()
         if wpos_flag:
             tool_offset_wpos = actual_status_report["wpos"]
             self.ui.tool_offset_x_wpos_dsb.setValue(tool_offset_wpos[0])
@@ -108,17 +135,10 @@ class UiSettingsPreferencesTab(QObject):
             self.ui.tool_offset_y_mpos_dsb.setValue(tool_offset_mpos[1])
             self.ui.tool_offset_z_mpos_dsb.setValue(tool_offset_mpos[2])
 
-    def get_tool_change_position(self):
-        """
-        Get tool change mpos and wpos and update corresponding ui fields.
-        This should be done with signals/slots because of the access to
-        another thread, momentarily made with function calls to control_wo.
-        """
-        actual_status_report = self.control_wo.get_status_report()
+    def get_tool_change_position(self, actual_status_report):
+        """ Get tool change mpos and wpos and update corresponding ui fields. """
+        # actual_status_report = self.control_wo.get_status_report()
         tool_change_mpos = actual_status_report["mpos"]
-        self.machine_settings.tool_probe_offset_x_mpos = tool_change_mpos[0]
-        self.machine_settings.tool_probe_offset_y_mpos = tool_change_mpos[1]
-        self.machine_settings.tool_probe_offset_z_mpos = tool_change_mpos[2]
         self.ui.tool_change_x_mpos_dsb.setValue(tool_change_mpos[0])
         self.ui.tool_change_y_mpos_dsb.setValue(tool_change_mpos[1])
         self.ui.tool_change_z_mpos_dsb.setValue(tool_change_mpos[2])
