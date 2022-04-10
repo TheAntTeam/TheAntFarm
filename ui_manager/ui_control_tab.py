@@ -129,7 +129,11 @@ class UiControlTab(QObject):
         self.ui.abl_active_chb.stateChanged.connect(
             lambda: self.controlWo.set_abl_active(self.ui.abl_active_chb.isChecked()))
         self.ui.get_bbox_pb.clicked.connect(self.controlWo.get_boundary_box)
+        self.ui.x_min_dsb.valueChanged.connect(self.update_bbox_x_steps)
+        self.ui.x_max_dsb.valueChanged.connect(self.update_bbox_x_steps)
         self.ui.x_num_step_sb.valueChanged.connect(self.update_bbox_x_steps)
+        self.ui.y_min_dsb.valueChanged.connect(self.update_bbox_y_steps)
+        self.ui.y_max_dsb.valueChanged.connect(self.update_bbox_y_steps)
         self.ui.y_num_step_sb.valueChanged.connect(self.update_bbox_y_steps)
 
         self.ui.soft_reset_tb.setEnabled(False)
@@ -180,7 +184,7 @@ class UiControlTab(QObject):
 
     def init_serial_port_cb(self):
         """
-        Initialize the serial ports ui elements.
+        Initialize the serial ports' ui elements.
 
         Returns
         -------
