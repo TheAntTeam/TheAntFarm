@@ -52,7 +52,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -5535,7 +5535,7 @@
                 <item>
                  <layout class="QGridLayout" name="gridLayout_14">
                   <item row="2" column="2">
-                   <widget class="QDoubleSpinBox" name="tool_offset_y_wpos_dsb">
+                   <widget class="QDoubleSpinBox" name="tool_probe_y_wpos_dsb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -5575,7 +5575,7 @@
                    </widget>
                   </item>
                   <item row="1" column="2">
-                   <widget class="QDoubleSpinBox" name="tool_offset_y_mpos_dsb">
+                   <widget class="QDoubleSpinBox" name="tool_probe_y_mpos_dsb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -5714,7 +5714,7 @@
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="QDoubleSpinBox" name="tool_offset_x_wpos_dsb">
+                   <widget class="QDoubleSpinBox" name="tool_probe_x_wpos_dsb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -5782,7 +5782,7 @@
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="QDoubleSpinBox" name="tool_offset_x_mpos_dsb">
+                   <widget class="QDoubleSpinBox" name="tool_probe_x_mpos_dsb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -5822,7 +5822,7 @@
                    </widget>
                   </item>
                   <item row="2" column="0">
-                   <widget class="QLabel" name="tool_offset_la_2">
+                   <widget class="QLabel" name="tool_probe_wpos_la">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -5856,7 +5856,7 @@
                    </widget>
                   </item>
                   <item row="1" column="3">
-                   <widget class="QDoubleSpinBox" name="tool_offset_z_mpos_dsb">
+                   <widget class="QDoubleSpinBox" name="tool_probe_z_mpos_dsb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -5896,7 +5896,7 @@
                    </widget>
                   </item>
                   <item row="1" column="0">
-                   <widget class="QLabel" name="tool_offset_la">
+                   <widget class="QLabel" name="tool_probe_mpos_la">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -5930,7 +5930,7 @@
                    </widget>
                   </item>
                   <item row="2" column="3">
-                   <widget class="QDoubleSpinBox" name="tool_offset_z_wpos_dsb">
+                   <widget class="QDoubleSpinBox" name="tool_probe_z_wpos_dsb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -6011,7 +6011,7 @@
                    </widget>
                   </item>
                   <item row="2" column="4">
-                   <widget class="QPushButton" name="get_tool_offset_pb">
+                   <widget class="QPushButton" name="get_tool_probe_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                       <horstretch>0</horstretch>

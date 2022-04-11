@@ -552,7 +552,7 @@ class UiControlTab(QObject):
             self.controller_connected_s.emit(True)
             self.ctrl_layer.create_pointer(coords=(0, 0, 0))
 
-            self.ui.get_tool_offset_pb.setEnabled(True)
+            self.ui.get_tool_probe_pb.setEnabled(True)
             self.ui.get_tool_change_pb.setEnabled(True)
 
     def act_on_disconnection(self):
@@ -576,7 +576,7 @@ class UiControlTab(QObject):
         self.controller_connected_s.emit(False)
         self.ctrl_layer.remove_pointer()
 
-        self.ui.get_tool_offset_pb.setEnabled(False)
+        self.ui.get_tool_probe_pb.setEnabled(False)
         self.ui.get_tool_change_pb.setEnabled(False)
 
     def handle_clear_terminal(self):

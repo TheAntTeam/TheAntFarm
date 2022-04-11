@@ -38,7 +38,7 @@ class UiSettingsPreferencesTab(QObject):
         self.tool_probe_wm_pos_checked()
 
         self.ui.tool_probe_wm_pos_chb.clicked.connect(self.tool_probe_wm_pos_checked)
-        self.ui.get_tool_offset_pb.clicked.connect(self.ask_tool_probe_position)
+        self.ui.get_tool_probe_pb.clicked.connect(self.ask_tool_probe_position)
         self.ask_status_report_s.connect(self.control_wo.report_status_report)
         self.control_wo.report_status_report_s.connect(self.get_and_manage_status_report)
         self.ui.get_tool_change_pb.clicked.connect(self.ask_tool_change_position)
@@ -52,12 +52,12 @@ class UiSettingsPreferencesTab(QObject):
 
     def set_tool_machine_initial_settings(self):
         """Initialize ui value from initial machine settings."""
-        self.ui.tool_offset_x_mpos_dsb.setValue(self.machine_settings.tool_probe_offset_x_mpos)
-        self.ui.tool_offset_y_mpos_dsb.setValue(self.machine_settings.tool_probe_offset_y_mpos)
-        self.ui.tool_offset_z_mpos_dsb.setValue(self.machine_settings.tool_probe_offset_z_mpos)
-        self.ui.tool_offset_x_wpos_dsb.setValue(self.machine_settings.tool_probe_offset_x_wpos)
-        self.ui.tool_offset_y_wpos_dsb.setValue(self.machine_settings.tool_probe_offset_y_wpos)
-        self.ui.tool_offset_z_wpos_dsb.setValue(self.machine_settings.tool_probe_offset_z_wpos)
+        self.ui.tool_probe_x_mpos_dsb.setValue(self.machine_settings.tool_probe_offset_x_mpos)
+        self.ui.tool_probe_y_mpos_dsb.setValue(self.machine_settings.tool_probe_offset_y_mpos)
+        self.ui.tool_probe_z_mpos_dsb.setValue(self.machine_settings.tool_probe_offset_z_mpos)
+        self.ui.tool_probe_x_wpos_dsb.setValue(self.machine_settings.tool_probe_offset_x_wpos)
+        self.ui.tool_probe_y_wpos_dsb.setValue(self.machine_settings.tool_probe_offset_y_wpos)
+        self.ui.tool_probe_z_wpos_dsb.setValue(self.machine_settings.tool_probe_offset_z_wpos)
 
         self.ui.tool_change_x_mpos_dsb.setValue(self.machine_settings.tool_change_offset_x_mpos)
         self.ui.tool_change_y_mpos_dsb.setValue(self.machine_settings.tool_change_offset_y_mpos)
@@ -71,7 +71,7 @@ class UiSettingsPreferencesTab(QObject):
 
     def ui_tool_probe_set_enabling(self, enable=False):
         """Enable or disable tool probe get button. """
-        self.ui.get_tool_offset_pb.setEnabled(enable)
+        self.ui.get_tool_probe_pb.setEnabled(enable)
 
     def ui_tool_change_set_enabling(self, enable=False):
         """Enable or disable tool change get button. """
@@ -82,29 +82,19 @@ class UiSettingsPreferencesTab(QObject):
         """Update tool probe field passing from relative to absolute position and vice-versa. """
         wpos_flag = self.ui.tool_probe_wm_pos_chb.isChecked()
         if wpos_flag:
-            self.ui.tool_offset_x_mpos_dsb.setEnabled(False)
-            self.ui.tool_offset_y_mpos_dsb.setEnabled(False)
-            self.ui.tool_offset_z_mpos_dsb.setEnabled(False)
-            self.ui.tool_offset_x_wpos_dsb.setEnabled(True)
-            self.ui.tool_offset_y_wpos_dsb.setEnabled(True)
-            self.ui.tool_offset_z_wpos_dsb.setEnabled(True)
+            self.ui.tool_probe_x_mpos_dsb.setEnabled(False)
+            self.ui.tool_probe_y_mpos_dsb.setEnabled(False)
+            self.ui.tool_probe_z_mpos_dsb.setEnabled(False)
+            self.ui.tool_probe_x_wpos_dsb.setEnabled(True)
+            self.ui.tool_probe_y_wpos_dsb.setEnabled(True)
+            self.ui.tool_probe_z_wpos_dsb.setEnabled(True)
         else:
-            self.ui.tool_offset_x_mpos_dsb.setEnabled(True)
-            self.ui.tool_offset_y_mpos_dsb.setEnabled(True)
-            self.ui.tool_offset_z_mpos_dsb.setEnabled(True)
-            self.ui.tool_offset_x_wpos_dsb.setEnabled(False)
-            self.ui.tool_offset_y_wpos_dsb.setEnabled(False)
-            self.ui.tool_offset_z_wpos_dsb.setEnabled(False)
-
-    def ask_tool_probe_position(self):
-        """ Set get_tool_probe_flag at true and ask controller status report. """
-        self.get_tool_probe_flag = True
-        self.ask_status_report()
-
-    def ask_tool_change_position(self):
-        """ Set get_tool_probe_flag at true and ask controller status report. """
-        self.get_tool_change_flag = True
-        self.ask_status_report()
+            self.ui.tool_probe_x_mpos_dsb.setEnabled(True)
+            self.ui.tool_probe_y_mpos_dsb.setEnabled(True)
+            self.ui.tool_probe_z_mpos_dsb.setEnabled(True)
+            self.ui.tool_probe_x_wpos_dsb.setEnabled(False)
+            self.ui.tool_probe_y_wpos_dsb.setEnabled(False)
+            self.ui.tool_probe_z_wpos_dsb.setEnabled(False)
 
     def ask_status_report(self):
         """ Emit a signal asking asynchronously the controller status report. """
@@ -120,24 +110,32 @@ class UiSettingsPreferencesTab(QObject):
             self.get_tool_change_flag = False
             self.get_tool_change_position(actual_status_report)
 
+    def ask_tool_probe_position(self):
+        """ Set get_tool_probe_flag at true and ask controller status report. """
+        self.get_tool_probe_flag = True
+        self.ask_status_report()
+
+    def ask_tool_change_position(self):
+        """ Set get_tool_probe_flag at true and ask controller status report. """
+        self.get_tool_change_flag = True
+        self.ask_status_report()
+
     def get_tool_probe_position(self, actual_status_report):
         """ Get tool offset mpos and wpos and update corresponding ui fields. """
-        # wpos_flag = self.machine_settings.tool_probe_rel_flag
         wpos_flag = self.ui.tool_probe_wm_pos_chb.isChecked()
         if wpos_flag:
-            tool_offset_wpos = actual_status_report["wpos"]
-            self.ui.tool_offset_x_wpos_dsb.setValue(tool_offset_wpos[0])
-            self.ui.tool_offset_y_wpos_dsb.setValue(tool_offset_wpos[1])
-            self.ui.tool_offset_z_wpos_dsb.setValue(tool_offset_wpos[2])
+            tool_probe_wpos = actual_status_report["wpos"]
+            self.ui.tool_probe_x_wpos_dsb.setValue(tool_probe_wpos[0])
+            self.ui.tool_probe_y_wpos_dsb.setValue(tool_probe_wpos[1])
+            self.ui.tool_probe_z_wpos_dsb.setValue(tool_probe_wpos[2])
         else:
-            tool_offset_mpos = actual_status_report["mpos"]
-            self.ui.tool_offset_x_mpos_dsb.setValue(tool_offset_mpos[0])
-            self.ui.tool_offset_y_mpos_dsb.setValue(tool_offset_mpos[1])
-            self.ui.tool_offset_z_mpos_dsb.setValue(tool_offset_mpos[2])
+            tool_probe_mpos = actual_status_report["mpos"]
+            self.ui.tool_probe_x_mpos_dsb.setValue(tool_probe_mpos[0])
+            self.ui.tool_probe_y_mpos_dsb.setValue(tool_probe_mpos[1])
+            self.ui.tool_probe_z_mpos_dsb.setValue(tool_probe_mpos[2])
 
     def get_tool_change_position(self, actual_status_report):
         """ Get tool change mpos and wpos and update corresponding ui fields. """
-        # actual_status_report = self.control_wo.get_status_report()
         tool_change_mpos = actual_status_report["mpos"]
         self.ui.tool_change_x_mpos_dsb.setValue(tool_change_mpos[0])
         self.ui.tool_change_y_mpos_dsb.setValue(tool_change_mpos[1])
@@ -149,13 +147,13 @@ class UiSettingsPreferencesTab(QObject):
         """Save settings preferences from UI to settings."""
         self.machine_settings.tool_probe_rel_flag = self.ui.tool_probe_wm_pos_chb.isChecked()
 
-        self.machine_settings.tool_probe_offset_x_mpos = self.ui.tool_offset_x_mpos_dsb.value()
-        self.machine_settings.tool_probe_offset_y_mpos = self.ui.tool_offset_y_mpos_dsb.value()
-        self.machine_settings.tool_probe_offset_z_mpos = self.ui.tool_offset_z_mpos_dsb.value()
+        self.machine_settings.tool_probe_offset_x_mpos = self.ui.tool_probe_x_mpos_dsb.value()
+        self.machine_settings.tool_probe_offset_y_mpos = self.ui.tool_probe_y_mpos_dsb.value()
+        self.machine_settings.tool_probe_offset_z_mpos = self.ui.tool_probe_z_mpos_dsb.value()
 
-        self.machine_settings.tool_probe_offset_x_wpos = self.ui.tool_offset_x_wpos_dsb.value()
-        self.machine_settings.tool_probe_offset_y_wpos = self.ui.tool_offset_y_wpos_dsb.value()
-        self.machine_settings.tool_probe_offset_z_wpos = self.ui.tool_offset_z_wpos_dsb.value()
+        self.machine_settings.tool_probe_offset_x_wpos = self.ui.tool_probe_x_wpos_dsb.value()
+        self.machine_settings.tool_probe_offset_y_wpos = self.ui.tool_probe_y_wpos_dsb.value()
+        self.machine_settings.tool_probe_offset_z_wpos = self.ui.tool_probe_z_wpos_dsb.value()
 
         self.machine_settings.tool_change_offset_x_mpos = self.ui.tool_change_x_mpos_dsb.value()
         self.machine_settings.tool_change_offset_y_mpos = self.ui.tool_change_y_mpos_dsb.value()
@@ -169,5 +167,5 @@ class UiSettingsPreferencesTab(QObject):
 
         self.load_gcoder_cfg_s.emit()
 
-        # self.settings.write_all_settings()
+        # Emit a signal to write all settings
         self.save_all_settings_s.emit()
