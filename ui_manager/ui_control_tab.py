@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 class UiControlTab(QObject):
     """Class dedicated to UI <--> Control interactions on Control Tab. """
     controller_connected_s = Signal(bool)
-    ui_serial_send_bytes_s = Signal(bytes)
     ui_serial_send_s = Signal(str)
     ui_serial_open_s = Signal(str, int)
     ui_serial_close_s = Signal()
@@ -22,6 +21,8 @@ class UiControlTab(QObject):
 
     precalc_gcode_s = Signal(str)
     select_gcode_s = Signal(str)
+
+    ui_send_cmd_s = Signal(str, tuple)
 
     def __init__(self, ui, control_worker, serial_worker, ctrl_layer, settings):
         """
@@ -53,8 +54,7 @@ class UiControlTab(QObject):
         self.serial_connection_status = False
         self.serial_ports_name_ls = []
         self.serial_ports_baudrate_ls = []
-        self.ui_serial_send_s.connect(self.serialWo.send)
-        self.ui_serial_send_bytes_s.connect(self.serialWo.send)
+        self.ui_serial_send_s.connect(self.controlWo.execute_gcode_cmd)
         self.ui_serial_open_s.connect(self.serialWo.open_port)
         self.ui_serial_close_s.connect(self.serialWo.close_port)
         self.controlWo.reset_controller_status_s.connect(self.controlWo.reset_dro_status_updated)
@@ -168,6 +168,8 @@ class UiControlTab(QObject):
         self.precalc_gcode_s.connect(self.controlWo.vectorize_new_gcode_file)
         self.select_gcode_s.connect(self.controlWo.select_active_gcode)
         self.controlWo.update_gcode_s.connect(self.visualize_gcode)
+
+        self.ui_send_cmd_s.connect(self.controlWo.execute_user_interface_cmd)
 
         self.init_xy_jog_step_value()
         self.init_z_jog_step_value()
@@ -327,7 +329,7 @@ class UiControlTab(QObject):
                                                   "Load G-Code File(s)",
                                                   self.app_settings.gcode_last_dir,
                                                   "G-Code Files (*.gcode)" + ";;All files (*.*)")  # todo: add other file extensions
-        logging.debug(load_gcode)
+        logger.debug(load_gcode)
         load_gcode_paths = load_gcode[0]
         if load_gcode_paths:
             self.app_settings.gcode_last_dir = os.path.dirname(load_gcode_paths[0])  # update setting
@@ -377,7 +379,7 @@ class UiControlTab(QObject):
             gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
             if self.ui.gcode_tw.cellWidget(row, 1).isChecked():
                 # read the tooltip
-                logging.debug(gcode_path)
+                logger.debug(gcode_path)
                 self.select_gcode_s.emit(gcode_path)
                 self.ui.ABL_pb.setEnabled(True)
                 self.ui.abl_active_chb.setEnabled(True)
@@ -588,42 +590,42 @@ class UiControlTab(QObject):
         else:
             self.ui.logging_plain_te.hide()
 
-    def handle_soft_reset(self):
-        logging.info("Soft Reset Command")
-        self.ui_serial_send_bytes_s.emit(b'\x18')
-
-    def handle_unlock(self):
-        logging.debug("Unlock Command")
-        self.ui_serial_send_s.emit("$X\n")
-
-    def handle_homing(self):
-        logging.debug("Homing Command")
-        self.ui_serial_send_s.emit("$H\n")
-
     def handle_tool_change_start(self):
         logger.debug("Tool change")
         self.controlWo.send_tool_change_s.emit()
         self.disable_during_send()
 
+    def handle_soft_reset(self):
+        logger.info("Soft Reset Command")
+        self.ui_send_cmd_s.emit("soft_reset", ())
+
+    def handle_unlock(self):
+        logger.debug("Unlock Command")
+        self.ui_send_cmd_s.emit("unlock", ())
+
+    def handle_homing(self):
+        logger.debug("Homing Command")
+        self.ui_send_cmd_s.emit("homing", ())
+
     def handle_xy_0(self):
-        logging.debug("XY = 0")
-        self.ui_serial_send_s.emit("G10 P1 L20 X0 Y0\n")
+        logger.debug("XY = 0")
+        self.ui_send_cmd_s.emit("xy=0", ())
 
     def handle_x_0(self):
-        logging.debug("X = 0")
-        self.ui_serial_send_s.emit("G10 P1 L20 X0\n")
+        logger.debug("X = 0")
+        self.ui_send_cmd_s.emit("x=0", ())
 
     def handle_y_0(self):
-        logging.debug("Y = 0")
-        self.ui_serial_send_s.emit("G10 P1 L20 Y0\n")
+        logger.debug("Y = 0")
+        self.ui_send_cmd_s.emit("y=0", ())
 
     def handle_z_0(self):
-        logging.debug("Z = 0")
-        self.ui_serial_send_s.emit("G10 P1 L20 Z0\n")
+        logger.debug("Z = 0")
+        self.ui_send_cmd_s.emit("z=0", ())
 
     def handle_center_jog(self):
-        logging.debug("Go to XY working 0")
-        self.ui_serial_send_s.emit("G90 G0 X0 Y0\n")
+        logger.debug("Go to XY working 0")
+        self.ui_send_cmd_s.emit("goto_wps_0", ())
 
     def z_update_step(self):
         self.machine_settings.z_step_idx = self.ui.z_step_cb.currentIndex()
@@ -639,54 +641,54 @@ class UiControlTab(QObject):
         self.machine_settings.z_step_value = self.ui.z_step_val_dsb.value()
 
     def handle_x_minus(self):
-        logging.debug("X_minus Command")
+        logger.debug("X_minus Command")
         x_min_val = self.ui.xy_step_val_dsb.value()
-        self.ui_serial_send_s.emit("$J=G91 X-" + str(x_min_val) + " F100000\n")
+        self.ui_send_cmd_s.emit("x_minus", (str(x_min_val),))
 
     def handle_x_plus(self):
-        logging.debug("X_plus Command")
+        logger.debug("X_plus Command")
         x_plus_val = self.ui.xy_step_val_dsb.value()
-        self.ui_serial_send_s.emit("$J=G91 X" + str(x_plus_val) + " F100000\n")
+        self.ui_send_cmd_s.emit("x_plus", (str(x_plus_val),))
 
     def handle_y_minus(self):
-        logging.debug("Y_minus Command")
+        logger.debug("Y_minus Command")
         y_min_val = self.ui.xy_step_val_dsb.value()
-        self.ui_serial_send_s.emit("$J=G91 Y-" + str(y_min_val) + " F100000\n")
+        self.ui_send_cmd_s.emit("y_minus", (str(y_min_val),))
 
     def handle_y_plus(self):
-        logging.debug("Y_plus Command")
+        logger.debug("Y_plus Command")
         y_plus_val = self.ui.xy_step_val_dsb.value()
-        self.ui_serial_send_s.emit("$J=G91 Y" + str(y_plus_val) + " F100000\n")
+        self.ui_send_cmd_s.emit("y_plus", (str(y_plus_val),))
 
     def handle_xy_plus(self):
-        logging.debug("XY_plus Command")
+        logger.debug("XY_plus Command")
         xy_plus_val = self.ui.xy_step_val_dsb.value()
-        self.ui_serial_send_s.emit("$J=G91 X" + str(xy_plus_val) + "Y" + str(xy_plus_val) + " F100000\n")
+        self.ui_send_cmd_s.emit("xy_plus", (str(xy_plus_val), str(xy_plus_val)))
 
     def handle_x_plus_y_minus(self):
-        logging.debug("X_plus_Y_minus Command")
+        logger.debug("X_plus_Y_minus Command")
         x_p_y_m_val = self.ui.xy_step_val_dsb.value()
-        self.ui_serial_send_s.emit("$J=G91 X" + str(x_p_y_m_val) + "Y-" + str(x_p_y_m_val) + " F100000\n")
+        self.ui_send_cmd_s.emit("x_plus_y_minus", (str(x_p_y_m_val), str(x_p_y_m_val)))
 
     def handle_xy_minus(self):
-        logging.debug("XY_minus Command")
+        logger.debug("XY_minus Command")
         xy_minus_val = self.ui.xy_step_val_dsb.value()
-        self.ui_serial_send_s.emit("$J=G91 X-" + str(xy_minus_val) + "Y-" + str(xy_minus_val) + " F100000\n")
+        self.ui_send_cmd_s.emit("xy_minus", (str(xy_minus_val), str(xy_minus_val)))
 
     def handle_x_minus_y_plus(self):
-        logging.debug("X_minus_y_plus Command")
+        logger.debug("X_minus_y_plus Command")
         x_m_y_p_val = self.ui.xy_step_val_dsb.value()
-        self.ui_serial_send_s.emit("$J=G91 X-" + str(x_m_y_p_val) + "Y" + str(x_m_y_p_val) + " F100000\n")
+        self.ui_send_cmd_s.emit("x_minus_y_plus", (str(x_m_y_p_val), str(x_m_y_p_val)))
 
     def handle_z_minus(self):
-        logging.debug("Z_minus Command")
+        logger.debug("Z_minus Command")
         z_minus_val = self.ui.z_step_val_dsb.value()
-        self.ui_serial_send_s.emit("$J=G91 Z-" + str(z_minus_val) + " F100000\n")
+        self.ui_send_cmd_s.emit("z_minus", (str(z_minus_val),))
 
     def handle_z_plus(self):
-        logging.debug("Z_plus Command")
+        logger.debug("Z_plus Command")
         z_plus_val = self.ui.z_step_val_dsb.value()
-        self.ui_serial_send_s.emit("$J=G91 Z" + str(z_plus_val) + " F100000\n")
+        self.ui_send_cmd_s.emit("z_plus", (str(z_plus_val),))
 
     def xy_update_step(self):
         self.machine_settings.xy_step_idx = self.ui.xy_step_cb.currentIndex()
@@ -740,13 +742,13 @@ class UiControlTab(QObject):
         self.machine_settings.probe_z_max = self.ui.z_max_dsb.value()
 
     def handle_probe_cmd(self):
-        logging.debug("Probe Command")
+        logger.debug("Probe Command")
         # todo: fake parameters just to test probe
         probe_z_min = self.ui.z_min_dsb.value()
         self.controlWo.cmd_probe(probe_z_min)
 
     def handle_auto_bed_levelling(self):
-        logging.debug("Auto Bed Levelling Command")
+        logger.debug("Auto Bed Levelling Command")
         bbox_t, steps_t = self.get_abl_inputs()
         self.controlWo.send_abl_s.emit(bbox_t, steps_t)
 
