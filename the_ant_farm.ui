@@ -5563,6 +5563,9 @@
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
                     </property>
@@ -5602,6 +5605,9 @@
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -5702,6 +5708,9 @@
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
                     </property>
@@ -5741,6 +5750,9 @@
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -5809,6 +5821,9 @@
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -5884,6 +5899,9 @@
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
                     </property>
@@ -5957,6 +5975,9 @@
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -6079,6 +6100,9 @@
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
                     </property>
@@ -6122,6 +6146,9 @@
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
                     </property>
@@ -6164,6 +6191,9 @@
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -6298,11 +6328,14 @@
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
                 </property>
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::UpDownArrows</enum>
+                </property>
                 <property name="maximum">
                  <double>100000.000000000000000</double>
                 </property>
                 <property name="singleStep">
-                 <double>0.100000000000000</double>
+                 <double>1.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -6406,11 +6439,14 @@
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
                 </property>
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::UpDownArrows</enum>
+                </property>
                 <property name="maximum">
                  <double>100000.000000000000000</double>
                 </property>
                 <property name="singleStep">
-                 <double>0.100000000000000</double>
+                 <double>1.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -6440,11 +6476,14 @@
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
                 </property>
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::UpDownArrows</enum>
+                </property>
                 <property name="maximum">
                  <double>100000.000000000000000</double>
                 </property>
                 <property name="singleStep">
-                 <double>0.100000000000000</double>
+                 <double>1.000000000000000</double>
                 </property>
                </widget>
               </item>
@@ -6541,6 +6580,13 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="restore_settings_preferences_pb">
+            <property name="text">
+             <string>Restore Settings/Preferences</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="save_settings_preferences_pb">

@@ -34,8 +34,7 @@ class UiSettingsPreferencesTab(QObject):
         self.get_tool_change_flag = False
         self.get_tool_probe_flag = False
 
-        self.ui.tool_probe_wm_pos_chb.setChecked(self.machine_settings.tool_probe_rel_flag)
-        self.tool_probe_wm_pos_checked()
+        self.reset_tool_probe_initial_enables()
 
         self.ui.tool_probe_wm_pos_chb.clicked.connect(self.tool_probe_wm_pos_checked)
         self.ui.get_tool_probe_pb.clicked.connect(self.ask_tool_probe_position)
@@ -48,10 +47,29 @@ class UiSettingsPreferencesTab(QObject):
         self.ui_tool_probe_set_enabling(enable=False)
         self.ui_tool_change_set_enabling(enable=False)
 
-        self.set_tool_machine_initial_settings()
+        self.reset_tool_machine_initial_settings()
+        self.ui.tool_probe_x_mpos_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_probe_y_mpos_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_probe_z_mpos_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_probe_x_wpos_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_probe_y_wpos_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_probe_z_wpos_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_change_x_mpos_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_change_y_mpos_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_change_z_mpos_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_probe_z_limit_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.feedrate_xy_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.feedrate_z_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.feedrate_probe_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.restore_settings_preferences_pb.clicked.connect(self.restore_initial_settings)
 
-    def set_tool_machine_initial_settings(self):
-        """Initialize ui value from initial machine settings."""
+    def reset_tool_probe_initial_enables(self):
+        """Reset status of tool probe checkbox checked (or not) and wpos/mpos fields enabled or disabled. """
+        self.ui.tool_probe_wm_pos_chb.setChecked(self.machine_settings.tool_probe_rel_flag)
+        self.enable_disable_tool_probe_wpos_mpos(self.machine_settings.tool_probe_rel_flag)
+
+    def reset_tool_machine_initial_settings(self):
+        """Initialize or re-initialize ui value from initial machine settings."""
         self.ui.tool_probe_x_mpos_dsb.setValue(self.machine_settings.tool_probe_offset_x_mpos)
         self.ui.tool_probe_y_mpos_dsb.setValue(self.machine_settings.tool_probe_offset_y_mpos)
         self.ui.tool_probe_z_mpos_dsb.setValue(self.machine_settings.tool_probe_offset_z_mpos)
@@ -69,6 +87,13 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.feedrate_z_dsb.setValue(self.machine_settings.feedrate_z)
         self.ui.feedrate_probe_dsb.setValue(self.machine_settings.feedrate_probe)
 
+    def restore_initial_settings(self):
+        """Restore initial settings in ui fields. """
+        self.reset_tool_machine_initial_settings()
+        self.reset_tool_probe_initial_enables()
+        self.reset_focus_lost()
+        self.ui.status_bar.showMessage("Settings/Preferences restored.")
+
     def ui_tool_probe_set_enabling(self, enable=False):
         """Enable or disable tool probe get button. """
         self.ui.get_tool_probe_pb.setEnabled(enable)
@@ -81,6 +106,21 @@ class UiSettingsPreferencesTab(QObject):
     def tool_probe_wm_pos_checked(self):
         """Update tool probe field passing from relative to absolute position and vice-versa. """
         wpos_flag = self.ui.tool_probe_wm_pos_chb.isChecked()
+        self.enable_disable_tool_probe_wpos_mpos(wpos_flag)
+        self.set_focus_lost()
+
+    def enable_disable_tool_probe_wpos_mpos(self, wpos_flag):
+        """
+        Enable/disable tool probe wpos ui fields or mpos ui fields.
+
+        Parameters
+        ----------
+        wpos_flag
+
+        Returns
+        -------
+
+        """
         if wpos_flag:
             self.ui.tool_probe_x_mpos_dsb.setEnabled(False)
             self.ui.tool_probe_y_mpos_dsb.setEnabled(False)
@@ -166,6 +206,16 @@ class UiSettingsPreferencesTab(QObject):
         self.machine_settings.feedrate_probe = self.ui.feedrate_probe_dsb.value()
 
         self.load_gcoder_cfg_s.emit()
-
         # Emit a signal to write all settings
         self.save_all_settings_s.emit()
+        self.ui.status_bar.showMessage("Settings/Preferences saved.")
+        self.reset_focus_lost()
+
+    def set_focus_lost(self):
+        """ When a setting is changed but not saved the focus is lost. We signal it coloring pushbutton in red. """
+        self.ui.save_settings_preferences_pb.setStyleSheet("background-color:red")
+        self.ui.status_bar.showMessage("Settings/Preferences modified but still not saved.")
+
+    def reset_focus_lost(self):
+        """Reset lost focus to False, the changed settings have been saved or restored. """
+        self.ui.save_settings_preferences_pb.setStyleSheet("")
