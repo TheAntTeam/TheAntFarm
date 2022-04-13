@@ -370,7 +370,7 @@ class ControllerWorker(QObject):
                 if direction_type.lower() == "xy":
                     feedrate = str(self.settings.machine_settings.feedrate_xy)
                 elif direction_type.lower() == "z":
-                    feedrate = str(self.settings.machine_settings.feedrate_xy)
+                    feedrate = str(self.settings.machine_settings.feedrate_z)
                 elif direction_type.lower() == "probe":
                     feedrate = str(self.settings.machine_settings.feedrate_probe)
                 cmd_str += "F" + feedrate
