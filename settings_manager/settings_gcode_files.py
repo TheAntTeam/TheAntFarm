@@ -19,17 +19,16 @@ class GCodeFilesSettingsHandler:
         if not os.path.isfile(self.gcf_config_path):
             self.restore_all_gcf_settings()
 
-        # Read g-code files'settings ini file #
+        # Read g-code files' settings ini file #
         self.gcf_settings.read(self.gcf_config_path)
 
         if "FILES" in self.gcf_settings:
             self.gcode_folder = self.gcf_settings["FILES"]["gcode_folder"]
 
     def write_all_gcf_settings(self):
-        """ Write all g-code files'settings to ini files """
+        """ Write all g-code files' settings to ini files """
         self.gcf_settings["DEFAULT"] = {"gcode_folder": self.GCODE_FOLDER_DEFAULT}
 
-        gcf_settings_od = {}
         self.gcf_settings["FILES"] = {}
         files_settings = self.gcf_settings["FILES"]
         files_settings["gcode_folder"] = self.gcode_folder
@@ -42,7 +41,6 @@ class GCodeFilesSettingsHandler:
         """ Restore all g-code files'settings to ini files """
         self.gcf_settings["DEFAULT"] = {"gcode_folder": self.GCODE_FOLDER_DEFAULT}
 
-        gcf_settings_od = {}
         self.gcf_settings["FILES"] = {}
         files_settings = self.gcf_settings["FILES"]
         files_settings["gcode_folder"] = self.GCODE_FOLDER_DEFAULT

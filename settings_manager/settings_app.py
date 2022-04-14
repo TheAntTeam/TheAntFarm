@@ -90,7 +90,7 @@ class AppSettingsHandler:
             self.last_serial_port = app_general.get("last_serial_port", self.LAST_SERIAL_PORT_DEFAULT)
             try:
                 self.last_serial_baud = app_general.getint("last_serial_baud", self.LAST_SERIAL_BAUD_DEFAULT)
-            except:
+            except Exception:
                 self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
 
         # Layers related application settings #

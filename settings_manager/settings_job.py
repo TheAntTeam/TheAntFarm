@@ -26,12 +26,12 @@ class JobSettingsHandler:
         self.jobs_settings_od = {}
 
     def read_all_jobs_settings(self):
-        """ Read all jobs'settings from ini files """
+        """ Read all jobs' settings from ini files """
         # If app settings file does NOT exist create it with default values
         if not os.path.isfile(self.jobs_config_path):
             self.restore_job_settings()
 
-        # Read jobs'settings ini file #
+        # Read jobs' settings ini file #
         self.jobs_settings.read(self.jobs_config_path)
 
         # Top job related settings #

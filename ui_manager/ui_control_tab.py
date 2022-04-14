@@ -325,10 +325,9 @@ class UiControlTab(QObject):
         return -1
 
     def open_gcode_files(self):
-        load_gcode = QFileDialog.getOpenFileNames(None,
-                                                  "Load G-Code File(s)",
+        load_gcode = QFileDialog.getOpenFileNames(None, "Load G-Code File(s)",  # todo: add other file extensions?
                                                   self.app_settings.gcode_last_dir,
-                                                  "G-Code Files (*.gcode)" + ";;All files (*.*)")  # todo: add other file extensions
+                                                  "G-Code Files (*.gcode)" + ";;All files (*.*)")
         logger.debug(load_gcode)
         load_gcode_paths = load_gcode[0]
         if load_gcode_paths:
@@ -794,5 +793,3 @@ class UiControlTab(QObject):
             self.ui.y_num_step_sb.value()
         )
         return bbox_t, steps_t
-
-
