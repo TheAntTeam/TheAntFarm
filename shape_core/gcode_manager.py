@@ -22,7 +22,7 @@ class GCoder:
     STEPS = 3
     CHANGE_TOOL_COMMAND = "M6"
 
-    def __init__(self, tag, machining_type='gerber', parent=None, units='ms'):
+    def __init__(self, tag, machining_type='gerber', parent=None, units='ms', mirror_type='x'):
 
         self.parent = parent
         self.tag = tag
@@ -35,6 +35,7 @@ class GCoder:
         # todo: check the functionalities of unit conversion
 
         self.units = units
+        self.mirror_type = mirror_type
         self.macro = None
 
         self.geom_list = []
@@ -102,14 +103,18 @@ class GCoder:
         self.path = path
 
     def compute(self):
+        if 'mirror' not in self.cfg.keys():
+            mirror = False
+        else:
+            mirror = self.cfg['mirror']
         if self.type == 'gerber':
-            self.compute_gerber()
+            self.compute_gerber(mirror=mirror)
         elif self.type == 'profile':
-            self.compute_pocketing()
+            self.compute_pocketing(mirror=mirror)
         elif self.type == 'drill':
-            self.compute_drill()
+            self.compute_drill(mirror=mirror)
         elif self.type == 'pocketing':
-            self.compute_pocketing()
+            self.compute_pocketing(mirror=mirror)
         elif self.type == 'commander':
             print("Nothing to do!")
         else:
@@ -117,7 +122,7 @@ class GCoder:
             return False
         return True
 
-    def compute_drill(self):
+    def compute_drill(self, mirror=False):
         # compute GCode from a drill path
 
         self.gcode = []
@@ -144,18 +149,18 @@ class GCoder:
                 dpp = abs(cut)/n
                 pass_list = [sign * dpp * x for x in range(1, n)] + [cut]
                 pass_list.sort(reverse=True)
-                self.compute_pocketing_paths(path, pass_list)
+                self.compute_pocketing_paths(path, pass_list, mirror=mirror)
             else:
                 print(" - Drilling, bit diameter " + str(data[0]))
                 self.insert_comment("Drill Section in Drill Procedure")
                 self.insert_comment("Tool Diameter: " + str(data[0]))
-                self.compute_drill_paths(path, tool_change=tool_change)
+                self.compute_drill_paths(path, tool_change=tool_change, mirror=mirror)
             tool_change += 1
 
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-    def compute_gerber(self):
+    def compute_gerber(self, mirror=False):
         # essentially it's about following the points indicated by the paths
         # joining them with fast movements.
         # the format of the gcode, the info contained and the file type
@@ -179,12 +184,12 @@ class GCoder:
 
         for d in self.path:
             paths = d[1]
-            self.compute_gerber_paths(paths)
+            self.compute_gerber_paths(paths, mirror=mirror)
 
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-    def compute_pocketing(self):
+    def compute_pocketing(self, mirror=False):
         # same concept of the milling method
         # in addition, in case there is a valid multipass cfg
         # execute the n necessary passes
@@ -220,14 +225,24 @@ class GCoder:
                 n = int(abs(cut)//dpp)
                 pass_list = [sign * dpp * x for x in range(1, n)] + [cut]
                 pass_list.sort(reverse=True)
-                self.compute_pocketing_paths(paths, pass_list)
+                self.compute_pocketing_paths(paths, pass_list, mirror=mirror)
             else:
-                self.compute_gerber_paths(paths)
+                self.compute_gerber_paths(paths, mirror=mirror)
 
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-    def compute_drill_paths(self, paths, tool_change=-1):
+    def mirror_coords(self, cs):
+        csa = np.array(cs)
+        if self.mirror_type == 'x':
+            # X mirror
+            csa[:, 0] *= -1.0
+        else:
+            # Y mirror
+            csa[:, 1] *= -1.0
+        return csa.tolist()
+
+    def compute_drill_paths(self, paths, tool_change=-1, mirror=False):
 
         # set the working feed rate
         # of the Z axis
@@ -241,25 +256,31 @@ class GCoder:
 
         for p in paths:
             cs = list(p.coords)
+            if mirror:
+                cs = self.mirror_coords(cs)
             for c in cs:
                 self.go_to(c)
                 self.make_drill()
                 self.go_travel()
 
-    def compute_gerber_paths(self, paths):
+    def compute_gerber_paths(self, paths, mirror=False):
         for p in paths:
             cs = list(p.coords)
+            if mirror:
+                cs = self.mirror_coords(cs)
             self.go_to(cs.pop(0))
             self.go_mill()
             for c in cs:
                 self.go_to(c)
             self.go_travel()
 
-    def compute_pocketing_paths(self, paths, pass_list):
+    def compute_pocketing_paths(self, paths, pass_list, mirror=False):
         for p in paths:
             rev = True
             orig_cs = list(p.coords)
             cs = orig_cs.copy()
+            if mirror:
+                cs = self.mirror_coords(cs)
             self.go_to(cs.pop(0))
             for cp in pass_list:
                 self.go_mill(cp)
