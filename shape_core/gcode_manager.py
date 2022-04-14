@@ -45,7 +45,8 @@ class GCoder:
                 'travel': 0.7,
                 'xy_feedrate': 250.0,
                 'z_feedrate': 40.0,
-                'spindle': 1000.0
+                'spindle': 1000.0,
+                'mirror': False
             }
         elif machining_type == 'profile':
             self.cfg = {
@@ -55,7 +56,8 @@ class GCoder:
                 'z_feedrate': 40.0,
                 'spindle': 1000.0,
                 'multi_depth': True,
-                'depth_per_pass': 0.6
+                'depth_per_pass': 0.6,
+                'mirror': False
             }
         elif machining_type == 'pocketing':
             self.cfg = {
@@ -63,7 +65,8 @@ class GCoder:
                 'travel': 0.7,
                 'xy_feedrate': 250.0,
                 'z_feedrate': 40.0,
-                'spindle': 1000.0
+                'spindle': 1000.0,
+                'mirror': False
             }
         elif machining_type == 'drill':
             self.cfg = {
@@ -71,7 +74,8 @@ class GCoder:
                 'travel': 0.7,
                 'xy_feedrate': 250.0,
                 'z_feedrate': 40.0,
-                'spindle': 1000.0
+                'spindle': 1000.0,
+                'mirror': False
             }
         elif machining_type == 'commander':
             self.cfg = {
@@ -287,6 +291,8 @@ class GCoder:
                 for c in cs:
                     self.go_to(c)
                 cs = orig_cs.copy()
+                if mirror:
+                    cs = self.mirror_coords(cs)
                 if rev:
                     cs.reverse()
                 rev = not rev
