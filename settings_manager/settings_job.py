@@ -19,6 +19,8 @@ class JobSettingsHandler:
     TAPS_TYPE_INDEX_DEFAULT = 3
     MILLING_TOOL_FLAG = False
     OPTIMIZE_FLAG_DEFAULT = True
+    MIRROR_ALL_DEFAULT = False
+    MIRROR_BOTTOM_DEFAULT = True
 
     def __init__(self, config_folder):
         self.jobs_config_path = config_folder + os.path.sep + 'jobs_sets_config.ini'
@@ -46,6 +48,7 @@ class JobSettingsHandler:
             top_set_od["spindle"] = top_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             top_set_od["xy_feedrate"] = top_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             top_set_od["z_feedrate"] = top_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
+            top_set_od["mirror"] = top_settings.getboolean("mirror", self.MIRROR_ALL_DEFAULT)
             self.jobs_settings_od["top"] = top_set_od
 
         # Bottom job related settings #
@@ -60,6 +63,7 @@ class JobSettingsHandler:
             bottom_set_od["spindle"] = bottom_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             bottom_set_od["xy_feedrate"] = bottom_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             bottom_set_od["z_feedrate"] = bottom_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
+            bottom_set_od["mirror"] = bottom_settings.getboolean("mirror", self.MIRROR_BOTTOM_DEFAULT)
             self.jobs_settings_od["bottom"] = bottom_set_od
 
         # Profile job related settings #
@@ -78,6 +82,7 @@ class JobSettingsHandler:
             profile_set_od["z_feedrate"] = profile_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
             profile_set_od["taps_type"] = profile_settings.getint("taps_type", self.TAPS_TYPE_INDEX_DEFAULT)
             profile_set_od["taps_length"] = profile_settings.getfloat("taps_length", self.TAPS_LENGTH_DEFAULT)
+            profile_set_od["mirror"] = profile_settings.getboolean("mirror", self.MIRROR_ALL_DEFAULT)
             self.jobs_settings_od["profile"] = profile_set_od
 
         if "DRILL" in self.jobs_settings:
@@ -91,6 +96,7 @@ class JobSettingsHandler:
             drill_set_od["xy_feedrate"] = drill_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             drill_set_od["z_feedrate"] = drill_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
             drill_set_od["optimize"] = drill_settings.getboolean("optimize", self.OPTIMIZE_FLAG_DEFAULT)
+            drill_set_od["mirror"] = drill_settings.getboolean("mirror", self.MIRROR_ALL_DEFAULT)
 
             drill_bits_names_list = []
             drill_bits_diameter_list = []
@@ -144,7 +150,8 @@ class JobSettingsHandler:
                                          "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
                                          "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
                                          "taps_type": self.TAPS_TYPE_INDEX_DEFAULT,
-                                         "taps_length": self.TAPS_LENGTH_DEFAULT}
+                                         "taps_length": self.TAPS_LENGTH_DEFAULT,
+                                         "mirror": self.MIRROR_ALL_DEFAULT}
 
         # Top job related settings #
         self.jobs_settings["TOP"] = {}
@@ -158,6 +165,7 @@ class JobSettingsHandler:
         top_settings["spindle"] = str(top_set_od["spindle"])
         top_settings["xy_feedrate"] = str(top_set_od["xy_feedrate"])
         top_settings["z_feedrate"] = str(top_set_od["z_feedrate"])
+        top_settings["mirror"] = str(top_set_od["mirror"])
 
         # Bottom job related settings #
         self.jobs_settings["BOTTOM"] = {}
@@ -171,6 +179,7 @@ class JobSettingsHandler:
         bottom_settings["spindle"] = str(bottom_set_od["spindle"])
         bottom_settings["xy_feedrate"] = str(bottom_set_od["xy_feedrate"])
         bottom_settings["z_feedrate"] = str(bottom_set_od["z_feedrate"])
+        bottom_settings["mirror"] = str(bottom_set_od["mirror"])
 
         # Profile job related settings #
         self.jobs_settings["PROFILE"] = {}
@@ -188,6 +197,7 @@ class JobSettingsHandler:
         profile_settings["z_feedrate"] = str(profile_set_od["z_feedrate"])
         profile_settings["taps_type"] = str(profile_set_od["taps_type"])
         profile_settings["taps_length"] = str(profile_set_od["taps_length"])
+        profile_settings["mirror"] = str(profile_set_od["mirror"])
 
         # Drill job related settings #
         self.jobs_settings["DRILL"] = {}
@@ -201,6 +211,7 @@ class JobSettingsHandler:
         drill_settings["xy_feedrate"] = str(drill_set_od["xy_feedrate"])
         drill_settings["z_feedrate"] = str(drill_set_od["z_feedrate"])
         drill_settings["optimize"] = str(drill_set_od["optimize"])
+        drill_settings["mirror"] = str(drill_set_od["mirror"])
 
         # Section dedicated to drill bits #
         self.jobs_settings["DRILL_BITS"] = {}
@@ -251,7 +262,8 @@ class JobSettingsHandler:
                                          "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
                                          "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
                                          "taps_type": self.TAPS_TYPE_INDEX_DEFAULT,
-                                         "taps_length": self.TAPS_LENGTH_DEFAULT}
+                                         "taps_length": self.TAPS_LENGTH_DEFAULT,
+                                         "mirror": self.MIRROR_ALL_DEFAULT}
 
         # Top job related settings #
         self.jobs_settings["TOP"] = {}
@@ -265,6 +277,7 @@ class JobSettingsHandler:
         top_settings["spindle"] = str(self.SPINDLE_SPEED_DEFAULT)
         top_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
         top_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
+        top_settings["mirror"] = str(self.MIRROR_ALL_DEFAULT)
 
         # Bottom job related settings #
         self.jobs_settings["BOTTOM"] = {}
@@ -278,6 +291,7 @@ class JobSettingsHandler:
         bottom_settings["spindle"] = str(self.SPINDLE_SPEED_DEFAULT)
         bottom_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
         bottom_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
+        bottom_settings["mirror"] = str(self.MIRROR_BOTTOM_DEFAULT)
 
         # Profile job related settings #
         self.jobs_settings["PROFILE"] = {}
@@ -295,6 +309,7 @@ class JobSettingsHandler:
         profile_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
         profile_settings["taps_type"] = str(self.TAPS_TYPE_INDEX_DEFAULT)
         profile_settings["taps_length"] = str(self.TAPS_LENGTH_DEFAULT)
+        profile_settings["mirror"] = str(self.MIRROR_ALL_DEFAULT)
 
         # Drill job related settings #
         self.jobs_settings["DRILL"] = {}
@@ -308,6 +323,7 @@ class JobSettingsHandler:
         drill_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
         drill_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
         drill_settings["optimize"] = str(self.OPTIMIZE_FLAG_DEFAULT)
+        drill_settings["mirror"] = str(self.MIRROR_ALL_DEFAULT)
 
         # Section dedicated to drill bits #
         self.jobs_settings["DRILL_BITS"] = {}

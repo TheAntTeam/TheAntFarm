@@ -322,29 +322,29 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.top_cut_z_dsb, 3, 1, 1, 1)
 
-        self.top_tool_diameter_l = QLabel(self.top_page)
-        self.top_tool_diameter_l.setObjectName(u"top_tool_diameter_l")
+        self.top_tool_diameter_la = QLabel(self.top_page)
+        self.top_tool_diameter_la.setObjectName(u"top_tool_diameter_la")
 
-        self.gridLayout_2.addWidget(self.top_tool_diameter_l, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_tool_diameter_la, 0, 0, 1, 1)
 
         self.top_generate_job_pb = QPushButton(self.top_page)
         self.top_generate_job_pb.setObjectName(u"top_generate_job_pb")
 
         self.gridLayout_2.addWidget(self.top_generate_job_pb, 11, 0, 1, 2)
 
-        self.top_n_passes_l = QLabel(self.top_page)
-        self.top_n_passes_l.setObjectName(u"top_n_passes_l")
+        self.top_n_passes_la = QLabel(self.top_page)
+        self.top_n_passes_la.setObjectName(u"top_n_passes_la")
 
-        self.gridLayout_2.addWidget(self.top_n_passes_l, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_n_passes_la, 1, 0, 1, 1)
 
         self.top_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.gridLayout_2.addItem(self.top_vertical_spacer, 10, 0, 1, 2)
 
-        self.top_travel_z_l = QLabel(self.top_page)
-        self.top_travel_z_l.setObjectName(u"top_travel_z_l")
+        self.top_travel_z_la = QLabel(self.top_page)
+        self.top_travel_z_la.setObjectName(u"top_travel_z_la")
 
-        self.gridLayout_2.addWidget(self.top_travel_z_l, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_travel_z_la, 4, 0, 1, 1)
 
         self.top_travel_z_dsb = QDoubleSpinBox(self.top_page)
         self.top_travel_z_dsb.setObjectName(u"top_travel_z_dsb")
@@ -354,20 +354,20 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.top_travel_z_dsb, 4, 1, 1, 1)
 
-        self.top_cut_z_l = QLabel(self.top_page)
-        self.top_cut_z_l.setObjectName(u"top_cut_z_l")
+        self.top_cut_z_la = QLabel(self.top_page)
+        self.top_cut_z_la.setObjectName(u"top_cut_z_la")
 
-        self.gridLayout_2.addWidget(self.top_cut_z_l, 3, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_cut_z_la, 3, 0, 1, 1)
 
-        self.top_overlap_l = QLabel(self.top_page)
-        self.top_overlap_l.setObjectName(u"top_overlap_l")
+        self.top_overlap_la = QLabel(self.top_page)
+        self.top_overlap_la.setObjectName(u"top_overlap_la")
 
-        self.gridLayout_2.addWidget(self.top_overlap_l, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_overlap_la, 2, 0, 1, 1)
 
-        self.top_spindle_speed_l = QLabel(self.top_page)
-        self.top_spindle_speed_l.setObjectName(u"top_spindle_speed_l")
+        self.top_spindle_speed_la = QLabel(self.top_page)
+        self.top_spindle_speed_la.setObjectName(u"top_spindle_speed_la")
 
-        self.gridLayout_2.addWidget(self.top_spindle_speed_l, 6, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_spindle_speed_la, 6, 0, 1, 1)
 
         self.top_xy_feed_rate_dsb = QDoubleSpinBox(self.top_page)
         self.top_xy_feed_rate_dsb.setObjectName(u"top_xy_feed_rate_dsb")
@@ -383,10 +383,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.top_tool_diameter_dsb, 0, 1, 1, 1)
 
-        self.top_xy_feed_rate_l = QLabel(self.top_page)
-        self.top_xy_feed_rate_l.setObjectName(u"top_xy_feed_rate_l")
+        self.top_xy_feed_rate_la = QLabel(self.top_page)
+        self.top_xy_feed_rate_la.setObjectName(u"top_xy_feed_rate_la")
 
-        self.gridLayout_2.addWidget(self.top_xy_feed_rate_l, 7, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_xy_feed_rate_la, 7, 0, 1, 1)
 
         self.top_n_passes_sb = QSpinBox(self.top_page)
         self.top_n_passes_sb.setObjectName(u"top_n_passes_sb")
@@ -410,10 +410,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.top_overlap_dsb, 2, 1, 1, 1)
 
-        self.top_z_feed_rate_l = QLabel(self.top_page)
-        self.top_z_feed_rate_l.setObjectName(u"top_z_feed_rate_l")
+        self.top_z_feed_rate_la = QLabel(self.top_page)
+        self.top_z_feed_rate_la.setObjectName(u"top_z_feed_rate_la")
 
-        self.gridLayout_2.addWidget(self.top_z_feed_rate_l, 9, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_z_feed_rate_la, 9, 0, 1, 1)
 
         self.top_z_feed_rate_dsb = QDoubleSpinBox(self.top_page)
         self.top_z_feed_rate_dsb.setObjectName(u"top_z_feed_rate_dsb")
@@ -428,10 +428,10 @@ class Ui_MainWindow(object):
         self.bottom_page.setObjectName(u"bottom_page")
         self.gridLayout_3 = QGridLayout(self.bottom_page)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.bottom_z_feed_rate_l = QLabel(self.bottom_page)
-        self.bottom_z_feed_rate_l.setObjectName(u"bottom_z_feed_rate_l")
+        self.bottom_z_feed_rate_la = QLabel(self.bottom_page)
+        self.bottom_z_feed_rate_la.setObjectName(u"bottom_z_feed_rate_la")
 
-        self.gridLayout_3.addWidget(self.bottom_z_feed_rate_l, 9, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_z_feed_rate_la, 9, 0, 1, 1)
 
         self.bottom_cut_z_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_cut_z_dsb.setObjectName(u"bottom_cut_z_dsb")
@@ -461,10 +461,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.bottom_n_passes_sb, 2, 1, 1, 1)
 
-        self.bottom_overlap_l = QLabel(self.bottom_page)
-        self.bottom_overlap_l.setObjectName(u"bottom_overlap_l")
+        self.bottom_overlap_la = QLabel(self.bottom_page)
+        self.bottom_overlap_la.setObjectName(u"bottom_overlap_la")
 
-        self.gridLayout_3.addWidget(self.bottom_overlap_l, 3, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_overlap_la, 3, 0, 1, 1)
 
         self.bottom_generate_job_pb = QPushButton(self.bottom_page)
         self.bottom_generate_job_pb.setObjectName(u"bottom_generate_job_pb")
@@ -491,25 +491,25 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addItem(self.bottom_vertical_spacer, 11, 0, 1, 2)
 
-        self.bottom_tool_diameter_l = QLabel(self.bottom_page)
-        self.bottom_tool_diameter_l.setObjectName(u"bottom_tool_diameter_l")
+        self.bottom_tool_diameter_la = QLabel(self.bottom_page)
+        self.bottom_tool_diameter_la.setObjectName(u"bottom_tool_diameter_la")
 
-        self.gridLayout_3.addWidget(self.bottom_tool_diameter_l, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_tool_diameter_la, 1, 0, 1, 1)
 
-        self.bottom_n_passes_l = QLabel(self.bottom_page)
-        self.bottom_n_passes_l.setObjectName(u"bottom_n_passes_l")
+        self.bottom_n_passes_la = QLabel(self.bottom_page)
+        self.bottom_n_passes_la.setObjectName(u"bottom_n_passes_la")
 
-        self.gridLayout_3.addWidget(self.bottom_n_passes_l, 2, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_n_passes_la, 2, 0, 1, 1)
 
-        self.bottom_travel_z_l = QLabel(self.bottom_page)
-        self.bottom_travel_z_l.setObjectName(u"bottom_travel_z_l")
+        self.bottom_travel_z_la = QLabel(self.bottom_page)
+        self.bottom_travel_z_la.setObjectName(u"bottom_travel_z_la")
 
-        self.gridLayout_3.addWidget(self.bottom_travel_z_l, 5, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_travel_z_la, 5, 0, 1, 1)
 
-        self.bottom_cut_z_l = QLabel(self.bottom_page)
-        self.bottom_cut_z_l.setObjectName(u"bottom_cut_z_l")
+        self.bottom_cut_z_la = QLabel(self.bottom_page)
+        self.bottom_cut_z_la.setObjectName(u"bottom_cut_z_la")
 
-        self.gridLayout_3.addWidget(self.bottom_cut_z_l, 4, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_cut_z_la, 4, 0, 1, 1)
 
         self.bottom_travel_z_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_travel_z_dsb.setObjectName(u"bottom_travel_z_dsb")
@@ -519,15 +519,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.bottom_travel_z_dsb, 5, 1, 1, 1)
 
-        self.bottom_xy_feed_rate_l = QLabel(self.bottom_page)
-        self.bottom_xy_feed_rate_l.setObjectName(u"bottom_xy_feed_rate_l")
+        self.bottom_xy_feed_rate_la = QLabel(self.bottom_page)
+        self.bottom_xy_feed_rate_la.setObjectName(u"bottom_xy_feed_rate_la")
 
-        self.gridLayout_3.addWidget(self.bottom_xy_feed_rate_l, 8, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_xy_feed_rate_la, 8, 0, 1, 1)
 
-        self.bottom_spindle_speed_l = QLabel(self.bottom_page)
-        self.bottom_spindle_speed_l.setObjectName(u"bottom_spindle_speed_l")
+        self.bottom_spindle_speed_la = QLabel(self.bottom_page)
+        self.bottom_spindle_speed_la.setObjectName(u"bottom_spindle_speed_la")
 
-        self.gridLayout_3.addWidget(self.bottom_spindle_speed_l, 6, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_spindle_speed_la, 6, 0, 1, 1)
 
         self.bottom_spindle_speed_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_spindle_speed_dsb.setObjectName(u"bottom_spindle_speed_dsb")
@@ -542,10 +542,10 @@ class Ui_MainWindow(object):
         self.profile_page.setObjectName(u"profile_page")
         self.gridLayout_4 = QGridLayout(self.profile_page)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.profile_depth_pass_l = QLabel(self.profile_page)
-        self.profile_depth_pass_l.setObjectName(u"profile_depth_pass_l")
+        self.profile_depth_pass_la = QLabel(self.profile_page)
+        self.profile_depth_pass_la.setObjectName(u"profile_depth_pass_la")
 
-        self.gridLayout_4.addWidget(self.profile_depth_pass_l, 3, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_depth_pass_la, 3, 1, 1, 1)
 
         self.profile_xy_feed_rate_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_xy_feed_rate_dsb.setObjectName(u"profile_xy_feed_rate_dsb")
@@ -579,15 +579,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_depth_pass_dsb, 3, 3, 1, 1)
 
-        self.profile_taps_layout_l = QLabel(self.profile_page)
-        self.profile_taps_layout_l.setObjectName(u"profile_taps_layout_l")
+        self.profile_taps_layout_la = QLabel(self.profile_page)
+        self.profile_taps_layout_la.setObjectName(u"profile_taps_layout_la")
 
-        self.gridLayout_4.addWidget(self.profile_taps_layout_l, 11, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_taps_layout_la, 11, 1, 1, 1)
 
-        self.profile_margin_l = QLabel(self.profile_page)
-        self.profile_margin_l.setObjectName(u"profile_margin_l")
+        self.profile_margin_la = QLabel(self.profile_page)
+        self.profile_margin_la.setObjectName(u"profile_margin_la")
 
-        self.gridLayout_4.addWidget(self.profile_margin_l, 1, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_margin_la, 1, 1, 1, 1)
 
         self.profile_tap_size_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_tap_size_dsb.setObjectName(u"profile_tap_size_dsb")
@@ -597,15 +597,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_tap_size_dsb, 12, 3, 1, 1)
 
-        self.profile_cut_z_l = QLabel(self.profile_page)
-        self.profile_cut_z_l.setObjectName(u"profile_cut_z_l")
+        self.profile_cut_z_la = QLabel(self.profile_page)
+        self.profile_cut_z_la.setObjectName(u"profile_cut_z_la")
 
-        self.gridLayout_4.addWidget(self.profile_cut_z_l, 5, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_cut_z_la, 5, 1, 1, 1)
 
-        self.profile_xy_feed_rate_l = QLabel(self.profile_page)
-        self.profile_xy_feed_rate_l.setObjectName(u"profile_xy_feed_rate_l")
+        self.profile_xy_feed_rate_la = QLabel(self.profile_page)
+        self.profile_xy_feed_rate_la.setObjectName(u"profile_xy_feed_rate_la")
 
-        self.gridLayout_4.addWidget(self.profile_xy_feed_rate_l, 9, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_xy_feed_rate_la, 9, 1, 1, 1)
 
         self.profile_z_feed_rate_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_z_feed_rate_dsb.setObjectName(u"profile_z_feed_rate_dsb")
@@ -620,10 +620,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_generate_job_pb, 16, 1, 1, 3)
 
-        self.profile_tool_diameter_l = QLabel(self.profile_page)
-        self.profile_tool_diameter_l.setObjectName(u"profile_tool_diameter_l")
+        self.profile_tool_diameter_la = QLabel(self.profile_page)
+        self.profile_tool_diameter_la.setObjectName(u"profile_tool_diameter_la")
 
-        self.gridLayout_4.addWidget(self.profile_tool_diameter_l, 0, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_tool_diameter_la, 0, 1, 1, 1)
 
         self.profile_multi_depth_chb = QCheckBox(self.profile_page)
         self.profile_multi_depth_chb.setObjectName(u"profile_multi_depth_chb")
@@ -633,10 +633,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_multi_depth_chb, 2, 3, 1, 1, Qt.AlignHCenter)
 
-        self.profile_z_feed_rate_l = QLabel(self.profile_page)
-        self.profile_z_feed_rate_l.setObjectName(u"profile_z_feed_rate_l")
+        self.profile_z_feed_rate_la = QLabel(self.profile_page)
+        self.profile_z_feed_rate_la.setObjectName(u"profile_z_feed_rate_la")
 
-        self.gridLayout_4.addWidget(self.profile_z_feed_rate_l, 10, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_z_feed_rate_la, 10, 1, 1, 1)
 
         self.profile_tool_diameter_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_tool_diameter_dsb.setObjectName(u"profile_tool_diameter_dsb")
@@ -644,19 +644,19 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_tool_diameter_dsb, 0, 3, 1, 1)
 
-        self.profile_tap_size_l = QLabel(self.profile_page)
-        self.profile_tap_size_l.setObjectName(u"profile_tap_size_l")
+        self.profile_tap_size_la = QLabel(self.profile_page)
+        self.profile_tap_size_la.setObjectName(u"profile_tap_size_la")
 
-        self.gridLayout_4.addWidget(self.profile_tap_size_l, 12, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_tap_size_la, 12, 1, 1, 1)
 
         self.profile_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.gridLayout_4.addItem(self.profile_vertical_spacer, 15, 1, 1, 3)
 
-        self.profile_travel_z_l = QLabel(self.profile_page)
-        self.profile_travel_z_l.setObjectName(u"profile_travel_z_l")
+        self.profile_travel_z_la = QLabel(self.profile_page)
+        self.profile_travel_z_la.setObjectName(u"profile_travel_z_la")
 
-        self.gridLayout_4.addWidget(self.profile_travel_z_l, 6, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_travel_z_la, 6, 1, 1, 1)
 
         self.profile_travel_z_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_travel_z_dsb.setObjectName(u"profile_travel_z_dsb")
@@ -671,15 +671,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_taps_layout_cb, 11, 3, 1, 1)
 
-        self.profile_multi_depth_l = QLabel(self.profile_page)
-        self.profile_multi_depth_l.setObjectName(u"profile_multi_depth_l")
+        self.profile_multi_depth_la = QLabel(self.profile_page)
+        self.profile_multi_depth_la.setObjectName(u"profile_multi_depth_la")
 
-        self.gridLayout_4.addWidget(self.profile_multi_depth_l, 2, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_multi_depth_la, 2, 1, 1, 1)
 
-        self.profile_spindle_speed_l = QLabel(self.profile_page)
-        self.profile_spindle_speed_l.setObjectName(u"profile_spindle_speed_l")
+        self.profile_spindle_speed_la = QLabel(self.profile_page)
+        self.profile_spindle_speed_la.setObjectName(u"profile_spindle_speed_la")
 
-        self.gridLayout_4.addWidget(self.profile_spindle_speed_l, 7, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_spindle_speed_la, 7, 1, 1, 1)
 
         self.profile_spindle_speed_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_spindle_speed_dsb.setObjectName(u"profile_spindle_speed_dsb")
@@ -689,15 +689,90 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_spindle_speed_dsb, 7, 3, 1, 1)
 
+        self.profile_mirror_la = QLabel(self.profile_page)
+        self.profile_mirror_la.setObjectName(u"profile_mirror_la")
+
+        self.gridLayout_4.addWidget(self.profile_mirror_la, 13, 1, 1, 1)
+
+        self.profile_mirror_chb = QCheckBox(self.profile_page)
+        self.profile_mirror_chb.setObjectName(u"profile_mirror_chb")
+        sizePolicy2.setHeightForWidth(self.profile_mirror_chb.sizePolicy().hasHeightForWidth())
+        self.profile_mirror_chb.setSizePolicy(sizePolicy2)
+        self.profile_mirror_chb.setMinimumSize(QSize(123, 0))
+
+        self.gridLayout_4.addWidget(self.profile_mirror_chb, 13, 3, 1, 1)
+
         self.jobs_sw.addWidget(self.profile_page)
         self.drill_page = QWidget()
         self.drill_page.setObjectName(u"drill_page")
         self.gridLayout_5 = QGridLayout(self.drill_page)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.drill_milling_tool_diameter_dsb = QDoubleSpinBox(self.drill_page)
+        self.drill_milling_tool_diameter_dsb.setObjectName(u"drill_milling_tool_diameter_dsb")
+        self.drill_milling_tool_diameter_dsb.setMinimum(0.010000000000000)
+
+        self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_dsb, 4, 2, 1, 1)
+
+        self.drill_travel_z_la = QLabel(self.drill_page)
+        self.drill_travel_z_la.setObjectName(u"drill_travel_z_la")
+
+        self.gridLayout_5.addWidget(self.drill_travel_z_la, 7, 1, 1, 1)
+
+        self.add_drill_tool_tb = QToolButton(self.drill_page)
+        self.add_drill_tool_tb.setObjectName(u"add_drill_tool_tb")
+
+        self.gridLayout_5.addWidget(self.add_drill_tool_tb, 2, 1, 1, 1, Qt.AlignHCenter)
+
+        self.drill_z_feed_rate_la = QLabel(self.drill_page)
+        self.drill_z_feed_rate_la.setObjectName(u"drill_z_feed_rate_la")
+
+        self.gridLayout_5.addWidget(self.drill_z_feed_rate_la, 12, 1, 1, 1)
+
+        self.drill_xy_feed_rate_la = QLabel(self.drill_page)
+        self.drill_xy_feed_rate_la.setObjectName(u"drill_xy_feed_rate_la")
+
+        self.gridLayout_5.addWidget(self.drill_xy_feed_rate_la, 10, 1, 1, 1)
+
+        self.drill_cut_z_la = QLabel(self.drill_page)
+        self.drill_cut_z_la.setObjectName(u"drill_cut_z_la")
+
+        self.gridLayout_5.addWidget(self.drill_cut_z_la, 6, 1, 1, 1)
+
+        self.drill_travel_z_dsb = QDoubleSpinBox(self.drill_page)
+        self.drill_travel_z_dsb.setObjectName(u"drill_travel_z_dsb")
+        self.drill_travel_z_dsb.setDecimals(2)
+        self.drill_travel_z_dsb.setMinimum(-9999.000000000000000)
+        self.drill_travel_z_dsb.setMaximum(9999.000000000000000)
+
+        self.gridLayout_5.addWidget(self.drill_travel_z_dsb, 7, 2, 1, 1)
+
+        self.drill_milling_tool_la = QLabel(self.drill_page)
+        self.drill_milling_tool_la.setObjectName(u"drill_milling_tool_la")
+
+        self.gridLayout_5.addWidget(self.drill_milling_tool_la, 3, 1, 1, 1)
+
         self.remove_drill_tool_tb = QToolButton(self.drill_page)
         self.remove_drill_tool_tb.setObjectName(u"remove_drill_tool_tb")
 
         self.gridLayout_5.addWidget(self.remove_drill_tool_tb, 2, 2, 1, 1, Qt.AlignHCenter)
+
+        self.drill_milling_tool_chb = QCheckBox(self.drill_page)
+        self.drill_milling_tool_chb.setObjectName(u"drill_milling_tool_chb")
+
+        self.gridLayout_5.addWidget(self.drill_milling_tool_chb, 3, 2, 1, 1)
+
+        self.drill_optimization_la = QLabel(self.drill_page)
+        self.drill_optimization_la.setObjectName(u"drill_optimization_la")
+
+        self.gridLayout_5.addWidget(self.drill_optimization_la, 13, 1, 1, 1)
+
+        self.drill_z_feed_rate_dsb = QDoubleSpinBox(self.drill_page)
+        self.drill_z_feed_rate_dsb.setObjectName(u"drill_z_feed_rate_dsb")
+        self.drill_z_feed_rate_dsb.setDecimals(2)
+        self.drill_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.drill_z_feed_rate_dsb.setMaximum(9999.000000000000000)
+
+        self.gridLayout_5.addWidget(self.drill_z_feed_rate_dsb, 12, 2, 1, 1)
 
         self.drill_tw = QTableWidget(self.drill_page)
         if (self.drill_tw.columnCount() < 2):
@@ -712,54 +787,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_tw, 0, 1, 1, 2, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.drill_travel_z_dsb = QDoubleSpinBox(self.drill_page)
-        self.drill_travel_z_dsb.setObjectName(u"drill_travel_z_dsb")
-        self.drill_travel_z_dsb.setDecimals(2)
-        self.drill_travel_z_dsb.setMinimum(-9999.000000000000000)
-        self.drill_travel_z_dsb.setMaximum(9999.000000000000000)
+        self.drill_optimization_chb = QCheckBox(self.drill_page)
+        self.drill_optimization_chb.setObjectName(u"drill_optimization_chb")
 
-        self.gridLayout_5.addWidget(self.drill_travel_z_dsb, 7, 2, 1, 1)
-
-        self.drill_z_feed_rate_dsb = QDoubleSpinBox(self.drill_page)
-        self.drill_z_feed_rate_dsb.setObjectName(u"drill_z_feed_rate_dsb")
-        self.drill_z_feed_rate_dsb.setDecimals(2)
-        self.drill_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
-        self.drill_z_feed_rate_dsb.setMaximum(9999.000000000000000)
-
-        self.gridLayout_5.addWidget(self.drill_z_feed_rate_dsb, 12, 2, 1, 1)
-
-        self.add_drill_tool_tb = QToolButton(self.drill_page)
-        self.add_drill_tool_tb.setObjectName(u"add_drill_tool_tb")
-
-        self.gridLayout_5.addWidget(self.add_drill_tool_tb, 2, 1, 1, 1, Qt.AlignHCenter)
-
-        self.drill_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_5.addItem(self.drill_vertical_spacer, 14, 1, 1, 2)
-
-        self.drill_generate_job_pb = QPushButton(self.drill_page)
-        self.drill_generate_job_pb.setObjectName(u"drill_generate_job_pb")
-
-        self.gridLayout_5.addWidget(self.drill_generate_job_pb, 15, 1, 1, 2)
-
-        self.drill_xy_feed_rate_dsb = QDoubleSpinBox(self.drill_page)
-        self.drill_xy_feed_rate_dsb.setObjectName(u"drill_xy_feed_rate_dsb")
-        self.drill_xy_feed_rate_dsb.setDecimals(2)
-        self.drill_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
-        self.drill_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
-
-        self.gridLayout_5.addWidget(self.drill_xy_feed_rate_dsb, 10, 2, 1, 1)
-
-        self.drill_xy_feed_rate_l = QLabel(self.drill_page)
-        self.drill_xy_feed_rate_l.setObjectName(u"drill_xy_feed_rate_l")
-
-        self.gridLayout_5.addWidget(self.drill_xy_feed_rate_l, 10, 1, 1, 1)
-
-        self.drill_milling_tool_diameter_dsb = QDoubleSpinBox(self.drill_page)
-        self.drill_milling_tool_diameter_dsb.setObjectName(u"drill_milling_tool_diameter_dsb")
-        self.drill_milling_tool_diameter_dsb.setMinimum(0.010000000000000)
-
-        self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_dsb, 4, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.drill_optimization_chb, 13, 2, 1, 1)
 
         self.drill_cut_z_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_cut_z_dsb.setObjectName(u"drill_cut_z_dsb")
@@ -769,31 +800,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_cut_z_dsb, 6, 2, 1, 1)
 
-        self.drill_travel_z_l = QLabel(self.drill_page)
-        self.drill_travel_z_l.setObjectName(u"drill_travel_z_l")
-
-        self.gridLayout_5.addWidget(self.drill_travel_z_l, 7, 1, 1, 1)
-
-        self.drill_milling_tool_l = QLabel(self.drill_page)
-        self.drill_milling_tool_l.setObjectName(u"drill_milling_tool_l")
-
-        self.gridLayout_5.addWidget(self.drill_milling_tool_l, 3, 1, 1, 1)
-
-        self.drill_z_feed_rate_l = QLabel(self.drill_page)
-        self.drill_z_feed_rate_l.setObjectName(u"drill_z_feed_rate_l")
-
-        self.gridLayout_5.addWidget(self.drill_z_feed_rate_l, 12, 1, 1, 1)
-
-        self.drill_spindle_speed_l = QLabel(self.drill_page)
-        self.drill_spindle_speed_l.setObjectName(u"drill_spindle_speed_l")
-
-        self.gridLayout_5.addWidget(self.drill_spindle_speed_l, 8, 1, 1, 1)
-
-        self.drill_cut_z_l = QLabel(self.drill_page)
-        self.drill_cut_z_l.setObjectName(u"drill_cut_z_l")
-
-        self.gridLayout_5.addWidget(self.drill_cut_z_l, 6, 1, 1, 1)
-
         self.drill_spindle_speed_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_spindle_speed_dsb.setObjectName(u"drill_spindle_speed_dsb")
         self.drill_spindle_speed_dsb.setDecimals(2)
@@ -802,40 +808,60 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_spindle_speed_dsb, 8, 2, 1, 1)
 
-        self.drill_milling_tool_chb = QCheckBox(self.drill_page)
-        self.drill_milling_tool_chb.setObjectName(u"drill_milling_tool_chb")
+        self.drill_spindle_speed_la = QLabel(self.drill_page)
+        self.drill_spindle_speed_la.setObjectName(u"drill_spindle_speed_la")
 
-        self.gridLayout_5.addWidget(self.drill_milling_tool_chb, 3, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.drill_spindle_speed_la, 8, 1, 1, 1)
 
-        self.drill_milling_tool_diameter_l = QLabel(self.drill_page)
-        self.drill_milling_tool_diameter_l.setObjectName(u"drill_milling_tool_diameter_l")
+        self.drill_xy_feed_rate_dsb = QDoubleSpinBox(self.drill_page)
+        self.drill_xy_feed_rate_dsb.setObjectName(u"drill_xy_feed_rate_dsb")
+        self.drill_xy_feed_rate_dsb.setDecimals(2)
+        self.drill_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.drill_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
 
-        self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_l, 4, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.drill_xy_feed_rate_dsb, 10, 2, 1, 1)
 
-        self.drill_optimization_l = QLabel(self.drill_page)
-        self.drill_optimization_l.setObjectName(u"drill_optimization_l")
+        self.drill_milling_tool_diameter_la = QLabel(self.drill_page)
+        self.drill_milling_tool_diameter_la.setObjectName(u"drill_milling_tool_diameter_la")
 
-        self.gridLayout_5.addWidget(self.drill_optimization_l, 13, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_la, 4, 1, 1, 1)
 
-        self.drill_optimization_chb = QCheckBox(self.drill_page)
-        self.drill_optimization_chb.setObjectName(u"drill_optimization_chb")
+        self.drill_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.gridLayout_5.addWidget(self.drill_optimization_chb, 13, 2, 1, 1)
+        self.gridLayout_5.addItem(self.drill_vertical_spacer, 15, 1, 1, 2)
+
+        self.drill_generate_job_pb = QPushButton(self.drill_page)
+        self.drill_generate_job_pb.setObjectName(u"drill_generate_job_pb")
+
+        self.gridLayout_5.addWidget(self.drill_generate_job_pb, 16, 1, 1, 2)
+
+        self.drill_mirror_la = QLabel(self.drill_page)
+        self.drill_mirror_la.setObjectName(u"drill_mirror_la")
+
+        self.gridLayout_5.addWidget(self.drill_mirror_la, 14, 1, 1, 1)
+
+        self.drill_mirror_chb = QCheckBox(self.drill_page)
+        self.drill_mirror_chb.setObjectName(u"drill_mirror_chb")
+        sizePolicy2.setHeightForWidth(self.drill_mirror_chb.sizePolicy().hasHeightForWidth())
+        self.drill_mirror_chb.setSizePolicy(sizePolicy2)
+        self.drill_mirror_chb.setMinimumSize(QSize(123, 0))
+
+        self.gridLayout_5.addWidget(self.drill_mirror_chb, 14, 2, 1, 1)
 
         self.jobs_sw.addWidget(self.drill_page)
         self.nc_area_top_page = QWidget()
         self.nc_area_top_page.setObjectName(u"nc_area_top_page")
         self.gridLayout_6 = QGridLayout(self.nc_area_top_page)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.nc_top_overlap_l = QLabel(self.nc_area_top_page)
-        self.nc_top_overlap_l.setObjectName(u"nc_top_overlap_l")
+        self.nc_top_overlap_la = QLabel(self.nc_area_top_page)
+        self.nc_top_overlap_la.setObjectName(u"nc_top_overlap_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_overlap_l, 1, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_overlap_la, 1, 0, 1, 1)
 
-        self.nc_top_cut_z_l = QLabel(self.nc_area_top_page)
-        self.nc_top_cut_z_l.setObjectName(u"nc_top_cut_z_l")
+        self.nc_top_cut_z_la = QLabel(self.nc_area_top_page)
+        self.nc_top_cut_z_la.setObjectName(u"nc_top_cut_z_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_cut_z_l, 2, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_cut_z_la, 2, 0, 1, 1)
 
         self.nc_top_xy_feed_rate_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_xy_feed_rate_dsb.setObjectName(u"nc_top_xy_feed_rate_dsb")
@@ -853,15 +879,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.nc_top_travel_z_dsb, 3, 1, 1, 1)
 
-        self.nc_top_spindle_speed_l = QLabel(self.nc_area_top_page)
-        self.nc_top_spindle_speed_l.setObjectName(u"nc_top_spindle_speed_l")
+        self.nc_top_spindle_speed_la = QLabel(self.nc_area_top_page)
+        self.nc_top_spindle_speed_la.setObjectName(u"nc_top_spindle_speed_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_spindle_speed_l, 4, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_spindle_speed_la, 4, 0, 1, 1)
 
-        self.nc_top_tool_diameter_l = QLabel(self.nc_area_top_page)
-        self.nc_top_tool_diameter_l.setObjectName(u"nc_top_tool_diameter_l")
+        self.nc_top_tool_diameter_la = QLabel(self.nc_area_top_page)
+        self.nc_top_tool_diameter_la.setObjectName(u"nc_top_tool_diameter_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_tool_diameter_l, 0, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_tool_diameter_la, 0, 0, 1, 1)
 
         self.nc_top_cut_z_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_cut_z_dsb.setObjectName(u"nc_top_cut_z_dsb")
@@ -871,15 +897,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.nc_top_cut_z_dsb, 2, 1, 1, 1)
 
-        self.nc_top_travel_z_l = QLabel(self.nc_area_top_page)
-        self.nc_top_travel_z_l.setObjectName(u"nc_top_travel_z_l")
+        self.nc_top_travel_z_la = QLabel(self.nc_area_top_page)
+        self.nc_top_travel_z_la.setObjectName(u"nc_top_travel_z_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_travel_z_l, 3, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_travel_z_la, 3, 0, 1, 1)
 
-        self.nc_top_z_feed_rate_l = QLabel(self.nc_area_top_page)
-        self.nc_top_z_feed_rate_l.setObjectName(u"nc_top_z_feed_rate_l")
+        self.nc_top_z_feed_rate_la = QLabel(self.nc_area_top_page)
+        self.nc_top_z_feed_rate_la.setObjectName(u"nc_top_z_feed_rate_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_z_feed_rate_l, 6, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_z_feed_rate_la, 6, 0, 1, 1)
 
         self.nc_top_tool_diameter_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_tool_diameter_dsb.setObjectName(u"nc_top_tool_diameter_dsb")
@@ -903,10 +929,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.nc_top_overlap_dsb, 1, 1, 1, 1)
 
-        self.nc_top_xy_feed_rate_l = QLabel(self.nc_area_top_page)
-        self.nc_top_xy_feed_rate_l.setObjectName(u"nc_top_xy_feed_rate_l")
+        self.nc_top_xy_feed_rate_la = QLabel(self.nc_area_top_page)
+        self.nc_top_xy_feed_rate_la.setObjectName(u"nc_top_xy_feed_rate_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_xy_feed_rate_l, 5, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_xy_feed_rate_la, 5, 0, 1, 1)
 
         self.nc_top_z_feed_rate_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_z_feed_rate_dsb.setObjectName(u"nc_top_z_feed_rate_dsb")
@@ -930,20 +956,20 @@ class Ui_MainWindow(object):
         self.nc_area_bottom_page.setObjectName(u"nc_area_bottom_page")
         self.gridLayout_7 = QGridLayout(self.nc_area_bottom_page)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.nc_bottom_travel_z_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_travel_z_l.setObjectName(u"nc_bottom_travel_z_l")
+        self.nc_bottom_travel_z_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_travel_z_la.setObjectName(u"nc_bottom_travel_z_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_travel_z_l, 3, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_travel_z_la, 3, 0, 1, 1)
 
         self.nc_bottom_generate_pb = QPushButton(self.nc_area_bottom_page)
         self.nc_bottom_generate_pb.setObjectName(u"nc_bottom_generate_pb")
 
         self.gridLayout_7.addWidget(self.nc_bottom_generate_pb, 9, 0, 1, 2)
 
-        self.nc_bottom_spindle_speed_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_spindle_speed_l.setObjectName(u"nc_bottom_spindle_speed_l")
+        self.nc_bottom_spindle_speed_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_spindle_speed_la.setObjectName(u"nc_bottom_spindle_speed_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_spindle_speed_l, 4, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_spindle_speed_la, 4, 0, 1, 1)
 
         self.nc_bottom_tool_diameter_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_tool_diameter_dsb.setObjectName(u"nc_bottom_tool_diameter_dsb")
@@ -967,10 +993,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.addWidget(self.nc_bottom_cut_z_dsb, 2, 1, 1, 1)
 
-        self.nc_bottom_cut_z_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_cut_z_l.setObjectName(u"nc_bottom_cut_z_l")
+        self.nc_bottom_cut_z_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_cut_z_la.setObjectName(u"nc_bottom_cut_z_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_cut_z_l, 2, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_cut_z_la, 2, 0, 1, 1)
 
         self.nc_bottom_z_feed_rate_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_z_feed_rate_dsb.setObjectName(u"nc_bottom_z_feed_rate_dsb")
@@ -980,15 +1006,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.addWidget(self.nc_bottom_z_feed_rate_dsb, 7, 1, 1, 1)
 
-        self.nc_bottom_overlap_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_overlap_l.setObjectName(u"nc_bottom_overlap_l")
+        self.nc_bottom_overlap_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_overlap_la.setObjectName(u"nc_bottom_overlap_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_overlap_l, 1, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_overlap_la, 1, 0, 1, 1)
 
-        self.nc_bottom_tool_diameter_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_tool_diameter_l.setObjectName(u"nc_bottom_tool_diameter_l")
+        self.nc_bottom_tool_diameter_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_tool_diameter_la.setObjectName(u"nc_bottom_tool_diameter_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_tool_diameter_l, 0, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_tool_diameter_la, 0, 0, 1, 1)
 
         self.nc_bottom_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -1018,15 +1044,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.addWidget(self.nc_bottom_xy_feed_rate_dsb, 6, 1, 1, 1)
 
-        self.nc_bottom_z_feed_rate_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_z_feed_rate_l.setObjectName(u"nc_bottom_z_feed_rate_l")
+        self.nc_bottom_z_feed_rate_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_z_feed_rate_la.setObjectName(u"nc_bottom_z_feed_rate_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_z_feed_rate_l, 7, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_z_feed_rate_la, 7, 0, 1, 1)
 
-        self.nc_bottom_xy_feed_rate_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_xy_feed_rate_l.setObjectName(u"nc_bottom_xy_feed_rate_l")
+        self.nc_bottom_xy_feed_rate_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_xy_feed_rate_la.setObjectName(u"nc_bottom_xy_feed_rate_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_xy_feed_rate_l, 6, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_xy_feed_rate_la, 6, 0, 1, 1)
 
         self.jobs_sw.addWidget(self.nc_area_bottom_page)
 
@@ -2524,46 +2550,16 @@ class Ui_MainWindow(object):
         self.gridLayout_9.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
 
         self.settings_sub_tab.addTab(self.application_settings_tab, "")
-        self.machine_settings_tab = QWidget()
-        self.machine_settings_tab.setObjectName(u"machine_settings_tab")
-        self.gridLayout_13 = QGridLayout(self.machine_settings_tab)
+        self.jobs_machine_settings_tab = QWidget()
+        self.jobs_machine_settings_tab.setObjectName(u"jobs_machine_settings_tab")
+        self.gridLayout_13 = QGridLayout(self.jobs_machine_settings_tab)
         self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.line_7 = QFrame(self.machine_settings_tab)
-        self.line_7.setObjectName(u"line_7")
-        self.line_7.setFrameShape(QFrame.HLine)
-        self.line_7.setFrameShadow(QFrame.Sunken)
+        self.line_8 = QFrame(self.jobs_machine_settings_tab)
+        self.line_8.setObjectName(u"line_8")
+        self.line_8.setFrameShape(QFrame.HLine)
+        self.line_8.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_13.addWidget(self.line_7, 3, 0, 1, 1)
-
-        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_13.addItem(self.verticalSpacer_4, 4, 0, 1, 1)
-
-        self.line_10 = QFrame(self.machine_settings_tab)
-        self.line_10.setObjectName(u"line_10")
-        self.line_10.setFrameShape(QFrame.HLine)
-        self.line_10.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_13.addWidget(self.line_10, 7, 0, 1, 1)
-
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridLayout_13.addItem(self.horizontalSpacer_4, 2, 1, 1, 1)
-
-        self.line_9 = QFrame(self.machine_settings_tab)
-        self.line_9.setObjectName(u"line_9")
-        self.line_9.setFrameShape(QFrame.HLine)
-        self.line_9.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_13.addWidget(self.line_9, 5, 0, 1, 1)
-
-        self.feedrates_section_la = QLabel(self.machine_settings_tab)
-        self.feedrates_section_la.setObjectName(u"feedrates_section_la")
-        font3 = QFont()
-        font3.setPointSize(16)
-        self.feedrates_section_la.setFont(font3)
-
-        self.gridLayout_13.addWidget(self.feedrates_section_la, 6, 0, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
+        self.gridLayout_13.addWidget(self.line_8, 1, 0, 1, 1)
 
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -2571,7 +2567,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
         self.gridLayout_14 = QGridLayout()
         self.gridLayout_14.setObjectName(u"gridLayout_14")
-        self.tool_probe_y_wpos_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.tool_probe_y_wpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.tool_probe_y_wpos_dsb.setObjectName(u"tool_probe_y_wpos_dsb")
         sizePolicy3.setHeightForWidth(self.tool_probe_y_wpos_dsb.sizePolicy().hasHeightForWidth())
         self.tool_probe_y_wpos_dsb.setSizePolicy(sizePolicy3)
@@ -2586,7 +2582,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.tool_probe_y_wpos_dsb, 2, 2, 1, 1)
 
-        self.tool_probe_y_mpos_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.tool_probe_y_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.tool_probe_y_mpos_dsb.setObjectName(u"tool_probe_y_mpos_dsb")
         sizePolicy3.setHeightForWidth(self.tool_probe_y_mpos_dsb.sizePolicy().hasHeightForWidth())
         self.tool_probe_y_mpos_dsb.setSizePolicy(sizePolicy3)
@@ -2601,7 +2597,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.tool_probe_y_mpos_dsb, 1, 2, 1, 1)
 
-        self.x_la = QLabel(self.machine_settings_tab)
+        self.x_la = QLabel(self.jobs_machine_settings_tab)
         self.x_la.setObjectName(u"x_la")
         sizePolicy10.setHeightForWidth(self.x_la.sizePolicy().hasHeightForWidth())
         self.x_la.setSizePolicy(sizePolicy10)
@@ -2611,7 +2607,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.x_la, 0, 1, 1, 1, Qt.AlignHCenter)
 
-        self.y_la = QLabel(self.machine_settings_tab)
+        self.y_la = QLabel(self.jobs_machine_settings_tab)
         self.y_la.setObjectName(u"y_la")
         sizePolicy10.setHeightForWidth(self.y_la.sizePolicy().hasHeightForWidth())
         self.y_la.setSizePolicy(sizePolicy10)
@@ -2621,7 +2617,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.y_la, 0, 2, 1, 1, Qt.AlignHCenter)
 
-        self.tool_probe_z_limit_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.tool_probe_z_limit_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.tool_probe_z_limit_dsb.setObjectName(u"tool_probe_z_limit_dsb")
         sizePolicy3.setHeightForWidth(self.tool_probe_z_limit_dsb.sizePolicy().hasHeightForWidth())
         self.tool_probe_z_limit_dsb.setSizePolicy(sizePolicy3)
@@ -2637,7 +2633,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.tool_probe_z_limit_dsb, 3, 3, 1, 1)
 
-        self.tool_probe_x_wpos_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.tool_probe_x_wpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.tool_probe_x_wpos_dsb.setObjectName(u"tool_probe_x_wpos_dsb")
         sizePolicy3.setHeightForWidth(self.tool_probe_x_wpos_dsb.sizePolicy().hasHeightForWidth())
         self.tool_probe_x_wpos_dsb.setSizePolicy(sizePolicy3)
@@ -2652,7 +2648,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.tool_probe_x_wpos_dsb, 2, 1, 1, 1)
 
-        self.z_la = QLabel(self.machine_settings_tab)
+        self.z_la = QLabel(self.jobs_machine_settings_tab)
         self.z_la.setObjectName(u"z_la")
         sizePolicy10.setHeightForWidth(self.z_la.sizePolicy().hasHeightForWidth())
         self.z_la.setSizePolicy(sizePolicy10)
@@ -2662,7 +2658,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.z_la, 0, 3, 1, 1, Qt.AlignHCenter)
 
-        self.tool_probe_x_mpos_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.tool_probe_x_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.tool_probe_x_mpos_dsb.setObjectName(u"tool_probe_x_mpos_dsb")
         sizePolicy3.setHeightForWidth(self.tool_probe_x_mpos_dsb.sizePolicy().hasHeightForWidth())
         self.tool_probe_x_mpos_dsb.setSizePolicy(sizePolicy3)
@@ -2677,7 +2673,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.tool_probe_x_mpos_dsb, 1, 1, 1, 1)
 
-        self.tool_probe_wpos_la = QLabel(self.machine_settings_tab)
+        self.tool_probe_wpos_la = QLabel(self.jobs_machine_settings_tab)
         self.tool_probe_wpos_la.setObjectName(u"tool_probe_wpos_la")
         sizePolicy3.setHeightForWidth(self.tool_probe_wpos_la.sizePolicy().hasHeightForWidth())
         self.tool_probe_wpos_la.setSizePolicy(sizePolicy3)
@@ -2688,7 +2684,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.tool_probe_wpos_la, 2, 0, 1, 1)
 
-        self.tool_probe_z_mpos_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.tool_probe_z_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.tool_probe_z_mpos_dsb.setObjectName(u"tool_probe_z_mpos_dsb")
         sizePolicy3.setHeightForWidth(self.tool_probe_z_mpos_dsb.sizePolicy().hasHeightForWidth())
         self.tool_probe_z_mpos_dsb.setSizePolicy(sizePolicy3)
@@ -2703,7 +2699,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.tool_probe_z_mpos_dsb, 1, 3, 1, 1)
 
-        self.tool_probe_mpos_la = QLabel(self.machine_settings_tab)
+        self.tool_probe_mpos_la = QLabel(self.jobs_machine_settings_tab)
         self.tool_probe_mpos_la.setObjectName(u"tool_probe_mpos_la")
         sizePolicy3.setHeightForWidth(self.tool_probe_mpos_la.sizePolicy().hasHeightForWidth())
         self.tool_probe_mpos_la.setSizePolicy(sizePolicy3)
@@ -2714,7 +2710,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.tool_probe_mpos_la, 1, 0, 1, 1)
 
-        self.tool_probe_z_wpos_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.tool_probe_z_wpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.tool_probe_z_wpos_dsb.setObjectName(u"tool_probe_z_wpos_dsb")
         sizePolicy3.setHeightForWidth(self.tool_probe_z_wpos_dsb.sizePolicy().hasHeightForWidth())
         self.tool_probe_z_wpos_dsb.setSizePolicy(sizePolicy3)
@@ -2729,7 +2725,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.tool_probe_z_wpos_dsb, 2, 3, 1, 1)
 
-        self.tool_probe_z_limit_la = QLabel(self.machine_settings_tab)
+        self.tool_probe_z_limit_la = QLabel(self.jobs_machine_settings_tab)
         self.tool_probe_z_limit_la.setObjectName(u"tool_probe_z_limit_la")
         sizePolicy3.setHeightForWidth(self.tool_probe_z_limit_la.sizePolicy().hasHeightForWidth())
         self.tool_probe_z_limit_la.setSizePolicy(sizePolicy3)
@@ -2740,12 +2736,12 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.tool_probe_z_limit_la, 3, 0, 1, 1)
 
-        self.tool_probe_wm_pos_chb = QCheckBox(self.machine_settings_tab)
+        self.tool_probe_wm_pos_chb = QCheckBox(self.jobs_machine_settings_tab)
         self.tool_probe_wm_pos_chb.setObjectName(u"tool_probe_wm_pos_chb")
 
         self.gridLayout_14.addWidget(self.tool_probe_wm_pos_chb, 1, 4, 1, 1, Qt.AlignHCenter)
 
-        self.get_tool_probe_pb = QPushButton(self.machine_settings_tab)
+        self.get_tool_probe_pb = QPushButton(self.jobs_machine_settings_tab)
         self.get_tool_probe_pb.setObjectName(u"get_tool_probe_pb")
         sizePolicy10.setHeightForWidth(self.get_tool_probe_pb.sizePolicy().hasHeightForWidth())
         self.get_tool_probe_pb.setSizePolicy(sizePolicy10)
@@ -2754,13 +2750,18 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.get_tool_probe_pb, 2, 4, 1, 1)
 
+        self.checkBox = QCheckBox(self.jobs_machine_settings_tab)
+        self.checkBox.setObjectName(u"checkBox")
+
+        self.gridLayout_14.addWidget(self.checkBox, 3, 4, 1, 1, Qt.AlignHCenter)
+
 
         self.horizontalLayout_13.addLayout(self.gridLayout_14)
 
 
         self.verticalLayout_5.addLayout(self.horizontalLayout_13)
 
-        self.line_6 = QFrame(self.machine_settings_tab)
+        self.line_6 = QFrame(self.jobs_machine_settings_tab)
         self.line_6.setObjectName(u"line_6")
         self.line_6.setFrameShape(QFrame.HLine)
         self.line_6.setFrameShadow(QFrame.Sunken)
@@ -2771,7 +2772,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
         self.gridLayout_15 = QGridLayout()
         self.gridLayout_15.setObjectName(u"gridLayout_15")
-        self.tool_change_z_mpos_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.tool_change_z_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.tool_change_z_mpos_dsb.setObjectName(u"tool_change_z_mpos_dsb")
         sizePolicy3.setHeightForWidth(self.tool_change_z_mpos_dsb.sizePolicy().hasHeightForWidth())
         self.tool_change_z_mpos_dsb.setSizePolicy(sizePolicy3)
@@ -2787,7 +2788,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_15.addWidget(self.tool_change_z_mpos_dsb, 0, 4, 1, 1)
 
-        self.tool_change_y_mpos_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.tool_change_y_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.tool_change_y_mpos_dsb.setObjectName(u"tool_change_y_mpos_dsb")
         sizePolicy3.setHeightForWidth(self.tool_change_y_mpos_dsb.sizePolicy().hasHeightForWidth())
         self.tool_change_y_mpos_dsb.setSizePolicy(sizePolicy3)
@@ -2803,7 +2804,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_15.addWidget(self.tool_change_y_mpos_dsb, 0, 2, 1, 1)
 
-        self.tool_change_x_mpos_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.tool_change_x_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.tool_change_x_mpos_dsb.setObjectName(u"tool_change_x_mpos_dsb")
         sizePolicy3.setHeightForWidth(self.tool_change_x_mpos_dsb.sizePolicy().hasHeightForWidth())
         self.tool_change_x_mpos_dsb.setSizePolicy(sizePolicy3)
@@ -2819,7 +2820,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_15.addWidget(self.tool_change_x_mpos_dsb, 0, 1, 1, 1)
 
-        self.tool_change_la = QLabel(self.machine_settings_tab)
+        self.tool_change_la = QLabel(self.jobs_machine_settings_tab)
         self.tool_change_la.setObjectName(u"tool_change_la")
         sizePolicy3.setHeightForWidth(self.tool_change_la.sizePolicy().hasHeightForWidth())
         self.tool_change_la.setSizePolicy(sizePolicy3)
@@ -2830,7 +2831,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_15.addWidget(self.tool_change_la, 0, 0, 1, 1)
 
-        self.get_tool_change_pb = QPushButton(self.machine_settings_tab)
+        self.get_tool_change_pb = QPushButton(self.jobs_machine_settings_tab)
         self.get_tool_change_pb.setObjectName(u"get_tool_change_pb")
         sizePolicy10.setHeightForWidth(self.get_tool_change_pb.sizePolicy().hasHeightForWidth())
         self.get_tool_change_pb.setSizePolicy(sizePolicy10)
@@ -2848,26 +2849,43 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addLayout(self.verticalLayout_5, 2, 0, 1, 1)
 
-        self.line_8 = QFrame(self.machine_settings_tab)
-        self.line_8.setObjectName(u"line_8")
-        self.line_8.setFrameShape(QFrame.HLine)
-        self.line_8.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_13.addWidget(self.line_8, 1, 0, 1, 1)
-
-        self.tool_change_section_la = QLabel(self.machine_settings_tab)
+        self.tool_change_section_la = QLabel(self.jobs_machine_settings_tab)
         self.tool_change_section_la.setObjectName(u"tool_change_section_la")
+        font3 = QFont()
+        font3.setPointSize(16)
         self.tool_change_section_la.setFont(font3)
 
         self.gridLayout_13.addWidget(self.tool_change_section_la, 0, 0, 1, 1, Qt.AlignHCenter)
+
+        self.line_10 = QFrame(self.jobs_machine_settings_tab)
+        self.line_10.setObjectName(u"line_10")
+        self.line_10.setFrameShape(QFrame.HLine)
+        self.line_10.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_10, 7, 0, 1, 1)
 
         self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.gridLayout_13.addItem(self.verticalSpacer_3, 9, 0, 1, 1)
 
+        self.line_9 = QFrame(self.jobs_machine_settings_tab)
+        self.line_9.setObjectName(u"line_9")
+        self.line_9.setFrameShape(QFrame.HLine)
+        self.line_9.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_9, 5, 0, 1, 1)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_13.addItem(self.verticalSpacer_4, 4, 0, 1, 1)
+
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_13.addItem(self.horizontalSpacer_4, 2, 1, 1, 1)
+
         self.gridLayout_19 = QGridLayout()
         self.gridLayout_19.setObjectName(u"gridLayout_19")
-        self.feedrate_z_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.feedrate_z_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.feedrate_z_dsb.setObjectName(u"feedrate_z_dsb")
         self.feedrate_z_dsb.setMinimumSize(QSize(252, 0))
         self.feedrate_z_dsb.setMaximumSize(QSize(252, 16777215))
@@ -2880,7 +2898,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_19.addWidget(self.feedrate_z_dsb, 1, 1, 1, 1)
 
-        self.z_feedrate_la = QLabel(self.machine_settings_tab)
+        self.z_feedrate_la = QLabel(self.jobs_machine_settings_tab)
         self.z_feedrate_la.setObjectName(u"z_feedrate_la")
         sizePolicy13 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         sizePolicy13.setHorizontalStretch(0)
@@ -2894,7 +2912,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_19.addWidget(self.z_feedrate_la, 1, 0, 1, 1)
 
-        self.xy_feedrate_la = QLabel(self.machine_settings_tab)
+        self.xy_feedrate_la = QLabel(self.jobs_machine_settings_tab)
         self.xy_feedrate_la.setObjectName(u"xy_feedrate_la")
         sizePolicy3.setHeightForWidth(self.xy_feedrate_la.sizePolicy().hasHeightForWidth())
         self.xy_feedrate_la.setSizePolicy(sizePolicy3)
@@ -2905,7 +2923,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_19.addWidget(self.xy_feedrate_la, 0, 0, 1, 1)
 
-        self.feedrate_xy_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.feedrate_xy_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.feedrate_xy_dsb.setObjectName(u"feedrate_xy_dsb")
         sizePolicy3.setHeightForWidth(self.feedrate_xy_dsb.sizePolicy().hasHeightForWidth())
         self.feedrate_xy_dsb.setSizePolicy(sizePolicy3)
@@ -2920,7 +2938,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_19.addWidget(self.feedrate_xy_dsb, 0, 1, 1, 1)
 
-        self.feedrate_probe_dsb = QDoubleSpinBox(self.machine_settings_tab)
+        self.feedrate_probe_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
         self.feedrate_probe_dsb.setObjectName(u"feedrate_probe_dsb")
         self.feedrate_probe_dsb.setMinimumSize(QSize(252, 0))
         self.feedrate_probe_dsb.setMaximumSize(QSize(252, 16777215))
@@ -2933,7 +2951,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_19.addWidget(self.feedrate_probe_dsb, 2, 1, 1, 1)
 
-        self.probe_feedrate_la = QLabel(self.machine_settings_tab)
+        self.probe_feedrate_la = QLabel(self.jobs_machine_settings_tab)
         self.probe_feedrate_la.setObjectName(u"probe_feedrate_la")
         sizePolicy3.setHeightForWidth(self.probe_feedrate_la.sizePolicy().hasHeightForWidth())
         self.probe_feedrate_la.setSizePolicy(sizePolicy3)
@@ -2959,7 +2977,20 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addLayout(self.gridLayout_19, 8, 0, 1, 1)
 
-        self.settings_sub_tab.addTab(self.machine_settings_tab, "")
+        self.line_7 = QFrame(self.jobs_machine_settings_tab)
+        self.line_7.setObjectName(u"line_7")
+        self.line_7.setFrameShape(QFrame.HLine)
+        self.line_7.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_7, 3, 0, 1, 1)
+
+        self.feedrates_section_la = QLabel(self.jobs_machine_settings_tab)
+        self.feedrates_section_la.setObjectName(u"feedrates_section_la")
+        self.feedrates_section_la.setFont(font3)
+
+        self.gridLayout_13.addWidget(self.feedrates_section_la, 6, 0, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
+
+        self.settings_sub_tab.addTab(self.jobs_machine_settings_tab, "")
 
         self.verticalLayout_12.addWidget(self.settings_sub_tab)
 
@@ -3109,8 +3140,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(3)
-        self.prepare_widget.setCurrentIndex(0)
+        self.main_tab_widget.setCurrentIndex(0)
+        self.prepare_widget.setCurrentIndex(1)
         self.jobs_sw.setCurrentIndex(0)
         self.ctrl_tab_widget.setCurrentIndex(1)
         self.z_step_cb.setCurrentIndex(3)
@@ -3175,70 +3206,74 @@ class Ui_MainWindow(object):
         self.profile_view_chb.setText("")
         self.prepare_widget.setTabText(self.prepare_widget.indexOf(self.load_layers_tab), QCoreApplication.translate("MainWindow", u"LOAD LAYERS", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Load a valid Layer", None))
-        self.top_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
+        self.top_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
         self.top_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.top_n_passes_l.setText(QCoreApplication.translate("MainWindow", u"Number of Passes", None))
-        self.top_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.top_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.top_overlap_l.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
-        self.top_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
-        self.top_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
-        self.top_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.bottom_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.bottom_overlap_l.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
+        self.top_n_passes_la.setText(QCoreApplication.translate("MainWindow", u"Number of Passes", None))
+        self.top_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.top_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.top_overlap_la.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
+        self.top_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.top_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.top_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.bottom_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.bottom_overlap_la.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
         self.bottom_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.bottom_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
-        self.bottom_n_passes_l.setText(QCoreApplication.translate("MainWindow", u"Number of Passes", None))
-        self.bottom_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.bottom_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.bottom_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
-        self.bottom_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
-        self.profile_depth_pass_l.setText(QCoreApplication.translate("MainWindow", u"Depth per Pass [mm]", None))
-        self.profile_taps_layout_l.setText(QCoreApplication.translate("MainWindow", u"Taps layout", None))
-        self.profile_margin_l.setText(QCoreApplication.translate("MainWindow", u"Margin [mm]", None))
-        self.profile_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.profile_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.bottom_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
+        self.bottom_n_passes_la.setText(QCoreApplication.translate("MainWindow", u"Number of Passes", None))
+        self.bottom_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.bottom_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.bottom_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.bottom_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.profile_depth_pass_la.setText(QCoreApplication.translate("MainWindow", u"Depth per Pass [mm]", None))
+        self.profile_taps_layout_la.setText(QCoreApplication.translate("MainWindow", u"Taps layout", None))
+        self.profile_margin_la.setText(QCoreApplication.translate("MainWindow", u"Margin [mm]", None))
+        self.profile_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.profile_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
         self.profile_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.profile_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
+        self.profile_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
         self.profile_multi_depth_chb.setText("")
-        self.profile_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.profile_tap_size_l.setText(QCoreApplication.translate("MainWindow", u"Tap size [mm]", None))
-        self.profile_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.profile_multi_depth_l.setText(QCoreApplication.translate("MainWindow", u"Multi-depth", None))
-        self.profile_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.profile_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.profile_tap_size_la.setText(QCoreApplication.translate("MainWindow", u"Tap size [mm]", None))
+        self.profile_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.profile_multi_depth_la.setText(QCoreApplication.translate("MainWindow", u"Multi-depth", None))
+        self.profile_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.profile_mirror_la.setText(QCoreApplication.translate("MainWindow", u"Mirror", None))
+        self.profile_mirror_chb.setText("")
+        self.drill_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.add_drill_tool_tb.setText(QCoreApplication.translate("MainWindow", u"+", None))
+        self.drill_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.drill_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.drill_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.drill_milling_tool_la.setText(QCoreApplication.translate("MainWindow", u"Milling Tool", None))
         self.remove_drill_tool_tb.setText(QCoreApplication.translate("MainWindow", u"-", None))
+        self.drill_milling_tool_chb.setText("")
+        self.drill_optimization_la.setText(QCoreApplication.translate("MainWindow", u"Optimization", None))
         ___qtablewidgetitem = self.drill_tw.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Bit", None));
         ___qtablewidgetitem1 = self.drill_tw.horizontalHeaderItem(1)
         ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Diameter [mm]", None));
-        self.add_drill_tool_tb.setText(QCoreApplication.translate("MainWindow", u"+", None))
-        self.drill_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.drill_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
-        self.drill_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.drill_milling_tool_l.setText(QCoreApplication.translate("MainWindow", u"Milling Tool", None))
-        self.drill_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.drill_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
-        self.drill_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.drill_milling_tool_chb.setText("")
-        self.drill_milling_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Mill Tool Diameter [mm]", None))
-        self.drill_optimization_l.setText(QCoreApplication.translate("MainWindow", u"Optimization", None))
         self.drill_optimization_chb.setText("")
-        self.nc_top_overlap_l.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
-        self.nc_top_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.nc_top_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
-        self.nc_top_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
-        self.nc_top_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.nc_top_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.nc_top_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.drill_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.drill_milling_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Mill Tool Diameter [mm]", None))
+        self.drill_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
+        self.drill_mirror_la.setText(QCoreApplication.translate("MainWindow", u"Mirror", None))
+        self.drill_mirror_chb.setText("")
+        self.nc_top_overlap_la.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
+        self.nc_top_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.nc_top_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.nc_top_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
+        self.nc_top_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.nc_top_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.nc_top_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
         self.nc_top_generate_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.nc_bottom_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.nc_bottom_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
         self.nc_bottom_generate_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.nc_bottom_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
-        self.nc_bottom_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.nc_bottom_overlap_l.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
-        self.nc_bottom_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
-        self.nc_bottom_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.nc_bottom_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.nc_bottom_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.nc_bottom_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.nc_bottom_overlap_la.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
+        self.nc_bottom_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
+        self.nc_bottom_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.nc_bottom_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
         self.prepare_widget.setTabText(self.prepare_widget.indexOf(self.create_job_tab), QCoreApplication.translate("MainWindow", u"CREATE JOB", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Top View", None))
         self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Bottom View", None))
@@ -3401,7 +3436,6 @@ class Ui_MainWindow(object):
         self.nc_top_layer_color_la.setText("")
         self.nc_bottom_layer_color_la.setText("")
         self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.application_settings_tab), QCoreApplication.translate("MainWindow", u"Application Settings", None))
-        self.feedrates_section_la.setText(QCoreApplication.translate("MainWindow", u"FEEDRATES [mm/min]", None))
         self.x_la.setText(QCoreApplication.translate("MainWindow", u"X", None))
         self.y_la.setText(QCoreApplication.translate("MainWindow", u"Y", None))
         self.z_la.setText(QCoreApplication.translate("MainWindow", u"Z", None))
@@ -3410,13 +3444,15 @@ class Ui_MainWindow(object):
         self.tool_probe_z_limit_la.setText(QCoreApplication.translate("MainWindow", u"Tool Probe Z Limit", None))
         self.tool_probe_wm_pos_chb.setText(QCoreApplication.translate("MainWindow", u"Working Position", None))
         self.get_tool_probe_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Offset Position", None))
+        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"Hold On Probe", None))
         self.tool_change_la.setText(QCoreApplication.translate("MainWindow", u"Tool Change MPos", None))
         self.get_tool_change_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Change Position", None))
         self.tool_change_section_la.setText(QCoreApplication.translate("MainWindow", u"TOOL CHANGE", None))
         self.z_feedrate_la.setText(QCoreApplication.translate("MainWindow", u"Z FEEDRATE", None))
         self.xy_feedrate_la.setText(QCoreApplication.translate("MainWindow", u"XY FEEDRATE", None))
         self.probe_feedrate_la.setText(QCoreApplication.translate("MainWindow", u"PROBE FEEDRATE", None))
-        self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.machine_settings_tab), QCoreApplication.translate("MainWindow", u"Machine Settings", None))
+        self.feedrates_section_la.setText(QCoreApplication.translate("MainWindow", u"FEEDRATES [mm/min]", None))
+        self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.jobs_machine_settings_tab), QCoreApplication.translate("MainWindow", u"Jobs/Machine Settings", None))
         self.restore_settings_preferences_pb.setText(QCoreApplication.translate("MainWindow", u"Restore Settings/Preferences", None))
         self.save_settings_preferences_pb.setText(QCoreApplication.translate("MainWindow", u"Save Settings/Preferences", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.settings_tab), QCoreApplication.translate("MainWindow", u"Settings/Preferences", None))

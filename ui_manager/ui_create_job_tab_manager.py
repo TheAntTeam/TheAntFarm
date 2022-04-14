@@ -152,6 +152,10 @@ class UiCreateJobLayerTab(QObject):
         self.ui.profile_z_feed_rate_dsb.setValue(settings_profile["z_feedrate"])
         self.ui.profile_taps_layout_cb.setCurrentIndex(settings_profile["taps_type"])
         self.ui.profile_tap_size_dsb.setValue(settings_profile["taps_length"])
+        if settings_profile["mirror"]:
+            self.ui.profile_mirror_chb.setCheckState(Qt.Checked)
+        else:
+            self.ui.profile_mirror_chb.setCheckState(Qt.Unchecked)
 
     def set_settings_per_drill(self):
         settings_drill = self.jobs_settings.jobs_settings_od["drill"]
@@ -177,6 +181,11 @@ class UiCreateJobLayerTab(QObject):
             self.ui.drill_optimization_chb.setCheckState(Qt.Checked)
         else:
             self.ui.drill_optimization_chb.setCheckState(Qt.Unchecked)
+
+        if settings_drill["mirror"]:
+            self.ui.drill_mirror_chb.setCheckState(Qt.Checked)
+        else:
+            self.ui.drill_mirror_chb.setCheckState(Qt.Unchecked)
 
     def set_settings_per_nc_top(self):
         settings_nc_top = self.jobs_settings.jobs_settings_od["no_copper_top"]
@@ -216,7 +225,7 @@ class UiCreateJobLayerTab(QObject):
         [self.set_settings_per_page(tag) for tag in self.lay_tags]
 
     def get_settings_per_top(self):
-        settings_top = Od({})
+        settings_top = self.jobs_settings.jobs_settings_od["top"].copy()
         settings_top["tool_diameter"] = self.ui.top_tool_diameter_dsb.value()
         settings_top["passages"] = self.ui.top_n_passes_sb.value()
         settings_top["overlap"] = self.ui.top_overlap_dsb.value()
@@ -229,7 +238,7 @@ class UiCreateJobLayerTab(QObject):
         return settings_top
 
     def get_settings_per_bottom(self):
-        settings_bottom = Od({})
+        settings_bottom = self.jobs_settings.jobs_settings_od["bottom"].copy()
         settings_bottom["tool_diameter"] = self.ui.bottom_tool_diameter_dsb.value()
         settings_bottom["passages"] = self.ui.bottom_n_passes_sb.value()
         settings_bottom["overlap"] = self.ui.bottom_overlap_dsb.value()
@@ -242,7 +251,7 @@ class UiCreateJobLayerTab(QObject):
         return settings_bottom
 
     def get_settings_per_profile(self):
-        settings_profile = Od({})
+        settings_profile = self.jobs_settings.jobs_settings_od["profile"].copy()
         settings_profile["tool_diameter"] = self.ui.profile_tool_diameter_dsb.value()
         settings_profile["margin"] = self.ui.profile_margin_dsb.value()
         settings_profile["multi_depth"] = self.ui.profile_multi_depth_chb.isChecked()
@@ -258,11 +267,12 @@ class UiCreateJobLayerTab(QObject):
         settings_profile["z_feedrate"] = self.ui.profile_z_feed_rate_dsb.value()
         settings_profile["taps_type"] = self.ui.profile_taps_layout_cb.currentIndex()
         settings_profile["taps_length"] = self.ui.profile_tap_size_dsb.value()
+        settings_profile["mirror"] = self.ui.profile_mirror_chb.isChecked()
         logging.debug(settings_profile)
         return settings_profile
 
     def get_settings_per_drill(self):
-        settings_drill = Od({})
+        settings_drill = self.jobs_settings.jobs_settings_od["drill"].copy()
         drill_tools_names = []
         drill_tools_diameters = []
         count_row = self.ui.drill_tw.rowCount()
@@ -280,11 +290,12 @@ class UiCreateJobLayerTab(QObject):
         settings_drill["xy_feedrate"] = self.ui.drill_xy_feed_rate_dsb.value()
         settings_drill["z_feedrate"] = self.ui.drill_z_feed_rate_dsb.value()
         settings_drill["optimize"] = self.ui.drill_optimization_chb.isChecked()
+        settings_drill["mirror"] = self.ui.drill_mirror_chb.isChecked()
         logging.debug(settings_drill)
         return settings_drill
 
     def get_settings_per_nc_top(self):
-        settings_nc_top = Od({})
+        settings_nc_top = self.jobs_settings.jobs_settings_od["no_copper_top"].copy()
         settings_nc_top["tool_diameter"] = self.ui.nc_top_tool_diameter_dsb.value()
         settings_nc_top["overlap"] = self.ui.nc_top_overlap_dsb.value()
         settings_nc_top["cut"] = self.ui.nc_top_cut_z_dsb.value()
@@ -296,7 +307,7 @@ class UiCreateJobLayerTab(QObject):
         return settings_nc_top
 
     def get_settings_per_nc_bottom(self):
-        settings_nc_bottom = Od({})
+        settings_nc_bottom = self.jobs_settings.jobs_settings_od["no_copper_bottom"].copy()
         settings_nc_bottom["tool_diameter"] = self.ui.nc_bottom_tool_diameter_dsb.value()
         settings_nc_bottom["overlap"] = self.ui.nc_bottom_overlap_dsb.value()
         settings_nc_bottom["cut"] = self.ui.nc_bottom_cut_z_dsb.value()
