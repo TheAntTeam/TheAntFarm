@@ -2,7 +2,6 @@ from PySide2.QtCore import QObject
 import qimage2ndarray
 from double_side_manager import DoubleSideManager
 import logging
-import traceback
 
 logger = logging.getLogger(__name__)
 

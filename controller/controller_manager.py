@@ -264,12 +264,12 @@ class ControllerWorker(QObject):
                         logger.debug(element)
             except BlockingIOError as e:
                 logger.error(e, exc_info=True)
-            except Exception as e:
+            except Exception:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
     def macro_check(self, cmd_to_send):
-        probe_data = self.control_controller.prb_val
-        wsp = self.get_workspace_parameters()
+        # probe_data = self.control_controller.prb_val
+        # wsp = self.get_workspace_parameters()
         ret_cmd_to_send = cmd_to_send
 
         if self.gcr.is_macro(cmd_to_send):
@@ -581,4 +581,3 @@ class ControllerWorker(QObject):
             'tool_probe_feedrate': (machine_sets.feedrate_probe, machine_sets.feedrate_z, machine_sets.feedrate_xy)
         })
         self.gcr.load_cfg(cfg)
-

@@ -93,14 +93,14 @@ class ControlController(QObject):
                     self.status_report_od["mpos"] = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "F":
                 try:
                     self.status_report_od["curfeed"] = float(word[1])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "FS":
                 try:
@@ -108,7 +108,7 @@ class ControlController(QObject):
                     self.status_report_od["curspindle"] = float(word[2])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "Bf":
                 try:
@@ -116,7 +116,7 @@ class ControlController(QObject):
                     self.status_report_od["rxbytes"] = int(word[2])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "Ov":
                 try:
@@ -125,7 +125,7 @@ class ControlController(QObject):
                     self.status_report_od["OvSpindle"] = int(word[3])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "WCO":
                 try:
@@ -133,14 +133,14 @@ class ControlController(QObject):
                     self.status_report_od["wco"] = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "Pn":
                 try:
                     self.status_report_od["pins"] = word[1]
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
 
         self.wpos_a = self.mpos_a - self.wco_a
@@ -156,7 +156,7 @@ class ControlController(QObject):
                 self.prb_updated = True
             except (ValueError, IndexError) as e:
                 logging.error(e, exc_info=True)
-            except Exception as e:
+            except Exception:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
         elif word[0] == "G54":
             self.workspace_params_od["G54"] = np.array([float(word[1]), float(word[2]), float(word[3])])
