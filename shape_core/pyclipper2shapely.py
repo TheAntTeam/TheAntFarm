@@ -103,7 +103,7 @@ def _polytree_node_to_shapely(node, scale):
             # see test_polygon_inners_crossing_outer for a test case.
             try:
                 diff = poly.difference(inner)
-            except:
+            except Exception:
                 continue
 
             if not diff.is_valid:

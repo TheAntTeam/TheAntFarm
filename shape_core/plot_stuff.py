@@ -94,7 +94,7 @@ def plot_shapely(poly_list, color=None):
 
     try:
         print(poly_list.geom_type)
-    except:
+    except Exception:
         print("polyList")
 
     for poly in poly_list:
