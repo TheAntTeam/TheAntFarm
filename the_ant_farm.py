@@ -35,7 +35,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu = Queue()                   # serial FIFO RX Queue
     serialTxQu = Queue()                   # serial FIFO TX Queue
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         super(MainWindow, self).__init__()
 
         self.ui = Ui_MainWindow()

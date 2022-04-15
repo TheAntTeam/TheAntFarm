@@ -2750,10 +2750,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_14.addWidget(self.get_tool_probe_pb, 2, 4, 1, 1)
 
-        self.checkBox = QCheckBox(self.jobs_machine_settings_tab)
-        self.checkBox.setObjectName(u"checkBox")
+        self.hold_on_probe_chb = QCheckBox(self.jobs_machine_settings_tab)
+        self.hold_on_probe_chb.setObjectName(u"hold_on_probe_chb")
 
-        self.gridLayout_14.addWidget(self.checkBox, 3, 4, 1, 1, Qt.AlignHCenter)
+        self.gridLayout_14.addWidget(self.hold_on_probe_chb, 3, 4, 1, 1, Qt.AlignHCenter)
 
 
         self.horizontalLayout_13.addLayout(self.gridLayout_14)
@@ -3140,8 +3140,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(0)
-        self.prepare_widget.setCurrentIndex(1)
+        self.main_tab_widget.setCurrentIndex(3)
+        self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
         self.ctrl_tab_widget.setCurrentIndex(1)
         self.z_step_cb.setCurrentIndex(3)
@@ -3444,7 +3444,7 @@ class Ui_MainWindow(object):
         self.tool_probe_z_limit_la.setText(QCoreApplication.translate("MainWindow", u"Tool Probe Z Limit", None))
         self.tool_probe_wm_pos_chb.setText(QCoreApplication.translate("MainWindow", u"Working Position", None))
         self.get_tool_probe_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Offset Position", None))
-        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"Hold On Probe", None))
+        self.hold_on_probe_chb.setText(QCoreApplication.translate("MainWindow", u"Hold On Probe", None))
         self.tool_change_la.setText(QCoreApplication.translate("MainWindow", u"Tool Change MPos", None))
         self.get_tool_change_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Change Position", None))
         self.tool_change_section_la.setText(QCoreApplication.translate("MainWindow", u"TOOL CHANGE", None))

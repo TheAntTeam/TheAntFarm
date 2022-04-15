@@ -25,9 +25,9 @@ class MachineSettingsHandler:
     TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT = 0.0
     TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT = 0.0
 
-    TOOL_PROBE_Z_LIMIT = -11.0
-
-    TOOL_CHANGE_REL_FLAG = False
+    TOOL_PROBE_Z_LIMIT_DEFAULT = -11.0
+    TOOL_PROBE_REL_FLAG_DEFAULT = False
+    HOLD_ON_PROBE_FLAG_DEFAULT = False
 
     def __init__(self, config_folder, main_win):
         self.machine_config_path = os.path.normpath(os.path.join(config_folder, 'machine_config.ini'))
@@ -55,9 +55,9 @@ class MachineSettingsHandler:
         self.tool_change_offset_y_mpos = self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT
         self.tool_change_offset_z_mpos = self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT
 
-        self.tool_probe_rel_flag = self.TOOL_CHANGE_REL_FLAG
-
-        self.tool_probe_z_limit = self.TOOL_PROBE_Z_LIMIT
+        self.tool_probe_z_limit = self.TOOL_PROBE_Z_LIMIT_DEFAULT
+        self.tool_probe_rel_flag = self.TOOL_PROBE_REL_FLAG_DEFAULT
+        self.hold_on_probe_flag = self.HOLD_ON_PROBE_FLAG_DEFAULT
 
     def read_all_machine_settings(self):
         """ Read all machine settings from ini files """
@@ -81,7 +81,8 @@ class MachineSettingsHandler:
             self.feedrate_z = machine_general.getfloat("feedrate_z", self.FEEDRATE_Z_DEFAULT)
             self.feedrate_probe = machine_general.getfloat("feedrate_probe", self.FEEDRATE_PROBE_DEFAULT)
 
-            self.tool_probe_rel_flag = machine_general.getboolean("tool_probe_relative_flag", self.TOOL_CHANGE_REL_FLAG)
+            self.tool_probe_rel_flag = machine_general.getboolean("tool_probe_relative_flag",
+                                                                  self.TOOL_PROBE_REL_FLAG_DEFAULT)
             self.tool_probe_offset_x_mpos = machine_general.getfloat("tool_probe_x_mpos",
                                                                      self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT)
             self.tool_probe_offset_y_mpos = machine_general.getfloat("tool_probe_y_mpos",
@@ -103,7 +104,8 @@ class MachineSettingsHandler:
             self.tool_change_offset_z_mpos = machine_general.getfloat("tool_change_z_mpos",
                                                                       self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT)
 
-            self.tool_probe_z_limit = machine_general.getfloat("tool_probe_z_limit", self.TOOL_PROBE_Z_LIMIT)
+            self.tool_probe_z_limit = machine_general.getfloat("tool_probe_z_limit", self.TOOL_PROBE_Z_LIMIT_DEFAULT)
+            self.hold_on_probe_flag = machine_general.getboolean("hold_on_probe_flag", self.HOLD_ON_PROBE_FLAG_DEFAULT)
 
     def write_all_machine_settings(self):
         """ Write all machine settings to ini files """
@@ -116,7 +118,8 @@ class MachineSettingsHandler:
                                             "feedrate_xy": self.FEEDRATE_XY_DEFAULT,
                                             "feedrate_z": self.FEEDRATE_Z_DEFAULT,
                                             "feedrate_probe": self.FEEDRATE_PROBE_DEFAULT,
-                                            "tool_probe_relative_flag": self.TOOL_CHANGE_REL_FLAG,
+                                            "tool_probe_relative_flag": self.TOOL_PROBE_REL_FLAG_DEFAULT,
+                                            "hold_on_probe_flag": self.HOLD_ON_PROBE_FLAG_DEFAULT,
                                             "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
                                             "tool_probe_z_mpos": self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT,
@@ -126,7 +129,7 @@ class MachineSettingsHandler:
                                             "tool_change_x_mpos": self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_change_y_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT,
                                             "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT,
-                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT}
+                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT}
 
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
@@ -141,7 +144,8 @@ class MachineSettingsHandler:
         machine_general["feedrate_xy"] = str(self.feedrate_xy)
         machine_general["feedrate_z"] = str(self.feedrate_z)
         machine_general["feedrate_probe"] = str(self.feedrate_probe)
-        machine_general["tool_probe_relative_flag"] = str(self.tool_probe_rel_flag)  # todo: substitute with check value
+        machine_general["tool_probe_relative_flag"] = str(self.tool_probe_rel_flag)
+        machine_general["hold_on_probe_flag"] = str(self.hold_on_probe_flag)
         machine_general["tool_probe_x_mpos"] = str(self.tool_probe_offset_x_mpos)
         machine_general["tool_probe_y_mpos"] = str(self.tool_probe_offset_y_mpos)
         machine_general["tool_probe_z_mpos"] = str(self.tool_probe_offset_z_mpos)
@@ -168,7 +172,8 @@ class MachineSettingsHandler:
                                             "feedrate_xy": self.FEEDRATE_XY_DEFAULT,
                                             "feedrate_z": self.FEEDRATE_Z_DEFAULT,
                                             "feedrate_probe": self.FEEDRATE_PROBE_DEFAULT,
-                                            "tool_probe_relative_flag": self.TOOL_CHANGE_REL_FLAG,
+                                            "tool_probe_relative_flag": self.TOOL_PROBE_REL_FLAG_DEFAULT,
+                                            "hold_on_probe_flag": self.HOLD_ON_PROBE_FLAG_DEFAULT,
                                             "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
                                             "tool_probe_z_mpos": self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT,
@@ -178,7 +183,7 @@ class MachineSettingsHandler:
                                             "tool_change_x_mpos": self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_change_y_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT,
                                             "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT,
-                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT}
+                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT}
 
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
@@ -192,7 +197,8 @@ class MachineSettingsHandler:
         machine_general["feedrate_xy"] = str(self.FEEDRATE_XY_DEFAULT)
         machine_general["feedrate_z"] = str(self.FEEDRATE_Z_DEFAULT)
         machine_general["feedrate_probe"] = str(self.FEEDRATE_PROBE_DEFAULT)
-        machine_general["tool_probe_relative_flag"] = str(self.tool_probe_rel_flag)  # todo: substitute with check value
+        machine_general["tool_probe_relative_flag"] = str(self.TOOL_PROBE_REL_FLAG_DEFAULT)
+        machine_general["hold_on_probe_flag"] = str(self.HOLD_ON_PROBE_FLAG_DEFAULT)
         machine_general["tool_probe_x_mpos"] = str(self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT)
         machine_general["tool_probe_y_mpos"] = str(self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT)
         machine_general["tool_probe_z_mpos"] = str(self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT)
@@ -202,7 +208,7 @@ class MachineSettingsHandler:
         machine_general["tool_change_x_mpos"] = str(self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT)
         machine_general["tool_change_y_mpos"] = str(self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT)
         machine_general["tool_change_z_mpos"] = str(self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT)
-        machine_general["tool_probe_z_limit"] = str(self.TOOL_PROBE_Z_LIMIT)
+        machine_general["tool_probe_z_limit"] = str(self.TOOL_PROBE_Z_LIMIT_DEFAULT)
 
         # Write machine ini file #
         with open(self.machine_config_path, 'w') as configfile:
