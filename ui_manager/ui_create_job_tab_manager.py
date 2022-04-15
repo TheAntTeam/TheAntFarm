@@ -332,8 +332,9 @@ class UiCreateJobLayerTab(QObject):
         elif tag == self.lay_tags[5]:
             return self.get_settings_per_nc_bottom()
 
-    def get_all_settings(self):
+    def get_all_jobs_settings(self):
         settings = Od({})
+        settings["common"] = self.jobs_settings.jobs_settings_od["common"]
         settings[self.lay_tags[0]] = self.get_settings_per_page(self.lay_tags[0])
         settings[self.lay_tags[1]] = self.get_settings_per_page(self.lay_tags[1])
         settings[self.lay_tags[2]] = self.get_settings_per_page(self.lay_tags[2])

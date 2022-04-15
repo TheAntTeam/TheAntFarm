@@ -76,7 +76,7 @@ class UiManager(QObject):
         self.main_win.ui.settings_sub_tab.setCurrentIndex(app_settings.settings_tab_index)
 
     def save_all_settings(self):
-        all_settings_od = {"jobs_settings": self.ui_create_job_m.get_all_settings()}
+        all_settings_od = {"jobs_settings": self.ui_create_job_m.get_all_jobs_settings()}
         self.settings.write_all_settings(all_settings_od)
 
     def from_load_to_create(self):

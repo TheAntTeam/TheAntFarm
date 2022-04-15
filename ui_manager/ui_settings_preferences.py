@@ -29,6 +29,7 @@ class UiSettingsPreferencesTab(QObject):
         self.ui = ui
         self.control_wo = control_worker
         self.settings = settings
+        self.jobs_settings = settings.jobs_settings
         self.machine_settings = settings.machine_settings
 
         self.get_tool_change_flag = False
@@ -48,6 +49,7 @@ class UiSettingsPreferencesTab(QObject):
         self.ui_tool_change_set_enabling(enable=False)
 
         self.reset_tool_machine_initial_settings()
+        self.reset_jobs_common_initial_settings()
         self.ui.tool_probe_x_mpos_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.tool_probe_y_mpos_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.tool_probe_z_mpos_dsb.valueChanged.connect(self.set_focus_lost)
@@ -62,7 +64,18 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.feedrate_xy_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.feedrate_z_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.feedrate_probe_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.x_mirror_rb.clicked.connect(self.set_focus_lost)
+        self.ui.y_mirror_rb.clicked.connect(self.set_focus_lost)
         self.ui.restore_settings_preferences_pb.clicked.connect(self.restore_initial_settings)
+
+    def reset_jobs_common_initial_settings(self):
+        """Reset status of common jobs settings. """
+        mirror_axis = self.jobs_settings.jobs_settings_od["common"]["mirroring_axis"]
+        print(mirror_axis)
+        if mirror_axis.lower() == "x":
+            self.ui.x_mirror_rb.setChecked(True)
+        elif mirror_axis.lower() == "y":
+            self.ui.y_mirror_rb.setChecked(True)
 
     def reset_tool_probe_initial_enables(self):
         """Reset status of tool probe checkbox checked (or not) and wpos/mpos fields enabled or disabled. """
@@ -91,6 +104,7 @@ class UiSettingsPreferencesTab(QObject):
 
     def restore_initial_settings(self):
         """Restore initial settings in ui fields. """
+        self.reset_jobs_common_initial_settings()
         self.reset_tool_machine_initial_settings()
         self.reset_tool_probe_initial_enables()
         self.reset_focus_lost()
@@ -187,6 +201,10 @@ class UiSettingsPreferencesTab(QObject):
 
     def save_settings_preferences(self):
         """Save settings preferences from UI to settings."""
+        if self.ui.x_mirror_rb.isChecked():
+            self.jobs_settings.jobs_settings_od["common"]["mirroring_axis"] = "x"
+        elif self.ui.y_mirror_rb.isChecked():
+            self.jobs_settings.jobs_settings_od["common"]["mirroring_axis"] = "y"
         self.machine_settings.tool_probe_rel_flag = self.ui.tool_probe_wm_pos_chb.isChecked()
 
         self.machine_settings.tool_probe_offset_x_mpos = self.ui.tool_probe_x_mpos_dsb.value()

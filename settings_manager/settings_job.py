@@ -21,9 +21,10 @@ class JobSettingsHandler:
     OPTIMIZE_FLAG_DEFAULT = True
     MIRROR_ALL_DEFAULT = False
     MIRROR_BOTTOM_DEFAULT = True
+    MIRROR_AXIS_DEFAULT = "x"
 
     def __init__(self, config_folder):
-        self.jobs_config_path = config_folder + os.path.sep + 'jobs_sets_config.ini'
+        self.jobs_config_path = os.path.normpath(os.path.join(config_folder, 'jobs_sets_config.ini'))
         self.jobs_settings = configparser.ConfigParser()
         self.jobs_settings_od = {}
 
@@ -35,6 +36,18 @@ class JobSettingsHandler:
 
         # Read jobs' settings ini file #
         self.jobs_settings.read(self.jobs_config_path)
+
+        # Settings common to all jobs #
+        if "COMMON" in self.jobs_settings:
+            common_settings = self.jobs_settings["COMMON"]
+            common_set_od = ({})
+            common_set_od["mirroring_axis"] = common_settings.get("mirroring_axis", self.MIRROR_AXIS_DEFAULT)
+            self.jobs_settings_od["common"] = common_set_od
+        else:
+            self.jobs_settings["COMMON"] = {}
+            common_set_od = ({})
+            common_set_od["mirroring_axis"] = self.MIRROR_AXIS_DEFAULT
+            self.jobs_settings_od["common"] = common_set_od
 
         # Top job related settings #
         if "TOP" in self.jobs_settings:
@@ -151,7 +164,14 @@ class JobSettingsHandler:
                                          "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
                                          "taps_type": self.TAPS_TYPE_INDEX_DEFAULT,
                                          "taps_length": self.TAPS_LENGTH_DEFAULT,
-                                         "mirror": self.MIRROR_ALL_DEFAULT}
+                                         "mirror": self.MIRROR_ALL_DEFAULT,
+                                         "mirroring_axis": self.MIRROR_AXIS_DEFAULT}
+
+        # Common jobs' settings.
+        self.jobs_settings["COMMON"] = {}
+        common_settings = self.jobs_settings["COMMON"]
+        common_set_od = job_settings_od["common"]
+        common_settings["mirroring_axis"] = str(common_set_od["mirroring_axis"])
 
         # Top job related settings #
         self.jobs_settings["TOP"] = {}
@@ -249,7 +269,7 @@ class JobSettingsHandler:
             self.jobs_settings.write(configfile)
 
     def restore_job_settings(self):
-        """ Restore all jobs settings to default and create ini file if it doesn't exists """
+        """ Restore all jobs settings to default and create ini file if it doesn't exist. """
         self.jobs_settings['DEFAULT'] = {"tool_diameter": self.TOOL_DIAMETER_DEFAULT,
                                          "passages": self.PASSAGES_DEFAULT,
                                          "overlap": self.OVERLAP_DEFAULT,
@@ -263,7 +283,13 @@ class JobSettingsHandler:
                                          "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
                                          "taps_type": self.TAPS_TYPE_INDEX_DEFAULT,
                                          "taps_length": self.TAPS_LENGTH_DEFAULT,
-                                         "mirror": self.MIRROR_ALL_DEFAULT}
+                                         "mirror": self.MIRROR_ALL_DEFAULT,
+                                         "mirroring_axis": self.MIRROR_AXIS_DEFAULT}
+
+        # Common jobs' settings.
+        self.jobs_settings["COMMON"] = {}
+        common_settings = self.jobs_settings["COMMON"]
+        common_settings["mirroring_axis"] = str(self.MIRROR_AXIS_DEFAULT)
 
         # Top job related settings #
         self.jobs_settings["TOP"] = {}

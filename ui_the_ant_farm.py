@@ -2559,7 +2559,11 @@ class Ui_MainWindow(object):
         self.line_8.setFrameShape(QFrame.HLine)
         self.line_8.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_13.addWidget(self.line_8, 1, 0, 1, 1)
+        self.gridLayout_13.addWidget(self.line_8, 8, 0, 1, 1)
+
+        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_13.addItem(self.verticalSpacer_5, 5, 0, 1, 1)
 
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -2847,7 +2851,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.addLayout(self.horizontalLayout_15)
 
 
-        self.gridLayout_13.addLayout(self.verticalLayout_5, 2, 0, 1, 1)
+        self.gridLayout_13.addLayout(self.verticalLayout_5, 9, 0, 1, 1)
 
         self.tool_change_section_la = QLabel(self.jobs_machine_settings_tab)
         self.tool_change_section_la.setObjectName(u"tool_change_section_la")
@@ -2855,33 +2859,110 @@ class Ui_MainWindow(object):
         font3.setPointSize(16)
         self.tool_change_section_la.setFont(font3)
 
-        self.gridLayout_13.addWidget(self.tool_change_section_la, 0, 0, 1, 1, Qt.AlignHCenter)
+        self.gridLayout_13.addWidget(self.tool_change_section_la, 7, 0, 1, 1, Qt.AlignHCenter)
 
         self.line_10 = QFrame(self.jobs_machine_settings_tab)
         self.line_10.setObjectName(u"line_10")
         self.line_10.setFrameShape(QFrame.HLine)
         self.line_10.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_13.addWidget(self.line_10, 7, 0, 1, 1)
+        self.gridLayout_13.addWidget(self.line_10, 14, 0, 1, 1)
+
+        self.tool_change_section_la_2 = QLabel(self.jobs_machine_settings_tab)
+        self.tool_change_section_la_2.setObjectName(u"tool_change_section_la_2")
+        self.tool_change_section_la_2.setFont(font3)
+
+        self.gridLayout_13.addWidget(self.tool_change_section_la_2, 1, 0, 1, 1, Qt.AlignHCenter)
 
         self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.gridLayout_13.addItem(self.verticalSpacer_3, 9, 0, 1, 1)
+        self.gridLayout_13.addItem(self.verticalSpacer_3, 16, 0, 1, 1)
+
+        self.line_13 = QFrame(self.jobs_machine_settings_tab)
+        self.line_13.setObjectName(u"line_13")
+        self.line_13.setFrameShape(QFrame.HLine)
+        self.line_13.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_13, 4, 0, 1, 1)
+
+        self.line_12 = QFrame(self.jobs_machine_settings_tab)
+        self.line_12.setObjectName(u"line_12")
+        self.line_12.setFrameShape(QFrame.HLine)
+        self.line_12.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_12, 0, 0, 1, 1)
 
         self.line_9 = QFrame(self.jobs_machine_settings_tab)
         self.line_9.setObjectName(u"line_9")
         self.line_9.setFrameShape(QFrame.HLine)
         self.line_9.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_13.addWidget(self.line_9, 5, 0, 1, 1)
+        self.gridLayout_13.addWidget(self.line_9, 12, 0, 1, 1)
+
+        self.line_11 = QFrame(self.jobs_machine_settings_tab)
+        self.line_11.setObjectName(u"line_11")
+        self.line_11.setFrameShape(QFrame.HLine)
+        self.line_11.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_11, 2, 0, 1, 1)
+
+        self.gridLayout_20 = QGridLayout()
+        self.gridLayout_20.setObjectName(u"gridLayout_20")
+        self.x_axis_la = QLabel(self.jobs_machine_settings_tab)
+        self.x_axis_la.setObjectName(u"x_axis_la")
+        sizePolicy10.setHeightForWidth(self.x_axis_la.sizePolicy().hasHeightForWidth())
+        self.x_axis_la.setSizePolicy(sizePolicy10)
+        self.x_axis_la.setMaximumSize(QSize(16777215, 50))
+        self.x_axis_la.setFont(font)
+        self.x_axis_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_20.addWidget(self.x_axis_la, 0, 1, 1, 1, Qt.AlignHCenter)
+
+        self.x_la_2 = QLabel(self.jobs_machine_settings_tab)
+        self.x_la_2.setObjectName(u"x_la_2")
+        sizePolicy10.setHeightForWidth(self.x_la_2.sizePolicy().hasHeightForWidth())
+        self.x_la_2.setSizePolicy(sizePolicy10)
+        self.x_la_2.setMaximumSize(QSize(16777215, 50))
+        self.x_la_2.setFont(font)
+        self.x_la_2.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_20.addWidget(self.x_la_2, 0, 2, 1, 1, Qt.AlignHCenter)
+
+        self.mirroring_axis_la = QLabel(self.jobs_machine_settings_tab)
+        self.mirroring_axis_la.setObjectName(u"mirroring_axis_la")
+        sizePolicy3.setHeightForWidth(self.mirroring_axis_la.sizePolicy().hasHeightForWidth())
+        self.mirroring_axis_la.setSizePolicy(sizePolicy3)
+        self.mirroring_axis_la.setMinimumSize(QSize(130, 0))
+        self.mirroring_axis_la.setMaximumSize(QSize(130, 16777215))
+        self.mirroring_axis_la.setFont(font)
+        self.mirroring_axis_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_20.addWidget(self.mirroring_axis_la, 1, 0, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
+
+        self.x_mirror_rb = QRadioButton(self.jobs_machine_settings_tab)
+        self.x_mirror_rb.setObjectName(u"x_mirror_rb")
+
+        self.gridLayout_20.addWidget(self.x_mirror_rb, 1, 1, 1, 1, Qt.AlignHCenter)
+
+        self.y_mirror_rb = QRadioButton(self.jobs_machine_settings_tab)
+        self.y_mirror_rb.setObjectName(u"y_mirror_rb")
+
+        self.gridLayout_20.addWidget(self.y_mirror_rb, 1, 2, 1, 1, Qt.AlignHCenter)
+
+        self.horizontalSpacer_9 = QSpacerItem(130, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.gridLayout_20.addItem(self.horizontalSpacer_9, 0, 0, 1, 1)
+
+
+        self.gridLayout_13.addLayout(self.gridLayout_20, 3, 0, 1, 1)
 
         self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.gridLayout_13.addItem(self.verticalSpacer_4, 4, 0, 1, 1)
+        self.gridLayout_13.addItem(self.verticalSpacer_4, 11, 0, 1, 1)
 
         self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.gridLayout_13.addItem(self.horizontalSpacer_4, 2, 1, 1, 1)
+        self.gridLayout_13.addItem(self.horizontalSpacer_4, 9, 1, 1, 1)
 
         self.gridLayout_19 = QGridLayout()
         self.gridLayout_19.setObjectName(u"gridLayout_19")
@@ -2975,20 +3056,27 @@ class Ui_MainWindow(object):
         self.gridLayout_19.addItem(self.horizontalSpacer_8, 2, 2, 1, 1)
 
 
-        self.gridLayout_13.addLayout(self.gridLayout_19, 8, 0, 1, 1)
+        self.gridLayout_13.addLayout(self.gridLayout_19, 15, 0, 1, 1)
 
         self.line_7 = QFrame(self.jobs_machine_settings_tab)
         self.line_7.setObjectName(u"line_7")
         self.line_7.setFrameShape(QFrame.HLine)
         self.line_7.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_13.addWidget(self.line_7, 3, 0, 1, 1)
+        self.gridLayout_13.addWidget(self.line_7, 10, 0, 1, 1)
 
         self.feedrates_section_la = QLabel(self.jobs_machine_settings_tab)
         self.feedrates_section_la.setObjectName(u"feedrates_section_la")
         self.feedrates_section_la.setFont(font3)
 
-        self.gridLayout_13.addWidget(self.feedrates_section_la, 6, 0, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
+        self.gridLayout_13.addWidget(self.feedrates_section_la, 13, 0, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
+
+        self.line_14 = QFrame(self.jobs_machine_settings_tab)
+        self.line_14.setObjectName(u"line_14")
+        self.line_14.setFrameShape(QFrame.HLine)
+        self.line_14.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_14, 6, 0, 1, 1)
 
         self.settings_sub_tab.addTab(self.jobs_machine_settings_tab, "")
 
@@ -3448,6 +3536,12 @@ class Ui_MainWindow(object):
         self.tool_change_la.setText(QCoreApplication.translate("MainWindow", u"Tool Change MPos", None))
         self.get_tool_change_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Change Position", None))
         self.tool_change_section_la.setText(QCoreApplication.translate("MainWindow", u"TOOL CHANGE", None))
+        self.tool_change_section_la_2.setText(QCoreApplication.translate("MainWindow", u"JOBS COMMON SETTINGS", None))
+        self.x_axis_la.setText(QCoreApplication.translate("MainWindow", u"X (top-down mirror)", None))
+        self.x_la_2.setText(QCoreApplication.translate("MainWindow", u"Y (left-right mirror)", None))
+        self.mirroring_axis_la.setText(QCoreApplication.translate("MainWindow", u"Mirroring axis", None))
+        self.x_mirror_rb.setText("")
+        self.y_mirror_rb.setText("")
         self.z_feedrate_la.setText(QCoreApplication.translate("MainWindow", u"Z FEEDRATE", None))
         self.xy_feedrate_la.setText(QCoreApplication.translate("MainWindow", u"XY FEEDRATE", None))
         self.probe_feedrate_la.setText(QCoreApplication.translate("MainWindow", u"PROBE FEEDRATE", None))
