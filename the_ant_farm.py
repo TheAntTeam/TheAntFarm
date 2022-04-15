@@ -1,7 +1,7 @@
 import os
 import sys
 from PySide2.QtWidgets import QMainWindow, QApplication
-from PySide2.QtCore import QThread
+from PySide2.QtCore import QThread, QResource
 from queue import Queue
 from ui_the_ant_farm import Ui_MainWindow  # convert ui to py: pyside2-uic the_ant_farm.ui > ui_the_ant_farm.py
 # Whenever you change resources in qrc, convert qrc to py: pyside2-rcc app_resources.qrc -o app_resources_rc.py
@@ -41,8 +41,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        # After the UI is set up, register the resources root path relatively to this file path.
+        resources_rel_path = os.path.normpath(os.path.join(os.path.dirname(__file__)))
+        QResource.registerResource(resources_rel_path)
+
         self.settings = SettingsHandler(self)
-        self.settings.read_all_settings()  # TODO: manage exceptions with a try except
+        self.settings.read_all_settings()
 
         # Control Worker Thread, started as soon as the thread pool is started.
         self.control_thread = QThread(self)
