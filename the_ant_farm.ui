@@ -5521,32 +5521,156 @@
             <string>Jobs/Machine Settings</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_13">
-            <item row="8" column="0">
-             <widget class="Line" name="line_8">
+            <item row="6" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <property name="spacing">
+               <number>2</number>
+              </property>
+              <property name="sizeConstraint">
+               <enum>QLayout::SetFixedSize</enum>
+              </property>
+              <item>
+               <widget class="Line" name="line_15">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item alignment="Qt::AlignHCenter">
+               <widget class="QLabel" name="probe_settings_section_la">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>PROBE SETTINGS</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="Line" name="line_16">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="gridLayout_21">
+                <property name="horizontalSpacing">
+                 <number>0</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <item row="0" column="0">
+                 <spacer name="horizontalSpacer_10">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>180</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="1" alignment="Qt::AlignHCenter">
+                 <widget class="QCheckBox" name="hold_on_probe_chb">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>150</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Hold On Probe</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2" alignment="Qt::AlignHCenter">
+                 <widget class="QCheckBox" name="hold_on_probe_chb_3">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>150</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Z=0 After Probe</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item row="14" column="0">
+             <widget class="Line" name="line_9">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
-             <spacer name="verticalSpacer_5">
+            <item row="4" column="0">
+             <widget class="Line" name="line_13">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
+             </widget>
             </item>
-            <item row="9" column="0">
+            <item row="11" column="0">
              <layout class="QVBoxLayout" name="verticalLayout_5">
+              <property name="spacing">
+               <number>2</number>
+              </property>
+              <property name="sizeConstraint">
+               <enum>QLayout::SetFixedSize</enum>
+              </property>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_13">
                 <item>
                  <layout class="QGridLayout" name="gridLayout_14">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetFixedSize</enum>
+                  </property>
+                  <property name="verticalSpacing">
+                   <number>2</number>
+                  </property>
                   <item row="2" column="2">
                    <widget class="QDoubleSpinBox" name="tool_probe_y_wpos_dsb">
                     <property name="sizePolicy">
@@ -5558,7 +5682,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -5601,7 +5725,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -5636,14 +5760,14 @@
                   <item row="0" column="1" alignment="Qt::AlignHCenter">
                    <widget class="QLabel" name="x_la">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>16777215</width>
+                      <width>80</width>
                       <height>50</height>
                      </size>
                     </property>
@@ -5664,14 +5788,14 @@
                   <item row="0" column="2" alignment="Qt::AlignHCenter">
                    <widget class="QLabel" name="y_la">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>16777215</width>
+                      <width>80</width>
                       <height>50</height>
                      </size>
                     </property>
@@ -5700,7 +5824,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -5746,7 +5870,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -5781,14 +5905,14 @@
                   <item row="0" column="3" alignment="Qt::AlignHCenter">
                    <widget class="QLabel" name="z_la">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>16777215</width>
+                      <width>80</width>
                       <height>50</height>
                      </size>
                     </property>
@@ -5817,7 +5941,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -5860,7 +5984,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>130</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -5894,7 +6018,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -5937,7 +6061,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>130</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -5971,7 +6095,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -6014,7 +6138,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>130</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -6039,18 +6163,54 @@
                   </item>
                   <item row="1" column="4" alignment="Qt::AlignHCenter">
                    <widget class="QCheckBox" name="tool_probe_wm_pos_chb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>120</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>120</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="autoFillBackground">
+                     <bool>true</bool>
+                    </property>
                     <property name="text">
                      <string>Working Position</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="4">
+                  <item row="2" column="4" alignment="Qt::AlignHCenter">
                    <widget class="QPushButton" name="get_tool_probe_pb">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>180</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>180</width>
+                      <height>20</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -6063,13 +6223,6 @@
                     </property>
                     <property name="text">
                      <string>Get Tool Offset Position</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="4" alignment="Qt::AlignHCenter">
-                   <widget class="QCheckBox" name="hold_on_probe_chb">
-                    <property name="text">
-                     <string>Hold On Probe</string>
                     </property>
                    </widget>
                   </item>
@@ -6088,6 +6241,9 @@
                <layout class="QHBoxLayout" name="horizontalLayout_15">
                 <item>
                  <layout class="QGridLayout" name="gridLayout_15">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetFixedSize</enum>
+                  </property>
                   <item row="0" column="4">
                    <widget class="QDoubleSpinBox" name="tool_change_z_mpos_dsb">
                     <property name="sizePolicy">
@@ -6099,7 +6255,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -6145,7 +6301,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -6191,7 +6347,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>80</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -6237,7 +6393,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>130</width>
-                      <height>0</height>
+                      <height>20</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -6260,13 +6416,25 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="5">
+                  <item row="0" column="5" alignment="Qt::AlignHCenter">
                    <widget class="QPushButton" name="get_tool_change_pb">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>150</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>180</width>
+                      <height>20</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>
@@ -6288,73 +6456,8 @@
               </item>
              </layout>
             </item>
-            <item row="7" column="0" alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="tool_change_section_la">
-              <property name="font">
-               <font>
-                <pointsize>16</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>TOOL CHANGE</string>
-              </property>
-             </widget>
-            </item>
-            <item row="14" column="0">
-             <widget class="Line" name="line_10">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0" alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="tool_change_section_la_2">
-              <property name="font">
-               <font>
-                <pointsize>16</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>JOBS COMMON SETTINGS</string>
-              </property>
-             </widget>
-            </item>
-            <item row="16" column="0">
-             <spacer name="verticalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="4" column="0">
-             <widget class="Line" name="line_13">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="Line" name="line_12">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
             <item row="12" column="0">
-             <widget class="Line" name="line_9">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="Line" name="line_11">
+             <widget class="Line" name="line_7">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -6362,18 +6465,27 @@
             </item>
             <item row="3" column="0">
              <layout class="QGridLayout" name="gridLayout_20">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetFixedSize</enum>
+              </property>
               <item row="0" column="1" alignment="Qt::AlignHCenter">
                <widget class="QLabel" name="x_axis_la">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>20</height>
+                 </size>
+                </property>
                 <property name="maximumSize">
                  <size>
-                  <width>16777215</width>
-                  <height>50</height>
+                  <width>150</width>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="font">
@@ -6393,15 +6505,21 @@
               <item row="0" column="2" alignment="Qt::AlignHCenter">
                <widget class="QLabel" name="x_la_2">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>20</height>
+                 </size>
+                </property>
                 <property name="maximumSize">
                  <size>
-                  <width>16777215</width>
-                  <height>50</height>
+                  <width>150</width>
+                  <height>20</height>
                  </size>
                 </property>
                 <property name="font">
@@ -6418,7 +6536,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+              <item row="1" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
                <widget class="QLabel" name="mirroring_axis_la">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -6454,6 +6572,18 @@
               </item>
               <item row="1" column="1" alignment="Qt::AlignHCenter">
                <widget class="QRadioButton" name="x_mirror_rb">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>20</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -6461,6 +6591,18 @@
               </item>
               <item row="1" column="2" alignment="Qt::AlignHCenter">
                <widget class="QRadioButton" name="y_mirror_rb">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>20</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -6484,34 +6626,18 @@
               </item>
              </layout>
             </item>
-            <item row="11" column="0">
-             <spacer name="verticalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>10</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="9" column="1">
-             <spacer name="horizontalSpacer_4">
+            <item row="0" column="0">
+             <widget class="Line" name="line_12">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
+             </widget>
             </item>
-            <item row="15" column="0">
+            <item row="17" column="0">
              <layout class="QGridLayout" name="gridLayout_19">
+              <property name="verticalSpacing">
+               <number>2</number>
+              </property>
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="feedrate_z_dsb">
                 <property name="minimumSize">
@@ -6736,9 +6862,12 @@
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
-                  <width>40</width>
+                  <width>200</width>
                   <height>20</height>
                  </size>
                 </property>
@@ -6749,9 +6878,12 @@
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
-                  <width>40</width>
+                  <width>200</width>
                   <height>20</height>
                  </size>
                 </property>
@@ -6762,9 +6894,12 @@
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
-                  <width>40</width>
+                  <width>200</width>
                   <height>20</height>
                  </size>
                 </property>
@@ -6773,17 +6908,17 @@
              </layout>
             </item>
             <item row="10" column="0">
-             <widget class="Line" name="line_7">
+             <widget class="Line" name="line_8">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
-            <item row="13" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+            <item row="15" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
              <widget class="QLabel" name="feedrates_section_la">
               <property name="font">
                <font>
-                <pointsize>16</pointsize>
+                <pointsize>12</pointsize>
                </font>
               </property>
               <property name="text">
@@ -6791,12 +6926,132 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
+            <item row="16" column="0">
+             <widget class="Line" name="line_10">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="jobs_common_settings_section_la">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>210</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>300</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>JOBS COMMON SETTINGS</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
              <widget class="Line" name="line_14">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
              </widget>
+            </item>
+            <item row="13" column="0">
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="9" column="0" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="tool_change_section_la">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>TOOL CHANGE</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="Line" name="line_11">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="1">
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="7" column="0">
+             <spacer name="verticalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="5" column="0">
+             <spacer name="verticalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </widget>
@@ -6805,7 +7060,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_16">
           <item>
-           <spacer name="horizontalSpacer_5">
+           <spacer name="horizontalSpacer_11">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -6830,6 +7085,19 @@
              <string>Save Settings/Preferences</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>

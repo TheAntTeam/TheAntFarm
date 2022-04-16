@@ -71,7 +71,6 @@ class UiSettingsPreferencesTab(QObject):
     def reset_jobs_common_initial_settings(self):
         """Reset status of common jobs settings. """
         mirror_axis = self.jobs_settings.jobs_settings_od["common"]["mirroring_axis"]
-        print(mirror_axis)
         if mirror_axis.lower() == "x":
             self.ui.x_mirror_rb.setChecked(True)
         elif mirror_axis.lower() == "y":
