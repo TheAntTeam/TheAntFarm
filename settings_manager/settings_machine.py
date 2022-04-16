@@ -30,6 +30,7 @@ class MachineSettingsHandler:
     TOOL_PROBE_Z_LIMIT_DEFAULT = -11.0
     TOOL_PROBE_REL_FLAG_DEFAULT = False
     HOLD_ON_PROBE_FLAG_DEFAULT = False
+    ZEROING_AFTER_PROBE_FLAG_DEFAULT = False
 
     def __init__(self, config_folder, main_win):
         self.machine_config_path = os.path.normpath(os.path.join(config_folder, 'machine_config.ini'))
@@ -62,6 +63,7 @@ class MachineSettingsHandler:
         self.tool_probe_z_limit = self.TOOL_PROBE_Z_LIMIT_DEFAULT
         self.tool_probe_rel_flag = self.TOOL_PROBE_REL_FLAG_DEFAULT
         self.hold_on_probe_flag = self.HOLD_ON_PROBE_FLAG_DEFAULT
+        self.zeroing_after_probe_flag = self.ZEROING_AFTER_PROBE_FLAG_DEFAULT
 
     def read_all_machine_settings(self):
         """ Read all machine settings from ini files """
@@ -112,6 +114,8 @@ class MachineSettingsHandler:
 
             self.tool_probe_z_limit = machine_general.getfloat("tool_probe_z_limit", self.TOOL_PROBE_Z_LIMIT_DEFAULT)
             self.hold_on_probe_flag = machine_general.getboolean("hold_on_probe_flag", self.HOLD_ON_PROBE_FLAG_DEFAULT)
+            self.zeroing_after_probe_flag = machine_general.getboolean("zeroing_after_probe_flag",
+                                                                       self.ZEROING_AFTER_PROBE_FLAG_DEFAULT)
 
     def write_all_machine_settings(self):
         """ Write all machine settings to ini files """
@@ -128,6 +132,7 @@ class MachineSettingsHandler:
                                             "feedrate_probe": self.FEEDRATE_PROBE_DEFAULT,
                                             "tool_probe_relative_flag": self.TOOL_PROBE_REL_FLAG_DEFAULT,
                                             "hold_on_probe_flag": self.HOLD_ON_PROBE_FLAG_DEFAULT,
+                                            "zeroing_after_probe_flag": self.ZEROING_AFTER_PROBE_FLAG_DEFAULT,
                                             "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
                                             "tool_probe_z_mpos": self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT,
@@ -156,6 +161,7 @@ class MachineSettingsHandler:
         machine_general["feedrate_probe"] = str(self.feedrate_probe)
         machine_general["tool_probe_relative_flag"] = str(self.tool_probe_rel_flag)
         machine_general["hold_on_probe_flag"] = str(self.hold_on_probe_flag)
+        machine_general["zeroing_after_probe_flag"] = str(self.zeroing_after_probe_flag)
         machine_general["tool_probe_x_mpos"] = str(self.tool_probe_offset_x_mpos)
         machine_general["tool_probe_y_mpos"] = str(self.tool_probe_offset_y_mpos)
         machine_general["tool_probe_z_mpos"] = str(self.tool_probe_offset_z_mpos)
@@ -186,6 +192,7 @@ class MachineSettingsHandler:
                                             "feedrate_probe": self.FEEDRATE_PROBE_DEFAULT,
                                             "tool_probe_relative_flag": self.TOOL_PROBE_REL_FLAG_DEFAULT,
                                             "hold_on_probe_flag": self.HOLD_ON_PROBE_FLAG_DEFAULT,
+                                            "zeroing_after_probe_flag": self.ZEROING_AFTER_PROBE_FLAG_DEFAULT,
                                             "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
                                             "tool_probe_z_mpos": self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT,
@@ -213,6 +220,7 @@ class MachineSettingsHandler:
         machine_general["feedrate_probe"] = str(self.FEEDRATE_PROBE_DEFAULT)
         machine_general["tool_probe_relative_flag"] = str(self.TOOL_PROBE_REL_FLAG_DEFAULT)
         machine_general["hold_on_probe_flag"] = str(self.HOLD_ON_PROBE_FLAG_DEFAULT)
+        machine_general["zeroing_after_probe_flag"] = str(self.ZEROING_AFTER_PROBE_FLAG_DEFAULT)
         machine_general["tool_probe_x_mpos"] = str(self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT)
         machine_general["tool_probe_y_mpos"] = str(self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT)
         machine_general["tool_probe_z_mpos"] = str(self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT)

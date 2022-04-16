@@ -2599,14 +2599,14 @@ class Ui_MainWindow(object):
 
         self.gridLayout_21.addWidget(self.hold_on_probe_chb, 0, 1, 1, 1, Qt.AlignHCenter)
 
-        self.hold_on_probe_chb_3 = QCheckBox(self.jobs_machine_settings_tab)
-        self.hold_on_probe_chb_3.setObjectName(u"hold_on_probe_chb_3")
-        sizePolicy3.setHeightForWidth(self.hold_on_probe_chb_3.sizePolicy().hasHeightForWidth())
-        self.hold_on_probe_chb_3.setSizePolicy(sizePolicy3)
-        self.hold_on_probe_chb_3.setMinimumSize(QSize(150, 0))
-        self.hold_on_probe_chb_3.setMaximumSize(QSize(150, 16777215))
+        self.zeroing_after_probe_chb = QCheckBox(self.jobs_machine_settings_tab)
+        self.zeroing_after_probe_chb.setObjectName(u"zeroing_after_probe_chb")
+        sizePolicy3.setHeightForWidth(self.zeroing_after_probe_chb.sizePolicy().hasHeightForWidth())
+        self.zeroing_after_probe_chb.setSizePolicy(sizePolicy3)
+        self.zeroing_after_probe_chb.setMinimumSize(QSize(150, 0))
+        self.zeroing_after_probe_chb.setMaximumSize(QSize(150, 16777215))
 
-        self.gridLayout_21.addWidget(self.hold_on_probe_chb_3, 0, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout_21.addWidget(self.zeroing_after_probe_chb, 0, 2, 1, 1, Qt.AlignHCenter)
 
 
         self.verticalLayout_4.addLayout(self.gridLayout_21)
@@ -3614,7 +3614,7 @@ class Ui_MainWindow(object):
         self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.application_settings_tab), QCoreApplication.translate("MainWindow", u"Application Settings", None))
         self.probe_settings_section_la.setText(QCoreApplication.translate("MainWindow", u"PROBE SETTINGS", None))
         self.hold_on_probe_chb.setText(QCoreApplication.translate("MainWindow", u"Hold On Probe", None))
-        self.hold_on_probe_chb_3.setText(QCoreApplication.translate("MainWindow", u"Z=0 After Probe", None))
+        self.zeroing_after_probe_chb.setText(QCoreApplication.translate("MainWindow", u"Z=0 After Probe", None))
         self.x_la.setText(QCoreApplication.translate("MainWindow", u"X", None))
         self.y_la.setText(QCoreApplication.translate("MainWindow", u"Y", None))
         self.z_la.setText(QCoreApplication.translate("MainWindow", u"Z", None))

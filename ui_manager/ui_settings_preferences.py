@@ -48,6 +48,7 @@ class UiSettingsPreferencesTab(QObject):
         self.ui_tool_probe_set_enabling(enable=False)
         self.ui_tool_change_set_enabling(enable=False)
 
+        self.reset_probe_initial_settings()
         self.reset_tool_machine_initial_settings()
         self.reset_jobs_common_initial_settings()
         self.ui.tool_probe_x_mpos_dsb.valueChanged.connect(self.set_focus_lost)
@@ -61,6 +62,7 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.tool_change_z_mpos_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.tool_probe_z_limit_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.hold_on_probe_chb.clicked.connect(self.set_focus_lost)
+        self.ui.zeroing_after_probe_chb.clicked.connect(self.set_focus_lost)
         self.ui.feedrate_xy_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.feedrate_z_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.feedrate_probe_dsb.valueChanged.connect(self.set_focus_lost)
@@ -81,6 +83,11 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.tool_probe_wm_pos_chb.setChecked(self.machine_settings.tool_probe_rel_flag)
         self.enable_disable_tool_probe_wpos_mpos(self.machine_settings.tool_probe_rel_flag)
 
+    def reset_probe_initial_settings(self):
+        """Initialize or re-initialize ui value from initial probe machine settings."""
+        self.ui.hold_on_probe_chb.setChecked(self.machine_settings.hold_on_probe_flag)
+        self.ui.zeroing_after_probe_chb.setChecked(self.machine_settings.zeroing_after_probe_flag)
+
     def reset_tool_machine_initial_settings(self):
         """Initialize or re-initialize ui value from initial machine settings."""
         self.ui.tool_probe_x_mpos_dsb.setValue(self.machine_settings.tool_probe_offset_x_mpos)
@@ -95,7 +102,6 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.tool_change_z_mpos_dsb.setValue(self.machine_settings.tool_change_offset_z_mpos)
 
         self.ui.tool_probe_z_limit_dsb.setValue(self.machine_settings.tool_probe_z_limit)
-        self.ui.hold_on_probe_chb.setChecked(self.machine_settings.hold_on_probe_flag)
 
         self.ui.feedrate_xy_dsb.setValue(self.machine_settings.feedrate_xy)
         self.ui.feedrate_z_dsb.setValue(self.machine_settings.feedrate_z)
@@ -104,6 +110,7 @@ class UiSettingsPreferencesTab(QObject):
     def restore_initial_settings(self):
         """Restore initial settings in ui fields. """
         self.reset_jobs_common_initial_settings()
+        self.reset_probe_initial_settings()
         self.reset_tool_machine_initial_settings()
         self.reset_tool_probe_initial_enables()
         self.reset_focus_lost()
@@ -220,6 +227,7 @@ class UiSettingsPreferencesTab(QObject):
 
         self.machine_settings.tool_probe_z_limit = self.ui.tool_probe_z_limit_dsb.value()
         self.machine_settings.hold_on_probe_flag = self.ui.hold_on_probe_chb.isChecked()
+        self.machine_settings.zeroing_after_probe_flag = self.ui.zeroing_after_probe_chb.isChecked()
 
         self.machine_settings.feedrate_xy = self.ui.feedrate_xy_dsb.value()
         self.machine_settings.feedrate_z = self.ui.feedrate_z_dsb.value()
