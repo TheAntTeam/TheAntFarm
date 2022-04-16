@@ -89,6 +89,10 @@ class UiControlTab(QObject):
         self.ui.send_te.hide()
         self.ui.send_pb.hide()
 
+        # Set x and y bbox step initial values.
+        self.ui.x_num_step_sb.setValue(self.machine_settings.x_bbox_step)
+        self.ui.y_num_step_sb.setValue(self.machine_settings.y_bbox_step)
+
         self.ui.refresh_pb.clicked.connect(self.handle_refresh_button)
         self.ui.connect_pb.clicked.connect(self.handle_connect_button)
         self.ui.clear_terminal_pb.clicked.connect(self.handle_clear_terminal)
@@ -130,10 +134,10 @@ class UiControlTab(QObject):
         self.ui.get_bbox_pb.clicked.connect(self.controlWo.get_boundary_box)
         self.ui.x_min_dsb.valueChanged.connect(self.update_bbox_x_steps)
         self.ui.x_max_dsb.valueChanged.connect(self.update_bbox_x_steps)
-        self.ui.x_num_step_sb.valueChanged.connect(self.update_bbox_x_steps)
+        self.ui.x_num_step_sb.valueChanged.connect(self.update_bbox_x_num_steps)
         self.ui.y_min_dsb.valueChanged.connect(self.update_bbox_y_steps)
         self.ui.y_max_dsb.valueChanged.connect(self.update_bbox_y_steps)
-        self.ui.y_num_step_sb.valueChanged.connect(self.update_bbox_y_steps)
+        self.ui.y_num_step_sb.valueChanged.connect(self.update_bbox_y_num_steps)
 
         self.ui.soft_reset_tb.setEnabled(False)
         self.ui.unlock_tb.setEnabled(False)
@@ -757,9 +761,19 @@ class UiControlTab(QObject):
         self.ui.progressBar.setValue(prog_percentage)
 
     @Slot()
+    def update_bbox_x_num_steps(self):
+        self.machine_settings.x_bbox_step = self.ui.x_num_step_sb.value()
+        self.update_bbox_x_steps()
+
+    @Slot()
     def update_bbox_x_steps(self):
         x_steps = abs(self.ui.x_max_dsb.value() - self.ui.x_min_dsb.value()) / self.ui.x_num_step_sb.value()
         self.ui.x_step_dsb.setValue(x_steps)
+
+    @Slot()
+    def update_bbox_y_num_steps(self):
+        self.machine_settings.y_bbox_step = self.ui.y_num_step_sb.value()
+        self.update_bbox_y_steps()
 
     @Slot()
     def update_bbox_y_steps(self):

@@ -6,6 +6,8 @@ class MachineSettingsHandler:
     # MACHINE CONFIGURATION DEFAULT VALUES
     PROBE_Z_MAX_DEFAULT = 1.0
     PROBE_Z_MIN_DEFAULT = -11.0
+    X_BBOX_STEP_DEFAULT = 1
+    Y_BBOX_STEP_DEFAULT = 1
     XY_STEP_IDX_DEFAULT = 3
     XY_STEP_VALUE_DEFAULT = 1.0
     Z_STEP_IDX_DEFAULT = 3
@@ -36,6 +38,8 @@ class MachineSettingsHandler:
 
         self.probe_z_min = self.PROBE_Z_MIN_DEFAULT
         self.probe_z_max = self.PROBE_Z_MAX_DEFAULT
+        self.x_bbox_step = self.X_BBOX_STEP_DEFAULT
+        self.y_bbox_step = self.Y_BBOX_STEP_DEFAULT
         self.xy_step_idx = self.XY_STEP_IDX_DEFAULT
         self.xy_step_value = self.XY_STEP_VALUE_DEFAULT
         self.z_step_idx = self.Z_STEP_IDX_DEFAULT
@@ -73,6 +77,8 @@ class MachineSettingsHandler:
             machine_general = self.machine_settings["GENERAL"]
             self.probe_z_min = machine_general.getfloat("probe_z_min", self.PROBE_Z_MIN_DEFAULT)
             self.probe_z_max = machine_general.getfloat("probe_z_max", self.PROBE_Z_MAX_DEFAULT)
+            self.x_bbox_step = machine_general.getint("x_bbox_step", self.X_BBOX_STEP_DEFAULT)
+            self.y_bbox_step = machine_general.getint("y_bbox_step", self.Y_BBOX_STEP_DEFAULT)
             self.xy_step_idx = machine_general.getint("xy_step_idx", self.XY_STEP_IDX_DEFAULT)
             self.xy_step_value = machine_general.getfloat("xy_step_value", self.XY_STEP_VALUE_DEFAULT)
             self.z_step_idx = machine_general.getint("z_step_idx", self.Z_STEP_IDX_DEFAULT)
@@ -111,6 +117,8 @@ class MachineSettingsHandler:
         """ Write all machine settings to ini files """
         self.machine_settings["DEFAULT"] = {"probe_z_min": self.PROBE_Z_MIN_DEFAULT,
                                             "probe_z_max": self.PROBE_Z_MAX_DEFAULT,
+                                            "x_bbox_step": self.X_BBOX_STEP_DEFAULT,
+                                            "y_bbox_step": self.Y_BBOX_STEP_DEFAULT,
                                             "xy_step_idx": self.XY_STEP_IDX_DEFAULT,
                                             "xy_step_value": self.XY_STEP_VALUE_DEFAULT,
                                             "z_step_idx": self.Z_STEP_IDX_DEFAULT,
@@ -137,6 +145,8 @@ class MachineSettingsHandler:
 
         machine_general["probe_z_min"] = str(self.probe_z_min)
         machine_general["probe_z_max"] = str(self.probe_z_max)
+        machine_general["x_bbox_step"] = str(self.x_bbox_step)
+        machine_general["y_bbox_step"] = str(self.y_bbox_step)
         machine_general["xy_step_idx"] = str(self.xy_step_idx)
         machine_general["xy_step_value"] = str(self.xy_step_value)
         machine_general["z_step_idx"] = str(self.z_step_idx)
@@ -162,9 +172,11 @@ class MachineSettingsHandler:
             self.machine_settings.write(configfile)
 
     def restore_machine_settings(self):
-        """ Restore all machine settings to default and create ini file if it doesn't exists """
+        """ Restore all machine settings to default and create ini file if it doesn't exist """
         self.machine_settings["DEFAULT"] = {"probe_z_min": self.PROBE_Z_MIN_DEFAULT,
                                             "probe_z_max": self.PROBE_Z_MAX_DEFAULT,
+                                            "x_bbox_step": self.X_BBOX_STEP_DEFAULT,
+                                            "y_bbox_step": self.Y_BBOX_STEP_DEFAULT,
                                             "xy_step_idx": self.XY_STEP_IDX_DEFAULT,
                                             "xy_step_value": self.XY_STEP_VALUE_DEFAULT,
                                             "z_step_idx": self.Z_STEP_IDX_DEFAULT,
@@ -190,6 +202,8 @@ class MachineSettingsHandler:
         machine_general = self.machine_settings["GENERAL"]
         machine_general["probe_z_min"] = str(self.PROBE_Z_MIN_DEFAULT)
         machine_general["probe_z_max"] = str(self.PROBE_Z_MAX_DEFAULT)
+        machine_general["x_bbox_step"] = str(self.X_BBOX_STEP_DEFAULT)
+        machine_general["y_bbox_step"] = str(self.Y_BBOX_STEP_DEFAULT)
         machine_general["xy_step_idx"] = str(self.XY_STEP_IDX_DEFAULT)
         machine_general["xy_step_value"] = str(self.XY_STEP_VALUE_DEFAULT)
         machine_general["z_step_idx"] = str(self.Z_STEP_IDX_DEFAULT)
