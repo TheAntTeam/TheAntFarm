@@ -45,6 +45,8 @@ class UiCreateJobLayerTab(QObject):
         self.generate_path_s.connect(self.control_wo.generate_new_path)
         self.control_wo.update_path_s.connect(self.add_new_path)
 
+        self.ui.drill_generate_job_pb.setEnabled(self.ui.drill_tw.rowCount())  # Disable drill generate pb if no bits.
+
     def load_active_layers(self, active_layers):
         self.ui.layer_choice_cb.clear()
 
@@ -103,6 +105,8 @@ class UiCreateJobLayerTab(QObject):
         new_tool_diameter.setMinimum(0.01)
         new_tool_diameter.setMaximum(99.99)
         self.ui.drill_tw.setCellWidget(count_row, 1, new_tool_diameter)
+        if self.ui.drill_tw.rowCount() != 0:
+            self.ui.drill_generate_job_pb.setEnabled(True)
 
     def remove_drill_tool(self):
         sel_range = self.ui.drill_tw.selectedIndexes()
@@ -113,6 +117,8 @@ class UiCreateJobLayerTab(QObject):
         del_rows.reverse()
         for x in del_rows:
             self.ui.drill_tw.removeRow(x)
+        if self.ui.drill_tw.rowCount() == 0:
+            self.ui.drill_generate_job_pb.setEnabled(False)
 
     def set_settings_per_top(self):
         settings_top = self.jobs_settings.jobs_settings_od["top"]
