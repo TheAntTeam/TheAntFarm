@@ -2811,8 +2811,8 @@ class Ui_MainWindow(object):
         self.tool_probe_wm_pos_chb.setObjectName(u"tool_probe_wm_pos_chb")
         sizePolicy3.setHeightForWidth(self.tool_probe_wm_pos_chb.sizePolicy().hasHeightForWidth())
         self.tool_probe_wm_pos_chb.setSizePolicy(sizePolicy3)
-        self.tool_probe_wm_pos_chb.setMinimumSize(QSize(120, 20))
-        self.tool_probe_wm_pos_chb.setMaximumSize(QSize(120, 20))
+        self.tool_probe_wm_pos_chb.setMinimumSize(QSize(150, 20))
+        self.tool_probe_wm_pos_chb.setMaximumSize(QSize(150, 20))
         self.tool_probe_wm_pos_chb.setLayoutDirection(Qt.LeftToRight)
         self.tool_probe_wm_pos_chb.setAutoFillBackground(True)
 
