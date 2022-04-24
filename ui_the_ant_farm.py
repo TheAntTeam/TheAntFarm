@@ -3622,7 +3622,7 @@ class Ui_MainWindow(object):
         self.tool_probe_mpos_la.setText(QCoreApplication.translate("MainWindow", u"Tool Probe MPos", None))
         self.tool_probe_z_limit_la.setText(QCoreApplication.translate("MainWindow", u"Tool Probe Z Limit", None))
         self.tool_probe_wm_pos_chb.setText(QCoreApplication.translate("MainWindow", u"Working Position", None))
-        self.get_tool_probe_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Offset Position", None))
+        self.get_tool_probe_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Probe Position", None))
         self.tool_change_la.setText(QCoreApplication.translate("MainWindow", u"Tool Change MPos", None))
         self.get_tool_change_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Change Position", None))
         self.x_axis_la.setText(QCoreApplication.translate("MainWindow", u"X (top-down mirror)", None))

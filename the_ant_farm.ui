@@ -6222,7 +6222,7 @@
                      <locale language="English" country="UnitedKingdom"/>
                     </property>
                     <property name="text">
-                     <string>Get Tool Offset Position</string>
+                     <string>Get Tool Probe Position</string>
                     </property>
                    </widget>
                   </item>
