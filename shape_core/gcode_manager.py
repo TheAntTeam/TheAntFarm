@@ -38,6 +38,7 @@ class GCoder:
         self.units = units
         self.mirror_type = mirror_type
         self.macro = None
+        self.user_cmd = None
 
         self.geom_list = []
         if machining_type == 'gerber':
