@@ -8,6 +8,7 @@ from datetime import datetime
 import scipy.interpolate as spi
 from shapely.geometry import LineString
 from .macros_manager import Macros
+from .commands_manager import CommandManager
 
 
 class GCoder:
@@ -83,9 +84,14 @@ class GCoder:
                 'tool_probe_working': True,  # False: machine pos or True: working pos
                 'tool_probe_min': -11.0,
                 'tool_change_pos': (-41.2, -120.88, -1.0),
-                'tool_probe_feedrate': (50.0, 80.0, 300.0) # SLOW FAST XY
+                'tool_probe_feedrate': (300.0, 80.0, 50.0),  # SLOW FAST XY
+                'tool_probe_hold': False,
+                'tool_probe_zero': False,
             }
-            self.macro = Macros(self.cfg, digits=self.DIGITS, parent=self)
+            self.macro = Macros(parent=self)
+            self.macro.load_cfg(self.cfg)
+            self.user_cmd = CommandManager(parent=self)
+            self.user_cmd.load_cfg(self.cfg)
         else:
             self.cfg = {}
         self.type = machining_type
@@ -96,6 +102,8 @@ class GCoder:
         self.cfg = cfg
         if self.macro is not None:
             self.macro.load_cfg(self.cfg)
+        if self.user_cmd is not None:
+            self.user_cmd.load_cfg(self.cfg)
 
     def format_float(self, f):
         ff = round(f, self.DIGITS)

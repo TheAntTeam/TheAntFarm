@@ -309,77 +309,17 @@ class ControllerWorker(QObject):
 
     @Slot(str, tuple)
     def execute_user_interface_cmd(self, cmd_key, cmd_data_values):
-        """
-        Send a G-CODE command coming from a user interface.
 
-        Parameters
-        ----------
-        cmd_key: str
-            The command name that is found in the command dictionary.
-        cmd_data_values: tuple
-            Numeric value(s) to send along with the command (ex: coordinate values for each axis).
+        str_l = self.gcr.user_cmd.get_command_str(cmd_key, cmd_data_values)
 
-        Returns
-        -------
-
-        """
-        # Commands dictionary, the keys are strings describing the command, the value is a list,
-        # where the 1st element is the main part of the command to send as it is,
-        # the 2nd element is the second part of the command coming after the first data value and before
-        # the second data value, the 3rd element is the third part of the command coming after the second
-        # data value and before the third data value, the 4th element is a flag to tell the function that
-        # the feedrate should also be sent. The 5th element is the direction of the movement,
-        # the 6th is a flag to tell if the command is newline terminated.
-        # This dictionary should be moved somewhere else.
-        cmd_dict = Od({"soft_reset": [b'\x18', "", "", False, None, False],
-                       "unlock": ["$X", "", "", False, None, True],
-                       "homing": ["$H", "", "", False, None, True],
-                       "xy=0": ["G10 P1 L20 X0 Y0", "", "", False, None, True],
-                       "x=0": ["G10 P1 L20 X0", "", "", False, None, True],
-                       "y=0": ["G10 P1 L20 Y0", "", "", False, None, True],
-                       "z=0": ["G10 P1 L20 Z0", "", "", False, None, True],
-                       "goto_wps_0": ["G90 G0 X0 Y0", "", "", False, None, True],
-                       "x_minus": ["$J=G91 X-", "", "", True, "xy", True],
-                       "x_plus":  ["$J=G91 X", "", "", True, "xy", True],
-                       "y_minus": ["$J=G91 Y-", "", "", True, "xy", True],
-                       "y_plus":  ["$J=G91 Y", "", "", True, "xy", True],
-                       "xy_plus": ["$J=G91 X", "Y", "", True, "xy", True],
-                       "x_plus_y_minus": ["$J=G91 X", "Y-", "", True, "xy", True],
-                       "xy_minus": ["$J=G91 X-", "Y-", "", True, "xy", True],
-                       "x_minus_y_plus": ["$J=G91 X-", "Y", "", True, "xy", True],
-                       "z_minus": ["$J=G91 Z-", "", "", True, "z", True],
-                       "z_plus":  ["$J=G91 Z", "", "", True, "z", True],
-                       })
-        if cmd_key in cmd_dict:
-            cmd_str = cmd_dict[cmd_key][0]
-            cmd_second_part = cmd_dict[cmd_key][1]
-            cmd_third_part = cmd_dict[cmd_key][2]
-            feedrate_flag = cmd_dict[cmd_key][3]
-            direction_type = cmd_dict[cmd_key][4]
-            newline_flag = cmd_dict[cmd_key][5]
-            cmd_data_values_len = len(cmd_data_values)
-            if cmd_data_values:
-                cmd_str += cmd_data_values[0]
-                if cmd_data_values_len > 1:
-                    cmd_str += cmd_second_part + cmd_data_values[1]
-                if cmd_data_values_len > 2:
-                    cmd_str += cmd_third_part + cmd_data_values[2]
-
-            if feedrate_flag and direction_type is not None:
-                feedrate = ""
-                if direction_type.lower() == "xy":
-                    feedrate = str(self.settings.machine_settings.feedrate_xy)
-                elif direction_type.lower() == "z":
-                    feedrate = str(self.settings.machine_settings.feedrate_z)
-                elif direction_type.lower() == "probe":
-                    feedrate = str(self.settings.machine_settings.feedrate_probe)
-                cmd_str += "F" + feedrate
-            if newline_flag:
-                cmd_str += "\n"
-
-            logger.info("Sent GCODE: " + str(cmd_str))  # To string because it can be a byte.
-            self.update_console_text_s.emit(str(cmd_str))  # To string because it can be a byte.
-            self.serial_send_s.emit(cmd_str)
+        if len(str_l) == 1:
+            logger.info("Sending Short User Command")
+            self.update_console_text_s.emit(str(str_l[0]))  # To string because it can be a byte.
+            self.serial_send_s.emit(str_l[0])
+        elif len(str_l) > 1:
+            logger.info("Sending Long User Command")
+            self.send_soft_reset = False
+            self.send_gcode_lines(str_l)
 
     def execute_gcode_cmd(self, cmd_str):
         """ Send generic G-CODE command coming from elsewhere. """
@@ -389,10 +329,8 @@ class ControllerWorker(QObject):
         self.serial_send_s.emit(parsed_cmd_str)
 
     def cmd_probe(self, probe_z_min):
-        probe_feed_rate = self.settings.machine_settings.feedrate_probe
-        probe_cmd_s = self.control_controller.cmd_probe(probe_z_min, probe_feed_rate)
-        logger.info(probe_cmd_s)
-        self.serial_send_s.emit(probe_cmd_s)  # Execute probe
+        self.control_controller.cmd_probe()
+        self.execute_user_interface_cmd("probe", (None, None, probe_z_min))
 
     def ack_probe(self):
         prb_val = self.control_controller.get_probe_value()
@@ -578,6 +516,8 @@ class ControllerWorker(QObject):
             'tool_probe_working': probe_working,  # False: machine pos or True: working pos
             'tool_probe_min': machine_sets.tool_probe_z_limit,
             'tool_change_pos': change_pos,
-            'tool_probe_feedrate': (machine_sets.feedrate_probe, machine_sets.feedrate_z, machine_sets.feedrate_xy)
+            'tool_probe_feedrate': (machine_sets.feedrate_xy, machine_sets.feedrate_z, machine_sets.feedrate_probe),
+            'tool_probe_hold': machine_sets.hold_on_probe_flag,
+            'tool_probe_zero': machine_sets.zeroing_after_probe_flag,
         })
         self.gcr.load_cfg(cfg)

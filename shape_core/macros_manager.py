@@ -15,14 +15,13 @@ class Macros:
     }
     AXIS = ("X", "Y", "Z")
 
-    def __init__(self, cfg=None, digits=4, parent=None):
+    def __init__(self, parent=None):
 
         self.parent = parent
 
         self.cfg = None
         self.load_cfg()
 
-        self.digits = digits
         self.macros_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../macros"))
 
         self.macros_dict = {
@@ -62,10 +61,13 @@ class Macros:
                 'tool_probe_working': True,  # False: machine pos or True: working pos
                 'tool_probe_min': -11.0,
                 'tool_change_pos': (-41.2, -120.88, -1.0),
-                'tool_probe_feedrate': (50.0, 80.0, 300.0),
+                'tool_probe_feedrate': (300.0, 80.0, 50.0),
+                'tool_probe_hold': False,
+                'tool_probe_zero': False,
             }
-        # self.cfg['tool_probe_feedrate'] = (50.0, 80.0)
         self.cfg["safe_pos"] = (-1.0, -1.0, -1.0)
+        print("Macros CFG")
+        print(self.cfg)
 
     def is_macro(self, cmd):
         # splitted = re.findall(r'[a-zA-Z][-]*[\d.]+', cmd.strip().upper())
@@ -120,10 +122,7 @@ class Macros:
         return list(set([x[0] for x in splitted_tags]))
 
     def format_float(self, f):
-        ff = round(f, self.digits)
-        fs = "{:." + str(self.digits) + "f}"
-        f_str = fs.format(ff)
-        return f_str
+        return self.parent.format_float(f)
 
     def check_tag_in_string(self, gc_str):
         return self.TAG in str(gc_str)
@@ -159,11 +158,16 @@ class Macros:
                 tag_str = "G54" if self.cfg["tool_probe_working"] else "G53"
         elif tag_type == "FEED":
             if stag[2] == "SLOW":
-                tag_str = self.format_float(self.cfg["tool_probe_feedrate"][0])
+                tag_str = self.format_float(self.cfg["tool_probe_feedrate"][2])
             elif stag[2] == "FAST":
                 tag_str = self.format_float(self.cfg["tool_probe_feedrate"][1])
             elif stag[2] == "XY":
-                tag_str = self.format_float(self.cfg["tool_probe_feedrate"][2])
+                tag_str = self.format_float(self.cfg["tool_probe_feedrate"][0])
+        elif tag_type == "HOLD":
+            if self.cfg["tool_probe_hold"]:
+                tag_str = "M0"
+            else:
+                tag_str = "(NO HOLD)"
         return tag_str
 
     def compute_change_tag(self, stag):

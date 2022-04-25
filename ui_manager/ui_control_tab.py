@@ -612,23 +612,23 @@ class UiControlTab(QObject):
 
     def handle_xy_0(self):
         logger.debug("XY = 0")
-        self.ui_send_cmd_s.emit("xy=0", ())
+        self.ui_send_cmd_s.emit("set_wps", (0.0, 0.0, None))
 
     def handle_x_0(self):
         logger.debug("X = 0")
-        self.ui_send_cmd_s.emit("x=0", ())
+        self.ui_send_cmd_s.emit("set_wps", (0.0, None, None))
 
     def handle_y_0(self):
         logger.debug("Y = 0")
-        self.ui_send_cmd_s.emit("y=0", ())
+        self.ui_send_cmd_s.emit("set_wps", (None, 0.0, None))
 
     def handle_z_0(self):
         logger.debug("Z = 0")
-        self.ui_send_cmd_s.emit("z=0", ())
+        self.ui_send_cmd_s.emit("set_wps", (None, None, 0.0))
 
     def handle_center_jog(self):
         logger.debug("Go to XY working 0")
-        self.ui_send_cmd_s.emit("goto_wps_0", ())
+        self.ui_send_cmd_s.emit("goto", (0.0, 0.0, None))
 
     def z_update_step(self):
         self.machine_settings.z_step_idx = self.ui.z_step_cb.currentIndex()
@@ -645,53 +645,53 @@ class UiControlTab(QObject):
 
     def handle_x_minus(self):
         logger.debug("X_minus Command")
-        x_min_val = self.ui.xy_step_val_dsb.value()
-        self.ui_send_cmd_s.emit("x_minus", (str(x_min_val),))
+        x_min_val = -self.ui.xy_step_val_dsb.value()
+        self.ui_send_cmd_s.emit("jog", (x_min_val, None, None))
 
     def handle_x_plus(self):
         logger.debug("X_plus Command")
         x_plus_val = self.ui.xy_step_val_dsb.value()
-        self.ui_send_cmd_s.emit("x_plus", (str(x_plus_val),))
+        self.ui_send_cmd_s.emit("jog", (x_plus_val, None, None))
 
     def handle_y_minus(self):
         logger.debug("Y_minus Command")
-        y_min_val = self.ui.xy_step_val_dsb.value()
-        self.ui_send_cmd_s.emit("y_minus", (str(y_min_val),))
+        y_min_val = -self.ui.xy_step_val_dsb.value()
+        self.ui_send_cmd_s.emit("jog", (None, y_min_val, None))
 
     def handle_y_plus(self):
         logger.debug("Y_plus Command")
         y_plus_val = self.ui.xy_step_val_dsb.value()
-        self.ui_send_cmd_s.emit("y_plus", (str(y_plus_val),))
+        self.ui_send_cmd_s.emit("jog", (None, y_plus_val, None))
 
     def handle_xy_plus(self):
         logger.debug("XY_plus Command")
         xy_plus_val = self.ui.xy_step_val_dsb.value()
-        self.ui_send_cmd_s.emit("xy_plus", (str(xy_plus_val), str(xy_plus_val)))
+        self.ui_send_cmd_s.emit("jog", (xy_plus_val, xy_plus_val, None))
 
     def handle_x_plus_y_minus(self):
         logger.debug("X_plus_Y_minus Command")
         x_p_y_m_val = self.ui.xy_step_val_dsb.value()
-        self.ui_send_cmd_s.emit("x_plus_y_minus", (str(x_p_y_m_val), str(x_p_y_m_val)))
+        self.ui_send_cmd_s.emit("jog", (x_p_y_m_val, -x_p_y_m_val, None))
 
     def handle_xy_minus(self):
         logger.debug("XY_minus Command")
-        xy_minus_val = self.ui.xy_step_val_dsb.value()
-        self.ui_send_cmd_s.emit("xy_minus", (str(xy_minus_val), str(xy_minus_val)))
+        xy_minus_val = -self.ui.xy_step_val_dsb.value()
+        self.ui_send_cmd_s.emit("jog", (xy_minus_val, xy_minus_val, None))
 
     def handle_x_minus_y_plus(self):
         logger.debug("X_minus_y_plus Command")
         x_m_y_p_val = self.ui.xy_step_val_dsb.value()
-        self.ui_send_cmd_s.emit("x_minus_y_plus", (str(x_m_y_p_val), str(x_m_y_p_val)))
+        self.ui_send_cmd_s.emit("jog", (-x_m_y_p_val, x_m_y_p_val, None))
 
     def handle_z_minus(self):
         logger.debug("Z_minus Command")
         z_minus_val = self.ui.z_step_val_dsb.value()
-        self.ui_send_cmd_s.emit("z_minus", (str(z_minus_val),))
+        self.ui_send_cmd_s.emit("jog", (None, None, -z_minus_val))
 
     def handle_z_plus(self):
         logger.debug("Z_plus Command")
         z_plus_val = self.ui.z_step_val_dsb.value()
-        self.ui_send_cmd_s.emit("z_plus", (str(z_plus_val),))
+        self.ui_send_cmd_s.emit("jog", (None, None, z_plus_val))
 
     def xy_update_step(self):
         self.machine_settings.xy_step_idx = self.ui.xy_step_cb.currentIndex()

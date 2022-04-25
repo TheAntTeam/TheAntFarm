@@ -181,17 +181,11 @@ class ControlController(QObject):
 
         return self.prb_val[0]
 
-    def cmd_probe(self, probe_z_min, probe_feed_rate):
-        probe_cmd_s = ""
-        probe_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
-        probe_cmd_s += "G38.2 Z" + str(probe_z_min) + "\n"  # Set probe command
-
+    def cmd_probe(self):
         self.prb_updated = False
         self.prb_activated = True
         self.prb_num_todo = 1
         self.prb_reps_todo = 1
-
-        return probe_cmd_s
 
     def cmd_auto_bed_levelling(self, bbox_t, steps_t, feedrate_probe):
         xy_coord_list = self.get_grid_coords(bbox_t, steps_t)
