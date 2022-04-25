@@ -247,7 +247,7 @@ class GCoder:
 
     def mirror_coords(self, cs):
         csa = np.array(cs)
-        if self.mirror_type == 'x':
+        if self.mirror_type == 'y':
             # X mirror
             csa[:, 0] *= -1.0
         else:

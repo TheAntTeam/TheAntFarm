@@ -66,8 +66,8 @@ class Macros:
                 'tool_probe_zero': False,
             }
         self.cfg["safe_pos"] = (-1.0, -1.0, -1.0)
-        print("Macros CFG")
-        print(self.cfg)
+        # print("Macros CFG")
+        # print(self.cfg)
 
     def is_macro(self, cmd):
         # splitted = re.findall(r'[a-zA-Z][-]*[\d.]+', cmd.strip().upper())
