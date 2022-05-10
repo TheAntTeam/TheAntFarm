@@ -1,5 +1,5 @@
-from PySide2.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelIndex
-from PySide2.QtWidgets import QFileDialog, QLineEdit, QRadioButton, QHeaderView, QButtonGroup
+from PySide2.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelIndex, QItemSelectionModel
+from PySide2.QtWidgets import QFileDialog, QLineEdit, QRadioButton, QHeaderView, QButtonGroup, QAbstractItemView
 from PySide2.QtGui import QIcon
 from style_manager import StyleManager
 import os
@@ -156,6 +156,11 @@ class UiControlTab(QObject):
         self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
         self.ui.gcode_tw.setColumnWidth(1, 100)
         self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        # To Select Rows by Vertical Header
+        self.ui.gcode_tw.setSelectionMode(QAbstractItemView.NoSelection)
+        self.ui.gcode_tw.horizontalHeader().sectionPressed.disconnect()
+        self.ui.gcode_tw.verticalHeader().sectionClicked.connect(self.select_gcode_row)
+        self.ui.gcode_tw.verticalHeader().sectionDoubleClicked.connect(self.deselect_all_gcode_row)
 
         self.ui.upload_temp_tb.clicked.connect(self.update_temporary_gcode_files)
         self.ui.remove_gcode_tb.clicked.connect(self.remove_gcode_files)
@@ -184,6 +189,26 @@ class UiControlTab(QObject):
         self.ui.z_max_dsb.setValue(self.machine_settings.probe_z_max)
         self.ui.z_min_dsb.valueChanged.connect(self.handle_z_min_changed)
         self.ui.z_max_dsb.valueChanged.connect(self.handle_z_max_changed)
+
+    def deselect_all_gcode_row(self, index):
+        print("DESELECT ALL")
+        self.ui.gcode_tw.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.ui.gcode_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.ui.gcode_tw.clearSelection()
+        self.ui.gcode_tw.setSelectionMode(QAbstractItemView.NoSelection)
+
+    def select_gcode_row(self, index):
+        self.ui.gcode_tw.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.ui.gcode_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
+        qindexes = self.ui.gcode_tw.selectionModel().selectedRows()
+        indexes = [x.row() for x in qindexes]
+        if index in indexes:
+            selectionModel = self.ui.gcode_tw.selectionModel()
+            selectionModel.select(self.ui.gcode_tw.model().index(index, 0),
+                                  selectionModel.Deselect | selectionModel.Rows)
+        else:
+            self.ui.gcode_tw.selectRow(index)
+        self.ui.gcode_tw.setSelectionMode(QAbstractItemView.NoSelection)
 
     def init_xy_jog_step_value(self):
         """ Initialize XY step and value ui fields. """
@@ -350,6 +375,7 @@ class UiControlTab(QObject):
                     new_le = QLineEdit(os.path.basename(elem))
                     new_le.setReadOnly(True)
                     new_le.setToolTip(elem)
+
                     self.ui.gcode_tw.setCellWidget(num_rows, 0, new_le)
                     column = 1
                     row = num_rows
