@@ -269,6 +269,10 @@ class ControlController(QObject):
         if gcp is not None:
             self.gcodes_od[gcode_path] = {"gcode": gcp, "tag": tag}
 
+    def remove_gcode_file(self, gcode_path):
+        if self.gcodes_od[gcode_path]:
+            del self.gcodes_od[gcode_path]
+
     def get_gcode_tag_and_v(self, gcode_path):
         v = self.gcodes_od[gcode_path]["gcode"].get_gcode_vectors()
         tag = self.gcodes_od[gcode_path]["tag"]

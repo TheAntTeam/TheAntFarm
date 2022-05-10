@@ -21,6 +21,7 @@ class UiControlTab(QObject):
 
     precalc_gcode_s = Signal(str)
     select_gcode_s = Signal(str)
+    remove_gcode_s = Signal(str)
 
     ui_send_cmd_s = Signal(str, tuple)
 
@@ -164,6 +165,7 @@ class UiControlTab(QObject):
 
         self.ui.upload_temp_tb.clicked.connect(self.update_temporary_gcode_files)
         self.ui.remove_gcode_tb.clicked.connect(self.remove_gcode_files)
+        self.remove_gcode_s.connect(self.controlWo.remove_gcode)
 
         self.gcode_rb_group = QButtonGroup()
         self.gcode_rb_group.setExclusive(True)
@@ -431,6 +433,7 @@ class UiControlTab(QObject):
         for row in sorted(rows, reverse=True):
             gcode_path = self.ui.gcode_tw.cellWidget(row, 0).toolTip()
             tag, _ = self.controlWo.get_gcode_data(gcode_path)
+            self.remove_gcode_s.emit(gcode_path)
             self.ctrl_layer.remove_gcode(tag)
             self.ui.gcode_tw.removeRow(row)
 

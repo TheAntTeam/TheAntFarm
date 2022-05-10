@@ -383,6 +383,10 @@ class ControllerWorker(QObject):
         return self.control_controller.get_gcode_tag_and_v(gcode_path)
 
     @Slot(str)
+    def remove_gcode(self, gcode_path):
+        self.control_controller.remove_gcode_file(gcode_path)
+
+    @Slot(str)
     def send_gcode_file(self, gcode_path):
         lines = self.control_controller.get_gcode_lines(gcode_path)
         logger.info("Sending file: " + str(gcode_path))
