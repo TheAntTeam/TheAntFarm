@@ -1,5 +1,5 @@
 from PySide2.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelIndex, QItemSelectionModel
-from PySide2.QtWidgets import QFileDialog, QLineEdit, QRadioButton, QHeaderView, QButtonGroup, QAbstractItemView
+from PySide2.QtWidgets import QFileDialog, QLabel, QRadioButton, QHeaderView, QButtonGroup, QAbstractItemView
 from PySide2.QtGui import QIcon
 from style_manager import StyleManager
 import os
@@ -191,7 +191,6 @@ class UiControlTab(QObject):
         self.ui.z_max_dsb.valueChanged.connect(self.handle_z_max_changed)
 
     def deselect_all_gcode_row(self, index):
-        print("DESELECT ALL")
         self.ui.gcode_tw.setSelectionMode(QAbstractItemView.MultiSelection)
         self.ui.gcode_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.gcode_tw.clearSelection()
@@ -372,11 +371,9 @@ class UiControlTab(QObject):
                     num_rows = self.ui.gcode_tw.rowCount()
                     self.ui.gcode_tw.insertRow(num_rows)
                     # The total path is just in the ToolTip while the name shown is only the name
-                    new_le = QLineEdit(os.path.basename(elem))
-                    new_le.setReadOnly(True)
-                    new_le.setToolTip(elem)
-
-                    self.ui.gcode_tw.setCellWidget(num_rows, 0, new_le)
+                    new_la = QLabel(os.path.basename(elem))
+                    new_la.setToolTip(elem)
+                    self.ui.gcode_tw.setCellWidget(num_rows, 0, new_la)
                     column = 1
                     row = num_rows
                     new_rb = QRadioButton()

@@ -287,7 +287,6 @@ class ControlController(QObject):
         # print(gcp.gc.modified_vectors)
 
     def remove_abl(self, gcode_path):
-        print("Remove ABL")
         gcp = self.get_gcode_gcp(gcode_path)
         if gcp.gc.modified_vectors:
             gcp.gc.modified_vectors = []
