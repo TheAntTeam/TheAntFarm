@@ -626,15 +626,15 @@ class UiControlTab(QObject):
 
     def handle_soft_reset(self):
         logger.info("Soft Reset Command")
-        self.ui_send_cmd_s.emit("soft_reset", ())
+        self.ui_send_cmd_s.emit("soft_reset", (None, None, None))
 
     def handle_unlock(self):
         logger.debug("Unlock Command")
-        self.ui_send_cmd_s.emit("unlock", ())
+        self.ui_send_cmd_s.emit("unlock", (None, None, None))
 
     def handle_homing(self):
         logger.debug("Homing Command")
-        self.ui_send_cmd_s.emit("homing", ())
+        self.ui_send_cmd_s.emit("homing", (None, None, None))
 
     def handle_xy_0(self):
         logger.debug("XY = 0")
