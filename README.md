@@ -88,6 +88,7 @@ Install all the required packages:
   
 The software must be run from the project directory, after the virtual environment has been activated (see installation paragraph), using the following command:
 
+> .\venv\Scripts\activate  
 > python3 the_ant_farm.py  
 
 ### Windows using VS Code
