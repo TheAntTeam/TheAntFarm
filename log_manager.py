@@ -2,26 +2,25 @@ from PySide2.QtCore import Signal, QObject
 import logging
 import logging.handlers
 
-
 logger = logging.getLogger(__name__)
 
 
-# Signals need to be contained in a QObject or subclass in order to be correctly initialized.
 class Signaller(QObject):
+    """
+    Since the Log Handler classes are not derived from QObject, they cannot
+    contain signals, this is why this class exists.
+    """
     signal = Signal(str, logging.LogRecord)
 
 
-# Output to a Qt GUI is only supposed to happen on the main thread. So, this
-# handler is designed to take a slot function which is set up to run in the main
-# thread. In this example, the function takes a string argument which is a
-# formatted log message, and the log record which generated it. The formatted
-# string is just a convenience - you could format a string for output any way
-# you like in the slot function itself.
-#
-# You specify the slot function to do whatever GUI updates you want. The handler
-# doesn't know or care about specific UI elements.
-#
 class LogHandler(logging.Handler):
+    """
+    Logging Handler class, that is responsible for the configuration of logs and
+    the redirection from non-main threads to main thread, where the app can display
+    the messages in the GUI.
+    The working logic of this class is derived from the following example:
+    http://plumberjack.blogspot.com/2019/11/a-qt-gui-for-logging.html
+    """
     def __init__(self, slot_func, *args, **kwargs):
         super(LogHandler, self).__init__(*args, **kwargs)
         self.signaller = Signaller()
@@ -45,6 +44,9 @@ class LogHandler(logging.Handler):
 
 
 class FileLogHandler(logging.handlers.RotatingFileHandler):
+    """
+    File Logging Handler class, that is responsible for the configuration of logs saved in files.
+    """
     def __init__(self, app_settings):
         super(FileLogHandler, self).__init__(app_settings.logs_file,
                                              maxBytes=app_settings.logs_max_bytes,
