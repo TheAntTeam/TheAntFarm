@@ -1,5 +1,6 @@
 import os
 import sys
+import platform
 from PySide2.QtWidgets import QMainWindow, QApplication
 from PySide2.QtCore import QThread, QResource
 from queue import Queue
@@ -15,20 +16,25 @@ from log_manager import LogHandler, FileLogHandler
 import logging.handlers
 
 
-pys2_path = os.path.dirname(sys.modules['PySide2'].__file__)
-if os.path.isdir(os.path.join(pys2_path, "Qt")):
-    pys2_path = os.path.join(pys2_path, "Qt")
+def config_os():
+    pys2_path = os.path.dirname(sys.modules['PySide2'].__file__)
+    if os.path.isdir(os.path.join(pys2_path, "Qt")):
+        pys2_path = os.path.join(pys2_path, "Qt")
+ 
+    # Simple mod to set the QT environment data just for python
+    # avoiding conflict with other applications using Qt
+    os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
 
-# Simple mod to set the QT environment data just for python
-# avoiding conflict with other applications using Qt
-if os.name == "nt":
-    print("Windows Env")
-    os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
-else:
-    print("Linux Env")
-    os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
-    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
-    os.environ["QT_QPA_PLATFORM"] = "xcb"
+    sys_name = platform.system()
+    if sys_name == "Window":
+        print("Windows Env")
+    elif sys_name == 'Darwin':
+        print("Mac Env")
+        os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
+    else:
+        print("Linux Env")
+        os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
+        os.environ["QT_QPA_PLATFORM"] = "xcb"
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -87,10 +93,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             print("Control Thread still running")
         else:
             print("Control Thread stopped")
-        app.exit(0)
+        self.close()
 
-
-if __name__ == "__main__":
+def main():
     app = QApplication(sys.argv)
     style_man = StyleManager(app)
     window = MainWindow()
@@ -112,3 +117,8 @@ if __name__ == "__main__":
 
     window.show()
     sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    config_os()
+    main()
