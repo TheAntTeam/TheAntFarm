@@ -26,7 +26,8 @@ def config_os():
     os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
 
     sys_name = platform.system()
-    if sys_name == "Window":
+    print(sys_name)
+    if sys_name == "Windows":
         print("Windows Env")
     elif sys_name == 'Darwin':
         print("Mac Env")
