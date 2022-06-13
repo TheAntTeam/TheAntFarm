@@ -1,7 +1,8 @@
 import os
 import sys
-from PySide2.QtWidgets import QMainWindow, QApplication, QMessageBox
-from PySide2.QtCore import QThread, QSettings, QPoint, QSize, QThreadPool
+import platform
+from PySide2.QtWidgets import QMainWindow, QApplication
+from PySide2.QtCore import QThread, QResource
 from queue import Queue
 from ui_the_ant_farm import Ui_MainWindow  # convert ui to py: pyside2-uic the_ant_farm.ui > ui_the_ant_farm.py
 # Whenever you change resources in qrc, convert qrc to py: pyside2-rcc app_resources.qrc -o app_resources_rc.py
@@ -15,34 +16,44 @@ from log_manager import LogHandler, FileLogHandler
 import logging.handlers
 
 
-pys2_path = os.path.dirname(sys.modules['PySide2'].__file__)
-if os.path.isdir(os.path.join(pys2_path, "Qt")):
-    pys2_path = os.path.join(pys2_path, "Qt")
+def config_os():
+    pys2_path = os.path.dirname(sys.modules['PySide2'].__file__)
+    if os.path.isdir(os.path.join(pys2_path, "Qt")):
+        pys2_path = os.path.join(pys2_path, "Qt")
+ 
+    # Simple mod to set the QT environment data just for python
+    # avoiding conflict with other applications using Qt
+    os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
 
-# Simple mod to set the QT environment data just for python
-# avoiding conflict with other applications using Qt
-if os.name == "nt":
-    print("Windows Env")
-    os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
-else:
-    print("Linux Env")
-    os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
-    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
-    os.environ["QT_QPA_PLATFORM"] = "xcb"
+    sys_name = platform.system()
+    print(sys_name)
+    if sys_name == "Windows":
+        print("Windows Env")
+    elif sys_name == 'Darwin':
+        print("Mac Env")
+        os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
+    else:
+        print("Linux Env")
+        os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
+        os.environ["QT_QPA_PLATFORM"] = "xcb"
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu = Queue()                   # serial FIFO RX Queue
     serialTxQu = Queue()                   # serial FIFO TX Queue
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         super(MainWindow, self).__init__()
-                                                    
+
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        # After the UI is set up, register the resources root path relatively to this file path.
+        resources_rel_path = os.path.normpath(os.path.join(os.path.dirname(__file__)))
+        QResource.registerResource(resources_rel_path)
+
         self.settings = SettingsHandler(self)
-        self.settings.read_all_settings()  # TODO: manage exceptions with a try except
+        self.settings.read_all_settings()
 
         # Control Worker Thread, started as soon as the thread pool is started.
         self.control_thread = QThread(self)
@@ -83,10 +94,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             print("Control Thread still running")
         else:
             print("Control Thread stopped")
-        app.exit(0)
+        self.close()
 
-
-if __name__ == "__main__":
+def main():
     app = QApplication(sys.argv)
     style_man = StyleManager(app)
     window = MainWindow()
@@ -108,3 +118,8 @@ if __name__ == "__main__":
 
     window.show()
     sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    config_os()
+    main()

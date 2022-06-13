@@ -101,7 +101,7 @@ class SerialWorker(QObject):
                     self.serial_port.waitForBytesWritten(msecs=200)
             except AttributeError as e:
                 logger.error(e, exc_info=True)
-            except Exception as e:
+            except Exception:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
     @Slot()
@@ -127,7 +127,7 @@ class SerialWorker(QObject):
                     self.serial_port.flush()
             except AttributeError as e:
                 logger.error(e, exc_info=True)
-            except Exception as e:
+            except Exception:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
     @Slot()
@@ -136,5 +136,5 @@ class SerialWorker(QObject):
         if error_type != 0:
             logger.error(self.serial_port.error())
             logger.error(self.serial_port.errorString())
-            if error_type == QSerialPort.ResourceError:
-                self.close_for_error_s.emit()
+            # if error_type == QSerialPort.ResourceError:
+            #     self.close_for_error_s.emit()

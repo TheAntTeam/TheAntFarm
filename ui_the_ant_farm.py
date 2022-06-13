@@ -322,29 +322,29 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.top_cut_z_dsb, 3, 1, 1, 1)
 
-        self.top_tool_diameter_l = QLabel(self.top_page)
-        self.top_tool_diameter_l.setObjectName(u"top_tool_diameter_l")
+        self.top_tool_diameter_la = QLabel(self.top_page)
+        self.top_tool_diameter_la.setObjectName(u"top_tool_diameter_la")
 
-        self.gridLayout_2.addWidget(self.top_tool_diameter_l, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_tool_diameter_la, 0, 0, 1, 1)
 
         self.top_generate_job_pb = QPushButton(self.top_page)
         self.top_generate_job_pb.setObjectName(u"top_generate_job_pb")
 
         self.gridLayout_2.addWidget(self.top_generate_job_pb, 11, 0, 1, 2)
 
-        self.top_n_passes_l = QLabel(self.top_page)
-        self.top_n_passes_l.setObjectName(u"top_n_passes_l")
+        self.top_n_passes_la = QLabel(self.top_page)
+        self.top_n_passes_la.setObjectName(u"top_n_passes_la")
 
-        self.gridLayout_2.addWidget(self.top_n_passes_l, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_n_passes_la, 1, 0, 1, 1)
 
         self.top_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.gridLayout_2.addItem(self.top_vertical_spacer, 10, 0, 1, 2)
 
-        self.top_travel_z_l = QLabel(self.top_page)
-        self.top_travel_z_l.setObjectName(u"top_travel_z_l")
+        self.top_travel_z_la = QLabel(self.top_page)
+        self.top_travel_z_la.setObjectName(u"top_travel_z_la")
 
-        self.gridLayout_2.addWidget(self.top_travel_z_l, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_travel_z_la, 4, 0, 1, 1)
 
         self.top_travel_z_dsb = QDoubleSpinBox(self.top_page)
         self.top_travel_z_dsb.setObjectName(u"top_travel_z_dsb")
@@ -354,20 +354,20 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.top_travel_z_dsb, 4, 1, 1, 1)
 
-        self.top_cut_z_l = QLabel(self.top_page)
-        self.top_cut_z_l.setObjectName(u"top_cut_z_l")
+        self.top_cut_z_la = QLabel(self.top_page)
+        self.top_cut_z_la.setObjectName(u"top_cut_z_la")
 
-        self.gridLayout_2.addWidget(self.top_cut_z_l, 3, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_cut_z_la, 3, 0, 1, 1)
 
-        self.top_overlap_l = QLabel(self.top_page)
-        self.top_overlap_l.setObjectName(u"top_overlap_l")
+        self.top_overlap_la = QLabel(self.top_page)
+        self.top_overlap_la.setObjectName(u"top_overlap_la")
 
-        self.gridLayout_2.addWidget(self.top_overlap_l, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_overlap_la, 2, 0, 1, 1)
 
-        self.top_spindle_speed_l = QLabel(self.top_page)
-        self.top_spindle_speed_l.setObjectName(u"top_spindle_speed_l")
+        self.top_spindle_speed_la = QLabel(self.top_page)
+        self.top_spindle_speed_la.setObjectName(u"top_spindle_speed_la")
 
-        self.gridLayout_2.addWidget(self.top_spindle_speed_l, 6, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_spindle_speed_la, 6, 0, 1, 1)
 
         self.top_xy_feed_rate_dsb = QDoubleSpinBox(self.top_page)
         self.top_xy_feed_rate_dsb.setObjectName(u"top_xy_feed_rate_dsb")
@@ -383,10 +383,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.top_tool_diameter_dsb, 0, 1, 1, 1)
 
-        self.top_xy_feed_rate_l = QLabel(self.top_page)
-        self.top_xy_feed_rate_l.setObjectName(u"top_xy_feed_rate_l")
+        self.top_xy_feed_rate_la = QLabel(self.top_page)
+        self.top_xy_feed_rate_la.setObjectName(u"top_xy_feed_rate_la")
 
-        self.gridLayout_2.addWidget(self.top_xy_feed_rate_l, 7, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_xy_feed_rate_la, 7, 0, 1, 1)
 
         self.top_n_passes_sb = QSpinBox(self.top_page)
         self.top_n_passes_sb.setObjectName(u"top_n_passes_sb")
@@ -410,10 +410,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.top_overlap_dsb, 2, 1, 1, 1)
 
-        self.top_z_feed_rate_l = QLabel(self.top_page)
-        self.top_z_feed_rate_l.setObjectName(u"top_z_feed_rate_l")
+        self.top_z_feed_rate_la = QLabel(self.top_page)
+        self.top_z_feed_rate_la.setObjectName(u"top_z_feed_rate_la")
 
-        self.gridLayout_2.addWidget(self.top_z_feed_rate_l, 9, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.top_z_feed_rate_la, 9, 0, 1, 1)
 
         self.top_z_feed_rate_dsb = QDoubleSpinBox(self.top_page)
         self.top_z_feed_rate_dsb.setObjectName(u"top_z_feed_rate_dsb")
@@ -428,10 +428,10 @@ class Ui_MainWindow(object):
         self.bottom_page.setObjectName(u"bottom_page")
         self.gridLayout_3 = QGridLayout(self.bottom_page)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.bottom_z_feed_rate_l = QLabel(self.bottom_page)
-        self.bottom_z_feed_rate_l.setObjectName(u"bottom_z_feed_rate_l")
+        self.bottom_z_feed_rate_la = QLabel(self.bottom_page)
+        self.bottom_z_feed_rate_la.setObjectName(u"bottom_z_feed_rate_la")
 
-        self.gridLayout_3.addWidget(self.bottom_z_feed_rate_l, 9, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_z_feed_rate_la, 9, 0, 1, 1)
 
         self.bottom_cut_z_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_cut_z_dsb.setObjectName(u"bottom_cut_z_dsb")
@@ -461,10 +461,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.bottom_n_passes_sb, 2, 1, 1, 1)
 
-        self.bottom_overlap_l = QLabel(self.bottom_page)
-        self.bottom_overlap_l.setObjectName(u"bottom_overlap_l")
+        self.bottom_overlap_la = QLabel(self.bottom_page)
+        self.bottom_overlap_la.setObjectName(u"bottom_overlap_la")
 
-        self.gridLayout_3.addWidget(self.bottom_overlap_l, 3, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_overlap_la, 3, 0, 1, 1)
 
         self.bottom_generate_job_pb = QPushButton(self.bottom_page)
         self.bottom_generate_job_pb.setObjectName(u"bottom_generate_job_pb")
@@ -491,25 +491,25 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addItem(self.bottom_vertical_spacer, 11, 0, 1, 2)
 
-        self.bottom_tool_diameter_l = QLabel(self.bottom_page)
-        self.bottom_tool_diameter_l.setObjectName(u"bottom_tool_diameter_l")
+        self.bottom_tool_diameter_la = QLabel(self.bottom_page)
+        self.bottom_tool_diameter_la.setObjectName(u"bottom_tool_diameter_la")
 
-        self.gridLayout_3.addWidget(self.bottom_tool_diameter_l, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_tool_diameter_la, 1, 0, 1, 1)
 
-        self.bottom_n_passes_l = QLabel(self.bottom_page)
-        self.bottom_n_passes_l.setObjectName(u"bottom_n_passes_l")
+        self.bottom_n_passes_la = QLabel(self.bottom_page)
+        self.bottom_n_passes_la.setObjectName(u"bottom_n_passes_la")
 
-        self.gridLayout_3.addWidget(self.bottom_n_passes_l, 2, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_n_passes_la, 2, 0, 1, 1)
 
-        self.bottom_travel_z_l = QLabel(self.bottom_page)
-        self.bottom_travel_z_l.setObjectName(u"bottom_travel_z_l")
+        self.bottom_travel_z_la = QLabel(self.bottom_page)
+        self.bottom_travel_z_la.setObjectName(u"bottom_travel_z_la")
 
-        self.gridLayout_3.addWidget(self.bottom_travel_z_l, 5, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_travel_z_la, 5, 0, 1, 1)
 
-        self.bottom_cut_z_l = QLabel(self.bottom_page)
-        self.bottom_cut_z_l.setObjectName(u"bottom_cut_z_l")
+        self.bottom_cut_z_la = QLabel(self.bottom_page)
+        self.bottom_cut_z_la.setObjectName(u"bottom_cut_z_la")
 
-        self.gridLayout_3.addWidget(self.bottom_cut_z_l, 4, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_cut_z_la, 4, 0, 1, 1)
 
         self.bottom_travel_z_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_travel_z_dsb.setObjectName(u"bottom_travel_z_dsb")
@@ -519,15 +519,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.bottom_travel_z_dsb, 5, 1, 1, 1)
 
-        self.bottom_xy_feed_rate_l = QLabel(self.bottom_page)
-        self.bottom_xy_feed_rate_l.setObjectName(u"bottom_xy_feed_rate_l")
+        self.bottom_xy_feed_rate_la = QLabel(self.bottom_page)
+        self.bottom_xy_feed_rate_la.setObjectName(u"bottom_xy_feed_rate_la")
 
-        self.gridLayout_3.addWidget(self.bottom_xy_feed_rate_l, 8, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_xy_feed_rate_la, 8, 0, 1, 1)
 
-        self.bottom_spindle_speed_l = QLabel(self.bottom_page)
-        self.bottom_spindle_speed_l.setObjectName(u"bottom_spindle_speed_l")
+        self.bottom_spindle_speed_la = QLabel(self.bottom_page)
+        self.bottom_spindle_speed_la.setObjectName(u"bottom_spindle_speed_la")
 
-        self.gridLayout_3.addWidget(self.bottom_spindle_speed_l, 6, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.bottom_spindle_speed_la, 6, 0, 1, 1)
 
         self.bottom_spindle_speed_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_spindle_speed_dsb.setObjectName(u"bottom_spindle_speed_dsb")
@@ -542,10 +542,10 @@ class Ui_MainWindow(object):
         self.profile_page.setObjectName(u"profile_page")
         self.gridLayout_4 = QGridLayout(self.profile_page)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.profile_depth_pass_l = QLabel(self.profile_page)
-        self.profile_depth_pass_l.setObjectName(u"profile_depth_pass_l")
+        self.profile_depth_pass_la = QLabel(self.profile_page)
+        self.profile_depth_pass_la.setObjectName(u"profile_depth_pass_la")
 
-        self.gridLayout_4.addWidget(self.profile_depth_pass_l, 3, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_depth_pass_la, 3, 1, 1, 1)
 
         self.profile_xy_feed_rate_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_xy_feed_rate_dsb.setObjectName(u"profile_xy_feed_rate_dsb")
@@ -579,15 +579,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_depth_pass_dsb, 3, 3, 1, 1)
 
-        self.profile_taps_layout_l = QLabel(self.profile_page)
-        self.profile_taps_layout_l.setObjectName(u"profile_taps_layout_l")
+        self.profile_taps_layout_la = QLabel(self.profile_page)
+        self.profile_taps_layout_la.setObjectName(u"profile_taps_layout_la")
 
-        self.gridLayout_4.addWidget(self.profile_taps_layout_l, 11, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_taps_layout_la, 11, 1, 1, 1)
 
-        self.profile_margin_l = QLabel(self.profile_page)
-        self.profile_margin_l.setObjectName(u"profile_margin_l")
+        self.profile_margin_la = QLabel(self.profile_page)
+        self.profile_margin_la.setObjectName(u"profile_margin_la")
 
-        self.gridLayout_4.addWidget(self.profile_margin_l, 1, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_margin_la, 1, 1, 1, 1)
 
         self.profile_tap_size_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_tap_size_dsb.setObjectName(u"profile_tap_size_dsb")
@@ -597,15 +597,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_tap_size_dsb, 12, 3, 1, 1)
 
-        self.profile_cut_z_l = QLabel(self.profile_page)
-        self.profile_cut_z_l.setObjectName(u"profile_cut_z_l")
+        self.profile_cut_z_la = QLabel(self.profile_page)
+        self.profile_cut_z_la.setObjectName(u"profile_cut_z_la")
 
-        self.gridLayout_4.addWidget(self.profile_cut_z_l, 5, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_cut_z_la, 5, 1, 1, 1)
 
-        self.profile_xy_feed_rate_l = QLabel(self.profile_page)
-        self.profile_xy_feed_rate_l.setObjectName(u"profile_xy_feed_rate_l")
+        self.profile_xy_feed_rate_la = QLabel(self.profile_page)
+        self.profile_xy_feed_rate_la.setObjectName(u"profile_xy_feed_rate_la")
 
-        self.gridLayout_4.addWidget(self.profile_xy_feed_rate_l, 9, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_xy_feed_rate_la, 9, 1, 1, 1)
 
         self.profile_z_feed_rate_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_z_feed_rate_dsb.setObjectName(u"profile_z_feed_rate_dsb")
@@ -620,10 +620,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_generate_job_pb, 16, 1, 1, 3)
 
-        self.profile_tool_diameter_l = QLabel(self.profile_page)
-        self.profile_tool_diameter_l.setObjectName(u"profile_tool_diameter_l")
+        self.profile_tool_diameter_la = QLabel(self.profile_page)
+        self.profile_tool_diameter_la.setObjectName(u"profile_tool_diameter_la")
 
-        self.gridLayout_4.addWidget(self.profile_tool_diameter_l, 0, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_tool_diameter_la, 0, 1, 1, 1)
 
         self.profile_multi_depth_chb = QCheckBox(self.profile_page)
         self.profile_multi_depth_chb.setObjectName(u"profile_multi_depth_chb")
@@ -633,10 +633,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_multi_depth_chb, 2, 3, 1, 1, Qt.AlignHCenter)
 
-        self.profile_z_feed_rate_l = QLabel(self.profile_page)
-        self.profile_z_feed_rate_l.setObjectName(u"profile_z_feed_rate_l")
+        self.profile_z_feed_rate_la = QLabel(self.profile_page)
+        self.profile_z_feed_rate_la.setObjectName(u"profile_z_feed_rate_la")
 
-        self.gridLayout_4.addWidget(self.profile_z_feed_rate_l, 10, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_z_feed_rate_la, 10, 1, 1, 1)
 
         self.profile_tool_diameter_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_tool_diameter_dsb.setObjectName(u"profile_tool_diameter_dsb")
@@ -644,19 +644,19 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_tool_diameter_dsb, 0, 3, 1, 1)
 
-        self.profile_tap_size_l = QLabel(self.profile_page)
-        self.profile_tap_size_l.setObjectName(u"profile_tap_size_l")
+        self.profile_tap_size_la = QLabel(self.profile_page)
+        self.profile_tap_size_la.setObjectName(u"profile_tap_size_la")
 
-        self.gridLayout_4.addWidget(self.profile_tap_size_l, 12, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_tap_size_la, 12, 1, 1, 1)
 
         self.profile_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.gridLayout_4.addItem(self.profile_vertical_spacer, 15, 1, 1, 3)
 
-        self.profile_travel_z_l = QLabel(self.profile_page)
-        self.profile_travel_z_l.setObjectName(u"profile_travel_z_l")
+        self.profile_travel_z_la = QLabel(self.profile_page)
+        self.profile_travel_z_la.setObjectName(u"profile_travel_z_la")
 
-        self.gridLayout_4.addWidget(self.profile_travel_z_l, 6, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_travel_z_la, 6, 1, 1, 1)
 
         self.profile_travel_z_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_travel_z_dsb.setObjectName(u"profile_travel_z_dsb")
@@ -671,15 +671,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_taps_layout_cb, 11, 3, 1, 1)
 
-        self.profile_multi_depth_l = QLabel(self.profile_page)
-        self.profile_multi_depth_l.setObjectName(u"profile_multi_depth_l")
+        self.profile_multi_depth_la = QLabel(self.profile_page)
+        self.profile_multi_depth_la.setObjectName(u"profile_multi_depth_la")
 
-        self.gridLayout_4.addWidget(self.profile_multi_depth_l, 2, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_multi_depth_la, 2, 1, 1, 1)
 
-        self.profile_spindle_speed_l = QLabel(self.profile_page)
-        self.profile_spindle_speed_l.setObjectName(u"profile_spindle_speed_l")
+        self.profile_spindle_speed_la = QLabel(self.profile_page)
+        self.profile_spindle_speed_la.setObjectName(u"profile_spindle_speed_la")
 
-        self.gridLayout_4.addWidget(self.profile_spindle_speed_l, 7, 1, 1, 1)
+        self.gridLayout_4.addWidget(self.profile_spindle_speed_la, 7, 1, 1, 1)
 
         self.profile_spindle_speed_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_spindle_speed_dsb.setObjectName(u"profile_spindle_speed_dsb")
@@ -689,15 +689,90 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_spindle_speed_dsb, 7, 3, 1, 1)
 
+        self.profile_mirror_la = QLabel(self.profile_page)
+        self.profile_mirror_la.setObjectName(u"profile_mirror_la")
+
+        self.gridLayout_4.addWidget(self.profile_mirror_la, 13, 1, 1, 1)
+
+        self.profile_mirror_chb = QCheckBox(self.profile_page)
+        self.profile_mirror_chb.setObjectName(u"profile_mirror_chb")
+        sizePolicy2.setHeightForWidth(self.profile_mirror_chb.sizePolicy().hasHeightForWidth())
+        self.profile_mirror_chb.setSizePolicy(sizePolicy2)
+        self.profile_mirror_chb.setMinimumSize(QSize(123, 0))
+
+        self.gridLayout_4.addWidget(self.profile_mirror_chb, 13, 3, 1, 1)
+
         self.jobs_sw.addWidget(self.profile_page)
         self.drill_page = QWidget()
         self.drill_page.setObjectName(u"drill_page")
         self.gridLayout_5 = QGridLayout(self.drill_page)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.drill_milling_tool_diameter_dsb = QDoubleSpinBox(self.drill_page)
+        self.drill_milling_tool_diameter_dsb.setObjectName(u"drill_milling_tool_diameter_dsb")
+        self.drill_milling_tool_diameter_dsb.setMinimum(0.010000000000000)
+
+        self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_dsb, 4, 2, 1, 1)
+
+        self.drill_travel_z_la = QLabel(self.drill_page)
+        self.drill_travel_z_la.setObjectName(u"drill_travel_z_la")
+
+        self.gridLayout_5.addWidget(self.drill_travel_z_la, 7, 1, 1, 1)
+
+        self.add_drill_tool_tb = QToolButton(self.drill_page)
+        self.add_drill_tool_tb.setObjectName(u"add_drill_tool_tb")
+
+        self.gridLayout_5.addWidget(self.add_drill_tool_tb, 2, 1, 1, 1, Qt.AlignHCenter)
+
+        self.drill_z_feed_rate_la = QLabel(self.drill_page)
+        self.drill_z_feed_rate_la.setObjectName(u"drill_z_feed_rate_la")
+
+        self.gridLayout_5.addWidget(self.drill_z_feed_rate_la, 12, 1, 1, 1)
+
+        self.drill_xy_feed_rate_la = QLabel(self.drill_page)
+        self.drill_xy_feed_rate_la.setObjectName(u"drill_xy_feed_rate_la")
+
+        self.gridLayout_5.addWidget(self.drill_xy_feed_rate_la, 10, 1, 1, 1)
+
+        self.drill_cut_z_la = QLabel(self.drill_page)
+        self.drill_cut_z_la.setObjectName(u"drill_cut_z_la")
+
+        self.gridLayout_5.addWidget(self.drill_cut_z_la, 6, 1, 1, 1)
+
+        self.drill_travel_z_dsb = QDoubleSpinBox(self.drill_page)
+        self.drill_travel_z_dsb.setObjectName(u"drill_travel_z_dsb")
+        self.drill_travel_z_dsb.setDecimals(2)
+        self.drill_travel_z_dsb.setMinimum(-9999.000000000000000)
+        self.drill_travel_z_dsb.setMaximum(9999.000000000000000)
+
+        self.gridLayout_5.addWidget(self.drill_travel_z_dsb, 7, 2, 1, 1)
+
+        self.drill_milling_tool_la = QLabel(self.drill_page)
+        self.drill_milling_tool_la.setObjectName(u"drill_milling_tool_la")
+
+        self.gridLayout_5.addWidget(self.drill_milling_tool_la, 3, 1, 1, 1)
+
         self.remove_drill_tool_tb = QToolButton(self.drill_page)
         self.remove_drill_tool_tb.setObjectName(u"remove_drill_tool_tb")
 
         self.gridLayout_5.addWidget(self.remove_drill_tool_tb, 2, 2, 1, 1, Qt.AlignHCenter)
+
+        self.drill_milling_tool_chb = QCheckBox(self.drill_page)
+        self.drill_milling_tool_chb.setObjectName(u"drill_milling_tool_chb")
+
+        self.gridLayout_5.addWidget(self.drill_milling_tool_chb, 3, 2, 1, 1)
+
+        self.drill_optimization_la = QLabel(self.drill_page)
+        self.drill_optimization_la.setObjectName(u"drill_optimization_la")
+
+        self.gridLayout_5.addWidget(self.drill_optimization_la, 13, 1, 1, 1)
+
+        self.drill_z_feed_rate_dsb = QDoubleSpinBox(self.drill_page)
+        self.drill_z_feed_rate_dsb.setObjectName(u"drill_z_feed_rate_dsb")
+        self.drill_z_feed_rate_dsb.setDecimals(2)
+        self.drill_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.drill_z_feed_rate_dsb.setMaximum(9999.000000000000000)
+
+        self.gridLayout_5.addWidget(self.drill_z_feed_rate_dsb, 12, 2, 1, 1)
 
         self.drill_tw = QTableWidget(self.drill_page)
         if (self.drill_tw.columnCount() < 2):
@@ -712,54 +787,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_tw, 0, 1, 1, 2, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.drill_travel_z_dsb = QDoubleSpinBox(self.drill_page)
-        self.drill_travel_z_dsb.setObjectName(u"drill_travel_z_dsb")
-        self.drill_travel_z_dsb.setDecimals(2)
-        self.drill_travel_z_dsb.setMinimum(-9999.000000000000000)
-        self.drill_travel_z_dsb.setMaximum(9999.000000000000000)
+        self.drill_optimization_chb = QCheckBox(self.drill_page)
+        self.drill_optimization_chb.setObjectName(u"drill_optimization_chb")
 
-        self.gridLayout_5.addWidget(self.drill_travel_z_dsb, 7, 2, 1, 1)
-
-        self.drill_z_feed_rate_dsb = QDoubleSpinBox(self.drill_page)
-        self.drill_z_feed_rate_dsb.setObjectName(u"drill_z_feed_rate_dsb")
-        self.drill_z_feed_rate_dsb.setDecimals(2)
-        self.drill_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
-        self.drill_z_feed_rate_dsb.setMaximum(9999.000000000000000)
-
-        self.gridLayout_5.addWidget(self.drill_z_feed_rate_dsb, 12, 2, 1, 1)
-
-        self.add_drill_tool_tb = QToolButton(self.drill_page)
-        self.add_drill_tool_tb.setObjectName(u"add_drill_tool_tb")
-
-        self.gridLayout_5.addWidget(self.add_drill_tool_tb, 2, 1, 1, 1, Qt.AlignHCenter)
-
-        self.drill_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_5.addItem(self.drill_vertical_spacer, 14, 1, 1, 2)
-
-        self.drill_generate_job_pb = QPushButton(self.drill_page)
-        self.drill_generate_job_pb.setObjectName(u"drill_generate_job_pb")
-
-        self.gridLayout_5.addWidget(self.drill_generate_job_pb, 15, 1, 1, 2)
-
-        self.drill_xy_feed_rate_dsb = QDoubleSpinBox(self.drill_page)
-        self.drill_xy_feed_rate_dsb.setObjectName(u"drill_xy_feed_rate_dsb")
-        self.drill_xy_feed_rate_dsb.setDecimals(2)
-        self.drill_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
-        self.drill_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
-
-        self.gridLayout_5.addWidget(self.drill_xy_feed_rate_dsb, 10, 2, 1, 1)
-
-        self.drill_xy_feed_rate_l = QLabel(self.drill_page)
-        self.drill_xy_feed_rate_l.setObjectName(u"drill_xy_feed_rate_l")
-
-        self.gridLayout_5.addWidget(self.drill_xy_feed_rate_l, 10, 1, 1, 1)
-
-        self.drill_milling_tool_diameter_dsb = QDoubleSpinBox(self.drill_page)
-        self.drill_milling_tool_diameter_dsb.setObjectName(u"drill_milling_tool_diameter_dsb")
-        self.drill_milling_tool_diameter_dsb.setMinimum(0.010000000000000)
-
-        self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_dsb, 4, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.drill_optimization_chb, 13, 2, 1, 1)
 
         self.drill_cut_z_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_cut_z_dsb.setObjectName(u"drill_cut_z_dsb")
@@ -769,31 +800,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_cut_z_dsb, 6, 2, 1, 1)
 
-        self.drill_travel_z_l = QLabel(self.drill_page)
-        self.drill_travel_z_l.setObjectName(u"drill_travel_z_l")
-
-        self.gridLayout_5.addWidget(self.drill_travel_z_l, 7, 1, 1, 1)
-
-        self.drill_milling_tool_l = QLabel(self.drill_page)
-        self.drill_milling_tool_l.setObjectName(u"drill_milling_tool_l")
-
-        self.gridLayout_5.addWidget(self.drill_milling_tool_l, 3, 1, 1, 1)
-
-        self.drill_z_feed_rate_l = QLabel(self.drill_page)
-        self.drill_z_feed_rate_l.setObjectName(u"drill_z_feed_rate_l")
-
-        self.gridLayout_5.addWidget(self.drill_z_feed_rate_l, 12, 1, 1, 1)
-
-        self.drill_spindle_speed_l = QLabel(self.drill_page)
-        self.drill_spindle_speed_l.setObjectName(u"drill_spindle_speed_l")
-
-        self.gridLayout_5.addWidget(self.drill_spindle_speed_l, 8, 1, 1, 1)
-
-        self.drill_cut_z_l = QLabel(self.drill_page)
-        self.drill_cut_z_l.setObjectName(u"drill_cut_z_l")
-
-        self.gridLayout_5.addWidget(self.drill_cut_z_l, 6, 1, 1, 1)
-
         self.drill_spindle_speed_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_spindle_speed_dsb.setObjectName(u"drill_spindle_speed_dsb")
         self.drill_spindle_speed_dsb.setDecimals(2)
@@ -802,40 +808,60 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_spindle_speed_dsb, 8, 2, 1, 1)
 
-        self.drill_milling_tool_chb = QCheckBox(self.drill_page)
-        self.drill_milling_tool_chb.setObjectName(u"drill_milling_tool_chb")
+        self.drill_spindle_speed_la = QLabel(self.drill_page)
+        self.drill_spindle_speed_la.setObjectName(u"drill_spindle_speed_la")
 
-        self.gridLayout_5.addWidget(self.drill_milling_tool_chb, 3, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.drill_spindle_speed_la, 8, 1, 1, 1)
 
-        self.drill_milling_tool_diameter_l = QLabel(self.drill_page)
-        self.drill_milling_tool_diameter_l.setObjectName(u"drill_milling_tool_diameter_l")
+        self.drill_xy_feed_rate_dsb = QDoubleSpinBox(self.drill_page)
+        self.drill_xy_feed_rate_dsb.setObjectName(u"drill_xy_feed_rate_dsb")
+        self.drill_xy_feed_rate_dsb.setDecimals(2)
+        self.drill_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.drill_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
 
-        self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_l, 4, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.drill_xy_feed_rate_dsb, 10, 2, 1, 1)
 
-        self.drill_optimization_l = QLabel(self.drill_page)
-        self.drill_optimization_l.setObjectName(u"drill_optimization_l")
+        self.drill_milling_tool_diameter_la = QLabel(self.drill_page)
+        self.drill_milling_tool_diameter_la.setObjectName(u"drill_milling_tool_diameter_la")
 
-        self.gridLayout_5.addWidget(self.drill_optimization_l, 13, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_la, 4, 1, 1, 1)
 
-        self.drill_optimization_chb = QCheckBox(self.drill_page)
-        self.drill_optimization_chb.setObjectName(u"drill_optimization_chb")
+        self.drill_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.gridLayout_5.addWidget(self.drill_optimization_chb, 13, 2, 1, 1)
+        self.gridLayout_5.addItem(self.drill_vertical_spacer, 15, 1, 1, 2)
+
+        self.drill_generate_job_pb = QPushButton(self.drill_page)
+        self.drill_generate_job_pb.setObjectName(u"drill_generate_job_pb")
+
+        self.gridLayout_5.addWidget(self.drill_generate_job_pb, 16, 1, 1, 2)
+
+        self.drill_mirror_la = QLabel(self.drill_page)
+        self.drill_mirror_la.setObjectName(u"drill_mirror_la")
+
+        self.gridLayout_5.addWidget(self.drill_mirror_la, 14, 1, 1, 1)
+
+        self.drill_mirror_chb = QCheckBox(self.drill_page)
+        self.drill_mirror_chb.setObjectName(u"drill_mirror_chb")
+        sizePolicy2.setHeightForWidth(self.drill_mirror_chb.sizePolicy().hasHeightForWidth())
+        self.drill_mirror_chb.setSizePolicy(sizePolicy2)
+        self.drill_mirror_chb.setMinimumSize(QSize(123, 0))
+
+        self.gridLayout_5.addWidget(self.drill_mirror_chb, 14, 2, 1, 1)
 
         self.jobs_sw.addWidget(self.drill_page)
         self.nc_area_top_page = QWidget()
         self.nc_area_top_page.setObjectName(u"nc_area_top_page")
         self.gridLayout_6 = QGridLayout(self.nc_area_top_page)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.nc_top_overlap_l = QLabel(self.nc_area_top_page)
-        self.nc_top_overlap_l.setObjectName(u"nc_top_overlap_l")
+        self.nc_top_overlap_la = QLabel(self.nc_area_top_page)
+        self.nc_top_overlap_la.setObjectName(u"nc_top_overlap_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_overlap_l, 1, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_overlap_la, 1, 0, 1, 1)
 
-        self.nc_top_cut_z_l = QLabel(self.nc_area_top_page)
-        self.nc_top_cut_z_l.setObjectName(u"nc_top_cut_z_l")
+        self.nc_top_cut_z_la = QLabel(self.nc_area_top_page)
+        self.nc_top_cut_z_la.setObjectName(u"nc_top_cut_z_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_cut_z_l, 2, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_cut_z_la, 2, 0, 1, 1)
 
         self.nc_top_xy_feed_rate_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_xy_feed_rate_dsb.setObjectName(u"nc_top_xy_feed_rate_dsb")
@@ -853,15 +879,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.nc_top_travel_z_dsb, 3, 1, 1, 1)
 
-        self.nc_top_spindle_speed_l = QLabel(self.nc_area_top_page)
-        self.nc_top_spindle_speed_l.setObjectName(u"nc_top_spindle_speed_l")
+        self.nc_top_spindle_speed_la = QLabel(self.nc_area_top_page)
+        self.nc_top_spindle_speed_la.setObjectName(u"nc_top_spindle_speed_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_spindle_speed_l, 4, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_spindle_speed_la, 4, 0, 1, 1)
 
-        self.nc_top_tool_diameter_l = QLabel(self.nc_area_top_page)
-        self.nc_top_tool_diameter_l.setObjectName(u"nc_top_tool_diameter_l")
+        self.nc_top_tool_diameter_la = QLabel(self.nc_area_top_page)
+        self.nc_top_tool_diameter_la.setObjectName(u"nc_top_tool_diameter_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_tool_diameter_l, 0, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_tool_diameter_la, 0, 0, 1, 1)
 
         self.nc_top_cut_z_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_cut_z_dsb.setObjectName(u"nc_top_cut_z_dsb")
@@ -871,15 +897,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.nc_top_cut_z_dsb, 2, 1, 1, 1)
 
-        self.nc_top_travel_z_l = QLabel(self.nc_area_top_page)
-        self.nc_top_travel_z_l.setObjectName(u"nc_top_travel_z_l")
+        self.nc_top_travel_z_la = QLabel(self.nc_area_top_page)
+        self.nc_top_travel_z_la.setObjectName(u"nc_top_travel_z_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_travel_z_l, 3, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_travel_z_la, 3, 0, 1, 1)
 
-        self.nc_top_z_feed_rate_l = QLabel(self.nc_area_top_page)
-        self.nc_top_z_feed_rate_l.setObjectName(u"nc_top_z_feed_rate_l")
+        self.nc_top_z_feed_rate_la = QLabel(self.nc_area_top_page)
+        self.nc_top_z_feed_rate_la.setObjectName(u"nc_top_z_feed_rate_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_z_feed_rate_l, 6, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_z_feed_rate_la, 6, 0, 1, 1)
 
         self.nc_top_tool_diameter_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_tool_diameter_dsb.setObjectName(u"nc_top_tool_diameter_dsb")
@@ -903,10 +929,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.nc_top_overlap_dsb, 1, 1, 1, 1)
 
-        self.nc_top_xy_feed_rate_l = QLabel(self.nc_area_top_page)
-        self.nc_top_xy_feed_rate_l.setObjectName(u"nc_top_xy_feed_rate_l")
+        self.nc_top_xy_feed_rate_la = QLabel(self.nc_area_top_page)
+        self.nc_top_xy_feed_rate_la.setObjectName(u"nc_top_xy_feed_rate_la")
 
-        self.gridLayout_6.addWidget(self.nc_top_xy_feed_rate_l, 5, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.nc_top_xy_feed_rate_la, 5, 0, 1, 1)
 
         self.nc_top_z_feed_rate_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_z_feed_rate_dsb.setObjectName(u"nc_top_z_feed_rate_dsb")
@@ -930,20 +956,20 @@ class Ui_MainWindow(object):
         self.nc_area_bottom_page.setObjectName(u"nc_area_bottom_page")
         self.gridLayout_7 = QGridLayout(self.nc_area_bottom_page)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.nc_bottom_travel_z_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_travel_z_l.setObjectName(u"nc_bottom_travel_z_l")
+        self.nc_bottom_travel_z_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_travel_z_la.setObjectName(u"nc_bottom_travel_z_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_travel_z_l, 3, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_travel_z_la, 3, 0, 1, 1)
 
         self.nc_bottom_generate_pb = QPushButton(self.nc_area_bottom_page)
         self.nc_bottom_generate_pb.setObjectName(u"nc_bottom_generate_pb")
 
         self.gridLayout_7.addWidget(self.nc_bottom_generate_pb, 9, 0, 1, 2)
 
-        self.nc_bottom_spindle_speed_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_spindle_speed_l.setObjectName(u"nc_bottom_spindle_speed_l")
+        self.nc_bottom_spindle_speed_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_spindle_speed_la.setObjectName(u"nc_bottom_spindle_speed_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_spindle_speed_l, 4, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_spindle_speed_la, 4, 0, 1, 1)
 
         self.nc_bottom_tool_diameter_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_tool_diameter_dsb.setObjectName(u"nc_bottom_tool_diameter_dsb")
@@ -967,10 +993,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.addWidget(self.nc_bottom_cut_z_dsb, 2, 1, 1, 1)
 
-        self.nc_bottom_cut_z_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_cut_z_l.setObjectName(u"nc_bottom_cut_z_l")
+        self.nc_bottom_cut_z_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_cut_z_la.setObjectName(u"nc_bottom_cut_z_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_cut_z_l, 2, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_cut_z_la, 2, 0, 1, 1)
 
         self.nc_bottom_z_feed_rate_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_z_feed_rate_dsb.setObjectName(u"nc_bottom_z_feed_rate_dsb")
@@ -980,15 +1006,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.addWidget(self.nc_bottom_z_feed_rate_dsb, 7, 1, 1, 1)
 
-        self.nc_bottom_overlap_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_overlap_l.setObjectName(u"nc_bottom_overlap_l")
+        self.nc_bottom_overlap_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_overlap_la.setObjectName(u"nc_bottom_overlap_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_overlap_l, 1, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_overlap_la, 1, 0, 1, 1)
 
-        self.nc_bottom_tool_diameter_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_tool_diameter_l.setObjectName(u"nc_bottom_tool_diameter_l")
+        self.nc_bottom_tool_diameter_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_tool_diameter_la.setObjectName(u"nc_bottom_tool_diameter_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_tool_diameter_l, 0, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_tool_diameter_la, 0, 0, 1, 1)
 
         self.nc_bottom_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -1018,15 +1044,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.addWidget(self.nc_bottom_xy_feed_rate_dsb, 6, 1, 1, 1)
 
-        self.nc_bottom_z_feed_rate_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_z_feed_rate_l.setObjectName(u"nc_bottom_z_feed_rate_l")
+        self.nc_bottom_z_feed_rate_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_z_feed_rate_la.setObjectName(u"nc_bottom_z_feed_rate_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_z_feed_rate_l, 7, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_z_feed_rate_la, 7, 0, 1, 1)
 
-        self.nc_bottom_xy_feed_rate_l = QLabel(self.nc_area_bottom_page)
-        self.nc_bottom_xy_feed_rate_l.setObjectName(u"nc_bottom_xy_feed_rate_l")
+        self.nc_bottom_xy_feed_rate_la = QLabel(self.nc_area_bottom_page)
+        self.nc_bottom_xy_feed_rate_la.setObjectName(u"nc_bottom_xy_feed_rate_la")
 
-        self.gridLayout_7.addWidget(self.nc_bottom_xy_feed_rate_l, 6, 0, 1, 1)
+        self.gridLayout_7.addWidget(self.nc_bottom_xy_feed_rate_la, 6, 0, 1, 1)
 
         self.jobs_sw.addWidget(self.nc_area_bottom_page)
 
@@ -1109,10 +1135,17 @@ class Ui_MainWindow(object):
         __qtablewidgetitem3 = QTableWidgetItem()
         self.gcode_tw.setHorizontalHeaderItem(1, __qtablewidgetitem3)
         self.gcode_tw.setObjectName(u"gcode_tw")
-        sizePolicy.setHeightForWidth(self.gcode_tw.sizePolicy().hasHeightForWidth())
-        self.gcode_tw.setSizePolicy(sizePolicy)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.gcode_tw.sizePolicy().hasHeightForWidth())
+        self.gcode_tw.setSizePolicy(sizePolicy6)
+        self.gcode_tw.setMinimumSize(QSize(320, 0))
+        self.gcode_tw.setMaximumSize(QSize(320, 16777215))
+        self.gcode_tw.setFrameShape(QFrame.NoFrame)
         self.gcode_tw.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.gcode_tw.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.gcode_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.gcode_tw.setShowGrid(False)
         self.gcode_tw.setColumnCount(2)
         self.gcode_tw.horizontalHeader().setCascadingSectionResizes(True)
@@ -1177,15 +1210,15 @@ class Ui_MainWindow(object):
         self.droGridLayout = QGridLayout()
         self.droGridLayout.setObjectName(u"droGridLayout")
         self.droGridLayout.setHorizontalSpacing(0)
-        self.droGridLayout.setVerticalSpacing(6)
+        self.droGridLayout.setVerticalSpacing(2)
         self.droGridLayout.setContentsMargins(0, 0, 0, 0)
         self.zero_xy_pb = QPushButton(self.sender_tab)
         self.zero_xy_pb.setObjectName(u"zero_xy_pb")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.MinimumExpanding)
-        sizePolicy6.setHorizontalStretch(0)
-        sizePolicy6.setVerticalStretch(0)
-        sizePolicy6.setHeightForWidth(self.zero_xy_pb.sizePolicy().hasHeightForWidth())
-        self.zero_xy_pb.setSizePolicy(sizePolicy6)
+        sizePolicy7 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.MinimumExpanding)
+        sizePolicy7.setHorizontalStretch(0)
+        sizePolicy7.setVerticalStretch(0)
+        sizePolicy7.setHeightForWidth(self.zero_xy_pb.sizePolicy().hasHeightForWidth())
+        self.zero_xy_pb.setSizePolicy(sizePolicy7)
         self.zero_xy_pb.setMinimumSize(QSize(0, 20))
         self.zero_xy_pb.setMaximumSize(QSize(16777215, 23))
         self.zero_xy_pb.setFont(font)
@@ -1194,8 +1227,8 @@ class Ui_MainWindow(object):
 
         self.zero_y_pb = QPushButton(self.sender_tab)
         self.zero_y_pb.setObjectName(u"zero_y_pb")
-        sizePolicy6.setHeightForWidth(self.zero_y_pb.sizePolicy().hasHeightForWidth())
-        self.zero_y_pb.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.zero_y_pb.sizePolicy().hasHeightForWidth())
+        self.zero_y_pb.setSizePolicy(sizePolicy7)
         self.zero_y_pb.setMinimumSize(QSize(0, 20))
         self.zero_y_pb.setMaximumSize(QSize(16777215, 23))
         self.zero_y_pb.setFont(font)
@@ -1204,8 +1237,8 @@ class Ui_MainWindow(object):
 
         self.z_axis_l = QLabel(self.sender_tab)
         self.z_axis_l.setObjectName(u"z_axis_l")
-        sizePolicy6.setHeightForWidth(self.z_axis_l.sizePolicy().hasHeightForWidth())
-        self.z_axis_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.z_axis_l.sizePolicy().hasHeightForWidth())
+        self.z_axis_l.setSizePolicy(sizePolicy7)
         self.z_axis_l.setMinimumSize(QSize(0, 12))
         self.z_axis_l.setMaximumSize(QSize(16777215, 13))
         self.z_axis_l.setFont(font)
@@ -1218,8 +1251,8 @@ class Ui_MainWindow(object):
 
         self.wpos_y_l = QLabel(self.sender_tab)
         self.wpos_y_l.setObjectName(u"wpos_y_l")
-        sizePolicy6.setHeightForWidth(self.wpos_y_l.sizePolicy().hasHeightForWidth())
-        self.wpos_y_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.wpos_y_l.sizePolicy().hasHeightForWidth())
+        self.wpos_y_l.setSizePolicy(sizePolicy7)
         self.wpos_y_l.setMinimumSize(QSize(0, 12))
         self.wpos_y_l.setMaximumSize(QSize(16777215, 13))
         self.wpos_y_l.setLayoutDirection(Qt.LeftToRight)
@@ -1231,8 +1264,8 @@ class Ui_MainWindow(object):
 
         self.wpos_l = QLabel(self.sender_tab)
         self.wpos_l.setObjectName(u"wpos_l")
-        sizePolicy6.setHeightForWidth(self.wpos_l.sizePolicy().hasHeightForWidth())
-        self.wpos_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.wpos_l.sizePolicy().hasHeightForWidth())
+        self.wpos_l.setSizePolicy(sizePolicy7)
         self.wpos_l.setMinimumSize(QSize(0, 12))
         self.wpos_l.setMaximumSize(QSize(16777215, 13))
         self.wpos_l.setFont(font)
@@ -1245,8 +1278,8 @@ class Ui_MainWindow(object):
 
         self.zero_z_pb = QPushButton(self.sender_tab)
         self.zero_z_pb.setObjectName(u"zero_z_pb")
-        sizePolicy6.setHeightForWidth(self.zero_z_pb.sizePolicy().hasHeightForWidth())
-        self.zero_z_pb.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.zero_z_pb.sizePolicy().hasHeightForWidth())
+        self.zero_z_pb.setSizePolicy(sizePolicy7)
         self.zero_z_pb.setMinimumSize(QSize(0, 20))
         self.zero_z_pb.setMaximumSize(QSize(16777215, 23))
         self.zero_z_pb.setFont(font)
@@ -1255,8 +1288,8 @@ class Ui_MainWindow(object):
 
         self.mpos_y_l = QLabel(self.sender_tab)
         self.mpos_y_l.setObjectName(u"mpos_y_l")
-        sizePolicy6.setHeightForWidth(self.mpos_y_l.sizePolicy().hasHeightForWidth())
-        self.mpos_y_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.mpos_y_l.sizePolicy().hasHeightForWidth())
+        self.mpos_y_l.setSizePolicy(sizePolicy7)
         self.mpos_y_l.setMinimumSize(QSize(0, 12))
         self.mpos_y_l.setMaximumSize(QSize(16777215, 13))
         self.mpos_y_l.setLayoutDirection(Qt.LeftToRight)
@@ -1268,8 +1301,8 @@ class Ui_MainWindow(object):
 
         self.mpos_z_l = QLabel(self.sender_tab)
         self.mpos_z_l.setObjectName(u"mpos_z_l")
-        sizePolicy6.setHeightForWidth(self.mpos_z_l.sizePolicy().hasHeightForWidth())
-        self.mpos_z_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.mpos_z_l.sizePolicy().hasHeightForWidth())
+        self.mpos_z_l.setSizePolicy(sizePolicy7)
         self.mpos_z_l.setMinimumSize(QSize(0, 12))
         self.mpos_z_l.setMaximumSize(QSize(16777215, 13))
         self.mpos_z_l.setLayoutDirection(Qt.LeftToRight)
@@ -1281,8 +1314,8 @@ class Ui_MainWindow(object):
 
         self.x_axis_l = QLabel(self.sender_tab)
         self.x_axis_l.setObjectName(u"x_axis_l")
-        sizePolicy6.setHeightForWidth(self.x_axis_l.sizePolicy().hasHeightForWidth())
-        self.x_axis_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.x_axis_l.sizePolicy().hasHeightForWidth())
+        self.x_axis_l.setSizePolicy(sizePolicy7)
         self.x_axis_l.setMinimumSize(QSize(0, 12))
         self.x_axis_l.setMaximumSize(QSize(16777215, 13))
         self.x_axis_l.setFont(font)
@@ -1295,8 +1328,8 @@ class Ui_MainWindow(object):
 
         self.wpos_x_l = QLabel(self.sender_tab)
         self.wpos_x_l.setObjectName(u"wpos_x_l")
-        sizePolicy6.setHeightForWidth(self.wpos_x_l.sizePolicy().hasHeightForWidth())
-        self.wpos_x_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.wpos_x_l.sizePolicy().hasHeightForWidth())
+        self.wpos_x_l.setSizePolicy(sizePolicy7)
         self.wpos_x_l.setMinimumSize(QSize(0, 12))
         self.wpos_x_l.setMaximumSize(QSize(16777215, 13))
         self.wpos_x_l.setLayoutDirection(Qt.LeftToRight)
@@ -1308,8 +1341,8 @@ class Ui_MainWindow(object):
 
         self.axis_l = QLabel(self.sender_tab)
         self.axis_l.setObjectName(u"axis_l")
-        sizePolicy6.setHeightForWidth(self.axis_l.sizePolicy().hasHeightForWidth())
-        self.axis_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.axis_l.sizePolicy().hasHeightForWidth())
+        self.axis_l.setSizePolicy(sizePolicy7)
         self.axis_l.setMinimumSize(QSize(0, 12))
         self.axis_l.setMaximumSize(QSize(16777215, 13))
         self.axis_l.setFont(font)
@@ -1322,8 +1355,8 @@ class Ui_MainWindow(object):
 
         self.mpos_l = QLabel(self.sender_tab)
         self.mpos_l.setObjectName(u"mpos_l")
-        sizePolicy6.setHeightForWidth(self.mpos_l.sizePolicy().hasHeightForWidth())
-        self.mpos_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.mpos_l.sizePolicy().hasHeightForWidth())
+        self.mpos_l.setSizePolicy(sizePolicy7)
         self.mpos_l.setMinimumSize(QSize(0, 12))
         self.mpos_l.setMaximumSize(QSize(16777215, 13))
         self.mpos_l.setFont(font)
@@ -1336,8 +1369,8 @@ class Ui_MainWindow(object):
 
         self.wpos_z_l = QLabel(self.sender_tab)
         self.wpos_z_l.setObjectName(u"wpos_z_l")
-        sizePolicy6.setHeightForWidth(self.wpos_z_l.sizePolicy().hasHeightForWidth())
-        self.wpos_z_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.wpos_z_l.sizePolicy().hasHeightForWidth())
+        self.wpos_z_l.setSizePolicy(sizePolicy7)
         self.wpos_z_l.setMinimumSize(QSize(0, 12))
         self.wpos_z_l.setMaximumSize(QSize(16777215, 13))
         self.wpos_z_l.setLayoutDirection(Qt.LeftToRight)
@@ -1349,8 +1382,8 @@ class Ui_MainWindow(object):
 
         self.zero_x_pb = QPushButton(self.sender_tab)
         self.zero_x_pb.setObjectName(u"zero_x_pb")
-        sizePolicy6.setHeightForWidth(self.zero_x_pb.sizePolicy().hasHeightForWidth())
-        self.zero_x_pb.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.zero_x_pb.sizePolicy().hasHeightForWidth())
+        self.zero_x_pb.setSizePolicy(sizePolicy7)
         self.zero_x_pb.setMinimumSize(QSize(0, 20))
         self.zero_x_pb.setMaximumSize(QSize(16777215, 23))
         self.zero_x_pb.setFont(font)
@@ -1359,8 +1392,8 @@ class Ui_MainWindow(object):
 
         self.y_axis_l = QLabel(self.sender_tab)
         self.y_axis_l.setObjectName(u"y_axis_l")
-        sizePolicy6.setHeightForWidth(self.y_axis_l.sizePolicy().hasHeightForWidth())
-        self.y_axis_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.y_axis_l.sizePolicy().hasHeightForWidth())
+        self.y_axis_l.setSizePolicy(sizePolicy7)
         self.y_axis_l.setMinimumSize(QSize(0, 12))
         self.y_axis_l.setMaximumSize(QSize(16777215, 13))
         self.y_axis_l.setFont(font)
@@ -1373,8 +1406,8 @@ class Ui_MainWindow(object):
 
         self.mpos_x_l = QLabel(self.sender_tab)
         self.mpos_x_l.setObjectName(u"mpos_x_l")
-        sizePolicy6.setHeightForWidth(self.mpos_x_l.sizePolicy().hasHeightForWidth())
-        self.mpos_x_l.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.mpos_x_l.sizePolicy().hasHeightForWidth())
+        self.mpos_x_l.setSizePolicy(sizePolicy7)
         self.mpos_x_l.setMinimumSize(QSize(0, 12))
         self.mpos_x_l.setMaximumSize(QSize(16777215, 13))
         self.mpos_x_l.setLayoutDirection(Qt.LeftToRight)
@@ -1399,8 +1432,8 @@ class Ui_MainWindow(object):
         self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
         self.probe_pb = QPushButton(self.sender_tab)
         self.probe_pb.setObjectName(u"probe_pb")
-        sizePolicy6.setHeightForWidth(self.probe_pb.sizePolicy().hasHeightForWidth())
-        self.probe_pb.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.probe_pb.sizePolicy().hasHeightForWidth())
+        self.probe_pb.setSizePolicy(sizePolicy7)
         self.probe_pb.setMinimumSize(QSize(0, 20))
         self.probe_pb.setMaximumSize(QSize(16777215, 23))
 
@@ -1408,8 +1441,8 @@ class Ui_MainWindow(object):
 
         self.get_bbox_pb = QPushButton(self.sender_tab)
         self.get_bbox_pb.setObjectName(u"get_bbox_pb")
-        sizePolicy6.setHeightForWidth(self.get_bbox_pb.sizePolicy().hasHeightForWidth())
-        self.get_bbox_pb.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.get_bbox_pb.sizePolicy().hasHeightForWidth())
+        self.get_bbox_pb.setSizePolicy(sizePolicy7)
         self.get_bbox_pb.setMinimumSize(QSize(0, 20))
         self.get_bbox_pb.setMaximumSize(QSize(16777215, 23))
         self.get_bbox_pb.setFont(font)
@@ -1420,8 +1453,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
         self.ABL_pb = QPushButton(self.sender_tab)
         self.ABL_pb.setObjectName(u"ABL_pb")
-        sizePolicy6.setHeightForWidth(self.ABL_pb.sizePolicy().hasHeightForWidth())
-        self.ABL_pb.setSizePolicy(sizePolicy6)
+        sizePolicy7.setHeightForWidth(self.ABL_pb.sizePolicy().hasHeightForWidth())
+        self.ABL_pb.setSizePolicy(sizePolicy7)
         self.ABL_pb.setMinimumSize(QSize(0, 20))
         self.ABL_pb.setMaximumSize(QSize(16777215, 23))
         self.ABL_pb.setFont(font)
@@ -1430,11 +1463,11 @@ class Ui_MainWindow(object):
 
         self.abl_active_chb = QCheckBox(self.sender_tab)
         self.abl_active_chb.setObjectName(u"abl_active_chb")
-        sizePolicy7 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
-        sizePolicy7.setHorizontalStretch(0)
-        sizePolicy7.setVerticalStretch(0)
-        sizePolicy7.setHeightForWidth(self.abl_active_chb.sizePolicy().hasHeightForWidth())
-        self.abl_active_chb.setSizePolicy(sizePolicy7)
+        sizePolicy8 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
+        sizePolicy8.setHorizontalStretch(0)
+        sizePolicy8.setVerticalStretch(0)
+        sizePolicy8.setHeightForWidth(self.abl_active_chb.sizePolicy().hasHeightForWidth())
+        self.abl_active_chb.setSizePolicy(sizePolicy8)
         self.abl_active_chb.setMinimumSize(QSize(0, 20))
         self.abl_active_chb.setMaximumSize(QSize(16777215, 23))
         self.abl_active_chb.setChecked(True)
@@ -1449,13 +1482,14 @@ class Ui_MainWindow(object):
 
         self.gridLayout_11 = QGridLayout()
         self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.gridLayout_11.setVerticalSpacing(0)
         self.label_6 = QLabel(self.sender_tab)
         self.label_6.setObjectName(u"label_6")
-        sizePolicy8 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
-        sizePolicy8.setHorizontalStretch(0)
-        sizePolicy8.setVerticalStretch(0)
-        sizePolicy8.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
-        self.label_6.setSizePolicy(sizePolicy8)
+        sizePolicy9 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
+        sizePolicy9.setHorizontalStretch(0)
+        sizePolicy9.setVerticalStretch(0)
+        sizePolicy9.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
+        self.label_6.setSizePolicy(sizePolicy9)
         self.label_6.setMinimumSize(QSize(0, 20))
         self.label_6.setMaximumSize(QSize(16777215, 23))
         self.label_6.setFont(font)
@@ -1465,8 +1499,8 @@ class Ui_MainWindow(object):
 
         self.label_7 = QLabel(self.sender_tab)
         self.label_7.setObjectName(u"label_7")
-        sizePolicy8.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
-        self.label_7.setSizePolicy(sizePolicy8)
+        sizePolicy9.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
+        self.label_7.setSizePolicy(sizePolicy9)
         self.label_7.setMinimumSize(QSize(0, 20))
         self.label_7.setMaximumSize(QSize(16777215, 23))
         self.label_7.setFont(font)
@@ -1476,8 +1510,8 @@ class Ui_MainWindow(object):
 
         self.label_8 = QLabel(self.sender_tab)
         self.label_8.setObjectName(u"label_8")
-        sizePolicy8.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
-        self.label_8.setSizePolicy(sizePolicy8)
+        sizePolicy9.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
+        self.label_8.setSizePolicy(sizePolicy9)
         self.label_8.setMinimumSize(QSize(0, 20))
         self.label_8.setMaximumSize(QSize(16777215, 23))
         self.label_8.setFont(font)
@@ -1487,8 +1521,8 @@ class Ui_MainWindow(object):
 
         self.label_9 = QLabel(self.sender_tab)
         self.label_9.setObjectName(u"label_9")
-        sizePolicy8.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
-        self.label_9.setSizePolicy(sizePolicy8)
+        sizePolicy9.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
+        self.label_9.setSizePolicy(sizePolicy9)
         self.label_9.setMinimumSize(QSize(0, 20))
         self.label_9.setMaximumSize(QSize(16777215, 23))
         self.label_9.setFont(font)
@@ -1498,8 +1532,8 @@ class Ui_MainWindow(object):
 
         self.label_10 = QLabel(self.sender_tab)
         self.label_10.setObjectName(u"label_10")
-        sizePolicy8.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
-        self.label_10.setSizePolicy(sizePolicy8)
+        sizePolicy9.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
+        self.label_10.setSizePolicy(sizePolicy9)
         self.label_10.setMinimumSize(QSize(0, 20))
         self.label_10.setMaximumSize(QSize(16777215, 23))
         self.label_10.setFont(font)
@@ -1509,8 +1543,8 @@ class Ui_MainWindow(object):
 
         self.x_min_dsb = QDoubleSpinBox(self.sender_tab)
         self.x_min_dsb.setObjectName(u"x_min_dsb")
-        sizePolicy7.setHeightForWidth(self.x_min_dsb.sizePolicy().hasHeightForWidth())
-        self.x_min_dsb.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.x_min_dsb.sizePolicy().hasHeightForWidth())
+        self.x_min_dsb.setSizePolicy(sizePolicy8)
         self.x_min_dsb.setMinimumSize(QSize(0, 20))
         self.x_min_dsb.setMaximumSize(QSize(16777215, 23))
         self.x_min_dsb.setAlignment(Qt.AlignCenter)
@@ -1522,8 +1556,8 @@ class Ui_MainWindow(object):
 
         self.x_max_dsb = QDoubleSpinBox(self.sender_tab)
         self.x_max_dsb.setObjectName(u"x_max_dsb")
-        sizePolicy7.setHeightForWidth(self.x_max_dsb.sizePolicy().hasHeightForWidth())
-        self.x_max_dsb.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.x_max_dsb.sizePolicy().hasHeightForWidth())
+        self.x_max_dsb.setSizePolicy(sizePolicy8)
         self.x_max_dsb.setMinimumSize(QSize(0, 20))
         self.x_max_dsb.setMaximumSize(QSize(16777215, 23))
         self.x_max_dsb.setAlignment(Qt.AlignCenter)
@@ -1536,8 +1570,8 @@ class Ui_MainWindow(object):
         self.x_step_dsb = QDoubleSpinBox(self.sender_tab)
         self.x_step_dsb.setObjectName(u"x_step_dsb")
         self.x_step_dsb.setEnabled(False)
-        sizePolicy7.setHeightForWidth(self.x_step_dsb.sizePolicy().hasHeightForWidth())
-        self.x_step_dsb.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.x_step_dsb.sizePolicy().hasHeightForWidth())
+        self.x_step_dsb.setSizePolicy(sizePolicy8)
         self.x_step_dsb.setMinimumSize(QSize(0, 20))
         self.x_step_dsb.setMaximumSize(QSize(16777215, 23))
         self.x_step_dsb.setAlignment(Qt.AlignCenter)
@@ -1548,8 +1582,8 @@ class Ui_MainWindow(object):
 
         self.x_num_step_sb = QSpinBox(self.sender_tab)
         self.x_num_step_sb.setObjectName(u"x_num_step_sb")
-        sizePolicy7.setHeightForWidth(self.x_num_step_sb.sizePolicy().hasHeightForWidth())
-        self.x_num_step_sb.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.x_num_step_sb.sizePolicy().hasHeightForWidth())
+        self.x_num_step_sb.setSizePolicy(sizePolicy8)
         self.x_num_step_sb.setMinimumSize(QSize(0, 20))
         self.x_num_step_sb.setMaximumSize(QSize(16777215, 23))
         self.x_num_step_sb.setAlignment(Qt.AlignCenter)
@@ -1559,8 +1593,8 @@ class Ui_MainWindow(object):
 
         self.label_11 = QLabel(self.sender_tab)
         self.label_11.setObjectName(u"label_11")
-        sizePolicy8.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
-        self.label_11.setSizePolicy(sizePolicy8)
+        sizePolicy9.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
+        self.label_11.setSizePolicy(sizePolicy9)
         self.label_11.setMinimumSize(QSize(0, 20))
         self.label_11.setMaximumSize(QSize(16777215, 23))
         self.label_11.setFont(font)
@@ -1570,8 +1604,8 @@ class Ui_MainWindow(object):
 
         self.y_min_dsb = QDoubleSpinBox(self.sender_tab)
         self.y_min_dsb.setObjectName(u"y_min_dsb")
-        sizePolicy7.setHeightForWidth(self.y_min_dsb.sizePolicy().hasHeightForWidth())
-        self.y_min_dsb.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.y_min_dsb.sizePolicy().hasHeightForWidth())
+        self.y_min_dsb.setSizePolicy(sizePolicy8)
         self.y_min_dsb.setMinimumSize(QSize(0, 20))
         self.y_min_dsb.setMaximumSize(QSize(16777215, 23))
         self.y_min_dsb.setAlignment(Qt.AlignCenter)
@@ -1583,8 +1617,8 @@ class Ui_MainWindow(object):
 
         self.y_max_dsb = QDoubleSpinBox(self.sender_tab)
         self.y_max_dsb.setObjectName(u"y_max_dsb")
-        sizePolicy7.setHeightForWidth(self.y_max_dsb.sizePolicy().hasHeightForWidth())
-        self.y_max_dsb.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.y_max_dsb.sizePolicy().hasHeightForWidth())
+        self.y_max_dsb.setSizePolicy(sizePolicy8)
         self.y_max_dsb.setMinimumSize(QSize(0, 20))
         self.y_max_dsb.setMaximumSize(QSize(16777215, 23))
         self.y_max_dsb.setAlignment(Qt.AlignCenter)
@@ -1597,8 +1631,8 @@ class Ui_MainWindow(object):
         self.y_step_dsb = QDoubleSpinBox(self.sender_tab)
         self.y_step_dsb.setObjectName(u"y_step_dsb")
         self.y_step_dsb.setEnabled(False)
-        sizePolicy7.setHeightForWidth(self.y_step_dsb.sizePolicy().hasHeightForWidth())
-        self.y_step_dsb.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.y_step_dsb.sizePolicy().hasHeightForWidth())
+        self.y_step_dsb.setSizePolicy(sizePolicy8)
         self.y_step_dsb.setMinimumSize(QSize(0, 20))
         self.y_step_dsb.setMaximumSize(QSize(16777215, 23))
         self.y_step_dsb.setAlignment(Qt.AlignCenter)
@@ -1609,8 +1643,8 @@ class Ui_MainWindow(object):
 
         self.y_num_step_sb = QSpinBox(self.sender_tab)
         self.y_num_step_sb.setObjectName(u"y_num_step_sb")
-        sizePolicy7.setHeightForWidth(self.y_num_step_sb.sizePolicy().hasHeightForWidth())
-        self.y_num_step_sb.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.y_num_step_sb.sizePolicy().hasHeightForWidth())
+        self.y_num_step_sb.setSizePolicy(sizePolicy8)
         self.y_num_step_sb.setMinimumSize(QSize(0, 20))
         self.y_num_step_sb.setMaximumSize(QSize(16777215, 23))
         self.y_num_step_sb.setAlignment(Qt.AlignCenter)
@@ -1620,8 +1654,8 @@ class Ui_MainWindow(object):
 
         self.label_12 = QLabel(self.sender_tab)
         self.label_12.setObjectName(u"label_12")
-        sizePolicy8.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
-        self.label_12.setSizePolicy(sizePolicy8)
+        sizePolicy9.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
+        self.label_12.setSizePolicy(sizePolicy9)
         self.label_12.setMinimumSize(QSize(0, 20))
         self.label_12.setMaximumSize(QSize(16777215, 23))
         self.label_12.setFont(font)
@@ -1631,8 +1665,8 @@ class Ui_MainWindow(object):
 
         self.z_min_dsb = QDoubleSpinBox(self.sender_tab)
         self.z_min_dsb.setObjectName(u"z_min_dsb")
-        sizePolicy7.setHeightForWidth(self.z_min_dsb.sizePolicy().hasHeightForWidth())
-        self.z_min_dsb.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.z_min_dsb.sizePolicy().hasHeightForWidth())
+        self.z_min_dsb.setSizePolicy(sizePolicy8)
         self.z_min_dsb.setMinimumSize(QSize(0, 20))
         self.z_min_dsb.setMaximumSize(QSize(16777215, 23))
         self.z_min_dsb.setAlignment(Qt.AlignCenter)
@@ -1644,8 +1678,8 @@ class Ui_MainWindow(object):
 
         self.z_max_dsb = QDoubleSpinBox(self.sender_tab)
         self.z_max_dsb.setObjectName(u"z_max_dsb")
-        sizePolicy7.setHeightForWidth(self.z_max_dsb.sizePolicy().hasHeightForWidth())
-        self.z_max_dsb.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.z_max_dsb.sizePolicy().hasHeightForWidth())
+        self.z_max_dsb.setSizePolicy(sizePolicy8)
         self.z_max_dsb.setMinimumSize(QSize(0, 20))
         self.z_max_dsb.setMaximumSize(QSize(16777215, 23))
         self.z_max_dsb.setAlignment(Qt.AlignCenter)
@@ -2040,11 +2074,11 @@ class Ui_MainWindow(object):
         self.serial_te = QTextEdit(self.sender_tab)
         self.serial_te.setObjectName(u"serial_te")
         self.serial_te.setEnabled(True)
-        sizePolicy9 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
-        sizePolicy9.setHorizontalStretch(0)
-        sizePolicy9.setVerticalStretch(0)
-        sizePolicy9.setHeightForWidth(self.serial_te.sizePolicy().hasHeightForWidth())
-        self.serial_te.setSizePolicy(sizePolicy9)
+        sizePolicy10 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        sizePolicy10.setHorizontalStretch(0)
+        sizePolicy10.setVerticalStretch(0)
+        sizePolicy10.setHeightForWidth(self.serial_te.sizePolicy().hasHeightForWidth())
+        self.serial_te.setSizePolicy(sizePolicy10)
         self.serial_te.setMinimumSize(QSize(0, 40))
         self.serial_te.setFrameShadow(QFrame.Sunken)
         self.serial_te.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -2061,11 +2095,11 @@ class Ui_MainWindow(object):
 
         self.send_pb = QPushButton(self.sender_tab)
         self.send_pb.setObjectName(u"send_pb")
-        sizePolicy10 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        sizePolicy10.setHorizontalStretch(0)
-        sizePolicy10.setVerticalStretch(0)
-        sizePolicy10.setHeightForWidth(self.send_pb.sizePolicy().hasHeightForWidth())
-        self.send_pb.setSizePolicy(sizePolicy10)
+        sizePolicy11 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy11.setHorizontalStretch(0)
+        sizePolicy11.setVerticalStretch(0)
+        sizePolicy11.setHeightForWidth(self.send_pb.sizePolicy().hasHeightForWidth())
+        self.send_pb.setSizePolicy(sizePolicy11)
         self.send_pb.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.send_pb)
@@ -2096,8 +2130,8 @@ class Ui_MainWindow(object):
 
         self.refresh_pb = QPushButton(self.sender_tab)
         self.refresh_pb.setObjectName(u"refresh_pb")
-        sizePolicy10.setHeightForWidth(self.refresh_pb.sizePolicy().hasHeightForWidth())
-        self.refresh_pb.setSizePolicy(sizePolicy10)
+        sizePolicy11.setHeightForWidth(self.refresh_pb.sizePolicy().hasHeightForWidth())
+        self.refresh_pb.setSizePolicy(sizePolicy11)
         self.refresh_pb.setFont(font)
         self.refresh_pb.setCheckable(False)
 
@@ -2114,11 +2148,11 @@ class Ui_MainWindow(object):
         self.clear_terminal_pb = QPushButton(self.sender_tab)
         self.clear_terminal_pb.setObjectName(u"clear_terminal_pb")
         self.clear_terminal_pb.setEnabled(True)
-        sizePolicy11 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-        sizePolicy11.setHorizontalStretch(0)
-        sizePolicy11.setVerticalStretch(0)
-        sizePolicy11.setHeightForWidth(self.clear_terminal_pb.sizePolicy().hasHeightForWidth())
-        self.clear_terminal_pb.setSizePolicy(sizePolicy11)
+        sizePolicy12 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        sizePolicy12.setHorizontalStretch(0)
+        sizePolicy12.setVerticalStretch(0)
+        sizePolicy12.setHeightForWidth(self.clear_terminal_pb.sizePolicy().hasHeightForWidth())
+        self.clear_terminal_pb.setSizePolicy(sizePolicy12)
         self.clear_terminal_pb.setFont(font)
 
         self.horizontalLayout_9.addWidget(self.clear_terminal_pb)
@@ -2175,11 +2209,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.soft_reset_tb = QToolButton(self.control_tab)
         self.soft_reset_tb.setObjectName(u"soft_reset_tb")
-        sizePolicy12 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
-        sizePolicy12.setHorizontalStretch(0)
-        sizePolicy12.setVerticalStretch(0)
-        sizePolicy12.setHeightForWidth(self.soft_reset_tb.sizePolicy().hasHeightForWidth())
-        self.soft_reset_tb.setSizePolicy(sizePolicy12)
+        sizePolicy6.setHeightForWidth(self.soft_reset_tb.sizePolicy().hasHeightForWidth())
+        self.soft_reset_tb.setSizePolicy(sizePolicy6)
         self.soft_reset_tb.setMinimumSize(QSize(120, 25))
         self.soft_reset_tb.setMaximumSize(QSize(120, 16777215))
         icon13 = QIcon()
@@ -2195,8 +2226,8 @@ class Ui_MainWindow(object):
 
         self.status_l = QLabel(self.control_tab)
         self.status_l.setObjectName(u"status_l")
-        sizePolicy12.setHeightForWidth(self.status_l.sizePolicy().hasHeightForWidth())
-        self.status_l.setSizePolicy(sizePolicy12)
+        sizePolicy6.setHeightForWidth(self.status_l.sizePolicy().hasHeightForWidth())
+        self.status_l.setSizePolicy(sizePolicy6)
         self.status_l.setMinimumSize(QSize(120, 50))
         self.status_l.setMaximumSize(QSize(120, 16777215))
         palette = QPalette()
@@ -2304,8 +2335,8 @@ class Ui_MainWindow(object):
 
         self.unlock_tb = QToolButton(self.control_tab)
         self.unlock_tb.setObjectName(u"unlock_tb")
-        sizePolicy12.setHeightForWidth(self.unlock_tb.sizePolicy().hasHeightForWidth())
-        self.unlock_tb.setSizePolicy(sizePolicy12)
+        sizePolicy6.setHeightForWidth(self.unlock_tb.sizePolicy().hasHeightForWidth())
+        self.unlock_tb.setSizePolicy(sizePolicy6)
         self.unlock_tb.setMinimumSize(QSize(120, 80))
         self.unlock_tb.setMaximumSize(QSize(120, 16777215))
         icon14 = QIcon()
@@ -2320,8 +2351,8 @@ class Ui_MainWindow(object):
 
         self.homing_tb = QToolButton(self.control_tab)
         self.homing_tb.setObjectName(u"homing_tb")
-        sizePolicy12.setHeightForWidth(self.homing_tb.sizePolicy().hasHeightForWidth())
-        self.homing_tb.setSizePolicy(sizePolicy12)
+        sizePolicy6.setHeightForWidth(self.homing_tb.sizePolicy().hasHeightForWidth())
+        self.homing_tb.setSizePolicy(sizePolicy6)
         self.homing_tb.setMinimumSize(QSize(120, 80))
         self.homing_tb.setMaximumSize(QSize(120, 16777215))
         icon15 = QIcon()
@@ -2336,8 +2367,8 @@ class Ui_MainWindow(object):
 
         self.play_tb = QToolButton(self.control_tab)
         self.play_tb.setObjectName(u"play_tb")
-        sizePolicy12.setHeightForWidth(self.play_tb.sizePolicy().hasHeightForWidth())
-        self.play_tb.setSizePolicy(sizePolicy12)
+        sizePolicy6.setHeightForWidth(self.play_tb.sizePolicy().hasHeightForWidth())
+        self.play_tb.setSizePolicy(sizePolicy6)
         self.play_tb.setMinimumSize(QSize(120, 80))
         self.play_tb.setMaximumSize(QSize(120, 16777215))
         icon16 = QIcon()
@@ -2352,8 +2383,8 @@ class Ui_MainWindow(object):
 
         self.pause_resume_tb = QToolButton(self.control_tab)
         self.pause_resume_tb.setObjectName(u"pause_resume_tb")
-        sizePolicy12.setHeightForWidth(self.pause_resume_tb.sizePolicy().hasHeightForWidth())
-        self.pause_resume_tb.setSizePolicy(sizePolicy12)
+        sizePolicy6.setHeightForWidth(self.pause_resume_tb.sizePolicy().hasHeightForWidth())
+        self.pause_resume_tb.setSizePolicy(sizePolicy6)
         self.pause_resume_tb.setMinimumSize(QSize(120, 80))
         self.pause_resume_tb.setMaximumSize(QSize(120, 16777215))
         icon17 = QIcon()
@@ -2368,8 +2399,8 @@ class Ui_MainWindow(object):
 
         self.stop_tb = QToolButton(self.control_tab)
         self.stop_tb.setObjectName(u"stop_tb")
-        sizePolicy12.setHeightForWidth(self.stop_tb.sizePolicy().hasHeightForWidth())
-        self.stop_tb.setSizePolicy(sizePolicy12)
+        sizePolicy6.setHeightForWidth(self.stop_tb.sizePolicy().hasHeightForWidth())
+        self.stop_tb.setSizePolicy(sizePolicy6)
         self.stop_tb.setMinimumSize(QSize(120, 80))
         self.stop_tb.setMaximumSize(QSize(120, 16777215))
         icon18 = QIcon()
@@ -2384,8 +2415,8 @@ class Ui_MainWindow(object):
 
         self.tool_change_tb = QToolButton(self.control_tab)
         self.tool_change_tb.setObjectName(u"tool_change_tb")
-        sizePolicy12.setHeightForWidth(self.tool_change_tb.sizePolicy().hasHeightForWidth())
-        self.tool_change_tb.setSizePolicy(sizePolicy12)
+        sizePolicy6.setHeightForWidth(self.tool_change_tb.sizePolicy().hasHeightForWidth())
+        self.tool_change_tb.setSizePolicy(sizePolicy6)
         self.tool_change_tb.setMinimumSize(QSize(120, 80))
         self.tool_change_tb.setMaximumSize(QSize(120, 16777215))
         icon19 = QIcon()
@@ -2431,6 +2462,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
         self.settings_sub_tab = QTabWidget(self.settings_tab)
         self.settings_sub_tab.setObjectName(u"settings_sub_tab")
+        self.settings_sub_tab.setEnabled(True)
         self.application_settings_tab = QWidget()
         self.application_settings_tab.setObjectName(u"application_settings_tab")
         self.gridLayout_9 = QGridLayout(self.application_settings_tab)
@@ -2521,18 +2553,644 @@ class Ui_MainWindow(object):
         self.gridLayout_9.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
 
         self.settings_sub_tab.addTab(self.application_settings_tab, "")
-        self.tab_4 = QWidget()
-        self.tab_4.setObjectName(u"tab_4")
-        self.gridLayout_13 = QGridLayout(self.tab_4)
+        self.jobs_machine_settings_tab = QWidget()
+        self.jobs_machine_settings_tab.setObjectName(u"jobs_machine_settings_tab")
+        self.gridLayout_13 = QGridLayout(self.jobs_machine_settings_tab)
         self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.pushButton_2 = QPushButton(self.tab_4)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.verticalLayout_4 = QVBoxLayout()
+        self.verticalLayout_4.setSpacing(2)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.verticalLayout_4.setSizeConstraint(QLayout.SetFixedSize)
+        self.line_15 = QFrame(self.jobs_machine_settings_tab)
+        self.line_15.setObjectName(u"line_15")
+        self.line_15.setFrameShape(QFrame.HLine)
+        self.line_15.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_13.addWidget(self.pushButton_2, 0, 0, 1, 1)
+        self.verticalLayout_4.addWidget(self.line_15)
 
-        self.settings_sub_tab.addTab(self.tab_4, "")
+        self.probe_settings_section_la = QLabel(self.jobs_machine_settings_tab)
+        self.probe_settings_section_la.setObjectName(u"probe_settings_section_la")
+        sizePolicy3.setHeightForWidth(self.probe_settings_section_la.sizePolicy().hasHeightForWidth())
+        self.probe_settings_section_la.setSizePolicy(sizePolicy3)
+        font3 = QFont()
+        font3.setPointSize(12)
+        self.probe_settings_section_la.setFont(font3)
+
+        self.verticalLayout_4.addWidget(self.probe_settings_section_la, 0, Qt.AlignHCenter)
+
+        self.line_16 = QFrame(self.jobs_machine_settings_tab)
+        self.line_16.setObjectName(u"line_16")
+        self.line_16.setFrameShape(QFrame.HLine)
+        self.line_16.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_4.addWidget(self.line_16)
+
+        self.gridLayout_21 = QGridLayout()
+        self.gridLayout_21.setObjectName(u"gridLayout_21")
+        self.gridLayout_21.setHorizontalSpacing(0)
+        self.gridLayout_21.setVerticalSpacing(2)
+        self.horizontalSpacer_10 = QSpacerItem(180, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.gridLayout_21.addItem(self.horizontalSpacer_10, 0, 0, 1, 1)
+
+        self.hold_on_probe_chb = QCheckBox(self.jobs_machine_settings_tab)
+        self.hold_on_probe_chb.setObjectName(u"hold_on_probe_chb")
+        sizePolicy3.setHeightForWidth(self.hold_on_probe_chb.sizePolicy().hasHeightForWidth())
+        self.hold_on_probe_chb.setSizePolicy(sizePolicy3)
+        self.hold_on_probe_chb.setMinimumSize(QSize(150, 0))
+        self.hold_on_probe_chb.setMaximumSize(QSize(150, 16777215))
+
+        self.gridLayout_21.addWidget(self.hold_on_probe_chb, 0, 1, 1, 1, Qt.AlignHCenter)
+
+        self.zeroing_after_probe_chb = QCheckBox(self.jobs_machine_settings_tab)
+        self.zeroing_after_probe_chb.setObjectName(u"zeroing_after_probe_chb")
+        sizePolicy3.setHeightForWidth(self.zeroing_after_probe_chb.sizePolicy().hasHeightForWidth())
+        self.zeroing_after_probe_chb.setSizePolicy(sizePolicy3)
+        self.zeroing_after_probe_chb.setMinimumSize(QSize(150, 0))
+        self.zeroing_after_probe_chb.setMaximumSize(QSize(150, 16777215))
+
+        self.gridLayout_21.addWidget(self.zeroing_after_probe_chb, 0, 2, 1, 1, Qt.AlignHCenter)
+
+
+        self.verticalLayout_4.addLayout(self.gridLayout_21)
+
+
+        self.gridLayout_13.addLayout(self.verticalLayout_4, 6, 0, 1, 1)
+
+        self.line_9 = QFrame(self.jobs_machine_settings_tab)
+        self.line_9.setObjectName(u"line_9")
+        self.line_9.setFrameShape(QFrame.HLine)
+        self.line_9.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_9, 14, 0, 1, 1)
+
+        self.line_13 = QFrame(self.jobs_machine_settings_tab)
+        self.line_13.setObjectName(u"line_13")
+        self.line_13.setFrameShape(QFrame.HLine)
+        self.line_13.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_13, 4, 0, 1, 1)
+
+        self.verticalLayout_5 = QVBoxLayout()
+        self.verticalLayout_5.setSpacing(2)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.verticalLayout_5.setSizeConstraint(QLayout.SetFixedSize)
+        self.horizontalLayout_13 = QHBoxLayout()
+        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.gridLayout_14 = QGridLayout()
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.gridLayout_14.setSizeConstraint(QLayout.SetFixedSize)
+        self.gridLayout_14.setVerticalSpacing(2)
+        self.tool_probe_y_wpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.tool_probe_y_wpos_dsb.setObjectName(u"tool_probe_y_wpos_dsb")
+        sizePolicy3.setHeightForWidth(self.tool_probe_y_wpos_dsb.sizePolicy().hasHeightForWidth())
+        self.tool_probe_y_wpos_dsb.setSizePolicy(sizePolicy3)
+        self.tool_probe_y_wpos_dsb.setMinimumSize(QSize(80, 20))
+        self.tool_probe_y_wpos_dsb.setMaximumSize(QSize(80, 16777215))
+        self.tool_probe_y_wpos_dsb.setFont(font)
+        self.tool_probe_y_wpos_dsb.setAlignment(Qt.AlignCenter)
+        self.tool_probe_y_wpos_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.tool_probe_y_wpos_dsb.setMinimum(-1000.000000000000000)
+        self.tool_probe_y_wpos_dsb.setMaximum(1000.000000000000000)
+        self.tool_probe_y_wpos_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_14.addWidget(self.tool_probe_y_wpos_dsb, 2, 2, 1, 1)
+
+        self.tool_probe_y_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.tool_probe_y_mpos_dsb.setObjectName(u"tool_probe_y_mpos_dsb")
+        sizePolicy3.setHeightForWidth(self.tool_probe_y_mpos_dsb.sizePolicy().hasHeightForWidth())
+        self.tool_probe_y_mpos_dsb.setSizePolicy(sizePolicy3)
+        self.tool_probe_y_mpos_dsb.setMinimumSize(QSize(80, 20))
+        self.tool_probe_y_mpos_dsb.setMaximumSize(QSize(80, 16777215))
+        self.tool_probe_y_mpos_dsb.setFont(font)
+        self.tool_probe_y_mpos_dsb.setAlignment(Qt.AlignCenter)
+        self.tool_probe_y_mpos_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.tool_probe_y_mpos_dsb.setMinimum(-1000.000000000000000)
+        self.tool_probe_y_mpos_dsb.setMaximum(1000.000000000000000)
+        self.tool_probe_y_mpos_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_14.addWidget(self.tool_probe_y_mpos_dsb, 1, 2, 1, 1)
+
+        self.x_la = QLabel(self.jobs_machine_settings_tab)
+        self.x_la.setObjectName(u"x_la")
+        sizePolicy3.setHeightForWidth(self.x_la.sizePolicy().hasHeightForWidth())
+        self.x_la.setSizePolicy(sizePolicy3)
+        self.x_la.setMaximumSize(QSize(80, 50))
+        self.x_la.setFont(font)
+        self.x_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_14.addWidget(self.x_la, 0, 1, 1, 1, Qt.AlignHCenter)
+
+        self.y_la = QLabel(self.jobs_machine_settings_tab)
+        self.y_la.setObjectName(u"y_la")
+        sizePolicy3.setHeightForWidth(self.y_la.sizePolicy().hasHeightForWidth())
+        self.y_la.setSizePolicy(sizePolicy3)
+        self.y_la.setMaximumSize(QSize(80, 50))
+        self.y_la.setFont(font)
+        self.y_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_14.addWidget(self.y_la, 0, 2, 1, 1, Qt.AlignHCenter)
+
+        self.tool_probe_z_limit_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.tool_probe_z_limit_dsb.setObjectName(u"tool_probe_z_limit_dsb")
+        sizePolicy3.setHeightForWidth(self.tool_probe_z_limit_dsb.sizePolicy().hasHeightForWidth())
+        self.tool_probe_z_limit_dsb.setSizePolicy(sizePolicy3)
+        self.tool_probe_z_limit_dsb.setMinimumSize(QSize(80, 20))
+        self.tool_probe_z_limit_dsb.setMaximumSize(QSize(80, 16777215))
+        self.tool_probe_z_limit_dsb.setFont(font)
+        self.tool_probe_z_limit_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.tool_probe_z_limit_dsb.setAlignment(Qt.AlignCenter)
+        self.tool_probe_z_limit_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.tool_probe_z_limit_dsb.setMinimum(-1000.000000000000000)
+        self.tool_probe_z_limit_dsb.setMaximum(1000.000000000000000)
+        self.tool_probe_z_limit_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_14.addWidget(self.tool_probe_z_limit_dsb, 3, 3, 1, 1)
+
+        self.tool_probe_x_wpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.tool_probe_x_wpos_dsb.setObjectName(u"tool_probe_x_wpos_dsb")
+        sizePolicy3.setHeightForWidth(self.tool_probe_x_wpos_dsb.sizePolicy().hasHeightForWidth())
+        self.tool_probe_x_wpos_dsb.setSizePolicy(sizePolicy3)
+        self.tool_probe_x_wpos_dsb.setMinimumSize(QSize(80, 20))
+        self.tool_probe_x_wpos_dsb.setMaximumSize(QSize(80, 16777215))
+        self.tool_probe_x_wpos_dsb.setFont(font)
+        self.tool_probe_x_wpos_dsb.setAlignment(Qt.AlignCenter)
+        self.tool_probe_x_wpos_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.tool_probe_x_wpos_dsb.setMinimum(-1000.000000000000000)
+        self.tool_probe_x_wpos_dsb.setMaximum(1000.000000000000000)
+        self.tool_probe_x_wpos_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_14.addWidget(self.tool_probe_x_wpos_dsb, 2, 1, 1, 1)
+
+        self.z_la = QLabel(self.jobs_machine_settings_tab)
+        self.z_la.setObjectName(u"z_la")
+        sizePolicy3.setHeightForWidth(self.z_la.sizePolicy().hasHeightForWidth())
+        self.z_la.setSizePolicy(sizePolicy3)
+        self.z_la.setMaximumSize(QSize(80, 50))
+        self.z_la.setFont(font)
+        self.z_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_14.addWidget(self.z_la, 0, 3, 1, 1, Qt.AlignHCenter)
+
+        self.tool_probe_x_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.tool_probe_x_mpos_dsb.setObjectName(u"tool_probe_x_mpos_dsb")
+        sizePolicy3.setHeightForWidth(self.tool_probe_x_mpos_dsb.sizePolicy().hasHeightForWidth())
+        self.tool_probe_x_mpos_dsb.setSizePolicy(sizePolicy3)
+        self.tool_probe_x_mpos_dsb.setMinimumSize(QSize(80, 20))
+        self.tool_probe_x_mpos_dsb.setMaximumSize(QSize(80, 16777215))
+        self.tool_probe_x_mpos_dsb.setFont(font)
+        self.tool_probe_x_mpos_dsb.setAlignment(Qt.AlignCenter)
+        self.tool_probe_x_mpos_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.tool_probe_x_mpos_dsb.setMinimum(-1000.000000000000000)
+        self.tool_probe_x_mpos_dsb.setMaximum(1000.000000000000000)
+        self.tool_probe_x_mpos_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_14.addWidget(self.tool_probe_x_mpos_dsb, 1, 1, 1, 1)
+
+        self.tool_probe_wpos_la = QLabel(self.jobs_machine_settings_tab)
+        self.tool_probe_wpos_la.setObjectName(u"tool_probe_wpos_la")
+        sizePolicy3.setHeightForWidth(self.tool_probe_wpos_la.sizePolicy().hasHeightForWidth())
+        self.tool_probe_wpos_la.setSizePolicy(sizePolicy3)
+        self.tool_probe_wpos_la.setMinimumSize(QSize(130, 20))
+        self.tool_probe_wpos_la.setMaximumSize(QSize(130, 16777215))
+        self.tool_probe_wpos_la.setFont(font)
+        self.tool_probe_wpos_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_14.addWidget(self.tool_probe_wpos_la, 2, 0, 1, 1)
+
+        self.tool_probe_z_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.tool_probe_z_mpos_dsb.setObjectName(u"tool_probe_z_mpos_dsb")
+        sizePolicy3.setHeightForWidth(self.tool_probe_z_mpos_dsb.sizePolicy().hasHeightForWidth())
+        self.tool_probe_z_mpos_dsb.setSizePolicy(sizePolicy3)
+        self.tool_probe_z_mpos_dsb.setMinimumSize(QSize(80, 20))
+        self.tool_probe_z_mpos_dsb.setMaximumSize(QSize(80, 16777215))
+        self.tool_probe_z_mpos_dsb.setFont(font)
+        self.tool_probe_z_mpos_dsb.setAlignment(Qt.AlignCenter)
+        self.tool_probe_z_mpos_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.tool_probe_z_mpos_dsb.setMinimum(-1000.000000000000000)
+        self.tool_probe_z_mpos_dsb.setMaximum(1000.000000000000000)
+        self.tool_probe_z_mpos_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_14.addWidget(self.tool_probe_z_mpos_dsb, 1, 3, 1, 1)
+
+        self.tool_probe_mpos_la = QLabel(self.jobs_machine_settings_tab)
+        self.tool_probe_mpos_la.setObjectName(u"tool_probe_mpos_la")
+        sizePolicy3.setHeightForWidth(self.tool_probe_mpos_la.sizePolicy().hasHeightForWidth())
+        self.tool_probe_mpos_la.setSizePolicy(sizePolicy3)
+        self.tool_probe_mpos_la.setMinimumSize(QSize(130, 20))
+        self.tool_probe_mpos_la.setMaximumSize(QSize(130, 16777215))
+        self.tool_probe_mpos_la.setFont(font)
+        self.tool_probe_mpos_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_14.addWidget(self.tool_probe_mpos_la, 1, 0, 1, 1)
+
+        self.tool_probe_z_wpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.tool_probe_z_wpos_dsb.setObjectName(u"tool_probe_z_wpos_dsb")
+        sizePolicy3.setHeightForWidth(self.tool_probe_z_wpos_dsb.sizePolicy().hasHeightForWidth())
+        self.tool_probe_z_wpos_dsb.setSizePolicy(sizePolicy3)
+        self.tool_probe_z_wpos_dsb.setMinimumSize(QSize(80, 20))
+        self.tool_probe_z_wpos_dsb.setMaximumSize(QSize(80, 16777215))
+        self.tool_probe_z_wpos_dsb.setFont(font)
+        self.tool_probe_z_wpos_dsb.setAlignment(Qt.AlignCenter)
+        self.tool_probe_z_wpos_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.tool_probe_z_wpos_dsb.setMinimum(-1000.000000000000000)
+        self.tool_probe_z_wpos_dsb.setMaximum(1000.000000000000000)
+        self.tool_probe_z_wpos_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_14.addWidget(self.tool_probe_z_wpos_dsb, 2, 3, 1, 1)
+
+        self.tool_probe_z_limit_la = QLabel(self.jobs_machine_settings_tab)
+        self.tool_probe_z_limit_la.setObjectName(u"tool_probe_z_limit_la")
+        sizePolicy3.setHeightForWidth(self.tool_probe_z_limit_la.sizePolicy().hasHeightForWidth())
+        self.tool_probe_z_limit_la.setSizePolicy(sizePolicy3)
+        self.tool_probe_z_limit_la.setMinimumSize(QSize(130, 20))
+        self.tool_probe_z_limit_la.setMaximumSize(QSize(130, 16777215))
+        self.tool_probe_z_limit_la.setFont(font)
+        self.tool_probe_z_limit_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_14.addWidget(self.tool_probe_z_limit_la, 3, 0, 1, 1)
+
+        self.tool_probe_wm_pos_chb = QCheckBox(self.jobs_machine_settings_tab)
+        self.tool_probe_wm_pos_chb.setObjectName(u"tool_probe_wm_pos_chb")
+        sizePolicy3.setHeightForWidth(self.tool_probe_wm_pos_chb.sizePolicy().hasHeightForWidth())
+        self.tool_probe_wm_pos_chb.setSizePolicy(sizePolicy3)
+        self.tool_probe_wm_pos_chb.setMinimumSize(QSize(150, 20))
+        self.tool_probe_wm_pos_chb.setMaximumSize(QSize(150, 20))
+        self.tool_probe_wm_pos_chb.setLayoutDirection(Qt.LeftToRight)
+        self.tool_probe_wm_pos_chb.setAutoFillBackground(True)
+
+        self.gridLayout_14.addWidget(self.tool_probe_wm_pos_chb, 1, 4, 1, 1, Qt.AlignHCenter)
+
+        self.get_tool_probe_pb = QPushButton(self.jobs_machine_settings_tab)
+        self.get_tool_probe_pb.setObjectName(u"get_tool_probe_pb")
+        sizePolicy3.setHeightForWidth(self.get_tool_probe_pb.sizePolicy().hasHeightForWidth())
+        self.get_tool_probe_pb.setSizePolicy(sizePolicy3)
+        self.get_tool_probe_pb.setMinimumSize(QSize(180, 20))
+        self.get_tool_probe_pb.setMaximumSize(QSize(180, 20))
+        self.get_tool_probe_pb.setFont(font)
+        self.get_tool_probe_pb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_14.addWidget(self.get_tool_probe_pb, 2, 4, 1, 1, Qt.AlignHCenter)
+
+
+        self.horizontalLayout_13.addLayout(self.gridLayout_14)
+
+
+        self.verticalLayout_5.addLayout(self.horizontalLayout_13)
+
+        self.line_6 = QFrame(self.jobs_machine_settings_tab)
+        self.line_6.setObjectName(u"line_6")
+        self.line_6.setFrameShape(QFrame.HLine)
+        self.line_6.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_5.addWidget(self.line_6)
+
+        self.horizontalLayout_15 = QHBoxLayout()
+        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
+        self.gridLayout_15 = QGridLayout()
+        self.gridLayout_15.setObjectName(u"gridLayout_15")
+        self.gridLayout_15.setSizeConstraint(QLayout.SetFixedSize)
+        self.tool_change_z_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.tool_change_z_mpos_dsb.setObjectName(u"tool_change_z_mpos_dsb")
+        sizePolicy3.setHeightForWidth(self.tool_change_z_mpos_dsb.sizePolicy().hasHeightForWidth())
+        self.tool_change_z_mpos_dsb.setSizePolicy(sizePolicy3)
+        self.tool_change_z_mpos_dsb.setMinimumSize(QSize(80, 20))
+        self.tool_change_z_mpos_dsb.setMaximumSize(QSize(80, 16777215))
+        self.tool_change_z_mpos_dsb.setFont(font)
+        self.tool_change_z_mpos_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.tool_change_z_mpos_dsb.setAlignment(Qt.AlignCenter)
+        self.tool_change_z_mpos_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.tool_change_z_mpos_dsb.setMinimum(-1000.000000000000000)
+        self.tool_change_z_mpos_dsb.setMaximum(1000.000000000000000)
+        self.tool_change_z_mpos_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_15.addWidget(self.tool_change_z_mpos_dsb, 0, 4, 1, 1)
+
+        self.tool_change_y_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.tool_change_y_mpos_dsb.setObjectName(u"tool_change_y_mpos_dsb")
+        sizePolicy3.setHeightForWidth(self.tool_change_y_mpos_dsb.sizePolicy().hasHeightForWidth())
+        self.tool_change_y_mpos_dsb.setSizePolicy(sizePolicy3)
+        self.tool_change_y_mpos_dsb.setMinimumSize(QSize(80, 20))
+        self.tool_change_y_mpos_dsb.setMaximumSize(QSize(80, 16777215))
+        self.tool_change_y_mpos_dsb.setFont(font)
+        self.tool_change_y_mpos_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.tool_change_y_mpos_dsb.setAlignment(Qt.AlignCenter)
+        self.tool_change_y_mpos_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.tool_change_y_mpos_dsb.setMinimum(-1000.000000000000000)
+        self.tool_change_y_mpos_dsb.setMaximum(1000.000000000000000)
+        self.tool_change_y_mpos_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_15.addWidget(self.tool_change_y_mpos_dsb, 0, 2, 1, 1)
+
+        self.tool_change_x_mpos_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.tool_change_x_mpos_dsb.setObjectName(u"tool_change_x_mpos_dsb")
+        sizePolicy3.setHeightForWidth(self.tool_change_x_mpos_dsb.sizePolicy().hasHeightForWidth())
+        self.tool_change_x_mpos_dsb.setSizePolicy(sizePolicy3)
+        self.tool_change_x_mpos_dsb.setMinimumSize(QSize(80, 20))
+        self.tool_change_x_mpos_dsb.setMaximumSize(QSize(80, 16777215))
+        self.tool_change_x_mpos_dsb.setFont(font)
+        self.tool_change_x_mpos_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.tool_change_x_mpos_dsb.setAlignment(Qt.AlignCenter)
+        self.tool_change_x_mpos_dsb.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.tool_change_x_mpos_dsb.setMinimum(-1000.000000000000000)
+        self.tool_change_x_mpos_dsb.setMaximum(1000.000000000000000)
+        self.tool_change_x_mpos_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_15.addWidget(self.tool_change_x_mpos_dsb, 0, 1, 1, 1)
+
+        self.tool_change_la = QLabel(self.jobs_machine_settings_tab)
+        self.tool_change_la.setObjectName(u"tool_change_la")
+        sizePolicy3.setHeightForWidth(self.tool_change_la.sizePolicy().hasHeightForWidth())
+        self.tool_change_la.setSizePolicy(sizePolicy3)
+        self.tool_change_la.setMinimumSize(QSize(130, 20))
+        self.tool_change_la.setMaximumSize(QSize(130, 16777215))
+        self.tool_change_la.setFont(font)
+        self.tool_change_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_15.addWidget(self.tool_change_la, 0, 0, 1, 1)
+
+        self.get_tool_change_pb = QPushButton(self.jobs_machine_settings_tab)
+        self.get_tool_change_pb.setObjectName(u"get_tool_change_pb")
+        sizePolicy3.setHeightForWidth(self.get_tool_change_pb.sizePolicy().hasHeightForWidth())
+        self.get_tool_change_pb.setSizePolicy(sizePolicy3)
+        self.get_tool_change_pb.setMinimumSize(QSize(150, 20))
+        self.get_tool_change_pb.setMaximumSize(QSize(180, 20))
+        self.get_tool_change_pb.setFont(font)
+        self.get_tool_change_pb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_15.addWidget(self.get_tool_change_pb, 0, 5, 1, 1, Qt.AlignHCenter)
+
+
+        self.horizontalLayout_15.addLayout(self.gridLayout_15)
+
+
+        self.verticalLayout_5.addLayout(self.horizontalLayout_15)
+
+
+        self.gridLayout_13.addLayout(self.verticalLayout_5, 11, 0, 1, 1)
+
+        self.line_7 = QFrame(self.jobs_machine_settings_tab)
+        self.line_7.setObjectName(u"line_7")
+        self.line_7.setFrameShape(QFrame.HLine)
+        self.line_7.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_7, 12, 0, 1, 1)
+
+        self.gridLayout_20 = QGridLayout()
+        self.gridLayout_20.setObjectName(u"gridLayout_20")
+        self.gridLayout_20.setSizeConstraint(QLayout.SetFixedSize)
+        self.x_axis_la = QLabel(self.jobs_machine_settings_tab)
+        self.x_axis_la.setObjectName(u"x_axis_la")
+        sizePolicy3.setHeightForWidth(self.x_axis_la.sizePolicy().hasHeightForWidth())
+        self.x_axis_la.setSizePolicy(sizePolicy3)
+        self.x_axis_la.setMinimumSize(QSize(150, 20))
+        self.x_axis_la.setMaximumSize(QSize(150, 20))
+        self.x_axis_la.setFont(font)
+        self.x_axis_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_20.addWidget(self.x_axis_la, 0, 1, 1, 1, Qt.AlignHCenter)
+
+        self.x_la_2 = QLabel(self.jobs_machine_settings_tab)
+        self.x_la_2.setObjectName(u"x_la_2")
+        sizePolicy3.setHeightForWidth(self.x_la_2.sizePolicy().hasHeightForWidth())
+        self.x_la_2.setSizePolicy(sizePolicy3)
+        self.x_la_2.setMinimumSize(QSize(150, 20))
+        self.x_la_2.setMaximumSize(QSize(150, 20))
+        self.x_la_2.setFont(font)
+        self.x_la_2.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_20.addWidget(self.x_la_2, 0, 2, 1, 1, Qt.AlignHCenter)
+
+        self.mirroring_axis_la = QLabel(self.jobs_machine_settings_tab)
+        self.mirroring_axis_la.setObjectName(u"mirroring_axis_la")
+        sizePolicy3.setHeightForWidth(self.mirroring_axis_la.sizePolicy().hasHeightForWidth())
+        self.mirroring_axis_la.setSizePolicy(sizePolicy3)
+        self.mirroring_axis_la.setMinimumSize(QSize(130, 0))
+        self.mirroring_axis_la.setMaximumSize(QSize(130, 16777215))
+        self.mirroring_axis_la.setFont(font)
+        self.mirroring_axis_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_20.addWidget(self.mirroring_axis_la, 1, 0, 1, 1, Qt.AlignLeft|Qt.AlignVCenter)
+
+        self.x_mirror_rb = QRadioButton(self.jobs_machine_settings_tab)
+        self.x_mirror_rb.setObjectName(u"x_mirror_rb")
+        sizePolicy3.setHeightForWidth(self.x_mirror_rb.sizePolicy().hasHeightForWidth())
+        self.x_mirror_rb.setSizePolicy(sizePolicy3)
+        self.x_mirror_rb.setMaximumSize(QSize(120, 20))
+
+        self.gridLayout_20.addWidget(self.x_mirror_rb, 1, 1, 1, 1, Qt.AlignHCenter)
+
+        self.y_mirror_rb = QRadioButton(self.jobs_machine_settings_tab)
+        self.y_mirror_rb.setObjectName(u"y_mirror_rb")
+        sizePolicy3.setHeightForWidth(self.y_mirror_rb.sizePolicy().hasHeightForWidth())
+        self.y_mirror_rb.setSizePolicy(sizePolicy3)
+        self.y_mirror_rb.setMaximumSize(QSize(120, 20))
+
+        self.gridLayout_20.addWidget(self.y_mirror_rb, 1, 2, 1, 1, Qt.AlignHCenter)
+
+        self.horizontalSpacer_9 = QSpacerItem(130, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.gridLayout_20.addItem(self.horizontalSpacer_9, 0, 0, 1, 1)
+
+
+        self.gridLayout_13.addLayout(self.gridLayout_20, 3, 0, 1, 1)
+
+        self.line_12 = QFrame(self.jobs_machine_settings_tab)
+        self.line_12.setObjectName(u"line_12")
+        self.line_12.setFrameShape(QFrame.HLine)
+        self.line_12.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_12, 0, 0, 1, 1)
+
+        self.gridLayout_19 = QGridLayout()
+        self.gridLayout_19.setObjectName(u"gridLayout_19")
+        self.gridLayout_19.setVerticalSpacing(2)
+        self.feedrate_z_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.feedrate_z_dsb.setObjectName(u"feedrate_z_dsb")
+        self.feedrate_z_dsb.setMinimumSize(QSize(252, 0))
+        self.feedrate_z_dsb.setMaximumSize(QSize(252, 16777215))
+        self.feedrate_z_dsb.setFont(font)
+        self.feedrate_z_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.feedrate_z_dsb.setAlignment(Qt.AlignCenter)
+        self.feedrate_z_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.feedrate_z_dsb.setMaximum(100000.000000000000000)
+        self.feedrate_z_dsb.setSingleStep(1.000000000000000)
+
+        self.gridLayout_19.addWidget(self.feedrate_z_dsb, 1, 1, 1, 1)
+
+        self.z_feedrate_la = QLabel(self.jobs_machine_settings_tab)
+        self.z_feedrate_la.setObjectName(u"z_feedrate_la")
+        sizePolicy13 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy13.setHorizontalStretch(0)
+        sizePolicy13.setVerticalStretch(0)
+        sizePolicy13.setHeightForWidth(self.z_feedrate_la.sizePolicy().hasHeightForWidth())
+        self.z_feedrate_la.setSizePolicy(sizePolicy13)
+        self.z_feedrate_la.setMinimumSize(QSize(130, 0))
+        self.z_feedrate_la.setMaximumSize(QSize(130, 16777215))
+        self.z_feedrate_la.setFont(font)
+        self.z_feedrate_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_19.addWidget(self.z_feedrate_la, 1, 0, 1, 1)
+
+        self.xy_feedrate_la = QLabel(self.jobs_machine_settings_tab)
+        self.xy_feedrate_la.setObjectName(u"xy_feedrate_la")
+        sizePolicy3.setHeightForWidth(self.xy_feedrate_la.sizePolicy().hasHeightForWidth())
+        self.xy_feedrate_la.setSizePolicy(sizePolicy3)
+        self.xy_feedrate_la.setMinimumSize(QSize(130, 0))
+        self.xy_feedrate_la.setMaximumSize(QSize(130, 16777215))
+        self.xy_feedrate_la.setFont(font)
+        self.xy_feedrate_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_19.addWidget(self.xy_feedrate_la, 0, 0, 1, 1)
+
+        self.feedrate_xy_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.feedrate_xy_dsb.setObjectName(u"feedrate_xy_dsb")
+        sizePolicy3.setHeightForWidth(self.feedrate_xy_dsb.sizePolicy().hasHeightForWidth())
+        self.feedrate_xy_dsb.setSizePolicy(sizePolicy3)
+        self.feedrate_xy_dsb.setMinimumSize(QSize(252, 0))
+        self.feedrate_xy_dsb.setMaximumSize(QSize(252, 16777215))
+        self.feedrate_xy_dsb.setFont(font)
+        self.feedrate_xy_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.feedrate_xy_dsb.setAlignment(Qt.AlignCenter)
+        self.feedrate_xy_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.feedrate_xy_dsb.setMaximum(100000.000000000000000)
+        self.feedrate_xy_dsb.setSingleStep(1.000000000000000)
+
+        self.gridLayout_19.addWidget(self.feedrate_xy_dsb, 0, 1, 1, 1)
+
+        self.feedrate_probe_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab)
+        self.feedrate_probe_dsb.setObjectName(u"feedrate_probe_dsb")
+        self.feedrate_probe_dsb.setMinimumSize(QSize(252, 0))
+        self.feedrate_probe_dsb.setMaximumSize(QSize(252, 16777215))
+        self.feedrate_probe_dsb.setFont(font)
+        self.feedrate_probe_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.feedrate_probe_dsb.setAlignment(Qt.AlignCenter)
+        self.feedrate_probe_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.feedrate_probe_dsb.setMaximum(100000.000000000000000)
+        self.feedrate_probe_dsb.setSingleStep(1.000000000000000)
+
+        self.gridLayout_19.addWidget(self.feedrate_probe_dsb, 2, 1, 1, 1)
+
+        self.probe_feedrate_la = QLabel(self.jobs_machine_settings_tab)
+        self.probe_feedrate_la.setObjectName(u"probe_feedrate_la")
+        sizePolicy3.setHeightForWidth(self.probe_feedrate_la.sizePolicy().hasHeightForWidth())
+        self.probe_feedrate_la.setSizePolicy(sizePolicy3)
+        self.probe_feedrate_la.setMinimumSize(QSize(130, 0))
+        self.probe_feedrate_la.setMaximumSize(QSize(130, 16777215))
+        self.probe_feedrate_la.setFont(font)
+        self.probe_feedrate_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_19.addWidget(self.probe_feedrate_la, 2, 0, 1, 1)
+
+        self.horizontalSpacer_6 = QSpacerItem(200, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.gridLayout_19.addItem(self.horizontalSpacer_6, 0, 2, 1, 1)
+
+        self.horizontalSpacer_7 = QSpacerItem(200, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.gridLayout_19.addItem(self.horizontalSpacer_7, 1, 2, 1, 1)
+
+        self.horizontalSpacer_8 = QSpacerItem(200, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.gridLayout_19.addItem(self.horizontalSpacer_8, 2, 2, 1, 1)
+
+
+        self.gridLayout_13.addLayout(self.gridLayout_19, 17, 0, 1, 1)
+
+        self.line_8 = QFrame(self.jobs_machine_settings_tab)
+        self.line_8.setObjectName(u"line_8")
+        self.line_8.setFrameShape(QFrame.HLine)
+        self.line_8.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_8, 10, 0, 1, 1)
+
+        self.feedrates_section_la = QLabel(self.jobs_machine_settings_tab)
+        self.feedrates_section_la.setObjectName(u"feedrates_section_la")
+        self.feedrates_section_la.setFont(font3)
+
+        self.gridLayout_13.addWidget(self.feedrates_section_la, 15, 0, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
+
+        self.line_10 = QFrame(self.jobs_machine_settings_tab)
+        self.line_10.setObjectName(u"line_10")
+        self.line_10.setFrameShape(QFrame.HLine)
+        self.line_10.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_10, 16, 0, 1, 1)
+
+        self.jobs_common_settings_section_la = QLabel(self.jobs_machine_settings_tab)
+        self.jobs_common_settings_section_la.setObjectName(u"jobs_common_settings_section_la")
+        sizePolicy3.setHeightForWidth(self.jobs_common_settings_section_la.sizePolicy().hasHeightForWidth())
+        self.jobs_common_settings_section_la.setSizePolicy(sizePolicy3)
+        self.jobs_common_settings_section_la.setMinimumSize(QSize(210, 0))
+        self.jobs_common_settings_section_la.setMaximumSize(QSize(300, 20))
+        self.jobs_common_settings_section_la.setFont(font3)
+
+        self.gridLayout_13.addWidget(self.jobs_common_settings_section_la, 1, 0, 1, 1, Qt.AlignHCenter)
+
+        self.line_14 = QFrame(self.jobs_machine_settings_tab)
+        self.line_14.setObjectName(u"line_14")
+        self.line_14.setFrameShape(QFrame.HLine)
+        self.line_14.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_14, 8, 0, 1, 1)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_13.addItem(self.verticalSpacer_4, 13, 0, 1, 1)
+
+        self.tool_change_section_la = QLabel(self.jobs_machine_settings_tab)
+        self.tool_change_section_la.setObjectName(u"tool_change_section_la")
+        sizePolicy3.setHeightForWidth(self.tool_change_section_la.sizePolicy().hasHeightForWidth())
+        self.tool_change_section_la.setSizePolicy(sizePolicy3)
+        self.tool_change_section_la.setFont(font3)
+
+        self.gridLayout_13.addWidget(self.tool_change_section_la, 9, 0, 1, 1, Qt.AlignHCenter)
+
+        self.line_11 = QFrame(self.jobs_machine_settings_tab)
+        self.line_11.setObjectName(u"line_11")
+        self.line_11.setFrameShape(QFrame.HLine)
+        self.line_11.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_13.addWidget(self.line_11, 2, 0, 1, 1)
+
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_13.addItem(self.horizontalSpacer_4, 11, 1, 1, 1)
+
+        self.verticalSpacer_6 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_13.addItem(self.verticalSpacer_6, 7, 0, 1, 1)
+
+        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_13.addItem(self.verticalSpacer_5, 5, 0, 1, 1)
+
+        self.settings_sub_tab.addTab(self.jobs_machine_settings_tab, "")
 
         self.verticalLayout_12.addWidget(self.settings_sub_tab)
+
+        self.horizontalLayout_16 = QHBoxLayout()
+        self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
+        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_16.addItem(self.horizontalSpacer_11)
+
+        self.restore_settings_preferences_pb = QPushButton(self.settings_tab)
+        self.restore_settings_preferences_pb.setObjectName(u"restore_settings_preferences_pb")
+
+        self.horizontalLayout_16.addWidget(self.restore_settings_preferences_pb)
+
+        self.save_settings_preferences_pb = QPushButton(self.settings_tab)
+        self.save_settings_preferences_pb.setObjectName(u"save_settings_preferences_pb")
+
+        self.horizontalLayout_16.addWidget(self.save_settings_preferences_pb)
+
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_16.addItem(self.horizontalSpacer_5)
+
+
+        self.verticalLayout_12.addLayout(self.horizontalLayout_16)
 
         self.main_tab_widget.addTab(self.settings_tab, "")
 
@@ -2540,8 +3198,8 @@ class Ui_MainWindow(object):
 
         self.logging_plain_te = QPlainTextEdit(self.central_widget)
         self.logging_plain_te.setObjectName(u"logging_plain_te")
-        sizePolicy9.setHeightForWidth(self.logging_plain_te.sizePolicy().hasHeightForWidth())
-        self.logging_plain_te.setSizePolicy(sizePolicy9)
+        sizePolicy10.setHeightForWidth(self.logging_plain_te.sizePolicy().hasHeightForWidth())
+        self.logging_plain_te.setSizePolicy(sizePolicy10)
         self.logging_plain_te.setMinimumSize(QSize(0, 40))
         self.logging_plain_te.setMaximumSize(QSize(16777215, 200))
         self.logging_plain_te.setReadOnly(True)
@@ -2552,7 +3210,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.central_widget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1160, 26))
+        self.menubar.setGeometry(QRect(0, 0, 1160, 21))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuFile.setFont(font)
@@ -2667,7 +3325,7 @@ class Ui_MainWindow(object):
         self.ctrl_tab_widget.setCurrentIndex(0)
         self.z_step_cb.setCurrentIndex(3)
         self.xy_step_cb.setCurrentIndex(3)
-        self.settings_sub_tab.setCurrentIndex(0)
+        self.settings_sub_tab.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2727,70 +3385,74 @@ class Ui_MainWindow(object):
         self.profile_view_chb.setText("")
         self.prepare_widget.setTabText(self.prepare_widget.indexOf(self.load_layers_tab), QCoreApplication.translate("MainWindow", u"LOAD LAYERS", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Load a valid Layer", None))
-        self.top_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
+        self.top_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
         self.top_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.top_n_passes_l.setText(QCoreApplication.translate("MainWindow", u"Number of Passes", None))
-        self.top_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.top_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.top_overlap_l.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
-        self.top_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
-        self.top_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
-        self.top_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.bottom_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.bottom_overlap_l.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
+        self.top_n_passes_la.setText(QCoreApplication.translate("MainWindow", u"Number of Passes", None))
+        self.top_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.top_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.top_overlap_la.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
+        self.top_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.top_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.top_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.bottom_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.bottom_overlap_la.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
         self.bottom_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.bottom_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
-        self.bottom_n_passes_l.setText(QCoreApplication.translate("MainWindow", u"Number of Passes", None))
-        self.bottom_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.bottom_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.bottom_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
-        self.bottom_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
-        self.profile_depth_pass_l.setText(QCoreApplication.translate("MainWindow", u"Depth per Pass [mm]", None))
-        self.profile_taps_layout_l.setText(QCoreApplication.translate("MainWindow", u"Taps layout", None))
-        self.profile_margin_l.setText(QCoreApplication.translate("MainWindow", u"Margin [mm]", None))
-        self.profile_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.profile_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.bottom_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
+        self.bottom_n_passes_la.setText(QCoreApplication.translate("MainWindow", u"Number of Passes", None))
+        self.bottom_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.bottom_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.bottom_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.bottom_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.profile_depth_pass_la.setText(QCoreApplication.translate("MainWindow", u"Depth per Pass [mm]", None))
+        self.profile_taps_layout_la.setText(QCoreApplication.translate("MainWindow", u"Taps layout", None))
+        self.profile_margin_la.setText(QCoreApplication.translate("MainWindow", u"Margin [mm]", None))
+        self.profile_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.profile_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
         self.profile_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.profile_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
+        self.profile_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
         self.profile_multi_depth_chb.setText("")
-        self.profile_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.profile_tap_size_l.setText(QCoreApplication.translate("MainWindow", u"Tap size [mm]", None))
-        self.profile_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.profile_multi_depth_l.setText(QCoreApplication.translate("MainWindow", u"Multi-depth", None))
-        self.profile_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.profile_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.profile_tap_size_la.setText(QCoreApplication.translate("MainWindow", u"Tap size [mm]", None))
+        self.profile_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.profile_multi_depth_la.setText(QCoreApplication.translate("MainWindow", u"Multi-depth", None))
+        self.profile_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.profile_mirror_la.setText(QCoreApplication.translate("MainWindow", u"Mirror", None))
+        self.profile_mirror_chb.setText("")
+        self.drill_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.add_drill_tool_tb.setText(QCoreApplication.translate("MainWindow", u"+", None))
+        self.drill_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.drill_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.drill_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.drill_milling_tool_la.setText(QCoreApplication.translate("MainWindow", u"Milling Tool", None))
         self.remove_drill_tool_tb.setText(QCoreApplication.translate("MainWindow", u"-", None))
+        self.drill_milling_tool_chb.setText("")
+        self.drill_optimization_la.setText(QCoreApplication.translate("MainWindow", u"Optimization", None))
         ___qtablewidgetitem = self.drill_tw.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Bit", None));
         ___qtablewidgetitem1 = self.drill_tw.horizontalHeaderItem(1)
         ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Diameter [mm]", None));
-        self.add_drill_tool_tb.setText(QCoreApplication.translate("MainWindow", u"+", None))
-        self.drill_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.drill_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
-        self.drill_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.drill_milling_tool_l.setText(QCoreApplication.translate("MainWindow", u"Milling Tool", None))
-        self.drill_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.drill_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
-        self.drill_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.drill_milling_tool_chb.setText("")
-        self.drill_milling_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Mill Tool Diameter [mm]", None))
-        self.drill_optimization_l.setText(QCoreApplication.translate("MainWindow", u"Optimization", None))
         self.drill_optimization_chb.setText("")
-        self.nc_top_overlap_l.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
-        self.nc_top_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.nc_top_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
-        self.nc_top_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
-        self.nc_top_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
-        self.nc_top_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.nc_top_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.drill_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.drill_milling_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Mill Tool Diameter [mm]", None))
+        self.drill_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
+        self.drill_mirror_la.setText(QCoreApplication.translate("MainWindow", u"Mirror", None))
+        self.drill_mirror_chb.setText("")
+        self.nc_top_overlap_la.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
+        self.nc_top_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.nc_top_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.nc_top_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
+        self.nc_top_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.nc_top_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.nc_top_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
         self.nc_top_generate_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.nc_bottom_travel_z_l.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
+        self.nc_bottom_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
         self.nc_bottom_generate_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
-        self.nc_bottom_spindle_speed_l.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
-        self.nc_bottom_cut_z_l.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
-        self.nc_bottom_overlap_l.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
-        self.nc_bottom_tool_diameter_l.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
-        self.nc_bottom_z_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.nc_bottom_xy_feed_rate_l.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
+        self.nc_bottom_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
+        self.nc_bottom_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
+        self.nc_bottom_overlap_la.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
+        self.nc_bottom_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
+        self.nc_bottom_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
+        self.nc_bottom_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
         self.prepare_widget.setTabText(self.prepare_widget.indexOf(self.create_job_tab), QCoreApplication.translate("MainWindow", u"CREATE JOB", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Top View", None))
         self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Bottom View", None))
@@ -2953,8 +3615,33 @@ class Ui_MainWindow(object):
         self.nc_top_layer_color_la.setText("")
         self.nc_bottom_layer_color_la.setText("")
         self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.application_settings_tab), QCoreApplication.translate("MainWindow", u"Application Settings", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"place holder 2", None))
-        self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"Tab 2", None))
+        self.probe_settings_section_la.setText(QCoreApplication.translate("MainWindow", u"PROBE SETTINGS", None))
+        self.hold_on_probe_chb.setText(QCoreApplication.translate("MainWindow", u"Hold On Probe", None))
+        self.zeroing_after_probe_chb.setText(QCoreApplication.translate("MainWindow", u"Z=0 After Probe", None))
+        self.x_la.setText(QCoreApplication.translate("MainWindow", u"X", None))
+        self.y_la.setText(QCoreApplication.translate("MainWindow", u"Y", None))
+        self.z_la.setText(QCoreApplication.translate("MainWindow", u"Z", None))
+        self.tool_probe_wpos_la.setText(QCoreApplication.translate("MainWindow", u"Tool Probe WPos", None))
+        self.tool_probe_mpos_la.setText(QCoreApplication.translate("MainWindow", u"Tool Probe MPos", None))
+        self.tool_probe_z_limit_la.setText(QCoreApplication.translate("MainWindow", u"Tool Probe Z Limit", None))
+        self.tool_probe_wm_pos_chb.setText(QCoreApplication.translate("MainWindow", u"Working Position", None))
+        self.get_tool_probe_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Probe Position", None))
+        self.tool_change_la.setText(QCoreApplication.translate("MainWindow", u"Tool Change MPos", None))
+        self.get_tool_change_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Change Position", None))
+        self.x_axis_la.setText(QCoreApplication.translate("MainWindow", u"X (top-down mirror)", None))
+        self.x_la_2.setText(QCoreApplication.translate("MainWindow", u"Y (left-right mirror)", None))
+        self.mirroring_axis_la.setText(QCoreApplication.translate("MainWindow", u"Mirroring axis", None))
+        self.x_mirror_rb.setText("")
+        self.y_mirror_rb.setText("")
+        self.z_feedrate_la.setText(QCoreApplication.translate("MainWindow", u"Z FEEDRATE", None))
+        self.xy_feedrate_la.setText(QCoreApplication.translate("MainWindow", u"XY FEEDRATE", None))
+        self.probe_feedrate_la.setText(QCoreApplication.translate("MainWindow", u"PROBE FEEDRATE", None))
+        self.feedrates_section_la.setText(QCoreApplication.translate("MainWindow", u"FEEDRATES [mm/min]", None))
+        self.jobs_common_settings_section_la.setText(QCoreApplication.translate("MainWindow", u"JOBS COMMON SETTINGS", None))
+        self.tool_change_section_la.setText(QCoreApplication.translate("MainWindow", u"TOOL CHANGE", None))
+        self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.jobs_machine_settings_tab), QCoreApplication.translate("MainWindow", u"Jobs/Machine Settings", None))
+        self.restore_settings_preferences_pb.setText(QCoreApplication.translate("MainWindow", u"Restore Settings/Preferences", None))
+        self.save_settings_preferences_pb.setText(QCoreApplication.translate("MainWindow", u"Save Settings/Preferences", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.settings_tab), QCoreApplication.translate("MainWindow", u"Settings/Preferences", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuConsole.setTitle(QCoreApplication.translate("MainWindow", u"Console", None))

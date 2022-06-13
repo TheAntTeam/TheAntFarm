@@ -513,7 +513,7 @@
                      </widget>
                     </item>
                     <item row="0" column="0">
-                     <widget class="QLabel" name="top_tool_diameter_l">
+                     <widget class="QLabel" name="top_tool_diameter_la">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
@@ -527,7 +527,7 @@
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QLabel" name="top_n_passes_l">
+                     <widget class="QLabel" name="top_n_passes_la">
                       <property name="text">
                        <string>Number of Passes</string>
                       </property>
@@ -547,7 +547,7 @@
                      </spacer>
                     </item>
                     <item row="4" column="0">
-                     <widget class="QLabel" name="top_travel_z_l">
+                     <widget class="QLabel" name="top_travel_z_la">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
@@ -567,21 +567,21 @@
                      </widget>
                     </item>
                     <item row="3" column="0">
-                     <widget class="QLabel" name="top_cut_z_l">
+                     <widget class="QLabel" name="top_cut_z_la">
                       <property name="text">
                        <string>Cut Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QLabel" name="top_overlap_l">
+                     <widget class="QLabel" name="top_overlap_la">
                       <property name="text">
                        <string>Overlap</string>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="0">
-                     <widget class="QLabel" name="top_spindle_speed_l">
+                     <widget class="QLabel" name="top_spindle_speed_la">
                       <property name="text">
                        <string>Spindle Speed</string>
                       </property>
@@ -608,7 +608,7 @@
                      </widget>
                     </item>
                     <item row="7" column="0">
-                     <widget class="QLabel" name="top_xy_feed_rate_l">
+                     <widget class="QLabel" name="top_xy_feed_rate_la">
                       <property name="text">
                        <string>XY Feed Rate [mm/min]</string>
                       </property>
@@ -648,7 +648,7 @@
                      </widget>
                     </item>
                     <item row="9" column="0">
-                     <widget class="QLabel" name="top_z_feed_rate_l">
+                     <widget class="QLabel" name="top_z_feed_rate_la">
                       <property name="text">
                        <string>Z Feed Rate [mm/min]</string>
                       </property>
@@ -672,7 +672,7 @@
                   <widget class="QWidget" name="bottom_page">
                    <layout class="QGridLayout" name="gridLayout_3">
                     <item row="9" column="0">
-                     <widget class="QLabel" name="bottom_z_feed_rate_l">
+                     <widget class="QLabel" name="bottom_z_feed_rate_la">
                       <property name="text">
                        <string>Z Feed Rate [mm/min]</string>
                       </property>
@@ -719,7 +719,7 @@
                      </widget>
                     </item>
                     <item row="3" column="0">
-                     <widget class="QLabel" name="bottom_overlap_l">
+                     <widget class="QLabel" name="bottom_overlap_la">
                       <property name="text">
                        <string>Overlap</string>
                       </property>
@@ -772,28 +772,28 @@
                      </spacer>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QLabel" name="bottom_tool_diameter_l">
+                     <widget class="QLabel" name="bottom_tool_diameter_la">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QLabel" name="bottom_n_passes_l">
+                     <widget class="QLabel" name="bottom_n_passes_la">
                       <property name="text">
                        <string>Number of Passes</string>
                       </property>
                      </widget>
                     </item>
                     <item row="5" column="0">
-                     <widget class="QLabel" name="bottom_travel_z_l">
+                     <widget class="QLabel" name="bottom_travel_z_la">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="0">
-                     <widget class="QLabel" name="bottom_cut_z_l">
+                     <widget class="QLabel" name="bottom_cut_z_la">
                       <property name="text">
                        <string>Cut Z [mm]</string>
                       </property>
@@ -813,14 +813,14 @@
                      </widget>
                     </item>
                     <item row="8" column="0">
-                     <widget class="QLabel" name="bottom_xy_feed_rate_l">
+                     <widget class="QLabel" name="bottom_xy_feed_rate_la">
                       <property name="text">
                        <string>XY Feed Rate [mm/min]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="0">
-                     <widget class="QLabel" name="bottom_spindle_speed_l">
+                     <widget class="QLabel" name="bottom_spindle_speed_la">
                       <property name="text">
                        <string>Spindle Speed</string>
                       </property>
@@ -844,7 +844,7 @@
                   <widget class="QWidget" name="profile_page">
                    <layout class="QGridLayout" name="gridLayout_4">
                     <item row="3" column="1">
-                     <widget class="QLabel" name="profile_depth_pass_l">
+                     <widget class="QLabel" name="profile_depth_pass_la">
                       <property name="text">
                        <string>Depth per Pass [mm]</string>
                       </property>
@@ -903,14 +903,14 @@
                      </widget>
                     </item>
                     <item row="11" column="1">
-                     <widget class="QLabel" name="profile_taps_layout_l">
+                     <widget class="QLabel" name="profile_taps_layout_la">
                       <property name="text">
                        <string>Taps layout</string>
                       </property>
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QLabel" name="profile_margin_l">
+                     <widget class="QLabel" name="profile_margin_la">
                       <property name="text">
                        <string>Margin [mm]</string>
                       </property>
@@ -930,14 +930,14 @@
                      </widget>
                     </item>
                     <item row="5" column="1">
-                     <widget class="QLabel" name="profile_cut_z_l">
+                     <widget class="QLabel" name="profile_cut_z_la">
                       <property name="text">
                        <string>Cut Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="9" column="1">
-                     <widget class="QLabel" name="profile_xy_feed_rate_l">
+                     <widget class="QLabel" name="profile_xy_feed_rate_la">
                       <property name="text">
                        <string>XY Feed Rate [mm/min]</string>
                       </property>
@@ -964,7 +964,7 @@
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QLabel" name="profile_tool_diameter_l">
+                     <widget class="QLabel" name="profile_tool_diameter_la">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
@@ -990,7 +990,7 @@
                      </widget>
                     </item>
                     <item row="10" column="1">
-                     <widget class="QLabel" name="profile_z_feed_rate_l">
+                     <widget class="QLabel" name="profile_z_feed_rate_la">
                       <property name="text">
                        <string>Z Feed Rate [mm/min]</string>
                       </property>
@@ -1004,7 +1004,7 @@
                      </widget>
                     </item>
                     <item row="12" column="1">
-                     <widget class="QLabel" name="profile_tap_size_l">
+                     <widget class="QLabel" name="profile_tap_size_la">
                       <property name="text">
                        <string>Tap size [mm]</string>
                       </property>
@@ -1024,7 +1024,7 @@
                      </spacer>
                     </item>
                     <item row="6" column="1">
-                     <widget class="QLabel" name="profile_travel_z_l">
+                     <widget class="QLabel" name="profile_travel_z_la">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
@@ -1047,14 +1047,14 @@
                      <widget class="QComboBox" name="profile_taps_layout_cb"/>
                     </item>
                     <item row="2" column="1">
-                     <widget class="QLabel" name="profile_multi_depth_l">
+                     <widget class="QLabel" name="profile_multi_depth_la">
                       <property name="text">
                        <string>Multi-depth</string>
                       </property>
                      </widget>
                     </item>
                     <item row="7" column="1">
-                     <widget class="QLabel" name="profile_spindle_speed_l">
+                     <widget class="QLabel" name="profile_spindle_speed_la">
                       <property name="text">
                        <string>Spindle Speed</string>
                       </property>
@@ -1073,14 +1073,129 @@
                       </property>
                      </widget>
                     </item>
+                    <item row="13" column="1">
+                     <widget class="QLabel" name="profile_mirror_la">
+                      <property name="text">
+                       <string>Mirror</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="13" column="3">
+                     <widget class="QCheckBox" name="profile_mirror_chb">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>123</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
                    </layout>
                   </widget>
                   <widget class="QWidget" name="drill_page">
                    <layout class="QGridLayout" name="gridLayout_5">
+                    <item row="4" column="2">
+                     <widget class="QDoubleSpinBox" name="drill_milling_tool_diameter_dsb">
+                      <property name="minimum">
+                       <double>0.010000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="1">
+                     <widget class="QLabel" name="drill_travel_z_la">
+                      <property name="text">
+                       <string>Travel Z [mm]</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1" alignment="Qt::AlignHCenter">
+                     <widget class="QToolButton" name="add_drill_tool_tb">
+                      <property name="text">
+                       <string>+</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="12" column="1">
+                     <widget class="QLabel" name="drill_z_feed_rate_la">
+                      <property name="text">
+                       <string>Z Feed Rate [mm/min]</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="10" column="1">
+                     <widget class="QLabel" name="drill_xy_feed_rate_la">
+                      <property name="text">
+                       <string>XY Feed Rate [mm/min]</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="1">
+                     <widget class="QLabel" name="drill_cut_z_la">
+                      <property name="text">
+                       <string>Cut Z [mm]</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="2">
+                     <widget class="QDoubleSpinBox" name="drill_travel_z_dsb">
+                      <property name="decimals">
+                       <number>2</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-9999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>9999.000000000000000</double>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLabel" name="drill_milling_tool_la">
+                      <property name="text">
+                       <string>Milling Tool</string>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="2" column="2" alignment="Qt::AlignHCenter">
                      <widget class="QToolButton" name="remove_drill_tool_tb">
                       <property name="text">
                        <string>-</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="2">
+                     <widget class="QCheckBox" name="drill_milling_tool_chb">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="13" column="1">
+                     <widget class="QLabel" name="drill_optimization_la">
+                      <property name="text">
+                       <string>Optimization</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="12" column="2">
+                     <widget class="QDoubleSpinBox" name="drill_z_feed_rate_dsb">
+                      <property name="decimals">
+                       <number>2</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-9999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>9999.000000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -1104,83 +1219,10 @@
                       </column>
                      </widget>
                     </item>
-                    <item row="7" column="2">
-                     <widget class="QDoubleSpinBox" name="drill_travel_z_dsb">
-                      <property name="decimals">
-                       <number>2</number>
-                      </property>
-                      <property name="minimum">
-                       <double>-9999.000000000000000</double>
-                      </property>
-                      <property name="maximum">
-                       <double>9999.000000000000000</double>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="12" column="2">
-                     <widget class="QDoubleSpinBox" name="drill_z_feed_rate_dsb">
-                      <property name="decimals">
-                       <number>2</number>
-                      </property>
-                      <property name="minimum">
-                       <double>-9999.000000000000000</double>
-                      </property>
-                      <property name="maximum">
-                       <double>9999.000000000000000</double>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1" alignment="Qt::AlignHCenter">
-                     <widget class="QToolButton" name="add_drill_tool_tb">
+                    <item row="13" column="2">
+                     <widget class="QCheckBox" name="drill_optimization_chb">
                       <property name="text">
-                       <string>+</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="14" column="1" colspan="2">
-                     <spacer name="drill_vertical_spacer">
-                      <property name="orientation">
-                       <enum>Qt::Vertical</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>20</width>
-                        <height>40</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item row="15" column="1" colspan="2">
-                     <widget class="QPushButton" name="drill_generate_job_pb">
-                      <property name="text">
-                       <string>Generate Job</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="10" column="2">
-                     <widget class="QDoubleSpinBox" name="drill_xy_feed_rate_dsb">
-                      <property name="decimals">
-                       <number>2</number>
-                      </property>
-                      <property name="minimum">
-                       <double>-9999.000000000000000</double>
-                      </property>
-                      <property name="maximum">
-                       <double>9999.000000000000000</double>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="10" column="1">
-                     <widget class="QLabel" name="drill_xy_feed_rate_l">
-                      <property name="text">
-                       <string>XY Feed Rate [mm/min]</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="2">
-                     <widget class="QDoubleSpinBox" name="drill_milling_tool_diameter_dsb">
-                      <property name="minimum">
-                       <double>0.010000000000000</double>
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -1197,41 +1239,6 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="7" column="1">
-                     <widget class="QLabel" name="drill_travel_z_l">
-                      <property name="text">
-                       <string>Travel Z [mm]</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="1">
-                     <widget class="QLabel" name="drill_milling_tool_l">
-                      <property name="text">
-                       <string>Milling Tool</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="12" column="1">
-                     <widget class="QLabel" name="drill_z_feed_rate_l">
-                      <property name="text">
-                       <string>Z Feed Rate [mm/min]</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="8" column="1">
-                     <widget class="QLabel" name="drill_spindle_speed_l">
-                      <property name="text">
-                       <string>Spindle Speed</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="6" column="1">
-                     <widget class="QLabel" name="drill_cut_z_l">
-                      <property name="text">
-                       <string>Cut Z [mm]</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="8" column="2">
                      <widget class="QDoubleSpinBox" name="drill_spindle_speed_dsb">
                       <property name="decimals">
@@ -1245,29 +1252,74 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="2">
-                     <widget class="QCheckBox" name="drill_milling_tool_chb">
+                    <item row="8" column="1">
+                     <widget class="QLabel" name="drill_spindle_speed_la">
                       <property name="text">
-                       <string/>
+                       <string>Spindle Speed</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="10" column="2">
+                     <widget class="QDoubleSpinBox" name="drill_xy_feed_rate_dsb">
+                      <property name="decimals">
+                       <number>2</number>
+                      </property>
+                      <property name="minimum">
+                       <double>-9999.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>9999.000000000000000</double>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="1">
-                     <widget class="QLabel" name="drill_milling_tool_diameter_l">
+                     <widget class="QLabel" name="drill_milling_tool_diameter_la">
                       <property name="text">
                        <string>Mill Tool Diameter [mm]</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="13" column="1">
-                     <widget class="QLabel" name="drill_optimization_l">
+                    <item row="15" column="1" colspan="2">
+                     <spacer name="drill_vertical_spacer">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="16" column="1" colspan="2">
+                     <widget class="QPushButton" name="drill_generate_job_pb">
                       <property name="text">
-                       <string>Optimization</string>
+                       <string>Generate Job</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="13" column="2">
-                     <widget class="QCheckBox" name="drill_optimization_chb">
+                    <item row="14" column="1">
+                     <widget class="QLabel" name="drill_mirror_la">
+                      <property name="text">
+                       <string>Mirror</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="14" column="2">
+                     <widget class="QCheckBox" name="drill_mirror_chb">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>123</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string/>
                       </property>
@@ -1278,14 +1330,14 @@
                   <widget class="QWidget" name="nc_area_top_page">
                    <layout class="QGridLayout" name="gridLayout_6">
                     <item row="1" column="0">
-                     <widget class="QLabel" name="nc_top_overlap_l">
+                     <widget class="QLabel" name="nc_top_overlap_la">
                       <property name="text">
                        <string>Overlap</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QLabel" name="nc_top_cut_z_l">
+                     <widget class="QLabel" name="nc_top_cut_z_la">
                       <property name="text">
                        <string>Cut Z [mm]</string>
                       </property>
@@ -1318,14 +1370,14 @@
                      </widget>
                     </item>
                     <item row="4" column="0">
-                     <widget class="QLabel" name="nc_top_spindle_speed_l">
+                     <widget class="QLabel" name="nc_top_spindle_speed_la">
                       <property name="text">
                        <string>Spindle Speed</string>
                       </property>
                      </widget>
                     </item>
                     <item row="0" column="0">
-                     <widget class="QLabel" name="nc_top_tool_diameter_l">
+                     <widget class="QLabel" name="nc_top_tool_diameter_la">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
@@ -1345,14 +1397,14 @@
                      </widget>
                     </item>
                     <item row="3" column="0">
-                     <widget class="QLabel" name="nc_top_travel_z_l">
+                     <widget class="QLabel" name="nc_top_travel_z_la">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="0">
-                     <widget class="QLabel" name="nc_top_z_feed_rate_l">
+                     <widget class="QLabel" name="nc_top_z_feed_rate_la">
                       <property name="text">
                        <string>Z Feed Rate [mm/min]</string>
                       </property>
@@ -1392,7 +1444,7 @@
                      </widget>
                     </item>
                     <item row="5" column="0">
-                     <widget class="QLabel" name="nc_top_xy_feed_rate_l">
+                     <widget class="QLabel" name="nc_top_xy_feed_rate_la">
                       <property name="text">
                        <string>XY Feed Rate [mm/min]</string>
                       </property>
@@ -1436,7 +1488,7 @@
                   <widget class="QWidget" name="nc_area_bottom_page">
                    <layout class="QGridLayout" name="gridLayout_7">
                     <item row="3" column="0">
-                     <widget class="QLabel" name="nc_bottom_travel_z_l">
+                     <widget class="QLabel" name="nc_bottom_travel_z_la">
                       <property name="text">
                        <string>Travel Z [mm]</string>
                       </property>
@@ -1450,7 +1502,7 @@
                      </widget>
                     </item>
                     <item row="4" column="0">
-                     <widget class="QLabel" name="nc_bottom_spindle_speed_l">
+                     <widget class="QLabel" name="nc_bottom_spindle_speed_la">
                       <property name="text">
                        <string>Spindle Speed</string>
                       </property>
@@ -1490,7 +1542,7 @@
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QLabel" name="nc_bottom_cut_z_l">
+                     <widget class="QLabel" name="nc_bottom_cut_z_la">
                       <property name="text">
                        <string>Cut Z [mm]</string>
                       </property>
@@ -1510,14 +1562,14 @@
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QLabel" name="nc_bottom_overlap_l">
+                     <widget class="QLabel" name="nc_bottom_overlap_la">
                       <property name="text">
                        <string>Overlap</string>
                       </property>
                      </widget>
                     </item>
                     <item row="0" column="0">
-                     <widget class="QLabel" name="nc_bottom_tool_diameter_l">
+                     <widget class="QLabel" name="nc_bottom_tool_diameter_la">
                       <property name="text">
                        <string>Tool Diameter [mm]</string>
                       </property>
@@ -1576,14 +1628,14 @@
                      </widget>
                     </item>
                     <item row="7" column="0">
-                     <widget class="QLabel" name="nc_bottom_z_feed_rate_l">
+                     <widget class="QLabel" name="nc_bottom_z_feed_rate_la">
                       <property name="text">
                        <string>Z Feed Rate [mm/min]</string>
                       </property>
                      </widget>
                     </item>
                     <item row="6" column="0">
-                     <widget class="QLabel" name="nc_bottom_xy_feed_rate_l">
+                     <widget class="QLabel" name="nc_bottom_xy_feed_rate_la">
                       <property name="text">
                        <string>XY Feed Rate [mm/min]</string>
                       </property>
@@ -1707,16 +1759,34 @@
               <item>
                <widget class="QTableWidget" name="gcode_tw">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>320</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>320</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
                 </property>
                 <property name="horizontalScrollBarPolicy">
                  <enum>Qt::ScrollBarAlwaysOff</enum>
                 </property>
                 <property name="selectionMode">
                  <enum>QAbstractItemView::MultiSelection</enum>
+                </property>
+                <property name="selectionBehavior">
+                 <enum>QAbstractItemView::SelectRows</enum>
                 </property>
                 <property name="showGrid">
                  <bool>false</bool>
@@ -1870,7 +1940,7 @@
                    <number>0</number>
                   </property>
                   <property name="verticalSpacing">
-                   <number>6</number>
+                   <number>2</number>
                   </property>
                   <item row="3" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                    <widget class="QPushButton" name="zero_xy_pb">
@@ -2625,6 +2695,9 @@
                 </item>
                 <item>
                  <layout class="QGridLayout" name="gridLayout_11">
+                  <property name="verticalSpacing">
+                   <number>0</number>
+                  </property>
                   <item row="0" column="1">
                    <widget class="QLabel" name="label_6">
                     <property name="sizePolicy">
@@ -5277,8 +5350,11 @@
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
          <widget class="QTabWidget" name="settings_sub_tab">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="application_settings_tab">
            <attribute name="title">
@@ -5455,21 +5531,1590 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tab_4">
+          <widget class="QWidget" name="jobs_machine_settings_tab">
            <attribute name="title">
-            <string>Tab 2</string>
+            <string>Jobs/Machine Settings</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_13">
-            <item row="0" column="0">
-             <widget class="QPushButton" name="pushButton_2">
-              <property name="text">
-               <string>place holder 2</string>
+            <item row="6" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <property name="spacing">
+               <number>2</number>
+              </property>
+              <property name="sizeConstraint">
+               <enum>QLayout::SetFixedSize</enum>
+              </property>
+              <item>
+               <widget class="Line" name="line_15">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item alignment="Qt::AlignHCenter">
+               <widget class="QLabel" name="probe_settings_section_la">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>PROBE SETTINGS</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="Line" name="line_16">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="gridLayout_21">
+                <property name="horizontalSpacing">
+                 <number>0</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>2</number>
+                </property>
+                <item row="0" column="0">
+                 <spacer name="horizontalSpacer_10">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>180</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="1" alignment="Qt::AlignHCenter">
+                 <widget class="QCheckBox" name="hold_on_probe_chb">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>150</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Hold On Probe</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2" alignment="Qt::AlignHCenter">
+                 <widget class="QCheckBox" name="zeroing_after_probe_chb">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>150</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Z=0 After Probe</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item row="14" column="0">
+             <widget class="Line" name="line_9">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="Line" name="line_13">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <property name="spacing">
+               <number>2</number>
+              </property>
+              <property name="sizeConstraint">
+               <enum>QLayout::SetFixedSize</enum>
+              </property>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_13">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_14">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetFixedSize</enum>
+                  </property>
+                  <property name="verticalSpacing">
+                   <number>2</number>
+                  </property>
+                  <item row="2" column="2">
+                   <widget class="QDoubleSpinBox" name="tool_probe_y_wpos_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QDoubleSpinBox" name="tool_probe_y_mpos_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" alignment="Qt::AlignHCenter">
+                   <widget class="QLabel" name="x_la">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>50</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="text">
+                     <string>X</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2" alignment="Qt::AlignHCenter">
+                   <widget class="QLabel" name="y_la">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>50</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="text">
+                     <string>Y</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="3">
+                   <widget class="QDoubleSpinBox" name="tool_probe_z_limit_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QDoubleSpinBox" name="tool_probe_x_wpos_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="3" alignment="Qt::AlignHCenter">
+                   <widget class="QLabel" name="z_la">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>50</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="text">
+                     <string>Z</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QDoubleSpinBox" name="tool_probe_x_mpos_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="tool_probe_wpos_la">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>130</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>130</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="text">
+                     <string>Tool Probe WPos</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="3">
+                   <widget class="QDoubleSpinBox" name="tool_probe_z_mpos_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="tool_probe_mpos_la">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>130</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>130</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="text">
+                     <string>Tool Probe MPos</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="3">
+                   <widget class="QDoubleSpinBox" name="tool_probe_z_wpos_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="tool_probe_z_limit_la">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>130</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>130</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="text">
+                     <string>Tool Probe Z Limit</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="4" alignment="Qt::AlignHCenter">
+                   <widget class="QCheckBox" name="tool_probe_wm_pos_chb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>150</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>150</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="autoFillBackground">
+                     <bool>true</bool>
+                    </property>
+                    <property name="text">
+                     <string>Working Position</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="4" alignment="Qt::AlignHCenter">
+                   <widget class="QPushButton" name="get_tool_probe_pb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>180</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>180</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="text">
+                     <string>Get Tool Probe Position</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="Line" name="line_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_15">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_15">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetFixedSize</enum>
+                  </property>
+                  <item row="0" column="4">
+                   <widget class="QDoubleSpinBox" name="tool_change_z_mpos_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QDoubleSpinBox" name="tool_change_y_mpos_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QDoubleSpinBox" name="tool_change_x_mpos_dsb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="buttonSymbols">
+                     <enum>QAbstractSpinBox::NoButtons</enum>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="tool_change_la">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>130</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>130</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="text">
+                     <string>Tool Change MPos</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="5" alignment="Qt::AlignHCenter">
+                   <widget class="QPushButton" name="get_tool_change_pb">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>150</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>180</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="locale">
+                     <locale language="English" country="UnitedKingdom"/>
+                    </property>
+                    <property name="text">
+                     <string>Get Tool Change Position</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item row="12" column="0">
+             <widget class="Line" name="line_7">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <layout class="QGridLayout" name="gridLayout_20">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetFixedSize</enum>
+              </property>
+              <item row="0" column="1" alignment="Qt::AlignHCenter">
+               <widget class="QLabel" name="x_axis_la">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>150</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="locale">
+                 <locale language="English" country="UnitedKingdom"/>
+                </property>
+                <property name="text">
+                 <string>X (top-down mirror)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" alignment="Qt::AlignHCenter">
+               <widget class="QLabel" name="x_la_2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>150</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="locale">
+                 <locale language="English" country="UnitedKingdom"/>
+                </property>
+                <property name="text">
+                 <string>Y (left-right mirror)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+               <widget class="QLabel" name="mirroring_axis_la">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>130</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>130</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="locale">
+                 <locale language="English" country="UnitedKingdom"/>
+                </property>
+                <property name="text">
+                 <string>Mirroring axis</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" alignment="Qt::AlignHCenter">
+               <widget class="QRadioButton" name="x_mirror_rb">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2" alignment="Qt::AlignHCenter">
+               <widget class="QRadioButton" name="y_mirror_rb">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <spacer name="horizontalSpacer_9">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>130</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="0">
+             <widget class="Line" name="line_12">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="17" column="0">
+             <layout class="QGridLayout" name="gridLayout_19">
+              <property name="verticalSpacing">
+               <number>2</number>
+              </property>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="feedrate_z_dsb">
+                <property name="minimumSize">
+                 <size>
+                  <width>252</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>252</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="locale">
+                 <locale language="English" country="UnitedKingdom"/>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::UpDownArrows</enum>
+                </property>
+                <property name="maximum">
+                 <double>100000.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="z_feedrate_la">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>130</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>130</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="locale">
+                 <locale language="English" country="UnitedKingdom"/>
+                </property>
+                <property name="text">
+                 <string>Z FEEDRATE</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="xy_feedrate_la">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>130</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>130</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="locale">
+                 <locale language="English" country="UnitedKingdom"/>
+                </property>
+                <property name="text">
+                 <string>XY FEEDRATE</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QDoubleSpinBox" name="feedrate_xy_dsb">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>252</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>252</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="locale">
+                 <locale language="English" country="UnitedKingdom"/>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::UpDownArrows</enum>
+                </property>
+                <property name="maximum">
+                 <double>100000.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QDoubleSpinBox" name="feedrate_probe_dsb">
+                <property name="minimumSize">
+                 <size>
+                  <width>252</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>252</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="locale">
+                 <locale language="English" country="UnitedKingdom"/>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::UpDownArrows</enum>
+                </property>
+                <property name="maximum">
+                 <double>100000.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="probe_feedrate_la">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>130</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>130</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="locale">
+                 <locale language="English" country="UnitedKingdom"/>
+                </property>
+                <property name="text">
+                 <string>PROBE FEEDRATE</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>200</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="1" column="2">
+               <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>200</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="2" column="2">
+               <spacer name="horizontalSpacer_8">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>200</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="10" column="0">
+             <widget class="Line" name="line_8">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+             <widget class="QLabel" name="feedrates_section_la">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>FEEDRATES [mm/min]</string>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="0">
+             <widget class="Line" name="line_10">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="jobs_common_settings_section_la">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>210</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>300</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>JOBS COMMON SETTINGS</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="Line" name="line_14">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="0">
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="9" column="0" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="tool_change_section_la">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>TOOL CHANGE</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="Line" name="line_11">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="1">
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="7" column="0">
+             <spacer name="verticalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="5" column="0">
+             <spacer name="verticalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </widget>
          </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_16">
+          <item>
+           <spacer name="horizontalSpacer_11">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="restore_settings_preferences_pb">
+            <property name="text">
+             <string>Restore Settings/Preferences</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="save_settings_preferences_pb">
+            <property name="text">
+             <string>Save Settings/Preferences</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -5511,7 +7156,7 @@
      <x>0</x>
      <y>0</y>
      <width>1160</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

@@ -7,6 +7,8 @@ from collections import OrderedDict as od
 from datetime import datetime
 import scipy.interpolate as spi
 from shapely.geometry import LineString
+from .macros_manager import Macros
+from .commands_manager import CommandManager
 
 
 class GCoder:
@@ -19,27 +21,14 @@ class GCoder:
 
     DIGITS = 4
     STEPS = 3
-    SAFE_ABSOLUTE_Z_PROBE = -1.0
-    CHANGE_TOOL_POS = (-41.2, -120.88, -1.0)
-    PROBE_TOOL_POS = (-1.0, -1.0, -11.0)
-    TAG = '@'
-    TAGS = {
-        "tlo": "TLO",
-        "position": "POSITION"
-    }
-
     CHANGE_TOOL_COMMAND = "M6"
 
-    def __init__(self, tag, machining_type='gerber', parent=None, units='ms'):
+    def __init__(self, tag, machining_type='gerber', parent=None, units='ms', mirror_type='x'):
 
         self.parent = parent
         self.tag = tag
 
         self.mill = True
-
-        self.change_tool_pos = self.CHANGE_TOOL_POS  # todo: must be parametrized
-        self.probe_tool_pos = self.PROBE_TOOL_POS  # todo: must be parametrized
-        self.safe_absolute_z_probe = self.SAFE_ABSOLUTE_Z_PROBE  # todo: must be parametrized
 
         # units:
         # ms -> metric system
@@ -47,6 +36,9 @@ class GCoder:
         # todo: check the functionalities of unit conversion
 
         self.units = units
+        self.mirror_type = mirror_type
+        self.macro = None
+        self.user_cmd = None
 
         self.geom_list = []
         if machining_type == 'gerber':
@@ -55,7 +47,8 @@ class GCoder:
                 'travel': 0.7,
                 'xy_feedrate': 250.0,
                 'z_feedrate': 40.0,
-                'spindle': 1000.0
+                'spindle': 1000.0,
+                'mirror': False
             }
         elif machining_type == 'profile':
             self.cfg = {
@@ -65,7 +58,8 @@ class GCoder:
                 'z_feedrate': 40.0,
                 'spindle': 1000.0,
                 'multi_depth': True,
-                'depth_per_pass': 0.6
+                'depth_per_pass': 0.6,
+                'mirror': False
             }
         elif machining_type == 'pocketing':
             self.cfg = {
@@ -73,7 +67,8 @@ class GCoder:
                 'travel': 0.7,
                 'xy_feedrate': 250.0,
                 'z_feedrate': 40.0,
-                'spindle': 1000.0
+                'spindle': 1000.0,
+                'mirror': False
             }
         elif machining_type == 'drill':
             self.cfg = {
@@ -81,8 +76,23 @@ class GCoder:
                 'travel': 0.7,
                 'xy_feedrate': 250.0,
                 'z_feedrate': 40.0,
-                'spindle': 1000.0
+                'spindle': 1000.0,
+                'mirror': False
             }
+        elif machining_type == 'commander':
+            self.cfg = {
+                'tool_probe_pos': (-1.0, -1.0, -11.0),
+                'tool_probe_working': True,  # False: machine pos or True: working pos
+                'tool_probe_min': -11.0,
+                'tool_change_pos': (-41.2, -120.88, -1.0),
+                'tool_probe_feedrate': (300.0, 80.0, 50.0),  # SLOW FAST XY
+                'tool_probe_hold': False,
+                'tool_probe_zero': False,
+            }
+            self.macro = Macros(parent=self)
+            self.macro.load_cfg(self.cfg)
+            self.user_cmd = CommandManager(parent=self)
+            self.user_cmd.load_cfg(self.cfg)
         else:
             self.cfg = {}
         self.type = machining_type
@@ -91,6 +101,10 @@ class GCoder:
 
     def load_cfg(self, cfg):
         self.cfg = cfg
+        if self.macro is not None:
+            self.macro.load_cfg(self.cfg)
+        if self.user_cmd is not None:
+            self.user_cmd.load_cfg(self.cfg)
 
     def format_float(self, f):
         ff = round(f, self.DIGITS)
@@ -102,14 +116,18 @@ class GCoder:
         self.path = path
 
     def compute(self):
+        if 'mirror' not in self.cfg.keys():
+            mirror = False
+        else:
+            mirror = self.cfg['mirror']
         if self.type == 'gerber':
-            self.compute_gerber()
+            self.compute_gerber(mirror=mirror)
         elif self.type == 'profile':
-            self.compute_pocketing()
+            self.compute_pocketing(mirror=mirror)
         elif self.type == 'drill':
-            self.compute_drill()
+            self.compute_drill(mirror=mirror)
         elif self.type == 'pocketing':
-            self.compute_pocketing()
+            self.compute_pocketing(mirror=mirror)
         elif self.type == 'commander':
             print("Nothing to do!")
         else:
@@ -117,7 +135,7 @@ class GCoder:
             return False
         return True
 
-    def compute_drill(self):
+    def compute_drill(self, mirror=False):
         # compute GCode from a drill path
 
         self.gcode = []
@@ -144,18 +162,18 @@ class GCoder:
                 dpp = abs(cut)/n
                 pass_list = [sign * dpp * x for x in range(1, n)] + [cut]
                 pass_list.sort(reverse=True)
-                self.compute_pocketing_paths(path, pass_list)
+                self.compute_pocketing_paths(path, pass_list, mirror=mirror)
             else:
                 print(" - Drilling, bit diameter " + str(data[0]))
                 self.insert_comment("Drill Section in Drill Procedure")
                 self.insert_comment("Tool Diameter: " + str(data[0]))
-                self.compute_drill_paths(path, tool_change=tool_change)
+                self.compute_drill_paths(path, tool_change=tool_change, mirror=mirror)
             tool_change += 1
 
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-    def compute_gerber(self):
+    def compute_gerber(self, mirror=False):
         # essentially it's about following the points indicated by the paths
         # joining them with fast movements.
         # the format of the gcode, the info contained and the file type
@@ -179,12 +197,12 @@ class GCoder:
 
         for d in self.path:
             paths = d[1]
-            self.compute_gerber_paths(paths)
+            self.compute_gerber_paths(paths, mirror=mirror)
 
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-    def compute_pocketing(self):
+    def compute_pocketing(self, mirror=False):
         # same concept of the milling method
         # in addition, in case there is a valid multipass cfg
         # execute the n necessary passes
@@ -220,14 +238,24 @@ class GCoder:
                 n = int(abs(cut)//dpp)
                 pass_list = [sign * dpp * x for x in range(1, n)] + [cut]
                 pass_list.sort(reverse=True)
-                self.compute_pocketing_paths(paths, pass_list)
+                self.compute_pocketing_paths(paths, pass_list, mirror=mirror)
             else:
-                self.compute_gerber_paths(paths)
+                self.compute_gerber_paths(paths, mirror=mirror)
 
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
 
-    def compute_drill_paths(self, paths, tool_change=-1):
+    def mirror_coords(self, cs):
+        csa = np.array(cs)
+        if self.mirror_type == 'y':
+            # X mirror
+            csa[:, 0] *= -1.0
+        else:
+            # Y mirror
+            csa[:, 1] *= -1.0
+        return csa.tolist()
+
+    def compute_drill_paths(self, paths, tool_change=-1, mirror=False):
 
         # set the working feed rate
         # of the Z axis
@@ -241,31 +269,39 @@ class GCoder:
 
         for p in paths:
             cs = list(p.coords)
+            if mirror:
+                cs = self.mirror_coords(cs)
             for c in cs:
                 self.go_to(c)
                 self.make_drill()
                 self.go_travel()
 
-    def compute_gerber_paths(self, paths):
+    def compute_gerber_paths(self, paths, mirror=False):
         for p in paths:
             cs = list(p.coords)
+            if mirror:
+                cs = self.mirror_coords(cs)
             self.go_to(cs.pop(0))
             self.go_mill()
             for c in cs:
                 self.go_to(c)
             self.go_travel()
 
-    def compute_pocketing_paths(self, paths, pass_list):
+    def compute_pocketing_paths(self, paths, pass_list, mirror=False):
         for p in paths:
             rev = True
             orig_cs = list(p.coords)
             cs = orig_cs.copy()
+            if mirror:
+                cs = self.mirror_coords(cs)
             self.go_to(cs.pop(0))
             for cp in pass_list:
                 self.go_mill(cp)
                 for c in cs:
                     self.go_to(c)
                 cs = orig_cs.copy()
+                if mirror:
+                    cs = self.mirror_coords(cs)
                 if rev:
                     cs.reverse()
                 rev = not rev
@@ -282,135 +318,15 @@ class GCoder:
             gc += "G00 X" + x_str + " Y" + y_str + "\n"
         self.gcode.append(gc)
 
-    def get_tool_change_string(self):
-
-        zero_str = self.format_float(0.0)
-        z_safe_str = self.format_float(1.0)
-        z_m_one = self.format_float(self.safe_absolute_z_probe)
-
-        x_ct_str = self.format_float(self.change_tool_pos[0])
-        y_ct_str = self.format_float(self.change_tool_pos[1])
-        z_ct_str = self.format_float(self.change_tool_pos[2])
-
-        x_str = self.format_float(self.probe_tool_pos[0])
-        y_str = self.format_float(self.probe_tool_pos[1])
-        z_str = self.format_float(self.probe_tool_pos[2])
-
-        posx_tag = self.get_tag(key="position", params=["x"])
-        posy_tag = self.get_tag(key="position", params=["y"])
-        posz_tag = self.get_tag(key="position", params=["z"])
-
-        fast_str = "F60"
-        slow_str = "F20"
-
-        gc = ""
-        gc += self.gcode_comment("The Ant Tool Change")
-
-        ## get previous status
-        #gc += "$#\n"
-
-        # super safe Z position
-        gc += fast_str + "\n"
-        gc += "G53 G00 Z" + z_m_one + " " + fast_str + "\n"
-
-        # go to probe position and perform a probe (G54 WORK SYSTEM COORD)
-        gc += "G54\n"
-        gc += "G00 X" + x_str + " Y" + y_str + " Z" + z_safe_str + " " + fast_str + "\n"
-        gc += "G01 " + slow_str + "\n"
-        gc += "G38.2 Z" + z_str + "\n"
-        gc += "G01 " + fast_str + "\n"
-
-        # move to change tool position (MACHINE SYSTEM COORD)
-        gc += "G53 G00 Z" + z_ct_str + "\n"
-        gc += "G53 G00 X" + x_ct_str + "\n"
-        gc += "G53 G00 Y" + y_ct_str + "\n"
-
-        # wait for the change tool
-        gc += "M0\n"
-
-        # go to probe position and perform a probe (G54 WORK SYSTEM COORD)
-        gc += "G53 G01 Z" + z_m_one + " " + fast_str + "\n"
-        gc += "G54\n"
-        gc += "G00 X" + x_str + " Y" + y_str + "\n"
-        gc += "G01 " + slow_str + "\n"
-        gc += "G38.2 Z" + z_str + "\n"
-        gc += "G01 " + fast_str + "\n"
-
-        # add tool offset
-        probe_diff_tag = self.get_tag(key="tlo", params=["a"])
-        gc += "G43.1 Z" + probe_diff_tag + "\n"
-
-        # return to WP Zero
-        gc += "G53 G01 Z" + z_m_one + " " + fast_str + "\n"
-        gc += "G00 X" + posx_tag + " Y" + posy_tag + "\n"
-        gc += "G00 Z" + posz_tag + "\n"
-        return gc
-
-    def get_tag(self, key="tlo", params=()):
-        if key in list(self.TAGS.keys()):
-            insert = ""
-            if params:
-                insert = "_" + "_".join(params)
-            return self.TAG + self.TAGS[key] + insert.upper() + self.TAG
-
-    def check_tag_in_string(self, gc_str):
-        return self.TAG in str(gc_str)
-
     def compute_tag(self, gc_str, wsp, probe_data, dro):
-        splitted_str = gc_str.split(self.TAG)
-        replaces_l = splitted_str.copy()
-        for k in self.TAGS.keys():
-            for i, tag in enumerate(splitted_str):
-                if tag.upper().startswith(self.TAGS[k]):
-                    if k == "position":
-                        spl_tag = tag.split("_")
-                        if len(spl_tag) > 1:
-                            coords = spl_tag[1:]
-                            for c in coords:
-                                v_str = ""
-                                wpo = dro["WPO"]
-                                if c.lower() == "x":
-                                    v_str = self.format_float(wpo[0])
-                                if c.lower() == "y":
-                                    v_str = self.format_float(wpo[1])
-                                if c.lower() == "z":
-                                    v_str = self.format_float(wpo[2])
-                                if v_str:
-                                    replaces_l[i] = v_str
-                                else:
-                                    print("WARNING WRONG POSITION TAG (1)")
-                        else:
-                            print("WARNING WRONG POSITION TAG (2)")
-
-                    elif k == "tlo":
-                        spl_tag = tag.split("_")
-                        if len(spl_tag) > 1:
-                            probe_type = spl_tag[1:]
-                            for c in probe_type:
-                                v_str = ""
-                                last = probe_data[0][2]
-                                prev = probe_data[1][2]
-                                difference = last - prev
-                                if c.lower() == "n":
-                                    # replace TLO
-                                    v_str = self.format_float(difference)
-                                if c.lower() == "a":
-                                    # add to actual TLO
-                                    v_str = self.format_float(wsp["TLO"] + difference)
-                                if v_str:
-                                    replaces_l[i] = v_str
-                                else:
-                                    print("WARNING WRONG TLO TAG (1)")
-                        else:
-                            print("WARNING WRONG PROBE TLO (2)")
-
-        replaced = "".join(replaces_l)
+        replaced = gc_str
+        if self.macro is not None:
+            replaced = self.macro.compute_tag(gc_str, wsp, probe_data, dro)
         return replaced
 
     def go_tool_change(self, tool_id=0):
-        #gc = self.get_tool_change_string()
         gc = "T" + str(int(tool_id)) + "\n"
-        gc += self.CHANGE_TOOL_COMMAND  + "\n"
+        gc += self.CHANGE_TOOL_COMMAND + "\n"
         self.gcode.append(gc)
 
     def make_drill(self):
@@ -536,7 +452,7 @@ class GCoder:
     def insert_comment(self, txt):
         self.gcode.append(self.gcode_comment(txt))
 
-    def get_autobed_leveling_code(self, xy_c_l, travel_z, probe_z_max, probe_feed_rate):
+    def get_autobed_leveling_code(self, xy_c_l, travel_z, probe_z_min, probe_feed_rate):
         # todo: change this part using methods to create the GCode
         abl_cmd_ls = []
         abl_cmd_s = ""
@@ -547,7 +463,7 @@ class GCoder:
             prb_num_todo += 1
             abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
             abl_cmd_s += "G00 X" + str(coord[0]) + "Y" + str(coord[1]) + "\n"  # go to XY coordinate
-            abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # set probe command
+            abl_cmd_s += "G38.2 Z" + str(probe_z_min) + "F" + str(probe_feed_rate) + "\n"  # set probe command
             abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
             abl_cmd_ls.append(abl_cmd_s)
             abl_cmd_s = ""
@@ -556,7 +472,7 @@ class GCoder:
         abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
         abl_cmd_s += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
                           str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
-        abl_cmd_s += "G38.2 Z" + str(probe_z_max) + "F" + str(probe_feed_rate) + "\n"  # set probe command
+        abl_cmd_s += "G38.2 Z" + str(probe_z_min) + "F" + str(probe_feed_rate) + "\n"  # set probe command
         prb_num_todo += 1
         abl_cmd_s += "G10 P1 L20 Z0\n"  # set Z zero
         abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
@@ -565,11 +481,14 @@ class GCoder:
 
         return abl_cmd_ls, prb_num_todo
 
-    def get_tool_change_code(self, to_comment=""):
+    def get_macro_code(self, macro_type="M6", to_comment=""):
+        print("Get Macro Code")
+        print(macro_type)
         s = ""
         if to_comment != "":
             s += self.gcode_comment(to_comment)
-        s += self.get_tool_change_string()
+        if self.macro is not None:
+            s += self.macro.get_macro_string(macro_type)
         return s
 
     def get_file_name(self):
@@ -585,22 +504,24 @@ class GCoder:
     # macro section
 
     def is_macro(self, cmd):
-        splitted = re.findall(r'[a-zA-Z][-]*[\d.]+', cmd.strip().upper())
-        print("splitted")
-        print(splitted)
-        if self.CHANGE_TOOL_COMMAND in splitted:
-            return True
+        print("Is Macro")
+        print(cmd)
+        if self.macro is not None:
+            return self.macro.is_macro(cmd)
         else:
             return False
 
 
 class GCodeMacro:
 
-    def __init__(self, freezed_dro, macro_type="M6"):
+    def __init__(self, freezed_dro, macro_type="M6", gcr=None):
         self.id = 0
         self.freezed_dro = freezed_dro
-        self.gcc = GCoder("dummy",machining_type="commander")
-        self.macro_lines = self.gcc.get_tool_change_code().split("\n")
+        if gcr is None:
+            self.gcc = GCoder("dummy", machining_type="commander")
+        else:
+            self.gcc = gcr
+        self.macro_lines = self.gcc.get_macro_code(macro_type).split("\n")
 
     def get_next_line(self, wsp, probe_data):
         if self.id < len(self.macro_lines):
@@ -700,9 +621,10 @@ class GcodePoint:
             s += "G0"
         else:
             s += "G1"
-        s += " X" + str(self.coords[0])
-        s += " Y" + str(self.coords[1])
-        s += " Z" + str(self.coords[2])
+        s += " X" + "{:.3f}".format(self.coords[0])
+        s += " Y" + "{:.3f}".format(self.coords[1])
+        if len(self.coords) > 2:
+            s += " Z" + "{:.3f}".format(self.coords[2])
         for k in self.params.keys():
             s += " " + str(k).upper() + str(self.params[k])
         s += "\n"
@@ -742,35 +664,8 @@ class GCodeParser:
                 if lines:
                     # GCode file loaded
                     self.gc = GCode(lines)
-                    # preparsing the GCode to pre-analyze
-                    # it and introduce macros
-                    # self.pre_parsing()
         else:
             print("Invalid GCode File Path")
-
-    def pre_parsing(self):
-        gcode_commander = GCoder("dummy", "commander")
-        if self.gc is not None:
-            # locate the tools change and expand them
-            # with the correct macro introducing tags
-            ls = self.gc.original_lines
-            for l in ls:
-                gl = self.interp(single_line=l)
-                nls = []
-                for g in gl:
-                    cmd_l = g.command
-                    if cmd_l:
-                        for cmd in cmd_l:
-                            if cmd[0] == self.CHANGE_TOOL_COMMAND[0] and self.CHANGE_TOOL_COMMAND[1] in cmd[1]:
-                                tool_change_gc = gcode_commander.get_tool_change_code()
-                                d = "\n"
-                                nls = [e + d for e in tool_change_gc.split(d) if e]
-                if not nls:
-                    nls = [l]
-                else:
-                    print("Tool Change Detected!")
-                    # print(nls)
-                self.gc.modified_lines += nls
 
     def interp(self, single_line=None):
         gcll = []
@@ -831,28 +726,27 @@ class GCodeParser:
         return gcll
 
     def recode_gcode(self):
+        # Recode Gcode
         gcls = []
         if self.gc.modified_vectors:
+            # - Modified Loaded
             gcv = self.gc.modified_vectors
         else:
+            # - Original Loaded
             gcv = self.gc.original_vectors
-        print("gcv")
-        print(gcv)
         gcl = self.gc.gcll
         if gcv or gcl:
             gcv_len = len(gcv)
-
             # start from one because the first initial point
             # is always in origin of the working coords system
             vi = 1
             for l in range(len(gcl)):
                 if vi < len(gcv):
-                    nl = gcv[vi]
+                    nl = gcv[vi].line
                 else:
                     nl = -1
                 if nl == l:
                     cl_flag = True
-                    # print the gcode vector line
                     gcls.append(gcv[vi].get_string())
                     while cl_flag and vi < gcv_len - 1:
                         vi += 1
@@ -863,6 +757,11 @@ class GCodeParser:
                     if gcl[l].command:
                         gcls.append(gcl[l].get_string())
         return gcls
+
+    def get_change_tool_gcode(self):
+        ctc = self.CHANGE_TOOL_COMMAND
+        ctc_str = ctc[0].upper() + str(ctc[1]) + "\n"
+        return ["T0\n", ctc_str]
 
     def vectorize(self):
         if self.gc.gcll:
@@ -989,10 +888,8 @@ class GCodeLeveler:
 
     def interp_grid_data(self):
         if self.grid_data is not None:
-            print("Grid Data Interpolation...")
             X, Y, Z = self.grid_data
             self.ig = spi.interp2d(X, Y, Z, kind='cubic')
-            print("Done")
 
     def apply(self):
         print("Auto Bed Leveler Start")
@@ -1054,7 +951,7 @@ class GCodeLeveler:
             self.gc.modified_vectors = mvl
             print("Advanced Auto Bed Leveler Stop")
             tb = time.time()
-            print("Duration ", tb-ta)
+            print("Done in " + "{:.3f}".format(tb-ta) + " sec")
             return True
         else:
             return False

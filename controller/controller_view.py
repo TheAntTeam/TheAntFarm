@@ -29,7 +29,7 @@ class ViewController(QObject):
                 return [loaded_layer, True]
         except (AttributeError, ValueError, ZeroDivisionError, IndexError) as e:
             logging.error(e, exc_info=True)
-        except Exception as e:
+        except Exception:
             logger.error("Uncaught exception: %s", traceback.format_exc())
         return [None, None]
 
@@ -48,7 +48,12 @@ class ViewController(QObject):
         return new_paths
 
     def generate_new_gcode_file(self, tag, cfg, machining_type, path):
-        gcoder = GCoder(tag, machining_type)
+        if 'mirroring_axis' in self.settings.jobs_settings.jobs_settings_od["common"].keys():
+            mt = self.settings.jobs_settings.jobs_settings_od["common"]['mirroring_axis']
+            logger.debug("Mirror Axis: " + str(mt))
+            gcoder = GCoder(tag, machining_type, mirror_type=mt)
+        else:
+            gcoder = GCoder(tag, machining_type)
         gcoder.load_cfg(cfg)
         gcoder.load_path(path)
         if gcoder.compute():

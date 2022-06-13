@@ -93,39 +93,39 @@ class ControlController(QObject):
                     self.status_report_od["mpos"] = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "F":
                 try:
                     self.status_report_od["curfeed"] = float(word[1])
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "FS":
                 try:
                     self.status_report_od["curfeed"] = float(word[1])
                     self.status_report_od["curspindle"] = float(word[2])
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "Bf":
                 try:
                     self.status_report_od["planner"] = int(word[1])
                     self.status_report_od["rxbytes"] = int(word[2])
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "Ov":
                 try:
                     self.status_report_od["OvFeed"] = int(word[1])
                     self.status_report_od["OvRapid"] = int(word[2])
                     self.status_report_od["OvSpindle"] = int(word[3])
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "WCO":
                 try:
@@ -133,14 +133,14 @@ class ControlController(QObject):
                     self.status_report_od["wco"] = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "Pn":
                 try:
                     self.status_report_od["pins"] = word[1]
                 except (ValueError, IndexError) as e:
                     logging.error(e, exc_info=True)
-                except Exception as e:
+                except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
 
         self.wpos_a = self.mpos_a - self.wco_a
@@ -156,7 +156,7 @@ class ControlController(QObject):
                 self.prb_updated = True
             except (ValueError, IndexError) as e:
                 logging.error(e, exc_info=True)
-            except Exception as e:
+            except Exception:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
         elif word[0] == "G54":
             self.workspace_params_od["G54"] = np.array([float(word[1]), float(word[2]), float(word[3])])
@@ -181,27 +181,20 @@ class ControlController(QObject):
 
         return self.prb_val[0]
 
-    def cmd_probe(self, probe_z_max, probe_feed_rate):
-        probe_cmd_s = ""
-        probe_cmd_s += "G01 F" + str(probe_feed_rate) + "\n"  # Set probe feed rate
-        probe_cmd_s += "G38.2 Z" + str(probe_z_max) + "\n"  # Set probe command
-
+    def cmd_probe(self):
         self.prb_updated = False
         self.prb_activated = True
         self.prb_num_todo = 1
         self.prb_reps_todo = 1
 
-        return probe_cmd_s
-
-    def cmd_auto_bed_levelling(self, bbox_t, steps_t):
+    def cmd_auto_bed_levelling(self, bbox_t, steps_t, feedrate_probe):
         xy_coord_list = self.get_grid_coords(bbox_t, steps_t)
         travel_z = bbox_t[5]
-        probe_z_max = bbox_t[2]
-        probe_feed_rate = 30
+        probe_z_min = bbox_t[2]
         logger.debug(xy_coord_list)
 
         [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
-                                                                                probe_z_max, probe_feed_rate)
+                                                                                probe_z_min, feedrate_probe)
         self.abl_val = []
         self.abl_steps = (steps_t[0], steps_t[1])
         self.prb_num_done = 0
@@ -226,10 +219,10 @@ class ControlController(QObject):
         return list(zip(xi.ravel().tolist(), yi.ravel().tolist()))
 
     @staticmethod
-    def make_cmd_auto_bed_levelling(xy_c_l, travel_z, probe_z_max, probe_feed_rate):
+    def make_cmd_auto_bed_levelling(xy_c_l, travel_z, probe_z_min, probe_feed_rate):
 
         gcr = GCoder("dummy", "commander")
-        abl_cmd_ls, prb_num_todo = gcr.get_autobed_leveling_code(xy_c_l, travel_z, probe_z_max, probe_feed_rate)
+        abl_cmd_ls, prb_num_todo = gcr.get_autobed_leveling_code(xy_c_l, travel_z, probe_z_min, probe_feed_rate)
 
         logger.debug("ABL routine: " + str(abl_cmd_ls))
         logger.debug("ABL points to do: " + str(prb_num_todo))
@@ -276,16 +269,22 @@ class ControlController(QObject):
         if gcp is not None:
             self.gcodes_od[gcode_path] = {"gcode": gcp, "tag": tag}
 
+    def remove_gcode_file(self, gcode_path):
+        if self.gcodes_od[gcode_path]:
+            del self.gcodes_od[gcode_path]
+
     def get_gcode_tag_and_v(self, gcode_path):
         v = self.gcodes_od[gcode_path]["gcode"].get_gcode_vectors()
         tag = self.gcodes_od[gcode_path]["tag"]
         return tag, v
 
     def apply_abl(self, gcode_path):
+        print("Apply ABL")
         gcp = self.get_gcode_gcp(gcode_path)
         abl = GCodeLeveler(gcp.gc)
-        last_probe = self.abl_val.pop()
-        abl.get_grid_data(self.abl_val, self.abl_steps, last_probe, self.wco_a)
+        abl_val = self.abl_val.copy()
+        last_probe = abl_val.pop()
+        abl.get_grid_data(abl_val, self.abl_steps, last_probe, self.wco_a)
         abl.interp_grid_data()
         abl.apply_abl()
         # print("Leveled")
@@ -304,6 +303,10 @@ class ControlController(QObject):
 
     def get_gcode_lines(self, gcode_path):
         return self.gcodes_od[gcode_path]["gcode"].recode_gcode()
+
+    def get_change_tool_lines(self):
+        gcp = GCodeParser(None)
+        return gcp.get_change_tool_gcode()
 
     def get_boundary_box(self, gcode_path):
         logger.debug(gcode_path)

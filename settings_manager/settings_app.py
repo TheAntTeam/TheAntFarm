@@ -16,6 +16,8 @@ class AppSettingsHandler:
     WIN_MAXIMIZED_DEFAULT = False
     MAIN_TAB_INDEX_DEFAULT = 0
     CTRL_TAB_INDEX_DEFAULT = 0
+    SETTINGS_TAB_INDEX_DEFAULT = 0
+    SHOW_SETTINGS_TAB_DEFAULT = False
     SHOW_CONSOLE_DEFAULT = False
     LAST_SERIAL_PORT_DEFAULT = ""
     LAST_SERIAL_BAUD_DEFAULT = 115200
@@ -45,6 +47,8 @@ class AppSettingsHandler:
         self.win_maximized = self.WIN_MAXIMIZED_DEFAULT
         self.main_tab_index = self.MAIN_TAB_INDEX_DEFAULT
         self.ctrl_tab_index = self.CTRL_TAB_INDEX_DEFAULT
+        self.settings_tab_index = self.SETTINGS_TAB_INDEX_DEFAULT
+        self.settings_tab_visibility = self.SHOW_SETTINGS_TAB_DEFAULT
         self.console_visibility = self.SHOW_CONSOLE_DEFAULT
         self.last_serial_port = self.LAST_SERIAL_PORT_DEFAULT
         self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
@@ -69,30 +73,25 @@ class AppSettingsHandler:
         # GENERAL application settings #
         if "GENERAL" in self.app_settings:
             app_general = self.app_settings["GENERAL"]
-            # self.win_maximized = app_general.getboolean("win_maximized", self.WIN_MAXIMIZED_DEFAULT)
-            # if self.win_maximized:
-            #     self.main_win.showMaximized()
             self.pos = QPoint(app_general.getint("win_position_x", self.WIN_POS_X_DEFAULT),
                               app_general.getint("win_position_y", self.WIN_POS_Y_DEFAULT))
-            self.main_win.move(self.pos)  # Restore position
             self.size = QSize(app_general.getint("win_width", self.WIN_SIZE_W_DEFAULT),
                               app_general.getint("win_height", self.WIN_SIZE_H_DEFAULT))
             self.win_maximized = app_general.getboolean("win_maximized", self.WIN_MAXIMIZED_DEFAULT)
-            if self.win_maximized:
-                self.main_win.showMaximized()
             self.main_tab_index = app_general.getint("main_tab_index", self.MAIN_TAB_INDEX_DEFAULT)
             self.ctrl_tab_index = app_general.getint("ctrl_tab_index", self.CTRL_TAB_INDEX_DEFAULT)
+            self.settings_tab_index = app_general.getint("settings_tab_index", self.SETTINGS_TAB_INDEX_DEFAULT)
+            self.settings_tab_visibility = app_general.getboolean("settings_tab_visibility",
+                                                                  self.SHOW_SETTINGS_TAB_DEFAULT)
             self.console_visibility = app_general.getboolean("console_visibility", self.SHOW_CONSOLE_DEFAULT)
             self.logs_file = app_general.get('logs_file', self.LOGS_FILE_DEFAULT)
             self.logs_max_bytes = app_general.getint('logs_max_bytes', self.LOGS_MAX_BYTES)
             self.logs_backup_count = app_general.getint('logs_backup_count', self.LOGS_BACKUP_COUNT)
             self.last_serial_port = app_general.get("last_serial_port", self.LAST_SERIAL_PORT_DEFAULT)
-            self.last_serial_baud = app_general.get("last_serial_baud", self.LAST_SERIAL_BAUD_DEFAULT)
-        # Apply general settings.
-        self.main_win.resize(self.size)
-        self.main_win.ui.main_tab_widget.setCurrentIndex(self.main_tab_index)
-        self.main_win.ui.ctrl_tab_widget.setCurrentIndex(self.ctrl_tab_index)
-        self.main_win.ui.actionHide_Show_Console.setChecked(self.console_visibility)
+            try:
+                self.last_serial_baud = app_general.getint("last_serial_baud", self.LAST_SERIAL_BAUD_DEFAULT)
+            except Exception:
+                self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
 
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
@@ -103,7 +102,8 @@ class AppSettingsHandler:
             self.profile_layer_color = app_layers_settings.get("profile_layer_color", self.PROFILE_LAYER_COLOR_DEFAULT)
             self.drill_layer_color = app_layers_settings.get("drill_layer_color", self.DRILL_LAYER_COLOR_DEFAULT)
             self.nc_top_layer_color = app_layers_settings.get("nc_top_layer_color", self.NC_TOP_LAYER_COLOR_DEFAULT)
-            self.nc_bottom_layer_color = app_layers_settings.get("nc_bottom_layer_color", self.NC_BOTTOM_LAYER_COLOR_DEFAULT)
+            self.nc_bottom_layer_color = app_layers_settings.get("nc_bottom_layer_color",
+                                                                 self.NC_BOTTOM_LAYER_COLOR_DEFAULT)
 
         if "GCODES" in self.app_settings:
             app_gcode_settings = self.app_settings["GCODES"]
@@ -118,6 +118,8 @@ class AppSettingsHandler:
                                         "win_maximized": self.WIN_MAXIMIZED_DEFAULT,
                                         "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
                                         "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
+                                        "settings_tab_index": self.SETTINGS_TAB_INDEX_DEFAULT,
+                                        "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
                                         "console_visibility": self.console_visibility,
                                         "layer_last_dir": self.LAYER_LAST_DIR_DEFAULT,
                                         "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
@@ -145,6 +147,8 @@ class AppSettingsHandler:
         app_general["win_maximized"] = str(self.main_win.isMaximized())
         app_general["main_tab_index"] = str(self.main_win.ui.main_tab_widget.currentIndex())
         app_general["ctrl_tab_index"] = str(self.main_win.ui.ctrl_tab_widget.currentIndex())
+        app_general["settings_tab_index"] = str(self.main_win.ui.settings_sub_tab.currentIndex())
+        app_general["settings_tab_visibility"] = str(self.main_win.ui.actionSettings_Preferences.isChecked())
         app_general["console_visibility"] = str(self.main_win.ui.actionHide_Show_Console.isChecked())
         app_general["logs_file"] = str(self.LOGS_FILE_DEFAULT)
         app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
@@ -181,6 +185,8 @@ class AppSettingsHandler:
                                         "win_maximized": self.WIN_MAXIMIZED_DEFAULT,
                                         "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
                                         "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
+                                        "settings_tab_index": self.SETTINGS_TAB_INDEX_DEFAULT,
+                                        "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
                                         "console_visibility": self.console_visibility,
                                         "layer_last_dir": self.LAYER_LAST_DIR_DEFAULT,
                                         "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
@@ -206,6 +212,8 @@ class AppSettingsHandler:
         app_general["win_maximized"] = str(self.WIN_MAXIMIZED_DEFAULT)
         app_general["main_tab_index"] = str(self.MAIN_TAB_INDEX_DEFAULT)
         app_general["ctrl_tab_index"] = str(self.CTRL_TAB_INDEX_DEFAULT)
+        app_general["settings_tab_index"] = str(self.SETTINGS_TAB_INDEX_DEFAULT)
+        app_general["settings_tab_visibility"] = str(self.main_win.ui.actionSettings_Preferences.isChecked())
         app_general["console_visibility"] = str(self.SHOW_CONSOLE_DEFAULT)
         app_general["logs_file"] = str(self.LOGS_FILE_DEFAULT)
         app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
@@ -226,4 +234,3 @@ class AppSettingsHandler:
         # Write application ini file #
         with open(self.app_config_path, 'w') as configfile:
             self.app_settings.write(configfile)
-

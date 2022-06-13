@@ -33,6 +33,9 @@ class ControllerWorker(QObject):
 
     reset_controller_status_s = Signal()
     stop_send_s = Signal()
+    send_tool_change_s = Signal()                # Signal to start the tool change procedure
+
+    report_status_report_s = Signal(Od)
 
     REMOTE_RX_BUFFER_MAX_SIZE = 128
 
@@ -47,13 +50,14 @@ class ControllerWorker(QObject):
         self.control_controller = ControlController(self.settings)
         self.align_controller = AlignController(self.settings)
 
+        self.send_tool_change_s.connect(self.start_tool_change)
+
         self.poll_timer = None
         self.alive_timer = None
         self.camera_timer = None
 
         self.align_active = False
 
-        self.status_l = []
         self.status_to_ack = 0
         self.buffered_cmds = []
         self.cmds_to_ack = 0
@@ -66,7 +70,6 @@ class ControllerWorker(QObject):
         self.prb_updated = False
         self.abl_updated = False
         self.prb_val = []
-        self.abl_val = []
         self.abl_cmd_ls = []
         self.prb_num_todo = 0
         self.prb_num_done = 0
@@ -75,6 +78,7 @@ class ControllerWorker(QObject):
 
         self.sending_file = False
         self.file_content = []
+        self.content_line = 0
         self.file_progress = 0.0
         self.sent_lines = 0
         self.ack_lines = 0
@@ -82,12 +86,16 @@ class ControllerWorker(QObject):
         self.buffered_size = 0
         self.max_buffered_lines = 100
         self.min_buffer_threshold = 80
+        self.eof_wait_for_idle = False
 
         self.active_gcode_path = ""
 
         self.gcr = GCoder("dummy", "commander")
+        self.update_gerber_cfg()
         self.macro_on = False
         self.macro_obj = None
+
+        self.send_soft_reset = True
 
     @Slot(bool)
     def on_controller_connection(self, connected):
@@ -124,6 +132,13 @@ class ControllerWorker(QObject):
         self.update_path_s.emit(tag, new_paths)
 
     # ***************** CONTROL related functions. ***************** #
+    def check_eof_and_idle(self):
+        if self.eof_wait_for_idle and self.cmds_to_ack == 0:
+            sta = self.control_controller.status_report_od["state"].lower()
+            if "idle" in sta:
+                self.stop_send_s.emit()
+                self.eof_wait_for_idle = False
+
     def reset_dro_status_updated(self):
         self.dro_status_updated = False
 
@@ -154,6 +169,7 @@ class ControllerWorker(QObject):
                         # This variable should be set to true the first time an ack is received.
                         if not self.dro_status_updated:
                             self.dro_status_updated = True
+                        self.check_eof_and_idle()
                     elif re.match("^\[.*\]\s*$\s", element):
                         self.control_controller.parse_bracket_square(element)
                         [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = \
@@ -170,57 +186,71 @@ class ControllerWorker(QObject):
                                 logger.debug(element)
                     elif re.match("ok\s*$\s", element):
                         logger.debug("buffered size: " + str(self.buffered_size))
+                        self.update_console_text_s.emit(element)
                         if self.sending_file and self.cmds_to_ack > 0:
                             # Update progress #
                             self.cmds_to_ack -= 1
                             self.ack_lines += 1
                             self.buffered_size -= len(self.buffered_cmds[0])
                             self.buffered_cmds.pop(0)
-                            self.file_progress = (self.ack_lines / self.tot_lines) * 100
+                            self.file_progress = (self.content_line / self.tot_lines) * 100
                             logger.debug("Acknowledged lines: " + str(self.ack_lines))
                             self.update_file_progress_s.emit(self.file_progress)
 
                             # all lines have been sent?
-                            end_of_file = self.sent_lines >= self.tot_lines
+
                             # print("End Of File: " + str(end_of_file))
+
+                            if self.macro_on:
+                                probe_data = self.control_controller.prb_val
+                                wsp = self.get_workspace_parameters()
+                                cmd_to_send = self.macro_obj.get_next_line(wsp, probe_data)
+                                # print(cmd_to_send)
+                                if cmd_to_send is None:
+                                    self.macro_on = False
+                                    self.macro_obj = None
+                                    self.wait_tag_decoding = False
+                                    self.tot_lines -= 1
+                                else:
+                                    # self.tot_lines += 1
+                                    buff_available = (self.buffered_size + len(
+                                        cmd_to_send)) < self.REMOTE_RX_BUFFER_MAX_SIZE
+
+                            end_of_file = self.content_line >= self.tot_lines
+
                             if not end_of_file:
-                                if self.macro_on:
-                                    probe_data = self.control_controller.prb_val
-                                    wsp = self.get_workspace_parameters()
-                                    cmd_to_send = self.macro_obj.get_next_line(wsp, probe_data)
-                                    print(cmd_to_send)
-                                    if cmd_to_send is None:
-                                        self.macro_on = False
-                                        self.macro_obj = None
-                                        self.wait_tag_decoding = False
-                                    else:
-                                        self.tot_lines += 1
-
                                 if not self.macro_on:
-                                    cmd_to_send = self.file_content[self.sent_lines]
+                                    cmd_to_send = self.file_content[self.content_line]
                                     cmd_to_send = self.macro_check(cmd_to_send)
+                                    self.content_line += 1
 
-                                logger.info(str(self.ack_lines) + " <-> " + str(self.sent_lines))
+                                logger.debug(str(self.ack_lines) + " <-> " + str(self.sent_lines))
                                 # does data fit the buffer?
                                 buff_available = (self.buffered_size + len(cmd_to_send)) < self.REMOTE_RX_BUFFER_MAX_SIZE
                             else:
                                 self.wait_tag_decoding = False
                                 buff_available = False
 
-                            logger.info("wait: " + str(self.wait_tag_decoding))
+                            logger.debug("wait: " + str(self.wait_tag_decoding))
 
                             if not end_of_file and buff_available and not self.wait_tag_decoding:
                                 # cmd_to_send = self.file_content[self.sent_lines]
                                 self.send_to_tx_queue(cmd_to_send)
                                 self.buffered_cmds.append(cmd_to_send)
                                 logger.debug("TX:" + cmd_to_send)
+                                self.update_console_text_s.emit(cmd_to_send)
                                 self.buffered_size += len(cmd_to_send)
                                 self.sent_lines += 1
                                 self.cmds_to_ack += 1
 
-                            if self.ack_lines == self.tot_lines:
-                                self.stop_send_s.emit()
+                            # if self.ack_lines == self.tot_lines:
+                            if end_of_file:
+                                self.eof_wait_for_idle = True
                                 self.sending_file = False
+
+                                self.file_progress = (self.content_line / self.tot_lines) * 100
+                                self.update_file_progress_s.emit(self.file_progress)
+
                                 logger.info("End of File sending.")
 
                     elif "error" in element.lower():
@@ -234,16 +264,16 @@ class ControllerWorker(QObject):
                         logger.debug(element)
             except BlockingIOError as e:
                 logger.error(e, exc_info=True)
-            except Exception as e:
+            except Exception:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
     def macro_check(self, cmd_to_send):
-        macro_type = self.gcr.is_macro(cmd_to_send)
-        probe_data = self.control_controller.prb_val
-        wsp = self.get_workspace_parameters()
+        # probe_data = self.control_controller.prb_val
+        # wsp = self.get_workspace_parameters()
         ret_cmd_to_send = cmd_to_send
 
-        if macro_type:
+        if self.gcr.is_macro(cmd_to_send):
+            macro_type = cmd_to_send.strip()
             if self.ack_lines != self.sent_lines:
                 # wait that the machine execute all previous lines
                 # to be able to decode the tag
@@ -260,7 +290,7 @@ class ControllerWorker(QObject):
                 }
 
                 self.wait_tag_decoding = False
-                self.macro_obj = GCodeMacro(freeze_dro, macro_type)
+                self.macro_obj = GCodeMacro(freeze_dro, macro_type, self.gcr)
                 ret_cmd_to_send = "$#\n"
                 # ret_cmd_to_send = self.macro_obj.get_next_line(probe_data, wsp)
                 self.tot_lines += 1
@@ -277,17 +307,30 @@ class ControllerWorker(QObject):
         #     logger.info("Tag Found: " + str(ret_str) + " [" + gcode_str + "]" )
         return gcode_str
 
+    @Slot(str, tuple)
+    def execute_user_interface_cmd(self, cmd_key, cmd_data_values):
+
+        str_l = self.gcr.user_cmd.get_command_str(cmd_key, cmd_data_values)
+
+        if len(str_l) == 1:
+            logger.info("Sending Short User Command")
+            self.update_console_text_s.emit(str(str_l[0]))  # To string because it can be a byte.
+            self.serial_send_s.emit(str_l[0])
+        elif len(str_l) > 1:
+            logger.info("Sending Long User Command")
+            self.send_soft_reset = False
+            self.send_gcode_lines(str_l)
+
     def execute_gcode_cmd(self, cmd_str):
         """ Send generic G-CODE command coming from elsewhere. """
-        print("Execute Gcode")
-        parsered_cmd_str = self.decode_tag(cmd_str)
-        logger.info("Sent GCODE: " + str(parsered_cmd_str))
-        self.serial_send_s.emit(parsered_cmd_str)
+        logger.debug("Execute Gcode")
+        parsed_cmd_str = self.decode_tag(cmd_str)
+        logger.info("Sent GCODE: " + str(parsed_cmd_str))
+        self.serial_send_s.emit(parsed_cmd_str)
 
-    def cmd_probe(self, probe_z_max, probe_feed_rate):
-        probe_cmd_s = self.control_controller.cmd_probe(probe_z_max, probe_feed_rate)
-        logger.info(probe_cmd_s)
-        self.serial_send_s.emit(probe_cmd_s)  # Execute probe
+    def cmd_probe(self, probe_z_min):
+        self.control_controller.cmd_probe()
+        self.execute_user_interface_cmd("probe", (None, None, probe_z_min))
 
     def ack_probe(self):
         prb_val = self.control_controller.get_probe_value()
@@ -295,7 +338,8 @@ class ControllerWorker(QObject):
         self.update_probe_s.emit(prb_val)
 
     def cmd_auto_bed_levelling(self, bbox_t, steps_t):
-        self.control_controller.cmd_auto_bed_levelling(bbox_t, steps_t)
+        probe_feed_rate = self.settings.machine_settings.feedrate_probe
+        self.control_controller.cmd_auto_bed_levelling(bbox_t, steps_t, probe_feed_rate)
         self.send_next_abl()  # Send first probe command.
 
     def send_next_abl(self):
@@ -304,9 +348,9 @@ class ControllerWorker(QObject):
         self.serial_send_s.emit(next_abl_cmd)  # Execute next Probe of Auto-Bed-Levelling
 
     def ack_auto_bed_levelling(self):
-        self.abl_val = self.control_controller.get_abl_value()
-        logger.info("ABL values: " + str(self.abl_val))
-        # self.update_abl_s.emit(self.abl_val)
+        abl_val = self.control_controller.get_abl_value()
+        logger.debug("ABL values: " + str(abl_val))
+        # self.update_abl_s.emit(abl_val)
         self.select_active_gcode(self.active_gcode_path)
 
     def set_abl_active(self, abl_active=True):
@@ -321,13 +365,17 @@ class ControllerWorker(QObject):
         self.active_gcode_path = gcode_path
         redraw = False
         visible = True
-        logger.debug("ABL_val " + str(self.abl_val))
+        abl_val = self.control_controller.get_abl_value()
+        logger.debug("ABL_val " + str(abl_val))
         logger.debug("ABL_active " + str(self.abl_apply_active))
-        if self.abl_val and self.abl_apply_active:
+        if abl_val != [] and self.abl_apply_active:
+            logger.debug("Apply ABL")
             self.control_controller.apply_abl(gcode_path)
             redraw = True
         else:
+            logger.debug("Remove ABL")
             redraw = self.control_controller.remove_abl(gcode_path)
+        logger.debug("ABL Done")
         (tag, v) = self.control_controller.get_gcode_tag_and_v(gcode_path)
         self.update_gcode_s.emit(tag, v, visible, redraw)
 
@@ -335,8 +383,19 @@ class ControllerWorker(QObject):
         return self.control_controller.get_gcode_tag_and_v(gcode_path)
 
     @Slot(str)
+    def remove_gcode(self, gcode_path):
+        self.control_controller.remove_gcode_file(gcode_path)
+
+    @Slot(str)
     def send_gcode_file(self, gcode_path):
-        self.file_content = self.control_controller.get_gcode_lines(gcode_path)
+        lines = self.control_controller.get_gcode_lines(gcode_path)
+        logger.info("Sending file: " + str(gcode_path))
+        self.send_gcode_lines(lines)
+
+    def send_gcode_lines(self, lines):
+        self.file_content = lines
+        # with open(gcode_path+".abl", "w") as f:
+        #     f.writelines(self.file_content)
         # with open(gcode_path) as f:            # DEBUG: take directly from file
         #     self.file_content = f.readlines()
         logger.debug(self.file_content)
@@ -344,34 +403,38 @@ class ControllerWorker(QObject):
             self.file_progress = 0.0
             self.cmds_to_ack = 0
             self.sent_lines = 0
+            self.content_line = 0
             self.ack_lines = 0
             self.tot_lines = len(self.file_content)
             self.macro_on = False
             self.macro_obj = None
-            logger.info("Sending file: " + str(gcode_path))
+            self.eof_wait_for_idle = False
+            self.wait_tag_decoding = False
             logger.info("Total lines: " + str(self.tot_lines))
 
-            while self.sent_lines < self.tot_lines and \
-                    (self.buffered_size + len(self.file_content[self.sent_lines])) < self.REMOTE_RX_BUFFER_MAX_SIZE\
-                    and not self.wait_tag_decoding:
-                cmd_to_send = self.file_content[self.sent_lines]
+            if self.sent_lines < self.tot_lines and \
+                    (self.buffered_size + len(self.file_content[self.content_line])) < self.REMOTE_RX_BUFFER_MAX_SIZE:
+                cmd_to_send = self.file_content[self.content_line]
+                cmd_to_send = self.macro_check(cmd_to_send)
                 self.send_to_tx_queue(cmd_to_send)
                 self.buffered_cmds.append(cmd_to_send)
+                self.update_console_text_s.emit(cmd_to_send)
                 logger.debug(cmd_to_send)
                 self.buffered_size += len(cmd_to_send)
                 self.sent_lines += 1
+                self.content_line += 1
                 self.cmds_to_ack += 1
-
-                if self.sent_lines < self.tot_lines:
-                    self.macro_check(self.file_content[self.sent_lines])
 
             logger.debug("Buffered size: " + str(self.buffered_size))
             self.sending_file = True
 
     def stop_gcode_file(self):
         self.sending_file = False
-        self.execute_gcode_cmd(b"!")
-        self.execute_gcode_cmd(b'\030')
+        if self.send_soft_reset:
+            # send soft reset
+            self.execute_gcode_cmd(b"!")
+            self.execute_gcode_cmd(b'\030')
+        self.send_soft_reset = True
         self.file_progress = 0.0
         self.cmds_to_ack = 0
         self.sent_lines = 0
@@ -393,13 +456,26 @@ class ControllerWorker(QObject):
     def get_boundary_box(self):
         if not self.active_gcode_path == "":
             bbox_t = self.control_controller.get_boundary_box(self.active_gcode_path)
-            self.update_bbox_s.emit(bbox_t)
+            if bbox_t is not None:
+                self.update_bbox_s.emit(bbox_t)
 
     def get_status_report(self):
         return self.control_controller.status_report_od
 
+    @Slot()
+    def report_status_report(self):
+        self.report_status_report_s.emit(self.control_controller.status_report_od)
+
     def get_workspace_parameters(self):
         return self.control_controller.workspace_params_od
+
+    @Slot()
+    def start_tool_change(self):
+        logger.info("Tool change is starting!")
+        lines = self.control_controller.get_change_tool_lines()
+        # print(lines)
+        self.send_soft_reset = False
+        self.send_gcode_lines(lines)
 
 # ***************** ALIGN related functions. ***************** #
 
@@ -415,3 +491,37 @@ class ControllerWorker(QObject):
     @Slot(int)
     def update_threshold_value(self, new_threshold):
         self.align_controller.update_threshold_value(new_threshold)
+
+    # ******* SETTINGS/PREFERENCES related functions. ******** #
+
+    @Slot()
+    def update_gerber_cfg(self):
+        machine_sets = self.settings.machine_settings
+        probe_working = machine_sets.tool_probe_rel_flag
+        if probe_working:
+            probe_pos = (
+                machine_sets.tool_probe_offset_x_wpos,
+                machine_sets.tool_probe_offset_y_wpos,
+                machine_sets.tool_probe_offset_z_wpos,
+            )
+        else:
+            probe_pos = (
+                machine_sets.tool_probe_offset_x_mpos,
+                machine_sets.tool_probe_offset_y_mpos,
+                machine_sets.tool_probe_offset_z_mpos,
+            )
+        change_pos = (
+            machine_sets.tool_change_offset_x_mpos,
+            machine_sets.tool_change_offset_y_mpos,
+            machine_sets.tool_change_offset_z_mpos,
+        )
+        cfg = Od({
+            'tool_probe_pos': probe_pos,
+            'tool_probe_working': probe_working,  # False: machine pos or True: working pos
+            'tool_probe_min': machine_sets.tool_probe_z_limit,
+            'tool_change_pos': change_pos,
+            'tool_probe_feedrate': (machine_sets.feedrate_xy, machine_sets.feedrate_z, machine_sets.feedrate_probe),
+            'tool_probe_hold': machine_sets.hold_on_probe_flag,
+            'tool_probe_zero': machine_sets.zeroing_after_probe_flag,
+        })
+        self.gcr.load_cfg(cfg)

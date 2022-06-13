@@ -91,8 +91,42 @@ Compile Resources & UI Definitions:
   
 The software must be run from the project directory, after the virtual environment has been activated (see installation paragraph), using the following command:
 
+> .\venv\Scripts\activate  
 > python3 the_ant_farm.py  
+
+### Windows using VS Code
+
+Either download the zip of the repository sources or use git:  
   
+> git clone https://github.com/TheAntTeam/TheAntFarm.git  
+
+In VS Code
+
+* File -> Open Folder -> open the TheAntFarm Folder
+
+* Terminal -> New Terminal (This will probably open a Powershell, which is what we will use)
+
+In the Terminal:
+
+> python -m venv .\venv  (You may have to install python3 globaly)
+
+* Restart VS code
+  
+Activate the virtual environment:  
+  
+> .\venv\Scripts\activate
+
+* Open the_ant_farm.py, in the bottom right of the interface it should say "Python", next to it should be the python verion number folled by 'venv'/venv, if not click it and change the interpreter.
+  
+Install all the required packages:
+
+> "path"\TheAntFarm\venv\Scripts\python.exe -m pip install --upgrade pip
+  
+> pip3 install -r requirements.txt  
+
+Running the software  
+
+> python .\the_ant_farm.py  
     
 # Disclaimer  
   
