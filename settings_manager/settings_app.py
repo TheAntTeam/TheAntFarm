@@ -85,6 +85,8 @@ class AppSettingsHandler:
                                                                   self.SHOW_SETTINGS_TAB_DEFAULT)
             self.console_visibility = app_general.getboolean("console_visibility", self.SHOW_CONSOLE_DEFAULT)
             self.logs_file = app_general.get('logs_file', self.LOGS_FILE_DEFAULT)
+            if not os.path.isdir(os.path.dirname(os.path.abspath(self.logs_file))):
+                self.logs_file = self.LOGS_FILE_DEFAULT  # restore logs file with the default path
             self.logs_max_bytes = app_general.getint('logs_max_bytes', self.LOGS_MAX_BYTES)
             self.logs_backup_count = app_general.getint('logs_backup_count', self.LOGS_BACKUP_COUNT)
             self.last_serial_port = app_general.get("last_serial_port", self.LAST_SERIAL_PORT_DEFAULT)
