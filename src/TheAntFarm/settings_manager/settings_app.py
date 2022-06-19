@@ -21,8 +21,8 @@ class AppSettingsHandler:
     SHOW_CONSOLE_DEFAULT = False
     LAST_SERIAL_PORT_DEFAULT = ""
     LAST_SERIAL_BAUD_DEFAULT = 115200
-    LAYER_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
-    GCODE_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
+    LAYER_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '../../..'))
+    GCODE_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '../../..'))
     TOP_LAYER_COLOR_DEFAULT = "#FFC300"
     BOTTOM_LAYER_COLOR_DEFAULT = "#A3E4D7"
     PROFILE_LAYER_COLOR_DEFAULT = "#000000"
