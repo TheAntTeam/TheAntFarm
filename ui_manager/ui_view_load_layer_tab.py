@@ -79,7 +79,13 @@ class UiViewLoadLayerTab(QObject):
 
     def load_gerber_file(self, layer="top", load_text="Load File", extensions=""):
         filters = extensions + ";;All files (*.*)"
-        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.app_settings.layer_last_dir, filters)
+        kwargs = {}
+        if "PYCHARM_HOSTED" in os.environ:
+            logger.debug("pycharm hosted")
+            kwargs['options'] = QFileDialog.DontUseNativeDialog
+        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.app_settings.layer_last_dir,
+                                                     filters, **kwargs)
+
         if load_file_path[0]:
             self.vis_layer.remove_layer(layer)
             self.vis_layer.remove_path(layer)
