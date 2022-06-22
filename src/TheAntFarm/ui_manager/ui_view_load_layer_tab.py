@@ -22,11 +22,7 @@ class UiViewLoadLayerTab(QObject):
         self.lay_names = lay_names
         self.app_settings = app_settings
 
-        lay_colors = [app_settings.top_layer_color, app_settings.bottom_layer_color,
-                      app_settings.profile_layer_color, app_settings.drill_layer_color,
-                      app_settings.nc_top_layer_color, app_settings.nc_bottom_layer_color]
-
-        self.layer_colors = Od([(k, v) for k, v in zip(self.lay_tags, lay_colors)])
+        self.layer_colors = self.app_settings.layer_color
         self.L_TEXT = [self.ui.top_file_le, self.ui.bottom_file_le, self.ui.profile_file_le,
                        self.ui.drill_file_le, self.ui.no_copper_1_le, self.ui.no_copper_2_le]
         self.layers_te = Od([(k, t) for k, t in zip(self.lay_tags, self.L_TEXT)])
