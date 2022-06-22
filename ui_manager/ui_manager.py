@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class UiManager(QObject):
     """Manage UI objects, signals and slots"""
-    L_TAGS = ("top", "bottom", "profile", "drill", "no_copper_top", "no_copper_bottom")
+    L_TAGS = ("top", "bottom", "profile", "drill", "nc_top", "nc_bottom")
     L_NAMES = ("TOP", "BOTTOM", "PROFILE", "DRILL", "NO COPPER TOP", "NO COPPER BOTTOM")
     LOG_COLORS = {
         logging.DEBUG:    'white',

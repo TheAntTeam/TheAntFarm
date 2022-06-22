@@ -1,4 +1,5 @@
 from PySide2.QtCore import QPoint, QSize
+from collections import OrderedDict as Od
 import configparser
 import os
 
@@ -54,12 +55,13 @@ class AppSettingsHandler:
         self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
         self.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
         self.gcode_last_dir = self.GCODE_LAST_DIR_DEFAULT
-        self.top_layer_color = self.TOP_LAYER_COLOR_DEFAULT
-        self.bottom_layer_color = self.BOTTOM_LAYER_COLOR_DEFAULT
-        self.profile_layer_color = self.PROFILE_LAYER_COLOR_DEFAULT
-        self.drill_layer_color = self.DRILL_LAYER_COLOR_DEFAULT
-        self.nc_top_layer_color = self.NC_TOP_LAYER_COLOR_DEFAULT
-        self.nc_bottom_layer_color = self.NC_BOTTOM_LAYER_COLOR_DEFAULT
+        self.layer_color = Od({})
+        self.layer_color["top"] = self.TOP_LAYER_COLOR_DEFAULT
+        self.layer_color["bottom"] = self.BOTTOM_LAYER_COLOR_DEFAULT
+        self.layer_color["profile"] = self.PROFILE_LAYER_COLOR_DEFAULT
+        self.layer_color["drill"] = self.DRILL_LAYER_COLOR_DEFAULT
+        self.layer_color["nc_top"] = self.NC_TOP_LAYER_COLOR_DEFAULT
+        self.layer_color["nc_bottom"] = self.NC_BOTTOM_LAYER_COLOR_DEFAULT
 
     def read_all_app_settings(self):
         """ Read all application settings from ini files """
@@ -99,13 +101,13 @@ class AppSettingsHandler:
         if "LAYERS" in self.app_settings:
             app_layers_settings = self.app_settings["LAYERS"]
             self.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
-            self.top_layer_color = app_layers_settings.get("top_layer_color", self.TOP_LAYER_COLOR_DEFAULT)
-            self.bottom_layer_color = app_layers_settings.get("bottom_layer_color", self.BOTTOM_LAYER_COLOR_DEFAULT)
-            self.profile_layer_color = app_layers_settings.get("profile_layer_color", self.PROFILE_LAYER_COLOR_DEFAULT)
-            self.drill_layer_color = app_layers_settings.get("drill_layer_color", self.DRILL_LAYER_COLOR_DEFAULT)
-            self.nc_top_layer_color = app_layers_settings.get("nc_top_layer_color", self.NC_TOP_LAYER_COLOR_DEFAULT)
-            self.nc_bottom_layer_color = app_layers_settings.get("nc_bottom_layer_color",
-                                                                 self.NC_BOTTOM_LAYER_COLOR_DEFAULT)
+            self.layer_color["top"] = app_layers_settings.get("top_layer_color", self.TOP_LAYER_COLOR_DEFAULT)
+            self.layer_color["bottom"] = app_layers_settings.get("bottom_layer_color", self.BOTTOM_LAYER_COLOR_DEFAULT)
+            self.layer_color["profile"] = app_layers_settings.get("profile_layer_color", self.PROFILE_LAYER_COLOR_DEFAULT)
+            self.layer_color["drill"] = app_layers_settings.get("drill_layer_color", self.DRILL_LAYER_COLOR_DEFAULT)
+            self.layer_color["nc_top"] = app_layers_settings.get("nc_top_layer_color", self.NC_TOP_LAYER_COLOR_DEFAULT)
+            self.layer_color["nc_bottom"] = app_layers_settings.get("nc_bottom_layer_color",
+                                                                           self.NC_BOTTOM_LAYER_COLOR_DEFAULT)
 
         if "GCODES" in self.app_settings:
             app_gcode_settings = self.app_settings["GCODES"]
@@ -162,12 +164,12 @@ class AppSettingsHandler:
         self.app_settings["LAYERS"] = {}
         app_layers = self.app_settings["LAYERS"]
         app_layers["layer_last_dir"] = self.layer_last_dir
-        app_layers["top_layer_color"] = self.top_layer_color
-        app_layers["bottom_layer_color"] = self.bottom_layer_color
-        app_layers["profile_layer_color"] = self.profile_layer_color
-        app_layers["drill_layer_color"] = self.drill_layer_color
-        app_layers["nc_top_layer_color"] = self.nc_top_layer_color
-        app_layers["nc_bottom_layer_color"] = self.nc_bottom_layer_color
+        app_layers["top_layer_color"] = self.layer_color["top"]
+        app_layers["bottom_layer_color"] = self.layer_color["bottom"]
+        app_layers["profile_layer_color"] = self.layer_color["profile"]
+        app_layers["drill_layer_color"] = self.layer_color["drill"]
+        app_layers["nc_top_layer_color"] = self.layer_color["nc_top"]
+        app_layers["nc_bottom_layer_color"] = self.layer_color["nc_bottom"]
 
         # Layers related application settings #
         self.app_settings["GCODES"] = {}

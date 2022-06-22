@@ -194,7 +194,7 @@ class UiCreateJobLayerTab(QObject):
             self.ui.drill_mirror_chb.setCheckState(Qt.Unchecked)
 
     def set_settings_per_nc_top(self):
-        settings_nc_top = self.jobs_settings.jobs_settings_od["no_copper_top"]
+        settings_nc_top = self.jobs_settings.jobs_settings_od["nc_top"]
         self.ui.nc_top_tool_diameter_dsb.setValue(settings_nc_top["tool_diameter"])
         self.ui.nc_top_overlap_dsb.setValue(settings_nc_top["overlap"])
         self.ui.nc_top_cut_z_dsb.setValue(settings_nc_top["cut"])
@@ -204,7 +204,7 @@ class UiCreateJobLayerTab(QObject):
         self.ui.nc_top_z_feed_rate_dsb.setValue(settings_nc_top["z_feedrate"])
 
     def set_settings_per_nc_bottom(self):
-        settings_nc_bottom = self.jobs_settings.jobs_settings_od["no_copper_bottom"]
+        settings_nc_bottom = self.jobs_settings.jobs_settings_od["nc_bottom"]
         self.ui.nc_bottom_tool_diameter_dsb.setValue(settings_nc_bottom["tool_diameter"])
         self.ui.nc_bottom_overlap_dsb.setValue(settings_nc_bottom["overlap"])
         self.ui.nc_bottom_cut_z_dsb.setValue(settings_nc_bottom["cut"])
@@ -301,7 +301,7 @@ class UiCreateJobLayerTab(QObject):
         return settings_drill
 
     def get_settings_per_nc_top(self):
-        settings_nc_top = self.jobs_settings.jobs_settings_od["no_copper_top"].copy()
+        settings_nc_top = self.jobs_settings.jobs_settings_od["nc_top"].copy()
         settings_nc_top["tool_diameter"] = self.ui.nc_top_tool_diameter_dsb.value()
         settings_nc_top["overlap"] = self.ui.nc_top_overlap_dsb.value()
         settings_nc_top["cut"] = self.ui.nc_top_cut_z_dsb.value()
@@ -313,7 +313,7 @@ class UiCreateJobLayerTab(QObject):
         return settings_nc_top
 
     def get_settings_per_nc_bottom(self):
-        settings_nc_bottom = self.jobs_settings.jobs_settings_od["no_copper_bottom"].copy()
+        settings_nc_bottom = self.jobs_settings.jobs_settings_od["nc_bottom"].copy()
         settings_nc_bottom["tool_diameter"] = self.ui.nc_bottom_tool_diameter_dsb.value()
         settings_nc_bottom["overlap"] = self.ui.nc_bottom_overlap_dsb.value()
         settings_nc_bottom["cut"] = self.ui.nc_bottom_cut_z_dsb.value()

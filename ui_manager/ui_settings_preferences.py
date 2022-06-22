@@ -1,4 +1,5 @@
 from PySide2.QtCore import QObject, Signal, Slot
+from PySide2.QtWidgets import QColorDialog
 from collections import OrderedDict as Od
 import logging
 
@@ -29,6 +30,7 @@ class UiSettingsPreferencesTab(QObject):
         self.ui = ui
         self.control_wo = control_worker
         self.settings = settings
+        self.app_settings = settings.app_settings
         self.jobs_settings = settings.jobs_settings
         self.machine_settings = settings.machine_settings
 
@@ -69,6 +71,24 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.x_mirror_rb.clicked.connect(self.set_focus_lost)
         self.ui.y_mirror_rb.clicked.connect(self.set_focus_lost)
         self.ui.restore_settings_preferences_pb.clicked.connect(self.restore_initial_settings)
+
+        self.ui.top_layer_color_la.setStyleSheet("background-color: {}".format(self.app_settings.layer_color["top"]))
+        self.ui.bottom_layer_color_la.setStyleSheet(
+            "background-color: {}".format(self.app_settings.layer_color["bottom"]))
+        self.ui.profile_layer_color_la.setStyleSheet(
+            "background-color: {}".format(self.app_settings.layer_color["profile"]))
+        self.ui.drill_layer_color_la.setStyleSheet(
+            "background-color: {}".format(self.app_settings.layer_color["drill"]))
+        self.ui.nc_top_layer_color_la.setStyleSheet(
+            "background-color: {}".format(self.app_settings.layer_color["nc_top"]))
+        self.ui.nc_bottom_layer_color_la.setStyleSheet(
+            "background-color: {}".format(self.app_settings.layer_color["nc_bottom"]))
+        self.ui.top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("top"))
+        self.ui.bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("bottom"))
+        self.ui.profile_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("profile"))
+        self.ui.drill_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("drill"))
+        self.ui.nc_top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_top"))
+        self.ui.nc_bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_bottom"))
 
     def reset_jobs_common_initial_settings(self):
         """Reset status of common jobs settings. """
@@ -233,6 +253,13 @@ class UiSettingsPreferencesTab(QObject):
         self.machine_settings.feedrate_z = self.ui.feedrate_z_dsb.value()
         self.machine_settings.feedrate_probe = self.ui.feedrate_probe_dsb.value()
 
+        self.app_settings.layer_color["top"] = self.ui.top_layer_color_la.palette().background().color().name()
+        self.app_settings.layer_color["bottom"] = self.ui.bottom_layer_color_la.palette().background().color().name()
+        self.app_settings.layer_color["profile"] = self.ui.profile_layer_color_la.palette().background().color().name()
+        self.app_settings.layer_color["drill"] = self.ui.drill_layer_color_la.palette().background().color().name()
+        self.app_settings.layer_color["nc_top"] = self.ui.nc_top_layer_color_la.palette().background().color().name()
+        self.app_settings.layer_color["nc_bottom"] = self.ui.nc_bottom_layer_color_la.palette().background().color().name()
+
         self.load_gcoder_cfg_s.emit()
         # Emit a signal to write all settings
         self.save_all_settings_s.emit()
@@ -247,3 +274,30 @@ class UiSettingsPreferencesTab(QObject):
     def reset_focus_lost(self):
         """Reset lost focus to False, the changed settings have been saved or restored. """
         self.ui.save_settings_preferences_pb.setStyleSheet("")
+
+    def layer_color_choice(self, layer):
+        """
+        Choose a different color for the given layer.
+
+        Parameters
+        ----------
+        layer: string
+            Name of the layer for which the new color is chosen.
+
+        """
+        color = QColorDialog.getColor()
+        if color.isValid():
+            logger.debug("color " + str(color.name()))
+            if layer == "top":
+                self.ui.top_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
+            elif layer == "bottom":
+                self.ui.bottom_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
+            elif layer == "profile":
+                self.ui.profile_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
+            elif layer == "drill":
+                self.ui.drill_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
+            elif layer == "nc_top":
+                self.ui.nc_top_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
+            elif layer == "nc_bottom":
+                self.ui.nc_bottom_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
+            self.set_focus_lost()

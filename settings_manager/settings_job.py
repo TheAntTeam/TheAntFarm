@@ -135,7 +135,7 @@ class JobSettingsHandler:
             nc_top_set_od["spindle"] = nc_top_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             nc_top_set_od["xy_feedrate"] = nc_top_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             nc_top_set_od["z_feedrate"] = nc_top_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
-            self.jobs_settings_od["no_copper_top"] = nc_top_set_od
+            self.jobs_settings_od["nc_top"] = nc_top_set_od
 
         if "NC_BOTTOM" in self.jobs_settings:
             nc_bottom_settings = self.jobs_settings["NC_BOTTOM"]
@@ -147,7 +147,7 @@ class JobSettingsHandler:
             nc_bottom_set_od["spindle"] = nc_bottom_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             nc_bottom_set_od["xy_feedrate"] = nc_bottom_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             nc_bottom_set_od["z_feedrate"] = nc_bottom_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
-            self.jobs_settings_od["no_copper_bottom"] = nc_bottom_set_od
+            self.jobs_settings_od["nc_bottom"] = nc_bottom_set_od
 
     def write_all_jobs_settings(self, job_settings_od):
         """ Write all jobs settings to ini files """
@@ -243,7 +243,7 @@ class JobSettingsHandler:
         # No-Copper Top job related settings #
         self.jobs_settings["NC_TOP"] = {}
         nc_top_settings = self.jobs_settings["NC_TOP"]
-        nc_top_set_od = job_settings_od["no_copper_top"]
+        nc_top_set_od = job_settings_od["nc_top"]
         nc_top_settings["tool_diameter"] = str(nc_top_set_od["tool_diameter"])
         nc_top_settings["overlap"] = str(nc_top_set_od["overlap"])
         nc_top_settings["cut"] = str(nc_top_set_od["cut"])
@@ -255,7 +255,7 @@ class JobSettingsHandler:
         # No-Copper Bottom job related settings #
         self.jobs_settings["NC_BOTTOM"] = {}
         nc_bottom_settings = self.jobs_settings["NC_BOTTOM"]
-        nc_bottom_set_od = job_settings_od["no_copper_bottom"]
+        nc_bottom_set_od = job_settings_od["nc_bottom"]
         nc_bottom_settings["tool_diameter"] = str(nc_bottom_set_od["tool_diameter"])
         nc_bottom_settings["overlap"] = str(nc_bottom_set_od["overlap"])
         nc_bottom_settings["cut"] = str(nc_bottom_set_od["cut"])
