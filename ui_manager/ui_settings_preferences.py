@@ -72,6 +72,16 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.y_mirror_rb.clicked.connect(self.set_focus_lost)
         self.ui.restore_settings_preferences_pb.clicked.connect(self.restore_initial_settings)
 
+        self.reset_application_settings()
+        self.ui.top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("top"))
+        self.ui.bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("bottom"))
+        self.ui.profile_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("profile"))
+        self.ui.drill_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("drill"))
+        self.ui.nc_top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_top"))
+        self.ui.nc_bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_bottom"))
+
+    def reset_application_settings(self):
+        """Resets ui elements values according to application settings."""
         self.ui.top_layer_color_la.setStyleSheet("background-color: {}".format(self.app_settings.layer_color["top"]))
         self.ui.bottom_layer_color_la.setStyleSheet(
             "background-color: {}".format(self.app_settings.layer_color["bottom"]))
@@ -83,12 +93,6 @@ class UiSettingsPreferencesTab(QObject):
             "background-color: {}".format(self.app_settings.layer_color["nc_top"]))
         self.ui.nc_bottom_layer_color_la.setStyleSheet(
             "background-color: {}".format(self.app_settings.layer_color["nc_bottom"]))
-        self.ui.top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("top"))
-        self.ui.bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("bottom"))
-        self.ui.profile_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("profile"))
-        self.ui.drill_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("drill"))
-        self.ui.nc_top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_top"))
-        self.ui.nc_bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_bottom"))
 
     def reset_jobs_common_initial_settings(self):
         """Reset status of common jobs settings. """
@@ -129,6 +133,7 @@ class UiSettingsPreferencesTab(QObject):
 
     def restore_initial_settings(self):
         """Restore initial settings in ui fields. """
+        self.reset_application_settings()
         self.reset_jobs_common_initial_settings()
         self.reset_probe_initial_settings()
         self.reset_tool_machine_initial_settings()
