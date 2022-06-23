@@ -290,33 +290,24 @@ class UiSettingsPreferencesTab(QObject):
             Name of the layer for which the new color is chosen.
 
         """
-        current_color = None
+        current_label = None
         if layer == "top":
-            current_color = self.ui.top_layer_color_la.palette().background().color()
+            current_label = self.ui.top_layer_color_la
         elif layer == "bottom":
-            current_color = self.ui.bottom_layer_color_la.palette().background().color()
+            current_label = self.ui.bottom_layer_color_la
         elif layer == "profile":
-            current_color = self.ui.profile_layer_color_la.palette().background().color()
+            current_label = self.ui.profile_layer_color_la
         elif layer == "drill":
-            current_color = self.ui.drill_layer_color_la.palette().background().color()
+            current_label = self.ui.drill_layer_color_la
         elif layer == "nc_top":
-            current_color = self.ui.nc_top_layer_color_la.palette().background().color()
+            current_label = self.ui.nc_top_layer_color_la
         elif layer == "nc_bottom":
-            current_color = self.ui.nc_bottom_layer_color_la.palette().background().color()
-        logger.debug(current_color)
-        color = QColorDialog.getColor(initial=current_color)
-        if color.isValid():
-            logger.debug("color " + str(color.name()))
-            if layer == "top":
-                self.ui.top_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
-            elif layer == "bottom":
-                self.ui.bottom_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
-            elif layer == "profile":
-                self.ui.profile_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
-            elif layer == "drill":
-                self.ui.drill_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
-            elif layer == "nc_top":
-                self.ui.nc_top_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
-            elif layer == "nc_bottom":
-                self.ui.nc_bottom_layer_color_la.setStyleSheet("background-color: {}".format(color.name()))
-            self.set_focus_lost()
+            current_label = self.ui.nc_bottom_layer_color_la
+        if current_label:
+            current_color = current_label.palette().background().color()
+            logger.debug(current_color)
+            color = QColorDialog.getColor(initial=current_color)
+            if color.isValid():
+                logger.debug("color " + str(color.name()))
+                current_label.setStyleSheet("background-color: {}".format(color.name()))
+                self.set_focus_lost()
