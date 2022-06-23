@@ -290,7 +290,21 @@ class UiSettingsPreferencesTab(QObject):
             Name of the layer for which the new color is chosen.
 
         """
-        color = QColorDialog.getColor()
+        current_color = None
+        if layer == "top":
+            current_color = self.ui.top_layer_color_la.palette().background().color()
+        elif layer == "bottom":
+            current_color = self.ui.bottom_layer_color_la.palette().background().color()
+        elif layer == "profile":
+            current_color = self.ui.profile_layer_color_la.palette().background().color()
+        elif layer == "drill":
+            current_color = self.ui.drill_layer_color_la.palette().background().color()
+        elif layer == "nc_top":
+            current_color = self.ui.nc_top_layer_color_la.palette().background().color()
+        elif layer == "nc_bottom":
+            current_color = self.ui.nc_bottom_layer_color_la.palette().background().color()
+        logger.debug(current_color)
+        color = QColorDialog.getColor(initial=current_color)
         if color.isValid():
             logger.debug("color " + str(color.name()))
             if layer == "top":
