@@ -57,6 +57,11 @@ class Ui_MainWindow(object):
         self.action_debug = QAction(MainWindow)
         self.action_debug.setObjectName(u"action_debug")
         self.action_debug.setCheckable(True)
+        self.actionICON = QAction(MainWindow)
+        self.actionICON.setObjectName(u"actionICON")
+        self.actionICON.setIcon(icon)
+        self.actionAbout = QAction(MainWindow)
+        self.actionAbout.setObjectName(u"actionAbout")
         self.central_widget = QWidget(MainWindow)
         self.central_widget.setObjectName(u"central_widget")
         sizePolicy.setHeightForWidth(self.central_widget.sizePolicy().hasHeightForWidth())
@@ -3219,6 +3224,8 @@ class Ui_MainWindow(object):
         self.menu_set_level = QMenu(self.menuConsole)
         self.menu_set_level.setObjectName(u"menu_set_level")
         self.menu_set_level.setInputMethodHints(Qt.ImhNone)
+        self.menuAbout = QMenu(self.menubar)
+        self.menuAbout.setObjectName(u"menuAbout")
         MainWindow.setMenuBar(self.menubar)
         self.status_bar = QStatusBar(MainWindow)
         self.status_bar.setObjectName(u"status_bar")
@@ -3307,6 +3314,7 @@ class Ui_MainWindow(object):
 
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuConsole.menuAction())
+        self.menubar.addAction(self.menuAbout.menuAction())
         self.menuFile.addAction(self.actionSettings_Preferences)
         self.menuFile.addAction(self.actionSave_Settings)
         self.menuConsole.addAction(self.actionHide_Show_Console)
@@ -3316,6 +3324,7 @@ class Ui_MainWindow(object):
         self.menu_set_level.addAction(self.action_warning)
         self.menu_set_level.addAction(self.action_info)
         self.menu_set_level.addAction(self.action_debug)
+        self.menuAbout.addAction(self.actionAbout)
 
         self.retranslateUi(MainWindow)
 
@@ -3356,6 +3365,11 @@ class Ui_MainWindow(object):
         self.action_warning.setText(QCoreApplication.translate("MainWindow", u"WARNING", None))
         self.action_info.setText(QCoreApplication.translate("MainWindow", u"INFO", None))
         self.action_debug.setText(QCoreApplication.translate("MainWindow", u"DEBUG", None))
+        self.actionICON.setText("")
+        self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
+#if QT_CONFIG(shortcut)
+        self.actionAbout.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+Shift+H", None))
+#endif // QT_CONFIG(shortcut)
 #if QT_CONFIG(tooltip)
         self.no_copper_2_pb.setToolTip(QCoreApplication.translate("MainWindow", u"NO-COPPER BOTTOM load layer button", None))
 #endif // QT_CONFIG(tooltip)
@@ -3646,5 +3660,6 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuConsole.setTitle(QCoreApplication.translate("MainWindow", u"Console", None))
         self.menu_set_level.setTitle(QCoreApplication.translate("MainWindow", u"Set Level", None))
+        self.menuAbout.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi
 

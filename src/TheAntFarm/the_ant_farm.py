@@ -20,7 +20,7 @@ def config_os():
     pys2_path = os.path.dirname(sys.modules['PySide2'].__file__)
     if os.path.isdir(os.path.join(pys2_path, "Qt")):
         pys2_path = os.path.join(pys2_path, "Qt")
- 
+
     # Simple mod to set the QT environment data just for python
     # avoiding conflict with other applications using Qt
     os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
@@ -95,6 +95,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             print("Control Thread stopped")
         self.close()
+
 
 def main():
     app = QApplication(sys.argv)
