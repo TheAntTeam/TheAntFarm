@@ -2547,15 +2547,42 @@ class Ui_MainWindow(object):
         self.gridLayout_12.addWidget(self.nc_bottom_layer_color_la, 5, 1, 1, 1)
 
 
-        self.gridLayout_9.addLayout(self.gridLayout_12, 0, 0, 1, 1)
+        self.gridLayout_9.addLayout(self.gridLayout_12, 3, 0, 1, 1)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.line_17 = QFrame(self.application_settings_tab)
+        self.line_17.setObjectName(u"line_17")
+        self.line_17.setFrameShape(QFrame.HLine)
+        self.line_17.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_9.addItem(self.horizontalSpacer_3, 0, 1, 1, 1)
+        self.gridLayout_9.addWidget(self.line_17, 2, 0, 1, 1)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.gridLayout_9.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
+        self.gridLayout_9.addItem(self.verticalSpacer_2, 4, 0, 1, 1)
+
+        self.layer_colors_section_la = QLabel(self.application_settings_tab)
+        self.layer_colors_section_la.setObjectName(u"layer_colors_section_la")
+        sizePolicy3.setHeightForWidth(self.layer_colors_section_la.sizePolicy().hasHeightForWidth())
+        self.layer_colors_section_la.setSizePolicy(sizePolicy3)
+        self.layer_colors_section_la.setMinimumSize(QSize(210, 0))
+        self.layer_colors_section_la.setMaximumSize(QSize(300, 20))
+        font3 = QFont()
+        font3.setPointSize(12)
+        self.layer_colors_section_la.setFont(font3)
+        self.layer_colors_section_la.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_9.addWidget(self.layer_colors_section_la, 1, 0, 1, 1)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_9.addItem(self.horizontalSpacer_3, 3, 1, 1, 1)
+
+        self.line_18 = QFrame(self.application_settings_tab)
+        self.line_18.setObjectName(u"line_18")
+        self.line_18.setFrameShape(QFrame.HLine)
+        self.line_18.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_9.addWidget(self.line_18, 0, 0, 1, 1)
 
         self.settings_sub_tab.addTab(self.application_settings_tab, "")
         self.jobs_machine_settings_tab = QWidget()
@@ -2577,8 +2604,6 @@ class Ui_MainWindow(object):
         self.probe_settings_section_la.setObjectName(u"probe_settings_section_la")
         sizePolicy3.setHeightForWidth(self.probe_settings_section_la.sizePolicy().hasHeightForWidth())
         self.probe_settings_section_la.setSizePolicy(sizePolicy3)
-        font3 = QFont()
-        font3.setPointSize(12)
         self.probe_settings_section_la.setFont(font3)
 
         self.verticalLayout_4.addWidget(self.probe_settings_section_la, 0, Qt.AlignHCenter)
@@ -3328,13 +3353,13 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(1)
+        self.main_tab_widget.setCurrentIndex(3)
         self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
         self.ctrl_tab_widget.setCurrentIndex(0)
         self.z_step_cb.setCurrentIndex(3)
         self.xy_step_cb.setCurrentIndex(3)
-        self.settings_sub_tab.setCurrentIndex(1)
+        self.settings_sub_tab.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -3628,6 +3653,7 @@ class Ui_MainWindow(object):
         self.drill_layer_color_la.setText("")
         self.nc_top_layer_color_la.setText("")
         self.nc_bottom_layer_color_la.setText("")
+        self.layer_colors_section_la.setText(QCoreApplication.translate("MainWindow", u"LAYER COLORS", None))
         self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.application_settings_tab), QCoreApplication.translate("MainWindow", u"Application Settings", None))
         self.probe_settings_section_la.setText(QCoreApplication.translate("MainWindow", u"PROBE SETTINGS", None))
         self.hold_on_probe_chb.setText(QCoreApplication.translate("MainWindow", u"Hold On Probe", None))
