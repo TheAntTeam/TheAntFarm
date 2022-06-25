@@ -7,6 +7,7 @@ from .ui_control_tab import UiControlTab
 from .ui_create_job_tab_manager import UiCreateJobLayerTab
 from .ui_view_load_layer_tab import UiViewLoadLayerTab
 from .ui_settings_preferences import UiSettingsPreferencesTab
+from .ui_about import UiAbout
 
 import logging
 
@@ -47,7 +48,9 @@ class UiManager(QObject):
         self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker, self.ctrl_layer, self.settings)
         self.ui_align_tab_m = UiAlignTab(ui, control_worker)
         self.ui_settings_tab_m = UiSettingsPreferencesTab(ui, control_worker, self.settings)
+        self.ui_about_m = UiAbout(main_win=main_win, app_settings=self.settings.app_settings)
 
+        self.ui.actionAbout.triggered.connect(self.ui_about_m.show_about_info)
         self.ui_settings_tab_m.save_all_settings_s.connect(self.save_all_settings)
 
         self.apply_initial_window_settings(self.settings.app_settings)

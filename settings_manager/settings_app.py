@@ -6,6 +6,7 @@ import os
 
 class AppSettingsHandler:
     # APP CONFIGURATION DEFAULT VALUES
+    APP_VERSION_DEFAULT = "0.1.0"
     LOGS_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '../app_logs'))
     LOGS_FILE_DEFAULT = os.path.normpath(os.path.join(LOGS_DIR_DEFAULT, 'app_logs.log'))
     LOGS_MAX_BYTES = 1000000
@@ -34,6 +35,8 @@ class AppSettingsHandler:
     def __init__(self, config_folder, main_win):
         self.app_config_path = os.path.normpath(os.path.join(config_folder, 'app_config.ini'))
         self.app_settings = configparser.ConfigParser()
+
+        self.app_version = self.APP_VERSION_DEFAULT
 
         if not os.path.isdir(self.LOGS_DIR_DEFAULT):
             os.makedirs(self.LOGS_DIR_DEFAULT)
@@ -75,6 +78,7 @@ class AppSettingsHandler:
         # GENERAL application settings #
         if "GENERAL" in self.app_settings:
             app_general = self.app_settings["GENERAL"]
+            self.app_version = app_general.get("app_version", self.APP_VERSION_DEFAULT)
             self.pos = QPoint(app_general.getint("win_position_x", self.WIN_POS_X_DEFAULT),
                               app_general.getint("win_position_y", self.WIN_POS_Y_DEFAULT))
             self.size = QSize(app_general.getint("win_width", self.WIN_SIZE_W_DEFAULT),
@@ -103,11 +107,12 @@ class AppSettingsHandler:
             self.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
             self.layer_color["top"] = app_layers_settings.get("top_layer_color", self.TOP_LAYER_COLOR_DEFAULT)
             self.layer_color["bottom"] = app_layers_settings.get("bottom_layer_color", self.BOTTOM_LAYER_COLOR_DEFAULT)
-            self.layer_color["profile"] = app_layers_settings.get("profile_layer_color", self.PROFILE_LAYER_COLOR_DEFAULT)
+            self.layer_color["profile"] = app_layers_settings.get("profile_layer_color",
+                                                                  self.PROFILE_LAYER_COLOR_DEFAULT)
             self.layer_color["drill"] = app_layers_settings.get("drill_layer_color", self.DRILL_LAYER_COLOR_DEFAULT)
             self.layer_color["nc_top"] = app_layers_settings.get("nc_top_layer_color", self.NC_TOP_LAYER_COLOR_DEFAULT)
             self.layer_color["nc_bottom"] = app_layers_settings.get("nc_bottom_layer_color",
-                                                                           self.NC_BOTTOM_LAYER_COLOR_DEFAULT)
+                                                                    self.NC_BOTTOM_LAYER_COLOR_DEFAULT)
 
         if "GCODES" in self.app_settings:
             app_gcode_settings = self.app_settings["GCODES"]
@@ -115,7 +120,8 @@ class AppSettingsHandler:
 
     def write_all_app_settings(self):
         """ Write all application settings to ini files """
-        self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
+        self.app_settings["DEFAULT"] = {"app_version": self.APP_VERSION_DEFAULT,
+                                        "win_position_x": self.WIN_POS_X_DEFAULT,
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
                                         "win_height": self.WIN_SIZE_H_DEFAULT,
@@ -142,6 +148,7 @@ class AppSettingsHandler:
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
         app_general = self.app_settings["GENERAL"]
+        app_general["app_version"] = self.app_version
         window_pos = self.main_win.pos()
         window_geo = self.main_win.normalGeometry()
         app_general["win_position_x"] = str(window_pos.x())
@@ -182,7 +189,8 @@ class AppSettingsHandler:
 
     def restore_app_settings(self):
         """ Restore all application settings to default and create ini file if it doesn't exists """
-        self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
+        self.app_settings["DEFAULT"] = {"app_version": self.APP_VERSION_DEFAULT,
+                                        "win_position_x": self.WIN_POS_X_DEFAULT,
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
                                         "win_height": self.WIN_SIZE_H_DEFAULT,
@@ -209,6 +217,7 @@ class AppSettingsHandler:
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
         app_general = self.app_settings["GENERAL"]
+        app_general["app_version"] = str(self.APP_VERSION_DEFAULT)
         app_general["win_position_x"] = str(self.WIN_POS_X_DEFAULT)
         app_general["win_position_y"] = str(self.WIN_POS_Y_DEFAULT)
         app_general["win_width"] = str(self.WIN_SIZE_W_DEFAULT)

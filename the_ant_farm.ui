@@ -7239,8 +7239,15 @@
     <addaction name="actionHide_Show_Console"/>
     <addaction name="menu_set_level"/>
    </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuConsole"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="status_bar"/>
   <action name="actionHide_Show_Console">
@@ -7326,6 +7333,23 @@
    </property>
    <property name="text">
     <string>DEBUG</string>
+   </property>
+  </action>
+  <action name="actionICON">
+   <property name="icon">
+    <iconset resource="app_resources.qrc">
+     <normaloff>:/resources/resources/logo/the_ant_logo.png</normaloff>:/resources/resources/logo/the_ant_logo.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+H</string>
    </property>
   </action>
  </widget>
