@@ -359,7 +359,19 @@ class UiControlTab(QObject):
                                                   self.app_settings.gcode_last_dir,
                                                   "G-Code Files (*.gcode)" + ";;All files (*.*)")
         logger.debug(load_gcode)
-        load_gcode_paths = load_gcode[0]
+        gcode_actual_l = []
+        load_gcode_paths = []
+
+        # Actual gcode list paths are re-calculated here.
+        num_rows = self.ui.gcode_tw.rowCount()
+        for row in range(0, num_rows):
+            gcode_actual_l.append(self.ui.gcode_tw.cellWidget(row, 0).toolTip())
+
+        for elem in load_gcode[0]:
+            norm_elem = os.path.normpath(elem)
+            if norm_elem not in gcode_actual_l:  # Avoid re-loading the same gcode.
+                load_gcode_paths.append(norm_elem)
+
         if load_gcode_paths:
             self.app_settings.gcode_last_dir = os.path.dirname(load_gcode_paths[0])  # update setting
             self._open_gcode_file(load_gcode_paths)
@@ -421,9 +433,17 @@ class UiControlTab(QObject):
     def update_temporary_gcode_files(self):
         temp_dir = self.gcf_settings.gcode_folder
         gcode_l = []
+        gcode_actual_l = []
+
+        num_rows = self.ui.gcode_tw.rowCount()
+        for row in range(0, num_rows):
+            gcode_actual_l.append(self.ui.gcode_tw.cellWidget(row, 0).toolTip())
+
         for file in os.listdir(temp_dir):
             if file.endswith(".gcode"):
-                gcode_l.append(os.path.join(temp_dir, file))
+                new_elem = os.path.join(temp_dir, file)
+                if new_elem not in gcode_actual_l:
+                    gcode_l.append(new_elem)
 
         if gcode_l:
             self._open_gcode_file(gcode_l)
