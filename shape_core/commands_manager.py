@@ -60,7 +60,7 @@ class CommandManager:
                 for i, v in enumerate(xy):
                     if v is not None:
                         cmd += " " + self.AXIS[i] + self.parent.format_float(v)
-                if command == "jog":
+                if command == "jog" or command == "goto":
                     cmd += " F" + self.parent.format_float(feedrate[0])
                 cmd += "\n"
                 str_l.append(cmd)
