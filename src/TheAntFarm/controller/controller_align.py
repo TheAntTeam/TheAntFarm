@@ -1,6 +1,6 @@
 from PySide2.QtCore import QObject
 import qimage2ndarray
-from src.TheAntFarm.double_side_manager import DoubleSideManager
+from double_side_manager import DoubleSideManager
 import logging
 
 logger = logging.getLogger(__name__)

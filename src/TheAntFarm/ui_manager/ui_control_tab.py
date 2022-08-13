@@ -1,7 +1,7 @@
 from PySide2.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelIndex
 from PySide2.QtWidgets import QFileDialog, QLabel, QRadioButton, QHeaderView, QButtonGroup, QAbstractItemView
 from PySide2.QtGui import QIcon
-from src.TheAntFarm.style_manager import StyleManager
+from style_manager import StyleManager
 import os
 import logging
 

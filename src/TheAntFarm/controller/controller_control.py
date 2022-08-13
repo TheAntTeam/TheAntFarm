@@ -6,7 +6,7 @@ import string
 import random
 import numpy as np
 from collections import OrderedDict, deque
-from src.TheAntFarm.shape_core.gcode_manager import GCoder, GCodeParser, GCodeLeveler
+from shape_core.gcode_manager import GCoder, GCodeParser, GCodeLeveler
 
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 from PySide2.QtCore import Slot, QObject
 from PySide2.QtWidgets import QActionGroup
-from src.TheAntFarm.shape_core.visual_manager import VisualLayer
+from shape_core.visual_manager import VisualLayer
 
 from .ui_align_tab import UiAlignTab
 from .ui_control_tab import UiControlTab

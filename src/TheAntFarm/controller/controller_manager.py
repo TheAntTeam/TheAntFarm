@@ -8,7 +8,7 @@ from .controller_align import AlignController
 import logging
 import traceback
 
-from src.TheAntFarm.shape_core.gcode_manager import GCoder, GCodeMacro
+from shape_core.gcode_manager import GCoder, GCodeMacro
 
 logger = logging.getLogger(__name__)
 
