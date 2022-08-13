@@ -32,7 +32,7 @@ Either download the zip of the repository sources or use git:
 
 Enter the folder where there is the code, create a virtual environment and activate it:  
   
-> cd TheAntFarm  
+> cd TheAntFarm    
 > python3 -m venv ./env  
   
 Activate the virtual environment:  
@@ -89,7 +89,7 @@ Install all the required packages:
 The software must be run from the project directory, after the virtual environment has been activated (see installation paragraph), using the following command:
 
 > .\venv\Scripts\activate
-> cd .\src\TheAntFarm
+> cd .\src\TheAntFarm  
 > python3 the_ant_farm.py  
 
 ### Windows using VS Code
@@ -124,7 +124,7 @@ Install all the required packages:
 
 Running the software  
 
-> cd .\src\TheAntFarm
+> cd .\src\TheAntFarm  
 > python .\the_ant_farm.py  
     
 # Disclaimer  
