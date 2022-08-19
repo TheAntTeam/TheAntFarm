@@ -52,7 +52,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -905,7 +905,7 @@
                     <item row="11" column="1">
                      <widget class="QLabel" name="profile_taps_layout_la">
                       <property name="text">
-                       <string>Taps layout</string>
+                       <string>Gaps layout</string>
                       </property>
                      </widget>
                     </item>
@@ -1006,7 +1006,7 @@
                     <item row="12" column="1">
                      <widget class="QLabel" name="profile_tap_size_la">
                       <property name="text">
-                       <string>Tap size [mm]</string>
+                       <string>Gap size [mm]</string>
                       </property>
                      </widget>
                     </item>

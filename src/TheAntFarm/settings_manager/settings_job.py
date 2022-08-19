@@ -15,8 +15,8 @@ class JobSettingsHandler:
     MARGIN_DEFAULT = 0.01
     DEPTH_PER_PASS_DEFAULT = 0.06
     MULTI_PATH_FLAG_DEFAULT = False
-    TAPS_LENGTH_DEFAULT = 1.0
-    TAPS_TYPE_INDEX_DEFAULT = 3
+    GAPS_LENGTH_DEFAULT = 1.0
+    GAPS_TYPE_INDEX_DEFAULT = 3
     MILLING_TOOL_FLAG = False
     OPTIMIZE_FLAG_DEFAULT = True
     MIRROR_ALL_DEFAULT = False
@@ -93,8 +93,8 @@ class JobSettingsHandler:
             profile_set_od["spindle"] = profile_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             profile_set_od["xy_feedrate"] = profile_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             profile_set_od["z_feedrate"] = profile_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
-            profile_set_od["taps_type"] = profile_settings.getint("taps_type", self.TAPS_TYPE_INDEX_DEFAULT)
-            profile_set_od["taps_length"] = profile_settings.getfloat("taps_length", self.TAPS_LENGTH_DEFAULT)
+            profile_set_od["taps_type"] = profile_settings.getint("taps_type", self.GAPS_TYPE_INDEX_DEFAULT)
+            profile_set_od["taps_length"] = profile_settings.getfloat("taps_length", self.GAPS_LENGTH_DEFAULT)
             profile_set_od["mirror"] = profile_settings.getboolean("mirror", self.MIRROR_ALL_DEFAULT)
             self.jobs_settings_od["profile"] = profile_set_od
 
@@ -162,8 +162,8 @@ class JobSettingsHandler:
                                          "margin": self.MARGIN_DEFAULT,
                                          "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
                                          "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
-                                         "taps_type": self.TAPS_TYPE_INDEX_DEFAULT,
-                                         "taps_length": self.TAPS_LENGTH_DEFAULT,
+                                         "taps_type": self.GAPS_TYPE_INDEX_DEFAULT,
+                                         "taps_length": self.GAPS_LENGTH_DEFAULT,
                                          "mirror": self.MIRROR_ALL_DEFAULT,
                                          "mirroring_axis": self.MIRROR_AXIS_DEFAULT}
 
@@ -281,8 +281,8 @@ class JobSettingsHandler:
                                          "margin": self.MARGIN_DEFAULT,
                                          "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
                                          "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
-                                         "taps_type": self.TAPS_TYPE_INDEX_DEFAULT,
-                                         "taps_length": self.TAPS_LENGTH_DEFAULT,
+                                         "taps_type": self.GAPS_TYPE_INDEX_DEFAULT,
+                                         "taps_length": self.GAPS_LENGTH_DEFAULT,
                                          "mirror": self.MIRROR_ALL_DEFAULT,
                                          "mirroring_axis": self.MIRROR_AXIS_DEFAULT}
 
@@ -333,8 +333,8 @@ class JobSettingsHandler:
         profile_settings["spindle"] = str(self.SPINDLE_SPEED_DEFAULT)
         profile_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
         profile_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
-        profile_settings["taps_type"] = str(self.TAPS_TYPE_INDEX_DEFAULT)
-        profile_settings["taps_length"] = str(self.TAPS_LENGTH_DEFAULT)
+        profile_settings["taps_type"] = str(self.GAPS_TYPE_INDEX_DEFAULT)
+        profile_settings["taps_length"] = str(self.GAPS_LENGTH_DEFAULT)
         profile_settings["mirror"] = str(self.MIRROR_ALL_DEFAULT)
 
         # Drill job related settings #

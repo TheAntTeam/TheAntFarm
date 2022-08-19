@@ -3353,7 +3353,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(3)
+        self.main_tab_widget.setCurrentIndex(0)
         self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
         self.ctrl_tab_widget.setCurrentIndex(0)
@@ -3443,7 +3443,7 @@ class Ui_MainWindow(object):
         self.bottom_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
         self.bottom_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
         self.profile_depth_pass_la.setText(QCoreApplication.translate("MainWindow", u"Depth per Pass [mm]", None))
-        self.profile_taps_layout_la.setText(QCoreApplication.translate("MainWindow", u"Taps layout", None))
+        self.profile_taps_layout_la.setText(QCoreApplication.translate("MainWindow", u"Gaps layout", None))
         self.profile_margin_la.setText(QCoreApplication.translate("MainWindow", u"Margin [mm]", None))
         self.profile_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
         self.profile_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
@@ -3451,7 +3451,7 @@ class Ui_MainWindow(object):
         self.profile_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Tool Diameter [mm]", None))
         self.profile_multi_depth_chb.setText("")
         self.profile_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
-        self.profile_tap_size_la.setText(QCoreApplication.translate("MainWindow", u"Tap size [mm]", None))
+        self.profile_tap_size_la.setText(QCoreApplication.translate("MainWindow", u"Gap size [mm]", None))
         self.profile_travel_z_la.setText(QCoreApplication.translate("MainWindow", u"Travel Z [mm]", None))
         self.profile_multi_depth_la.setText(QCoreApplication.translate("MainWindow", u"Multi-depth", None))
         self.profile_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
