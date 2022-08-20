@@ -5,7 +5,7 @@ In this software we included both the necessary CAM features and the CNC machine
 
 # Actual status  
 This software is a pre-alpha, meaning that not all the functionalities are implemented, and the implemented ones may not work or not work properly.  
-The **View** tab can be used and it's capable to generate gcode files from gerbers.  
+The **View** tab can be used, and it's capable to generate gcode files from gerbers.  
 The **Control** tab is currently under development, and its functionalities may have some issues.  
 The **Align** tab is not developed at all.  
 Up to now, the application is compatible only with CNC machines using GRBL v1.1 firmware, and it has been tested using only some gerber and drill files generated using Autodesk's Eagle and KiCad EDA.  
@@ -74,7 +74,7 @@ Either download the zip of the repository sources or use git:
 Enter the folder where there is the code, create a virtual environment and activate it:  
   
 > cd TheAntFarm    
-> python3 -m venv .\env  
+> python.exe -m venv .\env  
   
 Activate the virtual environment:  
   
@@ -82,13 +82,13 @@ Activate the virtual environment:
   
 Install all the required packages:
   
-> pip3 install -r requirements.txt  
+> pip.exe install -r requirements.txt  
 
 ## Running the software  
   
 The software must be run from the project directory, after the virtual environment has been activated (see installation paragraph), using the following command:
 
-> .\venv\Scripts\activate
+> .\env\Scripts\activate  
 > cd .\src\TheAntFarm  
 > python3 the_ant_farm.py  
 
@@ -106,7 +106,7 @@ In VS Code
 
 In the Terminal:
 
-> python -m venv .\venv  (You may have to install python3 globaly)
+> python -m venv .\venv  (You may have to install python3 globally)
 
 * Restart VS code
   
