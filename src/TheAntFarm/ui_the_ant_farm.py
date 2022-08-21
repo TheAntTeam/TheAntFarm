@@ -320,9 +320,11 @@ class Ui_MainWindow(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.top_cut_z_dsb = QDoubleSpinBox(self.top_page)
         self.top_cut_z_dsb.setObjectName(u"top_cut_z_dsb")
-        self.top_cut_z_dsb.setDecimals(2)
+        self.top_cut_z_dsb.setAccelerated(True)
+        self.top_cut_z_dsb.setDecimals(4)
         self.top_cut_z_dsb.setMinimum(-9999.000000000000000)
         self.top_cut_z_dsb.setMaximum(9999.000000000000000)
+        self.top_cut_z_dsb.setSingleStep(0.000100000000000)
         self.top_cut_z_dsb.setValue(0.000000000000000)
 
         self.gridLayout_2.addWidget(self.top_cut_z_dsb, 3, 1, 1, 1)
@@ -353,9 +355,11 @@ class Ui_MainWindow(object):
 
         self.top_travel_z_dsb = QDoubleSpinBox(self.top_page)
         self.top_travel_z_dsb.setObjectName(u"top_travel_z_dsb")
+        self.top_travel_z_dsb.setAccelerated(True)
         self.top_travel_z_dsb.setDecimals(2)
         self.top_travel_z_dsb.setMinimum(-9999.000000000000000)
         self.top_travel_z_dsb.setMaximum(9999.000000000000000)
+        self.top_travel_z_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_2.addWidget(self.top_travel_z_dsb, 4, 1, 1, 1)
 
@@ -376,6 +380,7 @@ class Ui_MainWindow(object):
 
         self.top_xy_feed_rate_dsb = QDoubleSpinBox(self.top_page)
         self.top_xy_feed_rate_dsb.setObjectName(u"top_xy_feed_rate_dsb")
+        self.top_xy_feed_rate_dsb.setAccelerated(True)
         self.top_xy_feed_rate_dsb.setDecimals(2)
         self.top_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
         self.top_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
@@ -384,7 +389,12 @@ class Ui_MainWindow(object):
 
         self.top_tool_diameter_dsb = QDoubleSpinBox(self.top_page)
         self.top_tool_diameter_dsb.setObjectName(u"top_tool_diameter_dsb")
-        self.top_tool_diameter_dsb.setMinimum(0.010000000000000)
+        self.top_tool_diameter_dsb.setAccelerated(True)
+        self.top_tool_diameter_dsb.setDecimals(4)
+        self.top_tool_diameter_dsb.setMinimum(0.000100000000000)
+        self.top_tool_diameter_dsb.setMaximum(100.000000000000000)
+        self.top_tool_diameter_dsb.setSingleStep(0.000100000000000)
+        self.top_tool_diameter_dsb.setStepType(QAbstractSpinBox.DefaultStepType)
 
         self.gridLayout_2.addWidget(self.top_tool_diameter_dsb, 0, 1, 1, 1)
 
@@ -409,9 +419,11 @@ class Ui_MainWindow(object):
 
         self.top_overlap_dsb = QDoubleSpinBox(self.top_page)
         self.top_overlap_dsb.setObjectName(u"top_overlap_dsb")
-        self.top_overlap_dsb.setDecimals(1)
+        self.top_overlap_dsb.setAccelerated(True)
+        self.top_overlap_dsb.setDecimals(2)
         self.top_overlap_dsb.setMinimum(0.000000000000000)
         self.top_overlap_dsb.setMaximum(1.000000000000000)
+        self.top_overlap_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_2.addWidget(self.top_overlap_dsb, 2, 1, 1, 1)
 
@@ -422,6 +434,7 @@ class Ui_MainWindow(object):
 
         self.top_z_feed_rate_dsb = QDoubleSpinBox(self.top_page)
         self.top_z_feed_rate_dsb.setObjectName(u"top_z_feed_rate_dsb")
+        self.top_z_feed_rate_dsb.setAccelerated(True)
         self.top_z_feed_rate_dsb.setDecimals(2)
         self.top_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
         self.top_z_feed_rate_dsb.setMaximum(9999.000000000000000)
@@ -440,14 +453,17 @@ class Ui_MainWindow(object):
 
         self.bottom_cut_z_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_cut_z_dsb.setObjectName(u"bottom_cut_z_dsb")
-        self.bottom_cut_z_dsb.setDecimals(2)
+        self.bottom_cut_z_dsb.setAccelerated(True)
+        self.bottom_cut_z_dsb.setDecimals(4)
         self.bottom_cut_z_dsb.setMinimum(-9999.000000000000000)
         self.bottom_cut_z_dsb.setMaximum(9999.000000000000000)
+        self.bottom_cut_z_dsb.setSingleStep(0.000100000000000)
 
         self.gridLayout_3.addWidget(self.bottom_cut_z_dsb, 4, 1, 1, 1)
 
         self.bottom_z_feed_rate_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_z_feed_rate_dsb.setObjectName(u"bottom_z_feed_rate_dsb")
+        self.bottom_z_feed_rate_dsb.setAccelerated(True)
         self.bottom_z_feed_rate_dsb.setDecimals(2)
         self.bottom_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
         self.bottom_z_feed_rate_dsb.setMaximum(9999.000000000000000)
@@ -456,7 +472,11 @@ class Ui_MainWindow(object):
 
         self.bottom_tool_diameter_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_tool_diameter_dsb.setObjectName(u"bottom_tool_diameter_dsb")
+        self.bottom_tool_diameter_dsb.setAccelerated(True)
+        self.bottom_tool_diameter_dsb.setDecimals(4)
         self.bottom_tool_diameter_dsb.setMinimum(0.010000000000000)
+        self.bottom_tool_diameter_dsb.setMaximum(100.000000000000000)
+        self.bottom_tool_diameter_dsb.setSingleStep(0.000100000000000)
 
         self.gridLayout_3.addWidget(self.bottom_tool_diameter_dsb, 1, 1, 1, 1)
 
@@ -478,6 +498,7 @@ class Ui_MainWindow(object):
 
         self.bottom_xy_feed_rate_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_xy_feed_rate_dsb.setObjectName(u"bottom_xy_feed_rate_dsb")
+        self.bottom_xy_feed_rate_dsb.setAccelerated(True)
         self.bottom_xy_feed_rate_dsb.setDecimals(2)
         self.bottom_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
         self.bottom_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
@@ -486,9 +507,10 @@ class Ui_MainWindow(object):
 
         self.bottom_overlap_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_overlap_dsb.setObjectName(u"bottom_overlap_dsb")
-        self.bottom_overlap_dsb.setDecimals(1)
+        self.bottom_overlap_dsb.setDecimals(2)
         self.bottom_overlap_dsb.setMinimum(0.000000000000000)
         self.bottom_overlap_dsb.setMaximum(1.000000000000000)
+        self.bottom_overlap_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_3.addWidget(self.bottom_overlap_dsb, 3, 1, 1, 1)
 
@@ -518,9 +540,11 @@ class Ui_MainWindow(object):
 
         self.bottom_travel_z_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_travel_z_dsb.setObjectName(u"bottom_travel_z_dsb")
+        self.bottom_travel_z_dsb.setAccelerated(True)
         self.bottom_travel_z_dsb.setDecimals(2)
         self.bottom_travel_z_dsb.setMinimum(-9999.000000000000000)
         self.bottom_travel_z_dsb.setMaximum(9999.000000000000000)
+        self.bottom_travel_z_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_3.addWidget(self.bottom_travel_z_dsb, 5, 1, 1, 1)
 
@@ -536,6 +560,7 @@ class Ui_MainWindow(object):
 
         self.bottom_spindle_speed_dsb = QDoubleSpinBox(self.bottom_page)
         self.bottom_spindle_speed_dsb.setObjectName(u"bottom_spindle_speed_dsb")
+        self.bottom_spindle_speed_dsb.setAccelerated(True)
         self.bottom_spindle_speed_dsb.setDecimals(2)
         self.bottom_spindle_speed_dsb.setMinimum(-9999.000000000000000)
         self.bottom_spindle_speed_dsb.setMaximum(9999.000000000000000)
@@ -562,9 +587,11 @@ class Ui_MainWindow(object):
 
         self.profile_cut_z_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_cut_z_dsb.setObjectName(u"profile_cut_z_dsb")
-        self.profile_cut_z_dsb.setDecimals(2)
+        self.profile_cut_z_dsb.setAccelerated(True)
+        self.profile_cut_z_dsb.setDecimals(4)
         self.profile_cut_z_dsb.setMinimum(-9999.000000000000000)
         self.profile_cut_z_dsb.setMaximum(9999.000000000000000)
+        self.profile_cut_z_dsb.setSingleStep(0.000100000000000)
 
         self.gridLayout_4.addWidget(self.profile_cut_z_dsb, 5, 3, 1, 1)
 
@@ -573,14 +600,17 @@ class Ui_MainWindow(object):
         self.profile_margin_dsb.setDecimals(2)
         self.profile_margin_dsb.setMinimum(0.000000000000000)
         self.profile_margin_dsb.setMaximum(9999.000000000000000)
+        self.profile_margin_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_4.addWidget(self.profile_margin_dsb, 1, 3, 1, 1)
 
         self.profile_depth_pass_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_depth_pass_dsb.setObjectName(u"profile_depth_pass_dsb")
+        self.profile_depth_pass_dsb.setAccelerated(True)
         self.profile_depth_pass_dsb.setDecimals(2)
         self.profile_depth_pass_dsb.setMinimum(0.000000000000000)
         self.profile_depth_pass_dsb.setMaximum(9999.000000000000000)
+        self.profile_depth_pass_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_4.addWidget(self.profile_depth_pass_dsb, 3, 3, 1, 1)
 
@@ -596,9 +626,11 @@ class Ui_MainWindow(object):
 
         self.profile_tap_size_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_tap_size_dsb.setObjectName(u"profile_tap_size_dsb")
+        self.profile_tap_size_dsb.setAccelerated(True)
         self.profile_tap_size_dsb.setDecimals(2)
         self.profile_tap_size_dsb.setMinimum(-9999.000000000000000)
         self.profile_tap_size_dsb.setMaximum(9999.000000000000000)
+        self.profile_tap_size_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_4.addWidget(self.profile_tap_size_dsb, 12, 3, 1, 1)
 
@@ -645,7 +677,11 @@ class Ui_MainWindow(object):
 
         self.profile_tool_diameter_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_tool_diameter_dsb.setObjectName(u"profile_tool_diameter_dsb")
-        self.profile_tool_diameter_dsb.setMinimum(0.010000000000000)
+        self.profile_tool_diameter_dsb.setAccelerated(True)
+        self.profile_tool_diameter_dsb.setDecimals(4)
+        self.profile_tool_diameter_dsb.setMinimum(0.000100000000000)
+        self.profile_tool_diameter_dsb.setMaximum(100.000000000000000)
+        self.profile_tool_diameter_dsb.setSingleStep(0.000100000000000)
 
         self.gridLayout_4.addWidget(self.profile_tool_diameter_dsb, 0, 3, 1, 1)
 
@@ -665,9 +701,11 @@ class Ui_MainWindow(object):
 
         self.profile_travel_z_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_travel_z_dsb.setObjectName(u"profile_travel_z_dsb")
+        self.profile_travel_z_dsb.setAccelerated(True)
         self.profile_travel_z_dsb.setDecimals(2)
         self.profile_travel_z_dsb.setMinimum(-9999.000000000000000)
         self.profile_travel_z_dsb.setMaximum(9999.000000000000000)
+        self.profile_travel_z_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_4.addWidget(self.profile_travel_z_dsb, 6, 3, 1, 1)
 
@@ -688,6 +726,7 @@ class Ui_MainWindow(object):
 
         self.profile_spindle_speed_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_spindle_speed_dsb.setObjectName(u"profile_spindle_speed_dsb")
+        self.profile_spindle_speed_dsb.setAccelerated(True)
         self.profile_spindle_speed_dsb.setDecimals(2)
         self.profile_spindle_speed_dsb.setMinimum(-9999.000000000000000)
         self.profile_spindle_speed_dsb.setMaximum(9999.000000000000000)
@@ -714,7 +753,10 @@ class Ui_MainWindow(object):
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.drill_milling_tool_diameter_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_milling_tool_diameter_dsb.setObjectName(u"drill_milling_tool_diameter_dsb")
+        self.drill_milling_tool_diameter_dsb.setAccelerated(True)
+        self.drill_milling_tool_diameter_dsb.setDecimals(4)
         self.drill_milling_tool_diameter_dsb.setMinimum(0.010000000000000)
+        self.drill_milling_tool_diameter_dsb.setSingleStep(0.000100000000000)
 
         self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_dsb, 4, 2, 1, 1)
 
@@ -745,9 +787,11 @@ class Ui_MainWindow(object):
 
         self.drill_travel_z_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_travel_z_dsb.setObjectName(u"drill_travel_z_dsb")
+        self.drill_travel_z_dsb.setAccelerated(True)
         self.drill_travel_z_dsb.setDecimals(2)
         self.drill_travel_z_dsb.setMinimum(-9999.000000000000000)
         self.drill_travel_z_dsb.setMaximum(9999.000000000000000)
+        self.drill_travel_z_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_5.addWidget(self.drill_travel_z_dsb, 7, 2, 1, 1)
 
@@ -773,6 +817,7 @@ class Ui_MainWindow(object):
 
         self.drill_z_feed_rate_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_z_feed_rate_dsb.setObjectName(u"drill_z_feed_rate_dsb")
+        self.drill_z_feed_rate_dsb.setAccelerated(True)
         self.drill_z_feed_rate_dsb.setDecimals(2)
         self.drill_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
         self.drill_z_feed_rate_dsb.setMaximum(9999.000000000000000)
@@ -799,14 +844,16 @@ class Ui_MainWindow(object):
 
         self.drill_cut_z_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_cut_z_dsb.setObjectName(u"drill_cut_z_dsb")
-        self.drill_cut_z_dsb.setDecimals(2)
+        self.drill_cut_z_dsb.setDecimals(4)
         self.drill_cut_z_dsb.setMinimum(-9999.000000000000000)
         self.drill_cut_z_dsb.setMaximum(9999.000000000000000)
+        self.drill_cut_z_dsb.setSingleStep(0.000100000000000)
 
         self.gridLayout_5.addWidget(self.drill_cut_z_dsb, 6, 2, 1, 1)
 
         self.drill_spindle_speed_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_spindle_speed_dsb.setObjectName(u"drill_spindle_speed_dsb")
+        self.drill_spindle_speed_dsb.setAccelerated(True)
         self.drill_spindle_speed_dsb.setDecimals(2)
         self.drill_spindle_speed_dsb.setMinimum(-9999.000000000000000)
         self.drill_spindle_speed_dsb.setMaximum(9999.000000000000000)
@@ -820,6 +867,7 @@ class Ui_MainWindow(object):
 
         self.drill_xy_feed_rate_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_xy_feed_rate_dsb.setObjectName(u"drill_xy_feed_rate_dsb")
+        self.drill_xy_feed_rate_dsb.setAccelerated(True)
         self.drill_xy_feed_rate_dsb.setDecimals(2)
         self.drill_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
         self.drill_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
@@ -870,6 +918,7 @@ class Ui_MainWindow(object):
 
         self.nc_top_xy_feed_rate_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_xy_feed_rate_dsb.setObjectName(u"nc_top_xy_feed_rate_dsb")
+        self.nc_top_xy_feed_rate_dsb.setAccelerated(True)
         self.nc_top_xy_feed_rate_dsb.setDecimals(2)
         self.nc_top_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
         self.nc_top_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
@@ -878,9 +927,11 @@ class Ui_MainWindow(object):
 
         self.nc_top_travel_z_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_travel_z_dsb.setObjectName(u"nc_top_travel_z_dsb")
+        self.nc_top_travel_z_dsb.setAccelerated(True)
         self.nc_top_travel_z_dsb.setDecimals(2)
         self.nc_top_travel_z_dsb.setMinimum(-9999.000000000000000)
         self.nc_top_travel_z_dsb.setMaximum(9999.000000000000000)
+        self.nc_top_travel_z_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_6.addWidget(self.nc_top_travel_z_dsb, 3, 1, 1, 1)
 
@@ -896,9 +947,11 @@ class Ui_MainWindow(object):
 
         self.nc_top_cut_z_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_cut_z_dsb.setObjectName(u"nc_top_cut_z_dsb")
-        self.nc_top_cut_z_dsb.setDecimals(2)
+        self.nc_top_cut_z_dsb.setAccelerated(True)
+        self.nc_top_cut_z_dsb.setDecimals(4)
         self.nc_top_cut_z_dsb.setMinimum(-9999.000000000000000)
         self.nc_top_cut_z_dsb.setMaximum(9999.000000000000000)
+        self.nc_top_cut_z_dsb.setSingleStep(0.000100000000000)
 
         self.gridLayout_6.addWidget(self.nc_top_cut_z_dsb, 2, 1, 1, 1)
 
@@ -914,12 +967,16 @@ class Ui_MainWindow(object):
 
         self.nc_top_tool_diameter_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_tool_diameter_dsb.setObjectName(u"nc_top_tool_diameter_dsb")
+        self.nc_top_tool_diameter_dsb.setDecimals(4)
         self.nc_top_tool_diameter_dsb.setMinimum(0.010000000000000)
+        self.nc_top_tool_diameter_dsb.setMaximum(100.000000000000000)
+        self.nc_top_tool_diameter_dsb.setSingleStep(0.000100000000000)
 
         self.gridLayout_6.addWidget(self.nc_top_tool_diameter_dsb, 0, 1, 1, 1)
 
         self.nc_top_spindle_speed_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_spindle_speed_dsb.setObjectName(u"nc_top_spindle_speed_dsb")
+        self.nc_top_spindle_speed_dsb.setAccelerated(True)
         self.nc_top_spindle_speed_dsb.setDecimals(2)
         self.nc_top_spindle_speed_dsb.setMinimum(-9999.000000000000000)
         self.nc_top_spindle_speed_dsb.setMaximum(9999.000000000000000)
@@ -928,9 +985,11 @@ class Ui_MainWindow(object):
 
         self.nc_top_overlap_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_overlap_dsb.setObjectName(u"nc_top_overlap_dsb")
-        self.nc_top_overlap_dsb.setDecimals(1)
+        self.nc_top_overlap_dsb.setAccelerated(True)
+        self.nc_top_overlap_dsb.setDecimals(2)
         self.nc_top_overlap_dsb.setMinimum(0.100000000000000)
         self.nc_top_overlap_dsb.setMaximum(1.000000000000000)
+        self.nc_top_overlap_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_6.addWidget(self.nc_top_overlap_dsb, 1, 1, 1, 1)
 
@@ -941,6 +1000,7 @@ class Ui_MainWindow(object):
 
         self.nc_top_z_feed_rate_dsb = QDoubleSpinBox(self.nc_area_top_page)
         self.nc_top_z_feed_rate_dsb.setObjectName(u"nc_top_z_feed_rate_dsb")
+        self.nc_top_z_feed_rate_dsb.setAccelerated(True)
         self.nc_top_z_feed_rate_dsb.setDecimals(2)
         self.nc_top_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
         self.nc_top_z_feed_rate_dsb.setMaximum(9999.000000000000000)
@@ -978,23 +1038,30 @@ class Ui_MainWindow(object):
 
         self.nc_bottom_tool_diameter_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_tool_diameter_dsb.setObjectName(u"nc_bottom_tool_diameter_dsb")
+        self.nc_bottom_tool_diameter_dsb.setAccelerated(True)
+        self.nc_bottom_tool_diameter_dsb.setDecimals(4)
         self.nc_bottom_tool_diameter_dsb.setMinimum(0.010000000000000)
+        self.nc_bottom_tool_diameter_dsb.setMaximum(100.000000000000000)
+        self.nc_bottom_tool_diameter_dsb.setSingleStep(0.000100000000000)
 
         self.gridLayout_7.addWidget(self.nc_bottom_tool_diameter_dsb, 0, 1, 1, 1)
 
         self.nc_bottom_overlap_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_overlap_dsb.setObjectName(u"nc_bottom_overlap_dsb")
-        self.nc_bottom_overlap_dsb.setDecimals(1)
-        self.nc_bottom_overlap_dsb.setMinimum(0.100000000000000)
+        self.nc_bottom_overlap_dsb.setDecimals(2)
+        self.nc_bottom_overlap_dsb.setMinimum(0.010000000000000)
         self.nc_bottom_overlap_dsb.setMaximum(1.000000000000000)
+        self.nc_bottom_overlap_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_7.addWidget(self.nc_bottom_overlap_dsb, 1, 1, 1, 1)
 
         self.nc_bottom_cut_z_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_cut_z_dsb.setObjectName(u"nc_bottom_cut_z_dsb")
-        self.nc_bottom_cut_z_dsb.setDecimals(2)
+        self.nc_bottom_cut_z_dsb.setAccelerated(True)
+        self.nc_bottom_cut_z_dsb.setDecimals(4)
         self.nc_bottom_cut_z_dsb.setMinimum(-9999.000000000000000)
         self.nc_bottom_cut_z_dsb.setMaximum(9999.000000000000000)
+        self.nc_bottom_cut_z_dsb.setSingleStep(0.000100000000000)
 
         self.gridLayout_7.addWidget(self.nc_bottom_cut_z_dsb, 2, 1, 1, 1)
 
@@ -1005,6 +1072,7 @@ class Ui_MainWindow(object):
 
         self.nc_bottom_z_feed_rate_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_z_feed_rate_dsb.setObjectName(u"nc_bottom_z_feed_rate_dsb")
+        self.nc_bottom_z_feed_rate_dsb.setAccelerated(True)
         self.nc_bottom_z_feed_rate_dsb.setDecimals(2)
         self.nc_bottom_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
         self.nc_bottom_z_feed_rate_dsb.setMaximum(9999.000000000000000)
@@ -1027,6 +1095,7 @@ class Ui_MainWindow(object):
 
         self.nc_bottom_spindle_speed_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_spindle_speed_dsb.setObjectName(u"nc_bottom_spindle_speed_dsb")
+        self.nc_bottom_spindle_speed_dsb.setAccelerated(True)
         self.nc_bottom_spindle_speed_dsb.setDecimals(2)
         self.nc_bottom_spindle_speed_dsb.setMinimum(-9999.000000000000000)
         self.nc_bottom_spindle_speed_dsb.setMaximum(9999.000000000000000)
@@ -1035,14 +1104,17 @@ class Ui_MainWindow(object):
 
         self.nc_bottom_travel_z_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_travel_z_dsb.setObjectName(u"nc_bottom_travel_z_dsb")
+        self.nc_bottom_travel_z_dsb.setAccelerated(True)
         self.nc_bottom_travel_z_dsb.setDecimals(2)
         self.nc_bottom_travel_z_dsb.setMinimum(-9999.000000000000000)
         self.nc_bottom_travel_z_dsb.setMaximum(9999.000000000000000)
+        self.nc_bottom_travel_z_dsb.setSingleStep(0.010000000000000)
 
         self.gridLayout_7.addWidget(self.nc_bottom_travel_z_dsb, 3, 1, 1, 1)
 
         self.nc_bottom_xy_feed_rate_dsb = QDoubleSpinBox(self.nc_area_bottom_page)
         self.nc_bottom_xy_feed_rate_dsb.setObjectName(u"nc_bottom_xy_feed_rate_dsb")
+        self.nc_bottom_xy_feed_rate_dsb.setAccelerated(True)
         self.nc_bottom_xy_feed_rate_dsb.setDecimals(2)
         self.nc_bottom_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
         self.nc_bottom_xy_feed_rate_dsb.setMaximum(9999.000000000000000)

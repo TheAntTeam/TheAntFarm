@@ -498,14 +498,20 @@
                    <layout class="QGridLayout" name="gridLayout_2">
                     <item row="3" column="1">
                      <widget class="QDoubleSpinBox" name="top_cut_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
-                       <number>2</number>
+                       <number>4</number>
                       </property>
                       <property name="minimum">
                        <double>-9999.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
                       </property>
                       <property name="value">
                        <double>0.000000000000000</double>
@@ -555,6 +561,9 @@
                     </item>
                     <item row="4" column="1">
                      <widget class="QDoubleSpinBox" name="top_travel_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -563,6 +572,9 @@
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -589,6 +601,9 @@
                     </item>
                     <item row="7" column="1">
                      <widget class="QDoubleSpinBox" name="top_xy_feed_rate_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -602,8 +617,23 @@
                     </item>
                     <item row="0" column="1">
                      <widget class="QDoubleSpinBox" name="top_tool_diameter_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
+                      <property name="decimals">
+                       <number>4</number>
+                      </property>
                       <property name="minimum">
-                       <double>0.010000000000000</double>
+                       <double>0.000100000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>100.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
+                      </property>
+                      <property name="stepType">
+                       <enum>QAbstractSpinBox::DefaultStepType</enum>
                       </property>
                      </widget>
                     </item>
@@ -636,14 +666,20 @@
                     </item>
                     <item row="2" column="1">
                      <widget class="QDoubleSpinBox" name="top_overlap_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
-                       <number>1</number>
+                       <number>2</number>
                       </property>
                       <property name="minimum">
                        <double>0.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>1.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -656,6 +692,9 @@
                     </item>
                     <item row="9" column="1">
                      <widget class="QDoubleSpinBox" name="top_z_feed_rate_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -680,8 +719,11 @@
                     </item>
                     <item row="4" column="1">
                      <widget class="QDoubleSpinBox" name="bottom_cut_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
-                       <number>2</number>
+                       <number>4</number>
                       </property>
                       <property name="minimum">
                        <double>-9999.000000000000000</double>
@@ -689,10 +731,16 @@
                       <property name="maximum">
                        <double>9999.000000000000000</double>
                       </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
+                      </property>
                      </widget>
                     </item>
                     <item row="9" column="1">
                      <widget class="QDoubleSpinBox" name="bottom_z_feed_rate_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -706,8 +754,20 @@
                     </item>
                     <item row="1" column="1">
                      <widget class="QDoubleSpinBox" name="bottom_tool_diameter_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
+                      <property name="decimals">
+                       <number>4</number>
+                      </property>
                       <property name="minimum">
                        <double>0.010000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>100.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -734,6 +794,9 @@
                     </item>
                     <item row="8" column="1">
                      <widget class="QDoubleSpinBox" name="bottom_xy_feed_rate_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -748,13 +811,16 @@
                     <item row="3" column="1">
                      <widget class="QDoubleSpinBox" name="bottom_overlap_dsb">
                       <property name="decimals">
-                       <number>1</number>
+                       <number>2</number>
                       </property>
                       <property name="minimum">
                        <double>0.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>1.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -801,6 +867,9 @@
                     </item>
                     <item row="5" column="1">
                      <widget class="QDoubleSpinBox" name="bottom_travel_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -809,6 +878,9 @@
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -828,6 +900,9 @@
                     </item>
                     <item row="6" column="1">
                      <widget class="QDoubleSpinBox" name="bottom_spindle_speed_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -865,14 +940,20 @@
                     </item>
                     <item row="5" column="3">
                      <widget class="QDoubleSpinBox" name="profile_cut_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
-                       <number>2</number>
+                       <number>4</number>
                       </property>
                       <property name="minimum">
                        <double>-9999.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -887,10 +968,16 @@
                       <property name="maximum">
                        <double>9999.000000000000000</double>
                       </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
+                      </property>
                      </widget>
                     </item>
                     <item row="3" column="3">
                      <widget class="QDoubleSpinBox" name="profile_depth_pass_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -899,6 +986,9 @@
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -918,6 +1008,9 @@
                     </item>
                     <item row="12" column="3">
                      <widget class="QDoubleSpinBox" name="profile_tap_size_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -926,6 +1019,9 @@
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -998,8 +1094,20 @@
                     </item>
                     <item row="0" column="3">
                      <widget class="QDoubleSpinBox" name="profile_tool_diameter_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
+                      <property name="decimals">
+                       <number>4</number>
+                      </property>
                       <property name="minimum">
-                       <double>0.010000000000000</double>
+                       <double>0.000100000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>100.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -1032,6 +1140,9 @@
                     </item>
                     <item row="6" column="3">
                      <widget class="QDoubleSpinBox" name="profile_travel_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1040,6 +1151,9 @@
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -1062,6 +1176,9 @@
                     </item>
                     <item row="7" column="3">
                      <widget class="QDoubleSpinBox" name="profile_spindle_speed_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1105,8 +1222,17 @@
                    <layout class="QGridLayout" name="gridLayout_5">
                     <item row="4" column="2">
                      <widget class="QDoubleSpinBox" name="drill_milling_tool_diameter_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
+                      <property name="decimals">
+                       <number>4</number>
+                      </property>
                       <property name="minimum">
                        <double>0.010000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -1147,6 +1273,9 @@
                     </item>
                     <item row="7" column="2">
                      <widget class="QDoubleSpinBox" name="drill_travel_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1155,6 +1284,9 @@
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -1188,6 +1320,9 @@
                     </item>
                     <item row="12" column="2">
                      <widget class="QDoubleSpinBox" name="drill_z_feed_rate_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1229,7 +1364,7 @@
                     <item row="6" column="2">
                      <widget class="QDoubleSpinBox" name="drill_cut_z_dsb">
                       <property name="decimals">
-                       <number>2</number>
+                       <number>4</number>
                       </property>
                       <property name="minimum">
                        <double>-9999.000000000000000</double>
@@ -1237,10 +1372,16 @@
                       <property name="maximum">
                        <double>9999.000000000000000</double>
                       </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
+                      </property>
                      </widget>
                     </item>
                     <item row="8" column="2">
                      <widget class="QDoubleSpinBox" name="drill_spindle_speed_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1261,6 +1402,9 @@
                     </item>
                     <item row="10" column="2">
                      <widget class="QDoubleSpinBox" name="drill_xy_feed_rate_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1345,6 +1489,9 @@
                     </item>
                     <item row="5" column="1">
                      <widget class="QDoubleSpinBox" name="nc_top_xy_feed_rate_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1358,6 +1505,9 @@
                     </item>
                     <item row="3" column="1">
                      <widget class="QDoubleSpinBox" name="nc_top_travel_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1366,6 +1516,9 @@
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -1385,14 +1538,20 @@
                     </item>
                     <item row="2" column="1">
                      <widget class="QDoubleSpinBox" name="nc_top_cut_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
-                       <number>2</number>
+                       <number>4</number>
                       </property>
                       <property name="minimum">
                        <double>-9999.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -1412,13 +1571,25 @@
                     </item>
                     <item row="0" column="1">
                      <widget class="QDoubleSpinBox" name="nc_top_tool_diameter_dsb">
+                      <property name="decimals">
+                       <number>4</number>
+                      </property>
                       <property name="minimum">
                        <double>0.010000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>100.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="1">
                      <widget class="QDoubleSpinBox" name="nc_top_spindle_speed_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1432,14 +1603,20 @@
                     </item>
                     <item row="1" column="1">
                      <widget class="QDoubleSpinBox" name="nc_top_overlap_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
-                       <number>1</number>
+                       <number>2</number>
                       </property>
                       <property name="minimum">
                        <double>0.100000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>1.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -1452,6 +1629,9 @@
                     </item>
                     <item row="6" column="1">
                      <widget class="QDoubleSpinBox" name="nc_top_z_feed_rate_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1510,34 +1690,55 @@
                     </item>
                     <item row="0" column="1">
                      <widget class="QDoubleSpinBox" name="nc_bottom_tool_diameter_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
+                      <property name="decimals">
+                       <number>4</number>
+                      </property>
                       <property name="minimum">
                        <double>0.010000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>100.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
                       </property>
                      </widget>
                     </item>
                     <item row="1" column="1">
                      <widget class="QDoubleSpinBox" name="nc_bottom_overlap_dsb">
                       <property name="decimals">
-                       <number>1</number>
+                       <number>2</number>
                       </property>
                       <property name="minimum">
-                       <double>0.100000000000000</double>
+                       <double>0.010000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>1.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="1">
                      <widget class="QDoubleSpinBox" name="nc_bottom_cut_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
-                       <number>2</number>
+                       <number>4</number>
                       </property>
                       <property name="minimum">
                        <double>-9999.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
+                      </property>
+                      <property name="singleStep">
+                       <double>0.000100000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -1550,6 +1751,9 @@
                     </item>
                     <item row="7" column="1">
                      <widget class="QDoubleSpinBox" name="nc_bottom_z_feed_rate_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1590,6 +1794,9 @@
                     </item>
                     <item row="4" column="1">
                      <widget class="QDoubleSpinBox" name="nc_bottom_spindle_speed_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1603,6 +1810,9 @@
                     </item>
                     <item row="3" column="1">
                      <widget class="QDoubleSpinBox" name="nc_bottom_travel_z_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
@@ -1612,10 +1822,16 @@
                       <property name="maximum">
                        <double>9999.000000000000000</double>
                       </property>
+                      <property name="singleStep">
+                       <double>0.010000000000000</double>
+                      </property>
                      </widget>
                     </item>
                     <item row="6" column="1">
                      <widget class="QDoubleSpinBox" name="nc_bottom_xy_feed_rate_dsb">
+                      <property name="accelerated">
+                       <bool>true</bool>
+                      </property>
                       <property name="decimals">
                        <number>2</number>
                       </property>
