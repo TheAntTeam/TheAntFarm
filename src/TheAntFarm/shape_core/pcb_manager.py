@@ -101,8 +101,7 @@ class PcbObj:
         tmp = gbr.read(path)
         self.excellons[tag] = tmp
         if tmp.units == 'inch':
-            self.gerbers[tag].to_metric()
-            self.gerbers[tag] = gbr.loads(self.dump_str(tmp))
+            self.excellons[tag].to_metric()
 
         #self.excellons[tag].to_metric()
 
