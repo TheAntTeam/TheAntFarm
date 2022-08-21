@@ -3,7 +3,9 @@ import os
 import time
 import gerber as gbr
 import gerber.primitives
+from gerber.excellon_statements import ToolSelectionStmt, CoordinateStmt, EndOfProgramStmt, SlotStmt
 # from gerber.render.cairo_backend import GerberCairoContext
+from gerber.excellon import DrillSlot, DrillHit
 
 import numpy as np
 import math
@@ -81,13 +83,40 @@ class PcbObj:
         # self.render_layer(tmp)
 
     @staticmethod
-    def dump_str(gerber_obj):
+    def dump_str(gerber_obj, data_type="gerber"):
         # used to FIX bug in pcb-tools that doesn't work properly
         # tip: file conversion to metric before geom parser
         print("Converting file units to metric")
         string = ""
-        for stmt in gerber_obj.statements:
-            string += str(stmt.to_gerber(gerber_obj.settings)) + "\n"
+        if data_type == "gerber":
+            for stmt in gerber_obj.statements:
+                string += str(stmt.to_gerber(gerber_obj.settings)) + "\n"
+        else:
+            # for stmt in gerber_obj.statements:
+            #     string += str(stmt.to_excellon(gerber_obj.settings)) + "\n"
+
+            for statement in gerber_obj.statements:
+                if not isinstance(statement, ToolSelectionStmt):
+                    string += statement.to_excellon(gerber_obj.settings) + '\n'
+                else:
+                    break
+
+            k = 25.4
+            # Write out coordinates for drill hits by tool
+            for tool in iter(gerber_obj.tools.values()):
+                data = ToolSelectionStmt(tool.number)
+                string += data.to_excellon(gerber_obj.settings) + '\n'
+                for hit in gerber_obj.hits:
+                    if hit.tool.number == tool.number:
+                        if isinstance(hit, DrillHit):
+                            string += CoordinateStmt(hit.position[0] * k, hit.position[1] * k).to_excellon(gerber_obj.settings) + '\n'
+                        elif isinstance(hit, DrillSlot):
+                            string += CoordinateStmt(hit.start[0] * k, hit.start[1] * k).to_excellon(
+                                gerber_obj.settings) + '\n'
+                            string += CoordinateStmt(hit.end[0] * k, hit.end[1] * k).to_excellon(
+                                gerber_obj.settings) + '\n'
+                            # string += SlotStmt(hit.start[0]*1e3, hit.start[1]*1e3, hit.end[0]*1e3, hit.end[1]*1e3).to_excellon(gerber_obj.settings) + '\n'
+            string += EndOfProgramStmt().to_excellon() + '\n'
         return string
 
     def load_excellon(self, path, tag):
@@ -101,7 +130,10 @@ class PcbObj:
         tmp = gbr.read(path)
         self.excellons[tag] = tmp
         if tmp.units == 'inch':
-            self.excellons[tag].to_metric()
+            self.excellons[tag].to_metric()  # pcb-tools has a bug related to the inch -> metric conversion
+                                             # a workaround is applied, during the dump process all the xy points
+                                             # coordinates are converted in metric by default
+            self.excellons[tag] = gbr.loads(self.dump_str(self.excellons[tag], data_type="excellon"))
 
         #self.excellons[tag].to_metric()
 
@@ -421,6 +453,16 @@ class PcbObj:
                     print("Drill")
                 p = primitive
                 points = self._arc_segmentation(p.position, p.radius, 0, 2 * math.pi)
+                gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+
+            elif isinstance(primitive, gbr.primitives.Slot):
+                # drill type
+                if verbose_flag:
+                    print("Slot")
+                p = primitive
+                points1 = self._arc_segmentation(p.start, p.diameter/2.0, 0, 2 * math.pi)
+                points2 = self._arc_segmentation(p.end, p.diameter/2.0, 0, 2 * math.pi)
+                points = convex_hull(points1 + points2)
                 gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
 
             # elif isinstance(primitive, gbr.primitives.AMGroup):
