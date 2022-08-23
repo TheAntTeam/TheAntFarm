@@ -884,7 +884,15 @@ class GCodeLeveler:
         X = np.array(x).reshape(steps[0], steps[1]) - wco_offset[0]
         Y = np.array(y).reshape(steps[0], steps[1]) - wco_offset[1]
         Z = np.array(z).reshape(steps[0], steps[1]) - last_probe[2]
+        self.grid_data = [X, Y, Z]
         return X, Y, Z
+
+    def abl_to_working_pos(self, abl_values, wco_a):
+        wp_abl_values = []
+        for v in abl_values:
+            d = [v[0] - wco_a[0], v[1] - wco_a[1], v[2] - wco_a[2]]
+            wp_abl_values.append(d)
+        return wp_abl_values
 
     def interp_grid_data(self):
         if self.grid_data is not None:
@@ -952,6 +960,9 @@ class GCodeLeveler:
             print("Advanced Auto Bed Leveler Stop")
             tb = time.time()
             print("Done in " + "{:.3f}".format(tb-ta) + " sec")
+            # Debug purpse
+            # for gcv in mvl:
+            #    print(gcv.coords)
             return True
         else:
             return False
