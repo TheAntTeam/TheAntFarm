@@ -80,10 +80,13 @@ class UiManager(QObject):
         self.main_win.ui.settings_sub_tab.setCurrentIndex(app_settings.settings_tab_index)
 
     def save_all_settings(self):
+        """ Saves all settings in the configuration files. """
         all_settings_od = {"jobs_settings": self.ui_create_job_m.get_all_jobs_settings()}
         self.settings.write_all_settings(all_settings_od)
 
     def from_load_to_create(self):
+        """ Do all actions needed to pass from layer loading sub-tab
+            to job creation sub-tab and vice-versa. """
         if self.ui.prepare_widget.currentWidget().objectName() == "create_job_tab":
             self.ui_create_job_m.load_active_layers(self.ui_load_layer_m.get_loaded_layers())
         elif self.ui.prepare_widget.currentWidget().objectName() == "load_layers_tab":
@@ -91,6 +94,7 @@ class UiManager(QObject):
 
     @Slot(str, logging.LogRecord)
     def update_logging_status(self, status, record):
+        """ Format and append logging records to the user interface text edit widget. """
         color = self.LOG_COLORS.get(record.levelno, 'black')
         if "<" in status:
             status = status.replace("<", "&lt;")
@@ -100,13 +104,15 @@ class UiManager(QObject):
         # self.ui.logging_plain_te.appendPlainText(record)  # Use only for debug.
 
     def hide_show_console(self):
+        """ Hide/Show logging console. """
         if self.ui.actionHide_Show_Console.isChecked():
             self.ui.logging_plain_te.show()
         else:
             self.ui.logging_plain_te.hide()
 
     def init_tabs_visibility_status(self):
-        """ Initialize """
+        """ Hide/Show Align and Settings/Preferences tabs according to the
+            application settings and check the relative menu actions. """
         align_tab_visible = self.settings.app_settings.align_tab_visibility
         self.main_win.ui.actionHide_Show_Align_Tab.setChecked(align_tab_visible)
         self.hide_show_align_tab()
@@ -126,6 +132,7 @@ class UiManager(QObject):
             self.ui.main_tab_widget.setCurrentIndex(0)
 
     def hide_show_preferences_tab(self):
+        """ Hide/Shows Settings/Preferences tab."""
         setting_tab_idx = self.ui.main_tab_widget.indexOf(self.ui.settings_tab)
         if self.ui.actionSettings_Preferences.isChecked():
             self.ui.main_tab_widget.setTabVisible(setting_tab_idx, True)
@@ -135,6 +142,8 @@ class UiManager(QObject):
             self.ui.main_tab_widget.setCurrentIndex(0)
 
     def make_log_action_mutually_exclusive(self):
+        """ Creates an action group for the log level menu items and makes them mutually exclusive,
+            to avoid to check two log levels at the same time. """
         log_level_group = QActionGroup(self.main_win)
         log_level_group.addAction(self.ui.action_critical)
         log_level_group.addAction(self.ui.action_error)
