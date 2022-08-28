@@ -64,10 +64,11 @@ class UiManager(QObject):
             self.main_win.showMaximized()
         self.main_win.move(app_settings.pos)  # Restore position
         self.main_win.resize(app_settings.size)
-        if app_settings.settings_tab_visibility:
-            self.main_win.ui.actionSettings_Preferences.setChecked(True)
-            self.hide_show_preferences_tab()
-        # Connect the hide show action after the initial state has been set.
+
+        # Initialize tabs visibility according to the saved app settings.
+        self.init_tabs_visibility_status()
+        # Connect hide/show actions after the initial state has been set (to avoid re-triggering of events).
+        self.ui.actionHide_Show_Align_Tab.triggered.connect(self.hide_show_align_tab)
         self.ui.actionSettings_Preferences.triggered.connect(self.hide_show_preferences_tab)
 
         self.main_win.ui.actionHide_Show_Console.setChecked(app_settings.console_visibility)
@@ -103,6 +104,26 @@ class UiManager(QObject):
             self.ui.logging_plain_te.show()
         else:
             self.ui.logging_plain_te.hide()
+
+    def init_tabs_visibility_status(self):
+        """ Initialize """
+        align_tab_visible = self.settings.app_settings.align_tab_visibility
+        self.main_win.ui.actionHide_Show_Align_Tab.setChecked(align_tab_visible)
+        self.hide_show_align_tab()
+
+        settings_tab_visible = self.settings.app_settings.settings_tab_visibility
+        self.main_win.ui.actionSettings_Preferences.setChecked(settings_tab_visible)
+        self.hide_show_preferences_tab()
+
+    def hide_show_align_tab(self):
+        """ Hide/Shows Align tab."""
+        align_tab_idx = self.ui.main_tab_widget.indexOf(self.ui.align_tab)
+        if self.ui.actionHide_Show_Align_Tab.isChecked():
+            self.ui.main_tab_widget.setTabVisible(align_tab_idx, True)
+            self.ui.main_tab_widget.setCurrentIndex(align_tab_idx)
+        else:
+            self.ui.main_tab_widget.setTabVisible(align_tab_idx, False)
+            self.ui.main_tab_widget.setCurrentIndex(0)
 
     def hide_show_preferences_tab(self):
         setting_tab_idx = self.ui.main_tab_widget.indexOf(self.ui.settings_tab)

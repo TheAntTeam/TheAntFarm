@@ -7432,8 +7432,10 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionHide_Show_Align_Tab"/>
     <addaction name="actionSettings_Preferences"/>
     <addaction name="actionSave_Settings"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuConsole">
     <property name="title">
@@ -7488,7 +7490,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Settings/Preferences</string>
+    <string>Show Settings/Preferences</string>
    </property>
    <property name="toolTip">
     <string>Hide/Show Settings Tab</string>
@@ -7497,7 +7499,7 @@
     <string>Hide/Show Settings Tab</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string>Shift+P</string>
    </property>
   </action>
   <action name="actionSave_Settings">
@@ -7566,6 +7568,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+H</string>
+   </property>
+  </action>
+  <action name="actionHide_Show_Align_Tab">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Align Tab</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+A</string>
    </property>
   </action>
  </widget>
