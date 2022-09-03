@@ -3,9 +3,11 @@ import os
 import time
 import gerber as gbr
 import gerber.primitives
-from gerber.excellon_statements import ToolSelectionStmt, CoordinateStmt, EndOfProgramStmt, SlotStmt
+from gerber.excellon_statements import ToolSelectionStmt, CoordinateStmt, EndOfProgramStmt, SlotStmt, FormatStmt
 # from gerber.render.cairo_backend import GerberCairoContext
-from gerber.excellon import DrillSlot, DrillHit
+from gerber.excellon import DrillSlot, DrillHit, ExcellonParser
+from gerber.excellon import loads as exc_load
+from gerber.cam import FileSettings
 
 import numpy as np
 import math
@@ -83,39 +85,47 @@ class PcbObj:
         # self.render_layer(tmp)
 
     @staticmethod
-    def dump_str(gerber_obj, data_type="gerber"):
+    def dump_str(gerber_obj, data_type="gerber", ext_settings=None):
         # used to FIX bug in pcb-tools that doesn't work properly
         # tip: file conversion to metric before geom parser
         print("Converting file units to metric")
         string = ""
+        if ext_settings is not None:
+            settings = ext_settings
+        else:
+            settings = gerber_obj.settings
+
         if data_type == "gerber":
             for stmt in gerber_obj.statements:
                 string += str(stmt.to_gerber(gerber_obj.settings)) + "\n"
         else:
             # for stmt in gerber_obj.statements:
-            #     string += str(stmt.to_excellon(gerber_obj.settings)) + "\n"
+            #     string += str(stmt.to_excellon(settings)) + "\n"
 
             for statement in gerber_obj.statements:
-                if not isinstance(statement, ToolSelectionStmt):
-                    string += statement.to_excellon(gerber_obj.settings) + '\n'
+                if not isinstance(statement, ToolSelectionStmt) and not isinstance(statement, FormatStmt):
+                    string += statement.to_excellon(settings) + '\n'
                 else:
-                    break
+                    if isinstance(statement, FormatStmt):
+                        pass
+                    else:
+                        break
 
             k = 25.4
             # Write out coordinates for drill hits by tool
             for tool in iter(gerber_obj.tools.values()):
                 data = ToolSelectionStmt(tool.number)
-                string += data.to_excellon(gerber_obj.settings) + '\n'
+                string += data.to_excellon(settings) + '\n'
                 for hit in gerber_obj.hits:
                     if hit.tool.number == tool.number:
                         if isinstance(hit, DrillHit):
-                            string += CoordinateStmt(hit.position[0] * k, hit.position[1] * k).to_excellon(gerber_obj.settings) + '\n'
+                            string += CoordinateStmt(hit.position[0] * k, hit.position[1] * k).to_excellon(settings) + '\n'
                         elif isinstance(hit, DrillSlot):
                             string += CoordinateStmt(hit.start[0] * k, hit.start[1] * k).to_excellon(
-                                gerber_obj.settings) + '\n'
+                                settings) + '\n'
                             string += CoordinateStmt(hit.end[0] * k, hit.end[1] * k).to_excellon(
-                                gerber_obj.settings) + '\n'
-                            # string += SlotStmt(hit.start[0]*1e3, hit.start[1]*1e3, hit.end[0]*1e3, hit.end[1]*1e3).to_excellon(gerber_obj.settings) + '\n'
+                                settings) + '\n'
+                            # string += SlotStmt(hit.start[0]*1e3, hit.start[1]*1e3, hit.end[0]*1e3, hit.end[1]*1e3).to_excellon(settings) + '\n'
             string += EndOfProgramStmt().to_excellon() + '\n'
         return string
 
@@ -133,9 +143,11 @@ class PcbObj:
             self.excellons[tag].to_metric()  # pcb-tools has a bug related to the inch -> metric conversion
                                              # a workaround is applied, during the dump process all the xy points
                                              # coordinates are converted in metric by default
-            self.excellons[tag] = gbr.loads(self.dump_str(self.excellons[tag], data_type="excellon"))
 
-        #self.excellons[tag].to_metric()
+            settings = FileSettings(format=(3, 3), zero_suppression='leading', units='metric', notation='absolute',
+                                    angle_units='degrees')
+            data = self.dump_str(self.excellons[tag], data_type="excellon", ext_settings=settings)
+            self.excellons[tag] = exc_load(data, settings=settings)
 
     # def render_layer(self, layer):
     #
