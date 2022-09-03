@@ -73,9 +73,9 @@ class Macros:
         # splitted = re.findall(r'[a-zA-Z][-]*[\d.]+', cmd.strip().upper())
         # if self.CHANGE_TOOL_COMMAND in splitted:
         #    return True
-        print("Is Macro New: " + str(cmd))
+        # print("Is Macro New: " + str(cmd))
         macros_list = list(self.macros_dict.keys())
-        print(cmd.strip().upper() in macros_list)
+        # print(cmd.strip().upper() in macros_list)
         return cmd.strip().upper() in macros_list
 
     def get_macro_string(self, macro):
@@ -90,7 +90,7 @@ class Macros:
         else:
             logger.error("Command: " + str(macro) + " isn't a valid macro command")
         lines = "".join(lines)
-        print(lines)
+        # print(lines)
         return lines
 
     def compute_tag(self, gc_str, wsp, probe_data, dro):

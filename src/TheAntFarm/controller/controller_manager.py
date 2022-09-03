@@ -124,6 +124,8 @@ class ControllerWorker(QObject):
         [loaded_layer, exc_flag] = self.view_controller.load_new_layer(layer, layer_path)
         if loaded_layer is not None:
             self.update_layer_s.emit(loaded_layer, layer, layer_path, exc_flag)
+        else:
+            logger.warning("Invalid file data. No geometries found in file: " + str(layer_path))
 
     @Slot(str, Od, str)
     def generate_new_path(self, tag, cfg, machining_type):

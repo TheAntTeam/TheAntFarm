@@ -367,8 +367,10 @@ def merge_polygons(mp):
                 others.append(p)
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Geom Collected")
-    if poly_set[0]:
-        merged += _merge_poly_set(poly_set)
+
+    if len(poly_set) > 0:
+        if poly_set[0]:
+            merged += _merge_poly_set(poly_set)
 
     print("Final Merging")
     start_time = time.time()
@@ -385,12 +387,13 @@ def merge_polygons(mp):
             g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
             merged_final.append(g)
     else:
-        tmp = [tmp_final.exterior.coords]
-        # add the holes of the darkpoly to the shapes to be subtracted
-        for i in tmp_final.interiors:
-            tmp.append(i.coords)
-        g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
-        merged_final.append(g)
+        if tmp_final:
+            tmp = [tmp_final.exterior.coords]
+            # add the holes of the darkpoly to the shapes to be subtracted
+            for i in tmp_final.interiors:
+                tmp.append(i.coords)
+            g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
+            merged_final.append(g)
 
     layer = merged_final
     print("--- %s seconds ---" % (time.time() - start_time))

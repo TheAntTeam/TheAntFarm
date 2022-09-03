@@ -22,10 +22,14 @@ class ViewController(QObject):
             if layer in grb_tags:
                 self.pcb.load_gerber(layer_path, layer)
                 loaded_layer = self.pcb.get_gerber_layer(layer)
+                if not loaded_layer[0]:
+                    loaded_layer = None
                 return [loaded_layer, False]
             if layer in exc_tags:
                 self.pcb.load_excellon(layer_path, layer)
                 loaded_layer = self.pcb.get_excellon_layer(layer)
+                if not loaded_layer[0]:
+                    loaded_layer = None
                 return [loaded_layer, True]
         except (AttributeError, ValueError, ZeroDivisionError, IndexError) as e:
             logging.error(e, exc_info=True)
