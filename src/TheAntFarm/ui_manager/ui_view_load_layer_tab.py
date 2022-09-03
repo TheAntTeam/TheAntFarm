@@ -91,8 +91,12 @@ class UiViewLoadLayerTab(QObject):
 
     @Slot(Od, str, str, bool)
     def visualize_new_layer(self, loaded_layer, layer_tag, layer_path, holes):
-        self.vis_layer.add_layer(layer_tag, loaded_layer[0], self.layer_colors[layer_tag], holes)
-        self.layers_te[layer_tag].setText(layer_path)
+        if loaded_layer is None or layer_path == "":
+            self.layers_te[layer_tag].clear()
+            self.ui.status_bar.showMessage("WARNING: user tried to load an empty layer.", 3000)
+        else:
+            self.vis_layer.add_layer(layer_tag, loaded_layer[0], self.layer_colors[layer_tag], holes)
+            self.layers_te[layer_tag].setText(layer_path)
 
     def visualize_all_active_layers(self):
         [self.vis_layer.set_layer_visible(x, False) for x in self.lay_tags]
