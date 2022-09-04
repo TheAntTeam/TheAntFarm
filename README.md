@@ -24,6 +24,39 @@ The application requires an installation of python version 3.7 or greater.
 The python packages needed are listed in the file "requirements.txt", that could be used to install them by command line.  
 The cleanest way to install these packages is using a virtual environment.
 
+### macOS  
+
+Either download the zip of the repository sources or use git:  
+
+```
+git clone https://github.com/TheAntTeam/TheAntFarm.git  
+```
+
+Enter the folder where there is the code, create a virtual environment and activate it:  
+
+```
+cd TheAntFarm    
+python3 -m venv ./env  
+```
+
+Activate the virtual environment:  
+
+```
+source ./env/bin/activate
+```
+
+Install all the required packages:
+
+```
+pip3 install -r requirements.txt  
+```
+
+You also need brew to install GEOS
+```  
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; brew install geos; 
+```
+
+
 ### Linux  
 
 Either download the zip of the repository sources or use git:  
