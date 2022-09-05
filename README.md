@@ -56,6 +56,19 @@ You also need brew to install GEOS
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; brew install geos; 
 ```
 
+To build a standalone app with py2app: (do in the active environment)
+```
+pip3 install -U py2app  
+cd src/TheAntFarm/
+py2applet --make-setup the_ant_farm.py
+
+```
+You can then check if it works with:
+(The build app can be found in the dist folder created by py2app)
+```
+setup.py py2app -A  
+```
+
 
 ### Linux  
 
