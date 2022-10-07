@@ -49,6 +49,6 @@
     <file>resources/icons/white-play-button-arrowhead.svg</file>
     <file>resources/icons/white-stop-button-black-rounded-square.svg</file>
     <file>resources/icons/white-unlock-padlock.svg</file>
-    <file>resources/logo/the_ant_logo.png</file>
+    <file>resources/logo/the_ant_farm_logo.svg</file>
   </qresource>
 </RCC>

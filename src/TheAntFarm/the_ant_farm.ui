@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="app_resources.qrc">
-    <normaloff>:/resources/resources/logo/the_ant_logo.png</normaloff>:/resources/resources/logo/the_ant_logo.png</iconset>
+    <normaloff>:/resources/resources/logo/the_ant_farm_logo.svg</normaloff>:/resources/resources/logo/the_ant_logo.png</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>
