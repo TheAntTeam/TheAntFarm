@@ -17,7 +17,7 @@ class ControllerWorker(QObject):
     update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
     update_path_s = Signal(str, list)            # Signal to update path visualization
     update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
-    update_status_s = Signal(list)               # Signal to update controller status
+    update_status_s = Signal(Od)                 # Signal to update controller status
     update_console_text_s = Signal(str)          # Signal to send text to the console textEdit
     serial_send_s = Signal(bytes)                # Signal to send text to the serial
     serial_tx_available_s = Signal()             # Signal to send text to the serial
