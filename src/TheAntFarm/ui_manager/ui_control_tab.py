@@ -2,6 +2,7 @@ from PySide2.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelInd
 from PySide2.QtWidgets import QFileDialog, QLabel, QRadioButton, QHeaderView, QButtonGroup, QAbstractItemView
 from PySide2.QtGui import QIcon
 from style_manager import StyleManager
+from collections import OrderedDict as Od
 import os
 import logging
 
@@ -231,18 +232,21 @@ class UiControlTab(QObject):
         """ Initialize the serial ports' ui elements. """
         self.handle_refresh_button()
 
-    @Slot(list)
-    def update_status(self, status_l):
-        self.ui.status_l.setText(status_l[0])
-        self.update_status_colors(status_l[0])
-        self.update_status_buttons(status_l[0])
-        self.ui.mpos_x_l.setText('{:.3f}'.format(status_l[1][0]))
-        self.ui.mpos_y_l.setText('{:.3f}'.format(status_l[1][1]))
-        self.ui.mpos_z_l.setText('{:.3f}'.format(status_l[1][2]))
-        self.ui.wpos_x_l.setText('{:.3f}'.format(status_l[2][0]))
-        self.ui.wpos_y_l.setText('{:.3f}'.format(status_l[2][1]))
-        self.ui.wpos_z_l.setText('{:.3f}'.format(status_l[2][2]))
-        self.ctrl_layer.update_pointer(coords=status_l[2])
+    @Slot(Od)
+    def update_status(self, status_od):
+        status_text = status_od["state"]
+        if "pins" in status_od.keys():
+            status_text += "\n" + status_od["pins"]
+        self.ui.status_l.setText(status_text)
+        self.update_status_colors(status_od["state"])
+        self.update_status_buttons(status_od["state"])
+        self.ui.mpos_x_l.setText('{:.3f}'.format(status_od["mpos"][0]))
+        self.ui.mpos_y_l.setText('{:.3f}'.format(status_od["mpos"][1]))
+        self.ui.mpos_z_l.setText('{:.3f}'.format(status_od["mpos"][2]))
+        self.ui.wpos_x_l.setText('{:.3f}'.format(status_od["wpos"][0]))
+        self.ui.wpos_y_l.setText('{:.3f}'.format(status_od["wpos"][1]))
+        self.ui.wpos_z_l.setText('{:.3f}'.format(status_od["wpos"][2]))
+        self.ctrl_layer.update_pointer(coords=status_od["wpos"])
 
     def update_status_buttons(self, status):
         sta = status.lower()

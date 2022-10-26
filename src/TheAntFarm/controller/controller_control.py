@@ -84,6 +84,7 @@ class ControlController(QObject):
         fields = line_stripped[1:-1].split("|")
         self.status = fields[0]
         self.status_report_od["state"] = fields[0]
+        self.status_report_od["pins"] = ""  # Cleaning limit pins status
 
         for field in fields[1:]:
             word = self.SPLITPAT.split(field.strip())
@@ -145,7 +146,7 @@ class ControlController(QObject):
 
         self.wpos_a = self.mpos_a - self.wco_a
         self.status_report_od["wpos"] = self.wpos_a
-        return [self.status, self.mpos_a, self.wpos_a]
+        return self.status_report_od
 
     def parse_bracket_square(self, line):
         word = self.SPLITPAT.split(line.rstrip()[1:-1])
