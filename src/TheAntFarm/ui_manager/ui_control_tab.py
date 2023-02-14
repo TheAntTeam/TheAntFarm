@@ -236,7 +236,7 @@ class UiControlTab(QObject):
     def update_status(self, status_od):
         status_text = status_od["state"]
         if "pins" in status_od.keys():
-            status_text += "\n" + status_od["pins"]
+            status_text += " " + status_od["pins"]
         self.ui.status_l.setText(status_text)
         self.update_status_colors(status_od["state"])
         self.update_status_buttons(status_od["state"])
