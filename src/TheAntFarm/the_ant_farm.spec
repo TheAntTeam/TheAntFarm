@@ -8,7 +8,7 @@ a = Analysis(
     ['the_ant_farm.py'],
     pathex=[],
     binaries=[],
-    datas=[('app_logs','app_logs'),('configurations','configurations'),('controller','controller'),('macros','macros'),('resources','resources'),('settings_manager','settings_manager'),('shape_core','shape_core'),('ui_manager','ui_manager'),('style_manager.py', '.'),('double_side_manager.py', '.'),('log_manager.py', '.'),('serial_manager.py', '.'),('ui_the_ant_farm.py', '.'),('vispy_qt_widget.py', '.'),('app_resources_rc.py', '.'),('the_ant_farm.ui', '.'),('serial_manager.py', '.')],
+    datas=[('controller','controller'),('macros','macros'),('resources','resources'),('settings_manager','settings_manager'),('shape_core','shape_core'),('ui_manager','ui_manager'),('style_manager.py', '.'),('double_side_manager.py', '.'),('log_manager.py', '.'),('serial_manager.py', '.'),('ui_the_ant_farm.py', '.'),('vispy_qt_widget.py', '.'),('app_resources_rc.py', '.'),('the_ant_farm.ui', '.'),('serial_manager.py', '.')],
     hiddenimports=['PySide2.QtCore', 'PySide2.QtGui', 'PySide2.QtSerialPort', 'shiboken2.shiboken2', 'vispy', 'vispy.app.backends._pyside2', 'vispy.app.qt', 'gerber', 'pyclipper', 'shapely', 'shapely.ops', 'shapely.validation', 'scipy.interpolate', 'qimage2ndarray', 'cv2'],
     hookspath=['.'],
     hooksconfig={},
