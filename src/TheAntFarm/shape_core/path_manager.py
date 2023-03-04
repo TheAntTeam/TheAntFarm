@@ -137,7 +137,7 @@ class Gapper:
         pts = []
         for line in intersect_line:
             lb = line.boundary
-            pts += [lb[0], lb[1]]
+            pts += [lb.geoms[0], lb.geoms[1]]
         pts_ll = []
         ids = []
         pids = []
@@ -274,7 +274,7 @@ class MachinePath:
             if og is not None:
                 og_list.append(og)
 
-        og_list = merge_polygons_path(og_list, as_list=True)
+        og_list = merge_polygons_path(og_list)
 
         # for the next steps, starting from the previous path, enlarge it by the tool radius
         # make bollean or on it and then reduce it by the tool radius
@@ -293,10 +293,10 @@ class MachinePath:
         path = []
         for g in og_list:
             ex_path = g.exterior
-            if ex_path.type == "LinearRing" or ex_path.type == "LineString":
+            if ex_path.geom_type == "LinearRing" or ex_path.type == "LineString":
                 path.append(ex_path)
             for i in g.interiors:
-                if ex_path.type == "LinearRing" or ex_path.type == "LineString":
+                if ex_path.geom_type == "LinearRing" or ex_path.type == "LineString":
                     path.append(i)
         t_d = self.cfg['tool_diameter']
         self.path = [((t_d, "gerber"), path)]
@@ -492,10 +492,10 @@ class MachinePath:
         path = []
         for g in og_list:
             ex_path = g.exterior
-            if ex_path.type == "LinearRing" or ex_path.type == "LineString":
+            if ex_path.geom_type == "LinearRing" or ex_path.geoom_type == "LineString":
                 path.append(ex_path)
             for i in g.interiors:
-                if ex_path.type == "LinearRing" or ex_path.type == "LineString":
+                if ex_path.geomtype == "LinearRing" or ex_path.geom_type == "LineString":
                     path.append(i)
 
         # add taps
@@ -541,7 +541,7 @@ class MachinePath:
             mog = offset_polygon(g, -pre_offset, shapely_poly=True)
             if mog is not None:
                 if mog.geom_type == 'MultiPolygon':
-                    for smog in mog:
+                    for smog in mog.geoms:
                         mog_list.append(smog)
                 else:
                     mog_list.append(mog)
@@ -553,7 +553,7 @@ class MachinePath:
             ng = offset_polygon(g, td / 2.0 * (1 + 0.5 - ov), shapely_poly=True)
             if ng is not None:
                 if ng.geom_type == 'MultiPolygon':
-                    for sng in ng:
+                    for sng in ng.geoms:
                         ng_list.append(sng)
                 else:
                     ng_list.append(ng)
