@@ -4,7 +4,7 @@
 import pyclipper as pc
 import shapely.geometry as shg
 from shapely.geometry import Polygon
-from shapely.ops import cascaded_union, unary_union
+from shapely.ops import unary_union
 from shapely.validation import explain_validity
 
 
@@ -147,7 +147,7 @@ def _polytree_to_shapely(tree, scale):
     # by the time recursion returns to the root.
     assert len(children) == 0
 
-    union = cascaded_union(polygons)
+    union = unary_union(polygons)
     assert union.is_valid
     return union
 

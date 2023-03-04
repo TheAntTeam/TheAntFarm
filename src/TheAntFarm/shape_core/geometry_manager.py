@@ -1,7 +1,7 @@
 import time
 import pyclipper as pc
 import shapely.geometry as shg
-from shapely.ops import cascaded_union
+from shapely.ops import unary_union
 
 # from .plot_stuff import plot_polygons, plot_shapely
 from .pyclipper2shapely import polytree_to_shapely
@@ -47,7 +47,8 @@ def merge_polygons_path(poly_set, as_list=False):
             poly_set[i] = p = p.buffer(0)
             # if not p.is_valid:
             #    plot_shapely([p])
-        merged = cascaded_union(poly_set)
+        # merged = cascaded_union(poly_set)
+        merged = unary_union(poly_set)
         if merged.geom_type != "MultiPolygon":
             merged = [merged]
         else:
@@ -296,7 +297,7 @@ def _merge_poly_set(poly_set, pure_merge=False):
             # get ready for clipping
             # of the whole holes
             if dark_poly_sh.geom_type == "MultiPolygon":
-                for dk in dark_poly_sh:
+                for dk in dark_poly_sh.geoms:
                     dark_poly.append(dk.exterior.coords)
                     # add the holes of the darkpoly to the shapes to be subtracted
                     for i in dk.interiors:
@@ -316,7 +317,7 @@ def _merge_poly_set(poly_set, pure_merge=False):
 
         merged = []
         if dark_poly_sh.geom_type == "MultiPolygon":
-            for dk in dark_poly_sh:
+            for dk in dark_poly_sh.geoms:
                 tmp = [dk.exterior.coords]
                 # add the holes of the darkpoly to the shapes to be subtracted
                 for i in dk.interiors:
@@ -377,9 +378,9 @@ def merge_polygons(mp):
 
     merged_final = []
     tmp_p = [m.geom for m in merged]
-    tmp_final = cascaded_union(tmp_p)
+    tmp_final = unary_union(tmp_p)
     if tmp_final.geom_type == "MultiPolygon":
-        for f in tmp_final:
+        for f in tmp_final.geoms:
             tmp = [f.exterior.coords]
             # add the holes of the darkpoly to the shapes to be subtracted
             for i in f.interiors:
