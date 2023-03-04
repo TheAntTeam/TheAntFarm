@@ -269,9 +269,9 @@ class VisualLayer:
             for d in geom_list:
                 gl = d[1]
                 for g in gl:
-                    if g.type == "LineString":
+                    if g.geom_type == "LineString":
                         ldata.append(list(g.coords))
-                    if g.type == "LinearRing":
+                    if g.geom_type == "LinearRing":
                         ldata.append(list(g.coords))
                 self.create_line(tag, ldata, color, order)
         else:

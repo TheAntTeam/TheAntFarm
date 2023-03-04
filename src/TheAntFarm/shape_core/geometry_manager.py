@@ -7,7 +7,7 @@ from shapely.ops import unary_union
 from .pyclipper2shapely import polytree_to_shapely
 
 
-def merge_polygons_path(poly_set, as_list=False):
+def merge_polygons_path(poly_set):
     merged = []
 
     use_shapely = True
@@ -52,8 +52,7 @@ def merge_polygons_path(poly_set, as_list=False):
         if merged.geom_type != "MultiPolygon":
             merged = [merged]
         else:
-            if as_list:
-                merged = list(merged)
+            merged = list(merged.geoms)
     return merged
 
 
