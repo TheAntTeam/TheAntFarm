@@ -38,4 +38,12 @@ jobs:
     - name: Build Executable
       run: |
         python -m pip install pyinstaller
-        pyinstaller ./src/TheAntFarm/the_ant_farm.spec
+        cd src
+        cd TheAntFarm
+        pyinstaller the_ant_farm.spec
+        cd ..
+        cd ..
+    - uses: actions/upload-artifact@v3
+      with:
+      name: the_ant_farm.exe
+      path: src/TheAntFarm/the_ant_farm.exe
