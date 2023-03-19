@@ -14,6 +14,7 @@ class Macros:
         "position": "POSITION"
     }
     AXIS = ("X", "Y", "Z")
+    MACRO_FOLDER_NAME = "macros"
 
     def __init__(self, parent=None):
 
@@ -22,7 +23,7 @@ class Macros:
         self.cfg = None
         self.load_cfg()
 
-        self.macros_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../macros"))
+        self.macros_default_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", self.MACRO_FOLDER_NAME))
 
         self.macros_dict = {
             "M6": "tool_change_wcs.gcode"
@@ -78,10 +79,13 @@ class Macros:
         # print(cmd.strip().upper() in macros_list)
         return cmd.strip().upper() in macros_list
 
-    def get_macro_string(self, macro):
+    def get_macro_string(self, macro, local_path=""):
         lines = []
         if self.is_macro(macro):
-            macro_path = os.path.join(self.macros_path, self.macros_dict[macro])
+            macros_path = self.macros_default_path
+            if os.path.isdir(local_path):
+                macros_path = os.path.join(local_path, self.MACRO_FOLDER_NAME)
+            macro_path = os.path.join(macros_path, self.macros_dict[macro])
             if os.path.isfile(macro_path):
                 with open(macro_path) as f:
                     lines = f.readlines()

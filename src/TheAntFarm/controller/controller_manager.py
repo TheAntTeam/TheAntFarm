@@ -293,7 +293,8 @@ class ControllerWorker(QObject):
                 }
 
                 self.wait_tag_decoding = False
-                self.macro_obj = GCodeMacro(freeze_dro, macro_type, self.gcr)
+                local_path = self.settings.local_path
+                self.macro_obj = GCodeMacro(freeze_dro, macro_type, self.gcr, local_path=local_path)
                 ret_cmd_to_send = "$#\n"
                 # ret_cmd_to_send = self.macro_obj.get_next_line(probe_data, wsp)
                 self.tot_lines += 1

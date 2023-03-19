@@ -7,18 +7,22 @@ from .settings_machine import MachineSettingsHandler
 
 class SettingsHandler:
     # Configuration file folder
-    CONFIG_FOLDER = os.path.normpath(os.path.join(os.path.dirname(__file__), '../configurations'))
+    CONFIG_FOLDER = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'configurations'))
 
     def __init__(self, main_win):
-        if not os.path.isdir(self.CONFIG_FOLDER):
-            os.makedirs(self.CONFIG_FOLDER)
+        self.config_folder = self.CONFIG_FOLDER
+        if os.path.isdir(main_win.local_path):
+            self.config_folder = os.path.join(main_win.local_path, "configurations")
+        if not os.path.isdir(self.config_folder):
+            os.makedirs(self.config_folder)
 
         self.main_win = main_win
+        self.local_path = self.main_win.local_path
 
-        self.app_settings = AppSettingsHandler(self.CONFIG_FOLDER, main_win)
-        self.jobs_settings = JobSettingsHandler(self.CONFIG_FOLDER)
-        self.gcf_settings = GCodeFilesSettingsHandler(self.CONFIG_FOLDER)
-        self.machine_settings = MachineSettingsHandler(self.CONFIG_FOLDER, main_win)
+        self.app_settings = AppSettingsHandler(self.config_folder, main_win)
+        self.jobs_settings = JobSettingsHandler(self.config_folder)
+        self.gcf_settings = GCodeFilesSettingsHandler(self.config_folder)
+        self.machine_settings = MachineSettingsHandler(self.config_folder, main_win)
 
     def read_all_settings(self):
         """ Read all settings from ini files """
