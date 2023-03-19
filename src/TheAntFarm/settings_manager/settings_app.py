@@ -7,7 +7,7 @@ import os
 class AppSettingsHandler:
     # APP CONFIGURATION DEFAULT VALUES
     APP_VERSION_DEFAULT = "0.1.0"
-    LOGS_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '../app_logs'))
+    LOGS_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'app_logs'))
     LOGS_FILE_DEFAULT = os.path.normpath(os.path.join(LOGS_DIR_DEFAULT, 'app_logs.log'))
     LOGS_MAX_BYTES = 1000000
     LOGS_BACKUP_COUNT = 2
@@ -34,15 +34,32 @@ class AppSettingsHandler:
     NC_BOTTOM_LAYER_COLOR_DEFAULT = "#A52A2A"
 
     def __init__(self, config_folder, main_win):
+
+        if os.path.isdir(main_win.local_path):
+            logs_dir_default = os.path.join(main_win.local_path, "app_logs")
+            self.logs_file_default = os.path.normpath(os.path.join(logs_dir_default, 'app_logs.log'))
+            self.logs_folder = os.path.join(main_win.local_path, "app_logs")
+            self.logs_file = self.logs_file_default
+
+            self.layer_last_dir_default = main_win.local_path
+            self.gcode_last_dir_default = main_win.local_path
+
+        else:
+            self.logs_file_default = self.LOGS_FILE_DEFAULT
+            self.logs_folder = self.LOGS_DIR_DEFAULT
+            self.logs_file = self.logs_file_default
+
+            self.layer_last_dir_default = self.LAYER_LAST_DIR_DEFAULT
+            self.gcode_last_dir_default = self.GCODE_LAST_DIR_DEFAULT
+
+        if not os.path.isdir(self.logs_folder):
+            os.makedirs(self.logs_folder)
+
         self.app_config_path = os.path.normpath(os.path.join(config_folder, 'app_config.ini'))
         self.app_settings = configparser.ConfigParser()
 
         self.app_version = self.APP_VERSION_DEFAULT
 
-        if not os.path.isdir(self.LOGS_DIR_DEFAULT):
-            os.makedirs(self.LOGS_DIR_DEFAULT)
-        self.logs_folder = self.LOGS_DIR_DEFAULT
-        self.logs_file = self.LOGS_FILE_DEFAULT
         self.logs_max_bytes = self.LOGS_MAX_BYTES
         self.logs_backup_count = self.LOGS_BACKUP_COUNT
 
@@ -58,8 +75,8 @@ class AppSettingsHandler:
         self.console_visibility = self.SHOW_CONSOLE_DEFAULT
         self.last_serial_port = self.LAST_SERIAL_PORT_DEFAULT
         self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
-        self.layer_last_dir = self.LAYER_LAST_DIR_DEFAULT
-        self.gcode_last_dir = self.GCODE_LAST_DIR_DEFAULT
+        self.layer_last_dir = self.layer_last_dir_default
+        self.gcode_last_dir = self.gcode_last_dir_default
         self.layer_color = Od({})
         self.layer_color["top"] = self.TOP_LAYER_COLOR_DEFAULT
         self.layer_color["bottom"] = self.BOTTOM_LAYER_COLOR_DEFAULT
@@ -93,9 +110,9 @@ class AppSettingsHandler:
             self.settings_tab_visibility = app_general.getboolean("settings_tab_visibility",
                                                                   self.SHOW_SETTINGS_TAB_DEFAULT)
             self.console_visibility = app_general.getboolean("console_visibility", self.SHOW_CONSOLE_DEFAULT)
-            self.logs_file = app_general.get('logs_file', self.LOGS_FILE_DEFAULT)
+            self.logs_file = app_general.get('logs_file', self.logs_file_default)
             if not os.path.isdir(os.path.dirname(os.path.abspath(self.logs_file))):
-                self.logs_file = self.LOGS_FILE_DEFAULT  # restore logs file with the default path
+                self.logs_file = self.logs_file_default  # restore logs file with the default path
             self.logs_max_bytes = app_general.getint('logs_max_bytes', self.LOGS_MAX_BYTES)
             self.logs_backup_count = app_general.getint('logs_backup_count', self.LOGS_BACKUP_COUNT)
             self.last_serial_port = app_general.get("last_serial_port", self.LAST_SERIAL_PORT_DEFAULT)
@@ -107,7 +124,7 @@ class AppSettingsHandler:
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
             app_layers_settings = self.app_settings["LAYERS"]
-            self.layer_last_dir = app_layers_settings.get("layer_last_dir", self.LAYER_LAST_DIR_DEFAULT)
+            self.layer_last_dir = app_layers_settings.get("layer_last_dir", self.layer_last_dir_default)
             self.layer_color["top"] = app_layers_settings.get("top_layer_color", self.TOP_LAYER_COLOR_DEFAULT)
             self.layer_color["bottom"] = app_layers_settings.get("bottom_layer_color", self.BOTTOM_LAYER_COLOR_DEFAULT)
             self.layer_color["profile"] = app_layers_settings.get("profile_layer_color",
@@ -119,7 +136,7 @@ class AppSettingsHandler:
 
         if "GCODES" in self.app_settings:
             app_gcode_settings = self.app_settings["GCODES"]
-            self.gcode_last_dir = app_gcode_settings.get("gcode_last_dir", self.GCODE_LAST_DIR_DEFAULT)
+            self.gcode_last_dir = app_gcode_settings.get("gcode_last_dir", self.gcode_last_dir_default)
 
     def write_all_app_settings(self):
         """ Write all application settings to ini files """
@@ -135,15 +152,15 @@ class AppSettingsHandler:
                                         "align_tab_visibility": self.SHOW_ALIGN_TAB_DEFAULT,
                                         "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
                                         "console_visibility": self.console_visibility,
-                                        "layer_last_dir": self.LAYER_LAST_DIR_DEFAULT,
+                                        "layer_last_dir": self.layer_last_dir_default,
                                         "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
                                         "bottom_layer_color": self.BOTTOM_LAYER_COLOR_DEFAULT,
                                         "profile_layer_color": self.PROFILE_LAYER_COLOR_DEFAULT,
                                         "drill_layer_color": self.DRILL_LAYER_COLOR_DEFAULT,
                                         "nc_top_layer_color": self.NC_TOP_LAYER_COLOR_DEFAULT,
                                         "nc_bottom_layer_color": self.NC_BOTTOM_LAYER_COLOR_DEFAULT,
-                                        "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT,
-                                        "logs_file": self.LOGS_FILE_DEFAULT,
+                                        "gcode_last_dir": self.gcode_last_dir_default,
+                                        "logs_file": self.logs_file_default,
                                         "logs_max_bytes": self.LOGS_MAX_BYTES,
                                         "logs_backup_count": self.LOGS_BACKUP_COUNT,
                                         "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
@@ -166,7 +183,7 @@ class AppSettingsHandler:
         app_general["align_tab_visibility"] = str(self.main_win.ui.actionHide_Show_Align_Tab.isChecked())
         app_general["settings_tab_visibility"] = str(self.main_win.ui.actionSettings_Preferences.isChecked())
         app_general["console_visibility"] = str(self.main_win.ui.actionHide_Show_Console.isChecked())
-        app_general["logs_file"] = str(self.LOGS_FILE_DEFAULT)
+        app_general["logs_file"] = str(self.logs_file_default)
         app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
         app_general["last_serial_port"] = str(self.main_win.ui.serial_ports_cb.currentText())
@@ -206,15 +223,15 @@ class AppSettingsHandler:
                                         "align_tab_visibility": self.SHOW_ALIGN_TAB_DEFAULT,
                                         "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
                                         "console_visibility": self.console_visibility,
-                                        "layer_last_dir": self.LAYER_LAST_DIR_DEFAULT,
+                                        "layer_last_dir": self.layer_last_dir_default,
                                         "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
                                         "bottom_layer_color": self.BOTTOM_LAYER_COLOR_DEFAULT,
                                         "profile_layer_color": self.PROFILE_LAYER_COLOR_DEFAULT,
                                         "drill_layer_color": self.DRILL_LAYER_COLOR_DEFAULT,
                                         "nc_top_layer_color": self.NC_TOP_LAYER_COLOR_DEFAULT,
                                         "nc_bottom_layer_color": self.NC_BOTTOM_LAYER_COLOR_DEFAULT,
-                                        "gcode_last_dir": self.GCODE_LAST_DIR_DEFAULT,
-                                        "logs_file": self.LOGS_FILE_DEFAULT,
+                                        "gcode_last_dir": self.gcode_last_dir_default,
+                                        "logs_file": self.logs_file_default,
                                         "logs_max_bytes": self.LOGS_MAX_BYTES,
                                         "logs_backup_count": self.LOGS_BACKUP_COUNT,
                                         "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
@@ -235,7 +252,7 @@ class AppSettingsHandler:
         app_general["align_tab_visibility"] = str(self.main_win.ui.actionHide_Show_Align_Tab.isChecked())
         app_general["settings_tab_visibility"] = str(self.main_win.ui.actionSettings_Preferences.isChecked())
         app_general["console_visibility"] = str(self.SHOW_CONSOLE_DEFAULT)
-        app_general["logs_file"] = str(self.LOGS_FILE_DEFAULT)
+        app_general["logs_file"] = str(self.logs_file_default)
         app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
         app_general["last_serial_port"] = str(self.LAST_SERIAL_PORT_DEFAULT)
@@ -244,12 +261,12 @@ class AppSettingsHandler:
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
         app_layers = self.app_settings["LAYERS"]
-        app_layers["layer_last_dir"] = str(self.LAYER_LAST_DIR_DEFAULT)
+        app_layers["layer_last_dir"] = str(self.layer_last_dir_default)
 
         # Layers related application settings #
         self.app_settings["GCODES"] = {}
         app_layers = self.app_settings["GCODES"]
-        app_layers["gcode_last_dir"] = str(self.GCODE_LAST_DIR_DEFAULT)
+        app_layers["gcode_last_dir"] = str(self.gcode_last_dir_default)
 
         # Write application ini file #
         with open(self.app_config_path, 'w') as configfile:

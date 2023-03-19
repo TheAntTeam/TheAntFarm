@@ -1,6 +1,7 @@
 import os
 import sys
 import platform
+import shutil
 from PySide2.QtWidgets import QMainWindow, QApplication
 from PySide2.QtCore import QThread, QResource
 from queue import Queue
@@ -12,6 +13,7 @@ from ui_the_ant_farm import Ui_MainWindow
 # convert qrc to py: pyside2-rcc app_resources.qrc -o app_resources_rc.py
 # or:                python .\build.py res
 """ Custom imports """
+from executable_path_checker import ExecutablePathChecker
 from serial_manager import SerialWorker
 from controller.controller_manager import ControllerWorker
 from style_manager import StyleManager
@@ -47,8 +49,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu = Queue()                   # serial FIFO RX Queue
     serialTxQu = Queue()                   # serial FIFO TX Queue
 
-    def __init__(self):
+    def __init__(self, local_path=""):
         super(MainWindow, self).__init__()
+
+        self.local_path = local_path
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -102,10 +106,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.close()
 
 
-def main():
+def main(local_path=""):
     app = QApplication(sys.argv)
     style_man = StyleManager(app)
-    window = MainWindow()
+    window = MainWindow(local_path=local_path)
 
     h = LogHandler(window.ui_manager.update_logging_status)
     h.set_handler_features()
@@ -128,4 +132,8 @@ def main():
 
 if __name__ == "__main__":
     config_os()
-    main()
+    epc = ExecutablePathChecker()
+    local_path = epc.create_data_folders()
+    print("The Ant Farm Path")
+    print(local_path)
+    main(local_path)

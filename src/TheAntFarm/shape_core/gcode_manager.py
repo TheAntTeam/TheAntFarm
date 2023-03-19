@@ -481,14 +481,14 @@ class GCoder:
 
         return abl_cmd_ls, prb_num_todo
 
-    def get_macro_code(self, macro_type="M6", to_comment=""):
+    def get_macro_code(self, macro_type="M6", to_comment="", local_path=""):
         print("Get Macro Code")
         print(macro_type)
         s = ""
         if to_comment != "":
             s += self.gcode_comment(to_comment)
         if self.macro is not None:
-            s += self.macro.get_macro_string(macro_type)
+            s += self.macro.get_macro_string(macro_type, local_path=local_path)
         return s
 
     def get_file_name(self):
@@ -514,14 +514,14 @@ class GCoder:
 
 class GCodeMacro:
 
-    def __init__(self, freezed_dro, macro_type="M6", gcr=None):
+    def __init__(self, freezed_dro, macro_type="M6", gcr=None, local_path=""):
         self.id = 0
         self.freezed_dro = freezed_dro
         if gcr is None:
             self.gcc = GCoder("dummy", machining_type="commander")
         else:
             self.gcc = gcr
-        self.macro_lines = self.gcc.get_macro_code(macro_type).split("\n")
+        self.macro_lines = self.gcc.get_macro_code(macro_type, local_path=local_path).split("\n")
 
     def get_next_line(self, wsp, probe_data):
         if self.id < len(self.macro_lines):
