@@ -45,5 +45,5 @@ jobs:
         cd ..
     - uses: actions/upload-artifact@v3
       with:
-        name: the_ant_farm.exe
-        path: src/TheAntFarm/dist/the_ant_farm.exe
+        name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}.exe
+        path: src/TheAntFarm/dist/the_ant_farm[.exe]
