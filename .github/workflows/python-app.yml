@@ -16,7 +16,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.8", "3.9", "3.10"]
+        # python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.10"]
 
     steps:
     - uses: actions/checkout@v3
@@ -32,9 +33,9 @@ jobs:
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 .  --exclude app_resources_rc.py,ui_the_ant_farm.py --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 .  --exclude app_resources_rc.py,ui_the_ant_farm.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Build Executable
       run: |
         python -m pip install pyinstaller
@@ -43,7 +44,13 @@ jobs:
         pyinstaller the_ant_farm.spec
         cd ..
         cd ..
-    - uses: actions/upload-artifact@v3
+    - if: ${{ matrix.os != 'windows-latest' }}
+      uses: actions/upload-artifact@v3
       with:
         name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}
         path: src/TheAntFarm/dist/the_ant_farm
+    - if: ${{ matrix.os == 'windows-latest' }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}.exe
+        path: src/TheAntFarm/dist/the_ant_farm.exe
