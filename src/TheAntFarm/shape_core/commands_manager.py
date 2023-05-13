@@ -1,5 +1,29 @@
 
 class CommandManager:
+    """
+    A CommandManager Object manages requests of gcode translation for a set of known commands.
+    ...
+
+    Supported Commands
+    ------------------
+    - soft_reset
+    - unlock
+    - homing
+    - goto
+    - jog
+    - set_wps
+    - probe
+    - hold
+
+    Methods
+    -------
+    load_cfg(cfg=None)
+        Load the object relative configuration
+
+    get_command_str(command, values)
+        return the GCODE sting of the requested command.
+        values, if needed, contain X Y and Z coordinates.
+    """
 
     AXIS = ("X", "Y", "Z")
     CMDS = {
@@ -14,11 +38,42 @@ class CommandManager:
     }
 
     def __init__(self, parent):
+        """
+        Return a CommandManager Object.
+
+            Parameters:
+                parent (object): Usually a GCoder object o derivatives
+
+            Returns:
+                 CommandManager Object (object)
+        """
         self.parent = parent
         self.cfg = None
         self.load_cfg()
 
     def load_cfg(self, cfg=None):
+        """
+        Return a CommandManager Object.
+
+            Parameters:
+                cfg (dict): if None a default set of configuration parameters loaded
+
+            Returns:
+                 None
+
+            cfg parameters:
+                - tool_probe_pos (tuple): Probe position coordinates (X, Y, Z) [default (-1.0, -1.0, -11.0)]
+                - tool_probe_working (bool) If False: tool_probe_pos is intended in machine pos,
+                                            if True: working pos [default True]
+                - tool_probe_min (float): Probe Z limit [default -11.0]
+                - tool_change_pos (tuple): Tool change position in machine pos. [default (-41.2, -120.88, -1.0)]
+                - tool_probe_feedrate (tuple): Feedrate for Jogging XY,
+                                               Jogging Z and Probe approaching respectively
+                                               [default (300.0, 80.0, 50.0)]
+                - tool_probe_hold (bool): Force and HOLD before the probe command [default False]
+                - tool_probe_zero (bool): Force zeroing Z axis after probing [default False]
+                - safe_pos (tuple): Unused
+        """
         if cfg is not None:
             self.cfg = cfg
         else:
