@@ -9,10 +9,10 @@ class CommandManager:
     - soft_reset
     - unlock
     - homing
-    - goto
-    - jog
-    - set_wps
-    - probe
+    - goto (use values)
+    - jog (use values)
+    - set_wps (use values)
+    - probe (use values)
     - hold
 
     Methods
@@ -89,6 +89,29 @@ class CommandManager:
         self.cfg["safe_pos"] = (-1.0, -1.0, -1.0)
 
     def get_command_str(self, command, values):
+        """
+        Manage the request of command to GCODE translation.
+
+            Parameters:
+                command (string): A command tag between the supported ones:
+                    - soft_reset
+                    - unlock
+                    - homing
+                    - goto (use values)
+                    - jog (use values)
+                    - set_wps (use values)
+                    - probe (use values)
+                    - hold
+
+                values (iterable): Set of X, Y, Z coordinates needed for a sub-set of commands:
+                    - goto
+                    - jog
+                    - set_wps
+                    - probe (just Z coord used)
+
+            Returns:
+                  The translation of the requested command in GCODE format.
+        """
         str_l = []
         xy_check = [q is not None for q in values[0:2]]
         z_check = values[2] is not None
