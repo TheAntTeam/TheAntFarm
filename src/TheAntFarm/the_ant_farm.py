@@ -42,7 +42,7 @@ def config_os():
     else:
         print("Linux Env")
         os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
-        os.environ["QT_QPA_PLATFORM"] = "xcb"
+        os.environ["QT_QPA_PLATFORM"] = "wayland;xcb"
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
