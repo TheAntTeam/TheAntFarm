@@ -36,6 +36,11 @@ jobs:
         flake8 .  --exclude app_resources_rc.py,ui_the_ant_farm.py --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 .  --exclude app_resources_rc.py,ui_the_ant_farm.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Set short git commit SHA
+      id: vars
+      run: |
+        calculatedSha=$(git rev-parse --short ${{ github.sha }})
+        echo "::set-output name=short_sha::$calculatedSha"
     - name: Build Executable
       run: |
         python -m pip install pyinstaller
@@ -47,10 +52,10 @@ jobs:
     - if: ${{ matrix.os != 'windows-latest' }}
       uses: actions/upload-artifact@v3
       with:
-        name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}
+        name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}_${{ steps.vars.outputs.short_sha }}_${{ github.run_number }}
         path: src/TheAntFarm/dist/the_ant_farm
     - if: ${{ matrix.os == 'windows-latest' }}
       uses: actions/upload-artifact@v3
       with:
-        name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}.exe
+        name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}_${{ steps.vars.outputs.short_sha }}_${{ github.run_number }}.exe
         path: src/TheAntFarm/dist/the_ant_farm.exe
