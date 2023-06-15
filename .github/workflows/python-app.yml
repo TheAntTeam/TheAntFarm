@@ -52,5 +52,5 @@ jobs:
     - if: ${{ matrix.os == 'windows-latest' }}
       uses: actions/upload-artifact@v3
       with:
-        name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}_${{ github.sha }}_${{ github.run_number }}.exe
+        name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}_${{ github.sha }}_${{ github.run_number }}
         path: src/TheAntFarm/dist/the_ant_farm.exe
