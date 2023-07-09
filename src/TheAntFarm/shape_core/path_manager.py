@@ -320,7 +320,6 @@ class MachinePath:
                 big_poly.append(p)
 
         print("REMOVED: " + str(old_poly - new_poly))
-
         return big_poly
 
     def execute_pocketing(self):
@@ -410,7 +409,11 @@ class MachinePath:
             bit_points = drill_per_bit[bit_k]
             if 'optimize' in self.cfg.keys():
                 if self.cfg['optimize']:
-                    opt = Optimizer(bit_points)
+                    # TODO parametrize optimizer_type
+                    opt = Optimizer(bit_points, optimizer_type="nearest_insertion")
+                    # opt = Optimizer(bit_points, optimizer_type="genetic")
+                    # opt = Optimizer(bit_points, optimizer_type="two_opt")
+
                     optimized_bit_points = opt.get_optimized_path()
                     drill_per_bit[bit_k] = optimized_bit_points
                     #print("Bit " + str(bit_k) + " " + str(optimized_bit_points))
@@ -423,7 +426,7 @@ class MachinePath:
             paths.append(((k, "drill"), [LineString(drill_per_bit[k])]))
 
         # if holes have already been performed by the pocketing procedure,
-        # the drilling path will be append to the pocketing one
+        # the drilling path will be appended to the pocketing one
 
         if not_to_drill is not None:
             if any(not_to_drill) and self.path is not None:
