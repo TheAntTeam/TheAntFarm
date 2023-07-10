@@ -901,13 +901,13 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_mirror_chb, 14, 2, 1, 1)
 
-        self.algo_choice_cb = QComboBox(self.drill_page)
-        self.algo_choice_cb.addItem("")
-        self.algo_choice_cb.addItem("")
-        self.algo_choice_cb.addItem("")
-        self.algo_choice_cb.setObjectName(u"algo_choice_cb")
+        self.drill_algo_choice_cb = QComboBox(self.drill_page)
+        self.drill_algo_choice_cb.addItem("")
+        self.drill_algo_choice_cb.addItem("")
+        self.drill_algo_choice_cb.addItem("")
+        self.drill_algo_choice_cb.setObjectName(u"drill_algo_choice_cb")
 
-        self.gridLayout_5.addWidget(self.algo_choice_cb, 13, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.drill_algo_choice_cb, 13, 2, 1, 1)
 
         self.jobs_sw.addWidget(self.drill_page)
         self.nc_area_top_page = QWidget()
@@ -3561,9 +3561,9 @@ class Ui_MainWindow(object):
         self.drill_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
         self.drill_mirror_la.setText(QCoreApplication.translate("MainWindow", u"Mirror", None))
         self.drill_mirror_chb.setText("")
-        self.algo_choice_cb.setItemText(0, QCoreApplication.translate("MainWindow", u"Nearest Insertion (fast)", None))
-        self.algo_choice_cb.setItemText(1, QCoreApplication.translate("MainWindow", u"2-opt (optimal)", None))
-        self.algo_choice_cb.setItemText(2, QCoreApplication.translate("MainWindow", u"Genetic", None))
+        self.drill_algo_choice_cb.setItemText(0, QCoreApplication.translate("MainWindow", u"Nearest Insertion (fast)", None))
+        self.drill_algo_choice_cb.setItemText(1, QCoreApplication.translate("MainWindow", u"2-opt (optimal)", None))
+        self.drill_algo_choice_cb.setItemText(2, QCoreApplication.translate("MainWindow", u"Genetic", None))
 
         self.nc_top_overlap_la.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
         self.nc_top_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
