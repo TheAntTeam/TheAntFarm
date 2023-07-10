@@ -842,11 +842,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_tw, 0, 1, 1, 2, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.drill_optimization_chb = QCheckBox(self.drill_page)
-        self.drill_optimization_chb.setObjectName(u"drill_optimization_chb")
-
-        self.gridLayout_5.addWidget(self.drill_optimization_chb, 13, 2, 1, 1)
-
         self.drill_cut_z_dsb = QDoubleSpinBox(self.drill_page)
         self.drill_cut_z_dsb.setObjectName(u"drill_cut_z_dsb")
         self.drill_cut_z_dsb.setDecimals(4)
@@ -905,6 +900,14 @@ class Ui_MainWindow(object):
         self.drill_mirror_chb.setMinimumSize(QSize(123, 0))
 
         self.gridLayout_5.addWidget(self.drill_mirror_chb, 14, 2, 1, 1)
+
+        self.algo_choice_cb = QComboBox(self.drill_page)
+        self.algo_choice_cb.addItem("")
+        self.algo_choice_cb.addItem("")
+        self.algo_choice_cb.addItem("")
+        self.algo_choice_cb.setObjectName(u"algo_choice_cb")
+
+        self.gridLayout_5.addWidget(self.algo_choice_cb, 13, 2, 1, 1)
 
         self.jobs_sw.addWidget(self.drill_page)
         self.nc_area_top_page = QWidget()
@@ -3548,17 +3551,20 @@ class Ui_MainWindow(object):
         self.drill_milling_tool_la.setText(QCoreApplication.translate("MainWindow", u"Milling Tool", None))
         self.remove_drill_tool_tb.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.drill_milling_tool_chb.setText("")
-        self.drill_optimization_la.setText(QCoreApplication.translate("MainWindow", u"Optimization", None))
+        self.drill_optimization_la.setText(QCoreApplication.translate("MainWindow", u"Algorithm", None))
         ___qtablewidgetitem = self.drill_tw.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Bit", None));
         ___qtablewidgetitem1 = self.drill_tw.horizontalHeaderItem(1)
         ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Diameter [mm]", None));
-        self.drill_optimization_chb.setText("")
         self.drill_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
         self.drill_milling_tool_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Mill Tool Diameter [mm]", None))
         self.drill_generate_job_pb.setText(QCoreApplication.translate("MainWindow", u"Generate Job", None))
         self.drill_mirror_la.setText(QCoreApplication.translate("MainWindow", u"Mirror", None))
         self.drill_mirror_chb.setText("")
+        self.algo_choice_cb.setItemText(0, QCoreApplication.translate("MainWindow", u"Nearest Insertion (fast)", None))
+        self.algo_choice_cb.setItemText(1, QCoreApplication.translate("MainWindow", u"2-opt (optimal)", None))
+        self.algo_choice_cb.setItemText(2, QCoreApplication.translate("MainWindow", u"Genetic", None))
+
         self.nc_top_overlap_la.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
         self.nc_top_cut_z_la.setText(QCoreApplication.translate("MainWindow", u"Cut Z [mm]", None))
         self.nc_top_spindle_speed_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Speed", None))
