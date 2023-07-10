@@ -18,7 +18,7 @@ class JobSettingsHandler:
     GAPS_LENGTH_DEFAULT = 1.0
     GAPS_TYPE_INDEX_DEFAULT = 3
     MILLING_TOOL_FLAG = False
-    OPTIMIZE_FLAG_DEFAULT = True
+    DRILL_ALGO_DEFAULT = 0
     MIRROR_ALL_DEFAULT = False
     MIRROR_BOTTOM_DEFAULT = True
     MIRROR_AXIS_DEFAULT = "x"
@@ -108,7 +108,7 @@ class JobSettingsHandler:
             drill_set_od["spindle"] = drill_settings.getfloat("spindle", self.SPINDLE_SPEED_DEFAULT)
             drill_set_od["xy_feedrate"] = drill_settings.getfloat("xy_feedrate", self.XY_FEEDRATE_DEFAULT)
             drill_set_od["z_feedrate"] = drill_settings.getfloat("z_feedrate", self.Z_FEEDRATE_DEFAULT)
-            drill_set_od["optimize"] = drill_settings.getboolean("optimize", self.OPTIMIZE_FLAG_DEFAULT)
+            drill_set_od["optimize"] = drill_settings.getint("algorithm", self.DRILL_ALGO_DEFAULT)
             drill_set_od["mirror"] = drill_settings.getboolean("mirror", self.MIRROR_ALL_DEFAULT)
 
             drill_bits_names_list = []
@@ -230,7 +230,7 @@ class JobSettingsHandler:
         drill_settings["spindle"] = str(drill_set_od["spindle"])
         drill_settings["xy_feedrate"] = str(drill_set_od["xy_feedrate"])
         drill_settings["z_feedrate"] = str(drill_set_od["z_feedrate"])
-        drill_settings["optimize"] = str(drill_set_od["optimize"])
+        drill_settings["algorithm"] = str(drill_set_od["optimize"])
         drill_settings["mirror"] = str(drill_set_od["mirror"])
 
         # Section dedicated to drill bits #
@@ -348,7 +348,7 @@ class JobSettingsHandler:
         drill_settings["spindle"] = str(self.SPINDLE_SPEED_DEFAULT)
         drill_settings["xy_feedrate"] = str(self.XY_FEEDRATE_DEFAULT)
         drill_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
-        drill_settings["optimize"] = str(self.OPTIMIZE_FLAG_DEFAULT)
+        drill_settings["optimize"] = str(self.DRILL_ALGO_DEFAULT)
         drill_settings["mirror"] = str(self.MIRROR_ALL_DEFAULT)
 
         # Section dedicated to drill bits #

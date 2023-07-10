@@ -183,11 +183,7 @@ class UiCreateJobLayerTab(QObject):
         self.ui.drill_xy_feed_rate_dsb.setValue(settings_drill["xy_feedrate"])
         self.ui.drill_z_feed_rate_dsb.setValue(settings_drill["z_feedrate"])
 
-        # TODO: Init algorithm instead of optimize flag setting#
-        # if settings_drill["optimize"]:
-        #     self.ui.drill_optimization_chb.setCheckState(Qt.Checked)
-        # else:
-        #     self.ui.drill_optimization_chb.setCheckState(Qt.Unchecked)
+        self.ui.drill_algo_choice_cb.setCurrentIndex(settings_drill["optimize"])
 
         if settings_drill["mirror"]:
             self.ui.drill_mirror_chb.setCheckState(Qt.Checked)
@@ -296,7 +292,7 @@ class UiCreateJobLayerTab(QObject):
         settings_drill["spindle"] = self.ui.drill_spindle_speed_dsb.value()
         settings_drill["xy_feedrate"] = self.ui.drill_xy_feed_rate_dsb.value()
         settings_drill["z_feedrate"] = self.ui.drill_z_feed_rate_dsb.value()
-        settings_drill["optimize"] = False  # self.ui.drill_optimization_chb.isChecked() # TODO: substitute with algo
+        settings_drill["optimize"] = self.ui.drill_algo_choice_cb.currentIndex()
         settings_drill["mirror"] = self.ui.drill_mirror_chb.isChecked()
         logging.debug(settings_drill)
         return settings_drill
