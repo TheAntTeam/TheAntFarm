@@ -1314,7 +1314,7 @@
                     <item row="13" column="1">
                      <widget class="QLabel" name="drill_optimization_la">
                       <property name="text">
-                       <string>Optimization</string>
+                       <string>Algorithm</string>
                       </property>
                      </widget>
                     </item>
@@ -1352,13 +1352,6 @@
                         <string>Diameter [mm]</string>
                        </property>
                       </column>
-                     </widget>
-                    </item>
-                    <item row="13" column="2">
-                     <widget class="QCheckBox" name="drill_optimization_chb">
-                      <property name="text">
-                       <string/>
-                      </property>
                      </widget>
                     </item>
                     <item row="6" column="2">
@@ -1467,6 +1460,25 @@
                       <property name="text">
                        <string/>
                       </property>
+                     </widget>
+                    </item>
+                    <item row="13" column="2">
+                     <widget class="QComboBox" name="algo_choice_cb">
+                      <item>
+                       <property name="text">
+                        <string>Nearest Insertion (fast)</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>2-opt (optimal)</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Genetic</string>
+                       </property>
+                      </item>
                      </widget>
                     </item>
                    </layout>

@@ -119,7 +119,7 @@ class JobSettingsHandler:
                 for elem in drill_bits_settings:
                     if "bit" in elem:  # This is needed to avoid to read default settings too.
                         drill_bits_names_list.append(elem)
-                        drill_bits_diameter_list.append(drill_bits_settings.getfloat(elem, 0.1))  # todo: set fallback value
+                        drill_bits_diameter_list.append(drill_bits_settings.getfloat(elem, 0.1))  # todo: set fallback
 
             drill_set_od["bits_names"] = drill_bits_names_list
             drill_set_od["bits_diameter"] = drill_bits_diameter_list
