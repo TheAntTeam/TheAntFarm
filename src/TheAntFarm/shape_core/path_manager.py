@@ -408,9 +408,13 @@ class MachinePath:
         for bit_k in drill_per_bit.keys():
             bit_points = drill_per_bit[bit_k]
             if 'optimize' in self.cfg.keys():
-                if self.cfg['optimize']:
-                    # TODO parametrize optimizer_type
-                    opt = Optimizer(bit_points, optimizer_type="nearest_insertion")
+                if isinstance(self.cfg['optimize'], int):
+                    opt = Optimizer(bit_points)
+                    availlable_opt_types = opt.get_optimization_types()
+                    if 0 <= self.cfg['optimize'] < len(availlable_opt_types):
+                        opt_type = availlable_opt_types[self.cfg['optimize']]
+                        opt.set_optimization_type(opt_type)
+
                     # opt = Optimizer(bit_points, optimizer_type="genetic")
                     # opt = Optimizer(bit_points, optimizer_type="two_opt")
 

@@ -12,11 +12,27 @@ from shapely.geometry import LineString, Point
 
 
 class Optimizer:
+
+    OPTIMIZATION_TYPES = ("nearest_insertion", "two_opt", "genetic")
+
     def __init__(self, coords, optimizer_type="nearest_insertion"):
         self.v = len(coords)
         self.coords = coords
         self.distances = distance.cdist(coords, coords, 'euclidean')
         self.optimizer_type = optimizer_type
+
+    def set_optimization_type(self, opt_type):
+        if opt_type in self.OPTIMIZATION_TYPES:
+            self.optimizer_type = opt_type
+            return True
+        else:
+            return False
+
+    def get_optimization_type(self):
+        return self.optimizer_type
+
+    def get_optimization_types(self):
+        return self.OPTIMIZATION_TYPES
 
     def calculate_path_distance(self, path):
         total_distance = np.sum(self.distances[path[:-1], path[1:]])
@@ -75,6 +91,9 @@ class Optimizer:
         path_ids = list(range(len(self.coords)))
 
         start_distance = self.calculate_path_distance(path_ids)
+
+        print("Selected OPT type:", self.optimizer_type)
+
         print("Initial Distance: ", start_distance)
 
         if self.optimizer_type == "genetic":
