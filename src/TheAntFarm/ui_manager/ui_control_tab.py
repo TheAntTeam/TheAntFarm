@@ -87,8 +87,9 @@ class UiControlTab(QObject):
 
         self.ui.open_gcode_tb.clicked.connect(self.open_gcode_files)
 
-        self.ui.send_te.setPlaceholderText('input here')
-        self.ui.send_te.hide()
+        combobox_ss = "QComboBox::drop-down {border-width: 0px;} QComboBox::down-arrow {image: url(noimg); border-width: 0px;}"
+        self.ui.send_cb.setStyleSheet(combobox_ss)
+        self.ui.send_cb.hide()
         self.ui.send_pb.hide()
 
         # Set x and y bbox step initial values.
@@ -99,7 +100,7 @@ class UiControlTab(QObject):
         self.ui.connect_pb.clicked.connect(self.handle_connect_button)
         self.ui.clear_terminal_pb.clicked.connect(self.handle_clear_terminal)
         self.ui.send_pb.clicked.connect(self.send_input)
-        self.ui.send_te.returnPressed.connect(self.send_input)
+        self.ui.send_cb.key_event_cb.connect(self.send_input)
         self.ui.soft_reset_tb.clicked.connect(self.handle_soft_reset)
         self.ui.unlock_tb.clicked.connect(self.handle_unlock)
         self.ui.homing_tb.clicked.connect(self.handle_homing)
@@ -533,9 +534,18 @@ class UiControlTab(QObject):
 
     def send_input(self):
         """Send input to the serial port."""
-        # self.serialTxQu.put(self.ui.send_te.text() + "\n")
-        self.ui_serial_send_s.emit(self.ui.send_te.text() + "\n")
-        self.ui.send_te.clear()
+        ct_cb = self.ui.send_cb.currentText()
+
+        if not ct_cb == "":
+            if self.ui.send_cb.count() == 0:
+                self.ui.send_cb.addItem(ct_cb)
+            else:
+                self.ui.send_cb.setItemText(self.ui.send_cb.count()-1, ct_cb)
+
+            self.ui.send_cb.addItem("")
+            self.ui.send_cb.setCurrentIndex(self.ui.send_cb.count()-1)
+
+            self.ui_serial_send_s.emit(ct_cb + "\n")
 
     @Slot(list, list)
     def get_ports_and_bauds(self, port_names, baudrates):
@@ -596,7 +606,7 @@ class UiControlTab(QObject):
             self.ui.serial_ports_cb.hide()
             self.ui.serial_baud_cb.hide()
             self.ui.refresh_pb.hide()
-            self.ui.send_te.show()
+            self.ui.send_cb.show()
             self.ui.send_pb.show()
             self.ui.soft_reset_tb.setEnabled(True)
             self.ui.unlock_tb.setEnabled(True)
@@ -617,7 +627,7 @@ class UiControlTab(QObject):
         self.ui.serial_ports_cb.show()
         self.ui.serial_baud_cb.show()
         self.ui.refresh_pb.show()
-        self.ui.send_te.hide()
+        self.ui.send_cb.hide()
         self.ui.send_pb.hide()
         self.ui.status_l.setText("Not Connected")
         self.update_status_colors("Not Connected")

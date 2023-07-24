@@ -4485,7 +4485,20 @@
                   <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_2">
                     <item>
-                     <widget class="QLineEdit" name="send_te"/>
+                     <widget class="ComboBoxFilterEnter" name="send_cb">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="autoFillBackground">
+                       <bool>true</bool>
+                      </property>
+                      <property name="editable">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
                     </item>
                     <item>
                      <widget class="QPushButton" name="send_pb">
@@ -7599,6 +7612,11 @@
    <class>VispyCanvas</class>
    <extends>QOpenGLWidget</extends>
    <header>vispy_qt_widget</header>
+  </customwidget>
+  <customwidget>
+   <class>ComboBoxFilterEnter</class>
+   <extends>QComboBox</extends>
+   <header>combobox_filter_enter</header>
   </customwidget>
  </customwidgets>
  <tabstops>
