@@ -13,6 +13,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from vispy_qt_widget import VispyCanvas
+from combobox_filter_enter import ComboBoxFilterEnter
 
 import app_resources_rc
 
@@ -2173,10 +2174,14 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.send_te = QLineEdit(self.sender_tab)
-        self.send_te.setObjectName(u"send_te")
+        self.send_cb = ComboBoxFilterEnter(self.sender_tab)
+        self.send_cb.setObjectName(u"send_cb")
+        sizePolicy2.setHeightForWidth(self.send_cb.sizePolicy().hasHeightForWidth())
+        self.send_cb.setSizePolicy(sizePolicy2)
+        self.send_cb.setAutoFillBackground(True)
+        self.send_cb.setEditable(True)
 
-        self.horizontalLayout_2.addWidget(self.send_te)
+        self.horizontalLayout_2.addWidget(self.send_cb)
 
         self.send_pb = QPushButton(self.sender_tab)
         self.send_pb.setObjectName(u"send_pb")
