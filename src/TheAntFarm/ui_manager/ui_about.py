@@ -10,7 +10,7 @@ class UiAbout(QObject):
         self.app_settings = app_settings
 
     def show_about_info(self):
-        qp_map = QPixmap(u":/resources/resources/logo/the_ant_logo.png")
+        qp_map = QPixmap(u":/resources/resources/logo/the_ant_farm_logo.svg")
         about_dlg = QDialog(parent=self.main_win)
         about_dlg.setModal(True)
         about_dlg.setWindowTitle("About The Ant Farm")
