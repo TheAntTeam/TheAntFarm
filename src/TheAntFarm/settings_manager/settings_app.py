@@ -1,12 +1,13 @@
 from PySide2.QtCore import QPoint, QSize
 from collections import OrderedDict as Od
+from __init__ import __version__
 import configparser
 import os
 
 
 class AppSettingsHandler:
     # APP CONFIGURATION DEFAULT VALUES
-    APP_VERSION_DEFAULT = "0.1.1"
+    APP_VERSION_DEFAULT = "0.1.2"
     LOGS_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'app_logs'))
     LOGS_FILE_DEFAULT = os.path.normpath(os.path.join(LOGS_DIR_DEFAULT, 'app_logs.log'))
     LOGS_MAX_BYTES = 1000000
@@ -85,6 +86,59 @@ class AppSettingsHandler:
         self.layer_color["nc_top"] = self.NC_TOP_LAYER_COLOR_DEFAULT
         self.layer_color["nc_bottom"] = self.NC_BOTTOM_LAYER_COLOR_DEFAULT
 
+    @staticmethod
+    def choose_version(version_s, version_default_s):
+        """
+        Choose between the actual version and the default version.
+        The version shall be 3 integer numbers (major, minor, build).
+        If both the version and default version strings are in a wrong format,
+        "0.0.0" is returned.
+        If one of the versions string is in a wrong format, the other one is returned.
+        If both the versions are ok, the greater is returned.
+
+        Parameters
+        ----------
+        version_s
+        version_default_s
+
+        Returns
+        -------
+        The actual cleaned-up version string.
+        """
+        version_wrong_format_flag = True
+        version_wrong_default_format_flag = True
+        try:
+            version_t = tuple(map(int, (version_s.split("."))))
+            if len(version_t) == 3:
+                version_wrong_format_flag = False
+        except ValueError as e:
+            print("version number wrong format")  # logger is not active at this point
+
+        try:
+            version_default_t = tuple(map(int, (version_default_s.split("."))))
+            if len(version_default_t) == 3:
+                version_wrong_default_format_flag = False
+        except Exception as e:
+            print("default version number wrong format")
+
+        if version_wrong_format_flag and version_wrong_default_format_flag:
+            print("both version number wrong format")
+            return "0.0.0"
+        elif version_wrong_format_flag:
+            return version_default_s
+        elif version_wrong_default_format_flag:
+            return version_s
+
+        if version_t[0] < version_default_t[0]:
+            return version_default_s
+        elif version_t[0] == version_default_t[0]:
+            if version_t[1] < version_default_t[1]:
+                return version_default_s
+            elif version_t[1] == version_default_t[1]:
+                if version_t[2] < version_default_t[2]:
+                    return version_default_s
+        return version_s
+
     def read_all_app_settings(self):
         """ Read all application settings from ini files """
         # If app settings file does NOT exist create it with default values
@@ -97,7 +151,9 @@ class AppSettingsHandler:
         # GENERAL application settings #
         if "GENERAL" in self.app_settings:
             app_general = self.app_settings["GENERAL"]
-            self.app_version = app_general.get("app_version", self.APP_VERSION_DEFAULT)
+            # The following function should choose and clean up the version.
+            self.app_version = self.choose_version(__version__, self.APP_VERSION_DEFAULT)
+
             self.pos = QPoint(app_general.getint("win_position_x", self.WIN_POS_X_DEFAULT),
                               app_general.getint("win_position_y", self.WIN_POS_Y_DEFAULT))
             self.size = QSize(app_general.getint("win_width", self.WIN_SIZE_W_DEFAULT),
@@ -140,8 +196,7 @@ class AppSettingsHandler:
 
     def write_all_app_settings(self):
         """ Write all application settings to ini files """
-        self.app_settings["DEFAULT"] = {"app_version": self.APP_VERSION_DEFAULT,
-                                        "win_position_x": self.WIN_POS_X_DEFAULT,
+        self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
                                         "win_height": self.WIN_SIZE_H_DEFAULT,
@@ -169,7 +224,6 @@ class AppSettingsHandler:
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
         app_general = self.app_settings["GENERAL"]
-        app_general["app_version"] = self.app_version
         window_pos = self.main_win.pos()
         window_geo = self.main_win.normalGeometry()
         app_general["win_position_x"] = str(window_pos.x())
@@ -211,8 +265,7 @@ class AppSettingsHandler:
 
     def restore_app_settings(self):
         """ Restore all application settings to default and create ini file if it doesn't exists """
-        self.app_settings["DEFAULT"] = {"app_version": self.APP_VERSION_DEFAULT,
-                                        "win_position_x": self.WIN_POS_X_DEFAULT,
+        self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
                                         "win_height": self.WIN_SIZE_H_DEFAULT,
@@ -240,7 +293,6 @@ class AppSettingsHandler:
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
         app_general = self.app_settings["GENERAL"]
-        app_general["app_version"] = str(self.APP_VERSION_DEFAULT)
         app_general["win_position_x"] = str(self.WIN_POS_X_DEFAULT)
         app_general["win_position_y"] = str(self.WIN_POS_Y_DEFAULT)
         app_general["win_width"] = str(self.WIN_SIZE_W_DEFAULT)

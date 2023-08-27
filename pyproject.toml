@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "TheAntFarm"
-version = "0.1.0"
+version = "0.1.2"
 description = "TheAntFarm is an application that simplifies the PCB creation using CNC machines."
 authors = ["The Ant Team"]
 license = "MIT"
@@ -25,6 +25,8 @@ Shapely = "1.8.1"
 shiboken2 = "5.15.2.1"
 vispy = "0.9.4"
 opencv-python = ">=4.5.1.48"
+
+dynamic = ["version"]
 
 [tool.poetry.dev-dependencies]
 
