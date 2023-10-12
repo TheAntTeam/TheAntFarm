@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="app_resources.qrc">
-    <normaloff>:/resources/resources/logo/the_ant_farm_logo.svg</normaloff>:/resources/resources/logo/the_ant_logo.png</iconset>
+    <normaloff>:/resources/resources/logo/the_ant_farm_logo.svg</normaloff>:/resources/resources/logo/the_ant_farm_logo.svg</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>
@@ -52,7 +52,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -1956,7 +1956,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="gcode_load">
              <property name="sizePolicy">
@@ -5563,24 +5563,401 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_7">
         <item>
-         <widget class="QOpenGLWidget" name="openGLWidget_2"/>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="verticalSlider">
-          <property name="maximum">
-           <number>255</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_17" stretch="0">
+          <item>
+           <layout class="QGridLayout" name="gridLayout_23" rowstretch="3,0">
+            <item row="1" column="0">
+             <widget class="QTableWidget" name="tableWidget">
+              <property name="columnCount">
+               <number>4</number>
+              </property>
+              <column/>
+              <column/>
+              <column/>
+              <column/>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QOpenGLWidget" name="openGLWidget"/>
+            </item>
+            <item row="1" column="1">
+             <layout class="QGridLayout" name="gridLayoutDirections" rowstretch="0,0,0,0,0">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetFixedSize</enum>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="yPlusButton_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Y+</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="app_resources.qrc">
+                  <normaloff>:/resources/resources/icons/white_north_arrow.svg</normaloff>:/resources/resources/icons/white_north_arrow.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QToolButton" name="center_tb_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Center</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="app_resources.qrc">
+                  <normaloff>:/resources/resources/icons/white_circle.svg</normaloff>:/resources/resources/icons/white_circle.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QToolButton" name="yMinusButton_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Y-</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="app_resources.qrc">
+                  <normaloff>:/resources/resources/icons/white_south_arrow.svg</normaloff>:/resources/resources/icons/white_south_arrow.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QToolButton" name="xPlusButton_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>X+</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="app_resources.qrc">
+                  <normaloff>:/resources/resources/icons/white_east_arrow.svg</normaloff>:/resources/resources/icons/white_east_arrow.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <widget class="QToolButton" name="xYPlusMinuButton_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>X+ Y-</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="app_resources.qrc">
+                  <normaloff>:/resources/resources/icons/white_south_east_arrow.svg</normaloff>:/resources/resources/icons/white_south_east_arrow.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QToolButton" name="xMinusButton_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>X-</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="app_resources.qrc">
+                  <normaloff>:/resources/resources/icons/white_west_arrow.svg</normaloff>:/resources/resources/icons/white_west_arrow.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QToolButton" name="xYMinusButton_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>X- Y-</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="app_resources.qrc">
+                  <normaloff>:/resources/resources/icons/white_south_west_arrow.svg</normaloff>:/resources/resources/icons/white_south_west_arrow.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QToolButton" name="xYPlusButton_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>X+ Y+</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="app_resources.qrc">
+                  <normaloff>:/resources/resources/icons/white_north_east_arrow.svg</normaloff>:/resources/resources/icons/white_north_east_arrow.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QToolButton" name="xYMinusPlusButton_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>X- Y+</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="app_resources.qrc">
+                  <normaloff>:/resources/resources/icons/white_north_west_arrow.svg</normaloff>:/resources/resources/icons/white_north_west_arrow.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <spacer name="verticalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="2" column="4">
+               <spacer name="horizontalSpacer_13">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="2" column="0">
+               <spacer name="horizontalSpacer_12">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="4" column="2">
+               <spacer name="verticalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="1">
+             <layout class="QVBoxLayout" name="verticalLayout_16" stretch="10,0">
+              <item>
+               <layout class="QGridLayout" name="gridLayout_25">
+                <item row="1" column="0">
+                 <widget class="QLabel" name="camera_la">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="gridLayout_26">
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_13">
+                  <property name="text">
+                   <string>Contrast</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QSlider" name="contrast_slider">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_14">
+                  <property name="text">
+                   <string>Camera Selection</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="comboBox_2"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -7580,7 +7957,7 @@
   </action>
   <action name="actionICON">
    <property name="icon">
-    <iconset resource="app_resources.qrc">
+    <iconset>
      <normaloff>:/resources/resources/logo/the_ant_logo.png</normaloff>:/resources/resources/logo/the_ant_logo.png</iconset>
    </property>
    <property name="text">
@@ -7701,7 +8078,6 @@
   <tabstop>nc_bottom_z_feed_rate_dsb</tabstop>
   <tabstop>nc_bottom_generate_pb</tabstop>
   <tabstop>logging_plain_te</tabstop>
-  <tabstop>verticalSlider</tabstop>
  </tabstops>
  <resources>
   <include location="app_resources.qrc"/>
