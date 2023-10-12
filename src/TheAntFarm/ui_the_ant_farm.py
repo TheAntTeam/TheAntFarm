@@ -2528,22 +2528,184 @@ class Ui_MainWindow(object):
         self.align_tab.setFont(font)
         self.horizontalLayout_7 = QHBoxLayout(self.align_tab)
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.openGLWidget_2 = QOpenGLWidget(self.align_tab)
-        self.openGLWidget_2.setObjectName(u"openGLWidget_2")
+        self.horizontalLayout_17 = QHBoxLayout()
+        self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
+        self.gridLayout_23 = QGridLayout()
+        self.gridLayout_23.setObjectName(u"gridLayout_23")
+        self.tableWidget = QTableWidget(self.align_tab)
+        if (self.tableWidget.columnCount() < 4):
+            self.tableWidget.setColumnCount(4)
+        self.tableWidget.setObjectName(u"tableWidget")
+        self.tableWidget.setColumnCount(4)
 
-        self.horizontalLayout_7.addWidget(self.openGLWidget_2)
+        self.gridLayout_23.addWidget(self.tableWidget, 1, 0, 1, 1)
 
-        self.label_2 = QLabel(self.align_tab)
-        self.label_2.setObjectName(u"label_2")
+        self.openGLWidget = QOpenGLWidget(self.align_tab)
+        self.openGLWidget.setObjectName(u"openGLWidget")
 
-        self.horizontalLayout_7.addWidget(self.label_2)
+        self.gridLayout_23.addWidget(self.openGLWidget, 0, 0, 1, 1)
 
-        self.verticalSlider = QSlider(self.align_tab)
-        self.verticalSlider.setObjectName(u"verticalSlider")
-        self.verticalSlider.setMaximum(255)
-        self.verticalSlider.setOrientation(Qt.Vertical)
+        self.gridLayoutDirections = QGridLayout()
+        self.gridLayoutDirections.setObjectName(u"gridLayoutDirections")
+        self.gridLayoutDirections.setSizeConstraint(QLayout.SetFixedSize)
+        self.gridLayoutDirections.setContentsMargins(0, 0, 0, 0)
+        self.yPlusButton_3 = QToolButton(self.align_tab)
+        self.yPlusButton_3.setObjectName(u"yPlusButton_3")
+        sizePolicy3.setHeightForWidth(self.yPlusButton_3.sizePolicy().hasHeightForWidth())
+        self.yPlusButton_3.setSizePolicy(sizePolicy3)
+        self.yPlusButton_3.setMinimumSize(QSize(0, 22))
+        self.yPlusButton_3.setMaximumSize(QSize(50, 16777215))
+        self.yPlusButton_3.setIcon(icon5)
 
-        self.horizontalLayout_7.addWidget(self.verticalSlider)
+        self.gridLayoutDirections.addWidget(self.yPlusButton_3, 1, 2, 1, 1)
+
+        self.center_tb_3 = QToolButton(self.align_tab)
+        self.center_tb_3.setObjectName(u"center_tb_3")
+        sizePolicy3.setHeightForWidth(self.center_tb_3.sizePolicy().hasHeightForWidth())
+        self.center_tb_3.setSizePolicy(sizePolicy3)
+        self.center_tb_3.setMinimumSize(QSize(0, 22))
+        self.center_tb_3.setMaximumSize(QSize(50, 16777215))
+        self.center_tb_3.setIcon(icon11)
+
+        self.gridLayoutDirections.addWidget(self.center_tb_3, 2, 2, 1, 1)
+
+        self.yMinusButton_3 = QToolButton(self.align_tab)
+        self.yMinusButton_3.setObjectName(u"yMinusButton_3")
+        sizePolicy3.setHeightForWidth(self.yMinusButton_3.sizePolicy().hasHeightForWidth())
+        self.yMinusButton_3.setSizePolicy(sizePolicy3)
+        self.yMinusButton_3.setMinimumSize(QSize(0, 22))
+        self.yMinusButton_3.setMaximumSize(QSize(50, 16777215))
+        self.yMinusButton_3.setIcon(icon6)
+
+        self.gridLayoutDirections.addWidget(self.yMinusButton_3, 3, 2, 1, 1)
+
+        self.xPlusButton_3 = QToolButton(self.align_tab)
+        self.xPlusButton_3.setObjectName(u"xPlusButton_3")
+        sizePolicy3.setHeightForWidth(self.xPlusButton_3.sizePolicy().hasHeightForWidth())
+        self.xPlusButton_3.setSizePolicy(sizePolicy3)
+        self.xPlusButton_3.setMinimumSize(QSize(0, 22))
+        self.xPlusButton_3.setMaximumSize(QSize(50, 16777215))
+        self.xPlusButton_3.setIcon(icon13)
+
+        self.gridLayoutDirections.addWidget(self.xPlusButton_3, 2, 3, 1, 1)
+
+        self.xYPlusMinuButton_3 = QToolButton(self.align_tab)
+        self.xYPlusMinuButton_3.setObjectName(u"xYPlusMinuButton_3")
+        sizePolicy3.setHeightForWidth(self.xYPlusMinuButton_3.sizePolicy().hasHeightForWidth())
+        self.xYPlusMinuButton_3.setSizePolicy(sizePolicy3)
+        self.xYPlusMinuButton_3.setMinimumSize(QSize(0, 22))
+        self.xYPlusMinuButton_3.setMaximumSize(QSize(50, 16777215))
+        self.xYPlusMinuButton_3.setIcon(icon8)
+
+        self.gridLayoutDirections.addWidget(self.xYPlusMinuButton_3, 3, 3, 1, 1)
+
+        self.xMinusButton_3 = QToolButton(self.align_tab)
+        self.xMinusButton_3.setObjectName(u"xMinusButton_3")
+        sizePolicy3.setHeightForWidth(self.xMinusButton_3.sizePolicy().hasHeightForWidth())
+        self.xMinusButton_3.setSizePolicy(sizePolicy3)
+        self.xMinusButton_3.setMinimumSize(QSize(0, 22))
+        self.xMinusButton_3.setMaximumSize(QSize(50, 16777215))
+        self.xMinusButton_3.setIcon(icon9)
+
+        self.gridLayoutDirections.addWidget(self.xMinusButton_3, 2, 1, 1, 1)
+
+        self.xYMinusButton_3 = QToolButton(self.align_tab)
+        self.xYMinusButton_3.setObjectName(u"xYMinusButton_3")
+        sizePolicy3.setHeightForWidth(self.xYMinusButton_3.sizePolicy().hasHeightForWidth())
+        self.xYMinusButton_3.setSizePolicy(sizePolicy3)
+        self.xYMinusButton_3.setMinimumSize(QSize(0, 22))
+        self.xYMinusButton_3.setMaximumSize(QSize(50, 16777215))
+        self.xYMinusButton_3.setIcon(icon10)
+
+        self.gridLayoutDirections.addWidget(self.xYMinusButton_3, 3, 1, 1, 1)
+
+        self.xYPlusButton_3 = QToolButton(self.align_tab)
+        self.xYPlusButton_3.setObjectName(u"xYPlusButton_3")
+        sizePolicy3.setHeightForWidth(self.xYPlusButton_3.sizePolicy().hasHeightForWidth())
+        self.xYPlusButton_3.setSizePolicy(sizePolicy3)
+        self.xYPlusButton_3.setMinimumSize(QSize(0, 22))
+        self.xYPlusButton_3.setMaximumSize(QSize(50, 16777215))
+        self.xYPlusButton_3.setIcon(icon12)
+
+        self.gridLayoutDirections.addWidget(self.xYPlusButton_3, 1, 3, 1, 1)
+
+        self.xYMinusPlusButton_3 = QToolButton(self.align_tab)
+        self.xYMinusPlusButton_3.setObjectName(u"xYMinusPlusButton_3")
+        sizePolicy3.setHeightForWidth(self.xYMinusPlusButton_3.sizePolicy().hasHeightForWidth())
+        self.xYMinusPlusButton_3.setSizePolicy(sizePolicy3)
+        self.xYMinusPlusButton_3.setMinimumSize(QSize(0, 22))
+        self.xYMinusPlusButton_3.setMaximumSize(QSize(50, 16777215))
+        self.xYMinusPlusButton_3.setIcon(icon7)
+
+        self.gridLayoutDirections.addWidget(self.xYMinusPlusButton_3, 1, 1, 1, 1)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayoutDirections.addItem(self.verticalSpacer_3, 0, 2, 1, 1)
+
+        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayoutDirections.addItem(self.horizontalSpacer_13, 2, 4, 1, 1)
+
+        self.horizontalSpacer_12 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayoutDirections.addItem(self.horizontalSpacer_12, 2, 0, 1, 1)
+
+        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayoutDirections.addItem(self.verticalSpacer_7, 4, 2, 1, 1)
+
+
+        self.gridLayout_23.addLayout(self.gridLayoutDirections, 1, 1, 1, 1)
+
+        self.verticalLayout_16 = QVBoxLayout()
+        self.verticalLayout_16.setObjectName(u"verticalLayout_16")
+        self.gridLayout_25 = QGridLayout()
+        self.gridLayout_25.setObjectName(u"gridLayout_25")
+        self.camera_la = QLabel(self.align_tab)
+        self.camera_la.setObjectName(u"camera_la")
+
+        self.gridLayout_25.addWidget(self.camera_la, 1, 0, 1, 1)
+
+
+        self.verticalLayout_16.addLayout(self.gridLayout_25)
+
+        self.gridLayout_26 = QGridLayout()
+        self.gridLayout_26.setObjectName(u"gridLayout_26")
+        self.label_13 = QLabel(self.align_tab)
+        self.label_13.setObjectName(u"label_13")
+
+        self.gridLayout_26.addWidget(self.label_13, 1, 0, 1, 1)
+
+        self.contrast_slider = QSlider(self.align_tab)
+        self.contrast_slider.setObjectName(u"contrast_slider")
+        self.contrast_slider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_26.addWidget(self.contrast_slider, 1, 1, 1, 1)
+
+        self.label_14 = QLabel(self.align_tab)
+        self.label_14.setObjectName(u"label_14")
+
+        self.gridLayout_26.addWidget(self.label_14, 0, 0, 1, 1)
+
+        self.comboBox_2 = QComboBox(self.align_tab)
+        self.comboBox_2.setObjectName(u"comboBox_2")
+
+        self.gridLayout_26.addWidget(self.comboBox_2, 0, 1, 1, 1)
+
+
+        self.verticalLayout_16.addLayout(self.gridLayout_26)
+
+        self.verticalLayout_16.setStretch(0, 10)
+
+        self.gridLayout_23.addLayout(self.verticalLayout_16, 0, 1, 1, 1)
+
+        self.gridLayout_23.setRowStretch(0, 3)
+
+        self.horizontalLayout_17.addLayout(self.gridLayout_23)
+
+
+        self.horizontalLayout_7.addLayout(self.horizontalLayout_17)
 
         self.main_tab_widget.addTab(self.align_tab, "")
         self.settings_tab = QWidget()
@@ -3420,7 +3582,6 @@ class Ui_MainWindow(object):
         QWidget.setTabOrder(self.nc_bottom_xy_feed_rate_dsb, self.nc_bottom_z_feed_rate_dsb)
         QWidget.setTabOrder(self.nc_bottom_z_feed_rate_dsb, self.nc_bottom_generate_pb)
         QWidget.setTabOrder(self.nc_bottom_generate_pb, self.logging_plain_te)
-        QWidget.setTabOrder(self.logging_plain_te, self.verticalSlider)
 
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuConsole.menuAction())
@@ -3440,10 +3601,10 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(0)
+        self.main_tab_widget.setCurrentIndex(2)
         self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
-        self.ctrl_tab_widget.setCurrentIndex(0)
+        self.ctrl_tab_widget.setCurrentIndex(1)
         self.z_step_cb.setCurrentIndex(3)
         self.xy_step_cb.setCurrentIndex(3)
         self.settings_sub_tab.setCurrentIndex(0)
@@ -3733,7 +3894,18 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(statustip)
         self.tool_change_tb.setText(QCoreApplication.translate("MainWindow", u"TOOL CHANGE", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.control_tab), QCoreApplication.translate("MainWindow", u"CONTROL", None))
-        self.label_2.setText("")
+        self.yPlusButton_3.setText(QCoreApplication.translate("MainWindow", u"Y+", None))
+        self.center_tb_3.setText(QCoreApplication.translate("MainWindow", u"Center", None))
+        self.yMinusButton_3.setText(QCoreApplication.translate("MainWindow", u"Y-", None))
+        self.xPlusButton_3.setText(QCoreApplication.translate("MainWindow", u"X+", None))
+        self.xYPlusMinuButton_3.setText(QCoreApplication.translate("MainWindow", u"X+ Y-", None))
+        self.xMinusButton_3.setText(QCoreApplication.translate("MainWindow", u"X-", None))
+        self.xYMinusButton_3.setText(QCoreApplication.translate("MainWindow", u"X- Y-", None))
+        self.xYPlusButton_3.setText(QCoreApplication.translate("MainWindow", u"X+ Y+", None))
+        self.xYMinusPlusButton_3.setText(QCoreApplication.translate("MainWindow", u"X- Y+", None))
+        self.camera_la.setText("")
+        self.label_13.setText(QCoreApplication.translate("MainWindow", u"Contrast", None))
+        self.label_14.setText(QCoreApplication.translate("MainWindow", u"Camera Selection", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.align_tab), QCoreApplication.translate("MainWindow", u"ALIGN", None))
         self.top_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"TOP LAYER COLOR", None))
         self.bottom_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"BOTTOM LAYER COLOR", None))

@@ -18,20 +18,20 @@ class UiAlignTab(QObject):
         # Align TAB related controls.
         self.ui.main_tab_widget.currentChanged.connect(self.check_align_is_active)
         self.align_active_s.connect(self.controlWo.set_align_is_active)
-        self.ui.verticalSlider.valueChanged.connect(self.update_threshold)
+        self.ui.contrast_slider.valueChanged.connect(self.update_threshold)
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
 
         self.controlWo.update_camera_image_s.connect(self.update_camera_image)
 
     @Slot(QPixmap)
     def update_camera_image(self, pixmap):
-        self.ui.label_2.setPixmap(pixmap)
+        self.ui.camera_la.setPixmap(pixmap)
 
     def check_align_is_active(self):
         self.align_active_s.emit(self.ui.main_tab_widget.currentWidget().objectName() == "align_tab")
 
     def update_threshold(self):
-        self.update_threshold_s.emit(self.ui.verticalSlider.value())
+        self.update_threshold_s.emit(self.ui.contrast_slider.value())
 
 
 if __name__ == "__main__":
