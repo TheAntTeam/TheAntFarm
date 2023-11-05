@@ -121,6 +121,18 @@ class UiControlTab(QObject):
         self.ui.z_minus_pb.clicked.connect(self.handle_z_minus)
         self.ui.z_plus_pb.clicked.connect(self.handle_z_plus)
 
+        self.ui.center_tb_2.clicked.connect(self.handle_center_jog)
+        self.ui.xMinusButton_2.clicked.connect(self.handle_x_minus)
+        self.ui.xPlusButton_2.clicked.connect(self.handle_x_plus)
+        self.ui.yMinusButton_2.clicked.connect(self.handle_y_minus)
+        self.ui.yPlusButton_2.clicked.connect(self.handle_y_plus)
+        self.ui.xYPlusButton_2.clicked.connect(self.handle_xy_plus)
+        self.ui.xYPlusMinuButton_2.clicked.connect(self.handle_x_plus_y_minus)
+        self.ui.xYMinusButton_2.clicked.connect(self.handle_xy_minus)
+        self.ui.xYMinusPlusButton_2.clicked.connect(self.handle_x_minus_y_plus)
+        self.ui.z_minus_pb_2.clicked.connect(self.handle_z_minus)
+        self.ui.z_plus_pb_2.clicked.connect(self.handle_z_plus)
+
         self.ui.xy_plus_1_pb.clicked.connect(self.handle_xy_plus_1)
         self.ui.xy_minus_1_pb.clicked.connect(self.handle_xy_minus_1)
         self.ui.xy_div_10_pb.clicked.connect(self.handle_xy_div_10)
