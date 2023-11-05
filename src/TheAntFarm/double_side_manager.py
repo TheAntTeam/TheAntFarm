@@ -9,9 +9,39 @@ class DoubleSideManager:
 
         self.detected_holes = []
         # grab webcam
-        self.cap = cv2.VideoCapture(4, cv2.CAP_DSHOW)
+        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
+    @staticmethod
+    def list_cameras_indexes():
+        index = 0
+        arr = []
+        while True:
+            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+            cap.isOpened()
+            if not cap.isOpened():  # cap.read()[0]:
+                break
+            else:
+                arr.append(index)
+            cap.release()
+            index += 1
+        return arr
+
+    @staticmethod
+    def return_camera_indexes():
+        # checks the first 10 indexes.
+        index = 0
+        arr = []
+        i = 10
+        while i > 0:
+            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+            if cap.isOpened():
+                arr.append(index)
+                cap.release()
+            index += 1
+            i -= 1
+        return arr
 
     @staticmethod
     def rotate_image(image, angle):
@@ -19,6 +49,11 @@ class DoubleSideManager:
         rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
         result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
         return result
+
+    def update_camera(self, index):
+        self.cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
     def get_webcam_frame(self):
         ret, frame = self.cap.read()

@@ -17,6 +17,7 @@ class ControllerWorker(QObject):
     update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
     update_path_s = Signal(str, list)            # Signal to update path visualization
     update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
+    update_camera_list_s = Signal(list)
     update_status_s = Signal(Od)                 # Signal to update controller status
     update_console_text_s = Signal(str)          # Signal to send text to the console textEdit
     serial_send_s = Signal(bytes)                # Signal to send text to the serial
@@ -487,6 +488,13 @@ class ControllerWorker(QObject):
         if self.align_active:
             image = self.align_controller.camera_new_frame()
             self.update_camera_image_s.emit(QPixmap.fromImage(image))
+
+    def refresh_camera_list(self):
+        cam_list = self.align_controller.get_camera_list()
+        self.update_camera_list_s.emit(cam_list)
+
+    def update_camera_selected(self, index):
+        self.align_controller.update_camera_selected(index)
 
     @Slot(bool)
     def set_align_is_active(self, align_is_active):
