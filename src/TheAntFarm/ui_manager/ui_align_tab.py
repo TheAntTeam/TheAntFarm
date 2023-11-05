@@ -22,6 +22,10 @@ class UiAlignTab(QObject):
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
 
         self.controlWo.update_camera_image_s.connect(self.update_camera_image)
+        self.controlWo.update_camera_list_s.connect(self.update_camera_list)
+        self.ui.camera_list_cb.currentIndexChanged.connect(lambda: self.controlWo.update_camera_selected(
+            self.ui.camera_list_cb.currentIndex()))
+        self.controlWo.refresh_camera_list()
 
     @Slot(QPixmap)
     def update_camera_image(self, pixmap):
@@ -32,6 +36,11 @@ class UiAlignTab(QObject):
 
     def update_threshold(self):
         self.update_threshold_s.emit(self.ui.contrast_slider.value())
+
+    @Slot(list)
+    def update_camera_list(self, camera_list):
+        for cam in camera_list:
+            self.ui.camera_list_cb.addItem(str(cam))
 
 
 if __name__ == "__main__":
