@@ -1240,6 +1240,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_10 = QHBoxLayout()
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+        self.horizontalLayout_10.setContentsMargins(-1, 10, -1, 10)
         self.upload_temp_tb = QToolButton(self.gcode_load)
         self.upload_temp_tb.setObjectName(u"upload_temp_tb")
         self.upload_temp_tb.setMinimumSize(QSize(50, 50))
@@ -3997,7 +3998,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.central_widget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1160, 26))
+        self.menubar.setGeometry(QRect(0, 0, 1160, 21))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuFile.setFont(font)
