@@ -61,6 +61,7 @@ class UiControlTab(QObject):
         self.ui_serial_close_s.connect(self.serialWo.close_port)
         self.controlWo.reset_controller_status_s.connect(self.controlWo.reset_dro_status_updated)
         self.controlWo.update_status_s.connect(self.update_status)
+        self.controlWo.touched_probe_s.connect(self.touched_probe)
         self.controlWo.update_probe_s.connect(self.update_probe)
         self.controlWo.send_abl_s.connect(self.controlWo.cmd_auto_bed_levelling)
         self.controlWo.update_bbox_s.connect(self.update_bbox)
@@ -110,26 +111,26 @@ class UiControlTab(QObject):
         self.ui.zero_y_pb.clicked.connect(self.handle_y_0)
         self.ui.zero_z_pb.clicked.connect(self.handle_z_0)
         self.ui.center_tb.clicked.connect(self.handle_center_jog)
-        self.ui.xMinusButton.clicked.connect(self.handle_x_minus)
-        self.ui.xPlusButton.clicked.connect(self.handle_x_plus)
-        self.ui.yMinusButton.clicked.connect(self.handle_y_minus)
-        self.ui.yPlusButton.clicked.connect(self.handle_y_plus)
-        self.ui.xYPlusButton.clicked.connect(self.handle_xy_plus)
-        self.ui.xYPlusMinuButton.clicked.connect(self.handle_x_plus_y_minus)
-        self.ui.xYMinusButton.clicked.connect(self.handle_xy_minus)
-        self.ui.xYMinusPlusButton.clicked.connect(self.handle_x_minus_y_plus)
+        self.ui.x_minus_pb.clicked.connect(self.handle_x_minus)
+        self.ui.x_plus_pb.clicked.connect(self.handle_x_plus)
+        self.ui.y_minus_pb.clicked.connect(self.handle_y_minus)
+        self.ui.y_plus_pb.clicked.connect(self.handle_y_plus)
+        self.ui.x_plus_y_plus_pb.clicked.connect(self.handle_xy_plus)
+        self.ui.x_plus_y_minus_pb.clicked.connect(self.handle_x_plus_y_minus)
+        self.ui.x_minus_y_minus_pb.clicked.connect(self.handle_xy_minus)
+        self.ui.x_minus_y_plus_pb.clicked.connect(self.handle_x_minus_y_plus)
         self.ui.z_minus_pb.clicked.connect(self.handle_z_minus)
         self.ui.z_plus_pb.clicked.connect(self.handle_z_plus)
 
         self.ui.center_tb_2.clicked.connect(self.handle_center_jog)
-        self.ui.xMinusButton_2.clicked.connect(self.handle_x_minus)
-        self.ui.xPlusButton_2.clicked.connect(self.handle_x_plus)
-        self.ui.yMinusButton_2.clicked.connect(self.handle_y_minus)
-        self.ui.yPlusButton_2.clicked.connect(self.handle_y_plus)
-        self.ui.xYPlusButton_2.clicked.connect(self.handle_xy_plus)
-        self.ui.xYPlusMinuButton_2.clicked.connect(self.handle_x_plus_y_minus)
-        self.ui.xYMinusButton_2.clicked.connect(self.handle_xy_minus)
-        self.ui.xYMinusPlusButton_2.clicked.connect(self.handle_x_minus_y_plus)
+        self.ui.x_minus_pb_2.clicked.connect(self.handle_x_minus)
+        self.ui.x_plus_pb_2.clicked.connect(self.handle_x_plus)
+        self.ui.y_minus_pb_2.clicked.connect(self.handle_y_minus)
+        self.ui.y_plus_pb_2.clicked.connect(self.handle_y_plus)
+        self.ui.x_plus_y_plus_pb_2.clicked.connect(self.handle_xy_plus)
+        self.ui.x_plus_y_minus_pb_2.clicked.connect(self.handle_x_plus_y_minus)
+        self.ui.x_minus_y_minus_pb_2.clicked.connect(self.handle_xy_minus)
+        self.ui.x_minus_y_plus_pb_2.clicked.connect(self.handle_x_minus_y_plus)
         self.ui.z_minus_pb_2.clicked.connect(self.handle_z_minus)
         self.ui.z_plus_pb_2.clicked.connect(self.handle_z_plus)
 
@@ -154,6 +155,7 @@ class UiControlTab(QObject):
         self.ui.y_max_dsb.valueChanged.connect(self.update_bbox_y_steps)
         self.ui.y_num_step_sb.valueChanged.connect(self.update_bbox_y_num_steps)
 
+        self.enable_control_jog_elements(False)
         self.ui.soft_reset_tb.setEnabled(False)
         self.ui.unlock_tb.setEnabled(False)
         self.ui.homing_tb.setEnabled(False)
@@ -205,6 +207,31 @@ class UiControlTab(QObject):
         self.ui.z_max_dsb.setValue(self.machine_settings.probe_z_max)
         self.ui.z_min_dsb.valueChanged.connect(self.handle_z_min_changed)
         self.ui.z_max_dsb.valueChanged.connect(self.handle_z_max_changed)
+
+    def enable_control_jog_elements(self, enable_flag=True):
+        """
+        Enable or disable ui elements of the control jog and related.
+
+        Parameters
+        ----------
+        enable_flag enable ui elements if true
+        """
+        self.ui.x_minus_y_plus_pb.setEnabled(enable_flag)
+        self.ui.x_plus_y_minus_pb.setEnabled(enable_flag)
+        self.ui.x_minus_y_minus_pb.setEnabled(enable_flag)
+        self.ui.x_plus_y_plus_pb.setEnabled(enable_flag)
+        self.ui.x_minus_pb.setEnabled(enable_flag)
+        self.ui.x_plus_pb.setEnabled(enable_flag)
+        self.ui.y_minus_pb.setEnabled(enable_flag)
+        self.ui.y_plus_pb.setEnabled(enable_flag)
+        self.ui.center_tb.setEnabled(enable_flag)
+        self.ui.z_plus_pb.setEnabled(enable_flag)
+        self.ui.z_minus_pb.setEnabled(enable_flag)
+        self.ui.probe_pb.setEnabled(enable_flag)
+        self.ui.zero_x_pb.setEnabled(enable_flag)
+        self.ui.zero_y_pb.setEnabled(enable_flag)
+        self.ui.zero_z_pb.setEnabled(enable_flag)
+        self.ui.zero_xy_pb.setEnabled(enable_flag)
 
     def deselect_all_gcode_row(self, index):
         self.ui.gcode_tw.setSelectionMode(QAbstractItemView.MultiSelection)
@@ -535,9 +562,13 @@ class UiControlTab(QObject):
                 return True
         return False
 
+    @Slot()
+    def touched_probe(self):
+        self.ui.probe_pb.setStyleSheet(StyleManager.set_button_color(bg_color="green", color="black"))
+
     @Slot(list)
     def update_probe(self, probe_l):
-        pass
+        self.ui.probe_pb.setStyleSheet(StyleManager.set_button_color(bg_color="dark_grey", color="white"))
 
     @Slot(str)
     def update_console_text(self, new_text):
@@ -626,6 +657,7 @@ class UiControlTab(QObject):
             self.ui.tool_change_tb.setEnabled(True)
             if self.is_gcode_rb_selected():
                 self.ui.play_tb.setEnabled(True)
+            self.enable_control_jog_elements(True)
             self.controller_connected_s.emit(True)
             self.ctrl_layer.create_pointer(coords=(0, 0, 0))
 
@@ -650,6 +682,7 @@ class UiControlTab(QObject):
         self.ui.stop_tb.setEnabled(False)
         self.ui.pause_resume_tb.setEnabled(False)
         self.ui.tool_change_tb.setEnabled(False)
+        self.enable_control_jog_elements(False)
         self.controller_connected_s.emit(False)
         self.ctrl_layer.remove_pointer()
 
@@ -818,7 +851,7 @@ class UiControlTab(QObject):
 
     def handle_probe_cmd(self):
         logger.debug("Probe Command")
-        # todo: fake parameters just to test probe
+        self.ui.probe_pb.setStyleSheet(StyleManager.set_button_color("yellow", "black"))
         probe_z_min = self.ui.z_min_dsb.value()
         self.controlWo.cmd_probe(probe_z_min)
 

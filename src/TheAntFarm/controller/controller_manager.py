@@ -17,12 +17,13 @@ class ControllerWorker(QObject):
     update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
     update_path_s = Signal(str, list)            # Signal to update path visualization
     update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
-    update_camera_list_s = Signal(list)
+    update_camera_list_s = Signal(list)          # Signal to update Camera list detected
     update_status_s = Signal(Od)                 # Signal to update controller status
     update_console_text_s = Signal(str)          # Signal to send text to the console textEdit
     serial_send_s = Signal(bytes)                # Signal to send text to the serial
     serial_tx_available_s = Signal()             # Signal to send text to the serial
 
+    touched_probe_s = Signal()                   # Signal the probe touched
     update_probe_s = Signal(list)                # Signal to update probe value
     send_abl_s = Signal(tuple, tuple)
     update_abl_s = Signal(list)                  # Signal to update Auto-Bed-Levelling value
@@ -179,6 +180,7 @@ class ControllerWorker(QObject):
                         [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = \
                             self.control_controller.process_probe_and_abl()
                         if ack_prb_flag:
+                            self.touched_probe_s.emit()
                             self.ack_probe()
                         if ack_abl_flag:
                             self.ack_auto_bed_levelling()
