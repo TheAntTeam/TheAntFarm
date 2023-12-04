@@ -3589,7 +3589,7 @@
                      <number>0</number>
                     </property>
                     <item row="0" column="0">
-                     <widget class="QToolButton" name="xYMinusPlusButton">
+                     <widget class="QToolButton" name="x_minus_y_plus_pb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -3618,7 +3618,7 @@
                      </widget>
                     </item>
                     <item row="2" column="2">
-                     <widget class="QToolButton" name="xYPlusMinuButton">
+                     <widget class="QToolButton" name="x_plus_y_minus_pb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -3647,7 +3647,7 @@
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QToolButton" name="xMinusButton">
+                     <widget class="QToolButton" name="x_minus_pb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -3676,7 +3676,7 @@
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QToolButton" name="xYMinusButton">
+                     <widget class="QToolButton" name="x_minus_y_minus_pb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -3705,7 +3705,7 @@
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QToolButton" name="yPlusButton">
+                     <widget class="QToolButton" name="y_plus_pb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -3763,7 +3763,7 @@
                      </widget>
                     </item>
                     <item row="2" column="1">
-                     <widget class="QToolButton" name="yMinusButton">
+                     <widget class="QToolButton" name="y_minus_pb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -3792,7 +3792,7 @@
                      </widget>
                     </item>
                     <item row="0" column="2">
-                     <widget class="QToolButton" name="xYPlusButton">
+                     <widget class="QToolButton" name="x_plus_y_plus_pb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -3821,7 +3821,7 @@
                      </widget>
                     </item>
                     <item row="1" column="2">
-                     <widget class="QToolButton" name="xPlusButton">
+                     <widget class="QToolButton" name="x_plus_pb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -6323,7 +6323,7 @@
                    <number>0</number>
                   </property>
                   <item row="0" column="0">
-                   <widget class="QToolButton" name="xYMinusPlusButton_2">
+                   <widget class="QToolButton" name="x_minus_y_plus_pb_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -6352,7 +6352,7 @@
                    </widget>
                   </item>
                   <item row="2" column="2">
-                   <widget class="QToolButton" name="xYPlusMinuButton_2">
+                   <widget class="QToolButton" name="x_plus_y_minus_pb_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -6381,7 +6381,7 @@
                    </widget>
                   </item>
                   <item row="1" column="0">
-                   <widget class="QToolButton" name="xMinusButton_2">
+                   <widget class="QToolButton" name="x_minus_pb_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -6410,7 +6410,7 @@
                    </widget>
                   </item>
                   <item row="2" column="0">
-                   <widget class="QToolButton" name="xYMinusButton_2">
+                   <widget class="QToolButton" name="x_minus_y_minus_pb_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -6439,7 +6439,7 @@
                    </widget>
                   </item>
                   <item row="0" column="1">
-                   <widget class="QToolButton" name="yPlusButton_2">
+                   <widget class="QToolButton" name="y_plus_pb_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -6497,7 +6497,7 @@
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="QToolButton" name="yMinusButton_2">
+                   <widget class="QToolButton" name="y_minus_pb_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -6526,7 +6526,7 @@
                    </widget>
                   </item>
                   <item row="0" column="2">
-                   <widget class="QToolButton" name="xYPlusButton_2">
+                   <widget class="QToolButton" name="x_plus_y_plus_pb_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -6555,7 +6555,7 @@
                    </widget>
                   </item>
                   <item row="1" column="2">
-                   <widget class="QToolButton" name="xPlusButton_2">
+                   <widget class="QToolButton" name="x_plus_pb_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
