@@ -67,6 +67,7 @@ class ControllerWorker(QObject):
         self.dro_status_updated = False
 
         self.abl_apply_active = True
+        self.align_apply_active = True
         self.prb_activated = False
         self.abl_activated = False
         self.prb_updated = False
@@ -364,6 +365,11 @@ class ControllerWorker(QObject):
         self.abl_apply_active = abl_active
         self.select_active_gcode(self.active_gcode_path)
 
+    def set_align_active(self, align_active=True):
+        self.align_apply_active = align_active
+        self.select_active_gcode(self.active_gcode_path)
+
+
     def vectorize_new_gcode_file(self, gcode_path):
         self.control_controller.load_gcode_file({}, gcode_path)
         self.gcode_vectorized_s.emit(gcode_path)
@@ -372,16 +378,31 @@ class ControllerWorker(QObject):
         self.active_gcode_path = gcode_path
         redraw = False
         visible = True
+
         abl_val = self.control_controller.get_abl_value()
         logger.debug("ABL_val " + str(abl_val))
         logger.debug("ABL_active " + str(self.abl_apply_active))
+
+        align_data = self.control_controller.get_align_data()
+        logger.debug("Align_val " + str(abl_val))
+        logger.debug("Align_active " + str(self.align_apply_active))
+
+        if align_data != [] and self.align_apply_active:
+            logger.debug("Apply Alignment")
+            self.control_controller.apply_alignment(gcode_path)
+            redraw_align = True
+        else:
+            logger.debug("Remove ABL")
+            redraw_align = self.control_controller.renove_alignment(gcode_path)
+
         if abl_val != [] and self.abl_apply_active:
             logger.debug("Apply ABL")
             self.control_controller.apply_abl(gcode_path)
-            redraw = True
+            redraw_abl = True
         else:
             logger.debug("Remove ABL")
-            redraw = self.control_controller.remove_abl(gcode_path)
+            redraw_abl = self.control_controller.remove_abl(gcode_path)
+        redraw = redraw_abl or redraw_align
         logger.debug("ABL Done")
         (tag, v) = self.control_controller.get_gcode_tag_and_v(gcode_path)
         self.update_gcode_s.emit(tag, v, visible, redraw)
