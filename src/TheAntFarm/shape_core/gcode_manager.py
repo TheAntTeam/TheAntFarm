@@ -9,6 +9,7 @@ import scipy.interpolate as spi
 from shapely.geometry import LineString
 from .macros_manager import Macros
 from .commands_manager import CommandManager
+from .align_manager import AlignManager
 
 
 class GCoder:
@@ -638,6 +639,7 @@ class GCode:
         self.modified_lines = []
         self.gcll = []
         self.original_vectors = []
+        self.aligned_vectors = []
         self.modified_vectors = []
         self.bb = None
 
@@ -820,14 +822,47 @@ class GCodeParser:
     def get_gcode_original_vectors(self):
         return self.gc.original_vectors
 
+    def get_gcode_original_vectors_copy(self):
+        govc = [p.copy() for p in self.gc.original_vectors]
+        return govc
+
     def get_gcode_vectors(self):
         if self.gc.modified_vectors:
             return self.gc.modified_vectors
         else:
-            return self.gc.original_vectors
+            if self.gc.aligned_vectors:
+                return self.gc.aligned_vectors
+            else:
+                return self.gc.original_vectors
 
     def get_bbox(self):
         return self.gc.bb
+
+
+class GCodeAlignment:
+    def __init__(self, gc):
+        self.gc = gc
+        self.am = AlignManager()
+
+    def update_align_info(self, align_point_data):
+        self.am.load_sampled_points(align_point_data)
+
+    def apply_align(self):
+        print("GCode Alignment Start")
+        align_flag = True
+        if self.gc is not None and self.am.is_sampled_point_loaded():
+            coords = [p.coords.copy() for p in self.gc.original_vectors]
+            new_coords = self.am.compute_points_transform(coords)
+            avl = self.gc.get_gcode_original_vectors_copy()
+            for i, p in enumerate(avl):
+                p.coords = new_coords[i]
+            self.gc.aligned_vectors = avl
+            align_flag = True
+        else:
+            self.gc.aligned_vectors = []
+            align_flag = False
+        print("GCode Alignment Stop")
+        return align_flag
 
 
 class GCodeLeveler:
@@ -925,7 +960,13 @@ class GCodeLeveler:
             pre_pc = None
             min_step = min(self.grid_step)
             print("Min Step ", min_step)
-            for p in self.gc.original_vectors:
+
+            if self.gc.aligned_vectors:
+                data = self.gc.aligned_vectors
+            else:
+                data = self.gc.original_vectors
+
+            for p in data:
                 np_l = []
                 nwp = p.copy()
                 delta = self.ig(nwp.coords[0], nwp.coords[1])
@@ -934,7 +975,7 @@ class GCodeLeveler:
                     pc = np.array(nwp.coords[:2])
                     seg_len = np.linalg.norm(pc - pre_pc)
                     sub_line = 0
-                    if seg_len <= min_step and seg_len > 0.1:
+                    if min_step >= seg_len > 0.1:
                         i_l = self.get_grid_intersection(pc, pre_pc)
                         if i_l:
                             for i in i_l:

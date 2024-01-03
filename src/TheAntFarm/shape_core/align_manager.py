@@ -105,6 +105,9 @@ class AlignManager:
         self.sampled_points = sampled_points
         self.update_tps_coefficients()
 
+    def is_sampled_point_loaded(self):
+        return self.sampled_points != []
+
     def update_tps_coefficients(self):
         self.tps_coeff = TpsCoefficients(self.sampled_points)
 

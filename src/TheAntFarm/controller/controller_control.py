@@ -6,7 +6,7 @@ import string
 import random
 import numpy as np
 from collections import OrderedDict, deque
-from shape_core.gcode_manager import GCoder, GCodeParser, GCodeLeveler
+from shape_core.gcode_manager import GCoder, GCodeParser, GCodeLeveler, GCodeAlignment
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +39,7 @@ class ControlController(QObject):
         self.abl_updated = False
         self.prb_val = deque([[-1.0, -1.0, -1.0], [-1.0, -1.0, -1.0]], maxlen=2)
         self.abl_val = []
+        self.align_data = []
         self.abl_steps = ()
         self.abl_cmd_ls = []
         self.prb_num_todo = 0
@@ -53,6 +54,9 @@ class ControlController(QObject):
 
     def get_probe_value(self):
         return self.prb_val[0]
+
+    def get_align_data(self):
+        return self.align_data
 
     def get_abl_value(self):
         return self.abl_val
@@ -279,6 +283,21 @@ class ControlController(QObject):
         tag = self.gcodes_od[gcode_path]["tag"]
         return tag, v
 
+    def apply_alignment(self, gcode_path):
+        print("Apply Alignment")
+        gcp = self.get_gcode_gcp(gcode_path)
+        align = GCodeAlignment(gcp.gc)
+        align.update_align_info(self.align_data.copy())
+        align.apply_align()
+
+    def remove_alignment(self, gcode_path):
+        gcp = self.get_gcode_gcp(gcode_path)
+        if gcp.gc.aligned_vectors:
+            gcp.gc.aligned_vectors = []
+            return True
+        else:
+            return False
+
     def apply_abl(self, gcode_path):
         print("Apply ABL")
         gcp = self.get_gcode_gcp(gcode_path)
@@ -288,8 +307,6 @@ class ControlController(QObject):
         abl.get_grid_data(abl_val, self.abl_steps, last_probe, self.wco_a)
         abl.interp_grid_data()
         abl.apply_abl()
-        # print("Leveled")
-        # print(gcp.gc.modified_vectors)
 
     def remove_abl(self, gcode_path):
         gcp = self.get_gcode_gcp(gcode_path)
