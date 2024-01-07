@@ -4704,7 +4704,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLedLabel" name="probe_status_la">
+               <widget class="QLedLabel" name="probe_led_la">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -4726,7 +4726,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLedLabel" name="abl_status_la">
+               <widget class="QLedLabel" name="abl_led_la">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -4748,7 +4748,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLedLabel" name="alignment_status_la">
+               <widget class="QLedLabel" name="alignment_led_la">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
