@@ -564,11 +564,11 @@ class UiControlTab(QObject):
 
     @Slot()
     def touched_probe(self):
-        self.ui.probe_pb.setStyleSheet(StyleManager.set_button_color(bg_color="green", color="black"))
+        self.ui.probe_led_la.set_led_color("green")
 
     @Slot(list)
     def update_probe(self, probe_l):
-        self.ui.probe_pb.setStyleSheet(StyleManager.set_button_color(bg_color="dark_grey", color="white"))
+        self.ui.probe_led_la.set_led_color("grey")
 
     @Slot(str)
     def update_console_text(self, new_text):
@@ -660,8 +660,8 @@ class UiControlTab(QObject):
             self.enable_control_jog_elements(True)
             self.controller_connected_s.emit(True)
             self.ctrl_layer.create_pointer(coords=(0, 0, 0))
-
             self.ui.get_tool_probe_pb.setEnabled(True)
+            self.ui.probe_led_la.set_led_color("grey")
             self.ui.get_tool_change_pb.setEnabled(True)
 
     def act_on_disconnection(self):
@@ -685,8 +685,8 @@ class UiControlTab(QObject):
         self.enable_control_jog_elements(False)
         self.controller_connected_s.emit(False)
         self.ctrl_layer.remove_pointer()
-
         self.ui.get_tool_probe_pb.setEnabled(False)
+        self.ui.probe_led_la.set_led_color("grey")
         self.ui.get_tool_change_pb.setEnabled(False)
 
     def handle_clear_terminal(self):
@@ -851,7 +851,7 @@ class UiControlTab(QObject):
 
     def handle_probe_cmd(self):
         logger.debug("Probe Command")
-        self.ui.probe_pb.setStyleSheet(StyleManager.set_button_color("yellow", "black"))
+        self.ui.probe_led_la.set_led_color("yellow")
         probe_z_min = self.ui.z_min_dsb.value()
         self.controlWo.cmd_probe(probe_z_min)
 
