@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="resources">
+    <file>resources/icons/black_alignment_applied.svg</file>
+    <file>resources/icons/black_apply_align.svg</file>
     <file>resources/icons/gray-refresh.svg</file>
     <file>resources/icons/white-upload-file.svg</file>
     <file>resources/icons/gray-upload-file.svg</file>

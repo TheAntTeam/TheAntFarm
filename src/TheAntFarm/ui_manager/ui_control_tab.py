@@ -863,7 +863,7 @@ class UiControlTab(QObject):
     @Slot(float)
     def update_progress_bar(self, prog_percentage):
         logger.debug(prog_percentage)
-        self.ui.progressBar.setValue(prog_percentage)
+        self.ui.progress_bar.setValue(prog_percentage)
 
     @Slot()
     def update_bbox_x_num_steps(self):
