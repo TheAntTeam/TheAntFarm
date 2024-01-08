@@ -8,16 +8,20 @@ logger = logging.getLogger(__name__)
 class UiAlignTab(QObject):
     """Class dedicated to UI <--> Control interactions on Align Tab. """
     align_active_s = Signal(bool)
+    align_apply_s = Signal(bool)
     update_threshold_s = Signal(int)
 
     def __init__(self, ui, control_worker):
         super(UiAlignTab, self).__init__()
         self.ui = ui
         self.controlWo = control_worker
+        self.align_applied = False
 
         # Align TAB related controls.
         self.ui.main_tab_widget.currentChanged.connect(self.check_align_is_active)
         self.align_active_s.connect(self.controlWo.set_align_is_active)
+        self.align_apply_s.connect(lambda: self.controlWo.set_align_active(self.align_applied))
+        self.ui.apply_alignment_tb.clicked.connect(self.apply_align)
         self.ui.contrast_slider.valueChanged.connect(self.update_threshold)
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
 
@@ -41,6 +45,9 @@ class UiAlignTab(QObject):
     def update_camera_list(self, camera_list):
         for cam in camera_list:
             self.ui.camera_list_cb.addItem(str(cam))
+
+    def apply_align(self):
+        self.align_apply_s.emit(True)
 
 
 if __name__ == "__main__":
