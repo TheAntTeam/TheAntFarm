@@ -393,7 +393,7 @@ class ControllerWorker(QObject):
             redraw_align = True
         else:
             logger.debug("Remove ABL")
-            redraw_align = self.control_controller.renove_alignment(gcode_path)
+            redraw_align = self.control_controller.remove_alignment(gcode_path)
 
         if abl_val != [] and self.abl_apply_active:
             logger.debug("Apply ABL")
