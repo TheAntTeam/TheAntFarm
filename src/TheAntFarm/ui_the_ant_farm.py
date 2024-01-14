@@ -2658,7 +2658,7 @@ class Ui_MainWindow(object):
         icon22.addFile(u":/resources/resources/icons/black_apply_align.svg", QSize(), QIcon.Normal, QIcon.Off)
         icon22.addFile(u":/resources/resources/icons/black_alignment_applied.svg", QSize(), QIcon.Normal, QIcon.On)
         self.apply_alignment_tb.setIcon(icon22)
-        self.apply_alignment_tb.setCheckable(False)
+        self.apply_alignment_tb.setCheckable(True)
         self.apply_alignment_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
 
         self.horizontalLayout_18.addWidget(self.apply_alignment_tb)

@@ -15,12 +15,11 @@ class UiAlignTab(QObject):
         super(UiAlignTab, self).__init__()
         self.ui = ui
         self.controlWo = control_worker
-        self.align_applied = False
 
         # Align TAB related controls.
         self.ui.main_tab_widget.currentChanged.connect(self.check_align_is_active)
         self.align_active_s.connect(self.controlWo.set_align_is_active)
-        self.align_apply_s.connect(lambda: self.controlWo.set_align_active(self.align_applied))
+        self.align_apply_s.connect(self.controlWo.set_align_active)
         self.ui.apply_alignment_tb.clicked.connect(self.apply_align)
         self.ui.contrast_slider.valueChanged.connect(self.update_threshold)
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
@@ -47,7 +46,7 @@ class UiAlignTab(QObject):
             self.ui.camera_list_cb.addItem(str(cam))
 
     def apply_align(self):
-        self.align_apply_s.emit(True)
+        self.align_apply_s.emit(self.ui.apply_alignment_tb.isChecked())
 
 
 if __name__ == "__main__":

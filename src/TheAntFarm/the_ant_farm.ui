@@ -5797,7 +5797,7 @@
                     <normalon>:/resources/resources/icons/black_alignment_applied.svg</normalon>:/resources/resources/icons/black_apply_align.svg</iconset>
                   </property>
                   <property name="checkable">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="toolButtonStyle">
                    <enum>Qt::ToolButtonIconOnly</enum>
