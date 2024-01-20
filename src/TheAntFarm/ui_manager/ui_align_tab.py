@@ -1,6 +1,8 @@
 from PySide2.QtCore import Signal, Slot, QObject
 from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QLabel
 import logging
+import math
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +23,7 @@ class UiAlignTab(QObject):
         self.align_active_s.connect(self.controlWo.set_align_is_active)
         self.align_apply_s.connect(self.controlWo.set_align_active)
         self.ui.apply_alignment_tb.clicked.connect(self.apply_align)
+        self.ui.add_point_tb.clicked.connect(self.add_new_point)
         self.ui.contrast_slider.valueChanged.connect(self.update_threshold)
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
 
@@ -47,6 +50,23 @@ class UiAlignTab(QObject):
 
     def apply_align(self):
         self.align_apply_s.emit(self.ui.apply_alignment_tb.isChecked())
+
+    def add_new_point(self):
+        x_val = self.ui.x_point_layer_dsb.value()
+        y_val = self.ui.y_point_layer_dsb.value()
+        offset_val = self.ui.distance_offset_dsb.value()
+        angle_val = self.ui.angle_dsb.value()
+        print(x_val, y_val, offset_val, angle_val)
+
+        new_x_val = x_val + (offset_val * math.cos(math.radians(angle_val)))
+        new_y_val = y_val + (offset_val * math.sin(math.radians(angle_val)))
+
+        num_rows = self.ui.align_points_tw.rowCount()
+        self.ui.align_points_tw.insertRow(num_rows)
+        self.ui.align_points_tw.setCellWidget(num_rows, 0, QLabel("{:.3f}".format(x_val)))
+        self.ui.align_points_tw.setCellWidget(num_rows, 1, QLabel("{:.3f}".format(y_val)))
+        self.ui.align_points_tw.setCellWidget(num_rows, 2, QLabel("{:.3f}".format(new_x_val)))
+        self.ui.align_points_tw.setCellWidget(num_rows, 3, QLabel("{:.3f}".format(new_y_val)))
 
 
 if __name__ == "__main__":

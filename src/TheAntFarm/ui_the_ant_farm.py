@@ -2563,11 +2563,6 @@ class Ui_MainWindow(object):
         self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
         self.gridLayout_23 = QGridLayout()
         self.gridLayout_23.setObjectName(u"gridLayout_23")
-        self.openGLWidget = QOpenGLWidget(self.align_tab)
-        self.openGLWidget.setObjectName(u"openGLWidget")
-
-        self.gridLayout_23.addWidget(self.openGLWidget, 0, 1, 1, 1)
-
         self.verticalLayout_16 = QVBoxLayout()
         self.verticalLayout_16.setObjectName(u"verticalLayout_16")
         self.gridLayout_25 = QGridLayout()
@@ -2617,14 +2612,16 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_13 = QVBoxLayout()
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.tableWidget_2 = QTableWidget(self.align_tab)
-        if (self.tableWidget_2.columnCount() < 4):
-            self.tableWidget_2.setColumnCount(4)
-        self.tableWidget_2.setObjectName(u"tableWidget_2")
-        self.tableWidget_2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-        self.tableWidget_2.setColumnCount(4)
+        self.align_points_tw = QTableWidget(self.align_tab)
+        if (self.align_points_tw.columnCount() < 4):
+            self.align_points_tw.setColumnCount(4)
+        self.align_points_tw.setObjectName(u"align_points_tw")
+        sizePolicy.setHeightForWidth(self.align_points_tw.sizePolicy().hasHeightForWidth())
+        self.align_points_tw.setSizePolicy(sizePolicy)
+        self.align_points_tw.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.align_points_tw.setColumnCount(4)
 
-        self.verticalLayout_13.addWidget(self.tableWidget_2)
+        self.verticalLayout_13.addWidget(self.align_points_tw, 0, Qt.AlignHCenter)
 
         self.horizontalLayout_18 = QHBoxLayout()
         self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
@@ -3269,6 +3266,128 @@ class Ui_MainWindow(object):
 
 
         self.gridLayout_23.addWidget(self.frame, 1, 0, 1, 1)
+
+        self.verticalLayout_14 = QVBoxLayout()
+        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
+        self.openGLWidget = QOpenGLWidget(self.align_tab)
+        self.openGLWidget.setObjectName(u"openGLWidget")
+
+        self.verticalLayout_14.addWidget(self.openGLWidget)
+
+        self.gridLayout_10 = QGridLayout()
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.x_point_layer_la = QLabel(self.align_tab)
+        self.x_point_layer_la.setObjectName(u"x_point_layer_la")
+        sizePolicy9.setHeightForWidth(self.x_point_layer_la.sizePolicy().hasHeightForWidth())
+        self.x_point_layer_la.setSizePolicy(sizePolicy9)
+        self.x_point_layer_la.setMinimumSize(QSize(0, 20))
+        self.x_point_layer_la.setMaximumSize(QSize(16777215, 23))
+        self.x_point_layer_la.setFont(font)
+        self.x_point_layer_la.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_10.addWidget(self.x_point_layer_la, 0, 1, 1, 1)
+
+        self.y_point_layer_la = QLabel(self.align_tab)
+        self.y_point_layer_la.setObjectName(u"y_point_layer_la")
+        sizePolicy9.setHeightForWidth(self.y_point_layer_la.sizePolicy().hasHeightForWidth())
+        self.y_point_layer_la.setSizePolicy(sizePolicy9)
+        self.y_point_layer_la.setMinimumSize(QSize(0, 20))
+        self.y_point_layer_la.setMaximumSize(QSize(16777215, 23))
+        self.y_point_layer_la.setFont(font)
+        self.y_point_layer_la.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_10.addWidget(self.y_point_layer_la, 1, 1, 1, 1)
+
+        self.distance_offset_dsb = QDoubleSpinBox(self.align_tab)
+        self.distance_offset_dsb.setObjectName(u"distance_offset_dsb")
+        sizePolicy8.setHeightForWidth(self.distance_offset_dsb.sizePolicy().hasHeightForWidth())
+        self.distance_offset_dsb.setSizePolicy(sizePolicy8)
+        self.distance_offset_dsb.setMinimumSize(QSize(0, 20))
+        self.distance_offset_dsb.setMaximumSize(QSize(16777215, 23))
+        self.distance_offset_dsb.setAlignment(Qt.AlignCenter)
+        self.distance_offset_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.distance_offset_dsb.setMinimum(-1000.000000000000000)
+        self.distance_offset_dsb.setMaximum(1000.000000000000000)
+
+        self.gridLayout_10.addWidget(self.distance_offset_dsb, 0, 4, 1, 1)
+
+        self.angle_la = QLabel(self.align_tab)
+        self.angle_la.setObjectName(u"angle_la")
+        sizePolicy9.setHeightForWidth(self.angle_la.sizePolicy().hasHeightForWidth())
+        self.angle_la.setSizePolicy(sizePolicy9)
+        self.angle_la.setMinimumSize(QSize(0, 20))
+        self.angle_la.setMaximumSize(QSize(16777215, 23))
+        self.angle_la.setFont(font)
+        self.angle_la.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_10.addWidget(self.angle_la, 1, 3, 1, 1)
+
+        self.x_offset_layer_la = QLabel(self.align_tab)
+        self.x_offset_layer_la.setObjectName(u"x_offset_layer_la")
+        sizePolicy9.setHeightForWidth(self.x_offset_layer_la.sizePolicy().hasHeightForWidth())
+        self.x_offset_layer_la.setSizePolicy(sizePolicy9)
+        self.x_offset_layer_la.setMinimumSize(QSize(0, 20))
+        self.x_offset_layer_la.setMaximumSize(QSize(16777215, 23))
+        self.x_offset_layer_la.setFont(font)
+        self.x_offset_layer_la.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_10.addWidget(self.x_offset_layer_la, 0, 3, 1, 1)
+
+        self.angle_dsb = QDoubleSpinBox(self.align_tab)
+        self.angle_dsb.setObjectName(u"angle_dsb")
+        sizePolicy8.setHeightForWidth(self.angle_dsb.sizePolicy().hasHeightForWidth())
+        self.angle_dsb.setSizePolicy(sizePolicy8)
+        self.angle_dsb.setMinimumSize(QSize(0, 20))
+        self.angle_dsb.setMaximumSize(QSize(16777215, 23))
+        self.angle_dsb.setAlignment(Qt.AlignCenter)
+        self.angle_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.angle_dsb.setDecimals(1)
+        self.angle_dsb.setMinimum(-180.000000000000000)
+        self.angle_dsb.setMaximum(360.000000000000000)
+        self.angle_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_10.addWidget(self.angle_dsb, 1, 4, 1, 1)
+
+        self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_10.addItem(self.horizontalSpacer_14, 0, 0, 1, 1)
+
+        self.x_point_layer_dsb = QDoubleSpinBox(self.align_tab)
+        self.x_point_layer_dsb.setObjectName(u"x_point_layer_dsb")
+        sizePolicy8.setHeightForWidth(self.x_point_layer_dsb.sizePolicy().hasHeightForWidth())
+        self.x_point_layer_dsb.setSizePolicy(sizePolicy8)
+        self.x_point_layer_dsb.setMinimumSize(QSize(0, 20))
+        self.x_point_layer_dsb.setMaximumSize(QSize(16777215, 23))
+        self.x_point_layer_dsb.setAlignment(Qt.AlignCenter)
+        self.x_point_layer_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.x_point_layer_dsb.setMinimum(-1000.000000000000000)
+        self.x_point_layer_dsb.setMaximum(1000.000000000000000)
+
+        self.gridLayout_10.addWidget(self.x_point_layer_dsb, 0, 2, 1, 1)
+
+        self.y_point_layer_dsb = QDoubleSpinBox(self.align_tab)
+        self.y_point_layer_dsb.setObjectName(u"y_point_layer_dsb")
+        sizePolicy8.setHeightForWidth(self.y_point_layer_dsb.sizePolicy().hasHeightForWidth())
+        self.y_point_layer_dsb.setSizePolicy(sizePolicy8)
+        self.y_point_layer_dsb.setMinimumSize(QSize(0, 20))
+        self.y_point_layer_dsb.setMaximumSize(QSize(16777215, 23))
+        self.y_point_layer_dsb.setAlignment(Qt.AlignCenter)
+        self.y_point_layer_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.y_point_layer_dsb.setMinimum(-1000.000000000000000)
+        self.y_point_layer_dsb.setMaximum(1000.000000000000000)
+
+        self.gridLayout_10.addWidget(self.y_point_layer_dsb, 1, 2, 1, 1)
+
+        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_10.addItem(self.horizontalSpacer_15, 0, 5, 1, 1)
+
+
+        self.verticalLayout_14.addLayout(self.gridLayout_10)
+
+        self.verticalLayout_14.setStretch(0, 10)
+
+        self.gridLayout_23.addLayout(self.verticalLayout_14, 0, 1, 1, 1)
 
         self.gridLayout_23.setRowStretch(0, 3)
         self.gridLayout_23.setColumnStretch(0, 1)
@@ -4175,10 +4294,10 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(1)
+        self.main_tab_widget.setCurrentIndex(2)
         self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
-        self.ctrl_tab_widget.setCurrentIndex(1)
+        self.ctrl_tab_widget.setCurrentIndex(0)
         self.z_step_cb.setCurrentIndex(3)
         self.xy_step_cb.setCurrentIndex(3)
         self.z_step_cb_2.setCurrentIndex(3)
@@ -4563,6 +4682,10 @@ class Ui_MainWindow(object):
         self.xy_div_10_pb_2.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
         self.xy_mul_10_pb_2.setText(QCoreApplication.translate("MainWindow", u"x10", None))
         self.xy_minus_1_pb_2.setText(QCoreApplication.translate("MainWindow", u"-1.0", None))
+        self.x_point_layer_la.setText(QCoreApplication.translate("MainWindow", u"X", None))
+        self.y_point_layer_la.setText(QCoreApplication.translate("MainWindow", u"Y", None))
+        self.angle_la.setText(QCoreApplication.translate("MainWindow", u"angle", None))
+        self.x_offset_layer_la.setText(QCoreApplication.translate("MainWindow", u"offset", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.align_tab), QCoreApplication.translate("MainWindow", u"ALIGN", None))
         self.top_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"TOP LAYER COLOR", None))
         self.bottom_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"BOTTOM LAYER COLOR", None))
