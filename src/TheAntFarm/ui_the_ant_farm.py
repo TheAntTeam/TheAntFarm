@@ -2619,6 +2619,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.align_points_tw.sizePolicy().hasHeightForWidth())
         self.align_points_tw.setSizePolicy(sizePolicy)
         self.align_points_tw.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.align_points_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.align_points_tw.setColumnCount(4)
 
         self.verticalLayout_13.addWidget(self.align_points_tw, 0, Qt.AlignHCenter)
