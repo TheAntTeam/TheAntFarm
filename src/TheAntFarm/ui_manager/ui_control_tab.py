@@ -233,7 +233,7 @@ class UiControlTab(QObject):
         self.ui.zero_z_pb.setEnabled(enable_flag)
         self.ui.zero_xy_pb.setEnabled(enable_flag)
 
-    def deselect_all_gcode_row(self, index):
+    def deselect_all_gcode_row(self):
         self.ui.gcode_tw.setSelectionMode(QAbstractItemView.MultiSelection)
         self.ui.gcode_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.ui.gcode_tw.clearSelection()
