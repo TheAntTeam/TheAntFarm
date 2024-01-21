@@ -643,6 +643,14 @@ class GCode:
         self.modified_vectors = []
         self.bb = None
 
+    def get_gcode_original_vectors_copy(self):
+        print("GCODEX")
+        govc = []
+        for p in self.original_vectors:
+            nwp = p.copy()
+            govc.append(nwp)
+        return govc
+
 
 class GCodeParser:
 
@@ -734,8 +742,12 @@ class GCodeParser:
             # - Modified Loaded
             gcv = self.gc.modified_vectors
         else:
-            # - Original Loaded
-            gcv = self.gc.original_vectors
+            if self.gc.aligned_vectors:
+                # - Aligned Loaded
+                gcv = self.gc.aligned_vectors
+            else:
+                # - Original Loaded
+                gcv = self.gc.original_vectors
         gcl = self.gc.gcll
         if gcv or gcl:
             gcv_len = len(gcv)
@@ -823,7 +835,10 @@ class GCodeParser:
         return self.gc.original_vectors
 
     def get_gcode_original_vectors_copy(self):
-        govc = [p.copy() for p in self.gc.original_vectors]
+        govc = []
+        for p in self.gc.original_vectors:
+            nwp = p.copy()
+            govc.append(nwp)
         return govc
 
     def get_gcode_vectors(self):

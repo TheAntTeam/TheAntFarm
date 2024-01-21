@@ -385,7 +385,7 @@ class ControllerWorker(QObject):
             logger.debug("ABL_active " + str(self.abl_apply_active))
 
             align_data = self.control_controller.get_align_data()
-            logger.debug("Align_val " + str(abl_val))
+            logger.debug("Align_val " + str(align_data))
             logger.debug("Align_active " + str(self.align_apply_active))
 
             if align_data != [] and self.align_apply_active:
@@ -393,7 +393,7 @@ class ControllerWorker(QObject):
                 self.control_controller.apply_alignment(gcode_path)
                 redraw_align = True
             else:
-                logger.debug("Remove ABL")
+                logger.debug("Remove Alignment")
                 redraw_align = self.control_controller.remove_alignment(gcode_path)
 
             if abl_val != [] and self.abl_apply_active:
