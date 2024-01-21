@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class UiAlignTab(QObject):
     """Class dedicated to UI <--> Control interactions on Align Tab. """
     align_active_s = Signal(bool)
-    align_apply_s = Signal(bool)
+    align_apply_s = Signal(bool, list)
     update_threshold_s = Signal(int)
 
     def __init__(self, ui, control_worker):
@@ -49,8 +49,36 @@ class UiAlignTab(QObject):
         for cam in camera_list:
             self.ui.camera_list_cb.addItem(str(cam))
 
+    def update_ui_alignment_applied(self, alignment_applied_flag=False):
+        if alignment_applied_flag:
+            self.ui.led_la.set_led_color("blue")
+            self.ui.led_la.setToolTip("Alignment Applied!")
+            self.ui.alignment_led_la.set_led_color("blue")
+            self.ui.alignment_led_la.setToolTip("Alignment Applied!")
+        else:
+            self.ui.led_la.set_led_color("grey")
+            self.ui.led_la.setToolTip("Alignment not applied")
+            self.ui.alignment_led_la.set_led_color("grey")
+            self.ui.alignment_led_la.setToolTip("Alignment not applied")
+
     def apply_align(self):
-        self.align_apply_s.emit(self.ui.apply_alignment_tb.isChecked())
+        alignment_points = list()
+        num_rows = self.ui.align_points_tw.rowCount()
+        align_to_be_applied_flag = self.ui.apply_alignment_tb.isChecked() and (num_rows >= 2)
+        # Grab alignment points only if apply alignment button is checked
+        if align_to_be_applied_flag:
+            self.update_ui_alignment_applied(True)
+            for r in range(0, num_rows):
+                x_base = float(self.ui.align_points_tw.cellWidget(r, 0).text())
+                y_base = float(self.ui.align_points_tw.cellWidget(r, 1).text())
+                x_offs = float(self.ui.align_points_tw.cellWidget(r, 2).text())
+                y_offs = float(self.ui.align_points_tw.cellWidget(r, 3).text())
+                points_l = [(x_base, y_base), (x_offs, y_offs)]
+                alignment_points.append(points_l)
+        else:
+            self.update_ui_alignment_applied(False)
+
+        self.align_apply_s.emit(align_to_be_applied_flag, alignment_points)
 
     def add_new_point(self):
         x_val = self.ui.x_point_layer_dsb.value()
@@ -67,6 +95,7 @@ class UiAlignTab(QObject):
         self.ui.align_points_tw.setCellWidget(num_rows, 1, QLabel("{:.3f}".format(y_val)))
         self.ui.align_points_tw.setCellWidget(num_rows, 2, QLabel("{:.3f}".format(new_x_val)))
         self.ui.align_points_tw.setCellWidget(num_rows, 3, QLabel("{:.3f}".format(new_y_val)))
+        self.apply_align()
 
     def remove_point(self):
         selection_model = self.ui.align_points_tw.selectionModel()
@@ -75,8 +104,7 @@ class UiAlignTab(QObject):
         for r in selected_rows[::-1]:
             self.ui.align_points_tw.removeRow(r.row())
         self.ui.align_points_tw.clearSelection()
-
-
+        self.apply_align()
 
 
 if __name__ == "__main__":
