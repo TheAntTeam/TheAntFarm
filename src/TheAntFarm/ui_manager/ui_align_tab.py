@@ -80,6 +80,14 @@ class UiAlignTab(QObject):
 
         self.align_apply_s.emit(align_to_be_applied_flag, alignment_points)
 
+    @staticmethod
+    def compute_offset_point(x_in, y_in, offset_in, angle_in):
+        x_out = offset_in + (x_in * math.cos(math.radians(angle_in)) -
+                             (y_in * math.sin(math.radians(angle_in))))
+        y_out = offset_in + ((x_in * math.sin(math.radians(angle_in))) +
+                             (y_in * math.cos(math.radians(angle_in))))
+        return x_out, y_out
+
     def add_new_point(self):
         x_val = self.ui.x_point_layer_dsb.value()
         y_val = self.ui.y_point_layer_dsb.value()
@@ -90,17 +98,12 @@ class UiAlignTab(QObject):
         for r in range(0, num_rows):
             actual_x_base = float(self.ui.align_points_tw.cellWidget(r, 0).text())
             actual_y_base = float(self.ui.align_points_tw.cellWidget(r, 1).text())
-            updated_x_offs = (actual_x_base + offset_val) * math.cos(math.radians(angle_val)) - \
-                             ((actual_y_base + offset_val) * math.sin(math.radians(angle_val)))
-            updated_y_offs = (actual_x_base + offset_val) * math.sin(math.radians(angle_val)) + \
-                             (actual_y_base + offset_val) * math.cos(math.radians(angle_val))
+            updated_x_offs, updated_y_offs = self.compute_offset_point(actual_x_base, actual_y_base,
+                                                                       offset_val, angle_val)
             self.ui.align_points_tw.setCellWidget(r, 2, QLabel("{:.3f}".format(updated_x_offs)))
             self.ui.align_points_tw.setCellWidget(r, 3, QLabel("{:.3f}".format(updated_y_offs)))
 
-        new_x_val = (x_val + offset_val) * math.cos(math.radians(angle_val)) - \
-                    ((y_val + offset_val) * math.sin(math.radians(angle_val)))
-        new_y_val = (x_val + offset_val) * math.sin(math.radians(angle_val)) + \
-                    (y_val + offset_val) * math.cos(math.radians(angle_val))
+        new_x_val, new_y_val = self.compute_offset_point(x_val, y_val, offset_val, angle_val)
 
         self.ui.align_points_tw.insertRow(num_rows)
         self.ui.align_points_tw.setCellWidget(num_rows, 0, QLabel("{:.3f}".format(x_val)))
