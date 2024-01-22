@@ -90,13 +90,17 @@ class UiAlignTab(QObject):
         for r in range(0, num_rows):
             actual_x_base = float(self.ui.align_points_tw.cellWidget(r, 0).text())
             actual_y_base = float(self.ui.align_points_tw.cellWidget(r, 1).text())
-            updated_x_offs = actual_x_base + (offset_val * math.cos(math.radians(angle_val)))
-            updated_y_offs = actual_y_base + (offset_val * math.sin(math.radians(angle_val)))
+            updated_x_offs = (actual_x_base + offset_val) * math.cos(math.radians(angle_val)) - \
+                             ((actual_y_base + offset_val) * math.sin(math.radians(angle_val)))
+            updated_y_offs = (actual_x_base + offset_val) * math.sin(math.radians(angle_val)) + \
+                             (actual_y_base + offset_val) * math.cos(math.radians(angle_val))
             self.ui.align_points_tw.setCellWidget(r, 2, QLabel("{:.3f}".format(updated_x_offs)))
             self.ui.align_points_tw.setCellWidget(r, 3, QLabel("{:.3f}".format(updated_y_offs)))
 
-        new_x_val = x_val + (offset_val * math.cos(math.radians(angle_val)))
-        new_y_val = y_val + (offset_val * math.sin(math.radians(angle_val)))
+        new_x_val = (x_val + offset_val) * math.cos(math.radians(angle_val)) - \
+                    ((y_val + offset_val) * math.sin(math.radians(angle_val)))
+        new_y_val = (x_val + offset_val) * math.sin(math.radians(angle_val)) + \
+                    (y_val + offset_val) * math.cos(math.radians(angle_val))
 
         self.ui.align_points_tw.insertRow(num_rows)
         self.ui.align_points_tw.setCellWidget(num_rows, 0, QLabel("{:.3f}".format(x_val)))
