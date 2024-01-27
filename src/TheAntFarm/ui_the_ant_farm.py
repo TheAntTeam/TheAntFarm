@@ -3270,10 +3270,15 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_14 = QVBoxLayout()
         self.verticalLayout_14.setObjectName(u"verticalLayout_14")
-        self.openGLWidget = QOpenGLWidget(self.align_tab)
-        self.openGLWidget.setObjectName(u"openGLWidget")
+        self.alignCanvasWidget = VispyCanvas(self.align_tab)
+        self.alignCanvasWidget.setObjectName(u"alignCanvasWidget")
 
-        self.verticalLayout_14.addWidget(self.openGLWidget)
+        self.verticalLayout_14.addWidget(self.alignCanvasWidget)
+
+        self.load_align_layer_tb = QToolButton(self.align_tab)
+        self.load_align_layer_tb.setObjectName(u"load_align_layer_tb")
+
+        self.verticalLayout_14.addWidget(self.load_align_layer_tb, 0, Qt.AlignRight)
 
         self.gridLayout_10 = QGridLayout()
         self.gridLayout_10.setObjectName(u"gridLayout_10")
@@ -4683,6 +4688,7 @@ class Ui_MainWindow(object):
         self.xy_div_10_pb_2.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
         self.xy_mul_10_pb_2.setText(QCoreApplication.translate("MainWindow", u"x10", None))
         self.xy_minus_1_pb_2.setText(QCoreApplication.translate("MainWindow", u"-1.0", None))
+        self.load_align_layer_tb.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.x_point_layer_la.setText(QCoreApplication.translate("MainWindow", u"X", None))
         self.y_point_layer_la.setText(QCoreApplication.translate("MainWindow", u"Y", None))
         self.angle_la.setText(QCoreApplication.translate("MainWindow", u"angle", None))
