@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 class ControllerWorker(QObject):
     update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
+    update_align_layer_s = Signal(Od, str, str, bool)  # Signal to update align layer visualization
     update_path_s = Signal(str, list)            # Signal to update path visualization
     update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
     update_camera_list_s = Signal(list)          # Signal to update Camera list detected
@@ -131,6 +132,15 @@ class ControllerWorker(QObject):
         else:
             logger.warning("Invalid file data. No geometries found in file: " + str(layer_path))
             self.update_layer_s.emit(None, layer, "", False)
+
+    @Slot(str, str)
+    def load_new_align_layer(self, layer, layer_path):
+        [loaded_layer, exc_flag] = self.align_controller.load_new_align_layer(layer, layer_path)
+        if loaded_layer is not None:
+            self.update_align_layer_s.emit(loaded_layer, layer, layer_path, exc_flag)
+        else:
+            logger.warning("Invalid file data. No geometries found in file: " + str(layer_path))
+            self.update_align_layer_s.emit(None, layer, "", False)
 
     @Slot(str, Od, str)
     def generate_new_path(self, tag, cfg, machining_type):

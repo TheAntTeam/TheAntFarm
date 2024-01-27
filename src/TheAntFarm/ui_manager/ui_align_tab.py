@@ -1,24 +1,36 @@
 from PySide2.QtCore import Signal, Slot, QObject
 from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QLabel
+from PySide2.QtWidgets import QLabel, QFileDialog
+from collections import OrderedDict as Od
 import logging
 import math
+import os
 
 logger = logging.getLogger(__name__)
 
 
 class UiAlignTab(QObject):
     """Class dedicated to UI <--> Control interactions on Align Tab. """
+    load_align_layer_s = Signal(str, str)
     align_active_s = Signal(bool)
     align_apply_s = Signal(bool, list)
     update_threshold_s = Signal(int)
 
-    def __init__(self, ui, control_worker):
+    def __init__(self, main_win, control_worker, vis_align_layer, app_settings):
         super(UiAlignTab, self).__init__()
-        self.ui = ui
+        self.main_win = main_win
+        self.ui = self.main_win.ui
         self.controlWo = control_worker
+        self.vis_align_layer = vis_align_layer
+        self.app_settings = app_settings
+
+        self.layer_colors = self.app_settings.layer_color
+
+        align_extensions = "Excellon (*.xln *.XLN *.drl *.DRL)"
 
         # Align TAB related controls.
+        self.load_align_layer_s.connect(self.controlWo.load_new_align_layer)
+        self.controlWo.update_align_layer_s.connect(self.visualize_new_align_layer)
         self.ui.main_tab_widget.currentChanged.connect(self.check_align_is_active)
         self.align_active_s.connect(self.controlWo.set_align_is_active)
         self.align_apply_s.connect(self.controlWo.set_align_active)
@@ -27,6 +39,8 @@ class UiAlignTab(QObject):
         self.ui.remove_point_tb.clicked.connect(self.remove_point)
         self.ui.contrast_slider.valueChanged.connect(self.update_threshold)
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
+        self.ui.load_align_layer_tb.clicked.connect(
+            lambda: self.load_align_file("Load Align File", align_extensions))
 
         self.controlWo.update_camera_image_s.connect(self.update_camera_image)
         self.controlWo.update_camera_list_s.connect(self.update_camera_list)
@@ -120,6 +134,30 @@ class UiAlignTab(QObject):
             self.ui.align_points_tw.removeRow(r.row())
         self.ui.align_points_tw.clearSelection()
         self.apply_align()
+
+    def load_align_file(self, load_text="Load Align File", extensions=""):
+        layer = "drill"
+        filters = extensions + ";;All files (*.*)"
+        kwargs = {}
+        if "PYCHARM_HOSTED" in os.environ:
+            logger.debug("pycharm hosted")
+            kwargs['options'] = QFileDialog.DontUseNativeDialog
+        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.app_settings.layer_last_dir,
+                                                     filters, **kwargs)
+
+        if load_file_path[0]:
+            # self.vis_layer.remove_layer(layer)
+            # self.vis_layer.remove_path(layer)
+            self.app_settings.layer_last_dir = os.path.dirname(load_file_path[0])
+            logger.info("Loading Align " + load_file_path[0])
+            self.load_align_layer_s.emit(layer, load_file_path[0])
+
+    @Slot(Od, str, str, bool)
+    def visualize_new_align_layer(self, loaded_layer, layer_tag, layer_path, holes):
+        if loaded_layer is None or layer_path == "":
+            self.ui.status_bar.showMessage("WARNING: user tried to load an empty layer.", 3000)
+        else:
+            self.vis_align_layer.add_layer(layer_tag, loaded_layer[0], self.layer_colors[layer_tag], holes)
 
 
 if __name__ == "__main__":
