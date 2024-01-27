@@ -146,8 +146,8 @@ class UiAlignTab(QObject):
                                                      filters, **kwargs)
 
         if load_file_path[0]:
-            # self.vis_layer.remove_layer(layer)
-            # self.vis_layer.remove_path(layer)
+            self.vis_align_layer.remove_layer(layer)
+            self.vis_align_layer.remove_path(layer)
             self.app_settings.layer_last_dir = os.path.dirname(load_file_path[0])
             logger.info("Loading Align " + load_file_path[0])
             self.load_align_layer_s.emit(layer, load_file_path[0])
