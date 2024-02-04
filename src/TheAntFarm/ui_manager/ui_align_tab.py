@@ -60,6 +60,7 @@ class UiAlignTab(QObject):
 
     @Slot(list)
     def update_camera_list(self, camera_list):
+        self.ui.camera_list_cb.addItem("No CAMERA")
         for cam in camera_list:
             self.ui.camera_list_cb.addItem(str(cam))
 
