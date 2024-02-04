@@ -1,4 +1,4 @@
-
+from PySide2 import QtMultimedia
 import cv2
 import numpy as np
 
@@ -6,41 +6,19 @@ import numpy as np
 class DoubleSideManager:
 
     def __init__(self):
-
         self.detected_holes = []
-        # grab webcam
-        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
+        self.cap = None
 
     @staticmethod
     def list_cameras_indexes():
         index = 0
         arr = []
-        while True:
-            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
-            cap.isOpened()
-            if not cap.isOpened():  # cap.read()[0]:
-                break
-            else:
-                arr.append(index)
-            cap.release()
-            index += 1
-        return arr
+        info = QtMultimedia.QCameraInfo()
+        for cameraDevice in info.availableCameras():
+            arr.append(cameraDevice.description())
+            # print(cameraDevice.description())
 
-    @staticmethod
-    def return_camera_indexes():
-        # checks the first 10 indexes.
-        index = 0
-        arr = []
-        i = 10
-        while i > 0:
-            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
-            if cap.isOpened():
-                arr.append(index)
-                cap.release()
-            index += 1
-            i -= 1
         return arr
 
     @staticmethod
@@ -51,14 +29,21 @@ class DoubleSideManager:
         return result
 
     def update_camera(self, index):
-        self.cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        if index >= 0:
+            self.cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        else:
+            if isinstance(self.cap, cv2.VideoCapture):
+                self.cap.release()
 
     def get_webcam_frame(self):
-        ret, frame = self.cap.read()
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        # frame = self.rotate_image(frame, 0)
+        frame = None
+        if self.cap:
+            ret, frame = self.cap.read()
+            if ret:
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                # frame = self.rotate_image(frame, 0)
         return frame
 
     @staticmethod

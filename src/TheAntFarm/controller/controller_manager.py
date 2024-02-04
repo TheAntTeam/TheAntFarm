@@ -523,14 +523,18 @@ class ControllerWorker(QObject):
     def on_camera_timeout(self):
         if self.align_active:
             image = self.align_controller.camera_new_frame()
-            self.update_camera_image_s.emit(QPixmap.fromImage(image))
+            if image:
+                self.update_camera_image_s.emit(QPixmap.fromImage(image))
+            else:
+                self.update_camera_image_s.emit(QPixmap())  # empty image
 
     def refresh_camera_list(self):
         cam_list = self.align_controller.get_camera_list()
         self.update_camera_list_s.emit(cam_list)
 
     def update_camera_selected(self, index):
-        self.align_controller.update_camera_selected(index)
+        # Take in account that index 0 indicates NO CAMERA
+        self.align_controller.update_camera_selected(index-1)
 
     @Slot(bool)
     def set_align_is_active(self, align_is_active):
