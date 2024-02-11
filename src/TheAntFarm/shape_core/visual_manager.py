@@ -11,6 +11,12 @@ import numpy as np
 from collections import OrderedDict
 import string
 import random
+from shapely.geometry import Point
+import shapely as sh
+
+print(sh.__version__)
+
+
 
 
 class GLUTess:
@@ -125,14 +131,24 @@ class VisualLayer:
     POINTER_COLOR = "orange"
     POINTER_SEGMENTS = 20
 
-    def __init__(self, canvas):
+    def __init__(self, canvas, selectable=False):
         self.canvas = canvas
         self.canvas.view.camera = PanZoomCamera(aspect=1)
         self.translucent_filter = Alpha()
         self.meshes = OrderedDict({})
         self.paths = OrderedDict({})
-        self.view = 0
+        self.meshes_geom = OrderedDict({})
+        self.paths_geom = OrderedDict({})
+
+        # self.view = 0
+        self.orientation = 0
         self.pointer_tag = ""
+        self.selectable = selectable
+
+        self.selected_object = None
+
+        if selectable:
+            self.canvas.events.mouse_double_click.connect(self.on_mouse_double_click)
 
     def compute_pointer(self, coords):
         segments = self.POINTER_SEGMENTS
@@ -195,6 +211,30 @@ class VisualLayer:
         self.canvas.update()
 
     def on_mouse_double_click(self, event):
+        if event.button == 1:
+            self.remove_layer("selected")
+            self.canvas.view.interactive = False
+            tr = self.canvas.scene.node_transform(self.canvas.view.scene)
+            pos = tr.map(event.pos)
+            self.canvas.view.interactive = True
+
+            # get selected polygon using shapely
+            point = Point(pos)
+            for gk in self.meshes_geom.keys():
+                if gk != "selected":
+                    geom_list = self.meshes_geom[gk].copy()
+                    contain_flag = False
+                    shape = None
+                    while geom_list and not contain_flag:
+                        shape = geom_list.pop()
+                        contain_flag = shape.geom.contains(point)
+
+                    # ToDo: to parametrize color of selection
+                    if contain_flag:
+                        self.add_layer(tag="selected", geom_list=[shape], color="yellow", holes=False, auto_range=False)
+                        break
+
+    def on_mouse_click(self, event):
         self.orientation = 0 if self.orientation == 1 else 1
         self.flip_view(orientation=self.orientation)
 
@@ -230,6 +270,7 @@ class VisualLayer:
             # self.canvas.events.draw.disconnect(to_remove.on_draw)
             to_remove.parent = None
             del self.meshes[tag]
+            del self.meshes_geom[tag]
 
     def remove_path(self, tag):
         if tag in self.paths.keys():
@@ -239,8 +280,9 @@ class VisualLayer:
                 to_remove.parent = None
                 del p
             del self.paths[tag]
+            del self.paths_geom[tag]
 
-    def add_layer(self, tag, geom_list, color=None, holes=False):
+    def add_layer(self, tag, geom_list, color=None, holes=False, auto_range=True):
         ldata = [[], []]
         triangulizer = GLUTess()
         order = 0
@@ -259,7 +301,8 @@ class VisualLayer:
             #     ldata[0] += tri_off
             #     ldata[1] += pts[:]
                 #order = 0
-        self.create_mesh(tag, ldata, color, order)
+        self.create_mesh(tag, ldata, color, order, auto_range=auto_range)
+        self.meshes_geom[tag] = geom_list
 
     def add_path(self, tag, geom_list, color=None):
         # todo: add zbuffer controll
@@ -274,6 +317,7 @@ class VisualLayer:
                     if g.geom_type == "LinearRing":
                         ldata.append(list(g.coords))
                 self.create_line(tag, ldata, color, order)
+            self.paths_geom[tag] = geom_list
         else:
             print("Cannot Visualize an Empty Path")
 
@@ -306,6 +350,7 @@ class VisualLayer:
 
             for color in gcode_paths.keys():
                 self.create_line(tag, gcode_paths[color], color, order)
+            self.paths_geom[tag] = gcode_list
         else:
             print("Cannot Visualize an Empty GCode")
 
@@ -348,10 +393,10 @@ class VisualLayer:
         self.canvas.view.camera.set_range()
         self.canvas.freeze()
 
-    def create_mesh(self, tag, ldata, color=None, order=0):
+    def create_mesh(self, tag, ldata, color=None, order=0, auto_range=True):
 
         self.canvas.unfreeze()
-        mesh = visuals.Mesh(parent=self.canvas.view.scene)
+        mesh = visuals.Mesh(parent=self.canvas.view)
         # mesh = visuals.Mesh(shading='flat', parent=self.canvas.view.scene)
         # mesh.unfreeze()
         # mesh.filter = self.translucent_filter
@@ -375,7 +420,8 @@ class VisualLayer:
         self.meshes[tag] = mesh
         self.canvas.view.add(mesh)
 
-        self.canvas.view.camera.set_range()
+        if auto_range:
+            self.canvas.view.camera.set_range()
 
         self.canvas.freeze()
         #visuals.XYZAxis(parent=self.canvas.view.scene)
