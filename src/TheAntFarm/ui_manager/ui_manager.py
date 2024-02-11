@@ -39,7 +39,7 @@ class UiManager(QObject):
 
         self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
         self.ctrl_layer = VisualLayer(self.ui.controlCanvasWidget)
-        self.vis_align_layer = VisualLayer(self.ui.alignCanvasWidget)
+        self.vis_align_layer = VisualLayer(self.ui.alignCanvasWidget, selectable=True)
 
         # UI Sub-Managers
         self.ui_load_layer_m = UiViewLoadLayerTab(main_win, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES,

@@ -55,6 +55,10 @@ class ControlController(QObject):
     def get_probe_value(self):
         return self.prb_val[0]
 
+    def set_align_data(self, align_data):
+        if isinstance(align_data, list) or isinstance(align_data, tuple):
+            self.align_data = align_data
+
     def get_align_data(self):
         print("GET ALIGN DATA")
         # WARNING INJECTING FAKE DATA FOR TESTING PURPOSE

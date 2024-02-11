@@ -376,7 +376,8 @@ class ControllerWorker(QObject):
         self.abl_apply_active = abl_active
         self.select_active_gcode(self.active_gcode_path)
 
-    def set_align_active(self, align_active=True):
+    def set_align_active(self, align_active=True, align_data=()):
+        self.control_controller.set_align_data(align_data)
         self.align_apply_active = align_active
         self.select_active_gcode(self.active_gcode_path)
 
