@@ -7,6 +7,7 @@ from collections import OrderedDict as od
 from datetime import datetime
 import scipy.interpolate as spi
 from shapely.geometry import LineString
+
 from .macros_manager import Macros
 from .commands_manager import CommandManager
 from .align_manager import AlignManager
