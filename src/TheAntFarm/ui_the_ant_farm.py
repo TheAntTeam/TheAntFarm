@@ -3239,12 +3239,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_23.setObjectName(u"horizontalLayout_23")
         self.flip_horizontally_tb = QToolButton(self.align_tab)
         self.flip_horizontally_tb.setObjectName(u"flip_horizontally_tb")
+        self.flip_horizontally_tb.setCheckable(True)
         self.flip_horizontally_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
 
         self.horizontalLayout_23.addWidget(self.flip_horizontally_tb)
 
         self.flip_vertically_tb = QToolButton(self.align_tab)
         self.flip_vertically_tb.setObjectName(u"flip_vertically_tb")
+        self.flip_vertically_tb.setCheckable(True)
         self.flip_vertically_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
 
         self.horizontalLayout_23.addWidget(self.flip_vertically_tb)
