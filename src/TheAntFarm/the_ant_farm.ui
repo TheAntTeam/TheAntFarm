@@ -7393,6 +7393,9 @@
                   <property name="text">
                    <string>FLIP HOR</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
                   <property name="toolButtonStyle">
                    <enum>Qt::ToolButtonTextOnly</enum>
                   </property>
@@ -7402,6 +7405,9 @@
                  <widget class="QToolButton" name="flip_vertically_tb">
                   <property name="text">
                    <string>FLIP VER</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
                   <property name="toolButtonStyle">
                    <enum>Qt::ToolButtonTextOnly</enum>

@@ -521,13 +521,15 @@ class ControllerWorker(QObject):
             logger.warning("Invalid file data. No geometries found in file: " + str(layer_path))
             self.update_align_layer_s.emit(None, layer, "", False)
 
-    @Slot()
-    def flip_align_layer_horizontally(self):
-        self.align_controller.flip_align_layer_horizontally()
+    @Slot(bool)
+    def flip_align_layer_horizontally(self, flipped):
+        self.align_controller.flip_align_layer_horizontally(flipped)
+        # todo: emit signal here to update align layer
 
-    @Slot()
-    def flip_align_layer_vertically(self):
-        self.align_controller.flip_align_layer_vertically()
+    @Slot(bool)
+    def flip_align_layer_vertically(self, flipped):
+        self.align_controller.flip_align_layer_vertically(flipped)
+        # todo: emit signal here to update align layer
 
     def on_camera_timeout(self):
         if self.align_active:

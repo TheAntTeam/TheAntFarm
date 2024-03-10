@@ -41,8 +41,10 @@ class UiAlignTab(QObject):
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
         self.ui.load_align_layer_tb.clicked.connect(
             lambda: self.load_align_file("Load Align File", align_extensions))
-        self.ui.flip_horizontally_tb.clicked.connect(self.controlWo.flip_align_layer_horizontally)
-        self.ui.flip_vertically_tb.clicked.connect(self.controlWo.flip_align_layer_vertically)
+        self.ui.flip_horizontally_tb.clicked.connect(
+            lambda: self.controlWo.flip_align_layer_horizontally(self.ui.flip_horizontally_tb.isChecked()))
+        self.ui.flip_vertically_tb.clicked.connect(
+            lambda: self.controlWo.flip_align_layer_vertically(self.ui.flip_vertically_tb.isChecked()))
 
         self.controlWo.update_camera_image_s.connect(self.update_camera_image)
         self.controlWo.update_camera_list_s.connect(self.update_camera_list)
