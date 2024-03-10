@@ -28,7 +28,6 @@ class AlignController(QObject):
         self.threshold_value = 0
 
     def load_new_align_layer(self, layer, layer_path):
-
         try:
             exc_tags = self.pcb.EXN_KEYS
             if layer in exc_tags:
@@ -53,6 +52,12 @@ class AlignController(QObject):
             logger.error("Uncaught exception: %s", traceback.format_exc())
 
         return [None, None]
+
+    def flip_align_layer_horizontally(self):
+        pass
+
+    def flip_align_layer_vertically(self):
+        pass
 
     def update_threshold_value(self, new_threshold):
         self.threshold_value = new_threshold
