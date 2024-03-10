@@ -41,6 +41,8 @@ class UiAlignTab(QObject):
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
         self.ui.load_align_layer_tb.clicked.connect(
             lambda: self.load_align_file("Load Align File", align_extensions))
+        self.ui.flip_horizontally_tb.clicked.connect(self.controlWo.flip_align_layer_horizontally)
+        self.ui.flip_vertically_tb.clicked.connect(self.controlWo.flip_align_layer_vertically)
 
         self.controlWo.update_camera_image_s.connect(self.update_camera_image)
         self.controlWo.update_camera_list_s.connect(self.update_camera_list)
@@ -104,10 +106,10 @@ class UiAlignTab(QObject):
         return x_out, y_out
 
     def add_new_point(self):
-        x_val = self.ui.x_point_layer_dsb.value()
-        y_val = self.ui.y_point_layer_dsb.value()
-        offset_val = self.ui.distance_offset_dsb.value()
-        angle_val = self.ui.angle_dsb.value()
+        x_val = 0  # todo: get the real values
+        y_val = 0  # todo: get the real values
+        offset_val = 0  # todo: get the real values
+        angle_val = 0  # todo: get the real values
         num_rows = self.ui.align_points_tw.rowCount()
 
         for r in range(0, num_rows):

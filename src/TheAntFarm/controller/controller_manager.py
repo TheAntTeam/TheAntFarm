@@ -133,15 +133,6 @@ class ControllerWorker(QObject):
             logger.warning("Invalid file data. No geometries found in file: " + str(layer_path))
             self.update_layer_s.emit(None, layer, "", False)
 
-    @Slot(str, str)
-    def load_new_align_layer(self, layer, layer_path):
-        [loaded_layer, exc_flag] = self.align_controller.load_new_align_layer(layer, layer_path)
-        if loaded_layer is not None:
-            self.update_align_layer_s.emit(loaded_layer, layer, layer_path, exc_flag)
-        else:
-            logger.warning("Invalid file data. No geometries found in file: " + str(layer_path))
-            self.update_align_layer_s.emit(None, layer, "", False)
-
     @Slot(str, Od, str)
     def generate_new_path(self, tag, cfg, machining_type):
         new_paths = self.view_controller.generate_new_path(tag, cfg, machining_type)
@@ -520,6 +511,23 @@ class ControllerWorker(QObject):
         self.send_gcode_lines(lines)
 
 # ***************** ALIGN related functions. ***************** #
+
+    @Slot(str, str)
+    def load_new_align_layer(self, layer, layer_path):
+        [loaded_layer, exc_flag] = self.align_controller.load_new_align_layer(layer, layer_path)
+        if loaded_layer is not None:
+            self.update_align_layer_s.emit(loaded_layer, layer, layer_path, exc_flag)
+        else:
+            logger.warning("Invalid file data. No geometries found in file: " + str(layer_path))
+            self.update_align_layer_s.emit(None, layer, "", False)
+
+    @Slot()
+    def flip_align_layer_horizontally(self):
+        self.align_controller.flip_align_layer_horizontally()
+
+    @Slot()
+    def flip_align_layer_vertically(self):
+        self.align_controller.flip_align_layer_vertically()
 
     def on_camera_timeout(self):
         if self.align_active:

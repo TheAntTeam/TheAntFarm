@@ -211,7 +211,7 @@ class VisualLayer:
         self.canvas.update()
 
     def on_mouse_double_click(self, event):
-        if event.button == 1:
+        if event.button == 1:  # left click
             self.remove_layer("selected")
             self.canvas.view.interactive = False
             tr = self.canvas.scene.node_transform(self.canvas.view.scene)
