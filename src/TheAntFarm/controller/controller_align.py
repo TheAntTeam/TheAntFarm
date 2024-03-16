@@ -13,6 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 class AlignController(QObject):
+
+    EXCELLON_EXTENSIONS = (".xln", ".drl")
+
     def __init__(self, settings):
         super(AlignController, self).__init__()
         self.settings = settings
@@ -20,20 +23,20 @@ class AlignController(QObject):
         self.pcb = PcbObj()
         # TODO: parametrize drill diameter for gcode conversion
         dgc_cfg = {
-            "align_drill_diameter": 0.7
+            "default_gcode_drill_size": 0.7
         }
         self.dgc = DrillGcodeConverter(cfg=dgc_cfg)
 
         self.double_side_manager = DoubleSideManager()
         self.threshold_value = 0
+        self.fipping_view = [False, False, False]
 
     def load_new_align_layer(self, layer, layer_path):
         try:
             exc_tags = self.pcb.EXN_KEYS
             if layer in exc_tags:
                 ext = os.path.splitext(layer_path)[1]
-                # TODO: parametrize excellon extensions
-                if ext.lower() in [".xln", ".drl"]:
+                if ext.lower() in self.EXCELLON_EXTENSIONS:
                     self.pcb.load_excellon(layer_path, layer)
                     loaded_layer = self.pcb.get_excellon_layer(layer)
                     if not loaded_layer[0]:
@@ -54,10 +57,10 @@ class AlignController(QObject):
         return [None, None]
 
     def flip_align_layer_horizontally(self, flipped):
-        pass
+        self.fipping_view[0] = flipped
 
     def flip_align_layer_vertically(self, flipped):
-        pass
+        self.fipping_view[1] = flipped
 
     def update_threshold_value(self, new_threshold):
         self.threshold_value = new_threshold
