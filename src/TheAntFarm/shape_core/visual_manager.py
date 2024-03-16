@@ -124,8 +124,8 @@ class GLUTess:
 class VisualLayer:
 
     DELTA = 1
-    TOP_ORDER = {'drill': 1, 'profile': 2, 'top': 4, 'bottom': 5, 'nc_top': 3, 'nc_bottom': 6}
-    BTM_ORDER = {'drill': 1, 'profile': 2, 'top': 5, 'bottom': 4, 'nc_top': 6, 'nc_bottom': 3}
+    TOP_ORDER = {'selected': 1, 'drill': 2, 'profile': 3, 'top': 5, 'bottom': 6, 'nc_top': 4, 'nc_bottom': 7}
+    BTM_ORDER = {'selected': 1, 'drill': 2, 'profile': 3, 'top': 6, 'bottom': 5, 'nc_top': 7, 'nc_bottom': 4}
     POINTER_RADIUS = 0.5
     POINTER_TAG = "POINTER"
     POINTER_COLOR = "orange"
@@ -206,6 +206,16 @@ class VisualLayer:
 
         for m in self.meshes.keys():
             self.meshes[m].order = self.BTM_ORDER[m]
+
+        self.canvas._draw_order.clear()
+        self.canvas.update()
+
+    def flip_camera(self, flipped):
+        self.canvas.view.camera.up = "+z"
+        self.canvas.view.camera.flip = (flipped)
+
+        for m in self.meshes.keys():
+            self.meshes[m].order = self.TOP_ORDER[m]
 
         self.canvas._draw_order.clear()
         self.canvas.update()

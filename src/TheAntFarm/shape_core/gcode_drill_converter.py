@@ -41,7 +41,7 @@ class DrillGcodeConverter:
 
                     mp = []
                     for i in range(drill_coords.shape[0]):
-                        dd = self.cfg["align_drill_diameter"]
+                        dd = self.cfg["default_gcode_drill_size"]
                         center_coords = drill_coords[i, :].tolist()
                         circle_coords = self.get_all_circle_coords(center_coords,
                                                                    radius=dd,
