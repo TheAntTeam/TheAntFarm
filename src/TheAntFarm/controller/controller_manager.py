@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 class ControllerWorker(QObject):
     update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
     update_align_layer_s = Signal(Od, str, str, bool)  # Signal to update align layer visualization
+    update_align_layer_view_s = Signal(list)  # Signal to update align layer visualization (flipping)
     update_path_s = Signal(str, list)            # Signal to update path visualization
     update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
     update_camera_list_s = Signal(list)          # Signal to update Camera list detected
@@ -525,11 +526,13 @@ class ControllerWorker(QObject):
     def flip_align_layer_horizontally(self, flipped):
         self.align_controller.flip_align_layer_horizontally(flipped)
         # todo: emit signal here to update align layer
+        self.update_align_layer_view_s.emit(self.align_controller.fipping_view)
 
     @Slot(bool)
     def flip_align_layer_vertically(self, flipped):
         self.align_controller.flip_align_layer_vertically(flipped)
         # todo: emit signal here to update align layer
+        self.update_align_layer_view_s.emit(self.align_controller.fipping_view)
 
     def on_camera_timeout(self):
         if self.align_active:

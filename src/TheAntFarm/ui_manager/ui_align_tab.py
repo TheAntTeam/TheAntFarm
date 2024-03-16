@@ -31,6 +31,7 @@ class UiAlignTab(QObject):
         # Align TAB related controls.
         self.load_align_layer_s.connect(self.controlWo.load_new_align_layer)
         self.controlWo.update_align_layer_s.connect(self.visualize_new_align_layer)
+        self.controlWo.update_align_layer_view_s.connect(self.flip_align_layer)
         self.ui.main_tab_widget.currentChanged.connect(self.check_align_is_active)
         self.align_active_s.connect(self.controlWo.set_align_is_active)
         self.align_apply_s.connect(self.controlWo.set_align_active)
@@ -163,6 +164,9 @@ class UiAlignTab(QObject):
             self.ui.status_bar.showMessage("WARNING: user tried to load an empty layer.", 3000)
         else:
             self.vis_align_layer.add_layer(layer_tag, loaded_layer[0], self.layer_colors[layer_tag], holes)
+    @Slot(list)
+    def flip_align_layer(self, flip_info):
+        self.vis_align_layer.flip_camera(flip_info)
 
 
 if __name__ == "__main__":
