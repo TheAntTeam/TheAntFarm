@@ -561,6 +561,10 @@ class ControllerWorker(QObject):
         else:
             logger.warning("Machine Disconnected")
 
+    def remove_align_points(self, selected_rows):
+        align_data = self.align_controller.remove_align_points(selected_rows)
+        self.update_align_points_s.emit(align_data)
+
     def on_camera_timeout(self):
         if self.align_active:
             image = self.align_controller.camera_new_frame()
