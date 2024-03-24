@@ -4056,20 +4056,20 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_25.addWidget(self.allignment_drill_diameter_la)
 
-        self.allignment_drill_diameter_dsb = QDoubleSpinBox(self.alignment_settings_tab)
-        self.allignment_drill_diameter_dsb.setObjectName(u"allignment_drill_diameter_dsb")
-        sizePolicy3.setHeightForWidth(self.allignment_drill_diameter_dsb.sizePolicy().hasHeightForWidth())
-        self.allignment_drill_diameter_dsb.setSizePolicy(sizePolicy3)
-        self.allignment_drill_diameter_dsb.setMinimumSize(QSize(252, 0))
-        self.allignment_drill_diameter_dsb.setMaximumSize(QSize(252, 16777215))
-        self.allignment_drill_diameter_dsb.setFont(font)
-        self.allignment_drill_diameter_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
-        self.allignment_drill_diameter_dsb.setAlignment(Qt.AlignCenter)
-        self.allignment_drill_diameter_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
-        self.allignment_drill_diameter_dsb.setMaximum(100000.000000000000000)
-        self.allignment_drill_diameter_dsb.setSingleStep(1.000000000000000)
+        self.alignment_drill_diameter_dsb = QDoubleSpinBox(self.alignment_settings_tab)
+        self.alignment_drill_diameter_dsb.setObjectName(u"alignment_drill_diameter_dsb")
+        sizePolicy3.setHeightForWidth(self.alignment_drill_diameter_dsb.sizePolicy().hasHeightForWidth())
+        self.alignment_drill_diameter_dsb.setSizePolicy(sizePolicy3)
+        self.alignment_drill_diameter_dsb.setMinimumSize(QSize(252, 0))
+        self.alignment_drill_diameter_dsb.setMaximumSize(QSize(252, 16777215))
+        self.alignment_drill_diameter_dsb.setFont(font)
+        self.alignment_drill_diameter_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.alignment_drill_diameter_dsb.setAlignment(Qt.AlignCenter)
+        self.alignment_drill_diameter_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.alignment_drill_diameter_dsb.setMaximum(100000.000000000000000)
+        self.alignment_drill_diameter_dsb.setSingleStep(1.000000000000000)
 
-        self.horizontalLayout_25.addWidget(self.allignment_drill_diameter_dsb)
+        self.horizontalLayout_25.addWidget(self.alignment_drill_diameter_dsb)
 
 
         self.verticalLayout_15.addLayout(self.horizontalLayout_25)
