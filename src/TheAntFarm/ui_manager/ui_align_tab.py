@@ -151,11 +151,7 @@ class UiAlignTab(QObject):
     def remove_point(self):
         selection_model = self.ui.align_points_tw.selectionModel()
         selected_rows = selection_model.selectedRows()
-        selected_rows.sort()
-        for r in selected_rows[::-1]:
-            self.ui.align_points_tw.removeRow(r.row())
-        self.ui.align_points_tw.clearSelection()
-        self.apply_align()
+
 
     def load_align_file(self, load_text="Load Align File", extensions=""):
         layer = "drill"
