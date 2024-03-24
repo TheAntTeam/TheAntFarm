@@ -15,6 +15,7 @@ class UiAlignTab(QObject):
     align_active_s = Signal(bool)
     align_apply_s = Signal(bool, list)
     update_threshold_s = Signal(int)
+    request_new_alignment_point_coords_s = Signal(list, tuple)
 
     def __init__(self, main_win, control_worker, vis_align_layer, app_settings):
         super(UiAlignTab, self).__init__()
@@ -38,7 +39,7 @@ class UiAlignTab(QObject):
         self.align_active_s.connect(self.controlWo.set_align_is_active)
         self.align_apply_s.connect(self.controlWo.set_align_active)
         self.ui.apply_alignment_tb.clicked.connect(self.apply_align)
-        self.ui.add_point_tb.clicked.connect(self.add_new_point)
+        self.ui.add_point_tb.clicked.connect(self.request_new_point)
         self.ui.remove_point_tb.clicked.connect(self.remove_point)
         self.ui.contrast_slider.valueChanged.connect(self.update_threshold)
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
@@ -48,6 +49,7 @@ class UiAlignTab(QObject):
             lambda: self.controlWo.flip_align_layer_horizontally(self.ui.flip_horizontally_tb.isChecked()))
         self.ui.flip_vertically_tb.clicked.connect(
             lambda: self.controlWo.flip_align_layer_vertically(self.ui.flip_vertically_tb.isChecked()))
+        self.request_new_alignment_point_coords_s.connect(self.controlWo.add_new_align_point)
 
         self.ui.tool_or_camera_tb.clicked.connect(self.update_tool_or_camera)
 
@@ -120,10 +122,15 @@ class UiAlignTab(QObject):
                              (y_in * math.cos(math.radians(angle_in))))
         return x_out, y_out
 
-    def add_new_point(self):
+    def request_new_point(self):
         selection_centroid = self.vis_align_layer.get_selected_centroid()
-        offset_info = (0, 0)
+        offset_info = (0, 0)  # todo: get this from the alignment settings
+        if self.camera_pos_selected:
+            offset_info = (-1.0, -1.0)  # todo: check and apply correct offset
 
+        self.request_new_alignment_point_coords_s.emit(selection_centroid, offset_info)
+
+    def add_new_point(self):
         x_val = 0  # todo: get the real values
         y_val = 0  # todo: get the real values
         offset_val = 0  # todo: get the real values
