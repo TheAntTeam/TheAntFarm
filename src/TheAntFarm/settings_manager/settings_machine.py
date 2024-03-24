@@ -32,6 +32,10 @@ class MachineSettingsHandler:
     HOLD_ON_PROBE_FLAG_DEFAULT = False
     ZEROING_AFTER_PROBE_FLAG_DEFAULT = False
 
+    ALIGNMENT_DRILL_DIAMETER_DEFAULT = 0.0
+    TOOL_CAMERA_OFFSET_X_DEFAULT = 0.0
+    TOOL_CAMERA_OFFSET_Y_DEFAULT = 0.0
+
     def __init__(self, config_folder, main_win):
         self.machine_config_path = os.path.normpath(os.path.join(config_folder, 'machine_config.ini'))
         self.machine_settings = configparser.ConfigParser()
@@ -64,6 +68,10 @@ class MachineSettingsHandler:
         self.tool_probe_rel_flag = self.TOOL_PROBE_REL_FLAG_DEFAULT
         self.hold_on_probe_flag = self.HOLD_ON_PROBE_FLAG_DEFAULT
         self.zeroing_after_probe_flag = self.ZEROING_AFTER_PROBE_FLAG_DEFAULT
+
+        self.alignment_drill_diameter = self.ALIGNMENT_DRILL_DIAMETER_DEFAULT
+        self.tool_camera_offset_x = self.TOOL_CAMERA_OFFSET_X_DEFAULT
+        self.tool_camera_offset_y = self.TOOL_CAMERA_OFFSET_Y_DEFAULT
 
     def read_all_machine_settings(self):
         """ Read all machine settings from ini files """
@@ -117,6 +125,13 @@ class MachineSettingsHandler:
             self.zeroing_after_probe_flag = machine_general.getboolean("zeroing_after_probe_flag",
                                                                        self.ZEROING_AFTER_PROBE_FLAG_DEFAULT)
 
+            self.alignment_drill_diameter = machine_general.getfloat("alignment_drill_diameter",
+                                                                     self.ALIGNMENT_DRILL_DIAMETER_DEFAULT)
+            self.tool_camera_offset_x = machine_general.getfloat("tool_camera_offset_x",
+                                                                 self.TOOL_CAMERA_OFFSET_X_DEFAULT)
+            self.tool_camera_offset_y = machine_general.getfloat("tool_camera_offset_y",
+                                                                 self.TOOL_CAMERA_OFFSET_Y_DEFAULT)
+
     def write_all_machine_settings(self):
         """ Write all machine settings to ini files """
         self.machine_settings["DEFAULT"] = {"probe_z_min": self.PROBE_Z_MIN_DEFAULT,
@@ -142,7 +157,10 @@ class MachineSettingsHandler:
                                             "tool_change_x_mpos": self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_change_y_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT,
                                             "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT,
-                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT}
+                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT,
+                                            "alignment_drill_diameter": self.ALIGNMENT_DRILL_DIAMETER_DEFAULT,
+                                            "tool_camera_offset_x": self.TOOL_CAMERA_OFFSET_X_DEFAULT,
+                                            "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT}
 
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
@@ -172,6 +190,9 @@ class MachineSettingsHandler:
         machine_general["tool_change_y_mpos"] = str(self.tool_change_offset_y_mpos)
         machine_general["tool_change_z_mpos"] = str(self.tool_change_offset_z_mpos)
         machine_general["tool_probe_z_limit"] = str(self.tool_probe_z_limit)
+        machine_general["alignment_drill_diameter"] = str(self.alignment_drill_diameter)
+        machine_general["tool_camera_offset_x"] = str(self.tool_camera_offset_x)
+        machine_general["tool_camera_offset_y"] = str(self.tool_camera_offset_y)
 
         # Write machine ini file #
         with open(self.machine_config_path, 'w') as configfile:
@@ -202,7 +223,10 @@ class MachineSettingsHandler:
                                             "tool_change_x_mpos": self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT,
                                             "tool_change_y_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT,
                                             "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT,
-                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT}
+                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT,
+                                            "alignment_drill_diameter": self.ALIGNMENT_DRILL_DIAMETER_DEFAULT,
+                                            "tool_camera_offset_x": self.TOOL_CAMERA_OFFSET_X_DEFAULT,
+                                            "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT}
 
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
@@ -231,6 +255,9 @@ class MachineSettingsHandler:
         machine_general["tool_change_y_mpos"] = str(self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT)
         machine_general["tool_change_z_mpos"] = str(self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT)
         machine_general["tool_probe_z_limit"] = str(self.TOOL_PROBE_Z_LIMIT_DEFAULT)
+        machine_general["alignment_drill_diameter"] = str(self.ALIGNMENT_DRILL_DIAMETER_DEFAULT)
+        machine_general["tool_camera_offset_x"] = str(self.TOOL_CAMERA_OFFSET_X_DEFAULT)
+        machine_general["tool_camera_offset_y"] = str(self.TOOL_CAMERA_OFFSET_Y_DEFAULT)
 
         # Write machine ini file #
         with open(self.machine_config_path, 'w') as configfile:

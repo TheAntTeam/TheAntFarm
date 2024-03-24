@@ -36,6 +36,7 @@ class UiSettingsPreferencesTab(QObject):
 
         self.get_tool_change_flag = False
         self.get_tool_probe_flag = False
+        self.get_tool_camera_offset_flag = False
 
         self.reset_tool_probe_initial_enables()
 
@@ -46,6 +47,7 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.get_tool_change_pb.clicked.connect(self.ask_tool_change_position)
         self.load_gcoder_cfg_s.connect(self.control_wo.update_gerber_cfg)
         self.ui.save_settings_preferences_pb.clicked.connect(self.save_settings_preferences)
+        self.ui.get_tool_camera_offset_pb.clicked.connect(self.ask_tool_camera_offset)
 
         self.ui_tool_probe_set_enabling(enable=False)
         self.ui_tool_change_set_enabling(enable=False)
@@ -70,6 +72,9 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.feedrate_probe_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.x_mirror_rb.clicked.connect(self.set_focus_lost)
         self.ui.y_mirror_rb.clicked.connect(self.set_focus_lost)
+        self.ui.alignment_drill_diameter_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.x_tool_camera_offset_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.y_tool_camera_offset_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.restore_settings_preferences_pb.clicked.connect(self.restore_initial_settings)
 
         self.reset_application_settings()
@@ -130,6 +135,10 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.feedrate_xy_dsb.setValue(self.machine_settings.feedrate_xy)
         self.ui.feedrate_z_dsb.setValue(self.machine_settings.feedrate_z)
         self.ui.feedrate_probe_dsb.setValue(self.machine_settings.feedrate_probe)
+
+        self.ui.alignment_drill_diameter_dsb.setValue(self.machine_settings.alignment_drill_diameter)
+        self.ui.x_tool_camera_offset_dsb.setValue(self.machine_settings.tool_camera_offset_x)
+        self.ui.y_tool_camera_offset_dsb.setValue(self.machine_settings.tool_camera_offset_y)
 
     def restore_initial_settings(self):
         """Restore initial settings in ui fields. """
@@ -196,6 +205,9 @@ class UiSettingsPreferencesTab(QObject):
         elif self.get_tool_change_flag:
             self.get_tool_change_flag = False
             self.get_tool_change_position(actual_status_report)
+        elif self.get_tool_camera_offset_flag:
+            self.get_tool_camera_offset_flag = False
+            self.get_tool_camera_offset(actual_status_report)
 
     def ask_tool_probe_position(self):
         """ Set get_tool_probe_flag at true and ask controller status report. """
@@ -205,6 +217,11 @@ class UiSettingsPreferencesTab(QObject):
     def ask_tool_change_position(self):
         """ Set get_tool_probe_flag at true and ask controller status report. """
         self.get_tool_change_flag = True
+        self.ask_status_report()
+
+    def ask_tool_camera_offset(self):
+        """ Set get_tool_camera_offset_flag at true and ask controller status report. """
+        self.get_tool_camera_offset_flag = True
         self.ask_status_report()
 
     def get_tool_probe_position(self, actual_status_report):
@@ -230,12 +247,18 @@ class UiSettingsPreferencesTab(QObject):
 
         self.load_gcoder_cfg_s.emit()
 
+    def get_tool_camera_offset(self, actual_status_report):
+        tool_change_mpos = actual_status_report["mpos"]
+        self.ui.x_tool_camera_offset_dsb.setValue(tool_change_mpos[0])
+        self.ui.y_tool_camera_offset_dsb.setValue(tool_change_mpos[1])
+
     def save_settings_preferences(self):
         """Save settings preferences from UI to settings."""
         if self.ui.x_mirror_rb.isChecked():
             self.jobs_settings.jobs_settings_od["common"]["mirroring_axis"] = "x"
         elif self.ui.y_mirror_rb.isChecked():
             self.jobs_settings.jobs_settings_od["common"]["mirroring_axis"] = "y"
+
         self.machine_settings.tool_probe_rel_flag = self.ui.tool_probe_wm_pos_chb.isChecked()
 
         self.machine_settings.tool_probe_offset_x_mpos = self.ui.tool_probe_x_mpos_dsb.value()
@@ -257,6 +280,10 @@ class UiSettingsPreferencesTab(QObject):
         self.machine_settings.feedrate_xy = self.ui.feedrate_xy_dsb.value()
         self.machine_settings.feedrate_z = self.ui.feedrate_z_dsb.value()
         self.machine_settings.feedrate_probe = self.ui.feedrate_probe_dsb.value()
+
+        self.machine_settings.alignment_drill_diameter = self.ui.alignment_drill_diameter_dsb.value()
+        self.machine_settings.tool_camera_offset_x = self.ui.x_tool_camera_offset_dsb.value()
+        self.machine_settings.tool_camera_offset_y = self.ui.y_tool_camera_offset_dsb.value()
 
         self.app_settings.layer_color["top"] = self.ui.top_layer_color_la.palette().background().color().name()
         self.app_settings.layer_color["bottom"] = self.ui.bottom_layer_color_la.palette().background().color().name()
