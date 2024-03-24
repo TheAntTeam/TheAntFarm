@@ -51,6 +51,8 @@ class ControllerWorker(QObject):
         self.serialTxQueue = serial_tx_queue
         self.settings = settings
 
+        self.connected = False  # Flag to know if the controller is connected
+
         self.view_controller = ViewController(self.settings)
         self.control_controller = ControlController(self.settings)
         self.align_controller = AlignController(self.settings)
@@ -105,6 +107,7 @@ class ControllerWorker(QObject):
 
     @Slot(bool)
     def on_controller_connection(self, connected):
+        self.connected = connected
         if connected:
             self.buffered_size = 0
             self.poll_timer.start()
