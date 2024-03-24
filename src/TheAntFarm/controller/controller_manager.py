@@ -561,6 +561,7 @@ class ControllerWorker(QObject):
         else:
             logger.warning("Machine Disconnected")
 
+    @Slot(list)
     def remove_align_points(self, selected_rows):
         align_data = self.align_controller.remove_align_points(selected_rows)
         self.update_align_points_s.emit(align_data)
