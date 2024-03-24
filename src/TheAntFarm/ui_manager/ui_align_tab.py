@@ -16,6 +16,7 @@ class UiAlignTab(QObject):
     align_apply_s = Signal(bool, list)
     update_threshold_s = Signal(int)
     request_new_alignment_point_coords_s = Signal(list, tuple)
+    remove_point_rows = Signal(list)
 
     def __init__(self, main_win, control_worker, vis_align_layer, app_settings):
         super(UiAlignTab, self).__init__()
@@ -50,6 +51,7 @@ class UiAlignTab(QObject):
         self.ui.flip_vertically_tb.clicked.connect(
             lambda: self.controlWo.flip_align_layer_vertically(self.ui.flip_vertically_tb.isChecked()))
         self.request_new_alignment_point_coords_s.connect(self.controlWo.add_new_align_point)
+        self.remove_point_rows.connect(self.controlWo.remove_align_points)
 
         self.ui.tool_or_camera_tb.clicked.connect(self.update_tool_or_camera)
 
@@ -60,6 +62,12 @@ class UiAlignTab(QObject):
         self.controlWo.refresh_camera_list()
 
         self.controlWo.update_align_points_s.connect(self.update_alignment_points_list)
+
+    def remove_point(self):
+        sel_model = self.ui.align_points_tw.selectionModel()
+        sel_rows = sel_model.selectedRows()
+        row_indexes = [x.row() for x in sel_rows]
+        self.remove_point_rows.emit(row_indexes)
 
     @Slot(QPixmap)
     def update_camera_image(self, pixmap):
@@ -147,11 +155,6 @@ class UiAlignTab(QObject):
             num_rows += 1
 
         self.apply_align()
-
-    def remove_point(self):
-        selection_model = self.ui.align_points_tw.selectionModel()
-        selected_rows = selection_model.selectedRows()
-
 
     def load_align_file(self, load_text="Load Align File", extensions=""):
         layer = "drill"

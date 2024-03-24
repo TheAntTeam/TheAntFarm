@@ -61,14 +61,12 @@ class AlignController(QObject):
         return [None, None]
 
     def remove_align_points(self, selected_rows):
-        # selection_model = self.ui.align_points_tw.selectionModel()
-        # selected_rows = selection_model.selectedRows()
         selected_rows.sort()
         for r in selected_rows[::-1]:
-            if len(self.align_data > r):
+            if len(self.align_data) > r:
                 del self.align_data[r]
             else:
-                logger.error("Invalid Alignement Points Row")
+                logger.error("Invalid Alignment Points Row")
         return self.align_data
 
     def flip_align_layer_horizontally(self, flipped):
