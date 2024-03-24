@@ -59,6 +59,8 @@ class UiAlignTab(QObject):
             self.ui.camera_list_cb.currentIndex()))
         self.controlWo.refresh_camera_list()
 
+        self.controlWo.update_align_points_s.connect(self.update_alignment_points_list)
+
     @Slot(QPixmap)
     def update_camera_image(self, pixmap):
         self.ui.camera_la.setPixmap(pixmap)
@@ -130,28 +132,20 @@ class UiAlignTab(QObject):
 
         self.request_new_alignment_point_coords_s.emit(selection_centroid, offset_info)
 
-    def add_new_point(self):
-        x_val = 0  # todo: get the real values
-        y_val = 0  # todo: get the real values
-        offset_val = 0  # todo: get the real values
-        angle_val = 0  # todo: get the real values
-        num_rows = self.ui.align_points_tw.rowCount()
+    @Slot(list)
+    def update_alignment_points_list(self, alignment_coords_l):
 
-        for r in range(0, num_rows):
-            actual_x_base = float(self.ui.align_points_tw.cellWidget(r, 0).text())
-            actual_y_base = float(self.ui.align_points_tw.cellWidget(r, 1).text())
-            updated_x_offs, updated_y_offs = self.compute_offset_point(actual_x_base, actual_y_base,
-                                                                       offset_val, angle_val)
-            self.ui.align_points_tw.setCellWidget(r, 2, QLabel("{:.3f}".format(updated_x_offs)))
-            self.ui.align_points_tw.setCellWidget(r, 3, QLabel("{:.3f}".format(updated_y_offs)))
+        self.ui.align_points_tw.setRowCount(0)  # Remove all elements
+        num_rows = 0
 
-        new_x_val, new_y_val = self.compute_offset_point(x_val, y_val, offset_val, angle_val)
+        for r in alignment_coords_l:
+            self.ui.align_points_tw.insertRow(num_rows)
+            self.ui.align_points_tw.setCellWidget(num_rows, 0, QLabel("{:.3f}".format(r[0][0])))
+            self.ui.align_points_tw.setCellWidget(num_rows, 1, QLabel("{:.3f}".format(r[0][1])))
+            self.ui.align_points_tw.setCellWidget(num_rows, 2, QLabel("{:.3f}".format(r[1][0])))
+            self.ui.align_points_tw.setCellWidget(num_rows, 3, QLabel("{:.3f}".format(r[1][1])))
+            num_rows += 1
 
-        self.ui.align_points_tw.insertRow(num_rows)
-        self.ui.align_points_tw.setCellWidget(num_rows, 0, QLabel("{:.3f}".format(x_val)))
-        self.ui.align_points_tw.setCellWidget(num_rows, 1, QLabel("{:.3f}".format(y_val)))
-        self.ui.align_points_tw.setCellWidget(num_rows, 2, QLabel("{:.3f}".format(new_x_val)))
-        self.ui.align_points_tw.setCellWidget(num_rows, 3, QLabel("{:.3f}".format(new_y_val)))
         self.apply_align()
 
     def remove_point(self):

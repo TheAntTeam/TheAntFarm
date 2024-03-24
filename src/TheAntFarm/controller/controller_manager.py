@@ -25,7 +25,7 @@ class ControllerWorker(QObject):
     update_console_text_s = Signal(str)          # Signal to send text to the console textEdit
     serial_send_s = Signal(bytes)                # Signal to send text to the serial
     serial_tx_available_s = Signal()             # Signal to send text to the serial
-
+    update_align_points_s = Signal(list)         # Signal to update the list of alignment points
     touched_probe_s = Signal()                   # Signal the probe touched
     update_probe_s = Signal(list)                # Signal to update probe value
     send_abl_s = Signal(tuple, tuple)
@@ -539,8 +539,6 @@ class ControllerWorker(QObject):
 
     @Slot(list, tuple)
     def add_new_align_point(self, geometry_point, offset_info):
-        print(geometry_point)
-        print(offset_info)
         if self.connected:
             status = self.get_status_report()
             if status:
@@ -555,8 +553,7 @@ class ControllerWorker(QObject):
                     if flipping_info[1]:
                         geometry_point[1] *= -1.0
                     align_data = self.align_controller.add_new_align_point(geometry_point, working_position_point)
-
-
+                    self.update_align_points_s.emit(align_data)
                 else:
                     logger.warning("Invalid Working Position Information")
             else:
