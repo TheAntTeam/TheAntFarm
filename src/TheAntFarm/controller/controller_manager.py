@@ -537,6 +537,10 @@ class ControllerWorker(QObject):
         # todo: emit signal here to update align layer
         self.update_align_layer_view_s.emit(self.align_controller.fipping_view)
 
+    def add_new_align_point(self, geometry_point, offset_info):
+        pass
+        # self.align_controller.add_new_align_point()
+
     def on_camera_timeout(self):
         if self.align_active:
             image = self.align_controller.camera_new_frame()
