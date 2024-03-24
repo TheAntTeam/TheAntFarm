@@ -26,6 +26,8 @@ class UiAlignTab(QObject):
 
         self.layer_colors = self.app_settings.layer_color
 
+        self.camera_pos_selected = False
+
         align_extensions = "Excellon (*.xln *.XLN *.drl *.DRL)"
 
         # Align TAB related controls.
@@ -47,6 +49,8 @@ class UiAlignTab(QObject):
         self.ui.flip_vertically_tb.clicked.connect(
             lambda: self.controlWo.flip_align_layer_vertically(self.ui.flip_vertically_tb.isChecked()))
 
+        self.ui.tool_or_camera_tb.clicked.connect(self.update_tool_or_camera)
+
         self.controlWo.update_camera_image_s.connect(self.update_camera_image)
         self.controlWo.update_camera_list_s.connect(self.update_camera_list)
         self.ui.camera_list_cb.currentIndexChanged.connect(lambda: self.controlWo.update_camera_selected(
@@ -56,6 +60,14 @@ class UiAlignTab(QObject):
     @Slot(QPixmap)
     def update_camera_image(self, pixmap):
         self.ui.camera_la.setPixmap(pixmap)
+
+    def update_tool_or_camera(self):
+        if self.ui.tool_or_camera_tb.isChecked():
+            self.ui.tool_or_camera_tb.setText("CAMERA_POSITION")
+            self.camera_pos_selected = True
+        else:
+            self.ui.tool_or_camera_tb.setText("TOOL_POSITION")
+            self.camera_pos_selected = False
 
     def check_align_is_active(self):
         self.align_active_s.emit(self.ui.main_tab_widget.currentWidget().objectName() == "align_tab")
