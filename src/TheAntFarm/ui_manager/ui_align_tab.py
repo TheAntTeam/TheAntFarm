@@ -121,6 +121,9 @@ class UiAlignTab(QObject):
         return x_out, y_out
 
     def add_new_point(self):
+        selection_centroid = self.vis_align_layer.get_selected_centroid()
+        offset_info = (0, 0)
+
         x_val = 0  # todo: get the real values
         y_val = 0  # todo: get the real values
         offset_val = 0  # todo: get the real values
@@ -176,6 +179,7 @@ class UiAlignTab(QObject):
             self.ui.status_bar.showMessage("WARNING: user tried to load an empty layer.", 3000)
         else:
             self.vis_align_layer.add_layer(layer_tag, loaded_layer[0], self.layer_colors[layer_tag], holes)
+
     @Slot(list)
     def flip_align_layer(self, flip_info):
         self.vis_align_layer.flip_camera(flip_info)
