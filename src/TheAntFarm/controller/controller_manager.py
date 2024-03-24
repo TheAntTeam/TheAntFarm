@@ -539,8 +539,30 @@ class ControllerWorker(QObject):
 
     @Slot(list, tuple)
     def add_new_align_point(self, geometry_point, offset_info):
-        pass
-        # self.align_controller.add_new_align_point()
+        print(geometry_point)
+        print(offset_info)
+        if self.connected:
+            status = self.get_status_report()
+            if status:
+                if "wpos" in status.keys():
+                    working_position_coords = status["wpos"]
+                    working_position_point = [working_position_coords[0], working_position_coords[1]]
+                    working_position_point[0] -= offset_info[0]
+                    working_position_point[1] -= offset_info[1]
+                    flipping_info = self.align_controller.flipping_view
+                    if flipping_info[0]:
+                        geometry_point[0] *= -1.0
+                    if flipping_info[1]:
+                        geometry_point[1] *= -1.0
+                    align_data = self.align_controller.add_new_align_point(geometry_point, working_position_point)
+
+
+                else:
+                    logger.warning("Invalid Working Position Information")
+            else:
+                logger.warning("Invalid Machine Status Information")
+        else:
+            logger.warning("Machine Disconnected")
 
     def on_camera_timeout(self):
         if self.align_active:

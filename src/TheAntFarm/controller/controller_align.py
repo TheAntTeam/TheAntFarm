@@ -31,6 +31,8 @@ class AlignController(QObject):
         self.threshold_value = 0
         self.fipping_view = [False, False, False]
 
+        self.align_data = []
+
     def load_new_align_layer(self, layer, layer_path):
         try:
             exc_tags = self.pcb.EXN_KEYS
@@ -47,6 +49,8 @@ class AlignController(QObject):
                     loaded_layer = self.dgc.get_drill_layer()
                     if not loaded_layer[0]:
                         loaded_layer = None
+                if loaded_layer is not None:
+                    self.align_data = []
                 return [loaded_layer, True]
 
         except (AttributeError, ValueError, ZeroDivisionError, IndexError) as e:
@@ -78,3 +82,8 @@ class AlignController(QObject):
             frame = self.double_side_manager.detect_holes(frame, self.threshold_value)
             image = qimage2ndarray.array2qimage(frame)
         return image
+
+    def add_new_align_point(self, geom_point, working_position_point):
+        if geom_point is not None and working_position_point is not None:
+            self.align_data.append((geom_point, working_position_point))
+        return self.align_data

@@ -13,10 +13,11 @@ import string
 import random
 from shapely.geometry import Point
 import shapely as sh
+import logging
+
+logger = logging.getLogger(__name__)
 
 print(sh.__version__)
-
-
 
 
 class GLUTess:
@@ -130,6 +131,7 @@ class VisualLayer:
     POINTER_TAG = "POINTER"
     POINTER_COLOR = "orange"
     POINTER_SEGMENTS = 20
+    SELECTED_TAG = "selected"
 
     def __init__(self, canvas, selectable=False):
         self.canvas = canvas
@@ -222,7 +224,7 @@ class VisualLayer:
 
     def on_mouse_double_click(self, event):
         if event.button == 1:  # left click
-            self.remove_layer("selected")
+            self.remove_layer(self.SELECTED_TAG)
             self.canvas.view.interactive = False
             tr = self.canvas.scene.node_transform(self.canvas.view.scene)
             pos = tr.map(event.pos)
@@ -231,7 +233,7 @@ class VisualLayer:
             # get selected polygon using shapely
             point = Point(pos)
             for gk in self.meshes_geom.keys():
-                if gk != "selected":
+                if gk != self.SELECTED_TAG:
                     geom_list = self.meshes_geom[gk].copy()
                     contain_flag = False
                     shape = None
@@ -241,7 +243,7 @@ class VisualLayer:
 
                     # ToDo: to parametrize color of selection
                     if contain_flag:
-                        self.add_layer(tag="selected", geom_list=[shape], color="yellow", holes=False, auto_range=False)
+                        self.add_layer(tag=self.SELECTED_TAG, geom_list=[shape], color="yellow", holes=False, auto_range=False)
                         break
 
     def on_mouse_click(self, event):
@@ -313,6 +315,19 @@ class VisualLayer:
                 #order = 0
         self.create_mesh(tag, ldata, color, order, auto_range=auto_range)
         self.meshes_geom[tag] = geom_list
+
+    def get_selected_centroid(self):
+        if self.SELECTED_TAG in self.meshes_geom.keys():
+            sel_geom_list = self.meshes_geom[self.SELECTED_TAG]
+            if len(sel_geom_list) > 0:
+                centroid = list(sel_geom_list[0].geom.centroid.xy)
+                centroid = [centroid[0][0], centroid[1][0]]
+                return centroid
+            else:
+                logger.warning("No Active Selection found. Please select a Drill Position from the Alignment View")
+        else:
+            logger.warning("No Drill Information Loaded. Please Load a GCODE or EXCELLON file in the Alignment View")
+        return None
 
     def add_path(self, tag, geom_list, color=None):
         # todo: add zbuffer controll
