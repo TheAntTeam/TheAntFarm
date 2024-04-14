@@ -1,5 +1,6 @@
 import time
 import pyclipper as pc
+import shapely.geometry
 import shapely.geometry as shg
 from shapely.ops import unary_union
 
@@ -480,6 +481,21 @@ def get_bbox_area_sh(geom):
     bb = geom.bounds
     a = (bb[2] - bb[0]) * (bb[3] - bb[1])
     return a
+
+
+def is_overlaping_multiple_polygons(polygon, polygon_list, shapely_poly=False):
+    # evaluate if polygon overlap one or more polygons in polygon_list
+
+    if shapely_poly:
+        diff_polys = polygon_list.difference(polygon)
+    else:
+        sh_poly = polygon.geom
+        sh_poly_list = [p.geom for p in polygon_list]
+        sh_mpoly = shapely.geometry.MultiPolygon(sh_poly_list)
+        diff_polys = sh_mpoly.difference(sh_poly)
+
+    return len(diff_polys.geoms) < len(polygon_list.geoms) - 1
+
 
 
 class Geom:

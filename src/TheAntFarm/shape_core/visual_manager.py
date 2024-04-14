@@ -329,19 +329,27 @@ class VisualLayer:
             logger.warning("No Drill Information Loaded. Please Load a GCODE or EXCELLON file in the Alignment View")
         return None
 
-    def add_path(self, tag, geom_list, color=None):
+    def add_path(self, tag, geom_list, color=None, warning_color='red'):
         # todo: add zbuffer controll
         if geom_list:
             ldata = []
             order = 0
             for d in geom_list:
                 gl = d[1]
-                for g in gl:
+                special_gl_ids = []
+                if len(d) > 2:
+                    special_gl_ids = d[2]
+                colors = []
+                for i, g in enumerate(gl):
                     if g.geom_type == "LineString":
                         ldata.append(list(g.coords))
                     if g.geom_type == "LinearRing":
                         ldata.append(list(g.coords))
-                self.create_line(tag, ldata, color, order)
+                    if i in special_gl_ids:
+                        colors.append(warning_color)
+                    else:
+                        colors.append(color)
+                self.create_line(tag, ldata, colors, order)
             self.paths_geom[tag] = geom_list
         else:
             print("Cannot Visualize an Empty Path")
@@ -391,7 +399,45 @@ class VisualLayer:
         self.canvas.freeze()
         visuals.XYZAxis(parent=self.canvas.view.scene)
 
-    def create_line(self, tag, ldata, color=None, order=0, width=0.1):
+    def create_line(self, tag, ldata, colors=None, order=0, width=0.1):
+        # modded to manage path of different colors
+        self.canvas.unfreeze()
+        if colors is not None:
+            if not isinstance(colors, list):
+                colors_list = [colors for i in range(len(ldata))]
+            else:
+                colors_list = colors
+        else:
+            colors_list = None
+            logger.error("Path Colors List not Set")
+
+        p = -1
+        for i, l in enumerate(ldata):
+            connect = []
+            coords = []
+            p += 1
+            c = l[0]
+            coords.append(c)
+            for j in range(1, len(l)):
+                c = l[j]
+                coords.append(c)
+                connect.append((p, p+1))
+                p += 1
+            coords = np.array(coords)
+            connect = np.array(connect)
+
+            line = visuals.Line(pos=coords, connect=connect, width=width, color=colors_list[i], parent=self.canvas.view, antialias=True)
+            line.order = order
+            if tag in list(self.paths.keys()):
+                self.paths[tag] += [line]
+            else:
+                self.paths[tag] = [line]
+            self.canvas.view.add(line)
+            p = -1
+        self.canvas.view.camera.set_range()
+        self.canvas.freeze()
+
+    def create_line_old(self, tag, ldata, color=None, order=0, width=0.1):
         self.canvas.unfreeze()
         connect = []
         coords = []

@@ -1,9 +1,12 @@
 #
 import time
+
+import shapely.geometry
 from shapely.geometry import Polygon, LineString, MultiLineString, Point, MultiPoint
 from shapely.ops import substring
 from collections import OrderedDict
-from .geometry_manager import merge_polygons_path, offset_polygon, offset_polygon_holes, get_bbox_area_sh, fill_holes_sh, get_poly_diameter
+from .geometry_manager import (merge_polygons_path, offset_polygon, offset_polygon_holes,
+                               get_bbox_area_sh, fill_holes_sh, get_poly_diameter, is_overlaping_multiple_polygons)
 from .path_optimizer import Optimizer
 import numpy as np
 
@@ -274,7 +277,19 @@ class MachinePath:
             if og is not None:
                 og_list.append(og)
 
+        pre_len = len(og_list)
         og_list = merge_polygons_path(og_list)
+
+        invalid_path_ids = []
+        # og_list contains the first path so at this point is possible to evaluate if is a valid path
+        if len(og_list) < pre_len:
+            # the path is invalid, some gerber features will not be milled correctly
+            prev_sh_poly = shapely.geometry.MultiPolygon(prev_poly)
+            for i, g in enumerate(og_list):
+                check = is_overlaping_multiple_polygons(g, prev_sh_poly, shapely_poly=True)
+                if check:
+                    # path surround multiple polygon so it isn't a valid path
+                    invalid_path_ids.append(i)
 
         # for the next steps, starting from the previous path, enlarge it by the tool radius
         # make bollean or on it and then reduce it by the tool radius
@@ -286,20 +301,27 @@ class MachinePath:
 
         t1 = time.time()
         print("Path Generation Done in " + str(t1-t0) + " sec")
+        print("DRC Check Output: " + str(len(invalid_path_ids)) + " invalid paths " + str(invalid_path_ids))
 
         og_list = self.check_min_area(og_list)
 
         # extract the linestring from paths polygons
         path = []
-        for g in og_list:
+        path_counter = 0
+        invalid_paths = []
+        for j, g in enumerate(og_list):
             ex_path = g.exterior
             if ex_path.geom_type == "LinearRing" or ex_path.type == "LineString":
                 path.append(ex_path)
+                if j in invalid_path_ids:
+                    invalid_paths.append(path_counter)
+                path_counter += 1
             for i in g.interiors:
                 if ex_path.geom_type == "LinearRing" or ex_path.type == "LineString":
                     path.append(i)
+                    path_counter += 1
         t_d = self.cfg['tool_diameter']
-        self.path = [((t_d, "gerber"), path)]
+        self.path = [((t_d, "gerber"), path, invalid_paths)]
 
     def check_min_area(self, og_list):
         big_poly = []
