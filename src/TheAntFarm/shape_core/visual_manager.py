@@ -169,7 +169,7 @@ class VisualLayer:
         chars = string.ascii_uppercase + string.digits
         tag = self.POINTER_TAG + "_" + "".join(random.choice(chars) for _ in range(4))
         self.pointer_tag = tag
-        self.create_line(tag, [pointer_coords], color=self.POINTER_COLOR, order=0, width=0.1)
+        self.create_line(tag, [pointer_coords], colors=self.POINTER_COLOR, order=0, width=0.1)
 
     def update_pointer(self, coords):
         if self.pointer_tag:
@@ -291,8 +291,10 @@ class VisualLayer:
                 # self.canvas.events.draw.disconnect(to_remove.on_draw)
                 to_remove.parent = None
                 del p
-            del self.paths[tag]
-            del self.paths_geom[tag]
+            if tag in self.paths.keys():
+                del self.paths[tag]
+            if tag in self.paths_geom.keys():
+                del self.paths_geom[tag]
 
     def add_layer(self, tag, geom_list, color=None, holes=False, auto_range=True):
         ldata = [[], []]

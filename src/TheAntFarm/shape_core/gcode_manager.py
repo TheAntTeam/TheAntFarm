@@ -718,6 +718,9 @@ class GCodeParser:
                             if splitted:
                                 if splitted[0].upper().startswith("G"):
                                     # second command
+                                    # TODO: issue with munich gerber gcode. check
+                                    print("splitted")
+                                    print(splitted)
                                     cmd = splitted.pop(0)
                                     ct = cmd[0]
                                     cd = [int(x) for x in cmd[1::].split(".")]
