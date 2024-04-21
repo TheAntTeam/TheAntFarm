@@ -29,7 +29,7 @@ class AlignController(QObject):
 
         self.double_side_manager = DoubleSideManager()
         self.threshold_value = 0
-        self.fipping_view = [False, False, False]
+        self.flipping_view = [False, False, False]
 
         self.align_data = []
 

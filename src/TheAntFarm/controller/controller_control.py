@@ -61,21 +61,22 @@ class ControlController(QObject):
 
     def get_align_data(self):
         print("GET ALIGN DATA")
-        # WARNING INJECTING FAKE DATA FOR TESTING PURPOSE
-        if not self.align_data:
-            print("INJECT FAKE DATA")
-            # FAKE DATA
-            fake_align_data = [
-                [(0, 0), (0, 0)],
-                [(0, 1), (-0.342020143325669, 0.939692620785908)],
-                [(1, 1), (0.59767247746024, 1.281712764111577)],
-                [(1, 0), (0.939692620785908, 0.342020143325669)],
-            ]
-            self.align_data = fake_align_data
-            return fake_align_data
-        else:
-            print("RETURN VALID DATA")
-            return self.align_data
+        # # WARNING INJECTING FAKE DATA FOR TESTING PURPOSE
+        # if not self.align_data:
+        #     print("INJECT FAKE DATA")
+        #     # FAKE DATA
+        #     fake_align_data = [
+        #         [(0, 0), (0, 0)],
+        #         [(0, 1), (-0.342020143325669, 0.939692620785908)],
+        #         [(1, 1), (0.59767247746024, 1.281712764111577)],
+        #         [(1, 0), (0.939692620785908, 0.342020143325669)],
+        #     ]
+        #     self.align_data = fake_align_data
+        #     return fake_align_data
+        # else:
+        #     print("RETURN VALID DATA")
+        #     return self.align_data
+        return self.align_data
 
     def get_abl_value(self):
         return self.abl_val

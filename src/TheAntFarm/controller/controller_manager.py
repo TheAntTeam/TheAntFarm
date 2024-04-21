@@ -538,15 +538,19 @@ class ControllerWorker(QObject):
         self.update_align_layer_view_s.emit(self.align_controller.fipping_view)
 
     @Slot(list, tuple)
-    def add_new_align_point(self, geometry_point, offset_info):
+    def add_new_align_point(self, geometry_point, offset_flag):
         if self.connected:
             status = self.get_status_report()
             if status:
                 if "wpos" in status.keys():
                     working_position_coords = status["wpos"]
                     working_position_point = [working_position_coords[0], working_position_coords[1]]
-                    working_position_point[0] -= offset_info[0]
-                    working_position_point[1] -= offset_info[1]
+                    if offset_flag:
+                        ox = self.settings.machine_settings.tool_camera_offset_x
+                        oy = self.settings.machine_settings.tool_camera_offset_y
+                        offset_info = (ox, oy)
+                        working_position_point[0] -= offset_info[0]
+                        working_position_point[1] -= offset_info[1]
                     flipping_info = self.align_controller.flipping_view
                     if flipping_info[0]:
                         geometry_point[0] *= -1.0

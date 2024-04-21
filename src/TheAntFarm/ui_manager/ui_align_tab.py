@@ -15,7 +15,7 @@ class UiAlignTab(QObject):
     align_active_s = Signal(bool)
     align_apply_s = Signal(bool, list)
     update_threshold_s = Signal(int)
-    request_new_alignment_point_coords_s = Signal(list, tuple)
+    request_new_alignment_point_coords_s = Signal(list, bool)
     remove_point_rows = Signal(list)
 
     def __init__(self, main_win, control_worker, vis_align_layer, app_settings):
@@ -135,10 +135,12 @@ class UiAlignTab(QObject):
     def request_new_point(self):
         selection_centroid = self.vis_align_layer.get_selected_centroid()
         offset_info = (0, 0)  # todo: get this from the alignment settings
-        if self.camera_pos_selected:
-            offset_info = (-1.0, -1.0)  # todo: check and apply correct offset
+        # if self.camera_pos_selected:
+        #     ox = self.controlWo.settings.machine_settings.tool_camera_offset_x
+        #     oy = self.controlWo.settings.machine_settings.tool_camera_offset_y
+        #     offset_info = (ox, oy)  # todo: get camera offset from controller worker through signal (thread safe)
 
-        self.request_new_alignment_point_coords_s.emit(selection_centroid, offset_info)
+        self.request_new_alignment_point_coords_s.emit(selection_centroid, self.camera_pos_selected)
 
     @Slot(list)
     def update_alignment_points_list(self, alignment_coords_l):

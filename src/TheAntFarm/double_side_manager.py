@@ -43,7 +43,8 @@ class DoubleSideManager:
             ret, frame = self.cap.read()
             if ret:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                # frame = self.rotate_image(frame, 0)
+                # TODO: add rotation angle in the align settings
+                frame = self.rotate_image(frame, 180)
         return frame
 
     @staticmethod
