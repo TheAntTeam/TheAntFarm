@@ -70,10 +70,10 @@ class AlignController(QObject):
         return self.align_data
 
     def flip_align_layer_horizontally(self, flipped):
-        self.fipping_view[0] = flipped
+        self.flipping_view[0] = flipped
 
     def flip_align_layer_vertically(self, flipped):
-        self.fipping_view[1] = flipped
+        self.flipping_view[1] = flipped
 
     def update_threshold_value(self, new_threshold):
         self.threshold_value = new_threshold

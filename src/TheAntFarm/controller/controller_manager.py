@@ -529,13 +529,13 @@ class ControllerWorker(QObject):
     def flip_align_layer_horizontally(self, flipped):
         self.align_controller.flip_align_layer_horizontally(flipped)
         # todo: emit signal here to update align layer
-        self.update_align_layer_view_s.emit(self.align_controller.fipping_view)
+        self.update_align_layer_view_s.emit(self.align_controller.flipping_view)
 
     @Slot(bool)
     def flip_align_layer_vertically(self, flipped):
         self.align_controller.flip_align_layer_vertically(flipped)
         # todo: emit signal here to update align layer
-        self.update_align_layer_view_s.emit(self.align_controller.fipping_view)
+        self.update_align_layer_view_s.emit(self.align_controller.flipping_view)
 
     @Slot(list, tuple)
     def add_new_align_point(self, geometry_point, offset_flag):
