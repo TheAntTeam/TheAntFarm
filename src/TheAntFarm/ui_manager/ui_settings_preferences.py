@@ -248,9 +248,9 @@ class UiSettingsPreferencesTab(QObject):
         self.load_gcoder_cfg_s.emit()
 
     def get_tool_camera_offset(self, actual_status_report):
-        tool_change_mpos = actual_status_report["wpos"]
-        self.ui.x_tool_camera_offset_dsb.setValue(tool_change_mpos[0])
-        self.ui.y_tool_camera_offset_dsb.setValue(tool_change_mpos[1])
+        tool_camera_offset_wpos = actual_status_report["wpos"]
+        self.ui.x_tool_camera_offset_dsb.setValue(tool_camera_offset_wpos[0])
+        self.ui.y_tool_camera_offset_dsb.setValue(tool_camera_offset_wpos[1])
 
     def save_settings_preferences(self):
         """Save settings preferences from UI to settings."""
