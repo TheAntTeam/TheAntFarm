@@ -269,11 +269,11 @@ class UiControlTab(QObject):
         self.xy_update_step_2()
         self.ui.xy_step_val_dsb.setValue(self.machine_settings.xy_step_value)
         self.ui.xy_step_cb.currentTextChanged.connect(self.xy_update_step)
-        self.ui.xy_step_val_dsb.valueChanged.connect(self.xy_update_value)
+        self.ui.xy_step_val_dsb.valueChanged.connect(lambda: self.xy_update_value(self.ui.xy_step_val_dsb.value()))
 
         self.ui.xy_step_val_dsb_2.setValue(self.machine_settings.xy_step_value)
         self.ui.xy_step_cb_2.currentTextChanged.connect(self.xy_update_step_2)
-        self.ui.xy_step_val_dsb_2.valueChanged.connect(self.xy_update_value)
+        self.ui.xy_step_val_dsb_2.valueChanged.connect(lambda: self.xy_update_value(self.ui.xy_step_val_dsb_2.value()))
 
     def init_z_jog_step_value(self):
         """ Initialize Z step and value ui fields. """
@@ -285,8 +285,8 @@ class UiControlTab(QObject):
         self.ui.z_step_val_dsb_2.setValue(self.machine_settings.z_step_value)
         self.ui.z_step_cb.currentTextChanged.connect(self.z_update_step)
         self.ui.z_step_cb_2.currentTextChanged.connect(self.z_update_step_2)
-        self.ui.z_step_val_dsb.valueChanged.connect(self.z_update_value)
-        self.ui.z_step_val_dsb_2.valueChanged.connect(self.z_update_value)
+        self.ui.z_step_val_dsb.valueChanged.connect(lambda: self.z_update_value(self.ui.z_step_val_dsb.value()))
+        self.ui.z_step_val_dsb_2.valueChanged.connect(lambda: self.z_update_value(self.ui.z_step_val_dsb_2.value()))
 
     def init_serial_port_cb(self):
         """ Initialize the serial ports' ui elements. """
@@ -786,10 +786,10 @@ class UiControlTab(QObject):
 
         self.ui.z_step_cb.setCurrentIndex(current_index)  # This shall trigger the update of the other dro control
 
-    @Slot()
-    def z_update_value(self):
+    @Slot(float)
+    def z_update_value(self, value):
         """ Update current value of Z STEP in the machine settings. """
-        self.machine_settings.z_step_value = self.ui.z_step_val_dsb.value()
+        self.machine_settings.z_step_value = value
 
     def handle_x_minus(self):
         logger.debug("X_minus Command")
@@ -864,10 +864,10 @@ class UiControlTab(QObject):
 
         self.ui.xy_step_cb.setCurrentIndex(current_index)  # This shall trigger the update of the other dro control
 
-    @Slot()
-    def xy_update_value(self):
+    @Slot(float)
+    def xy_update_value(self, value):
         """ Update current value of XY STEP in the machine settings. """
-        self.machine_settings.xy_step_value = self.ui.xy_step_val_dsb.value()
+        self.machine_settings.xy_step_value = value
 
     def handle_xy_plus_1(self):
         xy_val = self.ui.xy_step_val_dsb.value() + self.ui.xy_step_val_dsb.singleStep()
