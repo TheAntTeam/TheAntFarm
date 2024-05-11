@@ -789,7 +789,7 @@ class UiControlTab(QObject):
     @Slot(float)
     def z_update_value(self, dsb):
         """ Update current value of Z STEP in the machine settings. """
-        self.machine_settings.z_step_value = dsb.value
+        self.machine_settings.z_step_value = dsb.value()
 
     def handle_x_minus(self):
         logger.debug("X_minus Command")
@@ -866,7 +866,7 @@ class UiControlTab(QObject):
 
     def xy_update_value(self, dsb):
         """ Update current value of XY STEP in the machine settings. """
-        self.machine_settings.xy_step_value = dsb.value
+        self.machine_settings.xy_step_value = dsb.value()
 
     def update_all_xy_dsb_value(self, new_xy_value):
         self.ui.xy_step_val_dsb.setValue(new_xy_value)
