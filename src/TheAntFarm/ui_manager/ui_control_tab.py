@@ -134,23 +134,23 @@ class UiControlTab(QObject):
         self.ui.z_minus_pb_2.clicked.connect(self.handle_z_minus)
         self.ui.z_plus_pb_2.clicked.connect(self.handle_z_plus)
 
-        self.ui.xy_plus_1_pb.clicked.connect(self.handle_xy_plus_1)
-        self.ui.xy_minus_1_pb.clicked.connect(self.handle_xy_minus_1)
-        self.ui.xy_div_10_pb.clicked.connect(self.handle_xy_div_10)
-        self.ui.xy_mul_10_pb.clicked.connect(self.handle_xy_mul_10)
-        self.ui.z_plus_1_pb.clicked.connect(self.handle_z_plus_1)
-        self.ui.z_minus_1_pb.clicked.connect(self.handle_z_minus_1)
-        self.ui.z_div_10_pb.clicked.connect(self.handle_z_div_10)
-        self.ui.z_mul_10_pb.clicked.connect(self.handle_z_mul_10)
+        self.ui.xy_plus_1_pb.clicked.connect(lambda: self.handle_xy_plus_1(self.ui.xy_step_val_dsb))
+        self.ui.xy_minus_1_pb.clicked.connect(lambda: self.handle_xy_minus_1(self.ui.xy_step_val_dsb))
+        self.ui.xy_div_10_pb.clicked.connect(lambda: self.handle_xy_div_10(self.ui.xy_step_val_dsb))
+        self.ui.xy_mul_10_pb.clicked.connect(lambda: self.handle_xy_mul_10(self.ui.xy_step_val_dsb))
+        self.ui.z_plus_1_pb.clicked.connect(lambda: self.handle_z_plus_1(self.ui.z_step_val_dsb))
+        self.ui.z_minus_1_pb.clicked.connect(lambda: self.handle_z_minus_1(self.ui.z_step_val_dsb))
+        self.ui.z_div_10_pb.clicked.connect(lambda: self.handle_z_div_10(self.ui.z_step_val_dsb))
+        self.ui.z_mul_10_pb.clicked.connect(lambda: self.handle_z_mul_10(self.ui.z_step_val_dsb))
 
-        self.ui.xy_plus_1_pb_2.clicked.connect(self.handle_xy_plus_1)
-        self.ui.xy_minus_1_pb_2.clicked.connect(self.handle_xy_minus_1)
-        self.ui.xy_div_10_pb_2.clicked.connect(self.handle_xy_div_10)
-        self.ui.xy_mul_10_pb_2.clicked.connect(self.handle_xy_mul_10)
-        self.ui.z_plus_1_pb_2.clicked.connect(self.handle_z_plus_1)
-        self.ui.z_minus_1_pb_2.clicked.connect(self.handle_z_minus_1)
-        self.ui.z_div_10_pb_2.clicked.connect(self.handle_z_div_10)
-        self.ui.z_mul_10_pb_2.clicked.connect(self.handle_z_mul_10)
+        self.ui.xy_plus_1_pb_2.clicked.connect(lambda: self.handle_xy_plus_1(self.ui.xy_step_val_dsb_2))
+        self.ui.xy_minus_1_pb_2.clicked.connect(lambda: self.handle_xy_minus_1(self.ui.xy_step_val_dsb_2))
+        self.ui.xy_div_10_pb_2.clicked.connect(lambda: self.handle_xy_div_10(self.ui.xy_step_val_dsb_2))
+        self.ui.xy_mul_10_pb_2.clicked.connect(lambda: self.handle_xy_mul_10(self.ui.xy_step_val_dsb_2))
+        self.ui.z_plus_1_pb_2.clicked.connect(lambda: self.handle_z_plus_1(self.ui.z_step_val_dsb_2))
+        self.ui.z_minus_1_pb_2.clicked.connect(lambda: self.handle_z_minus_1(self.ui.z_step_val_dsb_2))
+        self.ui.z_div_10_pb_2.clicked.connect(lambda: self.handle_z_div_10(self.ui.z_step_val_dsb_2))
+        self.ui.z_mul_10_pb_2.clicked.connect(lambda: self.handle_z_mul_10(self.ui.z_step_val_dsb_2))
 
         self.ui.probe_pb.clicked.connect(self.handle_probe_cmd)
         self.ui.ABL_pb.clicked.connect(self.handle_auto_bed_levelling)
@@ -269,11 +269,11 @@ class UiControlTab(QObject):
         self.xy_update_step_2()
         self.ui.xy_step_val_dsb.setValue(self.machine_settings.xy_step_value)
         self.ui.xy_step_cb.currentTextChanged.connect(self.xy_update_step)
-        self.ui.xy_step_val_dsb.valueChanged.connect(lambda: self.xy_update_value(self.ui.xy_step_val_dsb.value()))
+        self.ui.xy_step_val_dsb.valueChanged.connect(lambda: self.xy_update_value(self.ui.xy_step_val_dsb))
 
         self.ui.xy_step_val_dsb_2.setValue(self.machine_settings.xy_step_value)
         self.ui.xy_step_cb_2.currentTextChanged.connect(self.xy_update_step_2)
-        self.ui.xy_step_val_dsb_2.valueChanged.connect(lambda: self.xy_update_value(self.ui.xy_step_val_dsb_2.value()))
+        self.ui.xy_step_val_dsb_2.valueChanged.connect(lambda: self.xy_update_value(self.ui.xy_step_val_dsb_2))
 
     def init_z_jog_step_value(self):
         """ Initialize Z step and value ui fields. """
@@ -285,8 +285,8 @@ class UiControlTab(QObject):
         self.ui.z_step_val_dsb_2.setValue(self.machine_settings.z_step_value)
         self.ui.z_step_cb.currentTextChanged.connect(self.z_update_step)
         self.ui.z_step_cb_2.currentTextChanged.connect(self.z_update_step_2)
-        self.ui.z_step_val_dsb.valueChanged.connect(lambda: self.z_update_value(self.ui.z_step_val_dsb.value()))
-        self.ui.z_step_val_dsb_2.valueChanged.connect(lambda: self.z_update_value(self.ui.z_step_val_dsb_2.value()))
+        self.ui.z_step_val_dsb.valueChanged.connect(lambda: self.z_update_value(self.ui.z_step_val_dsb))
+        self.ui.z_step_val_dsb_2.valueChanged.connect(lambda: self.z_update_value(self.ui.z_step_val_dsb_2))
 
     def init_serial_port_cb(self):
         """ Initialize the serial ports' ui elements. """
@@ -787,9 +787,9 @@ class UiControlTab(QObject):
         self.ui.z_step_cb.setCurrentIndex(current_index)  # This shall trigger the update of the other dro control
 
     @Slot(float)
-    def z_update_value(self, value):
+    def z_update_value(self, dsb):
         """ Update current value of Z STEP in the machine settings. """
-        self.machine_settings.z_step_value = value
+        self.machine_settings.z_step_value = dsb.value
 
     def handle_x_minus(self):
         logger.debug("X_minus Command")
@@ -864,54 +864,53 @@ class UiControlTab(QObject):
 
         self.ui.xy_step_cb.setCurrentIndex(current_index)  # This shall trigger the update of the other dro control
 
-    @Slot(float)
-    def xy_update_value(self, value):
+    def xy_update_value(self, dsb):
         """ Update current value of XY STEP in the machine settings. """
-        self.machine_settings.xy_step_value = value
+        self.machine_settings.xy_step_value = dsb.value
 
-    def handle_xy_plus_1(self):
-        xy_val = self.ui.xy_step_val_dsb.value() + self.ui.xy_step_val_dsb.singleStep()
-        self.ui.xy_step_val_dsb.setValue(xy_val)
-        self.ui.xy_step_val_dsb_2.setValue(xy_val)
+    def update_all_xy_dsb_value(self, new_xy_value):
+        self.ui.xy_step_val_dsb.setValue(new_xy_value)
+        self.ui.xy_step_val_dsb_2.setValue(new_xy_value)
 
-    def handle_xy_minus_1(self):
-        xy_val = self.ui.xy_step_val_dsb.value() - self.ui.xy_step_val_dsb.singleStep()
-        self.ui.xy_step_val_dsb.setValue(xy_val)
-        self.ui.xy_step_val_dsb_2.setValue(xy_val)
+    def handle_xy_plus_1(self, dsb):
+        new_xy_value = dsb.value() + dsb.singleStep()
+        self.update_all_xy_dsb_value(new_xy_value)
 
-    def handle_xy_div_10(self):
-        xy_value = self.ui.xy_step_val_dsb.value()
+    def handle_xy_minus_1(self, dsb):
+        new_xy_value = dsb.value() - dsb.singleStep()
+        self.update_all_xy_dsb_value(new_xy_value)
+
+    def handle_xy_div_10(self, dsb):
+        xy_value = dsb.value()
         new_xy_value = round(xy_value/10.0, 2)
-        self.ui.xy_step_val_dsb.setValue(new_xy_value)
-        self.ui.xy_step_val_dsb_2.setValue(new_xy_value)
+        self.update_all_xy_dsb_value(new_xy_value)
 
-    def handle_xy_mul_10(self):
-        xy_value = self.ui.xy_step_val_dsb.value()
+    def handle_xy_mul_10(self, dsb):
+        xy_value = dsb.value()
         new_xy_value = xy_value*10.0
-        self.ui.xy_step_val_dsb.setValue(new_xy_value)
-        self.ui.xy_step_val_dsb_2.setValue(new_xy_value)
+        self.update_all_xy_dsb_value(new_xy_value)
 
-    def handle_z_plus_1(self):
-        z_val = self.ui.z_step_val_dsb.value() + self.ui.z_step_val_dsb.singleStep()
-        self.ui.z_step_val_dsb.setValue(z_val)
-        self.ui.z_step_val_dsb_2.setValue(z_val)
+    def update_all_z_dsb_value(self, new_z_value):
+        self.ui.z_step_val_dsb.setValue(new_z_value)
+        self.ui.z_step_val_dsb_2.setValue(new_z_value)
 
-    def handle_z_minus_1(self):
-        z_val = self.ui.z_step_val_dsb.value() - self.ui.z_step_val_dsb.singleStep()
-        self.ui.z_step_val_dsb.setValue(z_val)
-        self.ui.z_step_val_dsb_2.setValue(z_val)
+    def handle_z_plus_1(self, dsb):
+        new_z_value = dsb.value() + dsb.singleStep()
+        self.update_all_z_dsb_value(new_z_value)
 
-    def handle_z_div_10(self):
-        z_value = self.ui.z_step_val_dsb.value()
+    def handle_z_minus_1(self, dsb):
+        new_z_value = dsb.value() - dsb.singleStep()
+        self.update_all_z_dsb_value(new_z_value)
+
+    def handle_z_div_10(self, dsb):
+        z_value = dsb.value()
         new_z_value = round(z_value/10.0, 2)
-        self.ui.z_step_val_dsb.setValue(new_z_value)
-        self.ui.z_step_val_dsb_2.setValue(new_z_value)
+        self.update_all_z_dsb_value(new_z_value)
 
-    def handle_z_mul_10(self):
-        z_value = self.ui.z_step_val_dsb.value()
+    def handle_z_mul_10(self, dsb):
+        z_value = dsb.value()
         new_z_value = z_value*10.0
-        self.ui.z_step_val_dsb.setValue(new_z_value)
-        self.ui.z_step_val_dsb_2.setValue(new_z_value)
+        self.update_all_z_dsb_value(new_z_value)
 
     def handle_z_min_changed(self):
         self.machine_settings.probe_z_min = self.ui.z_min_dsb.value()
