@@ -1,6 +1,6 @@
 from PySide2.QtCore import Signal, Slot, QObject
 from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QLabel, QFileDialog
+from PySide2.QtWidgets import QLabel, QFileDialog, QHeaderView
 from collections import OrderedDict as Od
 import logging
 import math
@@ -31,6 +31,12 @@ class UiAlignTab(QObject):
         self.camera_pos_selected = False
 
         align_extensions = "Excellon (*.xln *.XLN *.drl *.DRL)"
+
+        align_points_tw_horizontal_headers = self.ui.align_points_tw.horizontalHeader()
+        align_points_tw_horizontal_headers.setSectionResizeMode(0, QHeaderView.Stretch)
+        align_points_tw_horizontal_headers.setSectionResizeMode(1, QHeaderView.Stretch)
+        align_points_tw_horizontal_headers.setSectionResizeMode(2, QHeaderView.Stretch)
+        align_points_tw_horizontal_headers.setSectionResizeMode(3, QHeaderView.Stretch)
 
         # Align TAB related controls.
         self.load_align_layer_s.connect(self.controlWo.load_new_align_layer)
