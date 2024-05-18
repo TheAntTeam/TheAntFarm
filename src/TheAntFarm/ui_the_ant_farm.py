@@ -2561,150 +2561,92 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.horizontalLayout_17 = QHBoxLayout()
         self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
-        self.gridLayout_23 = QGridLayout()
-        self.gridLayout_23.setObjectName(u"gridLayout_23")
-        self.verticalLayout_16 = QVBoxLayout()
-        self.verticalLayout_16.setObjectName(u"verticalLayout_16")
-        self.gridLayout_25 = QGridLayout()
-        self.gridLayout_25.setObjectName(u"gridLayout_25")
-        self.camera_la = QLabel(self.align_tab)
+        self.horizontalLayout_18 = QHBoxLayout()
+        self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
+        self.verticalLayout_14 = QVBoxLayout()
+        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
+        self.frame = QFrame(self.align_tab)
+        self.frame.setObjectName(u"frame")
+        self.frame.setFrameShape(QFrame.StyledPanel)
+        self.frame.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_13 = QVBoxLayout(self.frame)
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.verticalSpacer_7 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_13.addItem(self.verticalSpacer_7)
+
+        self.camera_la = QLabel(self.frame)
         self.camera_la.setObjectName(u"camera_la")
+        sizePolicy10.setHeightForWidth(self.camera_la.sizePolicy().hasHeightForWidth())
+        self.camera_la.setSizePolicy(sizePolicy10)
+        self.camera_la.setMinimumSize(QSize(200, 200))
+        self.camera_la.setMaximumSize(QSize(480, 480))
 
-        self.gridLayout_25.addWidget(self.camera_la, 1, 0, 1, 1)
+        self.verticalLayout_13.addWidget(self.camera_la)
 
-
-        self.verticalLayout_16.addLayout(self.gridLayout_25)
-
-        self.gridLayout_26 = QGridLayout()
-        self.gridLayout_26.setObjectName(u"gridLayout_26")
-        self.contrast_slider = QSlider(self.align_tab)
-        self.contrast_slider.setObjectName(u"contrast_slider")
-        self.contrast_slider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout_26.addWidget(self.contrast_slider, 1, 1, 1, 1)
-
-        self.label_13 = QLabel(self.align_tab)
-        self.label_13.setObjectName(u"label_13")
-
-        self.gridLayout_26.addWidget(self.label_13, 1, 0, 1, 1)
-
-        self.label_14 = QLabel(self.align_tab)
-        self.label_14.setObjectName(u"label_14")
-
-        self.gridLayout_26.addWidget(self.label_14, 0, 0, 1, 1)
-
-        self.camera_list_pb = QToolButton(self.align_tab)
-        self.camera_list_pb.setObjectName(u"camera_list_pb")
-
-        self.gridLayout_26.addWidget(self.camera_list_pb, 0, 2, 1, 1)
-
-        self.camera_list_cb = QComboBox(self.align_tab)
-        self.camera_list_cb.setObjectName(u"camera_list_cb")
-
-        self.gridLayout_26.addWidget(self.camera_list_cb, 0, 1, 1, 1)
-
-        self.tool_or_camera_tb = QToolButton(self.align_tab)
+        self.gridLayout_28 = QGridLayout()
+        self.gridLayout_28.setObjectName(u"gridLayout_28")
+        self.tool_or_camera_tb = QToolButton(self.frame)
         self.tool_or_camera_tb.setObjectName(u"tool_or_camera_tb")
         self.tool_or_camera_tb.setCheckable(True)
         self.tool_or_camera_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
 
-        self.gridLayout_26.addWidget(self.tool_or_camera_tb, 2, 1, 1, 1, Qt.AlignHCenter)
+        self.gridLayout_28.addWidget(self.tool_or_camera_tb, 2, 1, 1, 1, Qt.AlignHCenter)
 
-        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.label_15 = QLabel(self.frame)
+        self.label_15.setObjectName(u"label_15")
 
-        self.gridLayout_26.addItem(self.verticalSpacer_7, 3, 1, 1, 1)
+        self.gridLayout_28.addWidget(self.label_15, 1, 0, 1, 1)
 
+        self.camera_list_cb = QComboBox(self.frame)
+        self.camera_list_cb.setObjectName(u"camera_list_cb")
 
-        self.verticalLayout_16.addLayout(self.gridLayout_26)
+        self.gridLayout_28.addWidget(self.camera_list_cb, 0, 1, 1, 1)
 
-        self.verticalLayout_16.setStretch(0, 10)
+        self.contrast_slider = QSlider(self.frame)
+        self.contrast_slider.setObjectName(u"contrast_slider")
+        self.contrast_slider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout_23.addLayout(self.verticalLayout_16, 0, 0, 1, 1)
+        self.gridLayout_28.addWidget(self.contrast_slider, 1, 1, 1, 1)
 
-        self.verticalLayout_13 = QVBoxLayout()
-        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.align_points_tw = QTableWidget(self.align_tab)
-        if (self.align_points_tw.columnCount() < 4):
-            self.align_points_tw.setColumnCount(4)
-        self.align_points_tw.setObjectName(u"align_points_tw")
-        sizePolicy.setHeightForWidth(self.align_points_tw.sizePolicy().hasHeightForWidth())
-        self.align_points_tw.setSizePolicy(sizePolicy)
-        self.align_points_tw.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
-        self.align_points_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.align_points_tw.setColumnCount(4)
+        self.label_16 = QLabel(self.frame)
+        self.label_16.setObjectName(u"label_16")
 
-        self.verticalLayout_13.addWidget(self.align_points_tw, 0, Qt.AlignHCenter)
+        self.gridLayout_28.addWidget(self.label_16, 0, 0, 1, 1)
 
-        self.horizontalLayout_18 = QHBoxLayout()
-        self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
-        self.add_point_tb = QToolButton(self.align_tab)
-        self.add_point_tb.setObjectName(u"add_point_tb")
-        self.add_point_tb.setMinimumSize(QSize(50, 50))
-        font3 = QFont()
-        font3.setPointSize(20)
-        self.add_point_tb.setFont(font3)
-        icon21 = QIcon()
-        icon21.addFile(u":/resources/resources/icons/gray-refresh.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.add_point_tb.setIcon(icon21)
-        self.add_point_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
+        self.camera_list_pb = QToolButton(self.frame)
+        self.camera_list_pb.setObjectName(u"camera_list_pb")
 
-        self.horizontalLayout_18.addWidget(self.add_point_tb)
-
-        self.remove_point_tb = QToolButton(self.align_tab)
-        self.remove_point_tb.setObjectName(u"remove_point_tb")
-        sizePolicy3.setHeightForWidth(self.remove_point_tb.sizePolicy().hasHeightForWidth())
-        self.remove_point_tb.setSizePolicy(sizePolicy3)
-        self.remove_point_tb.setMinimumSize(QSize(50, 50))
-        self.remove_point_tb.setFont(font3)
-        self.remove_point_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
-
-        self.horizontalLayout_18.addWidget(self.remove_point_tb)
-
-        self.apply_alignment_tb = QToolButton(self.align_tab)
-        self.apply_alignment_tb.setObjectName(u"apply_alignment_tb")
-        self.apply_alignment_tb.setMinimumSize(QSize(50, 50))
-        icon22 = QIcon()
-        icon22.addFile(u":/resources/resources/icons/black_apply_align.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon22.addFile(u":/resources/resources/icons/black_alignment_applied.svg", QSize(), QIcon.Normal, QIcon.On)
-        self.apply_alignment_tb.setIcon(icon22)
-        self.apply_alignment_tb.setCheckable(True)
-        self.apply_alignment_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
-
-        self.horizontalLayout_18.addWidget(self.apply_alignment_tb)
-
-        self.led_la = QLedLabel(self.align_tab)
-        self.led_la.setObjectName(u"led_la")
-        sizePolicy3.setHeightForWidth(self.led_la.sizePolicy().hasHeightForWidth())
-        self.led_la.setSizePolicy(sizePolicy3)
-        self.led_la.setMinimumSize(QSize(50, 50))
-        self.led_la.setAutoFillBackground(True)
-
-        self.horizontalLayout_18.addWidget(self.led_la)
+        self.gridLayout_28.addWidget(self.camera_list_pb, 0, 2, 1, 1)
 
 
-        self.verticalLayout_13.addLayout(self.horizontalLayout_18)
+        self.verticalLayout_13.addLayout(self.gridLayout_28)
 
 
-        self.gridLayout_23.addLayout(self.verticalLayout_13, 1, 1, 1, 1)
+        self.verticalLayout_14.addWidget(self.frame)
 
-        self.frame = QFrame(self.align_tab)
-        self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.Box)
-        self.frame.setFrameShadow(QFrame.Raised)
-        self.frame.setLineWidth(4)
-        self.frame.setMidLineWidth(1)
-        self.horizontalLayout_21 = QHBoxLayout(self.frame)
-        self.horizontalLayout_21.setObjectName(u"horizontalLayout_21")
-        self.gridLayoutDirections = QGridLayout()
-        self.gridLayoutDirections.setObjectName(u"gridLayoutDirections")
-        self.gridLayoutDirections.setSizeConstraint(QLayout.SetFixedSize)
-        self.gridLayoutDirections.setContentsMargins(0, 0, 0, 0)
+        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_14.addItem(self.verticalSpacer_3)
+
+        self.frame_2 = QFrame(self.align_tab)
+        self.frame_2.setObjectName(u"frame_2")
+        self.frame_2.setFrameShape(QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QFrame.Plain)
+        self.frame_2.setLineWidth(1)
+        self.frame_2.setMidLineWidth(1)
+        self.horizontalLayout_23 = QHBoxLayout(self.frame_2)
+        self.horizontalLayout_23.setObjectName(u"horizontalLayout_23")
+        self.gridLayoutDirections_2 = QGridLayout()
+        self.gridLayoutDirections_2.setObjectName(u"gridLayoutDirections_2")
+        self.gridLayoutDirections_2.setSizeConstraint(QLayout.SetFixedSize)
+        self.gridLayoutDirections_2.setContentsMargins(0, 0, 0, 0)
         self.jog_layout_2 = QGridLayout()
         self.jog_layout_2.setObjectName(u"jog_layout_2")
-        self.gridLayout_22 = QGridLayout()
-        self.gridLayout_22.setObjectName(u"gridLayout_22")
-        self.gridLayout_22.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.z_plus_pb_2 = QPushButton(self.frame)
+        self.gridLayout_23 = QGridLayout()
+        self.gridLayout_23.setObjectName(u"gridLayout_23")
+        self.gridLayout_23.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.z_plus_pb_2 = QPushButton(self.frame_2)
         self.z_plus_pb_2.setObjectName(u"z_plus_pb_2")
         sizePolicy3.setHeightForWidth(self.z_plus_pb_2.sizePolicy().hasHeightForWidth())
         self.z_plus_pb_2.setSizePolicy(sizePolicy3)
@@ -2712,9 +2654,9 @@ class Ui_MainWindow(object):
         self.z_plus_pb_2.setMaximumSize(QSize(100, 16777215))
         self.z_plus_pb_2.setIcon(icon5)
 
-        self.gridLayout_22.addWidget(self.z_plus_pb_2, 0, 0, 1, 1)
+        self.gridLayout_23.addWidget(self.z_plus_pb_2, 0, 0, 1, 1)
 
-        self.z_minus_pb_2 = QPushButton(self.frame)
+        self.z_minus_pb_2 = QPushButton(self.frame_2)
         self.z_minus_pb_2.setObjectName(u"z_minus_pb_2")
         sizePolicy3.setHeightForWidth(self.z_minus_pb_2.sizePolicy().hasHeightForWidth())
         self.z_minus_pb_2.setSizePolicy(sizePolicy3)
@@ -2722,15 +2664,15 @@ class Ui_MainWindow(object):
         self.z_minus_pb_2.setMaximumSize(QSize(100, 16777215))
         self.z_minus_pb_2.setIcon(icon6)
 
-        self.gridLayout_22.addWidget(self.z_minus_pb_2, 1, 0, 1, 1)
+        self.gridLayout_23.addWidget(self.z_minus_pb_2, 1, 0, 1, 1)
 
 
-        self.jog_layout_2.addLayout(self.gridLayout_22, 2, 0, 1, 1)
+        self.jog_layout_2.addLayout(self.gridLayout_23, 2, 0, 1, 1)
 
-        self.gridLayoutDirections_4 = QGridLayout()
-        self.gridLayoutDirections_4.setObjectName(u"gridLayoutDirections_4")
-        self.gridLayoutDirections_4.setContentsMargins(0, 0, 0, 0)
-        self.x_minus_y_plus_pb_2 = QToolButton(self.frame)
+        self.gridLayoutDirections_5 = QGridLayout()
+        self.gridLayoutDirections_5.setObjectName(u"gridLayoutDirections_5")
+        self.gridLayoutDirections_5.setContentsMargins(0, 0, 0, 0)
+        self.x_minus_y_plus_pb_2 = QToolButton(self.frame_2)
         self.x_minus_y_plus_pb_2.setObjectName(u"x_minus_y_plus_pb_2")
         sizePolicy3.setHeightForWidth(self.x_minus_y_plus_pb_2.sizePolicy().hasHeightForWidth())
         self.x_minus_y_plus_pb_2.setSizePolicy(sizePolicy3)
@@ -2738,9 +2680,9 @@ class Ui_MainWindow(object):
         self.x_minus_y_plus_pb_2.setMaximumSize(QSize(50, 16777215))
         self.x_minus_y_plus_pb_2.setIcon(icon7)
 
-        self.gridLayoutDirections_4.addWidget(self.x_minus_y_plus_pb_2, 0, 0, 1, 1)
+        self.gridLayoutDirections_5.addWidget(self.x_minus_y_plus_pb_2, 0, 0, 1, 1)
 
-        self.x_plus_y_minus_pb_2 = QToolButton(self.frame)
+        self.x_plus_y_minus_pb_2 = QToolButton(self.frame_2)
         self.x_plus_y_minus_pb_2.setObjectName(u"x_plus_y_minus_pb_2")
         sizePolicy3.setHeightForWidth(self.x_plus_y_minus_pb_2.sizePolicy().hasHeightForWidth())
         self.x_plus_y_minus_pb_2.setSizePolicy(sizePolicy3)
@@ -2748,9 +2690,9 @@ class Ui_MainWindow(object):
         self.x_plus_y_minus_pb_2.setMaximumSize(QSize(50, 16777215))
         self.x_plus_y_minus_pb_2.setIcon(icon8)
 
-        self.gridLayoutDirections_4.addWidget(self.x_plus_y_minus_pb_2, 2, 2, 1, 1)
+        self.gridLayoutDirections_5.addWidget(self.x_plus_y_minus_pb_2, 2, 2, 1, 1)
 
-        self.x_minus_pb_2 = QToolButton(self.frame)
+        self.x_minus_pb_2 = QToolButton(self.frame_2)
         self.x_minus_pb_2.setObjectName(u"x_minus_pb_2")
         sizePolicy3.setHeightForWidth(self.x_minus_pb_2.sizePolicy().hasHeightForWidth())
         self.x_minus_pb_2.setSizePolicy(sizePolicy3)
@@ -2758,9 +2700,9 @@ class Ui_MainWindow(object):
         self.x_minus_pb_2.setMaximumSize(QSize(50, 16777215))
         self.x_minus_pb_2.setIcon(icon9)
 
-        self.gridLayoutDirections_4.addWidget(self.x_minus_pb_2, 1, 0, 1, 1)
+        self.gridLayoutDirections_5.addWidget(self.x_minus_pb_2, 1, 0, 1, 1)
 
-        self.x_minus_y_minus_pb_2 = QToolButton(self.frame)
+        self.x_minus_y_minus_pb_2 = QToolButton(self.frame_2)
         self.x_minus_y_minus_pb_2.setObjectName(u"x_minus_y_minus_pb_2")
         sizePolicy3.setHeightForWidth(self.x_minus_y_minus_pb_2.sizePolicy().hasHeightForWidth())
         self.x_minus_y_minus_pb_2.setSizePolicy(sizePolicy3)
@@ -2768,9 +2710,9 @@ class Ui_MainWindow(object):
         self.x_minus_y_minus_pb_2.setMaximumSize(QSize(50, 16777215))
         self.x_minus_y_minus_pb_2.setIcon(icon10)
 
-        self.gridLayoutDirections_4.addWidget(self.x_minus_y_minus_pb_2, 2, 0, 1, 1)
+        self.gridLayoutDirections_5.addWidget(self.x_minus_y_minus_pb_2, 2, 0, 1, 1)
 
-        self.y_plus_pb_2 = QToolButton(self.frame)
+        self.y_plus_pb_2 = QToolButton(self.frame_2)
         self.y_plus_pb_2.setObjectName(u"y_plus_pb_2")
         sizePolicy3.setHeightForWidth(self.y_plus_pb_2.sizePolicy().hasHeightForWidth())
         self.y_plus_pb_2.setSizePolicy(sizePolicy3)
@@ -2778,9 +2720,9 @@ class Ui_MainWindow(object):
         self.y_plus_pb_2.setMaximumSize(QSize(50, 16777215))
         self.y_plus_pb_2.setIcon(icon5)
 
-        self.gridLayoutDirections_4.addWidget(self.y_plus_pb_2, 0, 1, 1, 1)
+        self.gridLayoutDirections_5.addWidget(self.y_plus_pb_2, 0, 1, 1, 1)
 
-        self.center_tb_2 = QToolButton(self.frame)
+        self.center_tb_2 = QToolButton(self.frame_2)
         self.center_tb_2.setObjectName(u"center_tb_2")
         sizePolicy3.setHeightForWidth(self.center_tb_2.sizePolicy().hasHeightForWidth())
         self.center_tb_2.setSizePolicy(sizePolicy3)
@@ -2788,9 +2730,9 @@ class Ui_MainWindow(object):
         self.center_tb_2.setMaximumSize(QSize(50, 16777215))
         self.center_tb_2.setIcon(icon11)
 
-        self.gridLayoutDirections_4.addWidget(self.center_tb_2, 1, 1, 1, 1)
+        self.gridLayoutDirections_5.addWidget(self.center_tb_2, 1, 1, 1, 1)
 
-        self.y_minus_pb_2 = QToolButton(self.frame)
+        self.y_minus_pb_2 = QToolButton(self.frame_2)
         self.y_minus_pb_2.setObjectName(u"y_minus_pb_2")
         sizePolicy3.setHeightForWidth(self.y_minus_pb_2.sizePolicy().hasHeightForWidth())
         self.y_minus_pb_2.setSizePolicy(sizePolicy3)
@@ -2798,9 +2740,9 @@ class Ui_MainWindow(object):
         self.y_minus_pb_2.setMaximumSize(QSize(50, 16777215))
         self.y_minus_pb_2.setIcon(icon6)
 
-        self.gridLayoutDirections_4.addWidget(self.y_minus_pb_2, 2, 1, 1, 1)
+        self.gridLayoutDirections_5.addWidget(self.y_minus_pb_2, 2, 1, 1, 1)
 
-        self.x_plus_y_plus_pb_2 = QToolButton(self.frame)
+        self.x_plus_y_plus_pb_2 = QToolButton(self.frame_2)
         self.x_plus_y_plus_pb_2.setObjectName(u"x_plus_y_plus_pb_2")
         sizePolicy3.setHeightForWidth(self.x_plus_y_plus_pb_2.sizePolicy().hasHeightForWidth())
         self.x_plus_y_plus_pb_2.setSizePolicy(sizePolicy3)
@@ -2808,9 +2750,9 @@ class Ui_MainWindow(object):
         self.x_plus_y_plus_pb_2.setMaximumSize(QSize(50, 16777215))
         self.x_plus_y_plus_pb_2.setIcon(icon12)
 
-        self.gridLayoutDirections_4.addWidget(self.x_plus_y_plus_pb_2, 0, 2, 1, 1)
+        self.gridLayoutDirections_5.addWidget(self.x_plus_y_plus_pb_2, 0, 2, 1, 1)
 
-        self.x_plus_pb_2 = QToolButton(self.frame)
+        self.x_plus_pb_2 = QToolButton(self.frame_2)
         self.x_plus_pb_2.setObjectName(u"x_plus_pb_2")
         sizePolicy3.setHeightForWidth(self.x_plus_pb_2.sizePolicy().hasHeightForWidth())
         self.x_plus_pb_2.setSizePolicy(sizePolicy3)
@@ -2818,28 +2760,28 @@ class Ui_MainWindow(object):
         self.x_plus_pb_2.setMaximumSize(QSize(50, 16777215))
         self.x_plus_pb_2.setIcon(icon13)
 
-        self.gridLayoutDirections_4.addWidget(self.x_plus_pb_2, 1, 2, 1, 1)
+        self.gridLayoutDirections_5.addWidget(self.x_plus_pb_2, 1, 2, 1, 1)
 
 
-        self.jog_layout_2.addLayout(self.gridLayoutDirections_4, 0, 0, 1, 1)
+        self.jog_layout_2.addLayout(self.gridLayoutDirections_5, 0, 0, 1, 1)
 
-        self.verticalLayout_17 = QVBoxLayout()
-        self.verticalLayout_17.setObjectName(u"verticalLayout_17")
-        self.horizontalLayout_19 = QHBoxLayout()
-        self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
-        self.horizontalLayout_19.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.z_jog_l_3 = QLabel(self.frame)
-        self.z_jog_l_3.setObjectName(u"z_jog_l_3")
-        sizePolicy3.setHeightForWidth(self.z_jog_l_3.sizePolicy().hasHeightForWidth())
-        self.z_jog_l_3.setSizePolicy(sizePolicy3)
-        self.z_jog_l_3.setMinimumSize(QSize(0, 20))
-        self.z_jog_l_3.setMaximumSize(QSize(16777215, 23))
-        self.z_jog_l_3.setFont(font)
-        self.z_jog_l_3.setAlignment(Qt.AlignCenter)
+        self.verticalLayout_19 = QVBoxLayout()
+        self.verticalLayout_19.setObjectName(u"verticalLayout_19")
+        self.horizontalLayout_26 = QHBoxLayout()
+        self.horizontalLayout_26.setObjectName(u"horizontalLayout_26")
+        self.horizontalLayout_26.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.z_jog_l_4 = QLabel(self.frame_2)
+        self.z_jog_l_4.setObjectName(u"z_jog_l_4")
+        sizePolicy3.setHeightForWidth(self.z_jog_l_4.sizePolicy().hasHeightForWidth())
+        self.z_jog_l_4.setSizePolicy(sizePolicy3)
+        self.z_jog_l_4.setMinimumSize(QSize(0, 20))
+        self.z_jog_l_4.setMaximumSize(QSize(16777215, 23))
+        self.z_jog_l_4.setFont(font)
+        self.z_jog_l_4.setAlignment(Qt.AlignCenter)
 
-        self.horizontalLayout_19.addWidget(self.z_jog_l_3, 0, Qt.AlignHCenter|Qt.AlignVCenter)
+        self.horizontalLayout_26.addWidget(self.z_jog_l_4, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.z_step_cb_2 = QComboBox(self.frame)
+        self.z_step_cb_2 = QComboBox(self.frame_2)
         self.z_step_cb_2.addItem("")
         self.z_step_cb_2.addItem("")
         self.z_step_cb_2.addItem("")
@@ -2855,14 +2797,14 @@ class Ui_MainWindow(object):
         self.z_step_cb_2.setMaximumSize(QSize(75, 16777215))
         self.z_step_cb_2.setFont(font)
 
-        self.horizontalLayout_19.addWidget(self.z_step_cb_2, 0, Qt.AlignHCenter|Qt.AlignVCenter)
+        self.horizontalLayout_26.addWidget(self.z_step_cb_2, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
 
-        self.verticalLayout_17.addLayout(self.horizontalLayout_19)
+        self.verticalLayout_19.addLayout(self.horizontalLayout_26)
 
-        self.gridLayout_24 = QGridLayout()
-        self.gridLayout_24.setObjectName(u"gridLayout_24")
-        self.z_step_val_dsb_2 = QDoubleSpinBox(self.frame)
+        self.gridLayout_25 = QGridLayout()
+        self.gridLayout_25.setObjectName(u"gridLayout_25")
+        self.z_step_val_dsb_2 = QDoubleSpinBox(self.frame_2)
         self.z_step_val_dsb_2.setObjectName(u"z_step_val_dsb_2")
         self.z_step_val_dsb_2.setMinimumSize(QSize(70, 20))
         self.z_step_val_dsb_2.setMaximumSize(QSize(70, 16777215))
@@ -2874,9 +2816,9 @@ class Ui_MainWindow(object):
         self.z_step_val_dsb_2.setSingleStep(0.100000000000000)
         self.z_step_val_dsb_2.setValue(0.100000000000000)
 
-        self.gridLayout_24.addWidget(self.z_step_val_dsb_2, 1, 1, 1, 1)
+        self.gridLayout_25.addWidget(self.z_step_val_dsb_2, 1, 1, 1, 1)
 
-        self.z_mul_10_pb_2 = QPushButton(self.frame)
+        self.z_mul_10_pb_2 = QPushButton(self.frame_2)
         self.z_mul_10_pb_2.setObjectName(u"z_mul_10_pb_2")
         sizePolicy3.setHeightForWidth(self.z_mul_10_pb_2.sizePolicy().hasHeightForWidth())
         self.z_mul_10_pb_2.setSizePolicy(sizePolicy3)
@@ -2885,9 +2827,9 @@ class Ui_MainWindow(object):
         self.z_mul_10_pb_2.setFont(font1)
         self.z_mul_10_pb_2.setAutoRepeat(False)
 
-        self.gridLayout_24.addWidget(self.z_mul_10_pb_2, 1, 2, 1, 1)
+        self.gridLayout_25.addWidget(self.z_mul_10_pb_2, 1, 2, 1, 1)
 
-        self.z_div_10_pb_2 = QPushButton(self.frame)
+        self.z_div_10_pb_2 = QPushButton(self.frame_2)
         self.z_div_10_pb_2.setObjectName(u"z_div_10_pb_2")
         sizePolicy3.setHeightForWidth(self.z_div_10_pb_2.sizePolicy().hasHeightForWidth())
         self.z_div_10_pb_2.setSizePolicy(sizePolicy3)
@@ -2896,9 +2838,9 @@ class Ui_MainWindow(object):
         self.z_div_10_pb_2.setFont(font)
         self.z_div_10_pb_2.setAutoRepeat(False)
 
-        self.gridLayout_24.addWidget(self.z_div_10_pb_2, 1, 0, 1, 1)
+        self.gridLayout_25.addWidget(self.z_div_10_pb_2, 1, 0, 1, 1)
 
-        self.z_minus_1_pb_2 = QPushButton(self.frame)
+        self.z_minus_1_pb_2 = QPushButton(self.frame_2)
         self.z_minus_1_pb_2.setObjectName(u"z_minus_1_pb_2")
         sizePolicy3.setHeightForWidth(self.z_minus_1_pb_2.sizePolicy().hasHeightForWidth())
         self.z_minus_1_pb_2.setSizePolicy(sizePolicy3)
@@ -2907,9 +2849,9 @@ class Ui_MainWindow(object):
         self.z_minus_1_pb_2.setFont(font)
         self.z_minus_1_pb_2.setAutoRepeat(True)
 
-        self.gridLayout_24.addWidget(self.z_minus_1_pb_2, 2, 1, 1, 1)
+        self.gridLayout_25.addWidget(self.z_minus_1_pb_2, 2, 1, 1, 1)
 
-        self.z_plus_1_pb_2 = QPushButton(self.frame)
+        self.z_plus_1_pb_2 = QPushButton(self.frame_2)
         self.z_plus_1_pb_2.setObjectName(u"z_plus_1_pb_2")
         sizePolicy3.setHeightForWidth(self.z_plus_1_pb_2.sizePolicy().hasHeightForWidth())
         self.z_plus_1_pb_2.setSizePolicy(sizePolicy3)
@@ -2918,20 +2860,20 @@ class Ui_MainWindow(object):
         self.z_plus_1_pb_2.setFont(font)
         self.z_plus_1_pb_2.setAutoRepeat(True)
 
-        self.gridLayout_24.addWidget(self.z_plus_1_pb_2, 0, 1, 1, 1)
+        self.gridLayout_25.addWidget(self.z_plus_1_pb_2, 0, 1, 1, 1)
 
 
-        self.verticalLayout_17.addLayout(self.gridLayout_24)
+        self.verticalLayout_19.addLayout(self.gridLayout_25)
 
 
-        self.jog_layout_2.addLayout(self.verticalLayout_17, 2, 1, 1, 1)
+        self.jog_layout_2.addLayout(self.verticalLayout_19, 2, 1, 1, 1)
 
-        self.verticalLayout_18 = QVBoxLayout()
-        self.verticalLayout_18.setObjectName(u"verticalLayout_18")
-        self.horizontalLayout_20 = QHBoxLayout()
-        self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
-        self.horizontalLayout_20.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.xy_jog_l_2 = QLabel(self.frame)
+        self.verticalLayout_20 = QVBoxLayout()
+        self.verticalLayout_20.setObjectName(u"verticalLayout_20")
+        self.horizontalLayout_27 = QHBoxLayout()
+        self.horizontalLayout_27.setObjectName(u"horizontalLayout_27")
+        self.horizontalLayout_27.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.xy_jog_l_2 = QLabel(self.frame_2)
         self.xy_jog_l_2.setObjectName(u"xy_jog_l_2")
         sizePolicy3.setHeightForWidth(self.xy_jog_l_2.sizePolicy().hasHeightForWidth())
         self.xy_jog_l_2.setSizePolicy(sizePolicy3)
@@ -2939,9 +2881,9 @@ class Ui_MainWindow(object):
         self.xy_jog_l_2.setMaximumSize(QSize(16777215, 23))
         self.xy_jog_l_2.setAlignment(Qt.AlignCenter)
 
-        self.horizontalLayout_20.addWidget(self.xy_jog_l_2, 0, Qt.AlignHCenter|Qt.AlignVCenter)
+        self.horizontalLayout_27.addWidget(self.xy_jog_l_2, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.xy_step_cb_2 = QComboBox(self.frame)
+        self.xy_step_cb_2 = QComboBox(self.frame_2)
         self.xy_step_cb_2.addItem("")
         self.xy_step_cb_2.addItem("")
         self.xy_step_cb_2.addItem("")
@@ -2956,14 +2898,14 @@ class Ui_MainWindow(object):
         self.xy_step_cb_2.setMinimumSize(QSize(75, 0))
         self.xy_step_cb_2.setMaximumSize(QSize(75, 23))
 
-        self.horizontalLayout_20.addWidget(self.xy_step_cb_2, 0, Qt.AlignHCenter|Qt.AlignVCenter)
+        self.horizontalLayout_27.addWidget(self.xy_step_cb_2, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
 
-        self.verticalLayout_18.addLayout(self.horizontalLayout_20)
+        self.verticalLayout_20.addLayout(self.horizontalLayout_27)
 
-        self.gridLayout_27 = QGridLayout()
-        self.gridLayout_27.setObjectName(u"gridLayout_27")
-        self.xy_plus_1_pb_2 = QPushButton(self.frame)
+        self.gridLayout_29 = QGridLayout()
+        self.gridLayout_29.setObjectName(u"gridLayout_29")
+        self.xy_plus_1_pb_2 = QPushButton(self.frame_2)
         self.xy_plus_1_pb_2.setObjectName(u"xy_plus_1_pb_2")
         sizePolicy3.setHeightForWidth(self.xy_plus_1_pb_2.sizePolicy().hasHeightForWidth())
         self.xy_plus_1_pb_2.setSizePolicy(sizePolicy3)
@@ -2972,9 +2914,9 @@ class Ui_MainWindow(object):
         self.xy_plus_1_pb_2.setFont(font)
         self.xy_plus_1_pb_2.setAutoRepeat(True)
 
-        self.gridLayout_27.addWidget(self.xy_plus_1_pb_2, 0, 1, 1, 1)
+        self.gridLayout_29.addWidget(self.xy_plus_1_pb_2, 0, 1, 1, 1)
 
-        self.xy_div_10_pb_2 = QPushButton(self.frame)
+        self.xy_div_10_pb_2 = QPushButton(self.frame_2)
         self.xy_div_10_pb_2.setObjectName(u"xy_div_10_pb_2")
         sizePolicy3.setHeightForWidth(self.xy_div_10_pb_2.sizePolicy().hasHeightForWidth())
         self.xy_div_10_pb_2.setSizePolicy(sizePolicy3)
@@ -2983,9 +2925,9 @@ class Ui_MainWindow(object):
         self.xy_div_10_pb_2.setFont(font)
         self.xy_div_10_pb_2.setAutoRepeat(False)
 
-        self.gridLayout_27.addWidget(self.xy_div_10_pb_2, 1, 0, 1, 1)
+        self.gridLayout_29.addWidget(self.xy_div_10_pb_2, 1, 0, 1, 1)
 
-        self.xy_step_val_dsb_2 = QDoubleSpinBox(self.frame)
+        self.xy_step_val_dsb_2 = QDoubleSpinBox(self.frame_2)
         self.xy_step_val_dsb_2.setObjectName(u"xy_step_val_dsb_2")
         sizePolicy3.setHeightForWidth(self.xy_step_val_dsb_2.sizePolicy().hasHeightForWidth())
         self.xy_step_val_dsb_2.setSizePolicy(sizePolicy3)
@@ -2999,9 +2941,9 @@ class Ui_MainWindow(object):
         self.xy_step_val_dsb_2.setSingleStep(0.100000000000000)
         self.xy_step_val_dsb_2.setValue(0.100000000000000)
 
-        self.gridLayout_27.addWidget(self.xy_step_val_dsb_2, 1, 1, 1, 1)
+        self.gridLayout_29.addWidget(self.xy_step_val_dsb_2, 1, 1, 1, 1)
 
-        self.xy_mul_10_pb_2 = QPushButton(self.frame)
+        self.xy_mul_10_pb_2 = QPushButton(self.frame_2)
         self.xy_mul_10_pb_2.setObjectName(u"xy_mul_10_pb_2")
         sizePolicy3.setHeightForWidth(self.xy_mul_10_pb_2.sizePolicy().hasHeightForWidth())
         self.xy_mul_10_pb_2.setSizePolicy(sizePolicy3)
@@ -3010,9 +2952,9 @@ class Ui_MainWindow(object):
         self.xy_mul_10_pb_2.setFont(font1)
         self.xy_mul_10_pb_2.setAutoRepeat(False)
 
-        self.gridLayout_27.addWidget(self.xy_mul_10_pb_2, 1, 2, 1, 1)
+        self.gridLayout_29.addWidget(self.xy_mul_10_pb_2, 1, 2, 1, 1)
 
-        self.xy_minus_1_pb_2 = QPushButton(self.frame)
+        self.xy_minus_1_pb_2 = QPushButton(self.frame_2)
         self.xy_minus_1_pb_2.setObjectName(u"xy_minus_1_pb_2")
         sizePolicy3.setHeightForWidth(self.xy_minus_1_pb_2.sizePolicy().hasHeightForWidth())
         self.xy_minus_1_pb_2.setSizePolicy(sizePolicy3)
@@ -3021,38 +2963,38 @@ class Ui_MainWindow(object):
         self.xy_minus_1_pb_2.setFont(font)
         self.xy_minus_1_pb_2.setAutoRepeat(True)
 
-        self.gridLayout_27.addWidget(self.xy_minus_1_pb_2, 2, 1, 1, 1)
+        self.gridLayout_29.addWidget(self.xy_minus_1_pb_2, 2, 1, 1, 1)
 
 
-        self.verticalLayout_18.addLayout(self.gridLayout_27)
+        self.verticalLayout_20.addLayout(self.gridLayout_29)
 
 
-        self.jog_layout_2.addLayout(self.verticalLayout_18, 0, 1, 1, 1)
+        self.jog_layout_2.addLayout(self.verticalLayout_20, 0, 1, 1, 1)
 
-        self.line_19 = QFrame(self.frame)
-        self.line_19.setObjectName(u"line_19")
-        self.line_19.setLineWidth(1)
-        self.line_19.setFrameShape(QFrame.HLine)
-        self.line_19.setFrameShadow(QFrame.Sunken)
+        self.line_25 = QFrame(self.frame_2)
+        self.line_25.setObjectName(u"line_25")
+        self.line_25.setLineWidth(1)
+        self.line_25.setFrameShape(QFrame.HLine)
+        self.line_25.setFrameShadow(QFrame.Sunken)
 
-        self.jog_layout_2.addWidget(self.line_19, 1, 1, 1, 1)
+        self.jog_layout_2.addWidget(self.line_25, 1, 1, 1, 1)
 
-        self.line_20 = QFrame(self.frame)
-        self.line_20.setObjectName(u"line_20")
-        self.line_20.setFrameShape(QFrame.HLine)
-        self.line_20.setFrameShadow(QFrame.Sunken)
+        self.line_26 = QFrame(self.frame_2)
+        self.line_26.setObjectName(u"line_26")
+        self.line_26.setFrameShape(QFrame.HLine)
+        self.line_26.setFrameShadow(QFrame.Sunken)
 
-        self.jog_layout_2.addWidget(self.line_20, 1, 0, 1, 1)
+        self.jog_layout_2.addWidget(self.line_26, 1, 0, 1, 1)
 
 
-        self.gridLayoutDirections.addLayout(self.jog_layout_2, 1, 0, 1, 1)
+        self.gridLayoutDirections_2.addLayout(self.jog_layout_2, 1, 0, 1, 1)
 
         self.droGridLayout_alignment = QGridLayout()
         self.droGridLayout_alignment.setObjectName(u"droGridLayout_alignment")
         self.droGridLayout_alignment.setHorizontalSpacing(0)
         self.droGridLayout_alignment.setVerticalSpacing(2)
         self.droGridLayout_alignment.setContentsMargins(0, 0, 0, 0)
-        self.z_axis_l_2 = QLabel(self.frame)
+        self.z_axis_l_2 = QLabel(self.frame_2)
         self.z_axis_l_2.setObjectName(u"z_axis_l_2")
         sizePolicy7.setHeightForWidth(self.z_axis_l_2.sizePolicy().hasHeightForWidth())
         self.z_axis_l_2.setSizePolicy(sizePolicy7)
@@ -3066,7 +3008,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.z_axis_l_2, 0, 3, 1, 1, Qt.AlignHCenter)
 
-        self.mpos_y_l_2 = QLabel(self.frame)
+        self.mpos_y_l_2 = QLabel(self.frame_2)
         self.mpos_y_l_2.setObjectName(u"mpos_y_l_2")
         sizePolicy7.setHeightForWidth(self.mpos_y_l_2.sizePolicy().hasHeightForWidth())
         self.mpos_y_l_2.setSizePolicy(sizePolicy7)
@@ -3079,7 +3021,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.mpos_y_l_2, 1, 2, 1, 1, Qt.AlignHCenter)
 
-        self.x_axis_l_2 = QLabel(self.frame)
+        self.x_axis_l_2 = QLabel(self.frame_2)
         self.x_axis_l_2.setObjectName(u"x_axis_l_2")
         sizePolicy7.setHeightForWidth(self.x_axis_l_2.sizePolicy().hasHeightForWidth())
         self.x_axis_l_2.setSizePolicy(sizePolicy7)
@@ -3093,7 +3035,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.x_axis_l_2, 0, 1, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.mpos_z_l_2 = QLabel(self.frame)
+        self.mpos_z_l_2 = QLabel(self.frame_2)
         self.mpos_z_l_2.setObjectName(u"mpos_z_l_2")
         sizePolicy7.setHeightForWidth(self.mpos_z_l_2.sizePolicy().hasHeightForWidth())
         self.mpos_z_l_2.setSizePolicy(sizePolicy7)
@@ -3106,7 +3048,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.mpos_z_l_2, 1, 3, 1, 1, Qt.AlignHCenter)
 
-        self.mpos_x_l_2 = QLabel(self.frame)
+        self.mpos_x_l_2 = QLabel(self.frame_2)
         self.mpos_x_l_2.setObjectName(u"mpos_x_l_2")
         sizePolicy7.setHeightForWidth(self.mpos_x_l_2.sizePolicy().hasHeightForWidth())
         self.mpos_x_l_2.setSizePolicy(sizePolicy7)
@@ -3119,7 +3061,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.mpos_x_l_2, 1, 1, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.wpos_l_2 = QLabel(self.frame)
+        self.wpos_l_2 = QLabel(self.frame_2)
         self.wpos_l_2.setObjectName(u"wpos_l_2")
         sizePolicy7.setHeightForWidth(self.wpos_l_2.sizePolicy().hasHeightForWidth())
         self.wpos_l_2.setSizePolicy(sizePolicy7)
@@ -3133,7 +3075,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.wpos_l_2, 2, 0, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.wpos_x_l_2 = QLabel(self.frame)
+        self.wpos_x_l_2 = QLabel(self.frame_2)
         self.wpos_x_l_2.setObjectName(u"wpos_x_l_2")
         sizePolicy7.setHeightForWidth(self.wpos_x_l_2.sizePolicy().hasHeightForWidth())
         self.wpos_x_l_2.setSizePolicy(sizePolicy7)
@@ -3146,7 +3088,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.wpos_x_l_2, 2, 1, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.mpos_l_2 = QLabel(self.frame)
+        self.mpos_l_2 = QLabel(self.frame_2)
         self.mpos_l_2.setObjectName(u"mpos_l_2")
         sizePolicy7.setHeightForWidth(self.mpos_l_2.sizePolicy().hasHeightForWidth())
         self.mpos_l_2.setSizePolicy(sizePolicy7)
@@ -3160,7 +3102,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.mpos_l_2, 1, 0, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.wpos_z_l_2 = QLabel(self.frame)
+        self.wpos_z_l_2 = QLabel(self.frame_2)
         self.wpos_z_l_2.setObjectName(u"wpos_z_l_2")
         sizePolicy7.setHeightForWidth(self.wpos_z_l_2.sizePolicy().hasHeightForWidth())
         self.wpos_z_l_2.setSizePolicy(sizePolicy7)
@@ -3173,7 +3115,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.wpos_z_l_2, 2, 3, 1, 1, Qt.AlignHCenter)
 
-        self.axis_l_2 = QLabel(self.frame)
+        self.axis_l_2 = QLabel(self.frame_2)
         self.axis_l_2.setObjectName(u"axis_l_2")
         sizePolicy7.setHeightForWidth(self.axis_l_2.sizePolicy().hasHeightForWidth())
         self.axis_l_2.setSizePolicy(sizePolicy7)
@@ -3187,7 +3129,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.axis_l_2, 0, 0, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.y_axis_l_2 = QLabel(self.frame)
+        self.y_axis_l_2 = QLabel(self.frame_2)
         self.y_axis_l_2.setObjectName(u"y_axis_l_2")
         sizePolicy7.setHeightForWidth(self.y_axis_l_2.sizePolicy().hasHeightForWidth())
         self.y_axis_l_2.setSizePolicy(sizePolicy7)
@@ -3201,7 +3143,7 @@ class Ui_MainWindow(object):
 
         self.droGridLayout_alignment.addWidget(self.y_axis_l_2, 0, 2, 1, 1, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.wpos_y_l_2 = QLabel(self.frame)
+        self.wpos_y_l_2 = QLabel(self.frame_2)
         self.wpos_y_l_2.setObjectName(u"wpos_y_l_2")
         sizePolicy7.setHeightForWidth(self.wpos_y_l_2.sizePolicy().hasHeightForWidth())
         self.wpos_y_l_2.setSizePolicy(sizePolicy7)
@@ -3215,62 +3157,162 @@ class Ui_MainWindow(object):
         self.droGridLayout_alignment.addWidget(self.wpos_y_l_2, 2, 2, 1, 1, Qt.AlignHCenter)
 
 
-        self.gridLayoutDirections.addLayout(self.droGridLayout_alignment, 0, 0, 1, 1)
+        self.gridLayoutDirections_2.addLayout(self.droGridLayout_alignment, 0, 0, 1, 1)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_12 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.gridLayoutDirections.addItem(self.verticalSpacer_3, 0, 1, 1, 1)
-
-
-        self.horizontalLayout_21.addLayout(self.gridLayoutDirections)
+        self.gridLayoutDirections_2.addItem(self.verticalSpacer_12, 0, 1, 1, 1)
 
 
-        self.gridLayout_23.addWidget(self.frame, 1, 0, 1, 1)
+        self.horizontalLayout_23.addLayout(self.gridLayoutDirections_2)
 
-        self.verticalLayout_14 = QVBoxLayout()
-        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
+
+        self.verticalLayout_14.addWidget(self.frame_2)
+
+        self.verticalSpacer_9 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_14.addItem(self.verticalSpacer_9)
+
+
+        self.horizontalLayout_18.addLayout(self.verticalLayout_14)
+
+        self.verticalLayout_16 = QVBoxLayout()
+        self.verticalLayout_16.setObjectName(u"verticalLayout_16")
         self.alignCanvasWidget = VispyCanvas(self.align_tab)
         self.alignCanvasWidget.setObjectName(u"alignCanvasWidget")
 
-        self.verticalLayout_14.addWidget(self.alignCanvasWidget)
+        self.verticalLayout_16.addWidget(self.alignCanvasWidget)
 
-        self.horizontalLayout_23 = QHBoxLayout()
-        self.horizontalLayout_23.setObjectName(u"horizontalLayout_23")
+        self.horizontalLayout_28 = QHBoxLayout()
+        self.horizontalLayout_28.setObjectName(u"horizontalLayout_28")
         self.flip_horizontally_tb = QToolButton(self.align_tab)
         self.flip_horizontally_tb.setObjectName(u"flip_horizontally_tb")
         self.flip_horizontally_tb.setCheckable(True)
         self.flip_horizontally_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
 
-        self.horizontalLayout_23.addWidget(self.flip_horizontally_tb)
+        self.horizontalLayout_28.addWidget(self.flip_horizontally_tb)
 
         self.flip_vertically_tb = QToolButton(self.align_tab)
         self.flip_vertically_tb.setObjectName(u"flip_vertically_tb")
         self.flip_vertically_tb.setCheckable(True)
         self.flip_vertically_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
 
-        self.horizontalLayout_23.addWidget(self.flip_vertically_tb)
+        self.horizontalLayout_28.addWidget(self.flip_vertically_tb)
 
         self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.horizontalLayout_23.addItem(self.horizontalSpacer_14)
+        self.horizontalLayout_28.addItem(self.horizontalSpacer_14)
 
         self.load_align_layer_tb = QToolButton(self.align_tab)
         self.load_align_layer_tb.setObjectName(u"load_align_layer_tb")
 
-        self.horizontalLayout_23.addWidget(self.load_align_layer_tb)
+        self.horizontalLayout_28.addWidget(self.load_align_layer_tb)
 
 
-        self.verticalLayout_14.addLayout(self.horizontalLayout_23)
+        self.verticalLayout_16.addLayout(self.horizontalLayout_28)
 
-        self.verticalLayout_14.setStretch(0, 10)
+        self.verticalLayout_16.setStretch(0, 10)
 
-        self.gridLayout_23.addLayout(self.verticalLayout_14, 0, 1, 1, 1)
+        self.horizontalLayout_18.addLayout(self.verticalLayout_16)
 
-        self.gridLayout_23.setRowStretch(0, 3)
-        self.gridLayout_23.setColumnStretch(0, 1)
-        self.gridLayout_23.setColumnStretch(1, 3)
+        self.verticalLayout_21 = QVBoxLayout()
+        self.verticalLayout_21.setObjectName(u"verticalLayout_21")
+        self.verticalLayout_22 = QVBoxLayout()
+        self.verticalLayout_22.setObjectName(u"verticalLayout_22")
+        self.align_points_tw = QTableWidget(self.align_tab)
+        if (self.align_points_tw.columnCount() < 4):
+            self.align_points_tw.setColumnCount(4)
+        self.align_points_tw.setObjectName(u"align_points_tw")
+        sizePolicy.setHeightForWidth(self.align_points_tw.sizePolicy().hasHeightForWidth())
+        self.align_points_tw.setSizePolicy(sizePolicy)
+        self.align_points_tw.setMinimumSize(QSize(200, 0))
+        self.align_points_tw.setMaximumSize(QSize(500, 16777215))
+        self.align_points_tw.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.align_points_tw.setColumnCount(4)
+        self.align_points_tw.horizontalHeader().setCascadingSectionResizes(False)
+        self.align_points_tw.horizontalHeader().setDefaultSectionSize(100)
 
-        self.horizontalLayout_17.addLayout(self.gridLayout_23)
+        self.verticalLayout_22.addWidget(self.align_points_tw, 0, Qt.AlignHCenter)
+
+        self.horizontalLayout_29 = QHBoxLayout()
+        self.horizontalLayout_29.setObjectName(u"horizontalLayout_29")
+        self.add_point_tb = QToolButton(self.align_tab)
+        self.add_point_tb.setObjectName(u"add_point_tb")
+        self.add_point_tb.setMinimumSize(QSize(50, 50))
+        font3 = QFont()
+        font3.setPointSize(20)
+        font3.setBold(True)
+        font3.setWeight(75)
+        self.add_point_tb.setFont(font3)
+        icon21 = QIcon()
+        icon21.addFile(u":/resources/resources/icons/gray-refresh.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.add_point_tb.setIcon(icon21)
+        self.add_point_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
+
+        self.horizontalLayout_29.addWidget(self.add_point_tb)
+
+        self.remove_point_tb = QToolButton(self.align_tab)
+        self.remove_point_tb.setObjectName(u"remove_point_tb")
+        sizePolicy3.setHeightForWidth(self.remove_point_tb.sizePolicy().hasHeightForWidth())
+        self.remove_point_tb.setSizePolicy(sizePolicy3)
+        self.remove_point_tb.setMinimumSize(QSize(50, 50))
+        self.remove_point_tb.setFont(font3)
+        self.remove_point_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
+
+        self.horizontalLayout_29.addWidget(self.remove_point_tb)
+
+        self.apply_alignment_tb = QToolButton(self.align_tab)
+        self.apply_alignment_tb.setObjectName(u"apply_alignment_tb")
+        self.apply_alignment_tb.setMinimumSize(QSize(50, 50))
+        icon22 = QIcon()
+        icon22.addFile(u":/resources/resources/icons/black_apply_align.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon22.addFile(u":/resources/resources/icons/black_alignment_applied.svg", QSize(), QIcon.Normal, QIcon.On)
+        self.apply_alignment_tb.setIcon(icon22)
+        self.apply_alignment_tb.setCheckable(True)
+        self.apply_alignment_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
+
+        self.horizontalLayout_29.addWidget(self.apply_alignment_tb)
+
+        self.led_la = QLedLabel(self.align_tab)
+        self.led_la.setObjectName(u"led_la")
+        sizePolicy3.setHeightForWidth(self.led_la.sizePolicy().hasHeightForWidth())
+        self.led_la.setSizePolicy(sizePolicy3)
+        self.led_la.setMinimumSize(QSize(50, 50))
+        self.led_la.setAutoFillBackground(True)
+
+        self.horizontalLayout_29.addWidget(self.led_la)
+
+
+        self.verticalLayout_22.addLayout(self.horizontalLayout_29)
+
+
+        self.verticalLayout_21.addLayout(self.verticalLayout_22)
+
+        self.horizontalLayout_30 = QHBoxLayout()
+        self.horizontalLayout_30.setObjectName(u"horizontalLayout_30")
+        self.label_17 = QLabel(self.align_tab)
+        self.label_17.setObjectName(u"label_17")
+        self.label_17.setAlignment(Qt.AlignCenter)
+
+        self.horizontalLayout_30.addWidget(self.label_17, 0, Qt.AlignHCenter|Qt.AlignVCenter)
+
+        self.label_18 = QLabel(self.align_tab)
+        self.label_18.setObjectName(u"label_18")
+        self.label_18.setAlignment(Qt.AlignCenter)
+
+        self.horizontalLayout_30.addWidget(self.label_18, 0, Qt.AlignHCenter|Qt.AlignVCenter)
+
+
+        self.verticalLayout_21.addLayout(self.horizontalLayout_30)
+
+
+        self.horizontalLayout_18.addLayout(self.verticalLayout_21)
+
+        self.horizontalLayout_18.setStretch(0, 3)
+        self.horizontalLayout_18.setStretch(1, 10)
+        self.horizontalLayout_18.setStretch(2, 3)
+
+        self.horizontalLayout_17.addLayout(self.horizontalLayout_18)
 
 
         self.horizontalLayout_7.addLayout(self.horizontalLayout_17)
@@ -4328,10 +4370,10 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(3)
+        self.main_tab_widget.setCurrentIndex(2)
         self.prepare_widget.setCurrentIndex(1)
         self.jobs_sw.setCurrentIndex(0)
-        self.ctrl_tab_widget.setCurrentIndex(0)
+        self.ctrl_tab_widget.setCurrentIndex(1)
         self.z_step_cb.setCurrentIndex(3)
         self.xy_step_cb.setCurrentIndex(3)
         self.z_step_cb_2.setCurrentIndex(3)
@@ -4636,32 +4678,10 @@ class Ui_MainWindow(object):
         self.tool_change_tb.setText(QCoreApplication.translate("MainWindow", u"TOOL CHANGE", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.control_tab), QCoreApplication.translate("MainWindow", u"CONTROL", None))
         self.camera_la.setText("")
-        self.label_13.setText(QCoreApplication.translate("MainWindow", u"Contrast", None))
-        self.label_14.setText(QCoreApplication.translate("MainWindow", u"Camera Selection", None))
-        self.camera_list_pb.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.tool_or_camera_tb.setText(QCoreApplication.translate("MainWindow", u"TOOL POSITION", None))
-#if QT_CONFIG(statustip)
-        self.add_point_tb.setStatusTip(QCoreApplication.translate("MainWindow", u"Reload gcode files generated.", None))
-#endif // QT_CONFIG(statustip)
-        self.add_point_tb.setText(QCoreApplication.translate("MainWindow", u"+", None))
-#if QT_CONFIG(statustip)
-        self.remove_point_tb.setStatusTip(QCoreApplication.translate("MainWindow", u"Load gcode files.", None))
-#endif // QT_CONFIG(statustip)
-        self.remove_point_tb.setText(QCoreApplication.translate("MainWindow", u"-", None))
-#if QT_CONFIG(shortcut)
-        self.remove_point_tb.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+G", None))
-#endif // QT_CONFIG(shortcut)
-#if QT_CONFIG(tooltip)
-        self.apply_alignment_tb.setToolTip(QCoreApplication.translate("MainWindow", u"Apply Alignment", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(statustip)
-        self.apply_alignment_tb.setStatusTip(QCoreApplication.translate("MainWindow", u"Remove gcode files.", None))
-#endif // QT_CONFIG(statustip)
-        self.apply_alignment_tb.setText(QCoreApplication.translate("MainWindow", u"...", None))
-#if QT_CONFIG(tooltip)
-        self.led_la.setToolTip(QCoreApplication.translate("MainWindow", u"Alignment not applied", None))
-#endif // QT_CONFIG(tooltip)
-        self.led_la.setText("")
+        self.label_15.setText(QCoreApplication.translate("MainWindow", u"Contrast", None))
+        self.label_16.setText(QCoreApplication.translate("MainWindow", u"Camera Selection", None))
+        self.camera_list_pb.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.z_plus_pb_2.setText(QCoreApplication.translate("MainWindow", u"Z+", None))
         self.z_minus_pb_2.setText(QCoreApplication.translate("MainWindow", u"Z-", None))
         self.x_minus_y_plus_pb_2.setText(QCoreApplication.translate("MainWindow", u"X- Y+", None))
@@ -4673,7 +4693,7 @@ class Ui_MainWindow(object):
         self.y_minus_pb_2.setText(QCoreApplication.translate("MainWindow", u"Y-", None))
         self.x_plus_y_plus_pb_2.setText(QCoreApplication.translate("MainWindow", u"X+ Y+", None))
         self.x_plus_pb_2.setText(QCoreApplication.translate("MainWindow", u"X+", None))
-        self.z_jog_l_3.setText(QCoreApplication.translate("MainWindow", u"Z step [mm]", None))
+        self.z_jog_l_4.setText(QCoreApplication.translate("MainWindow", u"Z step [mm]", None))
         self.z_step_cb_2.setItemText(0, QCoreApplication.translate("MainWindow", u"100.0", None))
         self.z_step_cb_2.setItemText(1, QCoreApplication.translate("MainWindow", u"10.0", None))
         self.z_step_cb_2.setItemText(2, QCoreApplication.translate("MainWindow", u"5.0", None))
@@ -4716,6 +4736,30 @@ class Ui_MainWindow(object):
         self.flip_horizontally_tb.setText(QCoreApplication.translate("MainWindow", u"FLIP HOR", None))
         self.flip_vertically_tb.setText(QCoreApplication.translate("MainWindow", u"FLIP VER", None))
         self.load_align_layer_tb.setText(QCoreApplication.translate("MainWindow", u"...", None))
+#if QT_CONFIG(statustip)
+        self.add_point_tb.setStatusTip(QCoreApplication.translate("MainWindow", u"Reload gcode files generated.", None))
+#endif // QT_CONFIG(statustip)
+        self.add_point_tb.setText(QCoreApplication.translate("MainWindow", u"+", None))
+#if QT_CONFIG(statustip)
+        self.remove_point_tb.setStatusTip(QCoreApplication.translate("MainWindow", u"Load gcode files.", None))
+#endif // QT_CONFIG(statustip)
+        self.remove_point_tb.setText(QCoreApplication.translate("MainWindow", u"-", None))
+#if QT_CONFIG(shortcut)
+        self.remove_point_tb.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+G", None))
+#endif // QT_CONFIG(shortcut)
+#if QT_CONFIG(tooltip)
+        self.apply_alignment_tb.setToolTip(QCoreApplication.translate("MainWindow", u"Apply Alignment", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(statustip)
+        self.apply_alignment_tb.setStatusTip(QCoreApplication.translate("MainWindow", u"Remove gcode files.", None))
+#endif // QT_CONFIG(statustip)
+        self.apply_alignment_tb.setText(QCoreApplication.translate("MainWindow", u"...", None))
+#if QT_CONFIG(tooltip)
+        self.led_la.setToolTip(QCoreApplication.translate("MainWindow", u"Alignment not applied", None))
+#endif // QT_CONFIG(tooltip)
+        self.led_la.setText("")
+        self.label_17.setText(QCoreApplication.translate("MainWindow", u"Error/STD_Deviation", None))
+        self.label_18.setText(QCoreApplication.translate("MainWindow", u"No value available", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.align_tab), QCoreApplication.translate("MainWindow", u"ALIGN", None))
         self.top_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"TOP LAYER COLOR", None))
         self.bottom_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"BOTTOM LAYER COLOR", None))
