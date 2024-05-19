@@ -2571,15 +2571,15 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.verticalLayout_13 = QVBoxLayout(self.frame)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.verticalSpacer_7 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        # self.verticalSpacer_7 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.verticalLayout_13.addItem(self.verticalSpacer_7)
+        # self.verticalLayout_13.addItem(self.verticalSpacer_7)
 
         self.camera_la = QLabel(self.frame)
         self.camera_la.setObjectName(u"camera_la")
         sizePolicy10.setHeightForWidth(self.camera_la.sizePolicy().hasHeightForWidth())
         self.camera_la.setSizePolicy(sizePolicy10)
-        self.camera_la.setMinimumSize(QSize(200, 200))
+        self.camera_la.setMinimumSize(QSize(200, 150))
         self.camera_la.setMaximumSize(QSize(480, 480))
 
         self.verticalLayout_13.addWidget(self.camera_la)
@@ -3166,15 +3166,17 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_23.addLayout(self.gridLayoutDirections_2)
 
-
-        self.verticalLayout_14.addWidget(self.frame_2)
-
         self.verticalSpacer_9 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_14.addItem(self.verticalSpacer_9)
 
+        self.verticalLayout_14.addWidget(self.frame_2)
 
         self.horizontalLayout_18.addLayout(self.verticalLayout_14)
+
+        self.verticalSpacer_7 = QSpacerItem(20, 30, QSizePolicy.Minimum, QSizePolicy.Fixed)
+
+        self.verticalLayout_14.addItem(self.verticalSpacer_7)
 
         self.verticalLayout_16 = QVBoxLayout()
         self.verticalLayout_16.setObjectName(u"verticalLayout_16")
@@ -3236,11 +3238,12 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_29 = QHBoxLayout()
         self.horizontalLayout_29.setObjectName(u"horizontalLayout_29")
+
         self.add_point_tb = QToolButton(self.align_tab)
         self.add_point_tb.setObjectName(u"add_point_tb")
         self.add_point_tb.setMinimumSize(QSize(50, 50))
         font3 = QFont()
-        font3.setPointSize(20)
+        font3.setPointSize(14)
         font3.setBold(True)
         font3.setWeight(75)
         self.add_point_tb.setFont(font3)
@@ -3260,6 +3263,9 @@ class Ui_MainWindow(object):
         self.remove_point_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
 
         self.horizontalLayout_29.addWidget(self.remove_point_tb)
+
+        self.horizontalSpacer_14a = QSpacerItem(20, 55, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalLayout_29.addItem(self.horizontalSpacer_14a)
 
         self.apply_alignment_tb = QToolButton(self.align_tab)
         self.apply_alignment_tb.setObjectName(u"apply_alignment_tb")
@@ -3293,15 +3299,19 @@ class Ui_MainWindow(object):
         self.label_17 = QLabel(self.align_tab)
         self.label_17.setObjectName(u"label_17")
         self.label_17.setAlignment(Qt.AlignCenter)
+        self.label_17.setFixedHeight(20)
 
         self.horizontalLayout_30.addWidget(self.label_17, 0, Qt.AlignHCenter|Qt.AlignVCenter)
+
+        self.horizontalSpacer_14b = QSpacerItem(10, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalLayout_30.addItem(self.horizontalSpacer_14b)
 
         self.label_18 = QLabel(self.align_tab)
         self.label_18.setObjectName(u"label_18")
         self.label_18.setAlignment(Qt.AlignCenter)
+        self.label_18.setFixedHeight(20)
 
         self.horizontalLayout_30.addWidget(self.label_18, 0, Qt.AlignHCenter|Qt.AlignVCenter)
-
 
         self.verticalLayout_21.addLayout(self.horizontalLayout_30)
 
