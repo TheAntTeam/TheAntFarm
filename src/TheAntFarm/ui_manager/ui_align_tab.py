@@ -1,4 +1,4 @@
-from PySide2.QtCore import Signal, Slot, QObject
+from PySide2.QtCore import Signal, Slot, QObject, Qt
 from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QLabel, QFileDialog, QHeaderView
 from collections import OrderedDict as Od
@@ -77,7 +77,10 @@ class UiAlignTab(QObject):
 
     @Slot(QPixmap)
     def update_camera_image(self, pixmap):
-        self.ui.camera_la.setPixmap(pixmap)
+        if not pixmap.isNull():
+            scaled_frame = pixmap.scaled(self.ui.camera_la.width(), 1000, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.ui.camera_la.setPixmap(scaled_frame)
+            # self.ui.camera_la.setPixmap(pixmap)
 
     def update_tool_or_camera(self):
         if self.ui.tool_or_camera_tb.isChecked():
