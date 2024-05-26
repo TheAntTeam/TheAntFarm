@@ -2571,14 +2571,13 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.verticalLayout_13 = QVBoxLayout(self.frame)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        # self.verticalSpacer_7 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        # self.verticalLayout_13.addItem(self.verticalSpacer_7)
-
         self.camera_la = QLabel(self.frame)
         self.camera_la.setObjectName(u"camera_la")
-        sizePolicy10.setHeightForWidth(self.camera_la.sizePolicy().hasHeightForWidth())
-        self.camera_la.setSizePolicy(sizePolicy10)
+        sizePolicy13 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Expanding)
+        sizePolicy13.setHorizontalStretch(0)
+        sizePolicy13.setVerticalStretch(0)
+        sizePolicy13.setHeightForWidth(self.camera_la.sizePolicy().hasHeightForWidth())
+        self.camera_la.setSizePolicy(sizePolicy13)
         self.camera_la.setMinimumSize(QSize(200, 150))
         self.camera_la.setMaximumSize(QSize(480, 480))
 
@@ -3159,24 +3158,18 @@ class Ui_MainWindow(object):
 
         self.gridLayoutDirections_2.addLayout(self.droGridLayout_alignment, 0, 0, 1, 1)
 
-        self.verticalSpacer_12 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayoutDirections_2.addItem(self.verticalSpacer_12, 0, 1, 1, 1)
-
 
         self.horizontalLayout_23.addLayout(self.gridLayoutDirections_2)
 
-        self.verticalSpacer_9 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout_14.addItem(self.verticalSpacer_9)
 
         self.verticalLayout_14.addWidget(self.frame_2)
 
+        self.verticalSpacer_9 = QSpacerItem(20, 26, QSizePolicy.Minimum, QSizePolicy.Fixed)
+
+        self.verticalLayout_14.addItem(self.verticalSpacer_9)
+
+
         self.horizontalLayout_18.addLayout(self.verticalLayout_14)
-
-        self.verticalSpacer_7 = QSpacerItem(20, 30, QSizePolicy.Minimum, QSizePolicy.Fixed)
-
-        self.verticalLayout_14.addItem(self.verticalSpacer_7)
 
         self.verticalLayout_16 = QVBoxLayout()
         self.verticalLayout_16.setObjectName(u"verticalLayout_16")
@@ -3189,6 +3182,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_28.setObjectName(u"horizontalLayout_28")
         self.flip_horizontally_tb = QToolButton(self.align_tab)
         self.flip_horizontally_tb.setObjectName(u"flip_horizontally_tb")
+        self.flip_horizontally_tb.setMinimumSize(QSize(0, 20))
+        self.flip_horizontally_tb.setMaximumSize(QSize(16777215, 20))
         self.flip_horizontally_tb.setCheckable(True)
         self.flip_horizontally_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
 
@@ -3196,6 +3191,8 @@ class Ui_MainWindow(object):
 
         self.flip_vertically_tb = QToolButton(self.align_tab)
         self.flip_vertically_tb.setObjectName(u"flip_vertically_tb")
+        self.flip_vertically_tb.setMinimumSize(QSize(0, 20))
+        self.flip_vertically_tb.setMaximumSize(QSize(16777215, 20))
         self.flip_vertically_tb.setCheckable(True)
         self.flip_vertically_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
 
@@ -3207,6 +3204,8 @@ class Ui_MainWindow(object):
 
         self.load_align_layer_tb = QToolButton(self.align_tab)
         self.load_align_layer_tb.setObjectName(u"load_align_layer_tb")
+        self.load_align_layer_tb.setMinimumSize(QSize(0, 20))
+        self.load_align_layer_tb.setMaximumSize(QSize(16777215, 20))
 
         self.horizontalLayout_28.addWidget(self.load_align_layer_tb)
 
@@ -3238,7 +3237,6 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_29 = QHBoxLayout()
         self.horizontalLayout_29.setObjectName(u"horizontalLayout_29")
-
         self.add_point_tb = QToolButton(self.align_tab)
         self.add_point_tb.setObjectName(u"add_point_tb")
         self.add_point_tb.setMinimumSize(QSize(50, 50))
@@ -3264,8 +3262,9 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_29.addWidget(self.remove_point_tb)
 
-        self.horizontalSpacer_14a = QSpacerItem(20, 55, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.horizontalLayout_29.addItem(self.horizontalSpacer_14a)
+        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_29.addItem(self.horizontalSpacer_13)
 
         self.apply_alignment_tb = QToolButton(self.align_tab)
         self.apply_alignment_tb.setObjectName(u"apply_alignment_tb")
@@ -3298,20 +3297,31 @@ class Ui_MainWindow(object):
         self.horizontalLayout_30.setObjectName(u"horizontalLayout_30")
         self.label_17 = QLabel(self.align_tab)
         self.label_17.setObjectName(u"label_17")
+        sizePolicy3.setHeightForWidth(self.label_17.sizePolicy().hasHeightForWidth())
+        self.label_17.setSizePolicy(sizePolicy3)
+        self.label_17.setMinimumSize(QSize(0, 20))
+        self.label_17.setMaximumSize(QSize(16777215, 20))
         self.label_17.setAlignment(Qt.AlignCenter)
-        self.label_17.setFixedHeight(20)
 
         self.horizontalLayout_30.addWidget(self.label_17, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.horizontalSpacer_14b = QSpacerItem(10, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.horizontalLayout_30.addItem(self.horizontalSpacer_14b)
+        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_30.addItem(self.horizontalSpacer_15)
 
         self.label_18 = QLabel(self.align_tab)
         self.label_18.setObjectName(u"label_18")
+        sizePolicy14 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy14.setHorizontalStretch(0)
+        sizePolicy14.setVerticalStretch(0)
+        sizePolicy14.setHeightForWidth(self.label_18.sizePolicy().hasHeightForWidth())
+        self.label_18.setSizePolicy(sizePolicy14)
+        self.label_18.setMinimumSize(QSize(0, 20))
+        self.label_18.setMaximumSize(QSize(16777215, 20))
         self.label_18.setAlignment(Qt.AlignCenter)
-        self.label_18.setFixedHeight(20)
 
         self.horizontalLayout_30.addWidget(self.label_18, 0, Qt.AlignHCenter|Qt.AlignVCenter)
+
 
         self.verticalLayout_21.addLayout(self.horizontalLayout_30)
 
@@ -3591,11 +3601,8 @@ class Ui_MainWindow(object):
 
         self.z_feedrate_la = QLabel(self.jobs_machine_settings_tab)
         self.z_feedrate_la.setObjectName(u"z_feedrate_la")
-        sizePolicy13 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sizePolicy13.setHorizontalStretch(0)
-        sizePolicy13.setVerticalStretch(0)
-        sizePolicy13.setHeightForWidth(self.z_feedrate_la.sizePolicy().hasHeightForWidth())
-        self.z_feedrate_la.setSizePolicy(sizePolicy13)
+        sizePolicy14.setHeightForWidth(self.z_feedrate_la.sizePolicy().hasHeightForWidth())
+        self.z_feedrate_la.setSizePolicy(sizePolicy14)
         self.z_feedrate_la.setMinimumSize(QSize(130, 0))
         self.z_feedrate_la.setMaximumSize(QSize(130, 16777215))
         self.z_feedrate_la.setFont(font)
