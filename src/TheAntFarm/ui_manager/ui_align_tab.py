@@ -2,6 +2,7 @@ from PySide2.QtCore import Signal, Slot, QObject, Qt
 from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QLabel, QFileDialog, QHeaderView
 from collections import OrderedDict as Od
+from style_manager import StyleManager
 import logging
 import math
 import os
@@ -46,6 +47,8 @@ class UiAlignTab(QObject):
         self.align_active_s.connect(self.controlWo.set_align_is_active)
         self.align_apply_s.connect(self.controlWo.set_align_active)
         self.ui.apply_alignment_tb.clicked.connect(self.apply_align)
+        self.ui.apply_alignment_tb_2.clicked.connect(
+            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb_2.isChecked()))
         self.ui.add_point_tb.clicked.connect(self.request_new_point)
         self.ui.remove_point_tb.clicked.connect(self.remove_point)
         self.ui.contrast_slider.valueChanged.connect(self.update_threshold)
@@ -102,25 +105,36 @@ class UiAlignTab(QObject):
         for cam in camera_list:
             self.ui.camera_list_cb.addItem(str(cam))
 
-    def update_ui_alignment_applied(self, alignment_applied_flag=False):
+    def update_ui_alignment_applied(self, alignment_applied_flag, num_points):
         if alignment_applied_flag:
-            self.ui.led_la.set_led_color("blue")
-            self.ui.led_la.setToolTip("Alignment Applied!")
-            self.ui.alignment_led_la.set_led_color("blue")
-            self.ui.alignment_led_la.setToolTip("Alignment Applied!")
+            self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="blue",
+                                                                                        color="black"))
+            self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="blue",
+                                                                                          color="black"))
+        elif num_points >= 3:
+            self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="yellow",
+                                                                                        color="black"))
+            self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="yellow",
+                                                                                          color="black"))
         else:
-            self.ui.led_la.set_led_color("grey")
-            self.ui.led_la.setToolTip("Alignment not applied")
-            self.ui.alignment_led_la.set_led_color("grey")
-            self.ui.alignment_led_la.setToolTip("Alignment not applied")
+            self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)",
+                                                                                        color="white"))
+            self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)",
+                                                                                          color="white"))
+
+    def set_alignment_tb_check(self, alignment_tb_2_check_status):
+        self.ui.apply_alignment_tb.setChecked(alignment_tb_2_check_status)  # sync check status of the aliment tb
+        self.apply_align()
 
     def apply_align(self):
         alignment_points = list()
         num_rows = self.ui.align_points_tw.rowCount()
-        align_to_be_applied_flag = self.ui.apply_alignment_tb.isChecked() and (num_rows >= 2)
+        alignment_tb_check_status = self.ui.apply_alignment_tb.isChecked()
+        self.ui.apply_alignment_tb_2.setChecked(alignment_tb_check_status)  # sync check status of the aliment tb
+        align_to_be_applied_flag = alignment_tb_check_status and (num_rows >= 2)
         # Grab alignment points only if apply alignment button is checked
         if align_to_be_applied_flag:
-            self.update_ui_alignment_applied(True)
+            self.update_ui_alignment_applied(True, num_rows)
             for r in range(0, num_rows):
                 x_base = float(self.ui.align_points_tw.cellWidget(r, 0).text())
                 y_base = float(self.ui.align_points_tw.cellWidget(r, 1).text())
@@ -129,7 +143,7 @@ class UiAlignTab(QObject):
                 points_l = [(x_base, y_base), (x_offs, y_offs)]
                 alignment_points.append(points_l)
         else:
-            self.update_ui_alignment_applied(False)
+            self.update_ui_alignment_applied(False, num_rows)
 
         self.align_apply_s.emit(align_to_be_applied_flag, alignment_points)
 
@@ -143,11 +157,6 @@ class UiAlignTab(QObject):
 
     def request_new_point(self):
         selection_centroid = self.vis_align_layer.get_selected_centroid()
-        offset_info = (0, 0)  # todo: get this from the alignment settings
-        # if self.camera_pos_selected:
-        #     ox = self.controlWo.settings.machine_settings.tool_camera_offset_x
-        #     oy = self.controlWo.settings.machine_settings.tool_camera_offset_y
-        #     offset_info = (ox, oy)  # todo: get camera offset from controller worker through signal (thread safe)
 
         self.request_new_alignment_point_coords_s.emit(selection_centroid, self.camera_pos_selected)
 
