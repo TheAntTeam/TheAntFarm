@@ -114,10 +114,16 @@ class StyleManager:
         return radio_btn_ss
 
     @staticmethod
-    def set_button_color(bg_color = "dark_gray", color = "white"):
+    def set_button_color(bg_color="dark_gray", color="white"):
         push_btn_ss = "QPushButton { background-color: " + bg_color + ";color: " + color + \
                       "; border: : 3px solid; font-weight: bold;}"
         return push_btn_ss
+
+    @staticmethod
+    def set_tool_button_color(bg_color="dark_gray", color="white"):
+        tool_btn_ss = "QToolButton { background-color: " + bg_color + ";color: " + color + \
+                      "; border: : 3px solid; font-weight: bold;}"
+        return tool_btn_ss
 
 
 if __name__ == "__main__":

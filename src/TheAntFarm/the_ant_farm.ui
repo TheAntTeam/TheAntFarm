@@ -4748,24 +4748,23 @@
                </widget>
               </item>
               <item>
-               <widget class="QLedLabel" name="alignment_led_la">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
+               <widget class="QToolButton" name="apply_alignment_tb_2">
                 <property name="minimumSize">
                  <size>
                   <width>30</width>
                   <height>30</height>
                  </size>
                 </property>
-                <property name="toolTip">
-                 <string>Alignment not applied</string>
-                </property>
                 <property name="text">
-                 <string/>
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="app_resources.qrc">
+                  <normaloff>:/resources/resources/icons/black_apply_align.svg</normaloff>
+                  <normalon>:/resources/resources/icons/black_alignment_applied.svg</normalon>:/resources/resources/icons/black_apply_align.svg</iconset>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -7492,31 +7491,6 @@
                     </property>
                     <property name="toolButtonStyle">
                      <enum>Qt::ToolButtonIconOnly</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLedLabel" name="led_la">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>50</width>
-                      <height>50</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Alignment not applied</string>
-                    </property>
-                    <property name="autoFillBackground">
-                     <bool>true</bool>
-                    </property>
-                    <property name="text">
-                     <string/>
                     </property>
                    </widget>
                   </item>
