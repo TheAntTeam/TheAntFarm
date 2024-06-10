@@ -113,7 +113,7 @@ class UiAlignTab(QObject):
                                                                                         color="black"))
             self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="blue",
                                                                                           color="black"))
-        elif num_points < self.MIN_ALIGNMENT_POINTS_NUMBER:
+        elif num_points >= self.MIN_ALIGNMENT_POINTS_NUMBER:
             self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="yellow",
                                                                                         color="black"))
             self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="yellow",
