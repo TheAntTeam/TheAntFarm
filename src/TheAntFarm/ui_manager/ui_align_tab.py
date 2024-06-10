@@ -19,6 +19,8 @@ class UiAlignTab(QObject):
     request_new_alignment_point_coords_s = Signal(list, bool)
     remove_point_rows = Signal(list)
 
+    MIN_ALIGNMENT_POINTS_NUMBER = 4
+
     def __init__(self, main_win, control_worker, vis_align_layer, app_settings):
         super(UiAlignTab, self).__init__()
         self.main_win = main_win
@@ -111,7 +113,7 @@ class UiAlignTab(QObject):
                                                                                         color="black"))
             self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="blue",
                                                                                           color="black"))
-        elif num_points >= 3:
+        elif num_points < self.MIN_ALIGNMENT_POINTS_NUMBER:
             self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="yellow",
                                                                                         color="black"))
             self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="yellow",
@@ -131,7 +133,7 @@ class UiAlignTab(QObject):
         num_rows = self.ui.align_points_tw.rowCount()
         alignment_tb_check_status = self.ui.apply_alignment_tb.isChecked()
         self.ui.apply_alignment_tb_2.setChecked(alignment_tb_check_status)  # sync check status of the aliment tb
-        align_to_be_applied_flag = alignment_tb_check_status and (num_rows >= 2)
+        align_to_be_applied_flag = alignment_tb_check_status and (num_rows >= self.MIN_ALIGNMENT_POINTS_NUMBER)
         # Grab alignment points only if apply alignment button is checked
         if align_to_be_applied_flag:
             self.update_ui_alignment_applied(True, num_rows)
