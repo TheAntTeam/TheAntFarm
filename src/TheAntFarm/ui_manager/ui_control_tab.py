@@ -875,44 +875,66 @@ class UiControlTab(QObject):
         self.ui.xy_step_val_dsb_2.setValue(new_xy_value)
 
     def handle_xy_plus_1(self, dsb):
-        new_xy_value = dsb.value() + dsb.singleStep()
-        self.update_all_xy_dsb_value(new_xy_value)
+        new_xy_value = round(dsb.value() + dsb.singleStep(), 2)
+        if new_xy_value <= dsb.maximum():
+            self.update_all_xy_dsb_value(new_xy_value)
+        else:
+            logger.warning(f"Cannot set value higher than maximum: {dsb.maximum()}")
 
     def handle_xy_minus_1(self, dsb):
-        new_xy_value = dsb.value() - dsb.singleStep()
-        self.update_all_xy_dsb_value(new_xy_value)
+        new_xy_value = round(dsb.value() - dsb.singleStep(), 2)
+        if new_xy_value >= dsb.minimum():
+            self.update_all_xy_dsb_value(new_xy_value)
+        else:
+            logger.warning(f"Cannot set value less than minimum: {dsb.minimum()}")
 
     def handle_xy_div_10(self, dsb):
         xy_value = dsb.value()
-        new_xy_value = round(xy_value/10.0, 2)
-        self.update_all_xy_dsb_value(new_xy_value)
+        new_xy_value = round(xy_value / 10.0, 2)
+        if new_xy_value >= dsb.minimum():
+            self.update_all_xy_dsb_value(new_xy_value)
+        else:
+            logger.warning(f"Cannot set value less than minimum: {dsb.minimum()}")
 
     def handle_xy_mul_10(self, dsb):
         xy_value = dsb.value()
-        new_xy_value = xy_value*10.0
-        self.update_all_xy_dsb_value(new_xy_value)
+        new_xy_value = round(xy_value * 10.0, 2)
+        if new_xy_value <= dsb.maximum():
+            self.update_all_xy_dsb_value(new_xy_value)
+        else:
+            logger.warning(f"Cannot set value higher than maximum: {dsb.maximum()}")
 
     def update_all_z_dsb_value(self, new_z_value):
         self.ui.z_step_val_dsb.setValue(new_z_value)
         self.ui.z_step_val_dsb_2.setValue(new_z_value)
 
     def handle_z_plus_1(self, dsb):
-        new_z_value = dsb.value() + dsb.singleStep()
-        self.update_all_z_dsb_value(new_z_value)
+        new_z_value = round(dsb.value() + dsb.singleStep(), 2)
+        if new_z_value <= dsb.maximum():
+            self.update_all_z_dsb_value(new_z_value)
+        else:
+            logger.warning(f"Cannot set value higher than maximum: {dsb.maximum()}")
 
     def handle_z_minus_1(self, dsb):
-        new_z_value = dsb.value() - dsb.singleStep()
-        self.update_all_z_dsb_value(new_z_value)
+        new_z_value = round(dsb.value() - dsb.singleStep(), 2)
+        if new_z_value >= dsb.minimum():
+            self.update_all_z_dsb_value(new_z_value)
+        else:
+            logger.warning(f"Cannot set value less than minimum: {dsb.minimum()}")
 
     def handle_z_div_10(self, dsb):
-        z_value = dsb.value()
-        new_z_value = round(z_value/10.0, 2)
-        self.update_all_z_dsb_value(new_z_value)
+        new_z_value = round(dsb.value() / 10.0, 2)
+        if new_z_value >= dsb.minimum():
+            self.update_all_z_dsb_value(new_z_value)
+        else:
+            logger.warning(f"Cannot set value less than minimum: {dsb.minimum()}")
 
     def handle_z_mul_10(self, dsb):
-        z_value = dsb.value()
-        new_z_value = z_value*10.0
-        self.update_all_z_dsb_value(new_z_value)
+        new_z_value = round(dsb.value() * 10.0, 2)
+        if new_z_value <= dsb.maximum():
+            self.update_all_z_dsb_value(new_z_value)
+        else:
+            logger.warning(f"Cannot set value higher than maximum: {dsb.maximum()}")
 
     def handle_z_min_changed(self):
         self.machine_settings.probe_z_min = self.ui.z_min_dsb.value()
