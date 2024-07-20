@@ -5653,7 +5653,7 @@
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_13">
                  <item>
-                  <widget class="QLabel" name="camera_la">
+                  <widget class="QCameraLabel" name="camera_la">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
                      <horstretch>0</horstretch>
@@ -5692,27 +5692,20 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_15">
-                     <property name="text">
-                      <string>Contrast</string>
-                     </property>
-                    </widget>
-                   </item>
                    <item row="0" column="1">
                     <widget class="QComboBox" name="camera_list_cb"/>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QSlider" name="contrast_slider">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                    </widget>
                    </item>
                    <item row="0" column="0">
                     <widget class="QLabel" name="label_16">
                      <property name="text">
                       <string>Camera Selection</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="camera_zoom_la">
+                     <property name="text">
+                      <string>Zoom</string>
                      </property>
                     </widget>
                    </item>
@@ -5722,6 +5715,9 @@
                       <string>...</string>
                      </property>
                     </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QComboBox" name="camera_zoom_cb"/>
                    </item>
                   </layout>
                  </item>
@@ -9994,6 +9990,11 @@
    <class>QLedLabel</class>
    <extends>QLabel</extends>
    <header location="global">qledlabel</header>
+  </customwidget>
+  <customwidget>
+   <class>QCameraLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">qcamera_label.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
