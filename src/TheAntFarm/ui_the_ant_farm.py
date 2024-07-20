@@ -15,6 +15,7 @@ from PySide2.QtWidgets import *
 from vispy_qt_widget import VispyCanvas
 from combobox_filter_enter import ComboBoxFilterEnter
 from qledlabel import QLedLabel
+from qcamera_label import QCameraLabel
 
 import app_resources_rc
 
@@ -2574,7 +2575,7 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.verticalLayout_13 = QVBoxLayout(self.frame)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
-        self.camera_la = QLabel(self.frame)
+        self.camera_la = QCameraLabel(self.frame)
         self.camera_la.setObjectName(u"camera_la")
         sizePolicy13 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Expanding)
         sizePolicy13.setHorizontalStretch(0)
@@ -2595,31 +2596,30 @@ class Ui_MainWindow(object):
 
         self.gridLayout_28.addWidget(self.tool_or_camera_tb, 2, 1, 1, 1, Qt.AlignHCenter)
 
-        self.label_15 = QLabel(self.frame)
-        self.label_15.setObjectName(u"label_15")
-
-        self.gridLayout_28.addWidget(self.label_15, 1, 0, 1, 1)
-
         self.camera_list_cb = QComboBox(self.frame)
         self.camera_list_cb.setObjectName(u"camera_list_cb")
 
         self.gridLayout_28.addWidget(self.camera_list_cb, 0, 1, 1, 1)
-
-        self.contrast_slider = QSlider(self.frame)
-        self.contrast_slider.setObjectName(u"contrast_slider")
-        self.contrast_slider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout_28.addWidget(self.contrast_slider, 1, 1, 1, 1)
 
         self.label_16 = QLabel(self.frame)
         self.label_16.setObjectName(u"label_16")
 
         self.gridLayout_28.addWidget(self.label_16, 0, 0, 1, 1)
 
+        self.camera_zoom_la = QLabel(self.frame)
+        self.camera_zoom_la.setObjectName(u"camera_zoom_la")
+
+        self.gridLayout_28.addWidget(self.camera_zoom_la, 1, 0, 1, 1)
+
         self.camera_list_pb = QToolButton(self.frame)
         self.camera_list_pb.setObjectName(u"camera_list_pb")
 
         self.gridLayout_28.addWidget(self.camera_list_pb, 0, 2, 1, 1)
+
+        self.camera_zoom_cb = QComboBox(self.frame)
+        self.camera_zoom_cb.setObjectName(u"camera_zoom_cb")
+
+        self.gridLayout_28.addWidget(self.camera_zoom_cb, 1, 1, 1, 1)
 
 
         self.verticalLayout_13.addLayout(self.gridLayout_28)
@@ -4264,7 +4264,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.central_widget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1160, 26))
+        self.menubar.setGeometry(QRect(0, 0, 1160, 21))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuFile.setFont(font)
@@ -4684,8 +4684,8 @@ class Ui_MainWindow(object):
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.control_tab), QCoreApplication.translate("MainWindow", u"CONTROL", None))
         self.camera_la.setText("")
         self.tool_or_camera_tb.setText(QCoreApplication.translate("MainWindow", u"TOOL POSITION", None))
-        self.label_15.setText(QCoreApplication.translate("MainWindow", u"Contrast", None))
         self.label_16.setText(QCoreApplication.translate("MainWindow", u"Camera Selection", None))
+        self.camera_zoom_la.setText(QCoreApplication.translate("MainWindow", u"Zoom", None))
         self.camera_list_pb.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.z_plus_pb_2.setText(QCoreApplication.translate("MainWindow", u"Z+", None))
         self.z_minus_pb_2.setText(QCoreApplication.translate("MainWindow", u"Z-", None))

@@ -3,6 +3,7 @@ from PySide2.QtGui import QPixmap
 from PySide2.QtWidgets import QLabel, QFileDialog, QHeaderView
 from collections import OrderedDict as Od
 from style_manager import StyleManager
+from qcamera_label import QCameraLabel
 import logging
 import math
 import os
@@ -53,7 +54,6 @@ class UiAlignTab(QObject):
             lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb_2.isChecked()))
         self.ui.add_point_tb.clicked.connect(self.request_new_point)
         self.ui.remove_point_tb.clicked.connect(self.remove_point)
-        self.ui.contrast_slider.valueChanged.connect(self.update_threshold)
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
         self.ui.load_align_layer_tb.clicked.connect(
             lambda: self.load_align_file("Load Align File", align_extensions))
@@ -73,6 +73,22 @@ class UiAlignTab(QObject):
         self.controlWo.refresh_camera_list()
 
         self.controlWo.update_align_points_s.connect(self.update_alignment_points_list)
+        self.camera_zoom_cb_init()
+
+        self.ui.camera_la.mouse_wheel_up_or_down_s.connect(self.update_camera_zoom)
+
+    def camera_zoom_cb_init(self):
+        self.ui.camera_zoom_cb.clear()
+        self.ui.camera_zoom_cb.addItems(["1x", "2x", "3x", "4x", "5x"])
+        self.ui.camera_zoom_cb.setCurrentIndex(0)
+
+    @Slot(int)
+    def update_camera_zoom(self, increment):
+        zoom_cb_index = self.ui.camera_zoom_cb.currentIndex()
+        zoom_cb_max = self.ui.camera_zoom_cb.count()
+        new_cb_index = zoom_cb_index + increment
+        if 0 <= new_cb_index < zoom_cb_max:
+            self.ui.camera_zoom_cb.setCurrentIndex(new_cb_index)
 
     def remove_point(self):
         sel_model = self.ui.align_points_tw.selectionModel()
@@ -97,9 +113,6 @@ class UiAlignTab(QObject):
 
     def check_align_is_active(self):
         self.align_active_s.emit(self.ui.main_tab_widget.currentWidget().objectName() == "align_tab")
-
-    def update_threshold(self):
-        self.update_threshold_s.emit(self.ui.contrast_slider.value())
 
     @Slot(list)
     def update_camera_list(self, camera_list):
