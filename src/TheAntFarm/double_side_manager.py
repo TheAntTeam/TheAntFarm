@@ -48,14 +48,17 @@ class DoubleSideManager:
         return frame
 
     @staticmethod
-    def detect_holes(frame_in, thr1=125):
+    def detect_holes(frame_in, thr1=125, zoom_f=2):
 
-        zoom_f = 2
         width = frame_in.shape[1]
         height = frame_in.shape[0]
-        crop_x = int(width / (2 * zoom_f))
-        crop_y = int(height / (2 * zoom_f))
-        cropped = frame_in[crop_y:3*crop_y, crop_x:3*crop_x]
+
+        width_z = width/zoom_f
+        height_z = height/zoom_f
+
+        crop_x = int((width - width_z)/2)
+        crop_y = int((height - height_z)/2)
+        cropped = frame_in[crop_y:height-crop_y, crop_x:width-crop_x]
         frame = cv2.resize(cropped, None, fx=zoom_f, fy=zoom_f)
         # frame[:, :, 0] = 0
         # frame[:, :, 2] = 0

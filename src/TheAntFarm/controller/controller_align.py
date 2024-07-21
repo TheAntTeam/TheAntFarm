@@ -84,11 +84,11 @@ class AlignController(QObject):
     def update_camera_selected(self, index):
         return self.double_side_manager.update_camera(index)
 
-    def camera_new_frame(self):
+    def camera_new_frame(self, zoom=1):
         frame = self.double_side_manager.get_webcam_frame()
         image = None
         if frame is not None:
-            frame = self.double_side_manager.detect_holes(frame, self.threshold_value)
+            frame = self.double_side_manager.detect_holes(frame, self.threshold_value, zoom_f=zoom)
             image = qimage2ndarray.array2qimage(frame)
         return image
 
