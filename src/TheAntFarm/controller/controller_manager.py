@@ -105,6 +105,8 @@ class ControllerWorker(QObject):
 
         self.send_soft_reset = True
 
+        self.camera_zoom = 1
+
     @Slot(bool)
     def on_controller_connection(self, connected):
         self.connected = connected
@@ -572,7 +574,7 @@ class ControllerWorker(QObject):
 
     def on_camera_timeout(self):
         if self.align_active:
-            image = self.align_controller.camera_new_frame()
+            image = self.align_controller.camera_new_frame(self.camera_zoom)
             if image:
                 self.update_camera_image_s.emit(QPixmap.fromImage(image))
             else:
@@ -585,6 +587,10 @@ class ControllerWorker(QObject):
     def update_camera_selected(self, index):
         # Take in account that index 0 indicates NO CAMERA
         self.align_controller.update_camera_selected(index-1)
+
+    @Slot(int)
+    def update_camera_zoom_value(self, zoom_value):
+        self.camera_zoom = zoom_value
 
     @Slot(bool)
     def set_align_is_active(self, align_is_active):

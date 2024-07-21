@@ -19,6 +19,7 @@ class UiAlignTab(QObject):
     update_threshold_s = Signal(int)
     request_new_alignment_point_coords_s = Signal(list, bool)
     remove_point_rows = Signal(list)
+    update_zoom_value_s = Signal(int)
 
     MIN_ALIGNMENT_POINTS_NUMBER = 4
 
@@ -76,6 +77,7 @@ class UiAlignTab(QObject):
         self.camera_zoom_cb_init()
 
         self.ui.camera_la.mouse_wheel_up_or_down_s.connect(self.update_camera_zoom)
+        self.update_zoom_value_s.connect(self.controlWo.update_camera_zoom_value)
 
     def camera_zoom_cb_init(self):
         self.ui.camera_zoom_cb.clear()
@@ -89,6 +91,8 @@ class UiAlignTab(QObject):
         new_cb_index = zoom_cb_index + increment
         if 0 <= new_cb_index < zoom_cb_max:
             self.ui.camera_zoom_cb.setCurrentIndex(new_cb_index)
+            current_zoom = int(self.ui.camera_zoom_cb.currentText()[:-1])
+            self.update_zoom_value_s.emit(current_zoom)
 
     def remove_point(self):
         sel_model = self.ui.align_points_tw.selectionModel()
