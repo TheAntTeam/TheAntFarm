@@ -50,7 +50,9 @@ class UiAlignTab(QObject):
         self.ui.main_tab_widget.currentChanged.connect(self.check_align_is_active)
         self.align_active_s.connect(self.controlWo.set_align_is_active)
         self.align_apply_s.connect(self.controlWo.set_align_active)
-        self.ui.apply_alignment_tb.clicked.connect(self.apply_align)
+        # self.ui.apply_alignment_tb.clicked.connect(self.apply_align)
+        self.ui.apply_alignment_tb.clicked.connect(
+            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb.isChecked()))
         self.ui.apply_alignment_tb_2.clicked.connect(
             lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb_2.isChecked()))
         self.ui.add_point_tb.clicked.connect(self.request_new_point)
@@ -141,15 +143,24 @@ class UiAlignTab(QObject):
             self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)",
                                                                                           color="white"))
 
-    def set_alignment_tb_check(self, alignment_tb_2_check_status):
-        self.ui.apply_alignment_tb.setChecked(alignment_tb_2_check_status)  # sync check status of the aliment tb
+    def set_alignment_tb_check(self, alignment_check_status):
+        self.ui.apply_alignment_tb.clicked.disconnect()
+        self.ui.apply_alignment_tb_2.clicked.disconnect()
+
+        self.ui.apply_alignment_tb.setChecked(alignment_check_status)  # sync check status of the aliment tb
+        self.ui.apply_alignment_tb_2.setChecked(alignment_check_status)  # sync check status of the aliment tb
+
+        self.ui.apply_alignment_tb.clicked.connect(
+            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb.isChecked()))
+        self.ui.apply_alignment_tb_2.clicked.connect(
+            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb_2.isChecked()))
+
         self.apply_align()
 
     def apply_align(self):
         alignment_points = list()
         num_rows = self.ui.align_points_tw.rowCount()
         alignment_tb_check_status = self.ui.apply_alignment_tb.isChecked()
-        self.ui.apply_alignment_tb_2.setChecked(alignment_tb_check_status)  # sync check status of the aliment tb
         align_to_be_applied_flag = alignment_tb_check_status and (num_rows >= self.MIN_ALIGNMENT_POINTS_NUMBER)
         # Grab alignment points only if apply alignment button is checked
         if align_to_be_applied_flag:
@@ -163,7 +174,6 @@ class UiAlignTab(QObject):
                 alignment_points.append(points_l)
         else:
             self.update_ui_alignment_applied(False, num_rows)
-
         self.align_apply_s.emit(align_to_be_applied_flag, alignment_points)
 
     @staticmethod

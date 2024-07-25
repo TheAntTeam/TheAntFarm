@@ -606,7 +606,10 @@ class GcodePoint:
 
     def copy(self):
         cnp = GcodePoint()
-        cnp.coords = self.coords.copy()
+        if isinstance(self.coords, tuple):
+            cnp.coords = list(self.coords).copy()
+        else:
+            cnp.coords = self.coords.copy()
         cnp.line = self.line
         cnp.sub_line = self.sub_line
         cnp.type = self.type
@@ -870,6 +873,7 @@ class GCodeAlignment:
         print("GCode Alignment Start")
         align_flag = True
         if self.gc is not None and self.am.is_sampled_point_loaded():
+            print("Sampled Point Loaded")
             coords = [p.coords.copy() for p in self.gc.original_vectors]
             new_coords = self.am.compute_points_transform(coords)
             avl = self.gc.get_gcode_original_vectors_copy()
@@ -878,9 +882,11 @@ class GCodeAlignment:
             self.gc.aligned_vectors = avl
             align_flag = True
         else:
+            print("Sampled Point NOT Loaded")
             self.gc.aligned_vectors = []
             align_flag = False
         print("GCode Alignment Stop")
+        print(align_flag)
         return align_flag
 
 

@@ -58,6 +58,7 @@ class ControlController(QObject):
     def set_align_data(self, align_data):
         if isinstance(align_data, list) or isinstance(align_data, tuple):
             self.align_data = align_data
+            print("Applied Alignment DATA")
 
     def get_align_data(self):
         print("GET ALIGN DATA")
