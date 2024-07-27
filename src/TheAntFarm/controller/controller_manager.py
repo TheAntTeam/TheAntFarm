@@ -405,6 +405,8 @@ class ControllerWorker(QObject):
                 redraw_align = self.control_controller.remove_alignment(gcode_path)
 
             if abl_val != [] and self.abl_apply_active:
+            # print("FORCE FAKE ABL")
+            # if self.abl_apply_active:
                 logger.debug("Apply ABL")
                 self.control_controller.apply_abl(gcode_path)
                 redraw_abl = True
@@ -414,6 +416,7 @@ class ControllerWorker(QObject):
             redraw = redraw_abl or redraw_align
             logger.debug("ABL Done")
             (tag, v) = self.control_controller.get_gcode_tag_and_v(gcode_path)
+            logger.debug("Update Gcode View: " + str(redraw))
             self.update_gcode_s.emit(tag, v, visible, redraw)
         else:
             logger.warning("No GCode Data Available. Please select a valid gcode file.")

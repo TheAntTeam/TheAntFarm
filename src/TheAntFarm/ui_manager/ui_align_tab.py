@@ -164,7 +164,9 @@ class UiAlignTab(QObject):
         alignment_points = list()
         num_rows = self.ui.align_points_tw.rowCount()
         alignment_tb_check_status = self.ui.apply_alignment_tb.isChecked()
-        align_to_be_applied_flag = alignment_tb_check_status and (num_rows >= self.MIN_ALIGNMENT_POINTS_NUMBER)
+        print("alignment_tb_check_status:", alignment_tb_check_status)
+        # align_to_be_applied_flag = alignment_tb_check_status and (num_rows >= self.MIN_ALIGNMENT_POINTS_NUMBER)
+        align_to_be_applied_flag = alignment_tb_check_status
         # Grab alignment points only if apply alignment button is checked
         if align_to_be_applied_flag:
             self.update_ui_alignment_applied(True, num_rows)

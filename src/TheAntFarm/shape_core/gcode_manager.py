@@ -444,11 +444,12 @@ class GCoder:
         gc += "\n"
         self.gcode.append(gc)
 
-    def gcode_comment(self, txt):
+    @staticmethod
+    def gcode_comment(txt):
         c = ""
         lines = txt.split('\n')
-        for l in lines:
-            c += "(" + l + ")\n"
+        for ln in lines:
+            c += "(" + ln + ")\n"
         return c
 
     def insert_comment(self, txt):
@@ -646,6 +647,7 @@ class GCode:
         self.aligned_vectors = []
         self.modified_vectors = []
         self.bb = None
+        self.aligned_bb = None
 
     def get_gcode_original_vectors_copy(self):
         print("GCODEX")
@@ -654,6 +656,25 @@ class GCode:
             nwp = p.copy()
             govc.append(nwp)
         return govc
+
+    def get_bbox(self, type=None):
+        if type is None:
+            if self.aligned_vectors:
+                return self.aligned_bb
+            else:
+                return self.bb
+        elif type == "original":
+            return self.bb
+        elif type == "modified":
+            if self.aligned_vectors:
+                return self.aligned_bb
+            else:
+                return self.bb
+        elif type == "aligned":
+            if self.aligned_vectors:
+                return self.aligned_bb
+            else:
+                return self.bb
 
 
 class GCodeParser:
@@ -858,7 +879,7 @@ class GCodeParser:
                 return self.gc.original_vectors
 
     def get_bbox(self):
-        return self.gc.bb
+        return self.gc.get_bbox()
 
 
 class GCodeAlignment:
@@ -877,13 +898,22 @@ class GCodeAlignment:
             coords = [p.coords.copy() for p in self.gc.original_vectors]
             new_coords = self.am.compute_points_transform(coords)
             avl = self.gc.get_gcode_original_vectors_copy()
+            bb_max = [-1e6, -1e6, -1e6]
+            bb_min = [1e6, 1e6, 1e6]
             for i, p in enumerate(avl):
-                p.coords = new_coords[i]
+                nc = np.array(new_coords[i])
+                for z, e in enumerate(nc):
+                    bb_max[z] = max(bb_max[z], nc[z])
+                    bb_min[z] = min(bb_min[z], nc[z])
+                p.coords = nc
+
             self.gc.aligned_vectors = avl
+            self.gc.aligned_bb = tuple(bb_min + bb_max)
             align_flag = True
         else:
             print("Sampled Point NOT Loaded")
             self.gc.aligned_vectors = []
+            self.gc.aligned_bb = None
             align_flag = False
         print("GCode Alignment Stop")
         print(align_flag)
@@ -922,7 +952,7 @@ class GCodeLeveler:
     def get_dummy_grid_data(self):
         grid_steps = 10
         if self.gc is not None:
-            bb = self.gc.bb
+            bb = self.gc.get_bbox()
             if bb is not None:
                 x_min = bb[0]
                 y_min = bb[1]
@@ -987,8 +1017,10 @@ class GCodeLeveler:
             print("Min Step ", min_step)
 
             if self.gc.aligned_vectors:
+                print("Apply ABL: Loaded Aligned Vectors")
                 data = self.gc.aligned_vectors
             else:
+                print("Apply ABL: Loaded Originals Vectors")
                 data = self.gc.original_vectors
 
             for p in data:
