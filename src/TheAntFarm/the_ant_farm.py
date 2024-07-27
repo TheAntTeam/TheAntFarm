@@ -90,6 +90,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui_manager.save_all_settings()
         print("Settings Saved")
         print("Stopping Threads")
+        self.ui.camera_list_cb.setCurrentIndex(0)  # Select NO CAMERA before closing
         self.serialWo.close_port()
         self.serial_thread.quit()
         self.control_thread.quit()
