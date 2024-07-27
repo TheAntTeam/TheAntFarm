@@ -36,6 +36,8 @@ class MachineSettingsHandler:
     TOOL_CAMERA_OFFSET_X_DEFAULT = 0.0
     TOOL_CAMERA_OFFSET_Y_DEFAULT = 0.0
 
+    CAMERA_SELECTED_OR_TOOL_DEFAULT = False  # Default selection should be tool, camera could be absent
+
     def __init__(self, config_folder, main_win):
         self.machine_config_path = os.path.normpath(os.path.join(config_folder, 'machine_config.ini'))
         self.machine_settings = configparser.ConfigParser()
@@ -72,6 +74,8 @@ class MachineSettingsHandler:
         self.alignment_drill_diameter = self.ALIGNMENT_DRILL_DIAMETER_DEFAULT
         self.tool_camera_offset_x = self.TOOL_CAMERA_OFFSET_X_DEFAULT
         self.tool_camera_offset_y = self.TOOL_CAMERA_OFFSET_Y_DEFAULT
+
+        self.camera_selected_or_tool = self.CAMERA_SELECTED_OR_TOOL_DEFAULT
 
     def read_all_machine_settings(self):
         """ Read all machine settings from ini files """
@@ -132,6 +136,9 @@ class MachineSettingsHandler:
             self.tool_camera_offset_y = machine_general.getfloat("tool_camera_offset_y",
                                                                  self.TOOL_CAMERA_OFFSET_Y_DEFAULT)
 
+            self.camera_selected_or_tool = machine_general.getboolean("camera_selected_or_tool",
+                                                                      self.CAMERA_SELECTED_OR_TOOL_DEFAULT)
+
     def write_all_machine_settings(self):
         """ Write all machine settings to ini files """
         self.machine_settings["DEFAULT"] = {"probe_z_min": self.PROBE_Z_MIN_DEFAULT,
@@ -160,7 +167,8 @@ class MachineSettingsHandler:
                                             "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT,
                                             "alignment_drill_diameter": self.ALIGNMENT_DRILL_DIAMETER_DEFAULT,
                                             "tool_camera_offset_x": self.TOOL_CAMERA_OFFSET_X_DEFAULT,
-                                            "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT}
+                                            "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT,
+                                            "camera_selected_or_tool": self.CAMERA_SELECTED_OR_TOOL_DEFAULT}
 
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
@@ -193,6 +201,7 @@ class MachineSettingsHandler:
         machine_general["alignment_drill_diameter"] = str(self.alignment_drill_diameter)
         machine_general["tool_camera_offset_x"] = str(self.tool_camera_offset_x)
         machine_general["tool_camera_offset_y"] = str(self.tool_camera_offset_y)
+        machine_general["camera_selected_or_tool"] = str(self.camera_selected_or_tool)
 
         # Write machine ini file #
         with open(self.machine_config_path, 'w') as configfile:
@@ -226,7 +235,8 @@ class MachineSettingsHandler:
                                             "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT,
                                             "alignment_drill_diameter": self.ALIGNMENT_DRILL_DIAMETER_DEFAULT,
                                             "tool_camera_offset_x": self.TOOL_CAMERA_OFFSET_X_DEFAULT,
-                                            "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT}
+                                            "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT,
+                                            "camera_selected_or_tool": self.CAMERA_SELECTED_OR_TOOL_DEFAULT}
 
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
@@ -258,6 +268,7 @@ class MachineSettingsHandler:
         machine_general["alignment_drill_diameter"] = str(self.ALIGNMENT_DRILL_DIAMETER_DEFAULT)
         machine_general["tool_camera_offset_x"] = str(self.TOOL_CAMERA_OFFSET_X_DEFAULT)
         machine_general["tool_camera_offset_y"] = str(self.TOOL_CAMERA_OFFSET_Y_DEFAULT)
+        machine_general["camera_selected_or_tool"] = str(self.CAMERA_SELECTED_OR_TOOL_DEFAULT)
 
         # Write machine ini file #
         with open(self.machine_config_path, 'w') as configfile:

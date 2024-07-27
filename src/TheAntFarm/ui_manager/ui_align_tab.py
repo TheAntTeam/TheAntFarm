@@ -23,17 +23,16 @@ class UiAlignTab(QObject):
 
     MIN_ALIGNMENT_POINTS_NUMBER = 4
 
-    def __init__(self, main_win, control_worker, vis_align_layer, app_settings):
+    def __init__(self, main_win, control_worker, vis_align_layer, settings):
         super(UiAlignTab, self).__init__()
         self.main_win = main_win
         self.ui = self.main_win.ui
         self.controlWo = control_worker
         self.vis_align_layer = vis_align_layer
-        self.app_settings = app_settings
+        self.app_settings = settings.app_settings
+        self.machine_settings = settings.machine_settings
 
         self.layer_colors = self.app_settings.layer_color
-
-        self.camera_pos_selected = False
 
         align_extensions = "Excellon (*.xln *.XLN *.drl *.DRL)"
 
@@ -67,6 +66,8 @@ class UiAlignTab(QObject):
         self.request_new_alignment_point_coords_s.connect(self.controlWo.add_new_align_point)
         self.remove_point_rows.connect(self.controlWo.remove_align_points)
 
+        self.ui.tool_or_camera_tb.setChecked(self.machine_settings.camera_selected_or_tool)
+        self.update_tool_or_camera()
         self.ui.tool_or_camera_tb.clicked.connect(self.update_tool_or_camera)
 
         self.controlWo.update_camera_image_s.connect(self.update_camera_image)
@@ -112,10 +113,10 @@ class UiAlignTab(QObject):
     def update_tool_or_camera(self):
         if self.ui.tool_or_camera_tb.isChecked():
             self.ui.tool_or_camera_tb.setText("CAMERA_POSITION")
-            self.camera_pos_selected = True
+            self.machine_settings.camera_selected_or_tool = True
         else:
             self.ui.tool_or_camera_tb.setText("TOOL_POSITION")
-            self.camera_pos_selected = False
+            self.machine_settings.camera_selected_or_tool = False
 
     def check_align_is_active(self):
         self.align_active_s.emit(self.ui.main_tab_widget.currentWidget().objectName() == "align_tab")
@@ -187,7 +188,7 @@ class UiAlignTab(QObject):
     def request_new_point(self):
         selection_centroid = self.vis_align_layer.get_selected_centroid()
 
-        self.request_new_alignment_point_coords_s.emit(selection_centroid, self.camera_pos_selected)
+        self.request_new_alignment_point_coords_s.emit(selection_centroid, self.machine_settings.camera_selected_or_tool)
 
     @Slot(list)
     def update_alignment_points_list(self, alignment_coords_l):
