@@ -34,6 +34,10 @@ class AppSettingsHandler:
     NC_TOP_LAYER_COLOR_DEFAULT = "#800080"
     NC_BOTTOM_LAYER_COLOR_DEFAULT = "#A52A2A"
 
+    CAMERA_SELECTED_OR_TOOL_DEFAULT = False  # Default selection should be tool, camera could be absent
+    FLIP_HORIZONTAL_SELECTED_DEFAULT = False
+    FLIP_VERTICAL_SELECTED_DEFAULT = False
+
     def __init__(self, config_folder, main_win):
 
         if os.path.isdir(main_win.local_path):
@@ -85,6 +89,10 @@ class AppSettingsHandler:
         self.layer_color["drill"] = self.DRILL_LAYER_COLOR_DEFAULT
         self.layer_color["nc_top"] = self.NC_TOP_LAYER_COLOR_DEFAULT
         self.layer_color["nc_bottom"] = self.NC_BOTTOM_LAYER_COLOR_DEFAULT
+
+        self.camera_selected_or_tool = self.CAMERA_SELECTED_OR_TOOL_DEFAULT
+        self.flip_horizontal_selected = self.FLIP_HORIZONTAL_SELECTED_DEFAULT
+        self.flip_vertical_selected = self.FLIP_VERTICAL_SELECTED_DEFAULT
 
     @staticmethod
     def choose_version(version_s, version_default_s):
@@ -177,6 +185,13 @@ class AppSettingsHandler:
             except Exception:
                 self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
 
+            self.camera_selected_or_tool = app_general.getboolean("camera_selected_or_tool",
+                                                                  self.CAMERA_SELECTED_OR_TOOL_DEFAULT)
+            self.flip_horizontal_selected = app_general.getboolean("flip_horizontal_selected",
+                                                                   self.FLIP_HORIZONTAL_SELECTED_DEFAULT)
+            self.flip_vertical_selected = app_general.getboolean("flip_vertical_selected",
+                                                                 self.FLIP_VERTICAL_SELECTED_DEFAULT)
+
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
             app_layers_settings = self.app_settings["LAYERS"]
@@ -219,7 +234,10 @@ class AppSettingsHandler:
                                         "logs_max_bytes": self.LOGS_MAX_BYTES,
                                         "logs_backup_count": self.LOGS_BACKUP_COUNT,
                                         "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
-                                        "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT}
+                                        "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT,
+                                        "camera_selected_or_tool": self.CAMERA_SELECTED_OR_TOOL_DEFAULT,
+                                        "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
+                                        "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT}
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -242,6 +260,9 @@ class AppSettingsHandler:
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
         app_general["last_serial_port"] = str(self.main_win.ui.serial_ports_cb.currentText())
         app_general["last_serial_baud"] = str(self.main_win.ui.serial_baud_cb.currentText())
+        app_general["camera_selected_or_tool"] = str(self.camera_selected_or_tool)
+        app_general["flip_horizontal_selected"] = str(self.main_win.ui.flip_horizontally_tb.isChecked())
+        app_general["flip_vertical_selected"] = str(self.main_win.ui.flip_vertically_tb.isChecked())
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
@@ -288,7 +309,9 @@ class AppSettingsHandler:
                                         "logs_max_bytes": self.LOGS_MAX_BYTES,
                                         "logs_backup_count": self.LOGS_BACKUP_COUNT,
                                         "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
-                                        "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT}
+                                        "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT,
+                                        "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
+                                        "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT}
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -309,6 +332,9 @@ class AppSettingsHandler:
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
         app_general["last_serial_port"] = str(self.LAST_SERIAL_PORT_DEFAULT)
         app_general["last_serial_baud"] = str(self.LAST_SERIAL_BAUD_DEFAULT)
+        app_general["camera_selected_or_tool"] = str(self.CAMERA_SELECTED_OR_TOOL_DEFAULT)
+        app_general["flip_horizontal_selected"] = str(self.main_win.ui.flip_horizontally_tb.isChecked())
+        app_general["flip_vertical_selected"] = str(self.main_win.ui.flip_vertically_tb.isChecked())
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
