@@ -425,6 +425,7 @@ class VisualLayer:
                 coords.append(c)
                 connect.append((p, p+1))
                 p += 1
+            print(coords)
             coords = np.array(coords)
             connect = np.array(connect)
 
