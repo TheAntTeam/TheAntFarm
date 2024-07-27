@@ -47,7 +47,7 @@ class UiManager(QObject):
         self.ui_create_job_m = UiCreateJobLayerTab(ui, control_worker, self.vis_layer, self.L_TAGS, self.L_NAMES,
                                                    self.settings.jobs_settings)
         self.ui_control_tab_m = UiControlTab(ui, control_worker, serial_worker, self.ctrl_layer, self.settings)
-        self.ui_align_tab_m = UiAlignTab(main_win, control_worker, self.vis_align_layer, self.settings)
+        self.ui_align_tab_m = UiAlignTab(main_win, control_worker, self.vis_align_layer, self.settings.app_settings)
         self.ui_settings_tab_m = UiSettingsPreferencesTab(ui, control_worker, self.settings)
         self.ui_about_m = UiAbout(main_win, app_settings=self.settings.app_settings)
 

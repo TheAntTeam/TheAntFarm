@@ -23,14 +23,13 @@ class UiAlignTab(QObject):
 
     MIN_ALIGNMENT_POINTS_NUMBER = 4
 
-    def __init__(self, main_win, control_worker, vis_align_layer, settings):
+    def __init__(self, main_win, control_worker, vis_align_layer, app_settings):
         super(UiAlignTab, self).__init__()
         self.main_win = main_win
         self.ui = self.main_win.ui
         self.controlWo = control_worker
         self.vis_align_layer = vis_align_layer
-        self.app_settings = settings.app_settings
-        self.machine_settings = settings.machine_settings
+        self.app_settings = app_settings
 
         self.layer_colors = self.app_settings.layer_color
 
@@ -59,14 +58,17 @@ class UiAlignTab(QObject):
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
         self.ui.load_align_layer_tb.clicked.connect(
             lambda: self.load_align_file("Load Align File", align_extensions))
+
+        self.ui.flip_horizontally_tb.setChecked(self.app_settings.flip_horizontal_selected)
         self.ui.flip_horizontally_tb.clicked.connect(
             lambda: self.controlWo.flip_align_layer_horizontally(self.ui.flip_horizontally_tb.isChecked()))
+        self.ui.flip_vertically_tb.setChecked(self.app_settings.flip_vertical_selected)
         self.ui.flip_vertically_tb.clicked.connect(
             lambda: self.controlWo.flip_align_layer_vertically(self.ui.flip_vertically_tb.isChecked()))
         self.request_new_alignment_point_coords_s.connect(self.controlWo.add_new_align_point)
         self.remove_point_rows.connect(self.controlWo.remove_align_points)
 
-        self.ui.tool_or_camera_tb.setChecked(self.machine_settings.camera_selected_or_tool)
+        self.ui.tool_or_camera_tb.setChecked(self.app_settings.camera_selected_or_tool)
         self.update_tool_or_camera()
         self.ui.tool_or_camera_tb.clicked.connect(self.update_tool_or_camera)
 
@@ -113,10 +115,10 @@ class UiAlignTab(QObject):
     def update_tool_or_camera(self):
         if self.ui.tool_or_camera_tb.isChecked():
             self.ui.tool_or_camera_tb.setText("CAMERA_POSITION")
-            self.machine_settings.camera_selected_or_tool = True
+            self.app_settings.camera_selected_or_tool = True
         else:
             self.ui.tool_or_camera_tb.setText("TOOL_POSITION")
-            self.machine_settings.camera_selected_or_tool = False
+            self.app_settings.camera_selected_or_tool = False
 
     def check_align_is_active(self):
         self.align_active_s.emit(self.ui.main_tab_widget.currentWidget().objectName() == "align_tab")
@@ -188,7 +190,7 @@ class UiAlignTab(QObject):
     def request_new_point(self):
         selection_centroid = self.vis_align_layer.get_selected_centroid()
 
-        self.request_new_alignment_point_coords_s.emit(selection_centroid, self.machine_settings.camera_selected_or_tool)
+        self.request_new_alignment_point_coords_s.emit(selection_centroid, self.app_settings.camera_selected_or_tool)
 
     @Slot(list)
     def update_alignment_points_list(self, alignment_coords_l):
