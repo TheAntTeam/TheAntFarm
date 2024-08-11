@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "TheAntFarm"
-version = "0.1.2"
+version = "0.2.1"
 description = "TheAntFarm is an application that simplifies the PCB creation using CNC machines."
 authors = ["The Ant Team"]
 license = "MIT"
