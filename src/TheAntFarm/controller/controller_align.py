@@ -1,7 +1,6 @@
 import os.path
 
 from PySide2.QtCore import QObject
-from PySide2 import QtMultimedia
 import qimage2ndarray
 from shape_core.pcb_manager import PcbObj
 from shape_core.gcode_drill_converter import DrillGcodeConverter
