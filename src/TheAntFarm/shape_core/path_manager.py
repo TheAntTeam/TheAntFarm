@@ -365,7 +365,7 @@ class MachinePath:
                 milled_list.append(False)
 
         # for the next steps, starting from the previous path, enlarge it by the tool radius
-        # make bollean or on it and then reduce it by the tool radius
+        # make boolean-or on it and then reduce it by the tool radius
         # at that point it is enlarged by the <diameter of the tool> * (1 - <overlap_percentage>)
         # todo: check the formula
 
