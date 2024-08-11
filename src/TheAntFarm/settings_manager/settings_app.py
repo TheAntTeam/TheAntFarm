@@ -7,7 +7,7 @@ import os
 
 class AppSettingsHandler:
     # APP CONFIGURATION DEFAULT VALUES
-    APP_VERSION_DEFAULT = "0.1.2"
+    APP_VERSION_DEFAULT = "0.2.0"
     LOGS_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'app_logs'))
     LOGS_FILE_DEFAULT = os.path.normpath(os.path.join(LOGS_DIR_DEFAULT, 'app_logs.log'))
     LOGS_MAX_BYTES = 1000000
