@@ -1,6 +1,6 @@
 
 import vispy.app as vapp
-vapp.use_app('pyside2')
+vapp.use_app('PySide6')
 from vispy.app.qt import QtSceneCanvas
 from vispy.scene import visuals
 from vispy.scene.cameras import TurntableCamera

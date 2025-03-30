@@ -1,4 +1,4 @@
-from PySide2.QtCore import QPoint, QSize
+from PySide6.QtCore import QPoint, QSize
 from collections import OrderedDict as Od
 from __init__ import __version__
 import configparser

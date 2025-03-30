@@ -1,5 +1,5 @@
-from PySide2.QtSerialPort import QSerialPort, QSerialPortInfo
-from PySide2.QtCore import QIODevice, Signal, Slot, QObject
+from PySide6.QtSerialPort import QSerialPort, QSerialPortInfo
+from PySide6.QtCore import QIODevice, Signal, Slot, QObject
 import logging
 import traceback
 
