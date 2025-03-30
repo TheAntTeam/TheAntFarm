@@ -9,7 +9,7 @@ def install_requirements():
 
 def build_ui():
     """Convert UI file to equivalent python code."""
-    os.system("PySide6-uic the_ant_farm.ui > ui_the_ant_farm.py")
+    os.system("pyside6-uic the_ant_farm.ui > ui_the_ant_farm.py")
 
 
 def clean_ui():
@@ -19,7 +19,7 @@ def clean_ui():
 
 def build_resources():
     """Convert QRC resource file to python code."""
-    os.system("PySide6-rcc app_resources.qrc -o app_resources_rc.py")
+    os.system("pyside6-rcc app_resources.qrc -o app_resources_rc.py")
 
 
 def clean_resources():

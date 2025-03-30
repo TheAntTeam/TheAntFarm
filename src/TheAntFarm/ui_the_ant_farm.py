@@ -3,20 +3,33 @@
 ################################################################################
 ## Form generated from reading UI file 'the_ant_farm.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.8.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QAbstractSpinBox, QApplication,
+    QCheckBox, QComboBox, QDoubleSpinBox, QFrame,
+    QGridLayout, QHBoxLayout, QHeaderView, QLabel,
+    QLayout, QLineEdit, QMainWindow, QMenu,
+    QMenuBar, QPlainTextEdit, QProgressBar, QPushButton,
+    QRadioButton, QSizePolicy, QSpacerItem, QSpinBox,
+    QStackedWidget, QStatusBar, QTabWidget, QTableWidget,
+    QTableWidgetItem, QTextEdit, QToolButton, QVBoxLayout,
+    QWidget)
 
-from vispy_qt_widget import VispyCanvas
 from combobox_filter_enter import ComboBoxFilterEnter
-from qledlabel import QLedLabel
 from qcamera_label import QCameraLabel
-
+from qledlabel import QLedLabel
+from vispy_qt_widget import VispyCanvas
 import app_resources_rc
 
 class Ui_MainWindow(object):
@@ -24,14 +37,14 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(1160, 952)
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setMinimumSize(QSize(1160, 720))
         icon = QIcon()
-        icon.addFile(u":/resources/resources/logo/the_ant_farm_logo.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/resources/resources/logo/the_ant_farm_logo.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
         self.actionHide_Show_Console = QAction(MainWindow)
@@ -63,7 +76,7 @@ class Ui_MainWindow(object):
         self.actionICON = QAction(MainWindow)
         self.actionICON.setObjectName(u"actionICON")
         icon1 = QIcon()
-        icon1.addFile(u":/resources/resources/logo/the_ant_logo.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/resources/resources/logo/the_ant_logo.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.actionICON.setIcon(icon1)
         self.actionAbout = QAction(MainWindow)
         self.actionAbout.setObjectName(u"actionAbout")
@@ -80,7 +93,6 @@ class Ui_MainWindow(object):
         self.main_tab_widget.setObjectName(u"main_tab_widget")
         font = QFont()
         font.setBold(True)
-        font.setWeight(75)
         self.main_tab_widget.setFont(font)
         self.main_tab_widget.setTabShape(QTabWidget.Rounded)
         self.main_tab_widget.setTabsClosable(False)
@@ -96,7 +108,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.prepare_widget = QTabWidget(self.view_tab)
         self.prepare_widget.setObjectName(u"prepare_widget")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.prepare_widget.sizePolicy().hasHeightForWidth())
@@ -112,7 +124,7 @@ class Ui_MainWindow(object):
         self.gridLayout.setSizeConstraint(QLayout.SetFixedSize)
         self.no_copper_1_le = QLineEdit(self.load_layers_tab)
         self.no_copper_1_le.setObjectName(u"no_copper_1_le")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.no_copper_1_le.sizePolicy().hasHeightForWidth())
@@ -123,7 +135,7 @@ class Ui_MainWindow(object):
 
         self.no_copper_2_pb = QPushButton(self.load_layers_tab)
         self.no_copper_2_pb.setObjectName(u"no_copper_2_pb")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.no_copper_2_pb.sizePolicy().hasHeightForWidth())
@@ -285,18 +297,18 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.profile_view_chb, 3, 2, 1, 1, Qt.AlignHCenter)
 
-        self.horizontal_spacer = QSpacerItem(140, 17, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontal_spacer = QSpacerItem(140, 17, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout.addItem(self.horizontal_spacer, 8, 0, 1, 1)
 
-        self.horizontal_spacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontal_spacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout.addItem(self.horizontal_spacer_2, 7, 0, 1, 1)
 
 
         self.verticalLayout_7.addLayout(self.gridLayout)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_7.addItem(self.verticalSpacer)
 
@@ -352,7 +364,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.top_n_passes_la, 1, 0, 1, 1)
 
-        self.top_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.top_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_2.addItem(self.top_vertical_spacer, 10, 0, 1, 2)
 
@@ -522,7 +534,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.bottom_overlap_dsb, 3, 1, 1, 1)
 
-        self.bottom_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.bottom_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_3.addItem(self.bottom_vertical_spacer, 11, 0, 1, 2)
 
@@ -698,7 +710,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_tap_size_la, 12, 1, 1, 1)
 
-        self.profile_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.profile_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_4.addItem(self.profile_vertical_spacer, 15, 1, 1, 3)
 
@@ -882,7 +894,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_la, 4, 1, 1, 1)
 
-        self.drill_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.drill_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_5.addItem(self.drill_vertical_spacer, 15, 1, 1, 2)
 
@@ -1018,7 +1030,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.nc_top_z_feed_rate_dsb, 6, 1, 1, 1)
 
-        self.nc_top_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.nc_top_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_6.addItem(self.nc_top_vertical_spacer, 7, 0, 1, 2)
 
@@ -1100,7 +1112,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.addWidget(self.nc_bottom_tool_diameter_la, 0, 0, 1, 1)
 
-        self.nc_bottom_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.nc_bottom_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_7.addItem(self.nc_bottom_vertical_spacer, 8, 0, 1, 2)
 
@@ -1164,7 +1176,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
@@ -1190,7 +1202,7 @@ class Ui_MainWindow(object):
         self.main_tab_widget.addTab(self.view_tab, "")
         self.control_tab = QWidget()
         self.control_tab.setObjectName(u"control_tab")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy4.setHorizontalStretch(0)
         sizePolicy4.setVerticalStretch(0)
         sizePolicy4.setHeightForWidth(self.control_tab.sizePolicy().hasHeightForWidth())
@@ -1202,7 +1214,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.ctrl_tab_widget = QTabWidget(self.control_tab)
         self.ctrl_tab_widget.setObjectName(u"ctrl_tab_widget")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
         sizePolicy5.setHorizontalStretch(0)
         sizePolicy5.setVerticalStretch(0)
         sizePolicy5.setHeightForWidth(self.ctrl_tab_widget.sizePolicy().hasHeightForWidth())
@@ -1223,7 +1235,7 @@ class Ui_MainWindow(object):
         __qtablewidgetitem3 = QTableWidgetItem()
         self.gcode_tw.setHorizontalHeaderItem(1, __qtablewidgetitem3)
         self.gcode_tw.setObjectName(u"gcode_tw")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
         sizePolicy6.setHorizontalStretch(0)
         sizePolicy6.setVerticalStretch(0)
         sizePolicy6.setHeightForWidth(self.gcode_tw.sizePolicy().hasHeightForWidth())
@@ -1247,10 +1259,10 @@ class Ui_MainWindow(object):
         self.upload_temp_tb.setObjectName(u"upload_temp_tb")
         self.upload_temp_tb.setMinimumSize(QSize(50, 50))
         icon2 = QIcon()
-        icon2.addFile(u":/resources/resources/icons/white-upload-file.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon2.addFile(u":/resources/resources/icons/white-upload-file.svg", QSize(), QIcon.Normal, QIcon.On)
-        icon2.addFile(u":/resources/resources/icons/gray-upload-file.svg", QSize(), QIcon.Disabled, QIcon.Off)
-        icon2.addFile(u":/resources/resources/icons/gray-upload-file.svg", QSize(), QIcon.Disabled, QIcon.On)
+        icon2.addFile(u":/resources/resources/icons/white-upload-file.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon2.addFile(u":/resources/resources/icons/white-upload-file.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon2.addFile(u":/resources/resources/icons/gray-upload-file.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon2.addFile(u":/resources/resources/icons/gray-upload-file.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.upload_temp_tb.setIcon(icon2)
 
         self.horizontalLayout_10.addWidget(self.upload_temp_tb)
@@ -1261,7 +1273,7 @@ class Ui_MainWindow(object):
         self.open_gcode_tb.setSizePolicy(sizePolicy3)
         self.open_gcode_tb.setMinimumSize(QSize(50, 50))
         icon3 = QIcon()
-        icon3.addFile(u":/resources/resources/icons/white-open-folder.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon3.addFile(u":/resources/resources/icons/white-open-folder.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.open_gcode_tb.setIcon(icon3)
 
         self.horizontalLayout_10.addWidget(self.open_gcode_tb)
@@ -1270,7 +1282,7 @@ class Ui_MainWindow(object):
         self.remove_gcode_tb.setObjectName(u"remove_gcode_tb")
         self.remove_gcode_tb.setMinimumSize(QSize(50, 50))
         icon4 = QIcon()
-        icon4.addFile(u":/resources/resources/icons/white-delete.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon4.addFile(u":/resources/resources/icons/white-delete.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.remove_gcode_tb.setIcon(icon4)
 
         self.horizontalLayout_10.addWidget(self.remove_gcode_tb)
@@ -1291,8 +1303,8 @@ class Ui_MainWindow(object):
         self.controlsVerticalLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.line_4 = QFrame(self.sender_tab)
         self.line_4.setObjectName(u"line_4")
-        self.line_4.setFrameShape(QFrame.HLine)
-        self.line_4.setFrameShadow(QFrame.Sunken)
+        self.line_4.setFrameShape(QFrame.Shape.HLine)
+        self.line_4.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.controlsVerticalLayout.addWidget(self.line_4)
 
@@ -1303,7 +1315,7 @@ class Ui_MainWindow(object):
         self.droGridLayout.setContentsMargins(0, 0, 0, 0)
         self.zero_xy_pb = QPushButton(self.sender_tab)
         self.zero_xy_pb.setObjectName(u"zero_xy_pb")
-        sizePolicy7 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.MinimumExpanding)
+        sizePolicy7 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy7.setHorizontalStretch(0)
         sizePolicy7.setVerticalStretch(0)
         sizePolicy7.setHeightForWidth(self.zero_xy_pb.sizePolicy().hasHeightForWidth())
@@ -1511,8 +1523,8 @@ class Ui_MainWindow(object):
 
         self.line_3 = QFrame(self.sender_tab)
         self.line_3.setObjectName(u"line_3")
-        self.line_3.setFrameShape(QFrame.HLine)
-        self.line_3.setFrameShadow(QFrame.Sunken)
+        self.line_3.setFrameShape(QFrame.Shape.HLine)
+        self.line_3.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.controlsVerticalLayout.addWidget(self.line_3)
 
@@ -1552,7 +1564,7 @@ class Ui_MainWindow(object):
 
         self.abl_active_chb = QCheckBox(self.sender_tab)
         self.abl_active_chb.setObjectName(u"abl_active_chb")
-        sizePolicy8 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
+        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy8.setHorizontalStretch(0)
         sizePolicy8.setVerticalStretch(0)
         sizePolicy8.setHeightForWidth(self.abl_active_chb.sizePolicy().hasHeightForWidth())
@@ -1574,7 +1586,7 @@ class Ui_MainWindow(object):
         self.stepsGridLayout.setVerticalSpacing(0)
         self.min_l = QLabel(self.sender_tab)
         self.min_l.setObjectName(u"min_l")
-        sizePolicy9 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
+        sizePolicy9 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy9.setHorizontalStretch(0)
         sizePolicy9.setVerticalStretch(0)
         sizePolicy9.setHeightForWidth(self.min_l.sizePolicy().hasHeightForWidth())
@@ -1783,8 +1795,8 @@ class Ui_MainWindow(object):
 
         self.line = QFrame(self.sender_tab)
         self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.controlsVerticalLayout.addWidget(self.line)
 
@@ -1800,7 +1812,7 @@ class Ui_MainWindow(object):
         self.z_plus_pb.setMinimumSize(QSize(0, 24))
         self.z_plus_pb.setMaximumSize(QSize(100, 16777215))
         icon5 = QIcon()
-        icon5.addFile(u":/resources/resources/icons/white_north_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon5.addFile(u":/resources/resources/icons/white_north_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.z_plus_pb.setIcon(icon5)
 
         self.zMoveGridLayout.addWidget(self.z_plus_pb, 0, 0, 1, 1)
@@ -1812,7 +1824,7 @@ class Ui_MainWindow(object):
         self.z_minus_pb.setMinimumSize(QSize(0, 24))
         self.z_minus_pb.setMaximumSize(QSize(100, 16777215))
         icon6 = QIcon()
-        icon6.addFile(u":/resources/resources/icons/white_south_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon6.addFile(u":/resources/resources/icons/white_south_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.z_minus_pb.setIcon(icon6)
 
         self.zMoveGridLayout.addWidget(self.z_minus_pb, 1, 0, 1, 1)
@@ -1830,7 +1842,7 @@ class Ui_MainWindow(object):
         self.x_minus_y_plus_pb.setMinimumSize(QSize(0, 22))
         self.x_minus_y_plus_pb.setMaximumSize(QSize(50, 16777215))
         icon7 = QIcon()
-        icon7.addFile(u":/resources/resources/icons/white_north_west_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon7.addFile(u":/resources/resources/icons/white_north_west_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_minus_y_plus_pb.setIcon(icon7)
 
         self.xyMoveGridLayout.addWidget(self.x_minus_y_plus_pb, 0, 0, 1, 1)
@@ -1842,7 +1854,7 @@ class Ui_MainWindow(object):
         self.x_plus_y_minus_pb.setMinimumSize(QSize(0, 22))
         self.x_plus_y_minus_pb.setMaximumSize(QSize(50, 16777215))
         icon8 = QIcon()
-        icon8.addFile(u":/resources/resources/icons/white_south_east_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon8.addFile(u":/resources/resources/icons/white_south_east_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_plus_y_minus_pb.setIcon(icon8)
 
         self.xyMoveGridLayout.addWidget(self.x_plus_y_minus_pb, 2, 2, 1, 1)
@@ -1854,7 +1866,7 @@ class Ui_MainWindow(object):
         self.x_minus_pb.setMinimumSize(QSize(0, 22))
         self.x_minus_pb.setMaximumSize(QSize(50, 16777215))
         icon9 = QIcon()
-        icon9.addFile(u":/resources/resources/icons/white_west_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon9.addFile(u":/resources/resources/icons/white_west_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_minus_pb.setIcon(icon9)
 
         self.xyMoveGridLayout.addWidget(self.x_minus_pb, 1, 0, 1, 1)
@@ -1866,7 +1878,7 @@ class Ui_MainWindow(object):
         self.x_minus_y_minus_pb.setMinimumSize(QSize(0, 22))
         self.x_minus_y_minus_pb.setMaximumSize(QSize(50, 16777215))
         icon10 = QIcon()
-        icon10.addFile(u":/resources/resources/icons/white_south_west_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon10.addFile(u":/resources/resources/icons/white_south_west_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_minus_y_minus_pb.setIcon(icon10)
 
         self.xyMoveGridLayout.addWidget(self.x_minus_y_minus_pb, 2, 0, 1, 1)
@@ -1888,7 +1900,7 @@ class Ui_MainWindow(object):
         self.center_tb.setMinimumSize(QSize(0, 22))
         self.center_tb.setMaximumSize(QSize(50, 16777215))
         icon11 = QIcon()
-        icon11.addFile(u":/resources/resources/icons/white_circle.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon11.addFile(u":/resources/resources/icons/white_circle.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.center_tb.setIcon(icon11)
 
         self.xyMoveGridLayout.addWidget(self.center_tb, 1, 1, 1, 1)
@@ -1910,7 +1922,7 @@ class Ui_MainWindow(object):
         self.x_plus_y_plus_pb.setMinimumSize(QSize(0, 22))
         self.x_plus_y_plus_pb.setMaximumSize(QSize(50, 16777215))
         icon12 = QIcon()
-        icon12.addFile(u":/resources/resources/icons/white_north_east_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon12.addFile(u":/resources/resources/icons/white_north_east_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_plus_y_plus_pb.setIcon(icon12)
 
         self.xyMoveGridLayout.addWidget(self.x_plus_y_plus_pb, 0, 2, 1, 1)
@@ -1922,7 +1934,7 @@ class Ui_MainWindow(object):
         self.x_plus_pb.setMinimumSize(QSize(0, 22))
         self.x_plus_pb.setMaximumSize(QSize(50, 16777215))
         icon13 = QIcon()
-        icon13.addFile(u":/resources/resources/icons/white_east_arrow.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon13.addFile(u":/resources/resources/icons/white_east_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_plus_pb.setIcon(icon13)
 
         self.xyMoveGridLayout.addWidget(self.x_plus_pb, 1, 2, 1, 1)
@@ -1992,7 +2004,6 @@ class Ui_MainWindow(object):
         font1 = QFont()
         font1.setPointSize(8)
         font1.setBold(True)
-        font1.setWeight(75)
         self.z_mul_10_pb.setFont(font1)
         self.z_mul_10_pb.setAutoRepeat(False)
 
@@ -2143,15 +2154,15 @@ class Ui_MainWindow(object):
         self.line_2 = QFrame(self.sender_tab)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setLineWidth(1)
-        self.line_2.setFrameShape(QFrame.HLine)
-        self.line_2.setFrameShadow(QFrame.Sunken)
+        self.line_2.setFrameShape(QFrame.Shape.HLine)
+        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.jogGridlayout.addWidget(self.line_2, 1, 1, 1, 1)
 
         self.line_5 = QFrame(self.sender_tab)
         self.line_5.setObjectName(u"line_5")
-        self.line_5.setFrameShape(QFrame.HLine)
-        self.line_5.setFrameShadow(QFrame.Sunken)
+        self.line_5.setFrameShape(QFrame.Shape.HLine)
+        self.line_5.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.jogGridlayout.addWidget(self.line_5, 1, 0, 1, 1)
 
@@ -2163,7 +2174,7 @@ class Ui_MainWindow(object):
         self.serial_te = QTextEdit(self.sender_tab)
         self.serial_te.setObjectName(u"serial_te")
         self.serial_te.setEnabled(True)
-        sizePolicy10 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        sizePolicy10 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy10.setHorizontalStretch(0)
         sizePolicy10.setVerticalStretch(0)
         sizePolicy10.setHeightForWidth(self.serial_te.sizePolicy().hasHeightForWidth())
@@ -2188,7 +2199,7 @@ class Ui_MainWindow(object):
 
         self.send_pb = QPushButton(self.sender_tab)
         self.send_pb.setObjectName(u"send_pb")
-        sizePolicy11 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy11 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy11.setHorizontalStretch(0)
         sizePolicy11.setVerticalStretch(0)
         sizePolicy11.setHeightForWidth(self.send_pb.sizePolicy().hasHeightForWidth())
@@ -2241,7 +2252,7 @@ class Ui_MainWindow(object):
         self.clear_terminal_pb = QPushButton(self.sender_tab)
         self.clear_terminal_pb.setObjectName(u"clear_terminal_pb")
         self.clear_terminal_pb.setEnabled(True)
-        sizePolicy12 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         sizePolicy12.setHorizontalStretch(0)
         sizePolicy12.setVerticalStretch(0)
         sizePolicy12.setHeightForWidth(self.clear_terminal_pb.sizePolicy().hasHeightForWidth())
@@ -2250,7 +2261,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_9.addWidget(self.clear_terminal_pb)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_9.addItem(self.horizontalSpacer_2)
 
@@ -2312,8 +2323,8 @@ class Ui_MainWindow(object):
         self.apply_alignment_tb_2.setObjectName(u"apply_alignment_tb_2")
         self.apply_alignment_tb_2.setMinimumSize(QSize(30, 30))
         icon14 = QIcon()
-        icon14.addFile(u":/resources/resources/icons/black_apply_align.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon14.addFile(u":/resources/resources/icons/black_alignment_applied.svg", QSize(), QIcon.Normal, QIcon.On)
+        icon14.addFile(u":/resources/resources/icons/black_apply_align.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon14.addFile(u":/resources/resources/icons/black_alignment_applied.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         self.apply_alignment_tb_2.setIcon(icon14)
         self.apply_alignment_tb_2.setCheckable(True)
 
@@ -2339,10 +2350,10 @@ class Ui_MainWindow(object):
         self.soft_reset_tb.setMinimumSize(QSize(120, 25))
         self.soft_reset_tb.setMaximumSize(QSize(120, 16777215))
         icon15 = QIcon()
-        icon15.addFile(u":/resources/resources/icons/white-refresh.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon15.addFile(u":/resources/resources/icons/white-refresh.svg", QSize(), QIcon.Normal, QIcon.On)
-        icon15.addFile(u":/resources/resources/icons/gray-refresh.svg", QSize(), QIcon.Disabled, QIcon.Off)
-        icon15.addFile(u":/resources/resources/icons/gray-refresh.svg", QSize(), QIcon.Disabled, QIcon.On)
+        icon15.addFile(u":/resources/resources/icons/white-refresh.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon15.addFile(u":/resources/resources/icons/white-refresh.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon15.addFile(u":/resources/resources/icons/gray-refresh.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon15.addFile(u":/resources/resources/icons/gray-refresh.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.soft_reset_tb.setIcon(icon15)
         self.soft_reset_tb.setIconSize(QSize(64, 64))
         self.soft_reset_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2446,10 +2457,9 @@ class Ui_MainWindow(object):
 #endif
         self.status_l.setPalette(palette)
         font2 = QFont()
-        font2.setFamily(u"MS Shell Dlg 2")
+        font2.setFamilies([u"MS Shell Dlg 2"])
         font2.setPointSize(10)
         font2.setBold(True)
-        font2.setWeight(75)
         self.status_l.setFont(font2)
         self.status_l.setFrameShape(QFrame.StyledPanel)
         self.status_l.setFrameShadow(QFrame.Plain)
@@ -2465,9 +2475,9 @@ class Ui_MainWindow(object):
         self.unlock_tb.setMinimumSize(QSize(120, 80))
         self.unlock_tb.setMaximumSize(QSize(120, 16777215))
         icon16 = QIcon()
-        icon16.addFile(u":/resources/resources/icons/white-unlock-padlock.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon16.addFile(u":/resources/resources/icons/gray-unlock-padlock.svg", QSize(), QIcon.Disabled, QIcon.Off)
-        icon16.addFile(u":/resources/resources/icons/gray-unlock-padlock.svg", QSize(), QIcon.Disabled, QIcon.On)
+        icon16.addFile(u":/resources/resources/icons/white-unlock-padlock.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon16.addFile(u":/resources/resources/icons/gray-unlock-padlock.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon16.addFile(u":/resources/resources/icons/gray-unlock-padlock.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.unlock_tb.setIcon(icon16)
         self.unlock_tb.setIconSize(QSize(64, 64))
         self.unlock_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2481,9 +2491,9 @@ class Ui_MainWindow(object):
         self.homing_tb.setMinimumSize(QSize(120, 80))
         self.homing_tb.setMaximumSize(QSize(120, 16777215))
         icon17 = QIcon()
-        icon17.addFile(u":/resources/resources/icons/white-home.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon17.addFile(u":/resources/resources/icons/gray-home.svg", QSize(), QIcon.Disabled, QIcon.Off)
-        icon17.addFile(u":/resources/resources/icons/gray-home.svg", QSize(), QIcon.Disabled, QIcon.On)
+        icon17.addFile(u":/resources/resources/icons/white-home.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon17.addFile(u":/resources/resources/icons/gray-home.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon17.addFile(u":/resources/resources/icons/gray-home.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.homing_tb.setIcon(icon17)
         self.homing_tb.setIconSize(QSize(64, 64))
         self.homing_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2497,9 +2507,9 @@ class Ui_MainWindow(object):
         self.play_tb.setMinimumSize(QSize(120, 80))
         self.play_tb.setMaximumSize(QSize(120, 16777215))
         icon18 = QIcon()
-        icon18.addFile(u":/resources/resources/icons/white-play-button-arrowhead.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon18.addFile(u":/resources/resources/icons/gray-play-button-arrowhead.svg", QSize(), QIcon.Disabled, QIcon.Off)
-        icon18.addFile(u":/resources/resources/icons/gray-play-button-arrowhead.svg", QSize(), QIcon.Disabled, QIcon.On)
+        icon18.addFile(u":/resources/resources/icons/white-play-button-arrowhead.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon18.addFile(u":/resources/resources/icons/gray-play-button-arrowhead.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon18.addFile(u":/resources/resources/icons/gray-play-button-arrowhead.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.play_tb.setIcon(icon18)
         self.play_tb.setIconSize(QSize(64, 64))
         self.play_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2513,9 +2523,9 @@ class Ui_MainWindow(object):
         self.pause_resume_tb.setMinimumSize(QSize(120, 80))
         self.pause_resume_tb.setMaximumSize(QSize(120, 16777215))
         icon19 = QIcon()
-        icon19.addFile(u":/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon19.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Disabled, QIcon.Off)
-        icon19.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Disabled, QIcon.On)
+        icon19.addFile(u":/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon19.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon19.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.pause_resume_tb.setIcon(icon19)
         self.pause_resume_tb.setIconSize(QSize(64, 64))
         self.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2529,9 +2539,9 @@ class Ui_MainWindow(object):
         self.stop_tb.setMinimumSize(QSize(120, 80))
         self.stop_tb.setMaximumSize(QSize(120, 16777215))
         icon20 = QIcon()
-        icon20.addFile(u":/resources/resources/icons/white-stop-button-black-rounded-square.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon20.addFile(u":/resources/resources/icons/gray-stop-button-black-rounded-square.svg", QSize(), QIcon.Disabled, QIcon.Off)
-        icon20.addFile(u":/resources/resources/icons/gray-stop-button-black-rounded-square.svg", QSize(), QIcon.Disabled, QIcon.On)
+        icon20.addFile(u":/resources/resources/icons/white-stop-button-black-rounded-square.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon20.addFile(u":/resources/resources/icons/gray-stop-button-black-rounded-square.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon20.addFile(u":/resources/resources/icons/gray-stop-button-black-rounded-square.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.stop_tb.setIcon(icon20)
         self.stop_tb.setIconSize(QSize(64, 64))
         self.stop_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2545,9 +2555,9 @@ class Ui_MainWindow(object):
         self.tool_change_tb.setMinimumSize(QSize(120, 80))
         self.tool_change_tb.setMaximumSize(QSize(120, 16777215))
         icon21 = QIcon()
-        icon21.addFile(u":/resources/resources/icons/white-milling-machine.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon21.addFile(u":/resources/resources/icons/gray-milling-machine.svg", QSize(), QIcon.Disabled, QIcon.Off)
-        icon21.addFile(u":/resources/resources/icons/gray-milling-machine.svg", QSize(), QIcon.Disabled, QIcon.On)
+        icon21.addFile(u":/resources/resources/icons/white-milling-machine.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon21.addFile(u":/resources/resources/icons/gray-milling-machine.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon21.addFile(u":/resources/resources/icons/gray-milling-machine.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.tool_change_tb.setIcon(icon21)
         self.tool_change_tb.setIconSize(QSize(72, 72))
         self.tool_change_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -2577,7 +2587,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.camera_la = QCameraLabel(self.frame)
         self.camera_la.setObjectName(u"camera_la")
-        sizePolicy13 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Expanding)
+        sizePolicy13 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Expanding)
         sizePolicy13.setHorizontalStretch(0)
         sizePolicy13.setVerticalStretch(0)
         sizePolicy13.setHeightForWidth(self.camera_la.sizePolicy().hasHeightForWidth())
@@ -2627,7 +2637,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_14.addWidget(self.frame)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_14.addItem(self.verticalSpacer_3)
 
@@ -2976,15 +2986,15 @@ class Ui_MainWindow(object):
         self.line_25 = QFrame(self.frame_2)
         self.line_25.setObjectName(u"line_25")
         self.line_25.setLineWidth(1)
-        self.line_25.setFrameShape(QFrame.HLine)
-        self.line_25.setFrameShadow(QFrame.Sunken)
+        self.line_25.setFrameShape(QFrame.Shape.HLine)
+        self.line_25.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.jog_layout_2.addWidget(self.line_25, 1, 1, 1, 1)
 
         self.line_26 = QFrame(self.frame_2)
         self.line_26.setObjectName(u"line_26")
-        self.line_26.setFrameShape(QFrame.HLine)
-        self.line_26.setFrameShadow(QFrame.Sunken)
+        self.line_26.setFrameShape(QFrame.Shape.HLine)
+        self.line_26.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.jog_layout_2.addWidget(self.line_26, 1, 0, 1, 1)
 
@@ -3167,7 +3177,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_14.addWidget(self.frame_2)
 
-        self.verticalSpacer_9 = QSpacerItem(20, 26, QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.verticalSpacer_9 = QSpacerItem(20, 26, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_14.addItem(self.verticalSpacer_9)
 
@@ -3201,7 +3211,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_28.addWidget(self.flip_vertically_tb)
 
-        self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_28.addItem(self.horizontalSpacer_14)
 
@@ -3246,10 +3256,9 @@ class Ui_MainWindow(object):
         font3 = QFont()
         font3.setPointSize(14)
         font3.setBold(True)
-        font3.setWeight(75)
         self.add_point_tb.setFont(font3)
         icon22 = QIcon()
-        icon22.addFile(u":/resources/resources/icons/gray-refresh.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon22.addFile(u":/resources/resources/icons/gray-refresh.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.add_point_tb.setIcon(icon22)
         self.add_point_tb.setToolButtonStyle(Qt.ToolButtonTextOnly)
 
@@ -3265,7 +3274,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_29.addWidget(self.remove_point_tb)
 
-        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_29.addItem(self.horizontalSpacer_13)
 
@@ -3296,13 +3305,13 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_30.addWidget(self.label_17, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
-        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_30.addItem(self.horizontalSpacer_15)
 
         self.label_18 = QLabel(self.align_tab)
         self.label_18.setObjectName(u"label_18")
-        sizePolicy14 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy14 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         sizePolicy14.setHorizontalStretch(0)
         sizePolicy14.setVerticalStretch(0)
         sizePolicy14.setHeightForWidth(self.label_18.sizePolicy().hasHeightForWidth())
@@ -3419,12 +3428,12 @@ class Ui_MainWindow(object):
 
         self.line_17 = QFrame(self.application_settings_tab)
         self.line_17.setObjectName(u"line_17")
-        self.line_17.setFrameShape(QFrame.HLine)
-        self.line_17.setFrameShadow(QFrame.Sunken)
+        self.line_17.setFrameShape(QFrame.Shape.HLine)
+        self.line_17.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_9.addWidget(self.line_17, 2, 0, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_9.addItem(self.verticalSpacer_2, 4, 0, 1, 1)
 
@@ -3437,20 +3446,19 @@ class Ui_MainWindow(object):
         font4 = QFont()
         font4.setPointSize(12)
         font4.setBold(True)
-        font4.setWeight(75)
         self.layer_colors_section_la.setFont(font4)
         self.layer_colors_section_la.setAlignment(Qt.AlignCenter)
 
         self.gridLayout_9.addWidget(self.layer_colors_section_la, 1, 0, 1, 1)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_9.addItem(self.horizontalSpacer_3, 3, 1, 1, 1)
 
         self.line_18 = QFrame(self.application_settings_tab)
         self.line_18.setObjectName(u"line_18")
-        self.line_18.setFrameShape(QFrame.HLine)
-        self.line_18.setFrameShadow(QFrame.Sunken)
+        self.line_18.setFrameShape(QFrame.Shape.HLine)
+        self.line_18.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_9.addWidget(self.line_18, 0, 0, 1, 1)
 
@@ -3511,7 +3519,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_20.addWidget(self.y_mirror_rb, 1, 2, 1, 1, Qt.AlignHCenter)
 
-        self.horizontalSpacer_9 = QSpacerItem(130, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.horizontalSpacer_9 = QSpacerItem(130, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_20.addItem(self.horizontalSpacer_9, 0, 0, 1, 1)
 
@@ -3526,18 +3534,18 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.probe_settings_section_la, 7, 0, 1, 1, Qt.AlignHCenter)
 
-        self.verticalSpacer_6 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_6 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_13.addItem(self.verticalSpacer_6, 10, 0, 1, 1)
 
-        self.verticalSpacer_8 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_8 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_13.addItem(self.verticalSpacer_8, 21, 0, 1, 1)
 
         self.line_10 = QFrame(self.jobs_machine_settings_tab)
         self.line_10.setObjectName(u"line_10")
-        self.line_10.setFrameShape(QFrame.HLine)
-        self.line_10.setFrameShadow(QFrame.Sunken)
+        self.line_10.setFrameShape(QFrame.Shape.HLine)
+        self.line_10.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_10, 19, 0, 1, 1)
 
@@ -3549,7 +3557,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.tool_change_section_la, 12, 0, 1, 1, Qt.AlignHCenter)
 
-        self.verticalSpacer_5 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_5 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_13.addItem(self.verticalSpacer_5, 5, 0, 1, 1)
 
@@ -3565,12 +3573,12 @@ class Ui_MainWindow(object):
 
         self.line_16 = QFrame(self.jobs_machine_settings_tab)
         self.line_16.setObjectName(u"line_16")
-        self.line_16.setFrameShape(QFrame.HLine)
-        self.line_16.setFrameShadow(QFrame.Sunken)
+        self.line_16.setFrameShape(QFrame.Shape.HLine)
+        self.line_16.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_16, 6, 0, 1, 1)
 
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_13.addItem(self.horizontalSpacer_4, 14, 1, 1, 1)
 
@@ -3651,15 +3659,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_19.addWidget(self.probe_feedrate_la, 2, 0, 1, 1)
 
-        self.horizontalSpacer_6 = QSpacerItem(200, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.horizontalSpacer_6 = QSpacerItem(200, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_19.addItem(self.horizontalSpacer_6, 0, 2, 1, 1)
 
-        self.horizontalSpacer_7 = QSpacerItem(200, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.horizontalSpacer_7 = QSpacerItem(200, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_19.addItem(self.horizontalSpacer_7, 1, 2, 1, 1)
 
-        self.horizontalSpacer_8 = QSpacerItem(200, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.horizontalSpacer_8 = QSpacerItem(200, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_19.addItem(self.horizontalSpacer_8, 2, 2, 1, 1)
 
@@ -3875,8 +3883,8 @@ class Ui_MainWindow(object):
 
         self.line_6 = QFrame(self.jobs_machine_settings_tab)
         self.line_6.setObjectName(u"line_6")
-        self.line_6.setFrameShape(QFrame.HLine)
-        self.line_6.setFrameShadow(QFrame.Sunken)
+        self.line_6.setFrameShape(QFrame.Shape.HLine)
+        self.line_6.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_5.addWidget(self.line_6)
 
@@ -3966,40 +3974,40 @@ class Ui_MainWindow(object):
 
         self.line_8 = QFrame(self.jobs_machine_settings_tab)
         self.line_8.setObjectName(u"line_8")
-        self.line_8.setFrameShape(QFrame.HLine)
-        self.line_8.setFrameShadow(QFrame.Sunken)
+        self.line_8.setFrameShape(QFrame.Shape.HLine)
+        self.line_8.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_8, 13, 0, 1, 1)
 
         self.line_15 = QFrame(self.jobs_machine_settings_tab)
         self.line_15.setObjectName(u"line_15")
-        self.line_15.setFrameShape(QFrame.HLine)
-        self.line_15.setFrameShadow(QFrame.Sunken)
+        self.line_15.setFrameShape(QFrame.Shape.HLine)
+        self.line_15.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_15, 8, 0, 1, 1)
 
         self.line_9 = QFrame(self.jobs_machine_settings_tab)
         self.line_9.setObjectName(u"line_9")
-        self.line_9.setFrameShape(QFrame.HLine)
-        self.line_9.setFrameShadow(QFrame.Sunken)
+        self.line_9.setFrameShape(QFrame.Shape.HLine)
+        self.line_9.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_9, 17, 0, 1, 1)
 
         self.line_7 = QFrame(self.jobs_machine_settings_tab)
         self.line_7.setObjectName(u"line_7")
-        self.line_7.setFrameShape(QFrame.HLine)
-        self.line_7.setFrameShadow(QFrame.Sunken)
+        self.line_7.setFrameShape(QFrame.Shape.HLine)
+        self.line_7.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_7, 15, 0, 1, 1)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_13.addItem(self.verticalSpacer_4, 16, 0, 1, 1)
 
         self.line_12 = QFrame(self.jobs_machine_settings_tab)
         self.line_12.setObjectName(u"line_12")
-        self.line_12.setFrameShape(QFrame.HLine)
-        self.line_12.setFrameShadow(QFrame.Sunken)
+        self.line_12.setFrameShape(QFrame.Shape.HLine)
+        self.line_12.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_12, 0, 0, 1, 1)
 
@@ -4011,7 +4019,7 @@ class Ui_MainWindow(object):
         self.gridLayout_21.setObjectName(u"gridLayout_21")
         self.gridLayout_21.setHorizontalSpacing(0)
         self.gridLayout_21.setVerticalSpacing(2)
-        self.horizontalSpacer_10 = QSpacerItem(180, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.horizontalSpacer_10 = QSpacerItem(180, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_21.addItem(self.horizontalSpacer_10, 0, 0, 1, 1)
 
@@ -4047,22 +4055,22 @@ class Ui_MainWindow(object):
 
         self.line_11 = QFrame(self.jobs_machine_settings_tab)
         self.line_11.setObjectName(u"line_11")
-        self.line_11.setFrameShape(QFrame.HLine)
-        self.line_11.setFrameShadow(QFrame.Sunken)
+        self.line_11.setFrameShape(QFrame.Shape.HLine)
+        self.line_11.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_11, 2, 0, 1, 1)
 
         self.line_13 = QFrame(self.jobs_machine_settings_tab)
         self.line_13.setObjectName(u"line_13")
-        self.line_13.setFrameShape(QFrame.HLine)
-        self.line_13.setFrameShadow(QFrame.Sunken)
+        self.line_13.setFrameShape(QFrame.Shape.HLine)
+        self.line_13.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_13, 4, 0, 1, 1)
 
         self.line_14 = QFrame(self.jobs_machine_settings_tab)
         self.line_14.setObjectName(u"line_14")
-        self.line_14.setFrameShape(QFrame.HLine)
-        self.line_14.setFrameShadow(QFrame.Sunken)
+        self.line_14.setFrameShape(QFrame.Shape.HLine)
+        self.line_14.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_14, 11, 0, 1, 1)
 
@@ -4075,8 +4083,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_15.setObjectName(u"verticalLayout_15")
         self.line_21 = QFrame(self.alignment_settings_tab)
         self.line_21.setObjectName(u"line_21")
-        self.line_21.setFrameShape(QFrame.HLine)
-        self.line_21.setFrameShadow(QFrame.Sunken)
+        self.line_21.setFrameShape(QFrame.Shape.HLine)
+        self.line_21.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_15.addWidget(self.line_21)
 
@@ -4088,8 +4096,8 @@ class Ui_MainWindow(object):
 
         self.line_22 = QFrame(self.alignment_settings_tab)
         self.line_22.setObjectName(u"line_22")
-        self.line_22.setFrameShape(QFrame.HLine)
-        self.line_22.setFrameShadow(QFrame.Sunken)
+        self.line_22.setFrameShape(QFrame.Shape.HLine)
+        self.line_22.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_15.addWidget(self.line_22)
 
@@ -4124,14 +4132,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_15.addLayout(self.horizontalLayout_25)
 
-        self.verticalSpacer_10 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_10 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_15.addItem(self.verticalSpacer_10)
 
         self.line_23 = QFrame(self.alignment_settings_tab)
         self.line_23.setObjectName(u"line_23")
-        self.line_23.setFrameShape(QFrame.HLine)
-        self.line_23.setFrameShadow(QFrame.Sunken)
+        self.line_23.setFrameShape(QFrame.Shape.HLine)
+        self.line_23.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_15.addWidget(self.line_23)
 
@@ -4143,8 +4151,8 @@ class Ui_MainWindow(object):
 
         self.line_24 = QFrame(self.alignment_settings_tab)
         self.line_24.setObjectName(u"line_24")
-        self.line_24.setFrameShape(QFrame.HLine)
-        self.line_24.setFrameShadow(QFrame.Sunken)
+        self.line_24.setFrameShape(QFrame.Shape.HLine)
+        self.line_24.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_15.addWidget(self.line_24)
 
@@ -4208,14 +4216,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_15.addLayout(self.gridLayout_17)
 
-        self.verticalSpacer_11 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_11 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_15.addItem(self.verticalSpacer_11)
 
 
         self.horizontalLayout_24.addLayout(self.verticalLayout_15)
 
-        self.horizontalSpacer_12 = QSpacerItem(623, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_12 = QSpacerItem(623, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_24.addItem(self.horizontalSpacer_12)
 
@@ -4225,7 +4233,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_16 = QHBoxLayout()
         self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
-        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_16.addItem(self.horizontalSpacer_11)
 
@@ -4239,7 +4247,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_16.addWidget(self.save_settings_preferences_pb)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_16.addItem(self.horizontalSpacer_5)
 
@@ -4264,7 +4272,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.central_widget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1160, 21))
+        self.menubar.setGeometry(QRect(0, 0, 1160, 22))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuFile.setFont(font)
@@ -4378,7 +4386,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(2)
+        self.main_tab_widget.setCurrentIndex(0)
         self.prepare_widget.setCurrentIndex(1)
         self.jobs_sw.setCurrentIndex(0)
         self.ctrl_tab_widget.setCurrentIndex(1)
