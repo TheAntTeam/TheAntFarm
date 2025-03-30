@@ -14,10 +14,10 @@ class DoubleSideManager:
     def list_cameras_indexes():
         index = 0
         arr = []
-        info = QtMultimedia.QCameraInfo()
-        for cameraDevice in info.availableCameras():
+        info = QtMultimedia.QMediaDevices.videoInputs()
+        for cameraDevice in info:
             arr.append(cameraDevice.description())
-            # print(cameraDevice.description())
+            print(cameraDevice.description())
 
         return arr
 
