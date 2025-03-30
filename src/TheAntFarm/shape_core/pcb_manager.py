@@ -18,6 +18,15 @@ from .geometry_manager import Geom, merge_polygons
 # import matplotlib.pyplot as plt
 
 
+# workaround for pcb-tools read function
+def _new_pcb_tools_read_function(filename):
+    with open(filename, 'r') as f:
+        data = f.read()
+    return gbr.loads(data, filename)
+gbr.read = _new_pcb_tools_read_function
+#
+
+
 class PcbObj:
 
     GBR_KEYS = ["top", "bottom", "profile"]
