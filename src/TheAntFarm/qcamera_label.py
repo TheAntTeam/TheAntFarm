@@ -1,6 +1,6 @@
-from PySide2.QtWidgets import QLabel
-from PySide2.QtGui import QWheelEvent
-from PySide2.QtCore import Signal
+from PySide6.QtWidgets import QLabel
+from PySide6.QtGui import QWheelEvent
+from PySide6.QtCore import Signal
 
 
 class QCameraLabel(QLabel):

@@ -1,6 +1,7 @@
-from PySide2.QtWidgets import QStyleFactory, QWidgetAction
-from PySide2.QtGui import QPalette, QColor
-from PySide2.QtCore import Qt
+
+from PySide6.QtWidgets import QStyleFactory, QWidgetAction
+from PySide6.QtGui import QPalette, QColor
+from PySide6.QtCore import Qt
 
 
 class StyleManager:

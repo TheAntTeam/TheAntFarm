@@ -1,5 +1,5 @@
-from PySide2.QtCore import QObject, Signal, Slot
-from PySide2.QtWidgets import QColorDialog
+from PySide6.QtCore import QObject, Signal, Slot
+from PySide6.QtWidgets import QColorDialog
 from collections import OrderedDict as Od
 import logging
 

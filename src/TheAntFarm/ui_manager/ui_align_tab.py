@@ -1,6 +1,6 @@
-from PySide2.QtCore import Signal, Slot, QObject, Qt
-from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QLabel, QFileDialog, QHeaderView
+from PySide6.QtCore import Signal, Slot, QObject, Qt
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QLabel, QFileDialog, QHeaderView
 from collections import OrderedDict as Od
 from style_manager import StyleManager
 from qcamera_label import QCameraLabel
