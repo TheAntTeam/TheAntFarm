@@ -1,4 +1,4 @@
-from PySide2 import QtMultimedia
+from PySide6 import QtMultimedia
 import cv2
 import numpy as np
 

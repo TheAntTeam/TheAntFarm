@@ -1,5 +1,5 @@
-from PySide2.QtWidgets import QComboBox
-from PySide2 import QtCore
+from PySide6.QtWidgets import QComboBox
+from PySide6 import QtCore
 
 
 class ComboBoxFilterEnter(QComboBox):

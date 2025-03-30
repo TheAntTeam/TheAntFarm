@@ -2,15 +2,15 @@ import os
 import sys
 import platform
 import shutil
-from PySide2.QtWidgets import QMainWindow, QApplication
-from PySide2.QtCore import QThread, QResource
+from PySide6.QtWidgets import QMainWindow, QApplication
+from PySide6.QtCore import QThread, QResource
 from queue import Queue
 from ui_the_ant_farm import Ui_MainWindow
 # To convert ui to py from the "src/TheAntFarm" folder
-# do: pyside2-uic the_ant_farm.ui > ui_the_ant_farm.py
+# do: PySide6-uic the_ant_farm.ui > ui_the_ant_farm.py
 # or: python .\build.py ui
 # Whenever you change resources in qrc, go into the "src/TheAntFarm" folder
-# convert qrc to py: pyside2-rcc app_resources.qrc -o app_resources_rc.py
+# convert qrc to py: PySide6-rcc app_resources.qrc -o app_resources_rc.py
 # or:                python .\build.py res
 """ Custom imports """
 from executable_path_checker import ExecutablePathChecker
@@ -24,7 +24,7 @@ import logging.handlers
 
 
 def config_os():
-    pys2_path = os.path.dirname(sys.modules['PySide2'].__file__)
+    pys2_path = os.path.dirname(sys.modules['PySide6'].__file__)
     if os.path.isdir(os.path.join(pys2_path, "Qt")):
         pys2_path = os.path.join(pys2_path, "Qt")
 
