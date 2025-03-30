@@ -1,5 +1,6 @@
 from PySide6.QtCore import QObject, Signal, Slot
 from PySide6.QtWidgets import QColorDialog
+from PySide6.QtGui import QPalette
 from collections import OrderedDict as Od
 import logging
 
@@ -331,7 +332,7 @@ class UiSettingsPreferencesTab(QObject):
         elif layer == "nc_bottom":
             current_label = self.ui.nc_bottom_layer_color_la
         if current_label:
-            current_color = current_label.palette().background().color()
+            current_color = current_label.palette().color(QPalette.Window)
             logger.debug(current_color)
             color = QColorDialog.getColor(initial=current_color)
             if color.isValid():
