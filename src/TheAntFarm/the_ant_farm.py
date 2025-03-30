@@ -1,5 +1,6 @@
 import os
 import sys
+import sysconfig
 import platform
 import shutil
 from PySide6.QtWidgets import QMainWindow, QApplication
@@ -36,6 +37,9 @@ def config_os():
     print(sys_name)
     if sys_name == "Windows":
         print("Windows Env")
+        # https://bugreports.qt.io/browse/PYSIDE-2935?attachmentViewMode=list
+        pyside6_dll_lib_path = sysconfig.get_path('purelib') + '/PySide6/'
+        os.add_dll_directory(pyside6_dll_lib_path)
     elif sys_name == 'Darwin':
         print("Mac Env")
         os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
