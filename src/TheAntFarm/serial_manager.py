@@ -34,8 +34,9 @@ class SerialWorker(QObject):
         port_l = QSerialPortInfo().availablePorts()
         port_name_l = [port.portName() for port in port_l]
         port_name_l.sort()
-        bauds_ls = port_l[0].standardBaudRates()
-        self.get_port_list_s.emit(port_name_l, bauds_ls)
+        if port_l:
+            bauds_ls = port_l[0].standardBaudRates()
+            self.get_port_list_s.emit(port_name_l, bauds_ls)
 
     def open_port(self, port, baud_rate):
         """Open passed serial port. Return outcome of operation. True if success, otherwise False. """
