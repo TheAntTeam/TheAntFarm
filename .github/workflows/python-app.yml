@@ -6,8 +6,6 @@ name: Python application
 on:
   push:
     branches: [ feature/use_pyside_6 ]
-  pull_request:
-    branches: [ main, dev ]
 
 jobs:
   build:
