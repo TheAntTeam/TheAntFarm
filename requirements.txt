@@ -14,5 +14,5 @@ qimage2ndarray==1.10.0
 scipy==1.8.0
 Shapely==1.8.1
 shiboken6==6.8.3
-vispy==0.9.4
+vispy==0.14.3
 opencv-python>=4.5.1.48
