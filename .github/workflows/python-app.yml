@@ -5,7 +5,7 @@ name: Python application
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ feature/use_pyside_6 ]
   pull_request:
     branches: [ main, dev ]
 
@@ -15,7 +15,7 @@ jobs:
     runs-on:  ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         # python-version: ["3.8", "3.9", "3.10"]
         python-version: ["3.10"]
 
