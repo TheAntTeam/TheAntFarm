@@ -29,7 +29,7 @@ gbr.read = _new_pcb_tools_read_function
 
 class PcbObj:
 
-    GBR_KEYS = ["top", "bottom", "profile"]
+    GBR_KEYS = ["top", "bottom", "profile", "noncopper_top", "noncopper_bottom"]
     EXN_KEYS = ["drill"]
     DEFAULT_ARC_SUBDIVISIONS = 64
     MAX_ARC_CHORD_LEN = 0.5  # mm
