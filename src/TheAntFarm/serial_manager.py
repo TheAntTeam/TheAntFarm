@@ -134,7 +134,7 @@ class SerialWorker(QObject):
     @Slot()
     def serial_error_manager(self):
         error_type = self.serial_port.error()
-        if error_type != 0:
+        if error_type != QSerialPort.SerialPortError.NoError:
             logger.error(self.serial_port.error())
             logger.error(self.serial_port.errorString())
             # if error_type == QSerialPort.ResourceError:
