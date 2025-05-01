@@ -507,8 +507,8 @@ class GCoder:
     # macro section
 
     def is_macro(self, cmd):
-        print("Is Macro")
-        print(cmd)
+        # print("Is Macro")
+        # print(cmd)
         if self.macro is not None:
             return self.macro.is_macro(cmd)
         else:
@@ -575,13 +575,20 @@ class GcodeLine:
 
 
 class GcodePoint:
+    """
+        Represents a point in G-code with coordinates, type, position, and additional parameters.
+    """
 
+    # Constants for point types and positions
     TRAVEL = "t"
     WORKING = "w"
     WORKING_POS = "wp"
     MACHINE_POS = "mp"
 
     def __init__(self):
+        """
+        Initializes a GcodePoint with default values.
+        """
         self.coords = np.zeros((3,))
         self.line = -1
         self.sub_line = 0
@@ -590,6 +597,9 @@ class GcodePoint:
         self.params = od({})
 
     def __repr__(self):
+        """
+        Returns a string representation of the GcodePoint.
+        """
         s = "GcodeVector (\n"
         s += " coords = " + str(self.coords) + "," + "\n"
         s += " type  = " + str("working" if self.type == self.WORKING else "travel") + "\n"
@@ -606,6 +616,9 @@ class GcodePoint:
         return s
 
     def copy(self):
+        """
+        Creates a copy of the current GcodePoint.
+        """
         cnp = GcodePoint()
         if isinstance(self.coords, tuple):
             cnp.coords = list(self.coords).copy()
@@ -619,6 +632,9 @@ class GcodePoint:
         return cnp
 
     def get_string(self):
+        """
+        Returns a string representation of the G-code command for this point.
+        """
         s = ""
         if self.pos == self.MACHINE_POS:
             s += "G53 "
@@ -638,7 +654,6 @@ class GcodePoint:
 
 
 class GCode:
-
     def __init__(self, lines):
         self.original_lines = lines
         self.modified_lines = []
@@ -987,7 +1002,11 @@ class GCodeLeveler:
     def interp_grid_data(self):
         if self.grid_data is not None:
             X, Y, Z = self.grid_data
-            self.ig = spi.interp2d(X, Y, Z, kind='cubic')
+            # self.ig = spi.interp2d(X, Y, Z, kind='cubic')
+            # interp2d is deprecated
+            # r = spi.bisplrep(X, Y, Z, kx=3, ky=3, s=0)
+            r = spi.bisplrep(X, Y, Z, kx=3, ky=3)
+            self.ig = lambda xnew, ynew: spi.bisplev(xnew, ynew, r).T
 
     def apply(self):
         print("Auto Bed Leveler Start")
