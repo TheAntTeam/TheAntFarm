@@ -1,4 +1,5 @@
 import time
+import logging
 import pyclipper as pc
 import shapely.geometry
 import shapely.geometry as shg
@@ -6,6 +7,8 @@ from shapely.ops import unary_union
 
 # from .plot_stuff import plot_polygons, plot_shapely
 from .pyclipper2shapely import polytree_to_shapely
+
+logger = logging.getLogger(__name__)
 
 
 def merge_polygons_path(poly_set):
@@ -494,8 +497,24 @@ def is_overlaping_multiple_polygons(polygon, polygon_list, shapely_poly=False):
         sh_mpoly = shapely.geometry.MultiPolygon(sh_poly_list)
         diff_polys = sh_mpoly.difference(sh_poly)
 
-    return len(diff_polys.geoms) < len(polygon_list.geoms) - 1
+    diff_len = 0
+    poly_len = 0
 
+    if diff_polys.geom_type == 'MultiPolygon':
+        diff_len = len(diff_polys.geoms)
+    elif diff_polys.geom_type == 'Polygon':
+        diff_len = 1
+    else:
+        logger.warning("Invalid Diff Polygons Type %s" % diff_polys.geom_type)
+
+    if polygon_list.geom_type == 'MultiPolygon':
+        poly_len = len(polygon_list.geoms)
+    elif polygon_list.geom_type == 'Polygon':
+        poly_len = 1
+    else:
+        logger.warning("Invalid Polygon List Type %s" % diff_polys.geom_type)
+
+    return diff_len < poly_len - 1
 
 
 class Geom:
