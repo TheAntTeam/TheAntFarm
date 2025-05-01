@@ -12,3 +12,4 @@ src/TheAntFarm/app_logs/
 gcode_temp_dir/
 src/TheAntFarm/configurations/
 src/TheAntFarm/gcode_temp_dir/
+/src/TheAntFarm/build/
