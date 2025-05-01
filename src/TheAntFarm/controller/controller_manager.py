@@ -178,13 +178,13 @@ class ControllerWorker(QObject):
                 element = self.serialRxQueue.get(block=False)
                 if element:
                     # logger.debug("Element received: " + str(element))
-                    if re.match("^<.*>\s*$\s", element):
+                    if re.match(r"^<.*>\s*$\s", element):
                         self.update_status_s.emit(self.control_controller.parse_bracket_angle(element))
                         # This variable should be set to true the first time an ack is received.
                         if not self.dro_status_updated:
                             self.dro_status_updated = True
                         self.check_eof_and_idle()
-                    elif re.match("^\[.*\]\s*$\s", element):
+                    elif re.match(r"^\[.*\]\s*$\s", element):
                         self.control_controller.parse_bracket_square(element)
                         [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = \
                             self.control_controller.process_probe_and_abl()
@@ -199,7 +199,7 @@ class ControllerWorker(QObject):
                             if element:
                                 self.update_console_text_s.emit(element)
                                 logger.debug(element)
-                    elif re.match("ok\s*$\s", element):
+                    elif re.match(r"ok\s*$\s", element):
                         logger.debug("buffered size: " + str(self.buffered_size))
                         self.update_console_text_s.emit(element)
                         if self.sending_file and self.cmds_to_ack > 0:
