@@ -129,7 +129,7 @@ class VisualLayer:
     BTM_ORDER = {'selected': 1, 'drill': 2, 'profile': 3, 'top': 6, 'bottom': 5, 'nc_top': 7, 'nc_bottom': 4}
     POINTER_RADIUS = 0.5
     POINTER_TAG = "POINTER"
-    POINTER_COLOR = "orange"
+    POINTER_COLOR = "yellow"
     POINTER_SEGMENTS = 20
     SELECTED_TAG = "selected"
 
@@ -355,7 +355,6 @@ class VisualLayer:
             self.paths_geom[tag] = geom_list
         else:
             print("Cannot Visualize an Empty Path")
-
         self.update_order()
 
     def add_gcode(self, tag, gcode_list, color=('white', 'orange')):
@@ -401,7 +400,7 @@ class VisualLayer:
         self.canvas.freeze()
         visuals.XYZAxis(parent=self.canvas.view.scene)
 
-    def create_line(self, tag, ldata, colors=None, order=0, width=0.1):
+    def create_line_slow(self, tag, ldata, colors=None, order=0, width=0.1):
         # modded to manage path of different colors
         self.canvas.unfreeze()
         if colors is not None:
@@ -440,12 +439,22 @@ class VisualLayer:
         self.canvas.view.camera.set_range()
         self.canvas.freeze()
 
-    def create_line_old(self, tag, ldata, color=None, order=0, width=0.1):
+    def create_line(self, tag, ldata, colors=None, order=0, width=0.1):
+        if colors is not None:
+            if not isinstance(colors, list):
+                colors_list = [colors for i in range(len(ldata))]
+            else:
+                colors_list = colors
+        else:
+            colors_list = None
+            logger.error("Path Colors List not Set")
+
         self.canvas.unfreeze()
         connect = []
         coords = []
         p = -1
-        for l in ldata:
+        all_colors = []
+        for i, l in enumerate(ldata):
             p += 1
             c = l[0]
             coords.append(c)
@@ -454,10 +463,11 @@ class VisualLayer:
                 coords.append(c)
                 connect.append((p, p+1))
                 p += 1
+            all_colors += [colors_list[i]] * len(l)
         coords = np.array(coords)
         connect = np.array(connect)
 
-        line = visuals.Line(pos=coords, connect=connect, width=width, color=color, parent=self.canvas.view, antialias=True)
+        line = visuals.Line(pos=coords, connect=connect, width=width, color=all_colors, parent=self.canvas.view, antialias=True)
         line.order = order
         if tag in list(self.paths.keys()):
             self.paths[tag] += [line]
