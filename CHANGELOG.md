@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.0] - Jun 28, 2025
+
+### Added
+
+- Migrated to PySide6 version.
+- Updated the way the camera devices info are obtained. 
+- Added a check on the serial ports in case there's none.
+- NC files can be loaded in the control tab and are now automatically loaded if they are in the gcode_temp_dir
+- Updated version of packages in toml file and requirements.txt.
+
+### Fixed
+
+- Fixed color picking in settings preferences
+- Workaround added to solve Pyside6 QTMultimedia bug with recent python versions. See [https://bugreports.qt.io/browse/PYSIDE-2935?attachmentViewMode=list]
+- Minor fix on regex pattern string in controller_manager.py
+- Bug Fix on geometry_manager.py. the is_overlaping_multiple_polygons method failed when comparing a polygon to many polygons
+- Override pcb-tools read function to be compatible with python 3 most recent versions.
+
+### Changed
+
+- Improvement in visual manager routines. Speed up of gcode visualization.    
+
 ## [0.2.1] - Aug 11, 2024  
 
 Bugfix to be able to generate executable using pyinstaller and added executable's icon.
