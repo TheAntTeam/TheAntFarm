@@ -68,7 +68,12 @@ class SerialWorker(QObject):
     @Slot()
     def receive(self):
         if self.serial_port.canReadLine():
-            data_out = self.serial_port.readAll().data().decode()
+            data_out_not_decoded = self.serial_port.readAll().data()
+            try:
+                data_out = data_out_not_decoded.decode()
+            except UnicodeDecodeError as e:
+                logger.error(f"Invalid Serial Data, unable to decoding [{data_out_not_decoded}]")
+                data_out = ""
             if data_out:
                 # logger.debug("data in: " + data_out)
                 self.residual_string = self.residual_string + data_out
