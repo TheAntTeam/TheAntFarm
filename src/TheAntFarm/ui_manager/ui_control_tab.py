@@ -429,7 +429,7 @@ class UiControlTab(QObject):
     def open_gcode_files(self):
         load_gcode = QFileDialog.getOpenFileNames(None, "Load G-Code File(s)",  # todo: add other file extensions?
                                                   self.app_settings.gcode_last_dir,
-                                                  "G-Code Files (*.gcode)" + ";;All files (*.*)")
+                                                  "G-Code Files (*.gcode *.nc)" + ";;All files (*.*)")
         logger.debug(load_gcode)
         gcode_actual_l = []
         load_gcode_paths = []
@@ -512,7 +512,7 @@ class UiControlTab(QObject):
             gcode_actual_l.append(self.ui.gcode_tw.cellWidget(row, 0).toolTip())
 
         for file in os.listdir(temp_dir):
-            if file.endswith(".gcode"):
+            if file.endswith(".gcode") or file.endswith(".nc"):
                 new_elem = os.path.join(temp_dir, file)
                 if new_elem not in gcode_actual_l:
                     gcode_l.append(new_elem)
