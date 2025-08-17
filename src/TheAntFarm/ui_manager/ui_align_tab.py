@@ -140,16 +140,22 @@ class UiAlignTab(QObject):
                                                                                         color="black"))
             self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="blue",
                                                                                           color="black"))
+            self.ui.apply_alignment_tb.setStatusTip("Alignment ON")
+            self.ui.apply_alignment_tb_2.setStatusTip("Alignment ON")
         elif num_points >= self.MIN_ALIGNMENT_POINTS_NUMBER:
             self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="yellow",
                                                                                         color="black"))
             self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="yellow",
                                                                                           color="black"))
+            self.ui.apply_alignment_tb.setStatusTip("Alignment OFF")
+            self.ui.apply_alignment_tb_2.setStatusTip("Alignment OFF")
         else:
             self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)",
                                                                                         color="white"))
             self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)",
                                                                                           color="white"))
+            self.ui.apply_alignment_tb.setStatusTip("Alignment OFF")
+            self.ui.apply_alignment_tb_2.setStatusTip("Alignment OFF")
 
     def set_alignment_tb_check(self, alignment_check_status):
         self.ui.apply_alignment_tb.clicked.disconnect()
