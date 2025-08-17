@@ -48,10 +48,10 @@
        </font>
       </property>
       <property name="tabShape">
-       <enum>QTabWidget::Rounded</enum>
+       <enum>QTabWidget::TabShape::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -82,10 +82,10 @@
                </sizepolicy>
               </property>
               <property name="tabPosition">
-               <enum>QTabWidget::North</enum>
+               <enum>QTabWidget::TabPosition::North</enum>
               </property>
               <property name="tabShape">
-               <enum>QTabWidget::Rounded</enum>
+               <enum>QTabWidget::TabShape::Rounded</enum>
               </property>
               <property name="currentIndex">
                <number>1</number>
@@ -98,7 +98,7 @@
                 <item>
                  <layout class="QGridLayout" name="gridLayout">
                   <property name="sizeConstraint">
-                   <enum>QLayout::SetFixedSize</enum>
+                   <enum>QLayout::SizeConstraint::SetFixedSize</enum>
                   </property>
                   <item row="5" column="0">
                    <widget class="QLineEdit" name="no_copper_1_le">
@@ -132,7 +132,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="6" column="2" alignment="Qt::AlignHCenter">
+                  <item row="6" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QCheckBox" name="no_copper_2_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -161,7 +161,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="2" alignment="Qt::AlignHCenter">
+                  <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="view_label">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -173,11 +173,11 @@
                      <string>View</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="2" alignment="Qt::AlignHCenter">
+                  <item row="1" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QCheckBox" name="top_view_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -225,7 +225,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="2" alignment="Qt::AlignHCenter">
+                  <item row="2" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QCheckBox" name="bottom_view_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -267,7 +267,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="5" column="2" alignment="Qt::AlignHCenter">
+                  <item row="5" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QCheckBox" name="no_copper_1_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -348,7 +348,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="4" column="2" alignment="Qt::AlignHCenter">
+                  <item row="4" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QCheckBox" name="drill_view_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -364,7 +364,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="0" alignment="Qt::AlignHCenter">
+                  <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="file_path_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -390,7 +390,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="8" column="2" alignment="Qt::AlignHCenter">
+                  <item row="8" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QCheckBox" name="all_view_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -406,7 +406,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="2" alignment="Qt::AlignHCenter">
+                  <item row="3" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QCheckBox" name="profile_view_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -425,10 +425,10 @@
                   <item row="8" column="0">
                    <spacer name="horizontal_spacer">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeType">
-                     <enum>QSizePolicy::Expanding</enum>
+                     <enum>QSizePolicy::Policy::Expanding</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -441,7 +441,7 @@
                   <item row="7" column="0">
                    <spacer name="horizontal_spacer_2">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -456,7 +456,7 @@
                 <item>
                  <spacer name="verticalSpacer">
                   <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                   <enum>Qt::Orientation::Vertical</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -540,7 +540,7 @@
                     <item row="10" column="0" colspan="2">
                      <spacer name="top_vertical_spacer">
                       <property name="orientation">
-                       <enum>Qt::Vertical</enum>
+                       <enum>Qt::Orientation::Vertical</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -631,7 +631,7 @@
                        <double>0.000100000000000</double>
                       </property>
                       <property name="stepType">
-                       <enum>QAbstractSpinBox::DefaultStepType</enum>
+                       <enum>QAbstractSpinBox::StepType::DefaultStepType</enum>
                       </property>
                      </widget>
                     </item>
@@ -825,7 +825,7 @@
                     <item row="11" column="0" colspan="2">
                      <spacer name="bottom_vertical_spacer">
                       <property name="orientation">
-                       <enum>Qt::Vertical</enum>
+                       <enum>Qt::Orientation::Vertical</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -1064,7 +1064,7 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="3" alignment="Qt::AlignHCenter">
+                    <item row="2" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
                      <widget class="QCheckBox" name="profile_multi_depth_chb">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1119,7 +1119,7 @@
                     <item row="15" column="1" colspan="3">
                      <spacer name="profile_vertical_spacer">
                       <property name="orientation">
-                       <enum>Qt::Vertical</enum>
+                       <enum>Qt::Orientation::Vertical</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -1241,7 +1241,7 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="1" alignment="Qt::AlignHCenter">
+                    <item row="2" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
                      <widget class="QToolButton" name="add_drill_tool_tb">
                       <property name="text">
                        <string>+</string>
@@ -1295,7 +1295,7 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="2" alignment="Qt::AlignHCenter">
+                    <item row="2" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                      <widget class="QToolButton" name="remove_drill_tool_tb">
                       <property name="text">
                        <string>-</string>
@@ -1332,10 +1332,10 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="1" colspan="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                    <item row="0" column="1" colspan="2" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                      <widget class="QTableWidget" name="drill_tw">
                       <property name="selectionBehavior">
-                       <enum>QAbstractItemView::SelectRows</enum>
+                       <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
                       </property>
                       <property name="columnCount">
                        <number>2</number>
@@ -1417,7 +1417,7 @@
                     <item row="15" column="1" colspan="2">
                      <spacer name="drill_vertical_spacer">
                       <property name="orientation">
-                       <enum>Qt::Vertical</enum>
+                       <enum>Qt::Orientation::Vertical</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -1656,7 +1656,7 @@
                     <item row="7" column="0" colspan="2">
                      <spacer name="nc_top_vertical_spacer">
                       <property name="orientation">
-                       <enum>Qt::Vertical</enum>
+                       <enum>Qt::Orientation::Vertical</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -1792,7 +1792,7 @@
                     <item row="8" column="0" colspan="2">
                      <spacer name="nc_bottom_vertical_spacer">
                       <property name="orientation">
-                       <enum>Qt::Vertical</enum>
+                       <enum>Qt::Orientation::Vertical</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -1894,7 +1894,7 @@
               <item>
                <spacer name="horizontalSpacer">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -2002,16 +2002,16 @@
                  </size>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
+                 <enum>QFrame::Shape::NoFrame</enum>
                 </property>
                 <property name="horizontalScrollBarPolicy">
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                 <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
                 </property>
                 <property name="selectionMode">
-                 <enum>QAbstractItemView::MultiSelection</enum>
+                 <enum>QAbstractItemView::SelectionMode::MultiSelection</enum>
                 </property>
                 <property name="selectionBehavior">
-                 <enum>QAbstractItemView::SelectRows</enum>
+                 <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
                 </property>
                 <property name="showGrid">
                  <bool>false</bool>
@@ -2144,12 +2144,12 @@
               <item>
                <layout class="QVBoxLayout" name="controlsVerticalLayout" stretch="0,0,0,0,0,0,0,0">
                 <property name="sizeConstraint">
-                 <enum>QLayout::SetDefaultConstraint</enum>
+                 <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                 </property>
                 <item>
                  <widget class="Line" name="line_4">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                  </widget>
                 </item>
@@ -2173,7 +2173,7 @@
                   <property name="verticalSpacing">
                    <number>2</number>
                   </property>
-                  <item row="3" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="3" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QPushButton" name="zero_xy_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2203,7 +2203,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="2" alignment="Qt::AlignHCenter">
+                  <item row="3" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QPushButton" name="zero_y_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2233,7 +2233,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="3" alignment="Qt::AlignHCenter">
+                  <item row="0" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="z_axis_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2259,23 +2259,23 @@
                      </font>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>Z</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="2" alignment="Qt::AlignHCenter">
+                  <item row="2" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="wpos_y_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2296,23 +2296,23 @@
                      </size>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>0.0</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QLabel" name="wpos_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2338,23 +2338,23 @@
                      </font>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>WPos</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="3" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="3" column="3" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QPushButton" name="zero_z_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2384,7 +2384,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="2" alignment="Qt::AlignHCenter">
+                  <item row="1" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="mpos_y_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2405,23 +2405,23 @@
                      </size>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>0.0</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="3" alignment="Qt::AlignHCenter">
+                  <item row="1" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="mpos_z_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2442,23 +2442,23 @@
                      </size>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>0.0</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QLabel" name="x_axis_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2484,23 +2484,23 @@
                      </font>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>X</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="2" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QLabel" name="wpos_x_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2521,23 +2521,23 @@
                      </size>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>0.0</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QLabel" name="axis_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2563,23 +2563,23 @@
                      </font>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>Axis:</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QLabel" name="mpos_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2605,23 +2605,23 @@
                      </font>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>MPos</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="3" alignment="Qt::AlignHCenter">
+                  <item row="2" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="wpos_z_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2642,23 +2642,23 @@
                      </size>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>0.0</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="3" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QPushButton" name="zero_x_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2688,7 +2688,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QLabel" name="y_axis_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2714,23 +2714,23 @@
                      </font>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>Y</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="1" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QLabel" name="mpos_x_l">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2751,19 +2751,19 @@
                      </size>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                     <enum>QFrame::Shape::NoFrame</enum>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Plain</enum>
+                     <enum>QFrame::Shadow::Plain</enum>
                     </property>
                     <property name="text">
                      <string>0.0</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
@@ -2772,7 +2772,7 @@
                 <item>
                  <widget class="Line" name="line_3">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                  </widget>
                 </item>
@@ -2790,7 +2790,7 @@
                   <property name="bottomMargin">
                    <number>0</number>
                   </property>
-                  <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QPushButton" name="probe_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2815,7 +2815,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                  <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                    <widget class="QPushButton" name="get_bbox_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -2946,7 +2946,7 @@
                      <string>Min</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
@@ -2979,7 +2979,7 @@
                      <string>Max</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
@@ -3012,7 +3012,7 @@
                      <string>Step</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
@@ -3045,7 +3045,7 @@
                      <string>N</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
@@ -3078,7 +3078,7 @@
                      <string>X</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
@@ -3103,10 +3103,10 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -3137,10 +3137,10 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -3174,13 +3174,13 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="readOnly">
                      <bool>true</bool>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                    </widget>
                   </item>
@@ -3205,7 +3205,7 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="minimum">
                      <number>1</number>
@@ -3241,7 +3241,7 @@
                      <string>Y</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
@@ -3266,10 +3266,10 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -3300,10 +3300,10 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -3337,13 +3337,13 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="readOnly">
                      <bool>true</bool>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                    </widget>
                   </item>
@@ -3368,7 +3368,7 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="minimum">
                      <number>1</number>
@@ -3404,7 +3404,7 @@
                      <string>Z</string>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                    </widget>
                   </item>
@@ -3429,10 +3429,10 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -3463,10 +3463,10 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -3481,7 +3481,7 @@
                 <item>
                  <widget class="Line" name="line">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                  </widget>
                 </item>
@@ -3490,7 +3490,7 @@
                   <item row="2" column="0">
                    <layout class="QGridLayout" name="zMoveGridLayout">
                     <property name="sizeConstraint">
-                     <enum>QLayout::SetDefaultConstraint</enum>
+                     <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                     </property>
                     <item row="0" column="0">
                      <widget class="QPushButton" name="z_plus_pb">
@@ -3834,9 +3834,9 @@
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_14">
                       <property name="sizeConstraint">
-                       <enum>QLayout::SetDefaultConstraint</enum>
+                       <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                       </property>
-                      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                      <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                        <widget class="QLabel" name="z_jog_l_2">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -3865,11 +3865,11 @@
                          <string>Z step [mm]</string>
                         </property>
                         <property name="alignment">
-                         <set>Qt::AlignCenter</set>
+                         <set>Qt::AlignmentFlag::AlignCenter</set>
                         </property>
                        </widget>
                       </item>
-                      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                      <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                        <widget class="QComboBox" name="z_step_cb">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -3963,10 +3963,10 @@
                          </font>
                         </property>
                         <property name="alignment">
-                         <set>Qt::AlignCenter</set>
+                         <set>Qt::AlignmentFlag::AlignCenter</set>
                         </property>
                         <property name="buttonSymbols">
-                         <enum>QAbstractSpinBox::NoButtons</enum>
+                         <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                         </property>
                         <property name="minimum">
                          <double>0.010000000000000</double>
@@ -4124,9 +4124,9 @@
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_12">
                       <property name="sizeConstraint">
-                       <enum>QLayout::SetDefaultConstraint</enum>
+                       <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                       </property>
-                      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                      <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                        <widget class="QLabel" name="xy_jog_l">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4150,11 +4150,11 @@
                          <string>XY step [mm]</string>
                         </property>
                         <property name="alignment">
-                         <set>Qt::AlignCenter</set>
+                         <set>Qt::AlignmentFlag::AlignCenter</set>
                         </property>
                        </widget>
                       </item>
-                      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                      <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                        <widget class="QComboBox" name="xy_step_cb">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4315,10 +4315,10 @@
                          </font>
                         </property>
                         <property name="alignment">
-                         <set>Qt::AlignCenter</set>
+                         <set>Qt::AlignmentFlag::AlignCenter</set>
                         </property>
                         <property name="buttonSymbols">
-                         <enum>QAbstractSpinBox::NoButtons</enum>
+                         <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                         </property>
                         <property name="minimum">
                          <double>0.010000000000000</double>
@@ -4411,14 +4411,14 @@
                      <number>1</number>
                     </property>
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="0">
                    <widget class="Line" name="line_5">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                    </widget>
                   </item>
@@ -4444,13 +4444,13 @@
                      </size>
                     </property>
                     <property name="frameShadow">
-                     <enum>QFrame::Sunken</enum>
+                     <enum>QFrame::Shadow::Sunken</enum>
                     </property>
                     <property name="verticalScrollBarPolicy">
-                     <enum>Qt::ScrollBarAlwaysOn</enum>
+                     <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
                     </property>
                     <property name="textInteractionFlags">
-                     <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+                     <set>Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
                     </property>
                    </widget>
                   </item>
@@ -4603,7 +4603,7 @@
                     <item>
                      <spacer name="horizontalSpacer_2">
                       <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
+                       <enum>Qt::Orientation::Horizontal</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -4717,6 +4717,9 @@
                   <height>30</height>
                  </size>
                 </property>
+                <property name="statusTip">
+                 <string>Alignment OFF</string>
+                </property>
                 <property name="text">
                  <string>...</string>
                 </property>
@@ -4781,7 +4784,7 @@
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonIconOnly</enum>
+             <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -4934,15 +4937,6 @@
                  </color>
                 </brush>
                </colorrole>
-               <colorrole role="NoRole">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>170</red>
-                  <green>85</green>
-                  <blue>255</blue>
-                 </color>
-                </brush>
-               </colorrole>
                <colorrole role="ToolTipBase">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
@@ -4967,6 +4961,15 @@
                   <red>255</red>
                   <green>255</green>
                   <blue>127</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Accent">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>76</red>
+                  <green>194</green>
+                  <blue>255</blue>
                  </color>
                 </brush>
                </colorrole>
@@ -5098,15 +5101,6 @@
                  </color>
                 </brush>
                </colorrole>
-               <colorrole role="NoRole">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
                <colorrole role="ToolTipBase">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
@@ -5131,6 +5125,15 @@
                   <red>0</red>
                   <green>0</green>
                   <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Accent">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>76</red>
+                  <green>194</green>
+                  <blue>255</blue>
                  </color>
                 </brush>
                </colorrole>
@@ -5262,15 +5265,6 @@
                  </color>
                 </brush>
                </colorrole>
-               <colorrole role="NoRole">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>0</red>
-                  <green>0</green>
-                  <blue>0</blue>
-                 </color>
-                </brush>
-               </colorrole>
                <colorrole role="ToolTipBase">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
@@ -5298,6 +5292,15 @@
                  </color>
                 </brush>
                </colorrole>
+               <colorrole role="Accent">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>157</red>
+                  <green>157</green>
+                  <blue>157</blue>
+                 </color>
+                </brush>
+               </colorrole>
               </disabled>
              </palette>
             </property>
@@ -5309,16 +5312,16 @@
              </font>
             </property>
             <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
+             <enum>QFrame::Shape::StyledPanel</enum>
             </property>
             <property name="frameShadow">
-             <enum>QFrame::Plain</enum>
+             <enum>QFrame::Shadow::Plain</enum>
             </property>
             <property name="text">
              <string>Not Connected</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -5364,7 +5367,7 @@
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonIconOnly</enum>
+             <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -5407,7 +5410,7 @@
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonIconOnly</enum>
+             <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -5450,7 +5453,7 @@
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonIconOnly</enum>
+             <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -5493,7 +5496,7 @@
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonIconOnly</enum>
+             <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -5536,7 +5539,7 @@
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonIconOnly</enum>
+             <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -5579,7 +5582,7 @@
              </size>
             </property>
             <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonIconOnly</enum>
+             <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
             </property>
            </widget>
           </item>
@@ -5606,10 +5609,10 @@
               <item>
                <widget class="QFrame" name="frame">
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::Shape::StyledPanel</enum>
                 </property>
                 <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
+                 <enum>QFrame::Shadow::Raised</enum>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_13">
                  <item>
@@ -5639,7 +5642,7 @@
                  </item>
                  <item>
                   <layout class="QGridLayout" name="gridLayout_28">
-                   <item row="2" column="1" alignment="Qt::AlignHCenter">
+                   <item row="2" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
                     <widget class="QToolButton" name="tool_or_camera_tb">
                      <property name="text">
                       <string>TOOL POSITION</string>
@@ -5648,7 +5651,7 @@
                       <bool>true</bool>
                      </property>
                      <property name="toolButtonStyle">
-                      <enum>Qt::ToolButtonTextOnly</enum>
+                      <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
                      </property>
                     </widget>
                    </item>
@@ -5687,7 +5690,7 @@
               <item>
                <spacer name="verticalSpacer_3">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -5700,10 +5703,10 @@
               <item>
                <widget class="QFrame" name="frame_2">
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::Shape::StyledPanel</enum>
                 </property>
                 <property name="frameShadow">
-                 <enum>QFrame::Plain</enum>
+                 <enum>QFrame::Shadow::Plain</enum>
                 </property>
                 <property name="lineWidth">
                  <number>1</number>
@@ -5715,7 +5718,7 @@
                  <item>
                   <layout class="QGridLayout" name="gridLayoutDirections_2" rowstretch="0,0">
                    <property name="sizeConstraint">
-                    <enum>QLayout::SetFixedSize</enum>
+                    <enum>QLayout::SizeConstraint::SetFixedSize</enum>
                    </property>
                    <property name="leftMargin">
                     <number>0</number>
@@ -5734,7 +5737,7 @@
                      <item row="2" column="0">
                       <layout class="QGridLayout" name="gridLayout_23">
                        <property name="sizeConstraint">
-                        <enum>QLayout::SetDefaultConstraint</enum>
+                        <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                        </property>
                        <item row="0" column="0">
                         <widget class="QPushButton" name="z_plus_pb_2">
@@ -6078,9 +6081,9 @@
                        <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_26">
                          <property name="sizeConstraint">
-                          <enum>QLayout::SetDefaultConstraint</enum>
+                          <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                          </property>
-                         <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                         <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                           <widget class="QLabel" name="z_jog_l_4">
                            <property name="sizePolicy">
                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -6109,11 +6112,11 @@
                             <string>Z step [mm]</string>
                            </property>
                            <property name="alignment">
-                            <set>Qt::AlignCenter</set>
+                            <set>Qt::AlignmentFlag::AlignCenter</set>
                            </property>
                           </widget>
                          </item>
-                         <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                         <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                           <widget class="QComboBox" name="z_step_cb_2">
                            <property name="sizePolicy">
                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -6207,10 +6210,10 @@
                             </font>
                            </property>
                            <property name="alignment">
-                            <set>Qt::AlignCenter</set>
+                            <set>Qt::AlignmentFlag::AlignCenter</set>
                            </property>
                            <property name="buttonSymbols">
-                            <enum>QAbstractSpinBox::NoButtons</enum>
+                            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                            </property>
                            <property name="minimum">
                             <double>0.010000000000000</double>
@@ -6368,9 +6371,9 @@
                        <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_27">
                          <property name="sizeConstraint">
-                          <enum>QLayout::SetDefaultConstraint</enum>
+                          <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                          </property>
-                         <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                         <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                           <widget class="QLabel" name="xy_jog_l_2">
                            <property name="sizePolicy">
                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -6394,11 +6397,11 @@
                             <string>XY step [mm]</string>
                            </property>
                            <property name="alignment">
-                            <set>Qt::AlignCenter</set>
+                            <set>Qt::AlignmentFlag::AlignCenter</set>
                            </property>
                           </widget>
                          </item>
-                         <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                         <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                           <widget class="QComboBox" name="xy_step_cb_2">
                            <property name="sizePolicy">
                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -6559,10 +6562,10 @@
                             </font>
                            </property>
                            <property name="alignment">
-                            <set>Qt::AlignCenter</set>
+                            <set>Qt::AlignmentFlag::AlignCenter</set>
                            </property>
                            <property name="buttonSymbols">
-                            <enum>QAbstractSpinBox::NoButtons</enum>
+                            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                            </property>
                            <property name="minimum">
                             <double>0.010000000000000</double>
@@ -6655,14 +6658,14 @@
                         <number>1</number>
                        </property>
                        <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+                        <enum>Qt::Orientation::Horizontal</enum>
                        </property>
                       </widget>
                      </item>
                      <item row="1" column="0">
                       <widget class="Line" name="line_26">
                        <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
+                        <enum>Qt::Orientation::Horizontal</enum>
                        </property>
                       </widget>
                      </item>
@@ -6688,7 +6691,7 @@
                      <property name="verticalSpacing">
                       <number>2</number>
                      </property>
-                     <item row="0" column="3" alignment="Qt::AlignHCenter">
+                     <item row="0" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
                       <widget class="QLabel" name="z_axis_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -6714,23 +6717,23 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>Z</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="1" column="2" alignment="Qt::AlignHCenter">
+                     <item row="1" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                       <widget class="QLabel" name="mpos_y_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -6751,23 +6754,23 @@
                         </size>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>0.0</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                     <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                       <widget class="QLabel" name="x_axis_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -6793,23 +6796,23 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>X</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="1" column="3" alignment="Qt::AlignHCenter">
+                     <item row="1" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
                       <widget class="QLabel" name="mpos_z_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -6830,23 +6833,23 @@
                         </size>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>0.0</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="1" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                     <item row="1" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                       <widget class="QLabel" name="mpos_x_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -6867,23 +6870,23 @@
                         </size>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>0.0</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="2" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                     <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                       <widget class="QLabel" name="wpos_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -6909,23 +6912,23 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>WPos</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="2" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                     <item row="2" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                       <widget class="QLabel" name="wpos_x_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -6946,23 +6949,23 @@
                         </size>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>0.0</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                     <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                       <widget class="QLabel" name="mpos_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -6988,23 +6991,23 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>MPos</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="2" column="3" alignment="Qt::AlignHCenter">
+                     <item row="2" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
                       <widget class="QLabel" name="wpos_z_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -7025,23 +7028,23 @@
                         </size>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>0.0</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                     <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                       <widget class="QLabel" name="axis_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -7067,23 +7070,23 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>Axis:</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="0" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                     <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                       <widget class="QLabel" name="y_axis_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -7109,23 +7112,23 @@
                         </font>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>Y</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
-                     <item row="2" column="2" alignment="Qt::AlignHCenter">
+                     <item row="2" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                       <widget class="QLabel" name="wpos_y_l_2">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
@@ -7146,19 +7149,19 @@
                         </size>
                        </property>
                        <property name="layoutDirection">
-                        <enum>Qt::LeftToRight</enum>
+                        <enum>Qt::LayoutDirection::LeftToRight</enum>
                        </property>
                        <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
+                        <enum>QFrame::Shape::NoFrame</enum>
                        </property>
                        <property name="frameShadow">
-                        <enum>QFrame::Plain</enum>
+                        <enum>QFrame::Shadow::Plain</enum>
                        </property>
                        <property name="text">
                         <string>0.0</string>
                        </property>
                        <property name="alignment">
-                        <set>Qt::AlignCenter</set>
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
                        </property>
                       </widget>
                      </item>
@@ -7172,10 +7175,10 @@
               <item>
                <spacer name="verticalSpacer_9">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
                 <property name="sizeType">
-                 <enum>QSizePolicy::Fixed</enum>
+                 <enum>QSizePolicy::Policy::Fixed</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -7215,7 +7218,7 @@
                    <bool>true</bool>
                   </property>
                   <property name="toolButtonStyle">
-                   <enum>Qt::ToolButtonTextOnly</enum>
+                   <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
                   </property>
                  </widget>
                 </item>
@@ -7240,14 +7243,14 @@
                    <bool>true</bool>
                   </property>
                   <property name="toolButtonStyle">
-                   <enum>Qt::ToolButtonTextOnly</enum>
+                   <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
                   </property>
                  </widget>
                 </item>
                 <item>
                  <spacer name="horizontalSpacer_14">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -7284,7 +7287,7 @@
              <layout class="QVBoxLayout" name="verticalLayout_21">
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_22">
-                <item alignment="Qt::AlignHCenter">
+                <item alignment="Qt::AlignmentFlag::AlignHCenter">
                  <widget class="QTableWidget" name="align_points_tw">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -7305,7 +7308,7 @@
                    </size>
                   </property>
                   <property name="sizeAdjustPolicy">
-                   <enum>QAbstractScrollArea::AdjustToContents</enum>
+                   <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
                   </property>
                   <property name="columnCount">
                    <number>4</number>
@@ -7339,7 +7342,7 @@
                      </font>
                     </property>
                     <property name="statusTip">
-                     <string>Reload gcode files generated.</string>
+                     <string>Add alignment point</string>
                     </property>
                     <property name="text">
                      <string>+</string>
@@ -7349,7 +7352,7 @@
                       <normaloff>:/resources/resources/icons/gray-refresh.svg</normaloff>:/resources/resources/icons/gray-refresh.svg</iconset>
                     </property>
                     <property name="toolButtonStyle">
-                     <enum>Qt::ToolButtonTextOnly</enum>
+                     <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
                     </property>
                    </widget>
                   </item>
@@ -7374,7 +7377,7 @@
                      </font>
                     </property>
                     <property name="statusTip">
-                     <string>Load gcode files.</string>
+                     <string>Remove alignment point</string>
                     </property>
                     <property name="text">
                      <string>-</string>
@@ -7383,14 +7386,14 @@
                      <string>Ctrl+G</string>
                     </property>
                     <property name="toolButtonStyle">
-                     <enum>Qt::ToolButtonTextOnly</enum>
+                     <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
                     </property>
                    </widget>
                   </item>
                   <item>
                    <spacer name="horizontalSpacer_13">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -7412,7 +7415,7 @@
                      <string>Apply Alignment</string>
                     </property>
                     <property name="statusTip">
-                     <string>Remove gcode files.</string>
+                     <string>Alignment OFF</string>
                     </property>
                     <property name="text">
                      <string>...</string>
@@ -7426,7 +7429,7 @@
                      <bool>true</bool>
                     </property>
                     <property name="toolButtonStyle">
-                     <enum>Qt::ToolButtonIconOnly</enum>
+                     <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
                     </property>
                    </widget>
                   </item>
@@ -7436,7 +7439,7 @@
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_30" stretch="0,0,0">
-                <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                  <widget class="QLabel" name="label_17">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -7460,14 +7463,14 @@
                    <string>Error/STD_Deviation</string>
                   </property>
                   <property name="alignment">
-                   <set>Qt::AlignCenter</set>
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
                   </property>
                  </widget>
                 </item>
                 <item>
                  <spacer name="horizontalSpacer_15">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -7477,7 +7480,7 @@
                   </property>
                  </spacer>
                 </item>
-                <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
                  <widget class="QLabel" name="label_18">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -7501,7 +7504,7 @@
                    <string>No value available</string>
                   </property>
                   <property name="alignment">
-                   <set>Qt::AlignCenter</set>
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
                   </property>
                  </widget>
                 </item>
@@ -7558,7 +7561,7 @@
                  </size>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::WinPanel</enum>
+                 <enum>QFrame::Shape::WinPanel</enum>
                 </property>
                 <property name="text">
                  <string/>
@@ -7588,7 +7591,7 @@
                  </size>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::WinPanel</enum>
+                 <enum>QFrame::Shape::WinPanel</enum>
                 </property>
                 <property name="text">
                  <string/>
@@ -7618,7 +7621,7 @@
                  </size>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::WinPanel</enum>
+                 <enum>QFrame::Shape::WinPanel</enum>
                 </property>
                 <property name="text">
                  <string/>
@@ -7634,7 +7637,7 @@
                  </size>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::WinPanel</enum>
+                 <enum>QFrame::Shape::WinPanel</enum>
                 </property>
                 <property name="text">
                  <string/>
@@ -7650,7 +7653,7 @@
                  </size>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::WinPanel</enum>
+                 <enum>QFrame::Shape::WinPanel</enum>
                 </property>
                 <property name="text">
                  <string/>
@@ -7666,7 +7669,7 @@
                  </size>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::WinPanel</enum>
+                 <enum>QFrame::Shape::WinPanel</enum>
                 </property>
                 <property name="text">
                  <string/>
@@ -7678,14 +7681,14 @@
             <item row="2" column="0">
              <widget class="Line" name="line_17">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="4" column="0">
              <spacer name="verticalSpacer_2">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -7725,14 +7728,14 @@
                <string>LAYER COLORS</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignCenter</set>
               </property>
              </widget>
             </item>
             <item row="3" column="1">
              <spacer name="horizontalSpacer_3">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -7745,7 +7748,7 @@
             <item row="0" column="0">
              <widget class="Line" name="line_18">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -7759,9 +7762,9 @@
             <item row="3" column="0">
              <layout class="QGridLayout" name="gridLayout_20">
               <property name="sizeConstraint">
-               <enum>QLayout::SetFixedSize</enum>
+               <enum>QLayout::SizeConstraint::SetFixedSize</enum>
               </property>
-              <item row="0" column="1" alignment="Qt::AlignHCenter">
+              <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
                <widget class="QLabel" name="x_axis_la">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -7794,7 +7797,7 @@
                 </property>
                </widget>
               </item>
-              <item row="0" column="2" alignment="Qt::AlignHCenter">
+              <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                <widget class="QLabel" name="x_la_2">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -7827,7 +7830,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="0" alignment="Qt::AlignLeft|Qt::AlignVCenter">
+              <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter">
                <widget class="QLabel" name="mirroring_axis_la">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -7860,7 +7863,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="1" alignment="Qt::AlignHCenter">
+              <item row="1" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
                <widget class="QRadioButton" name="x_mirror_rb">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -7879,7 +7882,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="2" alignment="Qt::AlignHCenter">
+              <item row="1" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                <widget class="QRadioButton" name="y_mirror_rb">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -7901,10 +7904,10 @@
               <item row="0" column="0">
                <spacer name="horizontalSpacer_9">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeType">
-                 <enum>QSizePolicy::Fixed</enum>
+                 <enum>QSizePolicy::Policy::Fixed</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -7916,7 +7919,7 @@
               </item>
              </layout>
             </item>
-            <item row="7" column="0" alignment="Qt::AlignHCenter">
+            <item row="7" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
              <widget class="QLabel" name="probe_settings_section_la">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -7938,10 +7941,10 @@
             <item row="10" column="0">
              <spacer name="verticalSpacer_6">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
+               <enum>QSizePolicy::Policy::Expanding</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -7954,7 +7957,7 @@
             <item row="21" column="0">
              <spacer name="verticalSpacer_8">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -7967,11 +7970,11 @@
             <item row="19" column="0">
              <widget class="Line" name="line_10">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
-            <item row="12" column="0" alignment="Qt::AlignHCenter">
+            <item row="12" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
              <widget class="QLabel" name="tool_change_section_la">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -7993,7 +7996,7 @@
             <item row="5" column="0">
              <spacer name="verticalSpacer_5">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -8003,7 +8006,7 @@
               </property>
              </spacer>
             </item>
-            <item row="1" column="0" alignment="Qt::AlignHCenter">
+            <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
              <widget class="QLabel" name="jobs_common_settings_section_la">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -8037,17 +8040,17 @@
             <item row="6" column="0">
              <widget class="Line" name="line_16">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="14" column="1">
              <spacer name="horizontalSpacer_4">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
+               <enum>QSizePolicy::Policy::Expanding</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -8085,10 +8088,10 @@
                  <locale language="English" country="UnitedKingdom"/>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignCenter</set>
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
                 </property>
                 <property name="buttonSymbols">
-                 <enum>QAbstractSpinBox::UpDownArrows</enum>
+                 <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
                 </property>
                 <property name="maximum">
                  <double>100000.000000000000000</double>
@@ -8193,10 +8196,10 @@
                  <locale language="English" country="UnitedKingdom"/>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignCenter</set>
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
                 </property>
                 <property name="buttonSymbols">
-                 <enum>QAbstractSpinBox::UpDownArrows</enum>
+                 <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
                 </property>
                 <property name="maximum">
                  <double>100000.000000000000000</double>
@@ -8229,10 +8232,10 @@
                  <locale language="English" country="UnitedKingdom"/>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignCenter</set>
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
                 </property>
                 <property name="buttonSymbols">
-                 <enum>QAbstractSpinBox::UpDownArrows</enum>
+                 <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
                 </property>
                 <property name="maximum">
                  <double>100000.000000000000000</double>
@@ -8278,10 +8281,10 @@
               <item row="0" column="2">
                <spacer name="horizontalSpacer_6">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeType">
-                 <enum>QSizePolicy::Fixed</enum>
+                 <enum>QSizePolicy::Policy::Fixed</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -8294,10 +8297,10 @@
               <item row="1" column="2">
                <spacer name="horizontalSpacer_7">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeType">
-                 <enum>QSizePolicy::Fixed</enum>
+                 <enum>QSizePolicy::Policy::Fixed</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -8310,10 +8313,10 @@
               <item row="2" column="2">
                <spacer name="horizontalSpacer_8">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeType">
-                 <enum>QSizePolicy::Fixed</enum>
+                 <enum>QSizePolicy::Policy::Fixed</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -8331,14 +8334,14 @@
                <number>2</number>
               </property>
               <property name="sizeConstraint">
-               <enum>QLayout::SetFixedSize</enum>
+               <enum>QLayout::SizeConstraint::SetFixedSize</enum>
               </property>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_13">
                 <item>
                  <layout class="QGridLayout" name="gridLayout_14">
                   <property name="sizeConstraint">
-                   <enum>QLayout::SetDefaultConstraint</enum>
+                   <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                   </property>
                   <property name="verticalSpacing">
                    <number>2</number>
@@ -8369,10 +8372,10 @@
                      </font>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -8411,10 +8414,10 @@
                      </font>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -8427,7 +8430,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="1" alignment="Qt::AlignHCenter">
+                  <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="x_la">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -8454,7 +8457,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="2" alignment="Qt::AlignHCenter">
+                  <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="y_la">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -8510,10 +8513,10 @@
                      <locale language="English" country="UnitedKingdom"/>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -8552,10 +8555,10 @@
                      </font>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -8568,7 +8571,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="3" alignment="Qt::AlignHCenter">
+                  <item row="0" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QLabel" name="z_la">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -8621,10 +8624,10 @@
                      </font>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -8696,10 +8699,10 @@
                      </font>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -8771,10 +8774,10 @@
                      </font>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -8820,7 +8823,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="4" alignment="Qt::AlignHCenter">
+                  <item row="1" column="4" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QCheckBox" name="tool_probe_wm_pos_chb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -8841,7 +8844,7 @@
                      </size>
                     </property>
                     <property name="layoutDirection">
-                     <enum>Qt::LeftToRight</enum>
+                     <enum>Qt::LayoutDirection::LeftToRight</enum>
                     </property>
                     <property name="autoFillBackground">
                      <bool>true</bool>
@@ -8851,7 +8854,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="4" alignment="Qt::AlignHCenter">
+                  <item row="2" column="4" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QPushButton" name="get_tool_probe_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -8891,7 +8894,7 @@
               <item>
                <widget class="Line" name="line_6">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                </widget>
               </item>
@@ -8900,7 +8903,7 @@
                 <item>
                  <layout class="QGridLayout" name="gridLayout_15">
                   <property name="sizeConstraint">
-                   <enum>QLayout::SetDefaultConstraint</enum>
+                   <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                   </property>
                   <item row="0" column="4">
                    <widget class="QDoubleSpinBox" name="tool_change_z_mpos_dsb">
@@ -8931,10 +8934,10 @@
                      <locale language="English" country="UnitedKingdom"/>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -8976,10 +8979,10 @@
                      <locale language="English" country="UnitedKingdom"/>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -9021,10 +9024,10 @@
                      <locale language="English" country="UnitedKingdom"/>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignCenter</set>
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
                     </property>
                     <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
+                     <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                     </property>
                     <property name="minimum">
                      <double>-1000.000000000000000</double>
@@ -9070,7 +9073,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="5" alignment="Qt::AlignHCenter">
+                  <item row="0" column="5" alignment="Qt::AlignmentFlag::AlignHCenter">
                    <widget class="QPushButton" name="get_tool_change_pb">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -9112,35 +9115,35 @@
             <item row="13" column="0">
              <widget class="Line" name="line_8">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="8" column="0">
              <widget class="Line" name="line_15">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="17" column="0">
              <widget class="Line" name="line_9">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="15" column="0">
              <widget class="Line" name="line_7">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="16" column="0">
              <spacer name="verticalSpacer_4">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -9153,7 +9156,7 @@
             <item row="0" column="0">
              <widget class="Line" name="line_12">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -9163,7 +9166,7 @@
                <number>2</number>
               </property>
               <property name="sizeConstraint">
-               <enum>QLayout::SetFixedSize</enum>
+               <enum>QLayout::SizeConstraint::SetFixedSize</enum>
               </property>
               <item>
                <layout class="QGridLayout" name="gridLayout_21">
@@ -9176,10 +9179,10 @@
                 <item row="0" column="0">
                  <spacer name="horizontalSpacer_10">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
+                   <enum>QSizePolicy::Policy::Fixed</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -9189,7 +9192,7 @@
                   </property>
                  </spacer>
                 </item>
-                <item row="0" column="1" alignment="Qt::AlignHCenter">
+                <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
                  <widget class="QCheckBox" name="hold_on_probe_chb">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -9214,7 +9217,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="2" alignment="Qt::AlignHCenter">
+                <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
                  <widget class="QCheckBox" name="zeroing_after_probe_chb">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -9243,7 +9246,7 @@
               </item>
              </layout>
             </item>
-            <item row="18" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+            <item row="18" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
              <widget class="QLabel" name="feedrates_section_la">
               <property name="font">
                <font>
@@ -9259,21 +9262,21 @@
             <item row="2" column="0">
              <widget class="Line" name="line_11">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="Line" name="line_13">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="11" column="0">
              <widget class="Line" name="line_14">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -9289,11 +9292,11 @@
               <item>
                <widget class="Line" name="line_21">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                </widget>
               </item>
-              <item alignment="Qt::AlignHCenter">
+              <item alignment="Qt::AlignmentFlag::AlignHCenter">
                <widget class="QLabel" name="alignment_drill_section_la">
                 <property name="font">
                  <font>
@@ -9309,7 +9312,7 @@
               <item>
                <widget class="Line" name="line_22">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                </widget>
               </item>
@@ -9377,10 +9380,10 @@
                    <locale language="English" country="UnitedKingdom"/>
                   </property>
                   <property name="alignment">
-                   <set>Qt::AlignCenter</set>
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
                   </property>
                   <property name="buttonSymbols">
-                   <enum>QAbstractSpinBox::UpDownArrows</enum>
+                   <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
                   </property>
                   <property name="maximum">
                    <double>100000.000000000000000</double>
@@ -9395,7 +9398,7 @@
               <item>
                <spacer name="verticalSpacer_10">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -9408,11 +9411,11 @@
               <item>
                <widget class="Line" name="line_23">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                </widget>
               </item>
-              <item alignment="Qt::AlignHCenter">
+              <item alignment="Qt::AlignmentFlag::AlignHCenter">
                <widget class="QLabel" name="alignment_camera_tool_offset_section_la">
                 <property name="font">
                  <font>
@@ -9428,14 +9431,14 @@
               <item>
                <widget class="Line" name="line_24">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                </widget>
               </item>
               <item>
                <layout class="QGridLayout" name="gridLayout_17">
                 <property name="sizeConstraint">
-                 <enum>QLayout::SetDefaultConstraint</enum>
+                 <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                 </property>
                 <item row="0" column="0">
                  <widget class="QLabel" name="tool_camera_offset_la">
@@ -9499,10 +9502,10 @@
                    <locale language="English" country="UnitedKingdom"/>
                   </property>
                   <property name="alignment">
-                   <set>Qt::AlignCenter</set>
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
                   </property>
                   <property name="buttonSymbols">
-                   <enum>QAbstractSpinBox::NoButtons</enum>
+                   <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                   </property>
                   <property name="minimum">
                    <double>-1000.000000000000000</double>
@@ -9515,7 +9518,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="4" alignment="Qt::AlignHCenter">
+                <item row="0" column="4" alignment="Qt::AlignmentFlag::AlignHCenter">
                  <widget class="QPushButton" name="get_tool_camera_offset_pb">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -9577,10 +9580,10 @@
                    <locale language="English" country="UnitedKingdom"/>
                   </property>
                   <property name="alignment">
-                   <set>Qt::AlignCenter</set>
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
                   </property>
                   <property name="buttonSymbols">
-                   <enum>QAbstractSpinBox::NoButtons</enum>
+                   <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
                   </property>
                   <property name="minimum">
                    <double>-1000.000000000000000</double>
@@ -9598,7 +9601,7 @@
               <item>
                <spacer name="verticalSpacer_11">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -9613,7 +9616,7 @@
             <item>
              <spacer name="horizontalSpacer_12">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -9632,7 +9635,7 @@
           <item>
            <spacer name="horizontalSpacer_11">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -9659,7 +9662,7 @@
           <item>
            <spacer name="horizontalSpacer_5">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -9711,7 +9714,7 @@
      <x>0</x>
      <y>0</y>
      <width>1160</width>
-     <height>22</height>
+     <height>33</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -9734,7 +9737,7 @@
     </property>
     <widget class="QMenu" name="menu_set_level">
      <property name="inputMethodHints">
-      <set>Qt::ImhNone</set>
+      <set>Qt::InputMethodHint::ImhNone</set>
      </property>
      <property name="title">
       <string>Set Level</string>
