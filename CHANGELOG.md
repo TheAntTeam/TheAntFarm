@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [0.3.1] - Aug 21, 2025
+
+### Fixed
+
+- Fixed spec file for generation of Ubuntu OS executable.
+- Fixed spec file for generation of Windows OS executable.
+- Fixed dll path for Windows executable. 
+- Fixed status tips for alignment buttons.
+
+### Changed
+
+- GH Actions generates executable for both python 3.10 and 3.12.
+- Renewed UI generated from pyside 6 designer tool.
+
 ## [0.3.0] - Jun 28, 2025
 
 ### Added
