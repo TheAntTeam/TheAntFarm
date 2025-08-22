@@ -116,6 +116,8 @@ class UiAlignTab(QObject):
             scaled_frame = pixmap.scaled(self.ui.camera_la.width(), 1000, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.ui.camera_la.setPixmap(scaled_frame)
             # self.ui.camera_la.setPixmap(pixmap)
+        else:
+            self.ui.camera_la.clear()
 
     def update_tool_or_camera(self):
         if self.ui.tool_or_camera_tb.isChecked():
