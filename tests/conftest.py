@@ -2,6 +2,15 @@ import pytest
 import sys
 import os
 from pathlib import Path
+from PySide6.QtCore import QCoreApplication
+from PySide6.QtSerialPort import QSerialPort
+
+@pytest.fixture(scope="session")
+def qapp():
+    """Create QApplication instance for tests."""
+    app = QCoreApplication([])
+    yield app
+    app.quit()
 
 # Add the src directory to PYTHONPATH
 src_path = Path(__file__).parent.parent / 'src'
@@ -19,7 +28,12 @@ def sample_config_path():
 
 @pytest.fixture
 def mock_serial_port(mocker):
-    """Fixture providing a mocked serial port"""
-    mock_serial = mocker.patch('serial.Serial')
-    mock_serial.return_value.is_open = True
+    """Fixture providing a mocked QSerialPort"""
+    mock_serial = mocker.Mock(spec=QSerialPort)
+    mock_serial.isOpen.return_value = True
+    mock_serial.open.return_value = True
+    mock_serial.setBaudRate.return_value = True
+    mock_serial.setPortName = mocker.Mock()
+    mock_serial.errorOccurred = mocker.Mock()
+    mock_serial.error.return_value = QSerialPort.NoError
     return mock_serial
