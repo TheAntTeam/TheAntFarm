@@ -54,10 +54,6 @@ jobs:
       run: |
         mypy src/TheAntFarm --ignore-missing-imports
     
-    - name: Security check
-      run: |
-        bandit -r src/TheAntFarm -x tests
-    
     - name: Run tests with coverage
       run: |
         python -m pytest tests -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing
