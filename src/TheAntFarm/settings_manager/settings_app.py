@@ -61,7 +61,6 @@ class AppSettingsHandler:
             os.makedirs(self.logs_folder)
 
         self.app_config_path = os.path.normpath(os.path.join(config_folder, 'app_config.ini'))
-        print(f"App config path: {self.app_config_path}")
         self.app_settings = configparser.ConfigParser()
 
         self.app_version = self.APP_VERSION_DEFAULT

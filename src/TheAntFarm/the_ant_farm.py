@@ -3,13 +3,6 @@ import sys
 import sysconfig
 import platform
 import shutil
-from pathlib import Path
-
-# Add src directory to Python path if not already there
-src_path = str(Path(__file__).resolve().parent.parent)
-if src_path not in sys.path:
-    sys.path.insert(0, src_path)
-
 from PySide6.QtWidgets import QMainWindow, QApplication
 from PySide6.QtCore import QThread, QResource
 from queue import Queue
