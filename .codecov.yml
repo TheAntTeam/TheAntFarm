@@ -1,0 +1,56 @@
+codecov:
+  require_ci_to_pass: yes
+  notify:
+    wait_for_ci: yes
+
+coverage:
+  precision: 2
+  round: down
+  range: "50...80"
+  status:
+    project:
+      default:
+        # basic
+        target: 60%
+        threshold: 1%
+        if_ci_failed: error
+        # advanced settings
+        paths:
+          - "src/TheAntFarm"
+        ignore:
+          - "src/TheAntFarm/app_resources_rc.py"
+          - "src/TheAntFarm/ui_the_ant_farm.py"
+          - "tests/"
+    patch:
+      default:
+        target: 60%
+        threshold: 1%
+        if_ci_failed: error
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
+
+comment:
+  layout: "reach,diff,flags,tree"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes
+  branches:
+    - "main"
+    - "dev"
+
+github_checks:
+  annotations: yes
+
+ignore:
+  - "src/TheAntFarm/app_resources_rc.py"  # Generated resource file
+  - "src/TheAntFarm/ui_the_ant_farm.py"   # Generated UI file
+  - "tests/**/*"                          # Test files
+  - "**/__pycache__/**"                   # Python cache
+  - "venv/**"                           # Virtual environment
