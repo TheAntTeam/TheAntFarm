@@ -1,0 +1,23 @@
+# Test dependencies
+pytest>=8.4.0
+pytest-cov>=7.0.0
+pytest-qt>=4.5.0
+pytest-mock>=3.15.0
+flake8>=7.0.0
+pre-commit>=3.6.0
+mypy>=1.8.0
+bandit>=2.0.0
+
+# Test coverage
+coverage>=7.4.0
+
+# Quality checks
+black>=24.0.0
+isort>=5.13.0
+
+# Type checking
+types-setuptools>=69.0.0
+types-PyYAML>=6.0.0
+
+# UI testing
+PySide6>=6.10.0  # Match the version used in the main requirements
