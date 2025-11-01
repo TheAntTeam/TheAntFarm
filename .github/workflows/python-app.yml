@@ -5,7 +5,7 @@ name: Python application
 
 on:
   push:
-    branches: [ main, dev , feature/testing]
+    branches: [ main, dev ]
   pull_request:
     branches: [ main, dev ]
 
@@ -32,6 +32,33 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-test.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
+
+    - name: Install Linux system dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          libegl1 \
+          libxcb-icccm4 \
+          libxcb-image0 \
+          libxcb-keysyms1 \
+          libxcb-randr0 \
+          libxcb-render-util0 \
+          libxcb-shape0 \
+          libxcb-xinerama0 \
+          libxcb-xfixes0 \
+          libxcb-cursor0 \
+          libxkbcommon-x11-0 \
+          libgl1-mesa-dev \
+          libegl1-mesa-dev \
+          libxcb1 \
+          '^libxcb.*-dev' \
+          libx11-xcb-dev \
+          libglu1-mesa-dev \
+          libxrender-dev \
+          libxi-dev \
+          libxkbcommon-dev \
+          libxkbcommon-x11-dev
     
     - name: Install dependencies
       run: |
@@ -67,10 +94,12 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage.xml
         flags: unittests
         name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
         fail_ci_if_error: true
+        verbose: true  # Add more detailed upload information
     
     - name: Build Executable
       run: |
