@@ -12,9 +12,10 @@ def qapp():
     yield app
     app.quit()
 
-# Add the src directory to PYTHONPATH
+# Add the src directory and TheAntFarm package to PYTHONPATH
 src_path = Path(__file__).parent.parent / 'src'
 sys.path.insert(0, str(src_path))
+sys.path.insert(0, str(src_path / 'TheAntFarm'))
 
 @pytest.fixture
 def sample_gerber_path():
