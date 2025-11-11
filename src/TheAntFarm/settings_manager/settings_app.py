@@ -211,6 +211,8 @@ class AppSettingsHandler:
 
     def write_all_app_settings(self):
         """ Write all application settings to ini files """
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(self.app_config_path), exist_ok=True)
         self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
@@ -286,6 +288,8 @@ class AppSettingsHandler:
 
     def restore_app_settings(self):
         """ Restore all application settings to default and create ini file if it doesn't exists """
+        # Ensure config directory exists
+        os.makedirs(os.path.dirname(self.app_config_path), exist_ok=True)
         self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
                                         "win_position_y": self.WIN_POS_Y_DEFAULT,
                                         "win_width": self.WIN_SIZE_W_DEFAULT,
