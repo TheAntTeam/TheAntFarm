@@ -730,6 +730,7 @@ class GCodeParser:
             for l in ls:
                 d = l.strip()
                 d = d.replace("(", ";")
+                d = d.replace("%", ";")
                 d = d.replace(")", "")
                 d += ";"
                 tmp = d.split(";")
@@ -748,7 +749,6 @@ class GCodeParser:
 
                             # detect tags (remember, tags cannot be used in motion commands)
                             tags = re.findall(r'[a-z][@]*[a-z_]+[@]*', data)
-
                             cmd = splitted.pop(0)
                             ct = cmd[0]
                             cd = [int(x) for x in cmd[1::].split(".")]
