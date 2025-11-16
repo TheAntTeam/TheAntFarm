@@ -286,12 +286,13 @@ class UiSettingsPreferencesTab(QObject):
         self.machine_settings.tool_camera_offset_x = self.ui.x_tool_camera_offset_dsb.value()
         self.machine_settings.tool_camera_offset_y = self.ui.y_tool_camera_offset_dsb.value()
 
-        self.app_settings.layer_color["top"] = self.ui.top_layer_color_la.palette().background().color().name()
-        self.app_settings.layer_color["bottom"] = self.ui.bottom_layer_color_la.palette().background().color().name()
-        self.app_settings.layer_color["profile"] = self.ui.profile_layer_color_la.palette().background().color().name()
-        self.app_settings.layer_color["drill"] = self.ui.drill_layer_color_la.palette().background().color().name()
-        self.app_settings.layer_color["nc_top"] = self.ui.nc_top_layer_color_la.palette().background().color().name()
-        self.app_settings.layer_color["nc_bottom"] = self.ui.nc_bottom_layer_color_la.palette().background().color().name()
+        self.app_settings.layer_color["top"] = self.ui.top_layer_color_la.palette().window().color().name()
+        self.app_settings.layer_color["bottom"] = self.ui.bottom_layer_color_la.palette().window().color().name()
+        self.app_settings.layer_color["profile"] = self.ui.profile_layer_color_la.palette().window().color().name()
+        self.app_settings.layer_color["drill"] = self.ui.drill_layer_color_la.palette().window().color().name()
+        self.app_settings.layer_color["nc_top"] = self.ui.nc_top_layer_color_la.palette().window().color().name()
+        self.app_settings.layer_color["nc_bottom"] = self.ui.nc_bottom_layer_color_la.palette().window().color().name()
+        self.app_settings.layer_color["nc_bottom"] = self.ui.nc_bottom_layer_color_la.palette().window().color().name()
 
         self.load_gcoder_cfg_s.emit()
         # Emit a signal to write all settings
