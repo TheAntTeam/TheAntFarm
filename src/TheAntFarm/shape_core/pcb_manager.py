@@ -381,15 +381,15 @@ class PcbObj:
                 p = primitive
                 points = self._arc_segmentation(p.center, p.radius, p.start_angle, p.end_angle, direction=p.direction)
 
-                if isinstance(primitive.aperture, gbr.primitives.Circle) or \
-                        isinstance(primitive.aperture, gbr.primitives.Rectangle) and not region:
-                        pts = points.copy()
-                        pp = pts.pop(0)
-                        gdata = []
-                        for np in pts:
-                            l_points = self._get_enhanced_line(pp, np, primitive.aperture)
-                            gdata.append({'points': l_points, 'polarity': primitive.level_polarity, 'closed': True})
-                            pp = np
+                if (isinstance(primitive.aperture, gbr.primitives.Circle) or
+                        isinstance(primitive.aperture, gbr.primitives.Rectangle)) and not region:
+                    pts = points.copy()
+                    pp = pts.pop(0)
+                    gdata = []
+                    for npp in pts:
+                        l_points = self._get_enhanced_line(pp, npp, primitive.aperture)
+                        gdata.append({'points': l_points, 'polarity': primitive.level_polarity, 'closed': True})
+                        pp = npp
                 else:
                     gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
 
