@@ -231,7 +231,7 @@ class VisualLayer:
             self.canvas.view.interactive = True
 
             # get selected polygon using shapely
-            point = Point(pos)
+            point = Point(pos[0:2])
             for gk in self.meshes_geom.keys():
                 if gk != self.SELECTED_TAG:
                     geom_list = self.meshes_geom[gk].copy()
