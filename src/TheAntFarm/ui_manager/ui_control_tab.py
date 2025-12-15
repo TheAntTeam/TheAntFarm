@@ -1,4 +1,4 @@
-from PySide6.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelIndex
+from PySide6.QtCore import Signal, Slot, QObject, QSize, Qt, QPersistentModelIndex, QItemSelectionModel
 from PySide6.QtWidgets import QFileDialog, QLabel, QRadioButton, QHeaderView, QButtonGroup, QAbstractItemView
 from PySide6.QtGui import QIcon
 from style_manager import StyleManager
@@ -182,11 +182,9 @@ class UiControlTab(QObject):
         self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
         self.ui.gcode_tw.setColumnWidth(1, 100)
         self.ui.gcode_tw.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        # To Select Rows by Vertical Header
+        # To Select Rows by clicking column 0 (filename) only, not column 1 (radio button)
         self.ui.gcode_tw.setSelectionMode(QAbstractItemView.NoSelection)
-        self.ui.gcode_tw.horizontalHeader().sectionPressed.disconnect()
-        self.ui.gcode_tw.verticalHeader().sectionClicked.connect(self.select_gcode_row)
-        self.ui.gcode_tw.verticalHeader().sectionDoubleClicked.connect(self.deselect_all_gcode_row)
+        self.ui.gcode_tw.cellClicked.connect(self._handle_table_cell_click)
 
         self.ui.upload_temp_tb.clicked.connect(self.update_temporary_gcode_files)
         self.ui.remove_gcode_tb.clicked.connect(self.remove_gcode_files)
@@ -243,23 +241,28 @@ class UiControlTab(QObject):
         self.ui.zero_xy_pb.setEnabled(enable_flag)
 
     def deselect_all_gcode_row(self):
-        self.ui.gcode_tw.setSelectionMode(QAbstractItemView.MultiSelection)
-        self.ui.gcode_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
+        """Clear all selections"""
         self.ui.gcode_tw.clearSelection()
-        self.ui.gcode_tw.setSelectionMode(QAbstractItemView.NoSelection)
 
     def select_gcode_row(self, index):
-        self.ui.gcode_tw.setSelectionMode(QAbstractItemView.MultiSelection)
-        self.ui.gcode_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
-        qindexes = self.ui.gcode_tw.selectionModel().selectedRows()
-        indexes = [x.row() for x in qindexes]
-        if index in indexes:
-            selectionModel = self.ui.gcode_tw.selectionModel()
+        """Toggle row selection - deselect only the clicked row if selected, or select it if not"""
+        selected_rows = [idx.row() for idx in self.ui.gcode_tw.selectionModel().selectedRows()]
+        selectionModel = self.ui.gcode_tw.selectionModel()
+        if index in selected_rows:
+            # Deselect only this row, keep others selected
             selectionModel.select(self.ui.gcode_tw.model().index(index, 0),
-                                  selectionModel.Deselect | selectionModel.Rows)
+                                  QItemSelectionModel.Deselect | QItemSelectionModel.Rows)
         else:
             self.ui.gcode_tw.selectRow(index)
-        self.ui.gcode_tw.setSelectionMode(QAbstractItemView.NoSelection)
+
+    def _handle_table_cell_click(self, row, column):
+        """Only select row when clicking column 0 (filename), ignore column 1 (radio button)"""
+        if column == 0:
+            # Enable selection mode temporarily to select the row
+            self.ui.gcode_tw.setSelectionMode(QAbstractItemView.MultiSelection)
+            self.ui.gcode_tw.setSelectionBehavior(QAbstractItemView.SelectRows)
+            self.select_gcode_row(row)
+            self.ui.gcode_tw.setSelectionMode(QAbstractItemView.NoSelection)
 
     def init_xy_jog_step_value(self):
         """ Initialize XY step and value ui fields. """
