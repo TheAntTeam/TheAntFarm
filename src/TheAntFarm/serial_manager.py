@@ -2,6 +2,7 @@ from PySide6.QtSerialPort import QSerialPort, QSerialPortInfo
 from PySide6.QtCore import QIODevice, Signal, Slot, QObject
 import logging
 import traceback
+from virtual_serial_port import VirtualSerialPort
 
 logger = logging.getLogger(__name__)
 
@@ -14,9 +15,18 @@ class SerialWorker(QObject):
     get_port_list_s = Signal(list, list)
     close_for_error_s = Signal()
 
-    def __init__(self, serial_rx_queue, serial_tx_queue):
+    def __init__(self, serial_rx_queue, serial_tx_queue, use_simulation=False):
         super(SerialWorker, self).__init__()
-        self.serial_port = QSerialPort(self)
+        
+        # Toggle between real and simulated port
+        if use_simulation:
+            self.serial_port = VirtualSerialPort(self)
+            logger.info("Using SIMULATED serial port")
+        else:
+            self.serial_port = QSerialPort(self)
+            logger.info("Using REAL serial port")
+        
+        self.use_simulation = use_simulation
         self.serial_port.readyRead.connect(self.receive)
         self.serial_port.errorOccurred.connect(self.serial_error_manager)
         self.refresh_port_list_s.connect(self.get_port_list)
@@ -34,9 +44,19 @@ class SerialWorker(QObject):
         port_l = QSerialPortInfo().availablePorts()
         port_name_l = [port.portName() for port in port_l]
         port_name_l.sort()
+        
+        # Add virtual port if simulation enabled
+        if self.use_simulation:
+            port_name_l.insert(0, "SIM_GRBL_PORT")
+        
         if port_l:
             bauds_ls = port_l[0].standardBaudRates()
             self.get_port_list_s.emit(port_name_l, bauds_ls)
+        elif self.use_simulation:
+            # Only virtual port available
+            self.get_port_list_s.emit(port_name_l, [115200, 9600, 57600])
+        else:
+            self.get_port_list_s.emit(port_name_l, [])
 
     def open_port(self, port, baud_rate):
         """Open passed serial port. Return outcome of operation. True if success, otherwise False. """
@@ -46,7 +66,11 @@ class SerialWorker(QObject):
             try:
                 self.serial_port.setPortName(port)
                 if self.serial_port.open(QIODevice.ReadWrite):
-                    self.serial_port.setBaudRate(baud_rate)
+                    # Only set baud rate for real ports (virtual port ignores it)
+                    if not isinstance(self.serial_port, VirtualSerialPort):
+                        self.serial_port.setBaudRate(baud_rate)
+                    else:
+                        self.serial_port.setBaudRate(baud_rate)  # Still call it, but it's a no-op
                     self.open_port_s.emit(True)
                 else:
                     self.update_console_text_s.emit("COM port could not be opened." + self.serial_port.errorString())

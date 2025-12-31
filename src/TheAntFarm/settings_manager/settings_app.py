@@ -25,6 +25,7 @@ class AppSettingsHandler:
     SHOW_CONSOLE_DEFAULT = False
     LAST_SERIAL_PORT_DEFAULT = ""
     LAST_SERIAL_BAUD_DEFAULT = 115200
+    USE_SIMULATION_DEFAULT = False
     LAYER_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '../../..'))
     GCODE_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '../../..'))
     TOP_LAYER_COLOR_DEFAULT = "#FFC300"
@@ -80,6 +81,7 @@ class AppSettingsHandler:
         self.console_visibility = self.SHOW_CONSOLE_DEFAULT
         self.last_serial_port = self.LAST_SERIAL_PORT_DEFAULT
         self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
+        self.use_simulation = self.USE_SIMULATION_DEFAULT
         self.layer_last_dir = self.layer_last_dir_default
         self.gcode_last_dir = self.gcode_last_dir_default
         self.layer_color = Od({})
@@ -184,6 +186,7 @@ class AppSettingsHandler:
                 self.last_serial_baud = app_general.getint("last_serial_baud", self.LAST_SERIAL_BAUD_DEFAULT)
             except Exception:
                 self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
+            self.use_simulation = app_general.getboolean("use_simulation", self.USE_SIMULATION_DEFAULT)
 
             self.camera_selected_or_tool = app_general.getboolean("camera_selected_or_tool",
                                                                   self.CAMERA_SELECTED_OR_TOOL_DEFAULT)
@@ -237,6 +240,7 @@ class AppSettingsHandler:
                                         "logs_backup_count": self.LOGS_BACKUP_COUNT,
                                         "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
                                         "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT,
+                                        "use_simulation": self.USE_SIMULATION_DEFAULT,
                                         "camera_selected_or_tool": self.CAMERA_SELECTED_OR_TOOL_DEFAULT,
                                         "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
                                         "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT}
@@ -262,6 +266,7 @@ class AppSettingsHandler:
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
         app_general["last_serial_port"] = str(self.main_win.ui.serial_ports_cb.currentText())
         app_general["last_serial_baud"] = str(self.main_win.ui.serial_baud_cb.currentText())
+        app_general["use_simulation"] = str(self.use_simulation)
         app_general["camera_selected_or_tool"] = str(self.camera_selected_or_tool)
         app_general["flip_horizontal_selected"] = str(self.main_win.ui.flip_horizontally_tb.isChecked())
         app_general["flip_vertical_selected"] = str(self.main_win.ui.flip_vertically_tb.isChecked())

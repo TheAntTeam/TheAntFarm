@@ -89,7 +89,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Serial Worker Thread.
         self.serial_thread = QThread(self)
         self.serial_thread.setObjectName("serial_T")
-        self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu)
+        self.serialWo = SerialWorker(self.serialRxQu, self.serialTxQu, self.settings.app_settings.use_simulation)
         self.serialWo.moveToThread(self.serial_thread)
         self.serial_thread.start()
 
