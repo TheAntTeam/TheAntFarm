@@ -958,11 +958,10 @@ class UiControlTab(QObject):
         bbox_t, steps_t = self.get_abl_inputs()
         self.controlWo.send_abl_s.emit(bbox_t, steps_t)
 
-    @Slot(float)
-    def update_progress_bar(self, prog_percentage):
-        logger.debug(prog_percentage)
-        self.ui.progress_bar.setFormat(f"{prog_percentage:.2f}%")
-        # print(prog_percentage)
+    @Slot(float, str)
+    def update_progress_bar(self, prog_percentage, elapsed_time):
+        logger.debug(f"Progress: {prog_percentage:.2f}%, Elapsed: {elapsed_time}")
+        self.ui.progress_bar.setFormat(f"{prog_percentage:.2f}% - {elapsed_time}")
         self.ui.progress_bar.setValue(prog_percentage)
 
     @Slot()
