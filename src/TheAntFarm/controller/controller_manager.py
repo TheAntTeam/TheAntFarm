@@ -8,6 +8,7 @@ from .controller_control import ControlController
 from .controller_align import AlignController
 import logging
 import traceback
+import time
 
 from shape_core.gcode_manager import GCoder, GCodeMacro
 
@@ -34,7 +35,7 @@ class ControllerWorker(QObject):
     update_gcode_s = Signal(str, list, bool, bool)
     gcode_vectorized_s = Signal(str)
 
-    update_file_progress_s = Signal(float)
+    update_file_progress_s = Signal(float, str)  # Signal(progress_percent, elapsed_time_str)
 
     reset_controller_status_s = Signal()
     stop_send_s = Signal()
@@ -95,6 +96,7 @@ class ControllerWorker(QObject):
         self.max_buffered_lines = 100
         self.min_buffer_threshold = 80
         self.eof_wait_for_idle = False
+        self.start_time = None
 
         self.active_gcode_path = ""
 
@@ -127,6 +129,16 @@ class ControllerWorker(QObject):
         self.camera_timer.timeout.connect(self.on_camera_timeout)
         self.camera_timer.setInterval(120)
         self.camera_timer.start()
+
+    def _get_elapsed_time_str(self):
+        """Calculate elapsed time since start_time and return as HH:MM:SS format."""
+        if self.start_time is None:
+            return "00:00:00"
+        elapsed_seconds = int(time.time() - self.start_time)
+        hours = elapsed_seconds // 3600
+        minutes = (elapsed_seconds % 3600) // 60
+        seconds = elapsed_seconds % 60
+        return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
     # ***************** VIEW related functions. ***************** #
 
@@ -210,7 +222,7 @@ class ControllerWorker(QObject):
                             self.buffered_cmds.pop(0)
                             self.file_progress = (self.content_line / self.tot_lines) * 100
                             logger.debug("Acknowledged lines: " + str(self.ack_lines))
-                            self.update_file_progress_s.emit(self.file_progress)
+                            self.update_file_progress_s.emit(self.file_progress, self._get_elapsed_time_str())
 
                             # all lines have been sent?
 
@@ -264,7 +276,7 @@ class ControllerWorker(QObject):
                                 self.sending_file = False
 
                                 self.file_progress = (self.content_line / self.tot_lines) * 100
-                                self.update_file_progress_s.emit(self.file_progress)
+                                self.update_file_progress_s.emit(self.file_progress, self._get_elapsed_time_str())
 
                                 logger.info("End of File sending.")
 
@@ -442,6 +454,7 @@ class ControllerWorker(QObject):
         #     self.file_content = f.readlines()
         logger.debug(self.file_content)
         if self.file_content:
+            self.start_time = time.time()
             self.file_progress = 0.0
             self.cmds_to_ack = 0
             self.sent_lines = 0
