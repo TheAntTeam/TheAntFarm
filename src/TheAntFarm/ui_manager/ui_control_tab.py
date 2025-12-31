@@ -215,6 +215,8 @@ class UiControlTab(QObject):
         self.ui.z_min_dsb.valueChanged.connect(self.handle_z_min_changed)
         self.ui.z_max_dsb.valueChanged.connect(self.handle_z_max_changed)
 
+        self.ui.progress_bar.setRange(0.0, 100.0)
+
     def enable_control_jog_elements(self, enable_flag=True):
         """
         Enable or disable ui elements of the control jog and related.
@@ -959,6 +961,8 @@ class UiControlTab(QObject):
     @Slot(float)
     def update_progress_bar(self, prog_percentage):
         logger.debug(prog_percentage)
+        self.ui.progress_bar.setFormat(f"{prog_percentage:.2f}%")
+        # print(prog_percentage)
         self.ui.progress_bar.setValue(prog_percentage)
 
     @Slot()
