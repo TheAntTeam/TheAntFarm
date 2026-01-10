@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.3.2] - Jan 10, 2026
+
+### Added
+
+- Draft for test development
+
+### Fixed
+
+- Corrected calls parameters in the GridLayout addWidget call for updated API in pyside 6 vs 2
+- Cleared camera image when there is no new image streamed
+- Fixed property name in settings save function
+- Fixed error occurring when a point position was grabbed in the alignment tab before displaying the value
+- Fixed a bug when importing Gerber files containing REGION primitives. If these primitives included arcs, a bug occurred in the handling of this geometry type. As a result, the REGION primitives were reconstructed incorrectly.
+- Resolved bug on multiple drilling paths visualization
+
+### Changed
+
+- Improved selection of items in gcode table 
+- Progress bar now displays elapsed time tracking with HH:MM:SS format.
+- Enhanced progress tracking with 2-decimal precision percentage display (e.g., "45.67% - 00:02:34").
+
+
 ## [0.3.1] - Aug 21, 2025
 
 ### Fixed
