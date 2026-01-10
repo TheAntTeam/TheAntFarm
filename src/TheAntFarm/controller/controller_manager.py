@@ -61,8 +61,8 @@ class ControllerWorker(QObject):
         self.send_tool_change_s.connect(self.start_tool_change)
 
         self.poll_timer = None
-        self.alive_timer = None
         self.camera_timer = None
+        self.progress_timer = None
 
         self.align_active = False
 
@@ -129,6 +129,10 @@ class ControllerWorker(QObject):
         self.camera_timer.timeout.connect(self.on_camera_timeout)
         self.camera_timer.setInterval(120)
         self.camera_timer.start()
+
+    def on_progress_timeout(self):
+        elapsed_time = self._get_elapsed_time_str()
+        self.update_file_progress_s.emit(-1.0, elapsed_time)
 
     def _get_elapsed_time_str(self):
         """Calculate elapsed time since start_time and return as HH:MM:SS format."""
@@ -222,7 +226,7 @@ class ControllerWorker(QObject):
                             self.buffered_cmds.pop(0)
                             self.file_progress = (self.content_line / self.tot_lines) * 100
                             logger.debug("Acknowledged lines: " + str(self.ack_lines))
-                            self.update_file_progress_s.emit(self.file_progress, self._get_elapsed_time_str())
+                            self.update_file_progress_s.emit(self.file_progress, "")
 
                             # all lines have been sent?
 
@@ -276,7 +280,7 @@ class ControllerWorker(QObject):
                                 self.sending_file = False
 
                                 self.file_progress = (self.content_line / self.tot_lines) * 100
-                                self.update_file_progress_s.emit(self.file_progress, self._get_elapsed_time_str())
+                                self.update_file_progress_s.emit(self.file_progress, "")
 
                                 logger.info("End of File sending.")
 
@@ -455,6 +459,10 @@ class ControllerWorker(QObject):
         logger.debug(self.file_content)
         if self.file_content:
             self.start_time = time.time()
+            self.progress_timer = QTimer()
+            self.progress_timer.timeout.connect(self.on_progress_timeout)
+            self.progress_timer.setInterval(500)
+            self.progress_timer.start()
             self.file_progress = 0.0
             self.cmds_to_ack = 0
             self.sent_lines = 0
@@ -485,6 +493,7 @@ class ControllerWorker(QObject):
 
     def stop_gcode_file(self):
         self.sending_file = False
+        self.progress_timer.stop()
         if self.send_soft_reset:
             # send soft reset
             self.execute_gcode_cmd(b"!")

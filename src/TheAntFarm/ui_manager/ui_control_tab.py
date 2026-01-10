@@ -961,8 +961,18 @@ class UiControlTab(QObject):
     @Slot(float, str)
     def update_progress_bar(self, prog_percentage, elapsed_time):
         logger.debug(f"Progress: {prog_percentage:.2f}%, Elapsed: {elapsed_time}")
-        self.ui.progress_bar.setFormat(f"{prog_percentage:.2f}% - {elapsed_time}")
-        self.ui.progress_bar.setValue(prog_percentage)
+        prog_text = self.ui.progress_bar.text()
+        prog_text_split = prog_text.split("-")
+        prog_value = float(prog_text.split("%")[0].strip())
+        if len(prog_text_split) < 2:
+            prog_time = "00:00:00"
+        else:
+            prog_time = prog_text.split("-")[1].strip()
+        if prog_percentage < 0:
+            self.ui.progress_bar.setFormat(f"{prog_value:.2f}% - {elapsed_time}")
+        elif elapsed_time == "":
+            self.ui.progress_bar.setFormat(f"{prog_percentage:.2f}% - {prog_time}")
+            self.ui.progress_bar.setValue(prog_percentage)
 
     @Slot()
     def update_bbox_x_num_steps(self):
