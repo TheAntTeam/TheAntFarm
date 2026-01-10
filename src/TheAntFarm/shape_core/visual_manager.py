@@ -334,9 +334,9 @@ class VisualLayer:
     def add_path(self, tag, geom_list, color=None, warning_color='red'):
         # todo: add zbuffer controll
         if geom_list:
-            ldata = []
             order = 0
             for d in geom_list:
+                ldata = []
                 gl = d[1]
                 special_gl_ids = []
                 if len(d) > 2:
@@ -454,6 +454,7 @@ class VisualLayer:
         coords = []
         p = -1
         all_colors = []
+
         for i, l in enumerate(ldata):
             p += 1
             c = l[0]
