@@ -28,6 +28,12 @@ class SerialWorker(QObject):
         self.count_queue_sent = 0
         self.count_sent = 0
 
+        # Error handling configuration
+        self._consecutive_errors = 0
+        self._warning_threshold = 3  # Log errors after this many consecutive errors
+        self._critical_threshold = 10  # Close port after this many consecutive errors
+        self._last_error_type = None
+
     @Slot()
     def get_port_list(self):
         """Return serial port list."""
@@ -63,6 +69,7 @@ class SerialWorker(QObject):
         """Close serial port."""
         logger.debug("Closing " + self.serial_port.portName())
         self.update_console_text_s.emit("Closing " + self.serial_port.portName())
+        self.reset_error_count()
         self.serial_port.close()
 
     @Slot()
@@ -140,7 +147,30 @@ class SerialWorker(QObject):
     def serial_error_manager(self):
         error_type = self.serial_port.error()
         if error_type != QSerialPort.SerialPortError.NoError:
-            logger.error(self.serial_port.error())
-            logger.error(self.serial_port.errorString())
-            # if error_type == QSerialPort.ResourceError:
-            #     self.close_for_error_s.emit()
+            error_msg = self.serial_port.errorString()
+
+            # Reset counter if error type changes
+            if error_type != self._last_error_type:
+                self._consecutive_errors = 0
+                self._last_error_type = error_type
+
+            self._consecutive_errors += 1
+
+            # Handle different error thresholds
+            if self._consecutive_errors >= self._critical_threshold:
+                logger.error(f"Critical error: {error_type} - {error_msg}")
+                logger.error("Too many consecutive errors, closing port")
+                self.update_console_text_s.emit(f"Critical error: {error_msg}")
+                self.close_for_error_s.emit()
+            elif self._consecutive_errors >= self._warning_threshold:
+                logger.error(f"Serial error: {error_type} - {error_msg}")
+                self.update_console_text_s.emit(f"Warning: {error_msg}")
+        else:
+            # Reset counters when no error occurs
+            self._consecutive_errors = 0
+            self._last_error_type = None
+
+    def reset_error_count(self):
+        """Reset error counters when connection is manually managed"""
+        self._consecutive_errors = 0
+        self._last_error_type = None
