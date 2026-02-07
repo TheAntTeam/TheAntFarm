@@ -79,6 +79,7 @@ class UiManager(QObject):
         self.main_win.ui.main_tab_widget.setCurrentIndex(app_settings.main_tab_index)
         self.main_win.ui.ctrl_tab_widget.setCurrentIndex(app_settings.ctrl_tab_index)
         self.main_win.ui.settings_sub_tab.setCurrentIndex(app_settings.settings_tab_index)
+        self.main_win.ui.jog_probe_tab_widget.setCurrentIndex(app_settings.jog_probe_tab_index)
 
     def save_all_settings(self):
         """ Saves all settings in the configuration files. """

@@ -2772,7 +2772,7 @@
                 <item>
                  <layout class="QVBoxLayout" name="terminalVerticalLayout">
                   <item>
-                   <widget class="QTabWidget" name="tabWidget">
+                   <widget class="QTabWidget" name="jog_probe_tab_widget">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
                       <horstretch>0</horstretch>
@@ -2794,7 +2794,7 @@
                     <property name="tabBarAutoHide">
                      <bool>true</bool>
                     </property>
-                    <widget class="QWidget" name="tab">
+                    <widget class="QWidget" name="jog_tab">
                      <property name="enabled">
                       <bool>true</bool>
                      </property>
@@ -3760,7 +3760,7 @@
                       </item>
                      </layout>
                     </widget>
-                    <widget class="QWidget" name="tabWidgetPage2" native="true">
+                    <widget class="QWidget" name="probe_terminal_tab">
                      <attribute name="title">
                       <string>Probe/Terminal</string>
                      </attribute>
