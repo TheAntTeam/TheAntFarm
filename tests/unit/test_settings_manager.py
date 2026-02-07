@@ -26,6 +26,7 @@ class TestAppSettingsHandler:
         mock_ui.main_tab_widget.currentIndex.return_value = 0
         mock_ui.ctrl_tab_widget.currentIndex.return_value = 0
         mock_ui.settings_sub_tab.currentIndex.return_value = 0
+        mock_ui.jog_probe_tab_widget.currentIndex.return_value = 0
         mock_ui.actionHide_Show_Align_Tab.isChecked.return_value = False
         mock_ui.actionSettings_Preferences.isChecked.return_value = False
         mock_ui.actionHide_Show_Console.isChecked.return_value = False

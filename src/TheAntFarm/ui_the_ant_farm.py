@@ -1523,20 +1523,20 @@ class Ui_MainWindow(object):
 
         self.terminalVerticalLayout = QVBoxLayout()
         self.terminalVerticalLayout.setObjectName(u"terminalVerticalLayout")
-        self.tabWidget = QTabWidget(self.sender_tab)
-        self.tabWidget.setObjectName(u"tabWidget")
+        self.jog_probe_tab_widget = QTabWidget(self.sender_tab)
+        self.jog_probe_tab_widget.setObjectName(u"jog_probe_tab_widget")
         sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         sizePolicy8.setHorizontalStretch(0)
         sizePolicy8.setVerticalStretch(0)
-        sizePolicy8.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
-        self.tabWidget.setSizePolicy(sizePolicy8)
-        self.tabWidget.setMinimumSize(QSize(0, 0))
-        self.tabWidget.setTabPosition(QTabWidget.TabPosition.South)
-        self.tabWidget.setTabBarAutoHide(True)
-        self.tab = QWidget()
-        self.tab.setObjectName(u"tab")
-        self.tab.setEnabled(True)
-        self.horizontalLayout_19 = QHBoxLayout(self.tab)
+        sizePolicy8.setHeightForWidth(self.jog_probe_tab_widget.sizePolicy().hasHeightForWidth())
+        self.jog_probe_tab_widget.setSizePolicy(sizePolicy8)
+        self.jog_probe_tab_widget.setMinimumSize(QSize(0, 0))
+        self.jog_probe_tab_widget.setTabPosition(QTabWidget.TabPosition.South)
+        self.jog_probe_tab_widget.setTabBarAutoHide(True)
+        self.jog_tab = QWidget()
+        self.jog_tab.setObjectName(u"jog_tab")
+        self.jog_tab.setEnabled(True)
+        self.horizontalLayout_19 = QHBoxLayout(self.jog_tab)
         self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
         self.verticalLayout_18 = QVBoxLayout()
         self.verticalLayout_18.setObjectName(u"verticalLayout_18")
@@ -1545,7 +1545,7 @@ class Ui_MainWindow(object):
         self.zMoveGridLayout = QGridLayout()
         self.zMoveGridLayout.setObjectName(u"zMoveGridLayout")
         self.zMoveGridLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
-        self.z_plus_pb = QPushButton(self.tab)
+        self.z_plus_pb = QPushButton(self.jog_tab)
         self.z_plus_pb.setObjectName(u"z_plus_pb")
         sizePolicy3.setHeightForWidth(self.z_plus_pb.sizePolicy().hasHeightForWidth())
         self.z_plus_pb.setSizePolicy(sizePolicy3)
@@ -1557,7 +1557,7 @@ class Ui_MainWindow(object):
 
         self.zMoveGridLayout.addWidget(self.z_plus_pb, 0, 0, 1, 1)
 
-        self.z_minus_pb = QPushButton(self.tab)
+        self.z_minus_pb = QPushButton(self.jog_tab)
         self.z_minus_pb.setObjectName(u"z_minus_pb")
         sizePolicy3.setHeightForWidth(self.z_minus_pb.sizePolicy().hasHeightForWidth())
         self.z_minus_pb.setSizePolicy(sizePolicy3)
@@ -1575,7 +1575,7 @@ class Ui_MainWindow(object):
         self.xyMoveGridLayout = QGridLayout()
         self.xyMoveGridLayout.setObjectName(u"xyMoveGridLayout")
         self.xyMoveGridLayout.setContentsMargins(0, 0, 0, 0)
-        self.x_minus_y_plus_pb = QToolButton(self.tab)
+        self.x_minus_y_plus_pb = QToolButton(self.jog_tab)
         self.x_minus_y_plus_pb.setObjectName(u"x_minus_y_plus_pb")
         sizePolicy3.setHeightForWidth(self.x_minus_y_plus_pb.sizePolicy().hasHeightForWidth())
         self.x_minus_y_plus_pb.setSizePolicy(sizePolicy3)
@@ -1587,7 +1587,7 @@ class Ui_MainWindow(object):
 
         self.xyMoveGridLayout.addWidget(self.x_minus_y_plus_pb, 0, 0, 1, 1)
 
-        self.x_plus_y_minus_pb = QToolButton(self.tab)
+        self.x_plus_y_minus_pb = QToolButton(self.jog_tab)
         self.x_plus_y_minus_pb.setObjectName(u"x_plus_y_minus_pb")
         sizePolicy3.setHeightForWidth(self.x_plus_y_minus_pb.sizePolicy().hasHeightForWidth())
         self.x_plus_y_minus_pb.setSizePolicy(sizePolicy3)
@@ -1599,7 +1599,7 @@ class Ui_MainWindow(object):
 
         self.xyMoveGridLayout.addWidget(self.x_plus_y_minus_pb, 2, 2, 1, 1)
 
-        self.x_minus_pb = QToolButton(self.tab)
+        self.x_minus_pb = QToolButton(self.jog_tab)
         self.x_minus_pb.setObjectName(u"x_minus_pb")
         sizePolicy3.setHeightForWidth(self.x_minus_pb.sizePolicy().hasHeightForWidth())
         self.x_minus_pb.setSizePolicy(sizePolicy3)
@@ -1611,7 +1611,7 @@ class Ui_MainWindow(object):
 
         self.xyMoveGridLayout.addWidget(self.x_minus_pb, 1, 0, 1, 1)
 
-        self.x_minus_y_minus_pb = QToolButton(self.tab)
+        self.x_minus_y_minus_pb = QToolButton(self.jog_tab)
         self.x_minus_y_minus_pb.setObjectName(u"x_minus_y_minus_pb")
         sizePolicy3.setHeightForWidth(self.x_minus_y_minus_pb.sizePolicy().hasHeightForWidth())
         self.x_minus_y_minus_pb.setSizePolicy(sizePolicy3)
@@ -1623,7 +1623,7 @@ class Ui_MainWindow(object):
 
         self.xyMoveGridLayout.addWidget(self.x_minus_y_minus_pb, 2, 0, 1, 1)
 
-        self.y_plus_pb = QToolButton(self.tab)
+        self.y_plus_pb = QToolButton(self.jog_tab)
         self.y_plus_pb.setObjectName(u"y_plus_pb")
         sizePolicy3.setHeightForWidth(self.y_plus_pb.sizePolicy().hasHeightForWidth())
         self.y_plus_pb.setSizePolicy(sizePolicy3)
@@ -1633,7 +1633,7 @@ class Ui_MainWindow(object):
 
         self.xyMoveGridLayout.addWidget(self.y_plus_pb, 0, 1, 1, 1)
 
-        self.center_tb = QToolButton(self.tab)
+        self.center_tb = QToolButton(self.jog_tab)
         self.center_tb.setObjectName(u"center_tb")
         sizePolicy3.setHeightForWidth(self.center_tb.sizePolicy().hasHeightForWidth())
         self.center_tb.setSizePolicy(sizePolicy3)
@@ -1645,7 +1645,7 @@ class Ui_MainWindow(object):
 
         self.xyMoveGridLayout.addWidget(self.center_tb, 1, 1, 1, 1)
 
-        self.y_minus_pb = QToolButton(self.tab)
+        self.y_minus_pb = QToolButton(self.jog_tab)
         self.y_minus_pb.setObjectName(u"y_minus_pb")
         sizePolicy3.setHeightForWidth(self.y_minus_pb.sizePolicy().hasHeightForWidth())
         self.y_minus_pb.setSizePolicy(sizePolicy3)
@@ -1655,7 +1655,7 @@ class Ui_MainWindow(object):
 
         self.xyMoveGridLayout.addWidget(self.y_minus_pb, 2, 1, 1, 1)
 
-        self.x_plus_y_plus_pb = QToolButton(self.tab)
+        self.x_plus_y_plus_pb = QToolButton(self.jog_tab)
         self.x_plus_y_plus_pb.setObjectName(u"x_plus_y_plus_pb")
         sizePolicy3.setHeightForWidth(self.x_plus_y_plus_pb.sizePolicy().hasHeightForWidth())
         self.x_plus_y_plus_pb.setSizePolicy(sizePolicy3)
@@ -1667,7 +1667,7 @@ class Ui_MainWindow(object):
 
         self.xyMoveGridLayout.addWidget(self.x_plus_y_plus_pb, 0, 2, 1, 1)
 
-        self.x_plus_pb = QToolButton(self.tab)
+        self.x_plus_pb = QToolButton(self.jog_tab)
         self.x_plus_pb.setObjectName(u"x_plus_pb")
         sizePolicy3.setHeightForWidth(self.x_plus_pb.sizePolicy().hasHeightForWidth())
         self.x_plus_pb.setSizePolicy(sizePolicy3)
@@ -1687,7 +1687,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_14 = QHBoxLayout()
         self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
         self.horizontalLayout_14.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
-        self.z_jog_l_2 = QLabel(self.tab)
+        self.z_jog_l_2 = QLabel(self.jog_tab)
         self.z_jog_l_2.setObjectName(u"z_jog_l_2")
         sizePolicy3.setHeightForWidth(self.z_jog_l_2.sizePolicy().hasHeightForWidth())
         self.z_jog_l_2.setSizePolicy(sizePolicy3)
@@ -1698,7 +1698,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_14.addWidget(self.z_jog_l_2, 0, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
 
-        self.z_step_cb = QComboBox(self.tab)
+        self.z_step_cb = QComboBox(self.jog_tab)
         self.z_step_cb.addItem("")
         self.z_step_cb.addItem("")
         self.z_step_cb.addItem("")
@@ -1721,7 +1721,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_18 = QGridLayout()
         self.gridLayout_18.setObjectName(u"gridLayout_18")
-        self.z_step_val_dsb = QDoubleSpinBox(self.tab)
+        self.z_step_val_dsb = QDoubleSpinBox(self.jog_tab)
         self.z_step_val_dsb.setObjectName(u"z_step_val_dsb")
         self.z_step_val_dsb.setMinimumSize(QSize(70, 20))
         self.z_step_val_dsb.setMaximumSize(QSize(70, 16777215))
@@ -1735,7 +1735,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_18.addWidget(self.z_step_val_dsb, 1, 1, 1, 1)
 
-        self.z_mul_10_pb = QPushButton(self.tab)
+        self.z_mul_10_pb = QPushButton(self.jog_tab)
         self.z_mul_10_pb.setObjectName(u"z_mul_10_pb")
         sizePolicy3.setHeightForWidth(self.z_mul_10_pb.sizePolicy().hasHeightForWidth())
         self.z_mul_10_pb.setSizePolicy(sizePolicy3)
@@ -1749,7 +1749,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_18.addWidget(self.z_mul_10_pb, 1, 2, 1, 1)
 
-        self.z_div_10_pb = QPushButton(self.tab)
+        self.z_div_10_pb = QPushButton(self.jog_tab)
         self.z_div_10_pb.setObjectName(u"z_div_10_pb")
         sizePolicy3.setHeightForWidth(self.z_div_10_pb.sizePolicy().hasHeightForWidth())
         self.z_div_10_pb.setSizePolicy(sizePolicy3)
@@ -1760,7 +1760,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_18.addWidget(self.z_div_10_pb, 1, 0, 1, 1)
 
-        self.z_minus_1_pb = QPushButton(self.tab)
+        self.z_minus_1_pb = QPushButton(self.jog_tab)
         self.z_minus_1_pb.setObjectName(u"z_minus_1_pb")
         sizePolicy3.setHeightForWidth(self.z_minus_1_pb.sizePolicy().hasHeightForWidth())
         self.z_minus_1_pb.setSizePolicy(sizePolicy3)
@@ -1771,7 +1771,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_18.addWidget(self.z_minus_1_pb, 2, 1, 1, 1)
 
-        self.z_plus_1_pb = QPushButton(self.tab)
+        self.z_plus_1_pb = QPushButton(self.jog_tab)
         self.z_plus_1_pb.setObjectName(u"z_plus_1_pb")
         sizePolicy3.setHeightForWidth(self.z_plus_1_pb.sizePolicy().hasHeightForWidth())
         self.z_plus_1_pb.setSizePolicy(sizePolicy3)
@@ -1793,7 +1793,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
         self.horizontalLayout_12.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
-        self.xy_jog_l = QLabel(self.tab)
+        self.xy_jog_l = QLabel(self.jog_tab)
         self.xy_jog_l.setObjectName(u"xy_jog_l")
         sizePolicy3.setHeightForWidth(self.xy_jog_l.sizePolicy().hasHeightForWidth())
         self.xy_jog_l.setSizePolicy(sizePolicy3)
@@ -1803,7 +1803,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_12.addWidget(self.xy_jog_l, 0, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
 
-        self.xy_step_cb = QComboBox(self.tab)
+        self.xy_step_cb = QComboBox(self.jog_tab)
         self.xy_step_cb.addItem("")
         self.xy_step_cb.addItem("")
         self.xy_step_cb.addItem("")
@@ -1825,7 +1825,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_16 = QGridLayout()
         self.gridLayout_16.setObjectName(u"gridLayout_16")
-        self.xy_plus_1_pb = QPushButton(self.tab)
+        self.xy_plus_1_pb = QPushButton(self.jog_tab)
         self.xy_plus_1_pb.setObjectName(u"xy_plus_1_pb")
         sizePolicy3.setHeightForWidth(self.xy_plus_1_pb.sizePolicy().hasHeightForWidth())
         self.xy_plus_1_pb.setSizePolicy(sizePolicy3)
@@ -1836,7 +1836,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_16.addWidget(self.xy_plus_1_pb, 0, 1, 1, 1)
 
-        self.xy_div_10_pb = QPushButton(self.tab)
+        self.xy_div_10_pb = QPushButton(self.jog_tab)
         self.xy_div_10_pb.setObjectName(u"xy_div_10_pb")
         sizePolicy3.setHeightForWidth(self.xy_div_10_pb.sizePolicy().hasHeightForWidth())
         self.xy_div_10_pb.setSizePolicy(sizePolicy3)
@@ -1847,7 +1847,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_16.addWidget(self.xy_div_10_pb, 1, 0, 1, 1)
 
-        self.xy_step_val_dsb = QDoubleSpinBox(self.tab)
+        self.xy_step_val_dsb = QDoubleSpinBox(self.jog_tab)
         self.xy_step_val_dsb.setObjectName(u"xy_step_val_dsb")
         sizePolicy3.setHeightForWidth(self.xy_step_val_dsb.sizePolicy().hasHeightForWidth())
         self.xy_step_val_dsb.setSizePolicy(sizePolicy3)
@@ -1863,7 +1863,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_16.addWidget(self.xy_step_val_dsb, 1, 1, 1, 1)
 
-        self.xy_mul_10_pb = QPushButton(self.tab)
+        self.xy_mul_10_pb = QPushButton(self.jog_tab)
         self.xy_mul_10_pb.setObjectName(u"xy_mul_10_pb")
         sizePolicy3.setHeightForWidth(self.xy_mul_10_pb.sizePolicy().hasHeightForWidth())
         self.xy_mul_10_pb.setSizePolicy(sizePolicy3)
@@ -1874,7 +1874,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_16.addWidget(self.xy_mul_10_pb, 1, 2, 1, 1)
 
-        self.xy_minus_1_pb = QPushButton(self.tab)
+        self.xy_minus_1_pb = QPushButton(self.jog_tab)
         self.xy_minus_1_pb.setObjectName(u"xy_minus_1_pb")
         sizePolicy3.setHeightForWidth(self.xy_minus_1_pb.sizePolicy().hasHeightForWidth())
         self.xy_minus_1_pb.setSizePolicy(sizePolicy3)
@@ -1891,7 +1891,7 @@ class Ui_MainWindow(object):
 
         self.jogGridlayout.addLayout(self.xyStepAdjustmentVerticalLayout, 0, 1, 1, 1)
 
-        self.line_2 = QFrame(self.tab)
+        self.line_2 = QFrame(self.jog_tab)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setLineWidth(1)
         self.line_2.setFrameShape(QFrame.Shape.HLine)
@@ -1899,7 +1899,7 @@ class Ui_MainWindow(object):
 
         self.jogGridlayout.addWidget(self.line_2, 1, 1, 1, 1)
 
-        self.line_5 = QFrame(self.tab)
+        self.line_5 = QFrame(self.jog_tab)
         self.line_5.setObjectName(u"line_5")
         self.line_5.setFrameShape(QFrame.Shape.HLine)
         self.line_5.setFrameShadow(QFrame.Shadow.Sunken)
@@ -1916,15 +1916,15 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_19.addLayout(self.verticalLayout_18)
 
-        self.tabWidget.addTab(self.tab, "")
-        self.tabWidgetPage2 = QWidget()
-        self.tabWidgetPage2.setObjectName(u"tabWidgetPage2")
-        self.verticalLayout_17 = QVBoxLayout(self.tabWidgetPage2)
+        self.jog_probe_tab_widget.addTab(self.jog_tab, "")
+        self.probe_terminal_tab = QWidget()
+        self.probe_terminal_tab.setObjectName(u"probe_terminal_tab")
+        self.verticalLayout_17 = QVBoxLayout(self.probe_terminal_tab)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
         self.probeABLGridLayout = QGridLayout()
         self.probeABLGridLayout.setObjectName(u"probeABLGridLayout")
         self.probeABLGridLayout.setContentsMargins(0, 0, 0, 0)
-        self.probe_pb = QPushButton(self.tabWidgetPage2)
+        self.probe_pb = QPushButton(self.probe_terminal_tab)
         self.probe_pb.setObjectName(u"probe_pb")
         sizePolicy7.setHeightForWidth(self.probe_pb.sizePolicy().hasHeightForWidth())
         self.probe_pb.setSizePolicy(sizePolicy7)
@@ -1933,7 +1933,7 @@ class Ui_MainWindow(object):
 
         self.probeABLGridLayout.addWidget(self.probe_pb, 0, 0, 1, 1, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
 
-        self.get_bbox_pb = QPushButton(self.tabWidgetPage2)
+        self.get_bbox_pb = QPushButton(self.probe_terminal_tab)
         self.get_bbox_pb.setObjectName(u"get_bbox_pb")
         sizePolicy7.setHeightForWidth(self.get_bbox_pb.sizePolicy().hasHeightForWidth())
         self.get_bbox_pb.setSizePolicy(sizePolicy7)
@@ -1945,7 +1945,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_11 = QHBoxLayout()
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-        self.ABL_pb = QPushButton(self.tabWidgetPage2)
+        self.ABL_pb = QPushButton(self.probe_terminal_tab)
         self.ABL_pb.setObjectName(u"ABL_pb")
         sizePolicy7.setHeightForWidth(self.ABL_pb.sizePolicy().hasHeightForWidth())
         self.ABL_pb.setSizePolicy(sizePolicy7)
@@ -1955,7 +1955,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_11.addWidget(self.ABL_pb)
 
-        self.abl_active_chb = QCheckBox(self.tabWidgetPage2)
+        self.abl_active_chb = QCheckBox(self.probe_terminal_tab)
         self.abl_active_chb.setObjectName(u"abl_active_chb")
         sizePolicy9 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy9.setHorizontalStretch(0)
@@ -1974,7 +1974,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_17.addLayout(self.probeABLGridLayout)
 
-        self.line_3 = QFrame(self.tabWidgetPage2)
+        self.line_3 = QFrame(self.probe_terminal_tab)
         self.line_3.setObjectName(u"line_3")
         self.line_3.setFrameShape(QFrame.Shape.HLine)
         self.line_3.setFrameShadow(QFrame.Shadow.Sunken)
@@ -1984,7 +1984,7 @@ class Ui_MainWindow(object):
         self.stepsGridLayout = QGridLayout()
         self.stepsGridLayout.setObjectName(u"stepsGridLayout")
         self.stepsGridLayout.setVerticalSpacing(0)
-        self.min_l = QLabel(self.tabWidgetPage2)
+        self.min_l = QLabel(self.probe_terminal_tab)
         self.min_l.setObjectName(u"min_l")
         sizePolicy10 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy10.setHorizontalStretch(0)
@@ -1998,7 +1998,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.min_l, 0, 1, 1, 1)
 
-        self.max_l = QLabel(self.tabWidgetPage2)
+        self.max_l = QLabel(self.probe_terminal_tab)
         self.max_l.setObjectName(u"max_l")
         sizePolicy10.setHeightForWidth(self.max_l.sizePolicy().hasHeightForWidth())
         self.max_l.setSizePolicy(sizePolicy10)
@@ -2009,7 +2009,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.max_l, 0, 2, 1, 1)
 
-        self.step_l = QLabel(self.tabWidgetPage2)
+        self.step_l = QLabel(self.probe_terminal_tab)
         self.step_l.setObjectName(u"step_l")
         sizePolicy10.setHeightForWidth(self.step_l.sizePolicy().hasHeightForWidth())
         self.step_l.setSizePolicy(sizePolicy10)
@@ -2020,7 +2020,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.step_l, 0, 3, 1, 1)
 
-        self.n_step_l = QLabel(self.tabWidgetPage2)
+        self.n_step_l = QLabel(self.probe_terminal_tab)
         self.n_step_l.setObjectName(u"n_step_l")
         sizePolicy10.setHeightForWidth(self.n_step_l.sizePolicy().hasHeightForWidth())
         self.n_step_l.setSizePolicy(sizePolicy10)
@@ -2031,7 +2031,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.n_step_l, 0, 4, 1, 1)
 
-        self.x_l = QLabel(self.tabWidgetPage2)
+        self.x_l = QLabel(self.probe_terminal_tab)
         self.x_l.setObjectName(u"x_l")
         sizePolicy10.setHeightForWidth(self.x_l.sizePolicy().hasHeightForWidth())
         self.x_l.setSizePolicy(sizePolicy10)
@@ -2042,7 +2042,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.x_l, 1, 0, 1, 1)
 
-        self.x_min_dsb = QDoubleSpinBox(self.tabWidgetPage2)
+        self.x_min_dsb = QDoubleSpinBox(self.probe_terminal_tab)
         self.x_min_dsb.setObjectName(u"x_min_dsb")
         sizePolicy9.setHeightForWidth(self.x_min_dsb.sizePolicy().hasHeightForWidth())
         self.x_min_dsb.setSizePolicy(sizePolicy9)
@@ -2055,7 +2055,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.x_min_dsb, 1, 1, 1, 1)
 
-        self.x_max_dsb = QDoubleSpinBox(self.tabWidgetPage2)
+        self.x_max_dsb = QDoubleSpinBox(self.probe_terminal_tab)
         self.x_max_dsb.setObjectName(u"x_max_dsb")
         sizePolicy9.setHeightForWidth(self.x_max_dsb.sizePolicy().hasHeightForWidth())
         self.x_max_dsb.setSizePolicy(sizePolicy9)
@@ -2068,7 +2068,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.x_max_dsb, 1, 2, 1, 1)
 
-        self.x_step_dsb = QDoubleSpinBox(self.tabWidgetPage2)
+        self.x_step_dsb = QDoubleSpinBox(self.probe_terminal_tab)
         self.x_step_dsb.setObjectName(u"x_step_dsb")
         self.x_step_dsb.setEnabled(False)
         sizePolicy9.setHeightForWidth(self.x_step_dsb.sizePolicy().hasHeightForWidth())
@@ -2081,7 +2081,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.x_step_dsb, 1, 3, 1, 1)
 
-        self.x_num_step_sb = QSpinBox(self.tabWidgetPage2)
+        self.x_num_step_sb = QSpinBox(self.probe_terminal_tab)
         self.x_num_step_sb.setObjectName(u"x_num_step_sb")
         sizePolicy9.setHeightForWidth(self.x_num_step_sb.sizePolicy().hasHeightForWidth())
         self.x_num_step_sb.setSizePolicy(sizePolicy9)
@@ -2092,7 +2092,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.x_num_step_sb, 1, 4, 1, 1)
 
-        self.y_l = QLabel(self.tabWidgetPage2)
+        self.y_l = QLabel(self.probe_terminal_tab)
         self.y_l.setObjectName(u"y_l")
         sizePolicy10.setHeightForWidth(self.y_l.sizePolicy().hasHeightForWidth())
         self.y_l.setSizePolicy(sizePolicy10)
@@ -2103,7 +2103,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.y_l, 2, 0, 1, 1)
 
-        self.y_min_dsb = QDoubleSpinBox(self.tabWidgetPage2)
+        self.y_min_dsb = QDoubleSpinBox(self.probe_terminal_tab)
         self.y_min_dsb.setObjectName(u"y_min_dsb")
         sizePolicy9.setHeightForWidth(self.y_min_dsb.sizePolicy().hasHeightForWidth())
         self.y_min_dsb.setSizePolicy(sizePolicy9)
@@ -2116,7 +2116,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.y_min_dsb, 2, 1, 1, 1)
 
-        self.y_max_dsb = QDoubleSpinBox(self.tabWidgetPage2)
+        self.y_max_dsb = QDoubleSpinBox(self.probe_terminal_tab)
         self.y_max_dsb.setObjectName(u"y_max_dsb")
         sizePolicy9.setHeightForWidth(self.y_max_dsb.sizePolicy().hasHeightForWidth())
         self.y_max_dsb.setSizePolicy(sizePolicy9)
@@ -2129,7 +2129,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.y_max_dsb, 2, 2, 1, 1)
 
-        self.y_step_dsb = QDoubleSpinBox(self.tabWidgetPage2)
+        self.y_step_dsb = QDoubleSpinBox(self.probe_terminal_tab)
         self.y_step_dsb.setObjectName(u"y_step_dsb")
         self.y_step_dsb.setEnabled(False)
         sizePolicy9.setHeightForWidth(self.y_step_dsb.sizePolicy().hasHeightForWidth())
@@ -2142,7 +2142,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.y_step_dsb, 2, 3, 1, 1)
 
-        self.y_num_step_sb = QSpinBox(self.tabWidgetPage2)
+        self.y_num_step_sb = QSpinBox(self.probe_terminal_tab)
         self.y_num_step_sb.setObjectName(u"y_num_step_sb")
         sizePolicy9.setHeightForWidth(self.y_num_step_sb.sizePolicy().hasHeightForWidth())
         self.y_num_step_sb.setSizePolicy(sizePolicy9)
@@ -2153,7 +2153,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.y_num_step_sb, 2, 4, 1, 1)
 
-        self.z_l = QLabel(self.tabWidgetPage2)
+        self.z_l = QLabel(self.probe_terminal_tab)
         self.z_l.setObjectName(u"z_l")
         sizePolicy10.setHeightForWidth(self.z_l.sizePolicy().hasHeightForWidth())
         self.z_l.setSizePolicy(sizePolicy10)
@@ -2164,7 +2164,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.z_l, 3, 0, 1, 1)
 
-        self.z_min_dsb = QDoubleSpinBox(self.tabWidgetPage2)
+        self.z_min_dsb = QDoubleSpinBox(self.probe_terminal_tab)
         self.z_min_dsb.setObjectName(u"z_min_dsb")
         sizePolicy9.setHeightForWidth(self.z_min_dsb.sizePolicy().hasHeightForWidth())
         self.z_min_dsb.setSizePolicy(sizePolicy9)
@@ -2177,7 +2177,7 @@ class Ui_MainWindow(object):
 
         self.stepsGridLayout.addWidget(self.z_min_dsb, 3, 1, 1, 1)
 
-        self.z_max_dsb = QDoubleSpinBox(self.tabWidgetPage2)
+        self.z_max_dsb = QDoubleSpinBox(self.probe_terminal_tab)
         self.z_max_dsb.setObjectName(u"z_max_dsb")
         sizePolicy9.setHeightForWidth(self.z_max_dsb.sizePolicy().hasHeightForWidth())
         self.z_max_dsb.setSizePolicy(sizePolicy9)
@@ -2193,14 +2193,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_17.addLayout(self.stepsGridLayout)
 
-        self.line_4 = QFrame(self.tabWidgetPage2)
+        self.line_4 = QFrame(self.probe_terminal_tab)
         self.line_4.setObjectName(u"line_4")
         self.line_4.setFrameShape(QFrame.Shape.HLine)
         self.line_4.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_17.addWidget(self.line_4)
 
-        self.serial_te = QTextEdit(self.tabWidgetPage2)
+        self.serial_te = QTextEdit(self.probe_terminal_tab)
         self.serial_te.setObjectName(u"serial_te")
         self.serial_te.setEnabled(True)
         sizePolicy11 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
@@ -2217,7 +2217,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.send_cb = ComboBoxFilterEnter(self.tabWidgetPage2)
+        self.send_cb = ComboBoxFilterEnter(self.probe_terminal_tab)
         self.send_cb.setObjectName(u"send_cb")
         sizePolicy2.setHeightForWidth(self.send_cb.sizePolicy().hasHeightForWidth())
         self.send_cb.setSizePolicy(sizePolicy2)
@@ -2226,7 +2226,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.send_cb)
 
-        self.send_pb = QPushButton(self.tabWidgetPage2)
+        self.send_pb = QPushButton(self.probe_terminal_tab)
         self.send_pb.setObjectName(u"send_pb")
         sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy12.setHorizontalStretch(0)
@@ -2247,21 +2247,21 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setSpacing(6)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.serial_ports_cb = QComboBox(self.tabWidgetPage2)
+        self.serial_ports_cb = QComboBox(self.probe_terminal_tab)
         self.serial_ports_cb.setObjectName(u"serial_ports_cb")
         sizePolicy2.setHeightForWidth(self.serial_ports_cb.sizePolicy().hasHeightForWidth())
         self.serial_ports_cb.setSizePolicy(sizePolicy2)
 
         self.horizontalLayout.addWidget(self.serial_ports_cb)
 
-        self.serial_baud_cb = QComboBox(self.tabWidgetPage2)
+        self.serial_baud_cb = QComboBox(self.probe_terminal_tab)
         self.serial_baud_cb.setObjectName(u"serial_baud_cb")
         sizePolicy2.setHeightForWidth(self.serial_baud_cb.sizePolicy().hasHeightForWidth())
         self.serial_baud_cb.setSizePolicy(sizePolicy2)
 
         self.horizontalLayout.addWidget(self.serial_baud_cb)
 
-        self.refresh_pb = QPushButton(self.tabWidgetPage2)
+        self.refresh_pb = QPushButton(self.probe_terminal_tab)
         self.refresh_pb.setObjectName(u"refresh_pb")
         sizePolicy2.setHeightForWidth(self.refresh_pb.sizePolicy().hasHeightForWidth())
         self.refresh_pb.setSizePolicy(sizePolicy2)
@@ -2278,7 +2278,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.clear_terminal_pb = QPushButton(self.tabWidgetPage2)
+        self.clear_terminal_pb = QPushButton(self.probe_terminal_tab)
         self.clear_terminal_pb.setObjectName(u"clear_terminal_pb")
         self.clear_terminal_pb.setEnabled(True)
         sizePolicy13 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
@@ -2294,7 +2294,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_9.addItem(self.horizontalSpacer_2)
 
-        self.connect_pb = QPushButton(self.tabWidgetPage2)
+        self.connect_pb = QPushButton(self.probe_terminal_tab)
         self.connect_pb.setObjectName(u"connect_pb")
         sizePolicy3.setHeightForWidth(self.connect_pb.sizePolicy().hasHeightForWidth())
         self.connect_pb.setSizePolicy(sizePolicy3)
@@ -2305,9 +2305,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_17.addLayout(self.horizontalLayout_9)
 
-        self.tabWidget.addTab(self.tabWidgetPage2, "")
+        self.jog_probe_tab_widget.addTab(self.probe_terminal_tab, "")
 
-        self.terminalVerticalLayout.addWidget(self.tabWidget)
+        self.terminalVerticalLayout.addWidget(self.jog_probe_tab_widget)
 
 
         self.controlsVerticalLayout.addLayout(self.terminalVerticalLayout)
@@ -4431,7 +4431,7 @@ class Ui_MainWindow(object):
         self.prepare_widget.setCurrentIndex(1)
         self.jobs_sw.setCurrentIndex(0)
         self.ctrl_tab_widget.setCurrentIndex(1)
-        self.tabWidget.setCurrentIndex(1)
+        self.jog_probe_tab_widget.setCurrentIndex(1)
         self.z_step_cb.setCurrentIndex(3)
         self.xy_step_cb.setCurrentIndex(3)
         self.z_step_cb_2.setCurrentIndex(3)
@@ -4655,7 +4655,7 @@ class Ui_MainWindow(object):
         self.xy_div_10_pb.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
         self.xy_mul_10_pb.setText(QCoreApplication.translate("MainWindow", u"x10", None))
         self.xy_minus_1_pb.setText(QCoreApplication.translate("MainWindow", u"-1.0", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Jog", None))
+        self.jog_probe_tab_widget.setTabText(self.jog_probe_tab_widget.indexOf(self.jog_tab), QCoreApplication.translate("MainWindow", u"Jog", None))
         self.probe_pb.setText(QCoreApplication.translate("MainWindow", u"PROBE", None))
         self.get_bbox_pb.setText(QCoreApplication.translate("MainWindow", u"GET BBOX", None))
         self.ABL_pb.setText(QCoreApplication.translate("MainWindow", u"ABL", None))
@@ -4693,7 +4693,7 @@ class Ui_MainWindow(object):
         self.connect_pb.setStatusTip(QCoreApplication.translate("MainWindow", u"Connect to selected serial port.", None))
 #endif // QT_CONFIG(statustip)
         self.connect_pb.setText(QCoreApplication.translate("MainWindow", u"Connect", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWidgetPage2), QCoreApplication.translate("MainWindow", u"Probe/Terminal", None))
+        self.jog_probe_tab_widget.setTabText(self.jog_probe_tab_widget.indexOf(self.probe_terminal_tab), QCoreApplication.translate("MainWindow", u"Probe/Terminal", None))
         self.ctrl_tab_widget.setTabText(self.ctrl_tab_widget.indexOf(self.sender_tab), QCoreApplication.translate("MainWindow", u"Sender", None))
 #if QT_CONFIG(tooltip)
         self.probe_led_la.setToolTip(QCoreApplication.translate("MainWindow", u"Probe in idle", None))

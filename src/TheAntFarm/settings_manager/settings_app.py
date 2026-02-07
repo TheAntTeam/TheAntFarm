@@ -20,6 +20,7 @@ class AppSettingsHandler:
     MAIN_TAB_INDEX_DEFAULT = 0
     CTRL_TAB_INDEX_DEFAULT = 0
     SETTINGS_TAB_INDEX_DEFAULT = 0
+    JOG_PROBE_TAB_INDEX_DEFAULT = 0
     SHOW_ALIGN_TAB_DEFAULT = False
     SHOW_SETTINGS_TAB_DEFAULT = False
     SHOW_CONSOLE_DEFAULT = False
@@ -75,6 +76,7 @@ class AppSettingsHandler:
         self.main_tab_index = self.MAIN_TAB_INDEX_DEFAULT
         self.ctrl_tab_index = self.CTRL_TAB_INDEX_DEFAULT
         self.settings_tab_index = self.SETTINGS_TAB_INDEX_DEFAULT
+        self.jog_probe_tab_index = self.JOG_PROBE_TAB_INDEX_DEFAULT
         self.align_tab_visibility = self.SHOW_ALIGN_TAB_DEFAULT
         self.settings_tab_visibility = self.SHOW_SETTINGS_TAB_DEFAULT
         self.console_visibility = self.SHOW_CONSOLE_DEFAULT
@@ -170,6 +172,7 @@ class AppSettingsHandler:
             self.main_tab_index = app_general.getint("main_tab_index", self.MAIN_TAB_INDEX_DEFAULT)
             self.ctrl_tab_index = app_general.getint("ctrl_tab_index", self.CTRL_TAB_INDEX_DEFAULT)
             self.settings_tab_index = app_general.getint("settings_tab_index", self.SETTINGS_TAB_INDEX_DEFAULT)
+            self.jog_probe_tab_index = app_general.getint("jog_probe_tab_index", self.JOG_PROBE_TAB_INDEX_DEFAULT)
             self.align_tab_visibility = app_general.getboolean("align_tab_visibility", self.SHOW_ALIGN_TAB_DEFAULT)
             self.settings_tab_visibility = app_general.getboolean("settings_tab_visibility",
                                                                   self.SHOW_SETTINGS_TAB_DEFAULT)
@@ -221,6 +224,7 @@ class AppSettingsHandler:
                                         "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
                                         "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
                                         "settings_tab_index": self.SETTINGS_TAB_INDEX_DEFAULT,
+                                        "jog_probe_tab_index": self.JOG_PROBE_TAB_INDEX_DEFAULT,
                                         "align_tab_visibility": self.SHOW_ALIGN_TAB_DEFAULT,
                                         "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
                                         "console_visibility": self.console_visibility,
@@ -254,6 +258,7 @@ class AppSettingsHandler:
         app_general["main_tab_index"] = str(self.main_win.ui.main_tab_widget.currentIndex())
         app_general["ctrl_tab_index"] = str(self.main_win.ui.ctrl_tab_widget.currentIndex())
         app_general["settings_tab_index"] = str(self.main_win.ui.settings_sub_tab.currentIndex())
+        app_general["jog_probe_tab_index"] = str(self.main_win.ui.jog_probe_tab_widget.currentIndex())
         app_general["align_tab_visibility"] = str(self.main_win.ui.actionHide_Show_Align_Tab.isChecked())
         app_general["settings_tab_visibility"] = str(self.main_win.ui.actionSettings_Preferences.isChecked())
         app_general["console_visibility"] = str(self.main_win.ui.actionHide_Show_Console.isChecked())
@@ -298,6 +303,7 @@ class AppSettingsHandler:
                                         "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
                                         "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
                                         "settings_tab_index": self.SETTINGS_TAB_INDEX_DEFAULT,
+                                        "jog_probe_tab_index": self.JOG_PROBE_TAB_INDEX_DEFAULT,
                                         "align_tab_visibility": self.SHOW_ALIGN_TAB_DEFAULT,
                                         "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
                                         "console_visibility": self.console_visibility,
