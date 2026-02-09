@@ -79,12 +79,16 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.restore_settings_preferences_pb.clicked.connect(self.restore_initial_settings)
 
         self.reset_application_settings()
+        self.reset_serial_error_thresholds()
         self.ui.top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("top"))
         self.ui.bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("bottom"))
         self.ui.profile_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("profile"))
         self.ui.drill_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("drill"))
         self.ui.nc_top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_top"))
         self.ui.nc_bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_bottom"))
+
+        self.ui.serial_error_warning_threshold_sb.valueChanged.connect(lambda:self.set_serial_error_thresholds(self.ui.serial_error_warning_threshold_sb.value(), self.ui.serial_error_critical_threshold_sb.value()))
+        self.ui.serial_error_critical_threshold_sb.valueChanged.connect(lambda:self.set_serial_error_thresholds(self.ui.serial_error_warning_threshold_sb.value(), self.ui.serial_error_critical_threshold_sb.value()))
 
     def reset_application_settings(self):
         """Resets ui elements values according to application settings."""
@@ -99,6 +103,13 @@ class UiSettingsPreferencesTab(QObject):
             "background-color: {}".format(self.app_settings.layer_color["nc_top"]))
         self.ui.nc_bottom_layer_color_la.setStyleSheet(
             "background-color: {}".format(self.app_settings.layer_color["nc_bottom"]))
+
+    def reset_serial_error_thresholds(self):
+        """Reset serial error threshold UI elements according to application settings."""
+        self.ui.serial_error_warning_threshold_sb.setValue(
+            self.app_settings.serial_error_warning_threshold)
+        self.ui.serial_error_critical_threshold_sb.setValue(
+            self.app_settings.serial_error_critical_threshold)
 
     def reset_jobs_common_initial_settings(self):
         """Reset status of common jobs settings. """
@@ -144,6 +155,7 @@ class UiSettingsPreferencesTab(QObject):
     def restore_initial_settings(self):
         """Restore initial settings in ui fields. """
         self.reset_application_settings()
+        self.reset_serial_error_thresholds()
         self.reset_jobs_common_initial_settings()
         self.reset_probe_initial_settings()
         self.reset_tool_machine_initial_settings()
@@ -294,6 +306,10 @@ class UiSettingsPreferencesTab(QObject):
         self.app_settings.layer_color["nc_bottom"] = self.ui.nc_bottom_layer_color_la.palette().window().color().name()
         self.app_settings.layer_color["nc_bottom"] = self.ui.nc_bottom_layer_color_la.palette().window().color().name()
 
+        # Save serial error thresholds to app settings
+        self.app_settings.serial_error_warning_threshold = self.ui.serial_error_warning_threshold_sb.value()
+        self.app_settings.serial_error_critical_threshold = self.ui.serial_error_critical_threshold_sb.value()
+
         self.load_gcoder_cfg_s.emit()
         # Emit a signal to write all settings
         self.save_all_settings_s.emit()
@@ -340,3 +356,11 @@ class UiSettingsPreferencesTab(QObject):
                 logger.debug("color " + str(color.name()))
                 current_label.setStyleSheet("background-color: {}".format(color.name()))
                 self.set_focus_lost()
+
+    def set_serial_error_thresholds(self, warning_threshold, critical_threshold):
+        if warning_threshold >= critical_threshold:
+            self.ui.serial_error_warning_threshold_sb.setValue(critical_threshold - 1)
+            warning_threshold = critical_threshold - 1
+        self.machine_settings.serial_error_warning_threshold = warning_threshold
+        self.machine_settings.serial_error_critical_threshold = critical_threshold
+        self.set_focus_lost()
