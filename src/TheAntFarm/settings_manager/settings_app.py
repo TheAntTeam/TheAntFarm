@@ -202,6 +202,15 @@ class AppSettingsHandler:
                                                                      self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT)
             self.serial_error_critical_threshold = app_general.getint("serial_error_critical_threshold",
                                                                       self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT)
+            # Validate thresholds are >= 0
+            if self.serial_error_warning_threshold < 0:
+                self.serial_error_warning_threshold = self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
+            if self.serial_error_critical_threshold < 0:
+                self.serial_error_critical_threshold = self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
+            # Ensure warning <= critical
+            if self.serial_error_warning_threshold > self.serial_error_critical_threshold:
+                self.serial_error_warning_threshold = self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
+                self.serial_error_critical_threshold = self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
 
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
