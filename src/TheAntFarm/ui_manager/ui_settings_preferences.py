@@ -358,9 +358,17 @@ class UiSettingsPreferencesTab(QObject):
                 self.set_focus_lost()
 
     def set_serial_error_thresholds(self, warning_threshold, critical_threshold):
-        if warning_threshold >= critical_threshold:
-            self.ui.serial_error_warning_threshold_sb.setValue(critical_threshold - 1)
-            warning_threshold = critical_threshold - 1
+        # Ensure both thresholds are at least 0
+        if warning_threshold < 0:
+            self.ui.serial_error_warning_threshold_sb.setValue(0)
+            warning_threshold = 0
+        if critical_threshold < 0:
+            self.ui.serial_error_critical_threshold_sb.setValue(0)
+            critical_threshold = 0
+        # Ensure warning threshold is less than or equal to critical threshold
+        if warning_threshold > critical_threshold:
+            self.ui.serial_error_warning_threshold_sb.setValue(critical_threshold)
+            warning_threshold = critical_threshold
         self.machine_settings.serial_error_warning_threshold = warning_threshold
         self.machine_settings.serial_error_critical_threshold = critical_threshold
         self.set_focus_lost()
