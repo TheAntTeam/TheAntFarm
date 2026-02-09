@@ -38,6 +38,8 @@ class AppSettingsHandler:
     CAMERA_SELECTED_OR_TOOL_DEFAULT = False  # Default selection should be tool, camera could be absent
     FLIP_HORIZONTAL_SELECTED_DEFAULT = False
     FLIP_VERTICAL_SELECTED_DEFAULT = False
+    SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT = 3
+    SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT = 10
 
     def __init__(self, config_folder, main_win):
 
@@ -95,6 +97,8 @@ class AppSettingsHandler:
         self.camera_selected_or_tool = self.CAMERA_SELECTED_OR_TOOL_DEFAULT
         self.flip_horizontal_selected = self.FLIP_HORIZONTAL_SELECTED_DEFAULT
         self.flip_vertical_selected = self.FLIP_VERTICAL_SELECTED_DEFAULT
+        self.serial_error_warning_threshold = self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
+        self.serial_error_critical_threshold = self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
 
     @staticmethod
     def choose_version(version_s, version_default_s):
@@ -194,6 +198,10 @@ class AppSettingsHandler:
                                                                    self.FLIP_HORIZONTAL_SELECTED_DEFAULT)
             self.flip_vertical_selected = app_general.getboolean("flip_vertical_selected",
                                                                  self.FLIP_VERTICAL_SELECTED_DEFAULT)
+            self.serial_error_warning_threshold = app_general.getint("serial_error_warning_threshold",
+                                                                     self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT)
+            self.serial_error_critical_threshold = app_general.getint("serial_error_critical_threshold",
+                                                                      self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT)
 
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
@@ -243,7 +251,9 @@ class AppSettingsHandler:
                                         "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT,
                                         "camera_selected_or_tool": self.CAMERA_SELECTED_OR_TOOL_DEFAULT,
                                         "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
-                                        "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT}
+                                        "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT,
+                                        "serial_error_warning_threshold": self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT,
+                                        "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT}
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -270,6 +280,8 @@ class AppSettingsHandler:
         app_general["camera_selected_or_tool"] = str(self.camera_selected_or_tool)
         app_general["flip_horizontal_selected"] = str(self.main_win.ui.flip_horizontally_tb.isChecked())
         app_general["flip_vertical_selected"] = str(self.main_win.ui.flip_vertically_tb.isChecked())
+        app_general["serial_error_warning_threshold"] = str(self.serial_error_warning_threshold)
+        app_general["serial_error_critical_threshold"] = str(self.serial_error_critical_threshold)
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
@@ -321,7 +333,9 @@ class AppSettingsHandler:
                                         "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
                                         "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT,
                                         "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
-                                        "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT}
+                                        "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT,
+                                        "serial_error_warning_threshold": self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT,
+                                        "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT}
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -345,6 +359,8 @@ class AppSettingsHandler:
         app_general["camera_selected_or_tool"] = str(self.CAMERA_SELECTED_OR_TOOL_DEFAULT)
         app_general["flip_horizontal_selected"] = str(self.main_win.ui.flip_horizontally_tb.isChecked())
         app_general["flip_vertical_selected"] = str(self.main_win.ui.flip_vertically_tb.isChecked())
+        app_general["serial_error_warning_threshold"] = str(self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT)
+        app_general["serial_error_critical_threshold"] = str(self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT)
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
