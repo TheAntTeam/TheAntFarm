@@ -1,8 +1,8 @@
 import pytest
 from TheAntFarm.serial_manager import SerialWorker
-from PySide6.QtSerialPort import QSerialPort, QSerialPortInfo
-from PySide6.QtCore import QIODevice
+from PySide6.QtSerialPort import QSerialPort
 from queue import Queue
+
 
 class TestSerialManager:
     @pytest.fixture
@@ -91,7 +91,7 @@ class TestSerialManager:
         serial_manager.serial_port.errorString.return_value = error_string
 
         # Simulate reaching critical threshold (10 errors)
-        with qtbot.waitSignal(serial_manager.close_for_error_s, timeout=1000) as blocker:
+        with qtbot.waitSignal(serial_manager.close_for_error_s, timeout=1000):
             for _ in range(10):
                 serial_manager.serial_error_manager()
 
@@ -175,7 +175,7 @@ class TestSerialManager:
 
         # Mock the availablePorts method
         mocker.patch('PySide6.QtSerialPort.QSerialPortInfo.availablePorts',
-                    return_value=[mock_port])
+                     return_value=[mock_port])
 
         # Set up signal spy
         with qtbot.waitSignal(serial_manager.get_port_list_s, timeout=1000) as blocker:

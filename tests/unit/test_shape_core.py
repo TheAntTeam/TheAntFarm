@@ -3,6 +3,7 @@ from TheAntFarm.shape_core.geometry_manager import Geom, merge_polygons
 from TheAntFarm.shape_core.gcode_manager import GCoder
 from pathlib import Path
 
+
 class TestGeometryManager:
     @pytest.fixture
     def geometry(self):
@@ -35,7 +36,7 @@ class TestGeometryManager:
         }
         geom1 = Geom(square1_data)
         geom2 = Geom(square2_data)
-        
+
         layer, others = merge_polygons([geom1, geom2])  # Pass the Geom objects directly
         assert len(layer) > 0  # Should have at least one merged polygon
         assert len(others) == 0  # Should have no "other" geometries
@@ -44,6 +45,7 @@ class TestGeometryManager:
         """Test handling invalid geometry"""
         with pytest.raises(Exception):  # Replace with specific exception
             merge_polygons(None, None)
+
 
 class TestGCoder:
     @pytest.fixture
