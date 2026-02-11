@@ -237,7 +237,7 @@ class UiCreateJobLayerTab(QObject):
         settings_top["spindle"] = self.ui.top_spindle_speed_dsb.value()
         settings_top["xy_feedrate"] = self.ui.top_xy_feed_rate_dsb.value()
         settings_top["z_feedrate"] = self.ui.top_z_feed_rate_dsb.value()
-        logging.debug(settings_top)
+        logger.debug(settings_top)
         return settings_top
 
     def get_settings_per_bottom(self):
@@ -250,7 +250,7 @@ class UiCreateJobLayerTab(QObject):
         settings_bottom["spindle"] = self.ui.bottom_spindle_speed_dsb.value()
         settings_bottom["xy_feedrate"] = self.ui.bottom_xy_feed_rate_dsb.value()
         settings_bottom["z_feedrate"] = self.ui.bottom_z_feed_rate_dsb.value()
-        logging.debug(settings_bottom)
+        logger.debug(settings_bottom)
         return settings_bottom
 
     def get_settings_per_profile(self):
@@ -271,7 +271,7 @@ class UiCreateJobLayerTab(QObject):
         settings_profile["taps_type"] = self.ui.profile_taps_layout_cb.currentIndex()
         settings_profile["taps_length"] = self.ui.profile_tap_size_dsb.value()
         settings_profile["mirror"] = self.ui.profile_mirror_chb.isChecked()
-        logging.debug(settings_profile)
+        logger.debug(settings_profile)
         return settings_profile
 
     def get_settings_per_drill(self):
@@ -294,7 +294,7 @@ class UiCreateJobLayerTab(QObject):
         settings_drill["z_feedrate"] = self.ui.drill_z_feed_rate_dsb.value()
         settings_drill["optimize"] = self.ui.drill_algo_choice_cb.currentIndex()
         settings_drill["mirror"] = self.ui.drill_mirror_chb.isChecked()
-        logging.debug(settings_drill)
+        logger.debug(settings_drill)
         return settings_drill
 
     def get_settings_per_nc_top(self):
@@ -306,7 +306,7 @@ class UiCreateJobLayerTab(QObject):
         settings_nc_top["spindle"] = self.ui.nc_top_spindle_speed_dsb.value()
         settings_nc_top["xy_feedrate"] = self.ui.nc_top_xy_feed_rate_dsb.value()
         settings_nc_top["z_feedrate"] = self.ui.nc_top_z_feed_rate_dsb.value()
-        logging.debug(settings_nc_top)
+        logger.debug(settings_nc_top)
         return settings_nc_top
 
     def get_settings_per_nc_bottom(self):
@@ -318,7 +318,7 @@ class UiCreateJobLayerTab(QObject):
         settings_nc_bottom["spindle"] = self.ui.nc_bottom_spindle_speed_dsb.value()
         settings_nc_bottom["xy_feedrate"] = self.ui.nc_bottom_xy_feed_rate_dsb.value()
         settings_nc_bottom["z_feedrate"] = self.ui.nc_bottom_z_feed_rate_dsb.value()
-        logging.debug(settings_nc_bottom)
+        logger.debug(settings_nc_bottom)
         return settings_nc_bottom
 
     def get_settings_per_page(self, tag):
