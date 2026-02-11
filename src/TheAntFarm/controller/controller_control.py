@@ -89,8 +89,8 @@ class ControlController(QObject):
         ack_abl_flag = False
         send_next = False
         other_cmd_flag = False
-        logging.debug("self.prb_activated: " + str(self.prb_activated))
-        logging.debug("self.prb_updated: " + str(self.prb_updated))
+        logger.debug("self.prb_activated: " + str(self.prb_activated))
+        logger.debug("self.prb_updated: " + str(self.prb_updated))
         if self.prb_activated and self.prb_updated:
             self.prb_activated = False
             self.prb_updated = False
@@ -98,7 +98,7 @@ class ControlController(QObject):
         elif self.abl_activated:
             [ack_abl_flag, send_next] = self.update_abl()
         else:
-            # logging.warning("Not a probe, nor an ABL.")
+            # logger.warning("Not a probe, nor an ABL.")
             other_cmd_flag = True
 
         return [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag]
@@ -117,14 +117,14 @@ class ControlController(QObject):
                     self.mpos_a = np.array([float(word[1]), float(word[2]), float(word[3])])
                     self.status_report_od["mpos"] = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
-                    logging.error(e, exc_info=True)
+                    logger.error(e, exc_info=True)
                 except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "F":
                 try:
                     self.status_report_od["curfeed"] = float(word[1])
                 except (ValueError, IndexError) as e:
-                    logging.error(e, exc_info=True)
+                    logger.error(e, exc_info=True)
                 except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "FS":
@@ -132,7 +132,7 @@ class ControlController(QObject):
                     self.status_report_od["curfeed"] = float(word[1])
                     self.status_report_od["curspindle"] = float(word[2])
                 except (ValueError, IndexError) as e:
-                    logging.error(e, exc_info=True)
+                    logger.error(e, exc_info=True)
                 except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "Bf":
@@ -140,7 +140,7 @@ class ControlController(QObject):
                     self.status_report_od["planner"] = int(word[1])
                     self.status_report_od["rxbytes"] = int(word[2])
                 except (ValueError, IndexError) as e:
-                    logging.error(e, exc_info=True)
+                    logger.error(e, exc_info=True)
                 except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "Ov":
@@ -149,7 +149,7 @@ class ControlController(QObject):
                     self.status_report_od["OvRapid"] = int(word[2])
                     self.status_report_od["OvSpindle"] = int(word[3])
                 except (ValueError, IndexError) as e:
-                    logging.error(e, exc_info=True)
+                    logger.error(e, exc_info=True)
                 except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "WCO":
@@ -157,14 +157,14 @@ class ControlController(QObject):
                     self.wco_a = np.array([float(word[1]), float(word[2]), float(word[3])])
                     self.status_report_od["wco"] = np.array([float(word[1]), float(word[2]), float(word[3])])
                 except (ValueError, IndexError) as e:
-                    logging.error(e, exc_info=True)
+                    logger.error(e, exc_info=True)
                 except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
             elif word[0] == "Pn":
                 try:
                     self.status_report_od["pins"] = word[1]
                 except (ValueError, IndexError) as e:
-                    logging.error(e, exc_info=True)
+                    logger.error(e, exc_info=True)
                 except Exception:
                     logger.error("Uncaught exception: %s", traceback.format_exc())
 
@@ -180,7 +180,7 @@ class ControlController(QObject):
                 self.prb_val.appendleft([float(word[1]), float(word[2]), float(word[3])])
                 self.prb_updated = True
             except (ValueError, IndexError) as e:
-                logging.error(e, exc_info=True)
+                logger.error(e, exc_info=True)
             except Exception:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
         elif word[0] == "G54":
@@ -268,7 +268,7 @@ class ControlController(QObject):
             elif self.prb_num_done < self.prb_num_todo:
                 send_next = True
             else:
-                logging.error("ABL: Number of probe done exceeded the number of probe to do.")
+                logger.error("ABL: Number of probe done exceeded the number of probe to do.")
 
         return [ack_flag, send_next]
 
