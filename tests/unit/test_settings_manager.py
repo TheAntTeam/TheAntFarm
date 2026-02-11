@@ -1,7 +1,7 @@
 import pytest
 import os
 from TheAntFarm.settings_manager.settings_app import AppSettingsHandler
-from pathlib import Path
+
 
 class TestAppSettingsHandler:
     @pytest.fixture
@@ -80,9 +80,9 @@ class TestAppSettingsHandler:
         new_settings.read_all_app_settings()
 
         # Verify settings were saved and read back correctly
-        assert new_settings.align_tab_visibility == True
-        assert new_settings.settings_tab_visibility == True
-        assert new_settings.flip_horizontal_selected == True
+        assert new_settings.align_tab_visibility is True
+        assert new_settings.settings_tab_visibility is True
+        assert new_settings.flip_horizontal_selected is True
 
     def test_invalid_config(self, mock_main_window, tmp_path):
         """Test loading invalid configuration"""
@@ -127,8 +127,10 @@ class TestAppSettingsHandler:
 
     def test_serial_error_threshold_defaults(self, app_settings_handler):
         """Test that serial error thresholds are initialized with default values"""
-        assert app_settings_handler.serial_error_warning_threshold == app_settings_handler.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
-        assert app_settings_handler.serial_error_critical_threshold == app_settings_handler.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
+        assert app_settings_handler.serial_error_warning_threshold == \
+        app_settings_handler.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
+        assert app_settings_handler.serial_error_critical_threshold == \
+        app_settings_handler.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
         assert app_settings_handler.serial_error_warning_threshold == 3
         assert app_settings_handler.serial_error_critical_threshold == 10
 
