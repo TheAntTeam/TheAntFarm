@@ -1,4 +1,3 @@
-
 import vispy.app as vapp
 vapp.use_app('PySide6')
 from vispy.app.qt import QtSceneCanvas

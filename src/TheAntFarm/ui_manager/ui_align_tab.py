@@ -3,7 +3,6 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QLabel, QFileDialog, QHeaderView
 from collections import OrderedDict as Od
 from style_manager import StyleManager
-from qcamera_label import QCameraLabel
 import logging
 import math
 import os

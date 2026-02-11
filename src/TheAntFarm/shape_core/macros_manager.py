@@ -1,7 +1,6 @@
 
 import os
 import logging
-from collections import Counter
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +99,7 @@ class Macros:
     def compute_tag(self, gc_str, wsp, probe_data, dro):
         splitted_str = gc_str.strip().split(self.TAG)
         replaces_l = splitted_str.copy()
-        tags_family = self.get_tags_family()
+        # tags_family = self.get_tags_family()
         for i, tag in enumerate(splitted_str):
             stag = tag.upper().split("_")
             head = stag[0]

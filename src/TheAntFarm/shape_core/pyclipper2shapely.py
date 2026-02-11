@@ -2,7 +2,6 @@
 # LICENSE: MIT
 
 import pyclipper as pc
-import shapely.geometry as shg
 from shapely.geometry import Polygon
 from shapely.ops import unary_union
 from shapely.validation import explain_validity

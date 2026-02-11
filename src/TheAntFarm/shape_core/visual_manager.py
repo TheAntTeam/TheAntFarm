@@ -2,8 +2,7 @@
 # https://programtalk.com/vs2/python/7189/phy/phy/plot/tests/test_panzoom.py/
 # https://stackoverflow.com/questions/33942728/how-to-get-world-coordinates-from-screen-coordinates-in-vispy
 
-from vispy import gloo
-from vispy.scene import visuals, PanZoomCamera, TurntableCamera
+from vispy.scene import visuals, PanZoomCamera
 from vispy.color import Color
 from vispy.visuals.filters import Alpha
 from OpenGL import GLU
@@ -314,7 +313,7 @@ class VisualLayer:
             #     tri_off = list(np.array(tri[:]) + len(ldata[1]))
             #     ldata[0] += tri_off
             #     ldata[1] += pts[:]
-                #order = 0
+            #     order = 0
         self.create_mesh(tag, ldata, color, order, auto_range=auto_range)
         self.meshes_geom[tag] = geom_list
 
@@ -424,11 +423,12 @@ class VisualLayer:
                 coords.append(c)
                 connect.append((p, p+1))
                 p += 1
-            #print(coords)
+            # print(coords)
             coords = np.array(coords)
             connect = np.array(connect)
 
-            line = visuals.Line(pos=coords, connect=connect, width=width, color=colors_list[i], parent=self.canvas.view, antialias=True)
+            line = visuals.Line(pos=coords, connect=connect, width=width, 
+                                color=colors_list[i], parent=self.canvas.view, antialias=True)
             line.order = order
             if tag in list(self.paths.keys()):
                 self.paths[tag] += [line]
@@ -468,7 +468,9 @@ class VisualLayer:
         coords = np.array(coords)
         connect = np.array(connect)
 
-        line = visuals.Line(pos=coords, connect=connect, width=width, color=all_colors, parent=self.canvas.view, antialias=True)
+        line = visuals.Line(pos=coords, connect=connect, width=width, 
+                            color=all_colors, parent=self.canvas.view, 
+                            antialias=True)
         line.order = order
         if tag in list(self.paths.keys()):
             self.paths[tag] += [line]
@@ -509,7 +511,7 @@ class VisualLayer:
             self.canvas.view.camera.set_range()
 
         self.canvas.freeze()
-        #visuals.XYZAxis(parent=self.canvas.view.scene)
+        # visuals.XYZAxis(parent=self.canvas.view.scene)
 
         #
         # gloo.set_clear_color('white')

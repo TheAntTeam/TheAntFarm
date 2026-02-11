@@ -2,7 +2,7 @@
 import time
 
 import shapely.geometry
-from shapely.geometry import Polygon, LineString, MultiLineString, Point, MultiPoint
+from shapely.geometry import Polygon, LineString
 from shapely.ops import substring
 from collections import OrderedDict
 from .geometry_manager import (merge_polygons_path, offset_polygon, offset_polygon_holes,
@@ -442,9 +442,9 @@ class MachinePath:
 
                     optimized_bit_points = opt.get_optimized_path()
                     drill_per_bit[bit_k] = optimized_bit_points
-                    #print("Bit " + str(bit_k) + " " + str(optimized_bit_points))
+                    # print("Bit " + str(bit_k) + " " + str(optimized_bit_points))
                 else:
-                    #print("Bit " + str(bit_k) + " " + str(bit_points))
+                    # print("Bit " + str(bit_k) + " " + str(bit_points))
                     pass
 
         paths = []
@@ -476,7 +476,7 @@ class MachinePath:
 
         t0 = time.time()
         og_list = []
-        prev_poly = [g.geom for g in self.geom_list]
+        # prev_poly = [g.geom for g in self.geom_list]
         td = self.cfg['tool_diameter'] * self.TD_COEFF
         # uniqueness check of the profile
         if len(self.geom_list) == 1:
