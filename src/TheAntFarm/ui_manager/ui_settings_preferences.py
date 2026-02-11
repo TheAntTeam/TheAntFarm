@@ -87,8 +87,12 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.nc_top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_top"))
         self.ui.nc_bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_bottom"))
 
-        self.ui.serial_error_warning_threshold_sb.valueChanged.connect(lambda:self.set_serial_error_thresholds(self.ui.serial_error_warning_threshold_sb.value(), self.ui.serial_error_critical_threshold_sb.value()))
-        self.ui.serial_error_critical_threshold_sb.valueChanged.connect(lambda:self.set_serial_error_thresholds(self.ui.serial_error_warning_threshold_sb.value(), self.ui.serial_error_critical_threshold_sb.value()))
+        self.ui.serial_error_warning_threshold_sb.valueChanged.connect(
+            lambda: self.set_serial_error_thresholds(self.ui.serial_error_warning_threshold_sb.value(), 
+                                                     self.ui.serial_error_critical_threshold_sb.value()))
+        self.ui.serial_error_critical_threshold_sb.valueChanged.connect(
+            lambda: self.set_serial_error_thresholds(self.ui.serial_error_warning_threshold_sb.value(), 
+                                                     self.ui.serial_error_critical_threshold_sb.value()))
 
     def reset_application_settings(self):
         """Resets ui elements values according to application settings."""

@@ -35,14 +35,14 @@ def merge_polygons_path(poly_set):
 
             if geoms:
                 tmp = [geoms.pop(0)]
-                for l in geoms:
-                    if not pc.Orientation(l):
+                for li in geoms:
+                    if not pc.Orientation(li):
                         # hole detected
-                        tmp.append(l)
+                        tmp.append(li)
                     else:
                         g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True).geom
                         merged.append(g)
-                        tmp = [l]
+                        tmp = [li]
                 if tmp:
                     g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True).geom
                     merged.append(g)
@@ -111,13 +111,13 @@ def offset_polygon(polyg, offset, shapely_poly=False):
 
         if geoms:
             tmp = [geoms.pop(0)]
-            for l in geoms:
-                if not pc.Orientation(l):
-                    tmp.append(l)
+            for li in geoms:
+                if not pc.Orientation(li):
+                    tmp.append(li)
                 else:
                     g = shg.Polygon(tmp.pop(0), holes=tmp)
                     merged.append(g)
-                    tmp = [l]
+                    tmp = [li]
             if tmp:
                 g = shg.Polygon(tmp.pop(0), holes=tmp)
                 merged.append(g)
@@ -199,7 +199,7 @@ def offset_polygon_old(polyg, offset, shapely_poly=False):
 
 def _offset_polylist(mp, offset_in, scale=True):
 
-    t0 = time.time()
+    # t0 = time.time()
     pco = pc.PyclipperOffset()
     polys = mp
     offset = offset_in
@@ -342,7 +342,6 @@ def merge_polygons(mp):
     start_time = time.time()
     others = []
 
-    to_merge = []
     merged = []
 
     pre_pol = 'clear'
@@ -545,4 +544,3 @@ class Geom:
                 geom = shg.LineString(self.points)
                 x, y, = geom.xy
         return geom
-

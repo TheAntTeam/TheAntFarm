@@ -79,7 +79,7 @@ class SerialWorker(QObject):
             try:
                 data_out = data_out_not_decoded.decode()
             except UnicodeDecodeError as e:
-                logger.error(f"Invalid Serial Data, unable to decoding [{data_out_not_decoded}]")
+                logger.error(f"Invalid Serial Data, unable to decoding [{data_out_not_decoded}], error: {e}")
                 data_out = ""
             if data_out:
                 # logger.debug("data in: " + data_out)

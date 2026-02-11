@@ -12,7 +12,6 @@ class DoubleSideManager:
 
     @staticmethod
     def list_cameras_indexes():
-        index = 0
         arr = []
         info = QtMultimedia.QMediaDevices.videoInputs()
         for cameraDevice in info:
@@ -66,12 +65,10 @@ class DoubleSideManager:
         image_gray = cv2.cvtColor(frame.copy(), cv2.COLOR_RGB2GRAY)
         image_gray[np.where(image_gray > thr1)] = 255
 
-
         # image = cv2.GaussianBlur(image_gray, (15, 15), 0)
         # image = cv2.adaptiveThreshold(image_gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
         # image = cv2.adaptiveThreshold(image_gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 25, 2)
         # _, image = cv2.threshold(image_gray, 200, 255, cv2.THRESH_BINARY)
-
 
         ret, image = cv2.threshold(image_gray, thr1, 255, cv2.THRESH_BINARY)
 
@@ -96,8 +93,8 @@ class DoubleSideManager:
         frame_out = frame
 
         if True:
-            black_holes = cv2.HoughCircles(image, cv2.HOUGH_GRADIENT, 1, 20, param1=50, param2=30, minRadius=0,
-                                    maxRadius=0)
+            black_holes = cv2.HoughCircles(image, cv2.HOUGH_GRADIENT, 1, 20, param1=50,
+                                           param2=30, minRadius=0, maxRadius=0)
 
             black_holes = None
             if black_holes is not None:
@@ -194,4 +191,3 @@ class DoubleSideManager:
         # Create a detector with the parameters
         detector = cv2.SimpleBlobDetector_create(params)
         return detector
-

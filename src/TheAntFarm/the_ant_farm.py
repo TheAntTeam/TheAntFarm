@@ -2,7 +2,6 @@ import os
 import sys
 import sysconfig
 import platform
-import shutil
 from PySide6.QtWidgets import QMainWindow, QApplication
 from PySide6.QtCore import QThread, QResource
 from queue import Queue

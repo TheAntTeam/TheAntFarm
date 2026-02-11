@@ -126,14 +126,14 @@ class AppSettingsHandler:
             if len(version_t) == 3:
                 version_wrong_format_flag = False
         except ValueError as e:
-            print("version number wrong format")  # logger is not active at this point
+            print(f"version number wrong format: {e}")  # logger is not active at this point
 
         try:
             version_default_t = tuple(map(int, (version_default_s.split("."))))
             if len(version_default_t) == 3:
                 version_wrong_default_format_flag = False
         except Exception as e:
-            print("default version number wrong format")
+            print(f"default version number wrong format: {e}")
 
         if version_wrong_format_flag and version_wrong_default_format_flag:
             print("both version number wrong format")

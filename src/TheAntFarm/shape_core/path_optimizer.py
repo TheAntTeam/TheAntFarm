@@ -1,14 +1,10 @@
 # from: https://github.com/ezstoltz/genetic-algorithm
 # import numpy as np, random, operator, pandas as pd, matplotlib.pyplot as plt
-import sys
 import numpy as np
 from scipy.spatial import distance
-from operator import itemgetter
-from scipy.sparse.csgraph import shortest_path
 import random
 import operator
-from shapely.geometry import LineString, Point
-#import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 class Optimizer:

@@ -83,11 +83,3 @@ class DrillGcodeConverter:
         thetas = [i/n_points * math.tau for i in range(n_points)]
         circle_coords = [self.get_circle_coord(theta, x_center, y_center, z_center, radius) for theta in thetas]
         return circle_coords
-
-
-
-
-
-
-
-

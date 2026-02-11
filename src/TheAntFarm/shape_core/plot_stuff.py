@@ -35,12 +35,12 @@ def plot_vertices(vertices):
 def plot_lines(ll1, ll2=None):
     # plotta line strings
     fig, ax = pyplot.subplots(1, 1)
-    for l in ll1:
-        x, y = l.xy
+    for li in ll1:
+        x, y = li.xy
         ax.plot(x, y, 'k')
     if ll2 is not None:
-        for l in ll2:
-            x, y = l.xy
+        for li in ll2:
+            x, y = li.xy
             ax.plot(x, y, 'w')
     ax.set_aspect('equal')
     pyplot.show()
@@ -128,9 +128,8 @@ def plot_shapely(poly_list, color=None):
     # print("X " + str(xmax) + " - " + str(xmin))
     # print("Y " + str(ymax) + " - " + str(ymin))
 
-    deltax = xmax - xmin
-    deltay = ymax - ymin
-
+    # deltax = xmax - xmin
+    # deltay = ymax - ymin
     # ax.set_xlim(xmin - abs(deltax*0.1), xmax + abs(deltax*0.1))
     # ax.set_ylim(ymin - abs(deltay*0.1), ymax + abs(deltay*0.1))
     ax.set_aspect('equal', 'box')

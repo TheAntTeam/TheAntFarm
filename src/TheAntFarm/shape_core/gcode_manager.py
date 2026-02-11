@@ -474,7 +474,7 @@ class GCoder:
         abl_cmd_s = ""
         abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
         abl_cmd_s += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
-                          str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
+            str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
         abl_cmd_s += "G38.2 Z" + str(probe_z_min) + "F" + str(probe_feed_rate) + "\n"  # set probe command
         prb_num_todo += 1
         abl_cmd_s += "G10 P1 L20 Z0\n"  # set Z zero
@@ -727,8 +727,8 @@ class GCodeParser:
                     ls = self.gc.modified_lines
                 else:
                     ls = self.gc.original_lines
-            for l in ls:
-                d = l.strip()
+            for li in ls:
+                d = li.strip()
                 d = d.replace("(", ";")
                 d = d.replace("%", ";")
                 d = d.replace(")", "")
@@ -797,22 +797,22 @@ class GCodeParser:
             # start from one because the first initial point
             # is always in origin of the working coords system
             vi = 1
-            for l in range(len(gcl)):
+            for li in range(len(gcl)):
                 if vi < len(gcv):
                     nl = gcv[vi].line
                 else:
                     nl = -1
-                if nl == l:
+                if nl == li:
                     cl_flag = True
                     gcls.append(gcv[vi].get_string())
                     while cl_flag and vi < gcv_len - 1:
                         vi += 1
-                        cl_flag = gcv[vi].line == l
+                        cl_flag = gcv[vi].line == li
                         if cl_flag:
                             gcls.append(gcv[vi].get_string())
                 else:
-                    if gcl[l].command:
-                        gcls.append(gcl[l].get_string())
+                    if gcl[li].command:
+                        gcls.append(gcl[li].get_string())
         return gcls
 
     def get_change_tool_gcode(self):
@@ -1106,7 +1106,7 @@ if __name__ == "__main__":
     gcp.vectorize()
     lines = gcp.recode_gcode()
 
-    #abl = GCodeLeveler(gcp.gc)
-    #abl.get_dummy_grid_data()
-    #abl.interp_grid_data()
-    #abl.apply_abl()
+    # abl = GCodeLeveler(gcp.gc)
+    # abl.get_dummy_grid_data()
+    # abl.interp_grid_data()
+    # abl.apply_abl()

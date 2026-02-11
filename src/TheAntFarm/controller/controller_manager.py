@@ -421,8 +421,6 @@ class ControllerWorker(QObject):
                 redraw_align = self.control_controller.remove_alignment(gcode_path)
 
             if abl_val != [] and self.abl_apply_active:
-            # print("FORCE FAKE ABL")
-            # if self.abl_apply_active:
                 logger.debug("Apply ABL")
                 self.control_controller.apply_abl(gcode_path)
                 redraw_abl = True

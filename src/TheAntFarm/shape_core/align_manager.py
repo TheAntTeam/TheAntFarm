@@ -129,5 +129,3 @@ class AlignManager:
             return new_points_coord
         else:
             return None
-
-
