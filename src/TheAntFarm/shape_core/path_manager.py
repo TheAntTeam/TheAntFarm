@@ -30,8 +30,8 @@ class Gapper:
         self.gap_dim = self.cfg['taps_length'] + self.cfg['tool_diameter']
 
     @staticmethod
-    def rotate(l, n):
-        return l[n:] + l[:n]
+    def rotate(el, idx):
+        return el[idx:] + el[:idx]
 
     def get_available_strategies(self):
         return self.DEFAULT_STRATEGIES

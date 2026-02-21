@@ -23,8 +23,8 @@ def _new_pcb_tools_read_function(filename):
     with open(filename, 'r') as f:
         data = f.read()
     return gbr.loads(data, filename)
+
 gbr.read = _new_pcb_tools_read_function
-#
 
 
 class PcbObj:
@@ -149,9 +149,10 @@ class PcbObj:
         tmp = gbr.read(path)
         self.excellons[tag] = tmp
         if tmp.units == 'inch':
-            self.excellons[tag].to_metric()  # pcb-tools has a bug related to the inch -> metric conversion
-                                             # a workaround is applied, during the dump process all the xy points
-                                             # coordinates are converted in metric by default
+            self.excellons[tag].to_metric()
+            """ Note: pcb-tools has a bug related to the inch -> metric conversion
+                a workaround is applied, during the dump process all the xy points
+                coordinates are converted in metric by default """
 
             settings = FileSettings(format=(3, 3), zero_suppression='leading', units='metric', notation='absolute',
                                     angle_units='degrees')

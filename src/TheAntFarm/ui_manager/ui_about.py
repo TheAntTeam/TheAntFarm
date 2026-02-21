@@ -42,7 +42,7 @@ class UiAbout(QObject):
         license_la.setStyleSheet("QLabel{font-size: 16pt;}")
         grid.addWidget(license_la, 2, 0, 1, 1, alignment=Qt.AlignCenter | Qt.AlignVCenter)
 
-        license_2_la = QLabel("<a href=\"https://github.com/TheAntTeam/TheAntFarm/blob/main/LICENSE\">MIT License</a>", 
+        license_2_la = QLabel("<a href=\"https://github.com/TheAntTeam/TheAntFarm/blob/main/LICENSE\">MIT License</a>",
                               about_dlg)
         license_2_la.setStyleSheet("QLabel{font-size: 16pt;}")
         license_2_la.setTextFormat(Qt.RichText)

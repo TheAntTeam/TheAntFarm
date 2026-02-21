@@ -265,8 +265,8 @@ class GeneticOptimizer:
         return bestRoute
 
     @staticmethod
-    def rotate(l, n):
-        return l[n:] + l[:n]
+    def rotate(el, idx):
+        return el[idx:] + el[:idx]
 
     def get_optimized_path(self, cityList=None):
         points_coord = np.array(self.points_coord)
