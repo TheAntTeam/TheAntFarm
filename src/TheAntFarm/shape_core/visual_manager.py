@@ -427,7 +427,7 @@ class VisualLayer:
             coords = np.array(coords)
             connect = np.array(connect)
 
-            line = visuals.Line(pos=coords, connect=connect, width=width, 
+            line = visuals.Line(pos=coords, connect=connect, width=width,
                                 color=colors_list[i], parent=self.canvas.view, antialias=True)
             line.order = order
             if tag in list(self.paths.keys()):
@@ -468,8 +468,8 @@ class VisualLayer:
         coords = np.array(coords)
         connect = np.array(connect)
 
-        line = visuals.Line(pos=coords, connect=connect, width=width, 
-                            color=all_colors, parent=self.canvas.view, 
+        line = visuals.Line(pos=coords, connect=connect, width=width,
+                            color=all_colors, parent=self.canvas.view,
                             antialias=True)
         line.order = order
         if tag in list(self.paths.keys()):

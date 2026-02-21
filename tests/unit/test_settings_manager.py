@@ -128,9 +128,9 @@ class TestAppSettingsHandler:
     def test_serial_error_threshold_defaults(self, app_settings_handler):
         """Test that serial error thresholds are initialized with default values"""
         assert app_settings_handler.serial_error_warning_threshold == \
-        app_settings_handler.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
+            app_settings_handler.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
         assert app_settings_handler.serial_error_critical_threshold == \
-        app_settings_handler.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
+            app_settings_handler.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
         assert app_settings_handler.serial_error_warning_threshold == 3
         assert app_settings_handler.serial_error_critical_threshold == 10
 

@@ -120,10 +120,10 @@ def plot_shapely(poly_list, color=None):
     # print(yl)
     # print(len(yl))
 
-    xmin = min(xl)
-    xmax = max(xl)
-    ymin = min(yl)
-    ymax = max(yl)
+    # xmin = min(xl)
+    # xmax = max(xl)
+    # ymin = min(yl)
+    # ymax = max(yl)
 
     # print("X " + str(xmax) + " - " + str(xmin))
     # print("Y " + str(ymax) + " - " + str(ymin))
