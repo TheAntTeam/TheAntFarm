@@ -69,7 +69,7 @@ jobs:
       continue-on-error: true
       run: |
         echo "Checking code formatting with Black (non-blocking)..."
-        black --check --diff src/TheAntFarm tests || echo "Black formatting issues found - check output above"
+        black --check --diff --exclude="app_resources_rc\.py|ui_the_ant_farm\.py" src/TheAntFarm tests || echo "Black formatting issues found - check output above"
         isort --check-only --diff src/TheAntFarm tests || echo "Import sorting issues found - check output above"
 
     - name: Lint with flake8
