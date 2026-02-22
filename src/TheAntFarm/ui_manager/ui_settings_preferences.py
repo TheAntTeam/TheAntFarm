@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class UiSettingsPreferencesTab(QObject):
-    """Class dedicated to UI <--> Settings interactions on Settings/Preferences Tab. """
+    """Class dedicated to UI <--> Settings interactions on Settings/Preferences Tab."""
 
     ask_status_report_s = Signal()
     load_gcoder_cfg_s = Signal()
@@ -88,35 +88,42 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.nc_bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("nc_bottom"))
 
         self.ui.serial_error_warning_threshold_sb.valueChanged.connect(
-            lambda: self.set_serial_error_thresholds(self.ui.serial_error_warning_threshold_sb.value(),
-                                                     self.ui.serial_error_critical_threshold_sb.value()))
+            lambda: self.set_serial_error_thresholds(
+                self.ui.serial_error_warning_threshold_sb.value(), self.ui.serial_error_critical_threshold_sb.value()
+            )
+        )
         self.ui.serial_error_critical_threshold_sb.valueChanged.connect(
-            lambda: self.set_serial_error_thresholds(self.ui.serial_error_warning_threshold_sb.value(),
-                                                     self.ui.serial_error_critical_threshold_sb.value()))
+            lambda: self.set_serial_error_thresholds(
+                self.ui.serial_error_warning_threshold_sb.value(), self.ui.serial_error_critical_threshold_sb.value()
+            )
+        )
 
     def reset_application_settings(self):
         """Resets ui elements values according to application settings."""
         self.ui.top_layer_color_la.setStyleSheet("background-color: {}".format(self.app_settings.layer_color["top"]))
         self.ui.bottom_layer_color_la.setStyleSheet(
-            "background-color: {}".format(self.app_settings.layer_color["bottom"]))
+            "background-color: {}".format(self.app_settings.layer_color["bottom"])
+        )
         self.ui.profile_layer_color_la.setStyleSheet(
-            "background-color: {}".format(self.app_settings.layer_color["profile"]))
+            "background-color: {}".format(self.app_settings.layer_color["profile"])
+        )
         self.ui.drill_layer_color_la.setStyleSheet(
-            "background-color: {}".format(self.app_settings.layer_color["drill"]))
+            "background-color: {}".format(self.app_settings.layer_color["drill"])
+        )
         self.ui.nc_top_layer_color_la.setStyleSheet(
-            "background-color: {}".format(self.app_settings.layer_color["nc_top"]))
+            "background-color: {}".format(self.app_settings.layer_color["nc_top"])
+        )
         self.ui.nc_bottom_layer_color_la.setStyleSheet(
-            "background-color: {}".format(self.app_settings.layer_color["nc_bottom"]))
+            "background-color: {}".format(self.app_settings.layer_color["nc_bottom"])
+        )
 
     def reset_serial_error_thresholds(self):
         """Reset serial error threshold UI elements according to application settings."""
-        self.ui.serial_error_warning_threshold_sb.setValue(
-            self.app_settings.serial_error_warning_threshold)
-        self.ui.serial_error_critical_threshold_sb.setValue(
-            self.app_settings.serial_error_critical_threshold)
+        self.ui.serial_error_warning_threshold_sb.setValue(self.app_settings.serial_error_warning_threshold)
+        self.ui.serial_error_critical_threshold_sb.setValue(self.app_settings.serial_error_critical_threshold)
 
     def reset_jobs_common_initial_settings(self):
-        """Reset status of common jobs settings. """
+        """Reset status of common jobs settings."""
         mirror_axis = self.jobs_settings.jobs_settings_od["common"]["mirroring_axis"]
         if mirror_axis.lower() == "x":
             self.ui.x_mirror_rb.setChecked(True)
@@ -124,7 +131,7 @@ class UiSettingsPreferencesTab(QObject):
             self.ui.y_mirror_rb.setChecked(True)
 
     def reset_tool_probe_initial_enables(self):
-        """Reset status of tool probe checkbox checked (or not) and wpos/mpos fields enabled or disabled. """
+        """Reset status of tool probe checkbox checked (or not) and wpos/mpos fields enabled or disabled."""
         self.ui.tool_probe_wm_pos_chb.setChecked(self.machine_settings.tool_probe_rel_flag)
         self.enable_disable_tool_probe_wpos_mpos(self.machine_settings.tool_probe_rel_flag)
 
@@ -157,7 +164,7 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.y_tool_camera_offset_dsb.setValue(self.machine_settings.tool_camera_offset_y)
 
     def restore_initial_settings(self):
-        """Restore initial settings in ui fields. """
+        """Restore initial settings in ui fields."""
         self.reset_application_settings()
         self.reset_serial_error_thresholds()
         self.reset_jobs_common_initial_settings()
@@ -168,16 +175,16 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.status_bar.showMessage("Settings/Preferences restored.")
 
     def ui_tool_probe_set_enabling(self, enable=False):
-        """Enable or disable tool probe get button. """
+        """Enable or disable tool probe get button."""
         self.ui.get_tool_probe_pb.setEnabled(enable)
 
     def ui_tool_change_set_enabling(self, enable=False):
-        """Enable or disable tool change get button. """
+        """Enable or disable tool change get button."""
         self.ui.get_tool_change_pb.setEnabled(enable)
 
     @Slot()
     def tool_probe_wm_pos_checked(self):
-        """Update tool probe field passing from relative to absolute position and vice-versa. """
+        """Update tool probe field passing from relative to absolute position and vice-versa."""
         wpos_flag = self.ui.tool_probe_wm_pos_chb.isChecked()
         self.enable_disable_tool_probe_wpos_mpos(wpos_flag)
         self.set_focus_lost()
@@ -210,12 +217,12 @@ class UiSettingsPreferencesTab(QObject):
             self.ui.tool_probe_z_wpos_dsb.setEnabled(False)
 
     def ask_status_report(self):
-        """ Emit a signal asking asynchronously the controller status report. """
+        """Emit a signal asking asynchronously the controller status report."""
         self.ask_status_report_s.emit()
 
     @Slot(Od)
     def get_and_manage_status_report(self, actual_status_report):
-        """ Asynchronously get status report and call function relative to function that asked for it. """
+        """Asynchronously get status report and call function relative to function that asked for it."""
         if self.get_tool_probe_flag:
             self.get_tool_probe_flag = False
             self.get_tool_probe_position(actual_status_report)
@@ -227,22 +234,22 @@ class UiSettingsPreferencesTab(QObject):
             self.get_tool_camera_offset(actual_status_report)
 
     def ask_tool_probe_position(self):
-        """ Set get_tool_probe_flag at true and ask controller status report. """
+        """Set get_tool_probe_flag at true and ask controller status report."""
         self.get_tool_probe_flag = True
         self.ask_status_report()
 
     def ask_tool_change_position(self):
-        """ Set get_tool_probe_flag at true and ask controller status report. """
+        """Set get_tool_probe_flag at true and ask controller status report."""
         self.get_tool_change_flag = True
         self.ask_status_report()
 
     def ask_tool_camera_offset(self):
-        """ Set get_tool_camera_offset_flag at true and ask controller status report. """
+        """Set get_tool_camera_offset_flag at true and ask controller status report."""
         self.get_tool_camera_offset_flag = True
         self.ask_status_report()
 
     def get_tool_probe_position(self, actual_status_report):
-        """ Get tool offset mpos and wpos and update corresponding ui fields. """
+        """Get tool offset mpos and wpos and update corresponding ui fields."""
         wpos_flag = self.ui.tool_probe_wm_pos_chb.isChecked()
         if wpos_flag:
             tool_probe_wpos = actual_status_report["wpos"]
@@ -256,7 +263,7 @@ class UiSettingsPreferencesTab(QObject):
             self.ui.tool_probe_z_mpos_dsb.setValue(tool_probe_mpos[2])
 
     def get_tool_change_position(self, actual_status_report):
-        """ Get tool change mpos and wpos and update corresponding ui fields. """
+        """Get tool change mpos and wpos and update corresponding ui fields."""
         tool_change_mpos = actual_status_report["mpos"]
         self.ui.tool_change_x_mpos_dsb.setValue(tool_change_mpos[0])
         self.ui.tool_change_y_mpos_dsb.setValue(tool_change_mpos[1])
@@ -321,12 +328,12 @@ class UiSettingsPreferencesTab(QObject):
         self.reset_focus_lost()
 
     def set_focus_lost(self):
-        """ When a setting is changed but not saved the focus is lost. We signal it coloring pushbutton in red. """
+        """When a setting is changed but not saved the focus is lost. We signal it coloring pushbutton in red."""
         self.ui.save_settings_preferences_pb.setStyleSheet("background-color:red")
         self.ui.status_bar.showMessage("Settings/Preferences modified but still not saved.")
 
     def reset_focus_lost(self):
-        """Reset lost focus to False, the changed settings have been saved or restored. """
+        """Reset lost focus to False, the changed settings have been saved or restored."""
         self.ui.save_settings_preferences_pb.setStyleSheet("")
 
     def layer_color_choice(self, layer):

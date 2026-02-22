@@ -1,4 +1,3 @@
-
 import os
 import re
 import time
@@ -14,18 +13,18 @@ from .align_manager import AlignManager
 
 
 class GCoder:
-    """ This class could be the parent class
-        which will then be used to diversify the
-        gcode based on the controller that will have to interpret it
-        of course this will be based on The Ant
-        so it will natively support the grbl mod that
-        we use as firmware. """
+    """This class could be the parent class
+    which will then be used to diversify the
+    gcode based on the controller that will have to interpret it
+    of course this will be based on The Ant
+    so it will natively support the grbl mod that
+    we use as firmware."""
 
     DIGITS = 4
     STEPS = 3
     CHANGE_TOOL_COMMAND = "M6"
 
-    def __init__(self, tag, machining_type='gerber', parent=None, units='ms', mirror_type='x'):
+    def __init__(self, tag, machining_type="gerber", parent=None, units="ms", mirror_type="x"):
 
         self.parent = parent
         self.tag = tag
@@ -43,53 +42,53 @@ class GCoder:
         self.user_cmd = None
 
         self.geom_list = []
-        if machining_type == 'gerber':
+        if machining_type == "gerber":
             self.cfg = {
-                'cut': -0.07,
-                'travel': 0.7,
-                'xy_feedrate': 250.0,
-                'z_feedrate': 40.0,
-                'spindle': 1000.0,
-                'mirror': False
+                "cut": -0.07,
+                "travel": 0.7,
+                "xy_feedrate": 250.0,
+                "z_feedrate": 40.0,
+                "spindle": 1000.0,
+                "mirror": False,
             }
-        elif machining_type == 'profile':
+        elif machining_type == "profile":
             self.cfg = {
-                'cut': -1.8,
-                'travel': 0.7,
-                'xy_feedrate': 250.0,
-                'z_feedrate': 40.0,
-                'spindle': 1000.0,
-                'multi_depth': True,
-                'depth_per_pass': 0.6,
-                'mirror': False
+                "cut": -1.8,
+                "travel": 0.7,
+                "xy_feedrate": 250.0,
+                "z_feedrate": 40.0,
+                "spindle": 1000.0,
+                "multi_depth": True,
+                "depth_per_pass": 0.6,
+                "mirror": False,
             }
-        elif machining_type == 'pocketing':
+        elif machining_type == "pocketing":
             self.cfg = {
-                'cut': -0.07,
-                'travel': 0.7,
-                'xy_feedrate': 250.0,
-                'z_feedrate': 40.0,
-                'spindle': 1000.0,
-                'mirror': False
+                "cut": -0.07,
+                "travel": 0.7,
+                "xy_feedrate": 250.0,
+                "z_feedrate": 40.0,
+                "spindle": 1000.0,
+                "mirror": False,
             }
-        elif machining_type == 'drill':
+        elif machining_type == "drill":
             self.cfg = {
-                'cut': -2.1,
-                'travel': 0.7,
-                'xy_feedrate': 250.0,
-                'z_feedrate': 40.0,
-                'spindle': 1000.0,
-                'mirror': False
+                "cut": -2.1,
+                "travel": 0.7,
+                "xy_feedrate": 250.0,
+                "z_feedrate": 40.0,
+                "spindle": 1000.0,
+                "mirror": False,
             }
-        elif machining_type == 'commander':
+        elif machining_type == "commander":
             self.cfg = {
-                'tool_probe_pos': (-1.0, -1.0, -11.0),
-                'tool_probe_working': True,  # False: machine pos or True: working pos
-                'tool_probe_min': -11.0,
-                'tool_change_pos': (-41.2, -120.88, -1.0),
-                'tool_probe_feedrate': (300.0, 80.0, 50.0),  # SLOW FAST XY
-                'tool_probe_hold': False,
-                'tool_probe_zero': False,
+                "tool_probe_pos": (-1.0, -1.0, -11.0),
+                "tool_probe_working": True,  # False: machine pos or True: working pos
+                "tool_probe_min": -11.0,
+                "tool_change_pos": (-41.2, -120.88, -1.0),
+                "tool_probe_feedrate": (300.0, 80.0, 50.0),  # SLOW FAST XY
+                "tool_probe_hold": False,
+                "tool_probe_zero": False,
             }
             self.macro = Macros(parent=self)
             self.macro.load_cfg(self.cfg)
@@ -118,19 +117,19 @@ class GCoder:
         self.path = path
 
     def compute(self):
-        if 'mirror' not in self.cfg.keys():
+        if "mirror" not in self.cfg.keys():
             mirror = False
         else:
-            mirror = self.cfg['mirror']
-        if self.type == 'gerber':
+            mirror = self.cfg["mirror"]
+        if self.type == "gerber":
             self.compute_gerber(mirror=mirror)
-        elif self.type == 'profile':
+        elif self.type == "profile":
             self.compute_pocketing(mirror=mirror)
-        elif self.type == 'drill':
+        elif self.type == "drill":
             self.compute_drill(mirror=mirror)
-        elif self.type == 'pocketing':
+        elif self.type == "pocketing":
             self.compute_pocketing(mirror=mirror)
-        elif self.type == 'commander':
+        elif self.type == "commander":
             print("Nothing to do!")
         else:
             print("Machining Type not supported")
@@ -153,15 +152,15 @@ class GCoder:
         for d in self.path:
             data = d[0]
             path = d[1]
-            if data[1] == 'pocketing':
+            if data[1] == "pocketing":
                 print(" - Pocketing, bit diameter " + str(data[0]))
                 self.insert_comment("Pocketing Section in Drill Procedure")
                 self.insert_comment("Tool Diameter: " + str(data[0]))
-                cut = self.cfg['cut']
+                cut = self.cfg["cut"]
                 sign = cut / abs(cut)
                 dpp = data[0]
                 n = int(abs(cut) // dpp) + 1
-                dpp = abs(cut)/n
+                dpp = abs(cut) / n
                 pass_list = [sign * dpp * x for x in range(1, n)] + [cut]
                 pass_list.sort(reverse=True)
                 self.compute_pocketing_paths(path, pass_list, mirror=mirror)
@@ -228,16 +227,16 @@ class GCoder:
         # return in travel mode
 
         multi_pass = False
-        if self.cfg['multi_depth']:
-            multi_pass = self.cfg['depth_per_pass'] > 0.0
+        if self.cfg["multi_depth"]:
+            multi_pass = self.cfg["depth_per_pass"] > 0.0
 
         for d in self.path:
             paths = d[1]
             if multi_pass:
-                cut = self.cfg['cut']
-                sign = cut/abs(cut)
-                dpp = self.cfg['depth_per_pass']
-                n = int(abs(cut)//dpp)
+                cut = self.cfg["cut"]
+                sign = cut / abs(cut)
+                dpp = self.cfg["depth_per_pass"]
+                n = int(abs(cut) // dpp)
                 pass_list = [sign * dpp * x for x in range(1, n)] + [cut]
                 pass_list.sort(reverse=True)
                 self.compute_pocketing_paths(paths, pass_list, mirror=mirror)
@@ -249,7 +248,7 @@ class GCoder:
 
     def mirror_coords(self, cs):
         csa = np.array(cs)
-        if self.mirror_type == 'y':
+        if self.mirror_type == "y":
             # X mirror
             csa[:, 0] *= -1.0
         else:
@@ -261,7 +260,7 @@ class GCoder:
 
         # set the working feed rate
         # of the Z axis
-        zf = self.cfg['z_feedrate']
+        zf = self.cfg["z_feedrate"]
         zf_str = self.format_float(zf)
         self.gcode.append("G01 F" + zf_str + "\n")
 
@@ -340,8 +339,8 @@ class GCoder:
         # unload the tip
 
         z_zero_str = self.format_float(0.0)
-        z_drill = self.cfg['cut']
-        delta_z = z_drill/(steps * 1.0)
+        z_drill = self.cfg["cut"]
+        delta_z = z_drill / (steps * 1.0)
         z = 0.0
 
         for i in range(steps):
@@ -352,23 +351,23 @@ class GCoder:
         self.gcode.append(gc)
 
     def go_travel(self):
-        zt = self.cfg['travel']
+        zt = self.cfg["travel"]
         zt_str = self.format_float(zt)
         self.gcode.append("G00 Z" + zt_str + "\n")
         self.mill = False
 
     def go_mill(self, z=None):
         gc = ""
-        zf = self.cfg['z_feedrate']
+        zf = self.cfg["z_feedrate"]
         if z is None:
-            zt = self.cfg['cut']
+            zt = self.cfg["cut"]
         else:
             zt = z
         zf_str = self.format_float(zf)
         gc += "G01 F" + zf_str + "\n"
         zt_str = self.format_float(zt)
         gc += "G01 Z" + zt_str + "\n"
-        xyf = self.cfg['xy_feedrate']
+        xyf = self.cfg["xy_feedrate"]
         xyf_str = self.format_float(xyf)
         gc += "G01 F" + xyf_str + "\n"
         self.gcode.append(gc)
@@ -381,7 +380,7 @@ class GCoder:
             gc += "M3 S" + ten_str + "\n"  # activate splindle
             one_str = self.format_float(1.0)
             gc += "G4 P" + one_str + "\n"  # just a little pause
-            spindle_speed = self.cfg['spindle']
+            spindle_speed = self.cfg["spindle"]
             spindle_speed_str = self.format_float(spindle_speed)
             gc += "M3 S" + spindle_speed_str + "\n"  # spindle at the full speed
             gc += "\n"
@@ -397,7 +396,7 @@ class GCoder:
     def add_init(self):
         gc = ""
         # units
-        if self.units == 'ms':
+        if self.units == "ms":
             gc += "G21\n"
         else:
             gc += "G20\n"
@@ -429,7 +428,7 @@ class GCoder:
 
         # date
         now = datetime.now()
-        d = now.today().strftime('%A')
+        d = now.today().strftime("%A")
         D = now.today().strftime("%d %B, %Y at %H:%M:%S")
 
         gc += self.gcode_comment("Create on " + d + ", " + D)
@@ -447,7 +446,7 @@ class GCoder:
     @staticmethod
     def gcode_comment(txt):
         c = ""
-        lines = txt.split('\n')
+        lines = txt.split("\n")
         for ln in lines:
             c += "(" + ln + ")\n"
         return c
@@ -473,8 +472,9 @@ class GCoder:
 
         abl_cmd_s = ""
         abl_cmd_s += "G00 Z" + str(travel_z) + "\n"  # get to safety Z Travel
-        abl_cmd_s += "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + \
-            str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
+        abl_cmd_s += (
+            "G00 X" + str((xy_c_l[0][0] + xy_c_l[-1][0]) / 2.0) + "Y" + str((xy_c_l[0][1] + xy_c_l[-1][1]) / 2.0) + "\n"
+        )
         abl_cmd_s += "G38.2 Z" + str(probe_z_min) + "F" + str(probe_feed_rate) + "\n"  # set probe command
         prb_num_todo += 1
         abl_cmd_s += "G10 P1 L20 Z0\n"  # set Z zero
@@ -500,7 +500,7 @@ class GCoder:
     def write(self, file_path):
         print("Writing gcode file:")
         print("\t " + str(os.path.abspath(file_path)))
-        with open(file_path, 'w') as f:
+        with open(file_path, "w") as f:
             f.write("".join(self.gcode))
         print("Done")
 
@@ -576,7 +576,7 @@ class GcodeLine:
 
 class GcodePoint:
     """
-        Represents a point in G-code with coordinates, type, position, and additional parameters.
+    Represents a point in G-code with coordinates, type, position, and additional parameters.
     """
 
     # Constants for point types and positions
@@ -694,10 +694,10 @@ class GCode:
 
 class GCodeParser:
 
-    COORD_TAG = ['x', 'y', 'z']
-    PARAM_TAG = ['f', 'p']
-    CHANGE_TOOL_COMMAND = ('m', 6)
-    MACHINE_POS_COMMAND = ('g', 53)
+    COORD_TAG = ["x", "y", "z"]
+    PARAM_TAG = ["f", "p"]
+    CHANGE_TOOL_COMMAND = ("m", 6)
+    MACHINE_POS_COMMAND = ("g", 53)
 
     def __init__(self, cfg):
         self.gcode_path = ""
@@ -745,10 +745,10 @@ class GCodeParser:
                         if "$#" in data:
                             gcl.command = [("$#", tuple())]
                         else:
-                            splitted = re.findall(r'[a-z][-]*[\d.]+', data)
+                            splitted = re.findall(r"[a-z][-]*[\d.]+", data)
 
                             # detect tags (remember, tags cannot be used in motion commands)
-                            tags = re.findall(r'[a-z][@]*[a-z_]+[@]*', data)
+                            tags = re.findall(r"[a-z][@]*[a-z_]+[@]*", data)
                             cmd = splitted.pop(0)
                             ct = cmd[0]
                             cd = [int(x) for x in cmd[1::].split(".")]
@@ -843,7 +843,7 @@ class GCodeParser:
                         ci = last_cmd[1][0]
                     else:
                         ci = -1
-                    if cn == 'g' and ci < 2 and not machine_pos and not gcl.tag:
+                    if cn == "g" and ci < 2 and not machine_pos and not gcl.tag:
                         # it is a valid position command in working position system
                         # let's vectorize it
                         a = set(gcl.params.keys())
@@ -971,15 +971,15 @@ class GCodeLeveler:
             if bb is not None:
                 x_min = bb[0]
                 y_min = bb[1]
-                delta_x = bb[3]-bb[0]
-                delta_y = bb[4]-bb[1]
-                delta_i = np.sqrt(delta_x*delta_x + delta_y*delta_y)
+                delta_x = bb[3] - bb[0]
+                delta_y = bb[4] - bb[1]
+                delta_i = np.sqrt(delta_x * delta_x + delta_y * delta_y)
                 delta_z = 0.2
                 delta_z0 = -0.1
                 xi = np.linspace(0.0, delta_x, grid_steps)
                 yi = np.linspace(0.0, delta_y, grid_steps)
                 X, Y = np.meshgrid(xi, yi)
-                Z = np.sqrt(np.square(X) + np.square(Y))/delta_i * delta_z + delta_z0
+                Z = np.sqrt(np.square(X) + np.square(Y)) / delta_i * delta_z + delta_z0
                 X += x_min
                 Y += y_min
                 return X, Y, Z
@@ -1076,7 +1076,7 @@ class GCodeLeveler:
             self.gc.modified_vectors = mvl
             print("Advanced Auto Bed Leveler Stop")
             tb = time.time()
-            print("Done in " + "{:.3f}".format(tb-ta) + " sec")
+            print("Done in " + "{:.3f}".format(tb - ta) + " sec")
             # Debug purpse
             # for gcv in mvl:
             #    print(gcv.coords)

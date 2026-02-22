@@ -1,4 +1,3 @@
-
 class CommandManager:
     """
     A CommandManager Object manages requests of gcode translation for a set of known commands.
@@ -27,7 +26,7 @@ class CommandManager:
 
     AXIS = ("X", "Y", "Z")
     CMDS = {
-        "soft_reset": b'\x18',
+        "soft_reset": b"\x18",
         "unlock": "$X",
         "homing": "$H",
         "goto": "G90 G00",
@@ -78,13 +77,13 @@ class CommandManager:
             self.cfg = cfg
         else:
             self.cfg = {
-                'tool_probe_pos': (-1.0, -1.0, -11.0),
-                'tool_probe_working': True,  # False: machine pos or True: working pos
-                'tool_probe_min': -11.0,
-                'tool_change_pos': (-41.2, -120.88, -1.0),
-                'tool_probe_feedrate': (300.0, 80.0, 50.0),
-                'tool_probe_hold': False,
-                'tool_probe_zero': False,
+                "tool_probe_pos": (-1.0, -1.0, -11.0),
+                "tool_probe_working": True,  # False: machine pos or True: working pos
+                "tool_probe_min": -11.0,
+                "tool_change_pos": (-41.2, -120.88, -1.0),
+                "tool_probe_feedrate": (300.0, 80.0, 50.0),
+                "tool_probe_hold": False,
+                "tool_probe_zero": False,
             }
         self.cfg["safe_pos"] = (-1.0, -1.0, -1.0)
 
@@ -122,7 +121,7 @@ class CommandManager:
         elif command == "homing":
             str_l.append(self.CMDS[command] + "\n")
         elif command == "jog" or command == "goto":
-            feedrate = self.cfg['tool_probe_feedrate']
+            feedrate = self.cfg["tool_probe_feedrate"]
             xy = values[0:2]
             z = values[2]
             if z_check:
@@ -154,7 +153,7 @@ class CommandManager:
             if self.cfg["tool_probe_hold"]:
                 cmd = self.CMDS["hold"] + "\n"
                 str_l.append(cmd)
-            fr = self.cfg['tool_probe_feedrate'][2]
+            fr = self.cfg["tool_probe_feedrate"][2]
             frstr = self.parent.format_float(fr)
             cmd = self.CMDS[command] + " F" + frstr
             for i, v in enumerate(values):

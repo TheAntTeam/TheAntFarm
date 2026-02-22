@@ -9,12 +9,20 @@ logger = logging.getLogger(__name__)
 
 
 class UiCreateJobLayerTab(QObject):
-    """Class dedicated to UI <--> Control interactions on Create Job Layer Tab. """
+    """Class dedicated to UI <--> Control interactions on Create Job Layer Tab."""
 
     generate_path_s = Signal(str, Od, str)
 
-    TAPS_TYPE_TEXT = ["None", "1 Left + 1 Right", "1 Top + 1 Bottom", "4 - 1 per side",
-                              "2 Left + 2 Right", "2 Top + 2 Bottom", "8 - 2 per side", "4 - 1 per corner"]
+    TAPS_TYPE_TEXT = [
+        "None",
+        "1 Left + 1 Right",
+        "1 Top + 1 Bottom",
+        "4 - 1 per side",
+        "2 Left + 2 Right",
+        "2 Top + 2 Bottom",
+        "8 - 2 per side",
+        "4 - 1 per corner",
+    ]
 
     def __init__(self, ui, control_wo, vis_layer, lay_tags, lay_names, jobs_settings):
         super(UiCreateJobLayerTab, self).__init__()
@@ -262,7 +270,7 @@ class UiCreateJobLayerTab(QObject):
         settings_profile["cut"] = self.ui.profile_cut_z_dsb.value()
         settings_profile["passages"] = 1
         if settings_profile["multi_depth"]:
-            settings_profile["passages"] = math.ceil(abs(settings_profile["cut"]/settings_profile["depth_per_pass"]))
+            settings_profile["passages"] = math.ceil(abs(settings_profile["cut"] / settings_profile["depth_per_pass"]))
         settings_profile["overlap"] = 1.0
         settings_profile["travel"] = self.ui.profile_travel_z_dsb.value()
         settings_profile["spindle"] = self.ui.profile_spindle_speed_dsb.value()

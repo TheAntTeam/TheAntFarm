@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QMainWindow, QApplication
 from PySide6.QtCore import QThread, QResource
 from queue import Queue
 from ui_the_ant_farm import Ui_MainWindow
+
 # To convert ui to py from the "src/TheAntFarm" folder
 # do: PySide6-uic the_ant_farm.ui > ui_the_ant_farm.py
 # or: python .\build.py ui
@@ -24,7 +25,7 @@ import logging.handlers
 
 
 def config_os():
-    pys2_path = os.path.dirname(sys.modules['PySide6'].__file__)
+    pys2_path = os.path.dirname(sys.modules["PySide6"].__file__)
     if os.path.isdir(os.path.join(pys2_path, "Qt")):
         pys2_path = os.path.join(pys2_path, "Qt")
 
@@ -38,8 +39,8 @@ def config_os():
         print("Windows Env")
         # https://bugreports.qt.io/browse/PYSIDE-2935?attachmentViewMode=list
         pyside6_dll_lib_path = ""
-        ps6_stdlib_path = os.path.normpath(os.path.join(sysconfig.get_path('stdlib'), 'PySide6'))
-        ps6_purelib_path = os.path.normpath(os.path.join(sysconfig.get_path('purelib'), 'PySide6'))
+        ps6_stdlib_path = os.path.normpath(os.path.join(sysconfig.get_path("stdlib"), "PySide6"))
+        ps6_purelib_path = os.path.normpath(os.path.join(sysconfig.get_path("purelib"), "PySide6"))
         if os.path.isdir(ps6_stdlib_path):
             pyside6_dll_lib_path = ps6_stdlib_path
         elif os.path.isdir(ps6_purelib_path):
@@ -49,7 +50,7 @@ def config_os():
             logging.error("PySide6 library path not found.")
         if not pyside6_dll_lib_path == "":
             os.add_dll_directory(pyside6_dll_lib_path)
-    elif sys_name == 'Darwin':
+    elif sys_name == "Darwin":
         print("Mac Env")
         os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
     else:
@@ -59,8 +60,8 @@ def config_os():
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    serialRxQu = Queue()                   # serial FIFO RX Queue
-    serialTxQu = Queue()                   # serial FIFO TX Queue
+    serialRxQu = Queue()  # serial FIFO RX Queue
+    serialTxQu = Queue()  # serial FIFO TX Queue
 
     def __init__(self, local_path=""):
         super(MainWindow, self).__init__()

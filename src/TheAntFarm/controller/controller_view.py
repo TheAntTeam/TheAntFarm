@@ -52,8 +52,8 @@ class ViewController(QObject):
         return new_paths
 
     def generate_new_gcode_file(self, tag, cfg, machining_type, path):
-        if 'mirroring_axis' in self.settings.jobs_settings.jobs_settings_od["common"].keys():
-            mt = self.settings.jobs_settings.jobs_settings_od["common"]['mirroring_axis']
+        if "mirroring_axis" in self.settings.jobs_settings.jobs_settings_od["common"].keys():
+            mt = self.settings.jobs_settings.jobs_settings_od["common"]["mirroring_axis"]
             logger.debug("Mirror Axis: " + str(mt))
             gcoder = GCoder(tag, machining_type, mirror_type=mt)
         else:

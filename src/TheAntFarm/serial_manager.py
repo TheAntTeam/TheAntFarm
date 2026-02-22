@@ -45,7 +45,7 @@ class SerialWorker(QObject):
             self.get_port_list_s.emit(port_name_l, bauds_ls)
 
     def open_port(self, port, baud_rate):
-        """Open passed serial port. Return outcome of operation. True if success, otherwise False. """
+        """Open passed serial port. Return outcome of operation. True if success, otherwise False."""
         if port:
             logger.debug("Opening " + port)
             self.update_console_text_s.emit("Opening " + port)
@@ -89,7 +89,7 @@ class SerialWorker(QObject):
                 self.residual_string = ""
                 while res_split:
                     element = res_split.pop(0)
-                    if '\n' in element:
+                    if "\n" in element:
                         self.serialRxQueue.put(element)
                         # logger.debug("RXelem: " + element)
                         self.rx_queue_not_empty_s.emit()

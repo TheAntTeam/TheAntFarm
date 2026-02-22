@@ -8,8 +8,8 @@ import os
 class AppSettingsHandler:
     # APP CONFIGURATION DEFAULT VALUES
     APP_VERSION_DEFAULT = "0.3.2"
-    LOGS_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'app_logs'))
-    LOGS_FILE_DEFAULT = os.path.normpath(os.path.join(LOGS_DIR_DEFAULT, 'app_logs.log'))
+    LOGS_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "app_logs"))
+    LOGS_FILE_DEFAULT = os.path.normpath(os.path.join(LOGS_DIR_DEFAULT, "app_logs.log"))
     LOGS_MAX_BYTES = 1000000
     LOGS_BACKUP_COUNT = 2
     WIN_POS_X_DEFAULT = 200
@@ -26,8 +26,8 @@ class AppSettingsHandler:
     SHOW_CONSOLE_DEFAULT = False
     LAST_SERIAL_PORT_DEFAULT = ""
     LAST_SERIAL_BAUD_DEFAULT = 115200
-    LAYER_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '../../..'))
-    GCODE_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), '../../..'))
+    LAYER_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../.."))
+    GCODE_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../.."))
     TOP_LAYER_COLOR_DEFAULT = "#FFC300"
     BOTTOM_LAYER_COLOR_DEFAULT = "#A3E4D7"
     PROFILE_LAYER_COLOR_DEFAULT = "#000000"
@@ -45,7 +45,7 @@ class AppSettingsHandler:
 
         if os.path.isdir(main_win.local_path):
             logs_dir_default = os.path.join(main_win.local_path, "app_logs")
-            self.logs_file_default = os.path.normpath(os.path.join(logs_dir_default, 'app_logs.log'))
+            self.logs_file_default = os.path.normpath(os.path.join(logs_dir_default, "app_logs.log"))
             self.logs_folder = os.path.join(main_win.local_path, "app_logs")
             self.logs_file = self.logs_file_default
 
@@ -63,7 +63,7 @@ class AppSettingsHandler:
         if not os.path.isdir(self.logs_folder):
             os.makedirs(self.logs_folder)
 
-        self.app_config_path = os.path.normpath(os.path.join(config_folder, 'app_config.ini'))
+        self.app_config_path = os.path.normpath(os.path.join(config_folder, "app_config.ini"))
         self.app_settings = configparser.ConfigParser()
 
         self.app_version = self.APP_VERSION_DEFAULT
@@ -154,7 +154,7 @@ class AppSettingsHandler:
         return version_s
 
     def read_all_app_settings(self):
-        """ Read all application settings from ini files """
+        """Read all application settings from ini files"""
         # If app settings file does NOT exist create it with default values
         if not os.path.isfile(self.app_config_path):
             self.restore_app_settings()
@@ -168,40 +168,50 @@ class AppSettingsHandler:
             # The following function should choose and clean up the version.
             self.app_version = self.choose_version(__version__, self.APP_VERSION_DEFAULT)
 
-            self.pos = QPoint(app_general.getint("win_position_x", self.WIN_POS_X_DEFAULT),
-                              app_general.getint("win_position_y", self.WIN_POS_Y_DEFAULT))
-            self.size = QSize(app_general.getint("win_width", self.WIN_SIZE_W_DEFAULT),
-                              app_general.getint("win_height", self.WIN_SIZE_H_DEFAULT))
+            self.pos = QPoint(
+                app_general.getint("win_position_x", self.WIN_POS_X_DEFAULT),
+                app_general.getint("win_position_y", self.WIN_POS_Y_DEFAULT),
+            )
+            self.size = QSize(
+                app_general.getint("win_width", self.WIN_SIZE_W_DEFAULT),
+                app_general.getint("win_height", self.WIN_SIZE_H_DEFAULT),
+            )
             self.win_maximized = app_general.getboolean("win_maximized", self.WIN_MAXIMIZED_DEFAULT)
             self.main_tab_index = app_general.getint("main_tab_index", self.MAIN_TAB_INDEX_DEFAULT)
             self.ctrl_tab_index = app_general.getint("ctrl_tab_index", self.CTRL_TAB_INDEX_DEFAULT)
             self.settings_tab_index = app_general.getint("settings_tab_index", self.SETTINGS_TAB_INDEX_DEFAULT)
             self.jog_probe_tab_index = app_general.getint("jog_probe_tab_index", self.JOG_PROBE_TAB_INDEX_DEFAULT)
             self.align_tab_visibility = app_general.getboolean("align_tab_visibility", self.SHOW_ALIGN_TAB_DEFAULT)
-            self.settings_tab_visibility = app_general.getboolean("settings_tab_visibility",
-                                                                  self.SHOW_SETTINGS_TAB_DEFAULT)
+            self.settings_tab_visibility = app_general.getboolean(
+                "settings_tab_visibility", self.SHOW_SETTINGS_TAB_DEFAULT
+            )
             self.console_visibility = app_general.getboolean("console_visibility", self.SHOW_CONSOLE_DEFAULT)
-            self.logs_file = app_general.get('logs_file', self.logs_file_default)
+            self.logs_file = app_general.get("logs_file", self.logs_file_default)
             if not os.path.isdir(os.path.dirname(os.path.abspath(self.logs_file))):
                 self.logs_file = self.logs_file_default  # restore logs file with the default path
-            self.logs_max_bytes = app_general.getint('logs_max_bytes', self.LOGS_MAX_BYTES)
-            self.logs_backup_count = app_general.getint('logs_backup_count', self.LOGS_BACKUP_COUNT)
+            self.logs_max_bytes = app_general.getint("logs_max_bytes", self.LOGS_MAX_BYTES)
+            self.logs_backup_count = app_general.getint("logs_backup_count", self.LOGS_BACKUP_COUNT)
             self.last_serial_port = app_general.get("last_serial_port", self.LAST_SERIAL_PORT_DEFAULT)
             try:
                 self.last_serial_baud = app_general.getint("last_serial_baud", self.LAST_SERIAL_BAUD_DEFAULT)
             except Exception:
                 self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
 
-            self.camera_selected_or_tool = app_general.getboolean("camera_selected_or_tool",
-                                                                  self.CAMERA_SELECTED_OR_TOOL_DEFAULT)
-            self.flip_horizontal_selected = app_general.getboolean("flip_horizontal_selected",
-                                                                   self.FLIP_HORIZONTAL_SELECTED_DEFAULT)
-            self.flip_vertical_selected = app_general.getboolean("flip_vertical_selected",
-                                                                 self.FLIP_VERTICAL_SELECTED_DEFAULT)
-            self.serial_error_warning_threshold = app_general.getint("serial_error_warning_threshold",
-                                                                     self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT)
-            self.serial_error_critical_threshold = app_general.getint("serial_error_critical_threshold",
-                                                                      self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT)
+            self.camera_selected_or_tool = app_general.getboolean(
+                "camera_selected_or_tool", self.CAMERA_SELECTED_OR_TOOL_DEFAULT
+            )
+            self.flip_horizontal_selected = app_general.getboolean(
+                "flip_horizontal_selected", self.FLIP_HORIZONTAL_SELECTED_DEFAULT
+            )
+            self.flip_vertical_selected = app_general.getboolean(
+                "flip_vertical_selected", self.FLIP_VERTICAL_SELECTED_DEFAULT
+            )
+            self.serial_error_warning_threshold = app_general.getint(
+                "serial_error_warning_threshold", self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
+            )
+            self.serial_error_critical_threshold = app_general.getint(
+                "serial_error_critical_threshold", self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
+            )
             # Validate thresholds are >= 0
             if self.serial_error_warning_threshold < 0:
                 self.serial_error_warning_threshold = self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
@@ -218,51 +228,55 @@ class AppSettingsHandler:
             self.layer_last_dir = app_layers_settings.get("layer_last_dir", self.layer_last_dir_default)
             self.layer_color["top"] = app_layers_settings.get("top_layer_color", self.TOP_LAYER_COLOR_DEFAULT)
             self.layer_color["bottom"] = app_layers_settings.get("bottom_layer_color", self.BOTTOM_LAYER_COLOR_DEFAULT)
-            self.layer_color["profile"] = app_layers_settings.get("profile_layer_color",
-                                                                  self.PROFILE_LAYER_COLOR_DEFAULT)
+            self.layer_color["profile"] = app_layers_settings.get(
+                "profile_layer_color", self.PROFILE_LAYER_COLOR_DEFAULT
+            )
             self.layer_color["drill"] = app_layers_settings.get("drill_layer_color", self.DRILL_LAYER_COLOR_DEFAULT)
             self.layer_color["nc_top"] = app_layers_settings.get("nc_top_layer_color", self.NC_TOP_LAYER_COLOR_DEFAULT)
-            self.layer_color["nc_bottom"] = app_layers_settings.get("nc_bottom_layer_color",
-                                                                    self.NC_BOTTOM_LAYER_COLOR_DEFAULT)
+            self.layer_color["nc_bottom"] = app_layers_settings.get(
+                "nc_bottom_layer_color", self.NC_BOTTOM_LAYER_COLOR_DEFAULT
+            )
 
         if "GCODES" in self.app_settings:
             app_gcode_settings = self.app_settings["GCODES"]
             self.gcode_last_dir = app_gcode_settings.get("gcode_last_dir", self.gcode_last_dir_default)
 
     def write_all_app_settings(self):
-        """ Write all application settings to ini files """
+        """Write all application settings to ini files"""
         # Ensure the directory exists
         os.makedirs(os.path.dirname(self.app_config_path), exist_ok=True)
-        self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
-                                        "win_position_y": self.WIN_POS_Y_DEFAULT,
-                                        "win_width": self.WIN_SIZE_W_DEFAULT,
-                                        "win_height": self.WIN_SIZE_H_DEFAULT,
-                                        "win_maximized": self.WIN_MAXIMIZED_DEFAULT,
-                                        "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
-                                        "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
-                                        "settings_tab_index": self.SETTINGS_TAB_INDEX_DEFAULT,
-                                        "jog_probe_tab_index": self.JOG_PROBE_TAB_INDEX_DEFAULT,
-                                        "align_tab_visibility": self.SHOW_ALIGN_TAB_DEFAULT,
-                                        "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
-                                        "console_visibility": self.console_visibility,
-                                        "layer_last_dir": self.layer_last_dir_default,
-                                        "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
-                                        "bottom_layer_color": self.BOTTOM_LAYER_COLOR_DEFAULT,
-                                        "profile_layer_color": self.PROFILE_LAYER_COLOR_DEFAULT,
-                                        "drill_layer_color": self.DRILL_LAYER_COLOR_DEFAULT,
-                                        "nc_top_layer_color": self.NC_TOP_LAYER_COLOR_DEFAULT,
-                                        "nc_bottom_layer_color": self.NC_BOTTOM_LAYER_COLOR_DEFAULT,
-                                        "gcode_last_dir": self.gcode_last_dir_default,
-                                        "logs_file": self.logs_file_default,
-                                        "logs_max_bytes": self.LOGS_MAX_BYTES,
-                                        "logs_backup_count": self.LOGS_BACKUP_COUNT,
-                                        "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
-                                        "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT,
-                                        "camera_selected_or_tool": self.CAMERA_SELECTED_OR_TOOL_DEFAULT,
-                                        "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
-                                        "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT,
-                                        "serial_error_warning_threshold": self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT,
-                                        "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT}
+        self.app_settings["DEFAULT"] = {
+            "win_position_x": self.WIN_POS_X_DEFAULT,
+            "win_position_y": self.WIN_POS_Y_DEFAULT,
+            "win_width": self.WIN_SIZE_W_DEFAULT,
+            "win_height": self.WIN_SIZE_H_DEFAULT,
+            "win_maximized": self.WIN_MAXIMIZED_DEFAULT,
+            "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
+            "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
+            "settings_tab_index": self.SETTINGS_TAB_INDEX_DEFAULT,
+            "jog_probe_tab_index": self.JOG_PROBE_TAB_INDEX_DEFAULT,
+            "align_tab_visibility": self.SHOW_ALIGN_TAB_DEFAULT,
+            "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
+            "console_visibility": self.console_visibility,
+            "layer_last_dir": self.layer_last_dir_default,
+            "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
+            "bottom_layer_color": self.BOTTOM_LAYER_COLOR_DEFAULT,
+            "profile_layer_color": self.PROFILE_LAYER_COLOR_DEFAULT,
+            "drill_layer_color": self.DRILL_LAYER_COLOR_DEFAULT,
+            "nc_top_layer_color": self.NC_TOP_LAYER_COLOR_DEFAULT,
+            "nc_bottom_layer_color": self.NC_BOTTOM_LAYER_COLOR_DEFAULT,
+            "gcode_last_dir": self.gcode_last_dir_default,
+            "logs_file": self.logs_file_default,
+            "logs_max_bytes": self.LOGS_MAX_BYTES,
+            "logs_backup_count": self.LOGS_BACKUP_COUNT,
+            "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
+            "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT,
+            "camera_selected_or_tool": self.CAMERA_SELECTED_OR_TOOL_DEFAULT,
+            "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
+            "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT,
+            "serial_error_warning_threshold": self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT,
+            "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT,
+        }
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -309,42 +323,44 @@ class AppSettingsHandler:
         app_gcodes["gcode_last_dir"] = self.gcode_last_dir
 
         # Write application ini file #
-        with open(self.app_config_path, 'w') as configfile:
+        with open(self.app_config_path, "w") as configfile:
             self.app_settings.write(configfile)
 
     def restore_app_settings(self):
-        """ Restore all application settings to default and create ini file if it doesn't exists """
+        """Restore all application settings to default and create ini file if it doesn't exists"""
         # Ensure config directory exists
         os.makedirs(os.path.dirname(self.app_config_path), exist_ok=True)
-        self.app_settings["DEFAULT"] = {"win_position_x": self.WIN_POS_X_DEFAULT,
-                                        "win_position_y": self.WIN_POS_Y_DEFAULT,
-                                        "win_width": self.WIN_SIZE_W_DEFAULT,
-                                        "win_height": self.WIN_SIZE_H_DEFAULT,
-                                        "win_maximized": self.WIN_MAXIMIZED_DEFAULT,
-                                        "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
-                                        "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
-                                        "settings_tab_index": self.SETTINGS_TAB_INDEX_DEFAULT,
-                                        "jog_probe_tab_index": self.JOG_PROBE_TAB_INDEX_DEFAULT,
-                                        "align_tab_visibility": self.SHOW_ALIGN_TAB_DEFAULT,
-                                        "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
-                                        "console_visibility": self.console_visibility,
-                                        "layer_last_dir": self.layer_last_dir_default,
-                                        "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
-                                        "bottom_layer_color": self.BOTTOM_LAYER_COLOR_DEFAULT,
-                                        "profile_layer_color": self.PROFILE_LAYER_COLOR_DEFAULT,
-                                        "drill_layer_color": self.DRILL_LAYER_COLOR_DEFAULT,
-                                        "nc_top_layer_color": self.NC_TOP_LAYER_COLOR_DEFAULT,
-                                        "nc_bottom_layer_color": self.NC_BOTTOM_LAYER_COLOR_DEFAULT,
-                                        "gcode_last_dir": self.gcode_last_dir_default,
-                                        "logs_file": self.logs_file_default,
-                                        "logs_max_bytes": self.LOGS_MAX_BYTES,
-                                        "logs_backup_count": self.LOGS_BACKUP_COUNT,
-                                        "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
-                                        "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT,
-                                        "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
-                                        "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT,
-                                        "serial_error_warning_threshold": self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT,
-                                        "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT}
+        self.app_settings["DEFAULT"] = {
+            "win_position_x": self.WIN_POS_X_DEFAULT,
+            "win_position_y": self.WIN_POS_Y_DEFAULT,
+            "win_width": self.WIN_SIZE_W_DEFAULT,
+            "win_height": self.WIN_SIZE_H_DEFAULT,
+            "win_maximized": self.WIN_MAXIMIZED_DEFAULT,
+            "main_tab_index": self.MAIN_TAB_INDEX_DEFAULT,
+            "ctrl_tab_index": self.CTRL_TAB_INDEX_DEFAULT,
+            "settings_tab_index": self.SETTINGS_TAB_INDEX_DEFAULT,
+            "jog_probe_tab_index": self.JOG_PROBE_TAB_INDEX_DEFAULT,
+            "align_tab_visibility": self.SHOW_ALIGN_TAB_DEFAULT,
+            "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
+            "console_visibility": self.console_visibility,
+            "layer_last_dir": self.layer_last_dir_default,
+            "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
+            "bottom_layer_color": self.BOTTOM_LAYER_COLOR_DEFAULT,
+            "profile_layer_color": self.PROFILE_LAYER_COLOR_DEFAULT,
+            "drill_layer_color": self.DRILL_LAYER_COLOR_DEFAULT,
+            "nc_top_layer_color": self.NC_TOP_LAYER_COLOR_DEFAULT,
+            "nc_bottom_layer_color": self.NC_BOTTOM_LAYER_COLOR_DEFAULT,
+            "gcode_last_dir": self.gcode_last_dir_default,
+            "logs_file": self.logs_file_default,
+            "logs_max_bytes": self.LOGS_MAX_BYTES,
+            "logs_backup_count": self.LOGS_BACKUP_COUNT,
+            "last_serial_port": self.LAST_SERIAL_PORT_DEFAULT,
+            "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT,
+            "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
+            "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT,
+            "serial_error_warning_threshold": self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT,
+            "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT,
+        }
 
         # GENERAL application settings #
         self.app_settings["GENERAL"] = {}
@@ -382,5 +398,5 @@ class AppSettingsHandler:
         app_layers["gcode_last_dir"] = str(self.gcode_last_dir_default)
 
         # Write application ini file #
-        with open(self.app_config_path, 'w') as configfile:
+        with open(self.app_config_path, "w") as configfile:
             self.app_settings.write(configfile)

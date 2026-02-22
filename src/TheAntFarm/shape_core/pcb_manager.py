@@ -1,9 +1,9 @@
-
 import os
 import time
 import gerber as gbr
 import gerber.primitives
 from gerber.excellon_statements import ToolSelectionStmt, CoordinateStmt, EndOfProgramStmt, SlotStmt, FormatStmt
+
 # from gerber.render.cairo_backend import GerberCairoContext
 from gerber.excellon import DrillSlot, DrillHit, ExcellonParser
 from gerber.excellon import loads as exc_load
@@ -15,14 +15,16 @@ from gerber.utils import convex_hull
 from collections import OrderedDict as Od
 
 from .geometry_manager import Geom, merge_polygons
+
 # import matplotlib.pyplot as plt
 
 
 # workaround for pcb-tools read function
 def _new_pcb_tools_read_function(filename):
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         data = f.read()
     return gbr.loads(data, filename)
+
 
 gbr.read = _new_pcb_tools_read_function
 
@@ -87,7 +89,7 @@ class PcbObj:
         tmp = gbr.read(path)
         self.gerbers[tag] = tmp
         # unit conversion used to FIX bug in pcb-tools
-        if tmp.units == 'inch':
+        if tmp.units == "inch":
             self.gerbers[tag].to_metric()
             self.gerbers[tag] = gbr.loads(self.dump_str(tmp))
 
@@ -113,7 +115,7 @@ class PcbObj:
 
             for statement in gerber_obj.statements:
                 if not isinstance(statement, ToolSelectionStmt) and not isinstance(statement, FormatStmt):
-                    string += statement.to_excellon(settings) + '\n'
+                    string += statement.to_excellon(settings) + "\n"
                 else:
                     if isinstance(statement, FormatStmt):
                         pass
@@ -124,18 +126,18 @@ class PcbObj:
             # Write out coordinates for drill hits by tool
             for tool in iter(gerber_obj.tools.values()):
                 data = ToolSelectionStmt(tool.number)
-                string += data.to_excellon(settings) + '\n'
+                string += data.to_excellon(settings) + "\n"
                 for hit in gerber_obj.hits:
                     if hit.tool.number == tool.number:
                         if isinstance(hit, DrillHit):
-                            string += CoordinateStmt(hit.position[0] * k, hit.position[1] * k).to_excellon(settings) + '\n'
+                            string += (
+                                CoordinateStmt(hit.position[0] * k, hit.position[1] * k).to_excellon(settings) + "\n"
+                            )
                         elif isinstance(hit, DrillSlot):
-                            string += CoordinateStmt(hit.start[0] * k, hit.start[1] * k).to_excellon(
-                                settings) + '\n'
-                            string += CoordinateStmt(hit.end[0] * k, hit.end[1] * k).to_excellon(
-                                settings) + '\n'
+                            string += CoordinateStmt(hit.start[0] * k, hit.start[1] * k).to_excellon(settings) + "\n"
+                            string += CoordinateStmt(hit.end[0] * k, hit.end[1] * k).to_excellon(settings) + "\n"
                             # string += SlotStmt(hit.start[0]*1e3, hit.start[1]*1e3, hit.end[0]*1e3, hit.end[1]*1e3).to_excellon(settings) + '\n'
-            string += EndOfProgramStmt().to_excellon() + '\n'
+            string += EndOfProgramStmt().to_excellon() + "\n"
         return string
 
     def load_excellon(self, path, tag):
@@ -148,14 +150,15 @@ class PcbObj:
 
         tmp = gbr.read(path)
         self.excellons[tag] = tmp
-        if tmp.units == 'inch':
+        if tmp.units == "inch":
             self.excellons[tag].to_metric()
             """ Note: pcb-tools has a bug related to the inch -> metric conversion
                 a workaround is applied, during the dump process all the xy points
                 coordinates are converted in metric by default """
 
-            settings = FileSettings(format=(3, 3), zero_suppression='leading', units='metric', notation='absolute',
-                                    angle_units='degrees')
+            settings = FileSettings(
+                format=(3, 3), zero_suppression="leading", units="metric", notation="absolute", angle_units="degrees"
+            )
             data = self.dump_str(self.excellons[tag], data_type="excellon", ext_settings=settings)
             self.excellons[tag] = exc_load(data, settings=settings)
 
@@ -206,12 +209,14 @@ class PcbObj:
         self.layers[tag] = merge_polygons(mp)
         return self.layers[tag]
 
-    def _arc_segmentation(self, center, radius, arc_start_angle, arc_end_angle, direction='clockwise', forced_divisions=None):
+    def _arc_segmentation(
+        self, center, radius, arc_start_angle, arc_end_angle, direction="clockwise", forced_divisions=None
+    ):
 
         start_angle = arc_start_angle
         end_angle = arc_end_angle
 
-        if direction == 'clockwise':
+        if direction == "clockwise":
             if start_angle < end_angle:
                 start_angle += 2 * math.pi
         else:
@@ -296,15 +301,17 @@ class PcbObj:
             if abs(theta_sin) < 1e-15:
                 theta = theta_cos
             start_theta = math.pi / 2.0 + theta
-            end_theta = - math.pi / 2.0 + theta
-            points = self._arc_segmentation(start, radius, start_theta, end_theta,
-                                            forced_divisions=int(subdivisions/2))
+            end_theta = -math.pi / 2.0 + theta
+            points = self._arc_segmentation(
+                start, radius, start_theta, end_theta, forced_divisions=int(subdivisions / 2)
+            )
 
             # sign inverted (Geekoid testcase)
-            start_theta = - math.pi / 2.0 + theta + math.pi
+            start_theta = -math.pi / 2.0 + theta + math.pi
             end_theta = math.pi / 2.0 + theta + math.pi
-            points += self._arc_segmentation(end, radius, end_theta, start_theta,
-                                             forced_divisions=int(subdivisions/2))
+            points += self._arc_segmentation(
+                end, radius, end_theta, start_theta, forced_divisions=int(subdivisions / 2)
+            )
 
             return convex_hull(points)
         else:
@@ -348,8 +355,9 @@ class PcbObj:
                 print("Open line")
             points = primitive.vertices
 
-            if isinstance(primitive.aperture, gbr.primitives.Circle) or \
-                    isinstance(primitive.aperture, gbr.primitives.Rectangle):
+            if isinstance(primitive.aperture, gbr.primitives.Circle) or isinstance(
+                primitive.aperture, gbr.primitives.Rectangle
+            ):
                 # if verbose_flag:
                 #     print("\t with rounded end")
                 #     pts = [primitive.start, primitive.end]
@@ -369,10 +377,10 @@ class PcbObj:
             #         closed_flag = False
             #     #print(points)
 
-            gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': closed_flag}]
+            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": closed_flag}]
             if points is None:
                 points = [primitive.start, primitive.end]
-                gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
+                gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": False}]
 
         elif isinstance(primitive, gbr.primitives.Arc):
             # open line arc type
@@ -381,37 +389,39 @@ class PcbObj:
             p = primitive
             points = self._arc_segmentation(p.center, p.radius, p.start_angle, p.end_angle, direction=p.direction)
 
-            if (isinstance(primitive.aperture, gbr.primitives.Circle) or
-                    isinstance(primitive.aperture, gbr.primitives.Rectangle)) and not region:
+            if (
+                isinstance(primitive.aperture, gbr.primitives.Circle)
+                or isinstance(primitive.aperture, gbr.primitives.Rectangle)
+            ) and not region:
                 pts = points.copy()
                 pp = pts.pop(0)
                 gdata = []
                 for npp in pts:
                     l_points = self._get_enhanced_line(pp, npp, primitive.aperture)
-                    gdata.append({'points': l_points, 'polarity': primitive.level_polarity, 'closed': True})
+                    gdata.append({"points": l_points, "polarity": primitive.level_polarity, "closed": True})
                     pp = npp
             else:
-                gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
+                gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": False}]
 
         elif isinstance(primitive, gbr.primitives.Rectangle):
             # rectangle type
             if verbose_flag:
                 print("Rectangle")
             points = primitive.vertices
-            gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
         elif isinstance(primitive, gbr.primitives.Polygon):
             # polygon type
             if verbose_flag:
                 print("Polygon")
             points = primitive.vertices
-            gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
         elif isinstance(primitive, gbr.primitives.Circle):
             # circle type
             if verbose_flag:
                 print("Circle")
             p = primitive
             points = self._arc_segmentation(p.position, p.radius, 0, 2 * math.pi)
-            gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
         elif isinstance(primitive, gbr.primitives.Obround):
             # obround type
             if verbose_flag:
@@ -422,11 +432,13 @@ class PcbObj:
             points1 = self._arc_segmentation(circle1.position, circle1.radius, 0, 2 * math.pi)
             points2 = self._arc_segmentation(circle2.position, circle2.radius, 0, 2 * math.pi)
             points = convex_hull(points1 + points2)
-            gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
 
-        elif isinstance(primitive, gbr.primitives.Region) or \
-                isinstance(primitive, gbr.primitives.AMGroup) \
-                or isinstance(primitive, gbr.primitives.Outline):
+        elif (
+            isinstance(primitive, gbr.primitives.Region)
+            or isinstance(primitive, gbr.primitives.AMGroup)
+            or isinstance(primitive, gbr.primitives.Outline)
+        ):
             # group type
 
             am_group = False
@@ -456,7 +468,7 @@ class PcbObj:
                     p1 = primitive.primitives[-1]
                     if p0.start != p1.end:
                         points = [p1.end, p0.start]
-                        gd = [{'points': points, 'polarity': primitive.level_polarity, 'closed': False}]
+                        gd = [{"points": points, "polarity": primitive.level_polarity, "closed": False}]
                         gdata += gd
 
                     vectors = False
@@ -464,7 +476,7 @@ class PcbObj:
                         vectors = p1.start == p1.end
 
                     points = self._get_region_polygon(gdata, vectors)
-                    gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+                    gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
             if am_group:
                 self.am_group = False
 
@@ -474,17 +486,17 @@ class PcbObj:
                 print("Drill")
             p = primitive
             points = self._arc_segmentation(p.position, p.radius, 0, 2 * math.pi)
-            gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
 
         elif isinstance(primitive, gbr.primitives.Slot):
             # drill type
             if verbose_flag:
                 print("Slot")
             p = primitive
-            points1 = self._arc_segmentation(p.start, p.diameter/2.0, 0, 2 * math.pi)
-            points2 = self._arc_segmentation(p.end, p.diameter/2.0, 0, 2 * math.pi)
+            points1 = self._arc_segmentation(p.start, p.diameter / 2.0, 0, 2 * math.pi)
+            points2 = self._arc_segmentation(p.end, p.diameter / 2.0, 0, 2 * math.pi)
             points = convex_hull(points1 + points2)
-            gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
 
         # elif isinstance(primitive, gbr.primitives.AMGroup):
         #     # group type
@@ -508,16 +520,18 @@ class PcbObj:
 # -----------------------------------------------------------------------------
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     gerber_path = "C:\\Users\\mmatt\\Documents\\prj\\new_cnc\\cam_data\\test1\\gerbers_file\\copper_top.gbr"
     gerber_path = "C:\\Users\\mmatt\\Documents\\prj\\new_cnc\\cam_data\\test1\\gerbers_file\\copper_bottom.gbr"
     gerber_path = "C:\\Users\\mmatt\\Documents\\prj\\new_cnc\\cam_data\\test2\\gerbers_file\\copper_bottom.gbr"
     gerber_path = "C:\\Users\\mmatt\\Documents\\prj\\new_cnc\\cam_data\\test2\\gerbers_file\\profile.gbr"
-    gerber_path = "C:\\Users\\mmatt\\Documents\\prj\\new_cnc\\cam_data\\test3\\gerbers_file\\JST_motor_breakout_board-F_Cu.gbr"
+    gerber_path = (
+        "C:\\Users\\mmatt\\Documents\\prj\\new_cnc\\cam_data\\test3\\gerbers_file\\JST_motor_breakout_board-F_Cu.gbr"
+    )
     gerber_path = "C:\\Users\\mmatt\\Desktop\\Gerber\\LedKeyring-F_Cu.gbr"
 
     pcb = PcbObj()
-    pcb.load_gerber(gerber_path, 'top')
-    gtop = pcb.get_gerber('top')
-    pcb.get_gerber_layer('top')
+    pcb.load_gerber(gerber_path, "top")
+    gtop = pcb.get_gerber("top")
+    pcb.get_gerber_layer("top")

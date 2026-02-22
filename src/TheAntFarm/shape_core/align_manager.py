@@ -1,4 +1,3 @@
-
 import numpy as np
 import numpy.linalg as nl
 from scipy.spatial.distance import pdist, cdist, squareform
@@ -59,8 +58,8 @@ class TpsCoefficients:
         tm[:k, 0] = 1
         tm[:k, 1:3] = cp
         tm[k, 3:] = 1
-        tm[k + 1:, 3:] = cp.T
-        r = squareform(pdist(cp, metric='euclidean'))
+        tm[k + 1 :, 3:] = cp.T
+        r = squareform(pdist(cp, metric="euclidean"))
         r = r * r
         r[r == 0] = 1  # a trick to make R ln(R) 0
         r = r * np.log(r)
@@ -74,10 +73,10 @@ class TpsCoefficients:
         # cp: [k x 2], control points
         # p_lift: [n x (3+k)], lifted input points
         n, k = p.shape[0], cp.shape[0]
-        p_lift = np.zeros((n, k+3))
+        p_lift = np.zeros((n, k + 3))
         p_lift[:, 0] = 1
         p_lift[:, 1:3] = p
-        r = cdist(p, cp, 'euclidean')
+        r = cdist(p, cp, "euclidean")
         r = r * r
         r[r == 0] = 1
         r = r * np.log(r)

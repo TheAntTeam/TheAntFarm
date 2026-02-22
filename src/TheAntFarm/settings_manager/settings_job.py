@@ -24,12 +24,12 @@ class JobSettingsHandler:
     MIRROR_AXIS_DEFAULT = "x"
 
     def __init__(self, config_folder):
-        self.jobs_config_path = os.path.normpath(os.path.join(config_folder, 'jobs_sets_config.ini'))
+        self.jobs_config_path = os.path.normpath(os.path.join(config_folder, "jobs_sets_config.ini"))
         self.jobs_settings = configparser.ConfigParser()
         self.jobs_settings_od = {}
 
     def read_all_jobs_settings(self):
-        """ Read all jobs' settings from ini files """
+        """Read all jobs' settings from ini files"""
         # If app settings file does NOT exist create it with default values
         if not os.path.isfile(self.jobs_config_path):
             self.restore_job_settings()
@@ -40,19 +40,19 @@ class JobSettingsHandler:
         # Settings common to all jobs #
         if "COMMON" in self.jobs_settings:
             common_settings = self.jobs_settings["COMMON"]
-            common_set_od = ({})
+            common_set_od = {}
             common_set_od["mirroring_axis"] = common_settings.get("mirroring_axis", self.MIRROR_AXIS_DEFAULT)
             self.jobs_settings_od["common"] = common_set_od
         else:
             self.jobs_settings["COMMON"] = {}
-            common_set_od = ({})
+            common_set_od = {}
             common_set_od["mirroring_axis"] = self.MIRROR_AXIS_DEFAULT
             self.jobs_settings_od["common"] = common_set_od
 
         # Top job related settings #
         if "TOP" in self.jobs_settings:
             top_settings = self.jobs_settings["TOP"]
-            top_set_od = ({})
+            top_set_od = {}
             top_set_od["tool_diameter"] = top_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
             top_set_od["passages"] = top_settings.getint("passages", self.PASSAGES_DEFAULT)
             top_set_od["overlap"] = top_settings.getfloat("overlap", self.OVERLAP_DEFAULT)
@@ -67,7 +67,7 @@ class JobSettingsHandler:
         # Bottom job related settings #
         if "BOTTOM" in self.jobs_settings:
             bottom_settings = self.jobs_settings["BOTTOM"]
-            bottom_set_od = ({})
+            bottom_set_od = {}
             bottom_set_od["tool_diameter"] = bottom_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
             bottom_set_od["passages"] = bottom_settings.getint("passages", self.PASSAGES_DEFAULT)
             bottom_set_od["overlap"] = bottom_settings.getfloat("overlap", self.OVERLAP_DEFAULT)
@@ -82,7 +82,7 @@ class JobSettingsHandler:
         # Profile job related settings #
         if "PROFILE" in self.jobs_settings:
             profile_settings = self.jobs_settings["PROFILE"]
-            profile_set_od = ({})
+            profile_set_od = {}
             profile_set_od["tool_diameter"] = profile_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
             profile_set_od["margin"] = profile_settings.getfloat("margin", self.MARGIN_DEFAULT)
             profile_set_od["multi_depth"] = profile_settings.getboolean("multi_depth", self.MULTI_PATH_FLAG_DEFAULT)
@@ -100,7 +100,7 @@ class JobSettingsHandler:
 
         if "DRILL" in self.jobs_settings:
             drill_settings = self.jobs_settings["DRILL"]
-            drill_set_od = ({})
+            drill_set_od = {}
             drill_set_od["milling_tool"] = drill_settings.getboolean("milling_tool_flag", self.MILLING_TOOL_FLAG)
             drill_set_od["tool_diameter"] = drill_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
             drill_set_od["cut"] = drill_settings.getfloat("cut", self.CUT_Z_DEFAULT)
@@ -127,7 +127,7 @@ class JobSettingsHandler:
 
         if "NC_TOP" in self.jobs_settings:
             nc_top_settings = self.jobs_settings["NC_TOP"]
-            nc_top_set_od = ({})
+            nc_top_set_od = {}
             nc_top_set_od["tool_diameter"] = nc_top_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
             nc_top_set_od["overlap"] = nc_top_settings.getfloat("overlap", self.OVERLAP_DEFAULT)
             nc_top_set_od["cut"] = nc_top_settings.getfloat("cut", self.CUT_Z_DEFAULT)
@@ -139,7 +139,7 @@ class JobSettingsHandler:
 
         if "NC_BOTTOM" in self.jobs_settings:
             nc_bottom_settings = self.jobs_settings["NC_BOTTOM"]
-            nc_bottom_set_od = ({})
+            nc_bottom_set_od = {}
             nc_bottom_set_od["tool_diameter"] = nc_bottom_settings.getfloat("tool_diameter", self.TOOL_DIAMETER_DEFAULT)
             nc_bottom_set_od["overlap"] = nc_bottom_settings.getfloat("overlap", self.OVERLAP_DEFAULT)
             nc_bottom_set_od["cut"] = nc_bottom_settings.getfloat("cut", self.CUT_Z_DEFAULT)
@@ -150,22 +150,24 @@ class JobSettingsHandler:
             self.jobs_settings_od["nc_bottom"] = nc_bottom_set_od
 
     def write_all_jobs_settings(self, job_settings_od):
-        """ Write all jobs settings to ini files """
-        self.jobs_settings['DEFAULT'] = {"tool_diameter": self.TOOL_DIAMETER_DEFAULT,
-                                         "passages": self.PASSAGES_DEFAULT,
-                                         "overlap": self.OVERLAP_DEFAULT,
-                                         "cut": self.CUT_Z_DEFAULT,
-                                         "travel": self.TRAVEL_Z_DEFAULT,
-                                         "spindle": self.SPINDLE_SPEED_DEFAULT,
-                                         "xy_feedrate": self.XY_FEEDRATE_DEFAULT,
-                                         "z_feedrate": self.Z_FEEDRATE_DEFAULT,
-                                         "margin": self.MARGIN_DEFAULT,
-                                         "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
-                                         "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
-                                         "taps_type": self.GAPS_TYPE_INDEX_DEFAULT,
-                                         "taps_length": self.GAPS_LENGTH_DEFAULT,
-                                         "mirror": self.MIRROR_ALL_DEFAULT,
-                                         "mirroring_axis": self.MIRROR_AXIS_DEFAULT}
+        """Write all jobs settings to ini files"""
+        self.jobs_settings["DEFAULT"] = {
+            "tool_diameter": self.TOOL_DIAMETER_DEFAULT,
+            "passages": self.PASSAGES_DEFAULT,
+            "overlap": self.OVERLAP_DEFAULT,
+            "cut": self.CUT_Z_DEFAULT,
+            "travel": self.TRAVEL_Z_DEFAULT,
+            "spindle": self.SPINDLE_SPEED_DEFAULT,
+            "xy_feedrate": self.XY_FEEDRATE_DEFAULT,
+            "z_feedrate": self.Z_FEEDRATE_DEFAULT,
+            "margin": self.MARGIN_DEFAULT,
+            "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
+            "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
+            "taps_type": self.GAPS_TYPE_INDEX_DEFAULT,
+            "taps_length": self.GAPS_LENGTH_DEFAULT,
+            "mirror": self.MIRROR_ALL_DEFAULT,
+            "mirroring_axis": self.MIRROR_AXIS_DEFAULT,
+        }
 
         # Common jobs' settings.
         self.jobs_settings["COMMON"] = {}
@@ -265,26 +267,28 @@ class JobSettingsHandler:
         nc_bottom_settings["z_feedrate"] = str(nc_bottom_set_od["z_feedrate"])
 
         # Write application ini file #
-        with open(self.jobs_config_path, 'w') as configfile:
+        with open(self.jobs_config_path, "w") as configfile:
             self.jobs_settings.write(configfile)
 
     def restore_job_settings(self):
-        """ Restore all jobs settings to default and create ini file if it doesn't exist. """
-        self.jobs_settings['DEFAULT'] = {"tool_diameter": self.TOOL_DIAMETER_DEFAULT,
-                                         "passages": self.PASSAGES_DEFAULT,
-                                         "overlap": self.OVERLAP_DEFAULT,
-                                         "cut": self.CUT_Z_DEFAULT,
-                                         "travel": self.TRAVEL_Z_DEFAULT,
-                                         "spindle": self.SPINDLE_SPEED_DEFAULT,
-                                         "xy_feedrate": self.XY_FEEDRATE_DEFAULT,
-                                         "z_feedrate": self.Z_FEEDRATE_DEFAULT,
-                                         "margin": self.MARGIN_DEFAULT,
-                                         "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
-                                         "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
-                                         "taps_type": self.GAPS_TYPE_INDEX_DEFAULT,
-                                         "taps_length": self.GAPS_LENGTH_DEFAULT,
-                                         "mirror": self.MIRROR_ALL_DEFAULT,
-                                         "mirroring_axis": self.MIRROR_AXIS_DEFAULT}
+        """Restore all jobs settings to default and create ini file if it doesn't exist."""
+        self.jobs_settings["DEFAULT"] = {
+            "tool_diameter": self.TOOL_DIAMETER_DEFAULT,
+            "passages": self.PASSAGES_DEFAULT,
+            "overlap": self.OVERLAP_DEFAULT,
+            "cut": self.CUT_Z_DEFAULT,
+            "travel": self.TRAVEL_Z_DEFAULT,
+            "spindle": self.SPINDLE_SPEED_DEFAULT,
+            "xy_feedrate": self.XY_FEEDRATE_DEFAULT,
+            "z_feedrate": self.Z_FEEDRATE_DEFAULT,
+            "margin": self.MARGIN_DEFAULT,
+            "depth_per_pass": self.DEPTH_PER_PASS_DEFAULT,
+            "multi_depth": self.MULTI_PATH_FLAG_DEFAULT,
+            "taps_type": self.GAPS_TYPE_INDEX_DEFAULT,
+            "taps_length": self.GAPS_LENGTH_DEFAULT,
+            "mirror": self.MIRROR_ALL_DEFAULT,
+            "mirroring_axis": self.MIRROR_AXIS_DEFAULT,
+        }
 
         # Common jobs' settings.
         self.jobs_settings["COMMON"] = {}
@@ -380,5 +384,5 @@ class JobSettingsHandler:
         nc_bottom_settings["z_feedrate"] = str(self.Z_FEEDRATE_DEFAULT)
 
         # Write application ini file #
-        with open(self.jobs_config_path, 'w') as configfile:
+        with open(self.jobs_config_path, "w") as configfile:
             self.jobs_settings.write(configfile)

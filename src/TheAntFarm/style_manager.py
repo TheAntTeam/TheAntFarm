@@ -1,4 +1,3 @@
-
 from PySide6.QtWidgets import QStyleFactory, QWidgetAction
 from PySide6.QtGui import QPalette, QColor
 from PySide6.QtCore import Qt
@@ -15,11 +14,11 @@ class StyleManager:
         self.dark_palette_action = None
 
     def list_styles(self):
-        """List the available application styles for the current OS. """
+        """List the available application styles for the current OS."""
         return self.native_styles
 
     def add_styles_to_menu(self, main_win, menu_style, style_group, palette_group):
-        """Add all the available styles to the Menu styles in the bar menu in a mutually exclusive action group. """
+        """Add all the available styles to the Menu styles in the bar menu in a mutually exclusive action group."""
         style_list = self.list_styles()
         if style_list:
             fusion_list = [style_list.index(x) for x in style_list if x.lower() == "fusion"]
@@ -59,7 +58,7 @@ class StyleManager:
         self.set_dark_palette()
 
     def set_palette(self):
-        """ Set default or dark palette according to menu selection. """
+        """Set default or dark palette according to menu selection."""
         if self.dark_palette_action.isChecked():
             self.set_dark_palette()
         else:
@@ -96,34 +95,46 @@ class StyleManager:
 
     @staticmethod
     def set_radio_btn_style_sheet():
-        radio_btn_ss = "QRadioButton{ color: white; margin-left:50%; margin-right:50%;} " + \
-                       "QRadioButton::indicator { width: 11px;" + \
-                                                 "height: 11px;" + \
-                                                 "border-radius: 5px;} " + \
-                       "QRadioButton::indicator::unchecked{border: 1px solid;" + \
-                                                          "border-color: rgb(132,132,132);" + \
-                                                          "border-radius: 5px;" + \
-                                                          "background-color: white;" + \
-                                                          "width: 11px;" + \
-                                                          "height: 11px;} " + \
-                       "QRadioButton::indicator::checked{border: 3px solid;" + \
-                                                        "border-color: white;" + \
-                                                        "border-radius: 6px;" + \
-                                                        "background-color: rgb(0,116,188);" + \
-                                                        "width: 7px;" + \
-                                                        "height: 7px;}"
+        radio_btn_ss = (
+            "QRadioButton{ color: white; margin-left:50%; margin-right:50%;} "
+            + "QRadioButton::indicator { width: 11px;"
+            + "height: 11px;"
+            + "border-radius: 5px;} "
+            + "QRadioButton::indicator::unchecked{border: 1px solid;"
+            + "border-color: rgb(132,132,132);"
+            + "border-radius: 5px;"
+            + "background-color: white;"
+            + "width: 11px;"
+            + "height: 11px;} "
+            + "QRadioButton::indicator::checked{border: 3px solid;"
+            + "border-color: white;"
+            + "border-radius: 6px;"
+            + "background-color: rgb(0,116,188);"
+            + "width: 7px;"
+            + "height: 7px;}"
+        )
         return radio_btn_ss
 
     @staticmethod
     def set_button_color(bg_color="dark_gray", color="white"):
-        push_btn_ss = "QPushButton { background-color: " + bg_color + ";color: " + color + \
-                      "; border: : 3px solid; font-weight: bold;}"
+        push_btn_ss = (
+            "QPushButton { background-color: "
+            + bg_color
+            + ";color: "
+            + color
+            + "; border: : 3px solid; font-weight: bold;}"
+        )
         return push_btn_ss
 
     @staticmethod
     def set_tool_button_color(bg_color="dark_gray", color="white"):
-        tool_btn_ss = "QToolButton { background-color: " + bg_color + ";color: " + color + \
-                      "; border: : 3px solid; font-weight: bold;}"
+        tool_btn_ss = (
+            "QToolButton { background-color: "
+            + bg_color
+            + ";color: "
+            + color
+            + "; border: : 3px solid; font-weight: bold;}"
+        )
         return tool_btn_ss
 
 

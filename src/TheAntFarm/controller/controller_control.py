@@ -15,10 +15,12 @@ class ControlController(QObject):
     STATUSPAT = re.compile(
         r"^<(\w*?),MPos:([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),"
         r"([+\-]?\d*\.\d*),WPos:([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),"
-        r"([+\-]?\d*\.\d*),?(.*)>$")
+        r"([+\-]?\d*\.\d*),?(.*)>$"
+    )
     POSPAT = re.compile(
         r"^\[(...):([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),"
-        r"([+\-]?\d*\.\d*):?(\d*)\]$")
+        r"([+\-]?\d*\.\d*):?(\d*)\]$"
+    )
     TLOPAT = re.compile(r"^\[(...):([+\-]?\d*\.\d*)\]$")
     DOLLARPAT = re.compile(r"^\[G\d* .*\]$")
     SPLITPAT = re.compile(r"[:,]")
@@ -218,8 +220,9 @@ class ControlController(QObject):
         probe_z_min = bbox_t[2]
         logger.debug(xy_coord_list)
 
-        [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(xy_coord_list, travel_z,
-                                                                                probe_z_min, feedrate_probe)
+        [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(
+            xy_coord_list, travel_z, probe_z_min, feedrate_probe
+        )
         self.abl_val = []
         self.abl_steps = (steps_t[0], steps_t[1])
         self.prb_num_done = 0
@@ -275,7 +278,7 @@ class ControlController(QObject):
     # GCode Related
     @staticmethod
     def id_generator(size=4, chars=string.ascii_uppercase + string.digits):
-        return ''.join(random.choice(chars) for _ in range(size))
+        return "".join(random.choice(chars) for _ in range(size))
 
     def get_new_tag(self):
         tag_l = [self.gcodes_od[k]["tag"] for k in self.gcodes_od.keys()]

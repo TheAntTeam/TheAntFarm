@@ -29,7 +29,21 @@ def clean_resources():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Build artifacts for The Ant Farm application.")
-    parser.add_argument("operation", choices=["req", "REQ", "ui", "UI", "res", "RES", "clean", "CLEAN", "all", "ALL"])
+    parser.add_argument(
+        "operation",
+        choices=[
+            "req",
+            "REQ",
+            "ui",
+            "UI",
+            "res",
+            "RES",
+            "clean",
+            "CLEAN",
+            "all",
+            "ALL",
+        ],
+    )
 
     parsed_args = parser.parse_args()
 

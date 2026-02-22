@@ -4,6 +4,7 @@ import numpy as np
 from scipy.spatial import distance
 import random
 import operator
+
 # import matplotlib.pyplot as plt
 
 
@@ -14,7 +15,7 @@ class Optimizer:
     def __init__(self, coords, optimizer_type="nearest_insertion"):
         self.v = len(coords)
         self.coords = coords
-        self.distances = distance.cdist(coords, coords, 'euclidean')
+        self.distances = distance.cdist(coords, coords, "euclidean")
         self.optimizer_type = optimizer_type
 
     def set_optimization_type(self, opt_type):
@@ -38,14 +39,14 @@ class Optimizer:
         num_points = len(points)
         unvisited = set(range(num_points))
 
-        first_point_matrix = distance.cdist([(0., 0.)], points, 'euclidean')
+        first_point_matrix = distance.cdist([(0.0, 0.0)], points, "euclidean")
         first_point_index = np.argmin(first_point_matrix)
 
         path = [first_point_index]
         unvisited.remove(first_point_index)
 
         while unvisited:
-            min_distance = float('inf')
+            min_distance = float("inf")
             nearest_point = None
 
             for current_point in path:
@@ -113,7 +114,7 @@ class Cities:
 
     def __init__(self, coords):
         self.coords = coords
-        self.distances = distance.cdist(coords, coords, 'euclidean')
+        self.distances = distance.cdist(coords, coords, "euclidean")
 
     def length(self, path0, path1):
         return np.sum(self.distances[path0, path1])
@@ -154,7 +155,7 @@ class GeneticOptimizer:
 
     def initialPopulation(self, popSize, cityList):
         population = [cityList]
-        for i in range(0, popSize-1):
+        for i in range(0, popSize - 1):
             population.append(self.createRoute(cityList))
         return np.array(population)
 
@@ -211,7 +212,7 @@ class GeneticOptimizer:
         children = matingpool[range(0, eliteSize)].tolist()
 
         for i in range(0, length):
-            child = self.breed(pool[i], pool[len(matingpool)-i-1])
+            child = self.breed(pool[i], pool[len(matingpool) - i - 1])
             children.append(child)
         return np.array(children)
 
@@ -247,7 +248,7 @@ class GeneticOptimizer:
         pop = self.initialPopulation(popSize, population)
         # print("Initial distance: " + str(1 / self.rankRoutes(pop)[0][1]))
 
-        x = int(generations/10)
+        x = int(generations / 10)
         c = 0
         j = 1
         for i in range(0, generations):
@@ -272,9 +273,11 @@ class GeneticOptimizer:
         points_coord = np.array(self.points_coord)
         if cityList is None:
             cityList = np.array(range(0, len(points_coord)))
-        bestRoute = self.geneticAlgorithm(population=cityList, popSize=400, eliteSize=50, mutationRate=0.02, generations=800)
+        bestRoute = self.geneticAlgorithm(
+            population=cityList, popSize=400, eliteSize=50, mutationRate=0.02, generations=800
+        )
 
-        first_point_matrix = distance.cdist([(0., 0.)], points_coord[bestRoute], 'euclidean')
+        first_point_matrix = distance.cdist([(0.0, 0.0)], points_coord[bestRoute], "euclidean")
         first_point_index = np.argmin(first_point_matrix)
         # optimized_coords = np.roll(points_coord[bestRoute], -first_point_index)
         optimized_ids = np.roll(bestRoute, -first_point_index)

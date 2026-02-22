@@ -33,3 +33,12 @@ dynamic = ["version"]
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+exclude = '''
+/(
+    app_resources_rc\.py
+  | ui_the_ant_farm\.py
+)/
+'''

@@ -43,6 +43,7 @@ class TestSelectGcodeRowImplementation:
     def test_deselect_single_row_when_selected(self, qapp):
         """Verify deselecting only the clicked row when it's selected"""
         from unittest.mock import MagicMock
+
         mock_ui = Mock()
         mock_ui.gcode_tw = Mock()
 
@@ -101,10 +102,8 @@ class TestSelectMethodCodeQuality:
         source = inspect.getsource(UiControlTab.select_gcode_row)
 
         # Should not contain mode switching - this proves simplification
-        assert "setSelectionMode" not in source, \
-            "select_gcode_row should not switch modes"
-        assert "setSelectionBehavior" not in source, \
-            "select_gcode_row should not set behavior"
+        assert "setSelectionMode" not in source, "select_gcode_row should not switch modes"
+        assert "setSelectionBehavior" not in source, "select_gcode_row should not set behavior"
 
     def test_deselect_all_gcode_row_no_mode_switching(self, qapp):
         """Verify deselect_all_gcode_row doesn't use setSelectionMode"""
@@ -114,10 +113,8 @@ class TestSelectMethodCodeQuality:
         source = inspect.getsource(UiControlTab.deselect_all_gcode_row)
 
         # Should not contain mode switching - this proves simplification
-        assert "setSelectionMode" not in source, \
-            "deselect_all_gcode_row should not switch modes"
-        assert "setSelectionBehavior" not in source, \
-            "deselect_all_gcode_row should not set behavior"
+        assert "setSelectionMode" not in source, "deselect_all_gcode_row should not switch modes"
+        assert "setSelectionBehavior" not in source, "deselect_all_gcode_row should not set behavior"
 
 
 class TestInitialization:
@@ -131,8 +128,8 @@ class TestInitialization:
         source = inspect.getsource(UiControlTab.__init__)
 
         # Check for NoSelection mode (to prevent default row selection on any click)
-        assert "QAbstractItemView.NoSelection" in source, \
-            "NoSelection mode should be configured"
+        assert "QAbstractItemView.NoSelection" in source, "NoSelection mode should be configured"
         # Check that cellClicked is connected (for custom column-specific selection)
-        assert "cellClicked.connect(self._handle_table_cell_click)" in source, \
-            "cellClicked should be connected to _handle_table_cell_click"
+        assert (
+            "cellClicked.connect(self._handle_table_cell_click)" in source
+        ), "cellClicked should be connected to _handle_table_cell_click"

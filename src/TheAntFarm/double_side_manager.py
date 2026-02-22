@@ -24,7 +24,9 @@ class DoubleSideManager:
     def rotate_image(image, angle):
         image_center = tuple(np.array(image.shape[1::-1]) / 2)
         rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
-        result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
+        result = cv2.warpAffine(
+            image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR
+        )
         return result
 
     def update_camera(self, index):
@@ -52,12 +54,12 @@ class DoubleSideManager:
         width = frame_in.shape[1]
         height = frame_in.shape[0]
 
-        width_z = width/zoom_f
-        height_z = height/zoom_f
+        width_z = width / zoom_f
+        height_z = height / zoom_f
 
-        crop_x = int((width - width_z)/2)
-        crop_y = int((height - height_z)/2)
-        cropped = frame_in[crop_y:height-crop_y, crop_x:width-crop_x]
+        crop_x = int((width - width_z) / 2)
+        crop_y = int((height - height_z) / 2)
+        cropped = frame_in[crop_y : height - crop_y, crop_x : width - crop_x]
         frame = cv2.resize(cropped, None, fx=zoom_f, fy=zoom_f)
         # frame[:, :, 0] = 0
         # frame[:, :, 2] = 0
@@ -93,16 +95,26 @@ class DoubleSideManager:
         frame_out = frame
 
         if True:
-            black_holes = cv2.HoughCircles(image, cv2.HOUGH_GRADIENT, 1, 20, param1=50,
-                                           param2=30, minRadius=0, maxRadius=0)
+            black_holes = cv2.HoughCircles(
+                image,
+                cv2.HOUGH_GRADIENT,
+                1,
+                20,
+                param1=50,
+                param2=30,
+                minRadius=0,
+                maxRadius=0,
+            )
 
             black_holes = None
             if black_holes is not None:
                 black_circles = np.round(black_holes[0, :]).astype("int")
-                for (x, y, r) in black_circles:
+                for x, y, r in black_circles:
                     cv2.circle(frame_out, (x, y), r, (255, 0, 255), 2)
 
-            cnts, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            cnts, _ = cv2.findContours(
+                image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+            )
             # loop over the contours
             for c in cnts:
                 # compute the center of the contour
@@ -123,8 +135,8 @@ class DoubleSideManager:
         thickness = 1
 
         height, width, channels = frame.shape
-        hhalf = int(height/2)
-        whalf = int(width/2)
+        hhalf = int(height / 2)
+        whalf = int(width / 2)
         start_point = (whalf, 0)
         end_point = (whalf, height)
 
@@ -142,15 +154,29 @@ class DoubleSideManager:
         height = frame_in.shape[0]
         crop_x = int(width / (2 * zoom_f))
         crop_y = int(height / (2 * zoom_f))
-        cropped = frame_in[crop_y:3*crop_y, crop_x:3*crop_x]
+        cropped = frame_in[crop_y : 3 * crop_y, crop_x : 3 * crop_x]
         frame = cv2.resize(cropped, None, fx=zoom_f, fy=zoom_f)
 
         overlay = frame.copy()
         keypoints = self.holes_detector.detect(frame)
         for k in keypoints:
-            cv2.circle(overlay, (int(k.pt[0]), int(k.pt[1])), int(k.size / 2), (0, 0, 255), -1)
-            cv2.line(overlay, (int(k.pt[0]) - 20, int(k.pt[1])), (int(k.pt[0]) + 20, int(k.pt[1])), (0, 0, 0), 3)
-            cv2.line(overlay, (int(k.pt[0]), int(k.pt[1]) - 20), (int(k.pt[0]), int(k.pt[1]) + 20), (0, 0, 0), 3)
+            cv2.circle(
+                overlay, (int(k.pt[0]), int(k.pt[1])), int(k.size / 2), (0, 0, 255), -1
+            )
+            cv2.line(
+                overlay,
+                (int(k.pt[0]) - 20, int(k.pt[1])),
+                (int(k.pt[0]) + 20, int(k.pt[1])),
+                (0, 0, 0),
+                3,
+            )
+            cv2.line(
+                overlay,
+                (int(k.pt[0]), int(k.pt[1]) - 20),
+                (int(k.pt[0]), int(k.pt[1]) + 20),
+                (0, 0, 0),
+                3,
+            )
 
         opacity = 0.5
         cv2.addWeighted(overlay, opacity, frame, 1 - opacity, 0, frame)
