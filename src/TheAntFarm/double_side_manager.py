@@ -24,9 +24,7 @@ class DoubleSideManager:
     def rotate_image(image, angle):
         image_center = tuple(np.array(image.shape[1::-1]) / 2)
         rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
-        result = cv2.warpAffine(
-            image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR
-        )
+        result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
         return result
 
     def update_camera(self, index):
@@ -112,9 +110,7 @@ class DoubleSideManager:
                 for x, y, r in black_circles:
                     cv2.circle(frame_out, (x, y), r, (255, 0, 255), 2)
 
-            cnts, _ = cv2.findContours(
-                image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
-            )
+            cnts, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             # loop over the contours
             for c in cnts:
                 # compute the center of the contour
@@ -160,9 +156,7 @@ class DoubleSideManager:
         overlay = frame.copy()
         keypoints = self.holes_detector.detect(frame)
         for k in keypoints:
-            cv2.circle(
-                overlay, (int(k.pt[0]), int(k.pt[1])), int(k.size / 2), (0, 0, 255), -1
-            )
+            cv2.circle(overlay, (int(k.pt[0]), int(k.pt[1])), int(k.size / 2), (0, 0, 255), -1)
             cv2.line(
                 overlay,
                 (int(k.pt[0]) - 20, int(k.pt[1])),
