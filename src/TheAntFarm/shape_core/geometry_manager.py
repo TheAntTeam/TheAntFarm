@@ -40,11 +40,11 @@ def merge_polygons_path(poly_set):
                         # hole detected
                         tmp.append(li)
                     else:
-                        g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True).geom
+                        g = Geom({"points": tmp, "polarity": "dark", "closed": True}, complex=True).geom
                         merged.append(g)
                         tmp = [li]
                 if tmp:
-                    g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True).geom
+                    g = Geom({"points": tmp, "polarity": "dark", "closed": True}, complex=True).geom
                     merged.append(g)
     else:
         for i, p in enumerate(poly_set):
@@ -325,14 +325,14 @@ def _merge_poly_set(poly_set, pure_merge=False):
                 # add the holes of the darkpoly to the shapes to be subtracted
                 for i in dk.interiors:
                     tmp.append(i.coords)
-                g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
+                g = Geom({"points": tmp, "polarity": "dark", "closed": True}, complex=True)
                 merged.append(g)
         else:
             tmp = [dark_poly_sh.exterior.coords]
             # add the holes of the darkpoly to the shapes to be subtracted
             for i in dark_poly_sh.interiors:
                 tmp.append(i.coords)
-            g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
+            g = Geom({"points": tmp, "polarity": "dark", "closed": True}, complex=True)
             merged.append(g)
     return merged
 
@@ -344,7 +344,7 @@ def merge_polygons(mp):
 
     merged = []
 
-    pre_pol = 'clear'
+    pre_pol = "clear"
     poly_set = []
 
     for p in mp:
@@ -353,18 +353,19 @@ def merge_polygons(mp):
                 # append closed polygon to the list until found a clear one.
                 # at this point, merge all the polygons in the list and subtract
                 # the clear one, putting the result in the treated polygons list
-                if p.polarity == 'dark':
-                    if pre_pol == 'clear':
+                if p.polarity == "dark":
+                    if pre_pol == "clear":
                         # merge all polygons in the list
                         if poly_set:
                             merged += _merge_poly_set(poly_set)
                         poly_set = [[p], []]
                     else:
                         poly_set[0].append(p)
-                elif p.polarity == 'clear':
+                elif p.polarity == "clear":
                     poly_set[1].append(p)
                 else:
                     print("[ERROR] Polarity not recognized")
+
                 pre_pol = p.polarity
             else:
                 others.append(p)
@@ -387,7 +388,7 @@ def merge_polygons(mp):
             # add the holes of the darkpoly to the shapes to be subtracted
             for i in f.interiors:
                 tmp.append(i.coords)
-            g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
+            g = Geom({"points": tmp, "polarity": "dark", "closed": True}, complex=True)
             merged_final.append(g)
     else:
         if tmp_final:
@@ -395,7 +396,7 @@ def merge_polygons(mp):
             # add the holes of the darkpoly to the shapes to be subtracted
             for i in tmp_final.interiors:
                 tmp.append(i.coords)
-            g = Geom({'points': tmp, 'polarity': 'dark', 'closed': True}, complex=True)
+            g = Geom({"points": tmp, "polarity": "dark", "closed": True}, complex=True)
             merged_final.append(g)
 
     layer = merged_final
@@ -499,16 +500,16 @@ def is_overlaping_multiple_polygons(polygon, polygon_list, shapely_poly=False):
     diff_len = 0
     poly_len = 0
 
-    if diff_polys.geom_type == 'MultiPolygon':
+    if diff_polys.geom_type == "MultiPolygon":
         diff_len = len(diff_polys.geoms)
-    elif diff_polys.geom_type == 'Polygon':
+    elif diff_polys.geom_type == "Polygon":
         diff_len = 1
     else:
         logger.warning("Invalid Diff Polygons Type %s" % diff_polys.geom_type)
 
-    if polygon_list.geom_type == 'MultiPolygon':
+    if polygon_list.geom_type == "MultiPolygon":
         poly_len = len(polygon_list.geoms)
-    elif polygon_list.geom_type == 'Polygon':
+    elif polygon_list.geom_type == "Polygon":
         poly_len = 1
     else:
         logger.warning("Invalid Polygon List Type %s" % diff_polys.geom_type)
@@ -519,9 +520,9 @@ def is_overlaping_multiple_polygons(polygon, polygon_list, shapely_poly=False):
 class Geom:
 
     def __init__(self, gdata, complex=False):
-        self.points = gdata['points']
-        self.closed = gdata['closed']
-        self.polarity = gdata['polarity']
+        self.points = gdata["points"]
+        self.closed = gdata["closed"]
+        self.polarity = gdata["polarity"]
         self.complex = complex
         self.geom = self._make_geom()
 
@@ -542,5 +543,5 @@ class Geom:
                     x, y = geom.exterior.xy
             else:
                 geom = shg.LineString(self.points)
-                x, y, = geom.xy
+                x, y = geom.xy
         return geom

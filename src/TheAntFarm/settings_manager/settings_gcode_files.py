@@ -9,12 +9,12 @@ class GCodeFilesSettingsHandler:
             local_path = os.path.dirname(config_folder)
             self.gcode_folder_default = os.path.join(local_path, "gcode_temp_dir")
 
-        self.gcf_config_path = os.path.normpath(os.path.join(config_folder, 'gcode_files_config.ini'))
+        self.gcf_config_path = os.path.normpath(os.path.join(config_folder, "gcode_files_config.ini"))
         self.gcode_folder = self.gcode_folder_default
         self.gcf_settings = configparser.ConfigParser()
 
     def read_all_gcf_settings(self):
-        """ Read all g-code files' settings from ini files """
+        """Read all g-code files' settings from ini files"""
         # If gcode settings file does NOT exist create it with default values
         if not os.path.isfile(self.gcf_config_path):
             self.restore_all_gcf_settings()
@@ -29,7 +29,7 @@ class GCodeFilesSettingsHandler:
             os.makedirs(self.gcode_folder)
 
     def write_all_gcf_settings(self):
-        """ Write all g-code files' settings to ini files """
+        """Write all g-code files' settings to ini files"""
         self.gcf_settings["DEFAULT"] = {"gcode_folder": self.gcode_folder_default}
 
         self.gcf_settings["FILES"] = {}
@@ -37,11 +37,11 @@ class GCodeFilesSettingsHandler:
         files_settings["gcode_folder"] = self.gcode_folder
 
         # Write application ini file #
-        with open(self.gcf_config_path, 'w') as configfile:
+        with open(self.gcf_config_path, "w") as configfile:
             self.gcf_settings.write(configfile)
 
     def restore_all_gcf_settings(self):
-        """ Restore all g-code files' settings to ini files """
+        """Restore all g-code files' settings to ini files"""
         self.gcf_settings["DEFAULT"] = {"gcode_folder": self.gcode_folder_default}
 
         self.gcf_settings["FILES"] = {}
@@ -49,5 +49,5 @@ class GCodeFilesSettingsHandler:
         files_settings["gcode_folder"] = self.gcode_folder_default
 
         # Write application ini file #
-        with open(self.gcf_config_path, 'w') as configfile:
+        with open(self.gcf_config_path, "w") as configfile:
             self.gcf_settings.write(configfile)

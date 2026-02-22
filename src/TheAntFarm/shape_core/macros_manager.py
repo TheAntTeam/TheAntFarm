@@ -1,4 +1,3 @@
-
 import os
 import logging
 
@@ -7,11 +6,8 @@ logger = logging.getLogger(__name__)
 
 class Macros:
 
-    TAG = '@'
-    TAGS = {
-        "tlo": "TLO",
-        "position": "POSITION"
-    }
+    TAG = "@"
+    TAGS = {"tlo": "TLO", "position": "POSITION"}
     AXIS = ("X", "Y", "Z")
     MACRO_FOLDER_NAME = "macros"
 
@@ -22,11 +18,11 @@ class Macros:
         self.cfg = None
         self.load_cfg()
 
-        self.macros_default_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", self.MACRO_FOLDER_NAME))
+        self.macros_default_path = os.path.normpath(
+            os.path.join(os.path.dirname(__file__), "..", self.MACRO_FOLDER_NAME)
+        )
 
-        self.macros_dict = {
-            "M6": "tool_change_wcs.gcode"
-        }
+        self.macros_dict = {"M6": "tool_change_wcs.gcode"}
 
         self.tags = [
             "PROBE_FEED_FAST",
@@ -46,7 +42,7 @@ class Macros:
             "CHANGE_POS_Y",
             "CHANGE_POS_Z",
             "SAFE_POS_Z",
-            "PRE_POS_X"
+            "PRE_POS_X",
             "PRE_POS_Y",
             "PRE_POS_Z",
             "TLO_TYPE_A",
@@ -57,13 +53,13 @@ class Macros:
             self.cfg = cfg
         else:
             self.cfg = {
-                'tool_probe_pos': (-1.0, -1.0, -11.0),
-                'tool_probe_working': True,  # False: machine pos or True: working pos
-                'tool_probe_min': -11.0,
-                'tool_change_pos': (-41.2, -120.88, -1.0),
-                'tool_probe_feedrate': (300.0, 80.0, 50.0),
-                'tool_probe_hold': False,
-                'tool_probe_zero': False,
+                "tool_probe_pos": (-1.0, -1.0, -11.0),
+                "tool_probe_working": True,  # False: machine pos or True: working pos
+                "tool_probe_min": -11.0,
+                "tool_change_pos": (-41.2, -120.88, -1.0),
+                "tool_probe_feedrate": (300.0, 80.0, 50.0),
+                "tool_probe_hold": False,
+                "tool_probe_zero": False,
             }
         self.cfg["safe_pos"] = (-1.0, -1.0, -1.0)
         # print("Macros CFG")

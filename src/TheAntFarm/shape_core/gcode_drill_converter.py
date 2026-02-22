@@ -1,4 +1,3 @@
-
 import os
 import math
 import numpy as np
@@ -10,7 +9,6 @@ from .geometry_manager import Geom, merge_polygons
 
 class DrillGcodeConverter:
     def __init__(self, cfg):
-
         self.gcode_path = ""
         self.cfg = cfg
         self.parser = GCodeParser(None)
@@ -19,7 +17,6 @@ class DrillGcodeConverter:
         self.gcode_path = gcode_path
 
     def convert(self):
-
         if self.gcode_path:
             if os.path.isfile(self.gcode_path):
                 self.parser.load_gcode_file(self.gcode_path)
@@ -29,7 +26,6 @@ class DrillGcodeConverter:
                 print("Invalid GCode Path")
 
     def get_drill_layer(self):
-
         layer = None
         if self.parser is not None:
             if self.parser.gc is not None:
@@ -43,15 +39,8 @@ class DrillGcodeConverter:
                     for i in range(drill_coords.shape[0]):
                         dd = self.cfg["default_gcode_drill_size"]
                         center_coords = drill_coords[i, :].tolist()
-                        circle_coords = self.get_all_circle_coords(center_coords,
-                                                                   radius=dd,
-                                                                   n_points=40)
-                        gd = {
-                            "points": circle_coords,
-                            "closed": True,
-                            "polarity": "dark",
-                            "complex": False
-                        }
+                        circle_coords = self.get_all_circle_coords(center_coords, radius=dd, n_points=40)
+                        gd = {"points": circle_coords, "closed": True, "polarity": "dark", "complex": False}
 
                         g = Geom(gd)
                         if g.closed:
@@ -80,6 +69,6 @@ class DrillGcodeConverter:
     # This function gets all the pairs of coordinates
     def get_all_circle_coords(self, center_coords, radius, n_points):
         x_center, y_center, z_center = center_coords
-        thetas = [i/n_points * math.tau for i in range(n_points)]
+        thetas = [i / n_points * math.tau for i in range(n_points)]
         circle_coords = [self.get_circle_coord(theta, x_center, y_center, z_center, radius) for theta in thetas]
         return circle_coords

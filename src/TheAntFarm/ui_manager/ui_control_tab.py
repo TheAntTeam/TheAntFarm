@@ -10,15 +10,16 @@ logger = logging.getLogger(__name__)
 
 
 class UiControlTab(QObject):
-    """Class dedicated to UI <--> Control interactions on Control Tab. """
+    """Class dedicated to UI <--> Control interactions on Control Tab."""
+
     controller_connected_s = Signal(bool)
     ui_serial_send_s = Signal(str)
     ui_serial_open_s = Signal(str, int)
     ui_serial_close_s = Signal()
 
-    send_gcode_s = Signal(str)                   # Signal to start sending a gcode file
-    stop_gcode_s = Signal()                      # Signal to stop sending a gcode file
-    pause_resume_gcode_s = Signal()              # Signal to pause/resume sending a gcode file
+    send_gcode_s = Signal(str)  # Signal to start sending a gcode file
+    stop_gcode_s = Signal()  # Signal to stop sending a gcode file
+    pause_resume_gcode_s = Signal()  # Signal to pause/resume sending a gcode file
 
     precalc_gcode_s = Signal(str)
     select_gcode_s = Signal(str)
@@ -88,7 +89,9 @@ class UiControlTab(QObject):
 
         self.ui.open_gcode_tb.clicked.connect(self.open_gcode_files)
 
-        combobox_ss = "QComboBox::drop-down {border-width: 0px;} QComboBox::down-arrow {image: url(noimg); border-width: 0px;}"
+        combobox_ss = (
+            "QComboBox::drop-down {border-width: 0px;} QComboBox::down-arrow {image: url(noimg); border-width: 0px;}"
+        )
         self.ui.send_cb.setStyleSheet(combobox_ss)
         self.ui.send_cb.hide()
         self.ui.send_pb.hide()
@@ -155,7 +158,8 @@ class UiControlTab(QObject):
         self.ui.probe_pb.clicked.connect(self.handle_probe_cmd)
         self.ui.ABL_pb.clicked.connect(self.handle_auto_bed_levelling)
         self.ui.abl_active_chb.stateChanged.connect(
-            lambda: self.controlWo.set_abl_active(self.ui.abl_active_chb.isChecked()))
+            lambda: self.controlWo.set_abl_active(self.ui.abl_active_chb.isChecked())
+        )
         self.ui.get_bbox_pb.clicked.connect(self.controlWo.get_boundary_box)
         self.ui.x_min_dsb.valueChanged.connect(self.update_bbox_x_steps)
         self.ui.x_max_dsb.valueChanged.connect(self.update_bbox_x_steps)
@@ -252,8 +256,9 @@ class UiControlTab(QObject):
         selectionModel = self.ui.gcode_tw.selectionModel()
         if index in selected_rows:
             # Deselect only this row, keep others selected
-            selectionModel.select(self.ui.gcode_tw.model().index(index, 0),
-                                  QItemSelectionModel.Deselect | QItemSelectionModel.Rows)
+            selectionModel.select(
+                self.ui.gcode_tw.model().index(index, 0), QItemSelectionModel.Deselect | QItemSelectionModel.Rows
+            )
         else:
             self.ui.gcode_tw.selectRow(index)
 
@@ -267,7 +272,7 @@ class UiControlTab(QObject):
             self.ui.gcode_tw.setSelectionMode(QAbstractItemView.NoSelection)
 
     def init_xy_jog_step_value(self):
-        """ Initialize XY step and value ui fields. """
+        """Initialize XY step and value ui fields."""
         self.ui.xy_step_cb.setCurrentIndex(self.machine_settings.xy_step_idx)
         self.ui.xy_step_cb_2.setCurrentIndex(self.machine_settings.xy_step_idx)
         self.xy_update_step()
@@ -281,7 +286,7 @@ class UiControlTab(QObject):
         self.ui.xy_step_val_dsb_2.valueChanged.connect(lambda: self.xy_update_value(self.ui.xy_step_val_dsb_2))
 
     def init_z_jog_step_value(self):
-        """ Initialize Z step and value ui fields. """
+        """Initialize Z step and value ui fields."""
         self.ui.z_step_cb.setCurrentIndex(self.machine_settings.z_step_idx)
         self.ui.z_step_cb_2.setCurrentIndex(self.machine_settings.z_step_idx)
         self.z_update_step()
@@ -294,7 +299,7 @@ class UiControlTab(QObject):
         self.ui.z_step_val_dsb_2.valueChanged.connect(lambda: self.z_update_value(self.ui.z_step_val_dsb_2))
 
     def init_serial_port_cb(self):
-        """ Initialize the serial ports' ui elements. """
+        """Initialize the serial ports' ui elements."""
         self.handle_refresh_button()
 
     @Slot(Od)
@@ -305,19 +310,19 @@ class UiControlTab(QObject):
         self.ui.status_l.setText(status_text)
         self.update_status_colors(status_od["state"])
         self.update_status_buttons(status_od["state"])
-        self.ui.mpos_x_l.setText('{:.3f}'.format(status_od["mpos"][0]))
-        self.ui.mpos_y_l.setText('{:.3f}'.format(status_od["mpos"][1]))
-        self.ui.mpos_z_l.setText('{:.3f}'.format(status_od["mpos"][2]))
-        self.ui.wpos_x_l.setText('{:.3f}'.format(status_od["wpos"][0]))
-        self.ui.wpos_y_l.setText('{:.3f}'.format(status_od["wpos"][1]))
-        self.ui.wpos_z_l.setText('{:.3f}'.format(status_od["wpos"][2]))
+        self.ui.mpos_x_l.setText("{:.3f}".format(status_od["mpos"][0]))
+        self.ui.mpos_y_l.setText("{:.3f}".format(status_od["mpos"][1]))
+        self.ui.mpos_z_l.setText("{:.3f}".format(status_od["mpos"][2]))
+        self.ui.wpos_x_l.setText("{:.3f}".format(status_od["wpos"][0]))
+        self.ui.wpos_y_l.setText("{:.3f}".format(status_od["wpos"][1]))
+        self.ui.wpos_z_l.setText("{:.3f}".format(status_od["wpos"][2]))
 
-        self.ui.mpos_x_l_2.setText('{:.3f}'.format(status_od["mpos"][0]))
-        self.ui.mpos_y_l_2.setText('{:.3f}'.format(status_od["mpos"][1]))
-        self.ui.mpos_z_l_2.setText('{:.3f}'.format(status_od["mpos"][2]))
-        self.ui.wpos_x_l_2.setText('{:.3f}'.format(status_od["wpos"][0]))
-        self.ui.wpos_y_l_2.setText('{:.3f}'.format(status_od["wpos"][1]))
-        self.ui.wpos_z_l_2.setText('{:.3f}'.format(status_od["wpos"][2]))
+        self.ui.mpos_x_l_2.setText("{:.3f}".format(status_od["mpos"][0]))
+        self.ui.mpos_y_l_2.setText("{:.3f}".format(status_od["mpos"][1]))
+        self.ui.mpos_z_l_2.setText("{:.3f}".format(status_od["mpos"][2]))
+        self.ui.wpos_x_l_2.setText("{:.3f}".format(status_od["wpos"][0]))
+        self.ui.wpos_y_l_2.setText("{:.3f}".format(status_od["wpos"][1]))
+        self.ui.wpos_z_l_2.setText("{:.3f}".format(status_od["wpos"][2]))
 
         self.ctrl_layer.update_pointer(coords=status_od["wpos"])
 
@@ -343,12 +348,15 @@ class UiControlTab(QObject):
             if not self.holding_status:
                 self.holding_status = True
                 icon = QIcon()
-                icon.addFile(u":/resources/resources/icons/white-play-and-pause-button.svg", QSize(), QIcon.Normal,
-                             QIcon.Off)
-                icon.addFile(u":/resources/resources/icons/gray-play-and-pause-button.svg", QSize(), QIcon.Disabled,
-                             QIcon.Off)
-                icon.addFile(u":/resources/resources/icons/gray-play-and-pause-button.svg", QSize(), QIcon.Disabled,
-                             QIcon.On)
+                icon.addFile(
+                    ":/resources/resources/icons/white-play-and-pause-button.svg", QSize(), QIcon.Normal, QIcon.Off
+                )
+                icon.addFile(
+                    ":/resources/resources/icons/gray-play-and-pause-button.svg", QSize(), QIcon.Disabled, QIcon.Off
+                )
+                icon.addFile(
+                    ":/resources/resources/icons/gray-play-and-pause-button.svg", QSize(), QIcon.Disabled, QIcon.On
+                )
                 self.ui.pause_resume_tb.setIcon(icon)
                 self.ui.pause_resume_tb.setIconSize(QSize(64, 64))
                 self.ui.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -356,12 +364,24 @@ class UiControlTab(QObject):
             if self.holding_status:
                 self.holding_status = False
                 icon = QIcon()
-                icon.addFile(u":/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg", QSize(),
-                             QIcon.Normal, QIcon.Off)
-                icon.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(),
-                             QIcon.Disabled, QIcon.Off)
-                icon.addFile(u":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg", QSize(),
-                             QIcon.Disabled, QIcon.On)
+                icon.addFile(
+                    ":/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg",
+                    QSize(),
+                    QIcon.Normal,
+                    QIcon.Off,
+                )
+                icon.addFile(
+                    ":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg",
+                    QSize(),
+                    QIcon.Disabled,
+                    QIcon.Off,
+                )
+                icon.addFile(
+                    ":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg",
+                    QSize(),
+                    QIcon.Disabled,
+                    QIcon.On,
+                )
                 self.ui.pause_resume_tb.setIcon(icon)
                 self.ui.pause_resume_tb.setIconSize(QSize(64, 64))
                 self.ui.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
@@ -432,9 +452,12 @@ class UiControlTab(QObject):
         return -1
 
     def open_gcode_files(self):
-        load_gcode = QFileDialog.getOpenFileNames(None, "Load G-Code File(s)",  # todo: add other file extensions?
-                                                  self.app_settings.gcode_last_dir,
-                                                  "G-Code Files (*.gcode *.nc)" + ";;All files (*.*)")
+        load_gcode = QFileDialog.getOpenFileNames(
+            None,
+            "Load G-Code File(s)",  # todo: add other file extensions?
+            self.app_settings.gcode_last_dir,
+            "G-Code Files (*.gcode *.nc)" + ";;All files (*.*)",
+        )
         logger.debug(load_gcode)
         gcode_actual_l = []
         load_gcode_paths = []
@@ -472,10 +495,8 @@ class UiControlTab(QObject):
                     new_rb.setEnabled(False)
                     self.gcode_rb_group.addButton(new_rb)
                     self.ui.gcode_tw.setCellWidget(row, column, new_rb)
-                    index = QPersistentModelIndex(
-                        self.ui.gcode_tw.model().index(row, column))
-                    new_rb.toggled.connect(
-                        lambda *args, index=index: self.gcode_item_selected(index))
+                    index = QPersistentModelIndex(self.ui.gcode_tw.model().index(row, column))
+                    new_rb.toggled.connect(lambda *args, index=index: self.gcode_item_selected(index))
                 else:
                     if self.ui.gcode_tw.cellWidget(elem_row, 1).isChecked():
                         tag, ov = self.controlWo.get_gcode_data(elem)
@@ -616,10 +637,10 @@ class UiControlTab(QObject):
             if self.ui.send_cb.count() == 0:
                 self.ui.send_cb.addItem(ct_cb)
             else:
-                self.ui.send_cb.setItemText(self.ui.send_cb.count()-1, ct_cb)
+                self.ui.send_cb.setItemText(self.ui.send_cb.count() - 1, ct_cb)
 
             self.ui.send_cb.addItem("")
-            self.ui.send_cb.setCurrentIndex(self.ui.send_cb.count()-1)
+            self.ui.send_cb.setCurrentIndex(self.ui.send_cb.count() - 1)
 
             self.ui_serial_send_s.emit(ct_cb + "\n")
 
@@ -638,8 +659,8 @@ class UiControlTab(QObject):
             self.ui.serial_baud_cb.clear()
             self.ui.serial_baud_cb.addItems([str(baud) for baud in baudrates])
         else:
-            logger.info('No serial ports available.')
-            self.ui.serial_te.append('No serial ports available.')
+            logger.info("No serial ports available.")
+            self.ui.serial_te.append("No serial ports available.")
             self.ui.serial_ports_cb.clear()
             self.ui.serial_baud_cb.clear()
 
@@ -664,11 +685,10 @@ class UiControlTab(QObject):
 
     def handle_connect_button(self):
         """Connect/Disconnect button opens/closes the selected serial port and
-           creates the serial worker thread. If the thread was
-           already created previously and paused, it revives it."""
+        creates the serial worker thread. If the thread was
+        already created previously and paused, it revives it."""
         if not self.serial_connection_status:
-            self.ui_serial_open_s.emit(self.ui.serial_ports_cb.currentText(),
-                                       int(self.ui.serial_baud_cb.currentText()))
+            self.ui_serial_open_s.emit(self.ui.serial_ports_cb.currentText(), int(self.ui.serial_baud_cb.currentText()))
         else:
             self.ui_serial_close_s.emit()
             self.act_on_disconnection()
@@ -793,7 +813,7 @@ class UiControlTab(QObject):
 
     @Slot(float)
     def z_update_value(self, dsb):
-        """ Update current value of Z STEP in the machine settings. """
+        """Update current value of Z STEP in the machine settings."""
         self.machine_settings.z_step_value = dsb.value()
         self.update_all_z_dsb_value(dsb.value())
 
@@ -871,7 +891,7 @@ class UiControlTab(QObject):
         self.ui.xy_step_cb.setCurrentIndex(current_index)  # This shall trigger the update of the other dro control
 
     def xy_update_value(self, dsb):
-        """ Update current value of XY STEP in the machine settings. """
+        """Update current value of XY STEP in the machine settings."""
         self.machine_settings.xy_step_value = dsb.value()
         self.update_all_xy_dsb_value(dsb.value())
 
@@ -1014,10 +1034,7 @@ class UiControlTab(QObject):
             self.ui.z_min_dsb.value(),
             self.ui.x_max_dsb.value(),
             self.ui.y_max_dsb.value(),
-            self.ui.z_max_dsb.value()
+            self.ui.z_max_dsb.value(),
         )
-        steps_t = (
-            self.ui.x_num_step_sb.value(),
-            self.ui.y_num_step_sb.value()
-        )
+        steps_t = (self.ui.x_num_step_sb.value(), self.ui.y_num_step_sb.value())
         return bbox_t, steps_t

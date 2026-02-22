@@ -14,21 +14,21 @@ def qapp():
 
 
 # Add the src directory and TheAntFarm package to PYTHONPATH
-src_path = Path(__file__).parent.parent / 'src'
+src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
-sys.path.insert(0, str(src_path / 'TheAntFarm'))
+sys.path.insert(0, str(src_path / "TheAntFarm"))
 
 
 @pytest.fixture
 def sample_gerber_path():
     """Fixture providing path to test gerber files"""
-    return Path(__file__).parent / 'test_data' / 'gerbers'
+    return Path(__file__).parent / "test_data" / "gerbers"
 
 
 @pytest.fixture
 def sample_config_path():
     """Fixture providing path to test configuration files"""
-    return Path(__file__).parent / 'test_data' / 'config'
+    return Path(__file__).parent / "test_data" / "config"
 
 
 @pytest.fixture

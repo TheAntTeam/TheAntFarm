@@ -31,9 +31,9 @@ def _union_in_blocks(contours, block_size, scale):
         inners = []
         for c in contours[i:j]:
             p = _contour_to_poly(c, scale)
-            if p.type == 'Polygon':
+            if p.geom_type == "Polygon":
                 inners.append(p)
-            elif p.type == 'MultiPolygon':
+            elif p.geom_type == "MultiPolygon":
                 inners.extend(p.geoms)
         holes = unary_union(inners)
         assert holes.is_valid
@@ -48,9 +48,11 @@ def _contour_to_poly(contour_in, scale):
     poly = Polygon(contour)
     if not poly.is_valid:
         poly = poly.buffer(0)
-    assert poly.is_valid, \
-        "Contour %r did not make valid polygon %s because %s" \
-        % (contour, poly.wkt, explain_validity(poly))
+    assert poly.is_valid, "Contour %r did not make valid polygon %s because %s" % (
+        contour,
+        poly.wkt,
+        explain_validity(poly),
+    )
     return poly
 
 
@@ -123,8 +125,7 @@ def _polytree_node_to_shapely(node, scale):
                 poly = diff
 
         assert poly.is_valid
-        # if poly.type == 'MultiPolygon':
-        if poly.geom_type == 'MultiPolygon':
+        if poly.geom_type == "MultiPolygon":
             polygons.extend(poly.geoms)
         else:
             polygons.append(poly)

@@ -1,4 +1,3 @@
-
 import os
 import sys
 import shutil
@@ -17,7 +16,7 @@ class ExecutablePathChecker:
         application_path = ""
 
         # determine if application is a script file or frozen exe
-        if getattr(sys, 'frozen', False):
+        if getattr(sys, "frozen", False):
             print("From Executable")
             application_path = os.path.abspath(os.path.dirname(sys.executable))
         elif __file__:

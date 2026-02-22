@@ -11,7 +11,8 @@ logger = logging.getLogger(__name__)
 
 
 class UiAlignTab(QObject):
-    """Class dedicated to UI <--> Control interactions on Align Tab. """
+    """Class dedicated to UI <--> Control interactions on Align Tab."""
+
     load_align_layer_s = Signal(str, str)
     align_active_s = Signal(bool)
     align_apply_s = Signal(bool, list)
@@ -49,21 +50,24 @@ class UiAlignTab(QObject):
         self.align_apply_s.connect(self.controlWo.set_align_active)
         # self.ui.apply_alignment_tb.clicked.connect(self.apply_align)
         self.ui.apply_alignment_tb.clicked.connect(
-            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb.isChecked()))
+            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb.isChecked())
+        )
         self.ui.apply_alignment_tb_2.clicked.connect(
-            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb_2.isChecked()))
+            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb_2.isChecked())
+        )
         self.ui.add_point_tb.clicked.connect(self.request_new_point)
         self.ui.remove_point_tb.clicked.connect(self.remove_point)
         self.update_threshold_s.connect(self.controlWo.update_threshold_value)
-        self.ui.load_align_layer_tb.clicked.connect(
-            lambda: self.load_align_file("Load Align File", align_extensions))
+        self.ui.load_align_layer_tb.clicked.connect(lambda: self.load_align_file("Load Align File", align_extensions))
 
         self.ui.flip_horizontally_tb.setChecked(self.app_settings.flip_horizontal_selected)
         self.ui.flip_horizontally_tb.clicked.connect(
-            lambda: self.controlWo.flip_align_layer_horizontally(self.ui.flip_horizontally_tb.isChecked()))
+            lambda: self.controlWo.flip_align_layer_horizontally(self.ui.flip_horizontally_tb.isChecked())
+        )
         self.ui.flip_vertically_tb.setChecked(self.app_settings.flip_vertical_selected)
         self.ui.flip_vertically_tb.clicked.connect(
-            lambda: self.controlWo.flip_align_layer_vertically(self.ui.flip_vertically_tb.isChecked()))
+            lambda: self.controlWo.flip_align_layer_vertically(self.ui.flip_vertically_tb.isChecked())
+        )
         self.request_new_alignment_point_coords_s.connect(self.controlWo.add_new_align_point)
         self.remove_point_rows.connect(self.controlWo.remove_align_points)
 
@@ -73,14 +77,16 @@ class UiAlignTab(QObject):
 
         self.controlWo.update_camera_image_s.connect(self.update_camera_image)
         self.controlWo.update_camera_list_s.connect(self.update_camera_list)
-        self.ui.camera_list_cb.currentIndexChanged.connect(lambda: self.controlWo.update_camera_selected(
-            self.ui.camera_list_cb.currentIndex()))
+        self.ui.camera_list_cb.currentIndexChanged.connect(
+            lambda: self.controlWo.update_camera_selected(self.ui.camera_list_cb.currentIndex())
+        )
         self.controlWo.refresh_camera_list()
 
         self.controlWo.update_align_points_s.connect(self.update_alignment_points_list)
         self.camera_zoom_cb_init()
-        self.ui.camera_zoom_cb.currentIndexChanged.connect(lambda: self.update_zoom_value(
-            int(self.ui.camera_zoom_cb.currentText()[:-1])))
+        self.ui.camera_zoom_cb.currentIndexChanged.connect(
+            lambda: self.update_zoom_value(int(self.ui.camera_zoom_cb.currentText()[:-1]))
+        )
 
         self.ui.camera_la.mouse_wheel_up_or_down_s.connect(self.update_camera_zoom)
         self.update_zoom_value_s.connect(self.controlWo.update_camera_zoom_value)
@@ -137,24 +143,28 @@ class UiAlignTab(QObject):
 
     def update_ui_alignment_applied(self, alignment_applied_flag, num_points):
         if alignment_applied_flag:
-            self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="blue",
-                                                                                        color="black"))
-            self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="blue",
-                                                                                          color="black"))
+            self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="blue", color="black"))
+            self.ui.apply_alignment_tb_2.setStyleSheet(
+                StyleManager.set_tool_button_color(bg_color="blue", color="black")
+            )
             self.ui.apply_alignment_tb.setStatusTip("Alignment ON")
             self.ui.apply_alignment_tb_2.setStatusTip("Alignment ON")
         elif num_points >= self.MIN_ALIGNMENT_POINTS_NUMBER:
-            self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="yellow",
-                                                                                        color="black"))
-            self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="yellow",
-                                                                                          color="black"))
+            self.ui.apply_alignment_tb.setStyleSheet(
+                StyleManager.set_tool_button_color(bg_color="yellow", color="black")
+            )
+            self.ui.apply_alignment_tb_2.setStyleSheet(
+                StyleManager.set_tool_button_color(bg_color="yellow", color="black")
+            )
             self.ui.apply_alignment_tb.setStatusTip("Alignment OFF")
             self.ui.apply_alignment_tb_2.setStatusTip("Alignment OFF")
         else:
-            self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)",
-                                                                                        color="white"))
-            self.ui.apply_alignment_tb_2.setStyleSheet(StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)",
-                                                                                          color="white"))
+            self.ui.apply_alignment_tb.setStyleSheet(
+                StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)", color="white")
+            )
+            self.ui.apply_alignment_tb_2.setStyleSheet(
+                StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)", color="white")
+            )
             self.ui.apply_alignment_tb.setStatusTip("Alignment OFF")
             self.ui.apply_alignment_tb_2.setStatusTip("Alignment OFF")
 
@@ -166,9 +176,11 @@ class UiAlignTab(QObject):
         self.ui.apply_alignment_tb_2.setChecked(alignment_check_status)  # sync check status of the aliment tb
 
         self.ui.apply_alignment_tb.clicked.connect(
-            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb.isChecked()))
+            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb.isChecked())
+        )
         self.ui.apply_alignment_tb_2.clicked.connect(
-            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb_2.isChecked()))
+            lambda: self.set_alignment_tb_check(self.ui.apply_alignment_tb_2.isChecked())
+        )
 
         self.apply_align()
 
@@ -193,10 +205,8 @@ class UiAlignTab(QObject):
 
     @staticmethod
     def compute_offset_point(x_in, y_in, offset_in, angle_in):
-        x_out = offset_in + (x_in * math.cos(math.radians(angle_in)) -
-                             (y_in * math.sin(math.radians(angle_in))))
-        y_out = offset_in + ((x_in * math.sin(math.radians(angle_in))) +
-                             (y_in * math.cos(math.radians(angle_in))))
+        x_out = offset_in + (x_in * math.cos(math.radians(angle_in)) - (y_in * math.sin(math.radians(angle_in))))
+        y_out = offset_in + ((x_in * math.sin(math.radians(angle_in))) + (y_in * math.cos(math.radians(angle_in))))
         return x_out, y_out
 
     def request_new_point(self):
@@ -226,9 +236,10 @@ class UiAlignTab(QObject):
         kwargs = {}
         if "PYCHARM_HOSTED" in os.environ:
             logger.debug("pycharm hosted")
-            kwargs['options'] = QFileDialog.DontUseNativeDialog
-        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.app_settings.layer_last_dir,
-                                                     filters, **kwargs)
+            kwargs["options"] = QFileDialog.DontUseNativeDialog
+        load_file_path = QFileDialog.getOpenFileName(
+            self.main_win, load_text, self.app_settings.layer_last_dir, filters, **kwargs
+        )
 
         if load_file_path[0]:
             self.vis_align_layer.remove_layer(layer)

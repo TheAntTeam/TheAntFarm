@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class UiViewLoadLayerTab(QObject):
-    """Class dedicated to UI <--> Control interactions on Load Layer Tab. """
+    """Class dedicated to UI <--> Control interactions on Load Layer Tab."""
 
     load_layer_s = Signal(str, str)
 
@@ -23,11 +23,23 @@ class UiViewLoadLayerTab(QObject):
         self.app_settings = app_settings
 
         self.layer_colors = self.app_settings.layer_color
-        self.L_TEXT = [self.ui.top_file_le, self.ui.bottom_file_le, self.ui.profile_file_le,
-                       self.ui.drill_file_le, self.ui.no_copper_1_le, self.ui.no_copper_2_le]
+        self.L_TEXT = [
+            self.ui.top_file_le,
+            self.ui.bottom_file_le,
+            self.ui.profile_file_le,
+            self.ui.drill_file_le,
+            self.ui.no_copper_1_le,
+            self.ui.no_copper_2_le,
+        ]
         self.layers_te = Od([(k, t) for k, t in zip(self.lay_tags, self.L_TEXT)])
-        self.L_CHECKBOX = [self.ui.top_view_chb, self.ui.bottom_view_chb, self.ui.profile_view_chb,
-                           self.ui.drill_view_chb, self.ui.no_copper_1_chb, self.ui.no_copper_2_chb]
+        self.L_CHECKBOX = [
+            self.ui.top_view_chb,
+            self.ui.bottom_view_chb,
+            self.ui.profile_view_chb,
+            self.ui.drill_view_chb,
+            self.ui.no_copper_1_chb,
+            self.ui.no_copper_2_chb,
+        ]
         self.layers_chb = Od([(k, t) for k, t in zip(self.lay_tags, self.L_CHECKBOX)])
 
         self.ui.pushButton_3.clicked.connect(self.vis_layer.top_view)
@@ -39,29 +51,41 @@ class UiViewLoadLayerTab(QObject):
         gerber_extensions = "Gerber (*.gbr *.GBR *.gbl *.GBL *.gtl *.GTL)"
         excellon_extensions = "Excellon (*.xln *.XLN *.drl *.DRL)"
         self.ui.top_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[0], "Load Top Gerber File", gerber_extensions))
+            lambda: self.load_gerber_file(self.lay_tags[0], "Load Top Gerber File", gerber_extensions)
+        )
         self.ui.bottom_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[1], "Load Bottom Gerber File", gerber_extensions))
+            lambda: self.load_gerber_file(self.lay_tags[1], "Load Bottom Gerber File", gerber_extensions)
+        )
         self.ui.profile_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[2], "Load Profile Gerber File", gerber_extensions))
+            lambda: self.load_gerber_file(self.lay_tags[2], "Load Profile Gerber File", gerber_extensions)
+        )
         self.ui.drill_load_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[3], "Load Drill Excellon File", excellon_extensions))
+            lambda: self.load_gerber_file(self.lay_tags[3], "Load Drill Excellon File", excellon_extensions)
+        )
         self.ui.no_copper_1_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[4], "Load No Copper TOP Gerber File", gerber_extensions))
+            lambda: self.load_gerber_file(self.lay_tags[4], "Load No Copper TOP Gerber File", gerber_extensions)
+        )
         self.ui.no_copper_2_pb.clicked.connect(
-            lambda: self.load_gerber_file(self.lay_tags[5], "Load No Copper BOTTOM Gerber File", gerber_extensions))
+            lambda: self.load_gerber_file(self.lay_tags[5], "Load No Copper BOTTOM Gerber File", gerber_extensions)
+        )
         self.ui.top_view_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.lay_tags[0], self.ui.top_view_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[0], self.ui.top_view_chb.isChecked())
+        )
         self.ui.bottom_view_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.lay_tags[1], self.ui.bottom_view_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[1], self.ui.bottom_view_chb.isChecked())
+        )
         self.ui.profile_view_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.lay_tags[2], self.ui.profile_view_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[2], self.ui.profile_view_chb.isChecked())
+        )
         self.ui.drill_view_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.lay_tags[3], self.ui.drill_view_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[3], self.ui.drill_view_chb.isChecked())
+        )
         self.ui.no_copper_1_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.lay_tags[4], self.ui.no_copper_1_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[4], self.ui.no_copper_1_chb.isChecked())
+        )
         self.ui.no_copper_2_chb.stateChanged.connect(
-            lambda: self.set_layer_visible(self.lay_tags[5], self.ui.no_copper_2_chb.isChecked()))
+            lambda: self.set_layer_visible(self.lay_tags[5], self.ui.no_copper_2_chb.isChecked())
+        )
         self.ui.all_view_chb.stateChanged.connect(lambda: self.hide_show_layers(self.ui.all_view_chb.isChecked()))
         self.ui.clear_views_pb.clicked.connect(self.remove_all_vis_layers)
 
@@ -78,9 +102,10 @@ class UiViewLoadLayerTab(QObject):
         kwargs = {}
         if "PYCHARM_HOSTED" in os.environ:
             logger.debug("pycharm hosted")
-            kwargs['options'] = QFileDialog.DontUseNativeDialog
-        load_file_path = QFileDialog.getOpenFileName(self.main_win, load_text, self.app_settings.layer_last_dir,
-                                                     filters, **kwargs)
+            kwargs["options"] = QFileDialog.DontUseNativeDialog
+        load_file_path = QFileDialog.getOpenFileName(
+            self.main_win, load_text, self.app_settings.layer_last_dir, filters, **kwargs
+        )
 
         if load_file_path[0]:
             self.vis_layer.remove_layer(layer)

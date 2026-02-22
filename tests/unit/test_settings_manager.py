@@ -109,12 +109,12 @@ class TestAppSettingsHandler:
         """Test updating settings values"""
         # Test updating individual settings
         test_values = {
-            'win_maximized': True,
-            'main_tab_index': 2,
-            'ctrl_tab_index': 1,
-            'settings_tab_index': 3,
-            'align_tab_visibility': True,
-            'console_visibility': True
+            "win_maximized": True,
+            "main_tab_index": 2,
+            "ctrl_tab_index": 1,
+            "settings_tab_index": 3,
+            "align_tab_visibility": True,
+            "console_visibility": True,
         }
 
         # Update settings
@@ -127,10 +127,14 @@ class TestAppSettingsHandler:
 
     def test_serial_error_threshold_defaults(self, app_settings_handler):
         """Test that serial error thresholds are initialized with default values"""
-        assert app_settings_handler.serial_error_warning_threshold == \
-            app_settings_handler.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
-        assert app_settings_handler.serial_error_critical_threshold == \
-            app_settings_handler.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
+        assert (
+            app_settings_handler.serial_error_warning_threshold
+            == app_settings_handler.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
+        )
+        assert (
+            app_settings_handler.serial_error_critical_threshold
+            == app_settings_handler.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
+        )
         assert app_settings_handler.serial_error_warning_threshold == 3
         assert app_settings_handler.serial_error_critical_threshold == 10
 
@@ -178,8 +182,12 @@ class TestAppSettingsHandler:
         new_settings.read_all_app_settings()
 
         # Verify thresholds are restored to defaults
-        assert new_settings.serial_error_warning_threshold == app_settings_handler.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
-        assert new_settings.serial_error_critical_threshold == app_settings_handler.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
+        assert (
+            new_settings.serial_error_warning_threshold == app_settings_handler.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
+        )
+        assert (
+            new_settings.serial_error_critical_threshold == app_settings_handler.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
+        )
 
     def test_serial_error_threshold_validation_zero_values(self, app_settings_handler, tmp_path):
         """Test that zero thresholds are accepted - valid edge case for closing on first error"""
@@ -190,11 +198,9 @@ class TestAppSettingsHandler:
 
         # Manually write config with zero values (now valid)
         import configparser
+
         config = configparser.ConfigParser()
-        config["GENERAL"] = {
-            "serial_error_warning_threshold": "0",
-            "serial_error_critical_threshold": "0"
-        }
+        config["GENERAL"] = {"serial_error_warning_threshold": "0", "serial_error_critical_threshold": "0"}
         config_dir.mkdir(parents=True, exist_ok=True)
         with open(str(config_dir / "app_config.ini"), "w") as f:
             config.write(f)
@@ -216,11 +222,9 @@ class TestAppSettingsHandler:
 
         # Manually write invalid config with negative values
         import configparser
+
         config = configparser.ConfigParser()
-        config["GENERAL"] = {
-            "serial_error_warning_threshold": "-5",
-            "serial_error_critical_threshold": "-10"
-        }
+        config["GENERAL"] = {"serial_error_warning_threshold": "-5", "serial_error_critical_threshold": "-10"}
         config_dir.mkdir(parents=True, exist_ok=True)
         with open(str(config_dir / "app_config.ini"), "w") as f:
             config.write(f)
@@ -242,11 +246,9 @@ class TestAppSettingsHandler:
 
         # Manually write invalid config with warning > critical
         import configparser
+
         config = configparser.ConfigParser()
-        config["GENERAL"] = {
-            "serial_error_warning_threshold": "10",
-            "serial_error_critical_threshold": "5"
-        }
+        config["GENERAL"] = {"serial_error_warning_threshold": "10", "serial_error_critical_threshold": "5"}
         config_dir.mkdir(parents=True, exist_ok=True)
         with open(str(config_dir / "app_config.ini"), "w") as f:
             config.write(f)
@@ -268,11 +270,9 @@ class TestAppSettingsHandler:
 
         # Manually write config with equal non-zero values
         import configparser
+
         config = configparser.ConfigParser()
-        config["GENERAL"] = {
-            "serial_error_warning_threshold": "5",
-            "serial_error_critical_threshold": "5"
-        }
+        config["GENERAL"] = {"serial_error_warning_threshold": "5", "serial_error_critical_threshold": "5"}
         config_dir.mkdir(parents=True, exist_ok=True)
         with open(str(config_dir / "app_config.ini"), "w") as f:
             config.write(f)
@@ -294,11 +294,9 @@ class TestAppSettingsHandler:
 
         # Manually write config with (0, 10)
         import configparser
+
         config = configparser.ConfigParser()
-        config["GENERAL"] = {
-            "serial_error_warning_threshold": "0",
-            "serial_error_critical_threshold": "10"
-        }
+        config["GENERAL"] = {"serial_error_warning_threshold": "0", "serial_error_critical_threshold": "10"}
         config_dir.mkdir(parents=True, exist_ok=True)
         with open(str(config_dir / "app_config.ini"), "w") as f:
             config.write(f)

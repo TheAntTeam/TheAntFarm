@@ -21,9 +21,7 @@ class AlignController(QObject):
 
         self.pcb = PcbObj()
         # TODO: parametrize drill diameter for gcode conversion
-        dgc_cfg = {
-            "default_gcode_drill_size": 0.7
-        }
+        dgc_cfg = {"default_gcode_drill_size": 0.7}
         self.dgc = DrillGcodeConverter(cfg=dgc_cfg)
 
         self.double_side_manager = DoubleSideManager()

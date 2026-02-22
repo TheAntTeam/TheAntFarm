@@ -77,15 +77,15 @@ class GLUTess:
         GLU.gluTessBeginPolygon(tess, None)
 
         def define_contour(contour):
-            vertices = list(contour.coords)             # Get vertices coordinates
+            vertices = list(contour.coords)  # Get vertices coordinates
 
-            if vertices[0] == vertices[-1]:             # Open ring
+            if vertices[0] == vertices[-1]:  # Open ring
                 vertices = vertices[:-1]
 
             vertices3d = [(v[0], v[1], z) for v in vertices]
             self.pts += vertices3d
 
-            GLU.gluTessBeginContour(tess)               # Start contour
+            GLU.gluTessBeginContour(tess)  # Start contour
 
             # Set vertices
             for vertex in vertices:
@@ -93,7 +93,7 @@ class GLUTess:
                 GLU.gluTessVertex(tess, point, self.vertex_index)
                 self.vertex_index += 1
 
-            GLU.gluTessEndContour(tess)                 # End contour
+            GLU.gluTessEndContour(tess)  # End contour
 
         # Polygon exterior
         define_contour(polygon.exterior)
@@ -124,8 +124,8 @@ class GLUTess:
 class VisualLayer:
 
     DELTA = 1
-    TOP_ORDER = {'selected': 1, 'drill': 2, 'profile': 3, 'top': 5, 'bottom': 6, 'nc_top': 4, 'nc_bottom': 7}
-    BTM_ORDER = {'selected': 1, 'drill': 2, 'profile': 3, 'top': 6, 'bottom': 5, 'nc_top': 7, 'nc_bottom': 4}
+    TOP_ORDER = {"selected": 1, "drill": 2, "profile": 3, "top": 5, "bottom": 6, "nc_top": 4, "nc_bottom": 7}
+    BTM_ORDER = {"selected": 1, "drill": 2, "profile": 3, "top": 6, "bottom": 5, "nc_top": 7, "nc_bottom": 4}
     POINTER_RADIUS = 0.5
     POINTER_TAG = "POINTER"
     POINTER_COLOR = "yellow"
@@ -213,7 +213,7 @@ class VisualLayer:
 
     def flip_camera(self, flipped):
         self.canvas.view.camera.up = "+z"
-        self.canvas.view.camera.flip = (flipped)
+        self.canvas.view.camera.flip = flipped
 
         for m in self.meshes.keys():
             self.meshes[m].order = self.TOP_ORDER[m]
@@ -242,7 +242,9 @@ class VisualLayer:
 
                     # ToDo: to parametrize color of selection
                     if contain_flag:
-                        self.add_layer(tag=self.SELECTED_TAG, geom_list=[shape], color="yellow", holes=False, auto_range=False)
+                        self.add_layer(
+                            tag=self.SELECTED_TAG, geom_list=[shape], color="yellow", holes=False, auto_range=False
+                        )
                         break
 
     def on_mouse_click(self, event):
@@ -251,9 +253,9 @@ class VisualLayer:
 
     def flip_view(self, orientation=0):
         if orientation == 0:
-            self.canvas.view.camera.up = '+z'
+            self.canvas.view.camera.up = "+z"
         else:
-            self.canvas.view.camera.up = '-z'
+            self.canvas.view.camera.up = "-z"
 
     def set_layer_visible(self, tag, visible):
         if tag in self.meshes.keys():
@@ -299,7 +301,7 @@ class VisualLayer:
         ldata = [[], []]
         triangulizer = GLUTess()
         order = 0
-        order_d = self.TOP_ORDER if self.canvas.view.camera.up == '+z' else self.BTM_ORDER
+        order_d = self.TOP_ORDER if self.canvas.view.camera.up == "+z" else self.BTM_ORDER
         if tag in order_d:
             order = order_d[tag]
 
@@ -330,7 +332,7 @@ class VisualLayer:
             logger.warning("No Drill Information Loaded. Please Load a GCODE or EXCELLON file in the Alignment View")
         return None
 
-    def add_path(self, tag, geom_list, color=None, warning_color='red'):
+    def add_path(self, tag, geom_list, color=None, warning_color="red"):
         # todo: add zbuffer controll
         if geom_list:
             order = 0
@@ -356,7 +358,7 @@ class VisualLayer:
             print("Cannot Visualize an Empty Path")
         self.update_order()
 
-    def add_gcode(self, tag, gcode_list, color=('white', 'orange')):
+    def add_gcode(self, tag, gcode_list, color=("white", "orange")):
         if gcode_list:
             order = 0
             gcode_paths = {}
@@ -421,14 +423,15 @@ class VisualLayer:
             for j in range(1, len(l)):
                 c = l[j]
                 coords.append(c)
-                connect.append((p, p+1))
+                connect.append((p, p + 1))
                 p += 1
             # print(coords)
             coords = np.array(coords)
             connect = np.array(connect)
 
-            line = visuals.Line(pos=coords, connect=connect, width=width,
-                                color=colors_list[i], parent=self.canvas.view, antialias=True)
+            line = visuals.Line(
+                pos=coords, connect=connect, width=width, color=colors_list[i], parent=self.canvas.view, antialias=True
+            )
             line.order = order
             if tag in list(self.paths.keys()):
                 self.paths[tag] += [line]
@@ -462,15 +465,15 @@ class VisualLayer:
             for j in range(1, len(l)):
                 c = l[j]
                 coords.append(c)
-                connect.append((p, p+1))
+                connect.append((p, p + 1))
                 p += 1
             all_colors += [colors_list[i]] * len(l)
         coords = np.array(coords)
         connect = np.array(connect)
 
-        line = visuals.Line(pos=coords, connect=connect, width=width,
-                            color=all_colors, parent=self.canvas.view,
-                            antialias=True)
+        line = visuals.Line(
+            pos=coords, connect=connect, width=width, color=all_colors, parent=self.canvas.view, antialias=True
+        )
         line.order = order
         if tag in list(self.paths.keys()):
             self.paths[tag] += [line]
@@ -491,7 +494,7 @@ class VisualLayer:
         # mesh.freeze()
         # mesh.filter.alpha = 0.3
         # mesh.shading = None
-        mesh.set_gl_state('translucent', cull_face=False)
+        mesh.set_gl_state("translucent", cull_face=False)
         mesh.order = order
 
         tri = ldata[0]
@@ -499,8 +502,9 @@ class VisualLayer:
 
         if color:
             mesh_colors = [Color(color).rgba] * int(len(tri) / 3)
-            mesh.set_data(np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)),
-                          face_colors=np.asarray(mesh_colors))
+            mesh.set_data(
+                np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)), face_colors=np.asarray(mesh_colors)
+            )
         else:
             mesh.set_data(np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)))
         mesh._bounds_changed()

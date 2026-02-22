@@ -7,7 +7,7 @@ from .settings_machine import MachineSettingsHandler
 
 class SettingsHandler:
     # Configuration file folder
-    CONFIG_FOLDER = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'configurations'))
+    CONFIG_FOLDER = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "configurations"))
 
     def __init__(self, main_win):
         self.config_folder = self.CONFIG_FOLDER
@@ -25,14 +25,14 @@ class SettingsHandler:
         self.machine_settings = MachineSettingsHandler(self.config_folder, main_win)
 
     def read_all_settings(self):
-        """ Read all settings from ini files """
+        """Read all settings from ini files"""
         self.app_settings.read_all_app_settings()
         self.jobs_settings.read_all_jobs_settings()
         self.gcf_settings.read_all_gcf_settings()
         self.machine_settings.read_all_machine_settings()
 
     def write_all_settings(self, all_settings_od=None):
-        """ Write all settings to ini files """
+        """Write all settings to ini files"""
         # if "app_settings" in all_settings_od:
         #    self.app_settings.write_all_app_settings(all_settings_od["app_settings"])
 

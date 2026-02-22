@@ -37,7 +37,7 @@ class MachineSettingsHandler:
     TOOL_CAMERA_OFFSET_Y_DEFAULT = 0.0
 
     def __init__(self, config_folder, main_win):
-        self.machine_config_path = os.path.normpath(os.path.join(config_folder, 'machine_config.ini'))
+        self.machine_config_path = os.path.normpath(os.path.join(config_folder, "machine_config.ini"))
         self.machine_settings = configparser.ConfigParser()
         self.main_win = main_win
 
@@ -74,7 +74,7 @@ class MachineSettingsHandler:
         self.tool_camera_offset_y = self.TOOL_CAMERA_OFFSET_Y_DEFAULT
 
     def read_all_machine_settings(self):
-        """ Read all machine settings from ini files """
+        """Read all machine settings from ini files"""
         # If app settings file does NOT exist create it with default values
         if not os.path.isfile(self.machine_config_path):
             self.restore_machine_settings()
@@ -97,70 +97,86 @@ class MachineSettingsHandler:
             self.feedrate_z = machine_general.getfloat("feedrate_z", self.FEEDRATE_Z_DEFAULT)
             self.feedrate_probe = machine_general.getfloat("feedrate_probe", self.FEEDRATE_PROBE_DEFAULT)
 
-            self.tool_probe_rel_flag = machine_general.getboolean("tool_probe_relative_flag",
-                                                                  self.TOOL_PROBE_REL_FLAG_DEFAULT)
-            self.tool_probe_offset_x_mpos = machine_general.getfloat("tool_probe_x_mpos",
-                                                                     self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT)
-            self.tool_probe_offset_y_mpos = machine_general.getfloat("tool_probe_y_mpos",
-                                                                     self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT)
-            self.tool_probe_offset_z_mpos = machine_general.getfloat("tool_probe_z_mpos",
-                                                                     self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT)
+            self.tool_probe_rel_flag = machine_general.getboolean(
+                "tool_probe_relative_flag", self.TOOL_PROBE_REL_FLAG_DEFAULT
+            )
+            self.tool_probe_offset_x_mpos = machine_general.getfloat(
+                "tool_probe_x_mpos", self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT
+            )
+            self.tool_probe_offset_y_mpos = machine_general.getfloat(
+                "tool_probe_y_mpos", self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT
+            )
+            self.tool_probe_offset_z_mpos = machine_general.getfloat(
+                "tool_probe_z_mpos", self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT
+            )
 
-            self.tool_probe_offset_x_wpos = machine_general.getfloat("tool_probe_x_wpos",
-                                                                     self.TOOL_PROBE_OFFSET_WPOS_X_DEFAULT)
-            self.tool_probe_offset_y_wpos = machine_general.getfloat("tool_probe_y_wpos",
-                                                                     self.TOOL_PROBE_OFFSET_WPOS_Y_DEFAULT)
-            self.tool_probe_offset_z_wpos = machine_general.getfloat("tool_probe_z_wpos",
-                                                                     self.TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT)
+            self.tool_probe_offset_x_wpos = machine_general.getfloat(
+                "tool_probe_x_wpos", self.TOOL_PROBE_OFFSET_WPOS_X_DEFAULT
+            )
+            self.tool_probe_offset_y_wpos = machine_general.getfloat(
+                "tool_probe_y_wpos", self.TOOL_PROBE_OFFSET_WPOS_Y_DEFAULT
+            )
+            self.tool_probe_offset_z_wpos = machine_general.getfloat(
+                "tool_probe_z_wpos", self.TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT
+            )
 
-            self.tool_change_offset_x_mpos = machine_general.getfloat("tool_change_x_mpos",
-                                                                      self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT)
-            self.tool_change_offset_y_mpos = machine_general.getfloat("tool_change_y_mpos",
-                                                                      self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT)
-            self.tool_change_offset_z_mpos = machine_general.getfloat("tool_change_z_mpos",
-                                                                      self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT)
+            self.tool_change_offset_x_mpos = machine_general.getfloat(
+                "tool_change_x_mpos", self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT
+            )
+            self.tool_change_offset_y_mpos = machine_general.getfloat(
+                "tool_change_y_mpos", self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT
+            )
+            self.tool_change_offset_z_mpos = machine_general.getfloat(
+                "tool_change_z_mpos", self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT
+            )
 
             self.tool_probe_z_limit = machine_general.getfloat("tool_probe_z_limit", self.TOOL_PROBE_Z_LIMIT_DEFAULT)
             self.hold_on_probe_flag = machine_general.getboolean("hold_on_probe_flag", self.HOLD_ON_PROBE_FLAG_DEFAULT)
-            self.zeroing_after_probe_flag = machine_general.getboolean("zeroing_after_probe_flag",
-                                                                       self.ZEROING_AFTER_PROBE_FLAG_DEFAULT)
+            self.zeroing_after_probe_flag = machine_general.getboolean(
+                "zeroing_after_probe_flag", self.ZEROING_AFTER_PROBE_FLAG_DEFAULT
+            )
 
-            self.alignment_drill_diameter = machine_general.getfloat("alignment_drill_diameter",
-                                                                     self.ALIGNMENT_DRILL_DIAMETER_DEFAULT)
-            self.tool_camera_offset_x = machine_general.getfloat("tool_camera_offset_x",
-                                                                 self.TOOL_CAMERA_OFFSET_X_DEFAULT)
-            self.tool_camera_offset_y = machine_general.getfloat("tool_camera_offset_y",
-                                                                 self.TOOL_CAMERA_OFFSET_Y_DEFAULT)
+            self.alignment_drill_diameter = machine_general.getfloat(
+                "alignment_drill_diameter", self.ALIGNMENT_DRILL_DIAMETER_DEFAULT
+            )
+            self.tool_camera_offset_x = machine_general.getfloat(
+                "tool_camera_offset_x", self.TOOL_CAMERA_OFFSET_X_DEFAULT
+            )
+            self.tool_camera_offset_y = machine_general.getfloat(
+                "tool_camera_offset_y", self.TOOL_CAMERA_OFFSET_Y_DEFAULT
+            )
 
     def write_all_machine_settings(self):
-        """ Write all machine settings to ini files """
-        self.machine_settings["DEFAULT"] = {"probe_z_min": self.PROBE_Z_MIN_DEFAULT,
-                                            "probe_z_max": self.PROBE_Z_MAX_DEFAULT,
-                                            "x_bbox_step": self.X_BBOX_STEP_DEFAULT,
-                                            "y_bbox_step": self.Y_BBOX_STEP_DEFAULT,
-                                            "xy_step_idx": self.XY_STEP_IDX_DEFAULT,
-                                            "xy_step_value": self.XY_STEP_VALUE_DEFAULT,
-                                            "z_step_idx": self.Z_STEP_IDX_DEFAULT,
-                                            "z_step_value": self.Z_STEP_VALUE_DEFAULT,
-                                            "feedrate_xy": self.FEEDRATE_XY_DEFAULT,
-                                            "feedrate_z": self.FEEDRATE_Z_DEFAULT,
-                                            "feedrate_probe": self.FEEDRATE_PROBE_DEFAULT,
-                                            "tool_probe_relative_flag": self.TOOL_PROBE_REL_FLAG_DEFAULT,
-                                            "hold_on_probe_flag": self.HOLD_ON_PROBE_FLAG_DEFAULT,
-                                            "zeroing_after_probe_flag": self.ZEROING_AFTER_PROBE_FLAG_DEFAULT,
-                                            "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
-                                            "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
-                                            "tool_probe_z_mpos": self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT,
-                                            "tool_probe_x_wpos": self.TOOL_PROBE_OFFSET_WPOS_X_DEFAULT,
-                                            "tool_probe_y_wpos": self.TOOL_PROBE_OFFSET_WPOS_Y_DEFAULT,
-                                            "tool_probe_z_wpos": self.TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT,
-                                            "tool_change_x_mpos": self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT,
-                                            "tool_change_y_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT,
-                                            "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT,
-                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT,
-                                            "alignment_drill_diameter": self.ALIGNMENT_DRILL_DIAMETER_DEFAULT,
-                                            "tool_camera_offset_x": self.TOOL_CAMERA_OFFSET_X_DEFAULT,
-                                            "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT}
+        """Write all machine settings to ini files"""
+        self.machine_settings["DEFAULT"] = {
+            "probe_z_min": self.PROBE_Z_MIN_DEFAULT,
+            "probe_z_max": self.PROBE_Z_MAX_DEFAULT,
+            "x_bbox_step": self.X_BBOX_STEP_DEFAULT,
+            "y_bbox_step": self.Y_BBOX_STEP_DEFAULT,
+            "xy_step_idx": self.XY_STEP_IDX_DEFAULT,
+            "xy_step_value": self.XY_STEP_VALUE_DEFAULT,
+            "z_step_idx": self.Z_STEP_IDX_DEFAULT,
+            "z_step_value": self.Z_STEP_VALUE_DEFAULT,
+            "feedrate_xy": self.FEEDRATE_XY_DEFAULT,
+            "feedrate_z": self.FEEDRATE_Z_DEFAULT,
+            "feedrate_probe": self.FEEDRATE_PROBE_DEFAULT,
+            "tool_probe_relative_flag": self.TOOL_PROBE_REL_FLAG_DEFAULT,
+            "hold_on_probe_flag": self.HOLD_ON_PROBE_FLAG_DEFAULT,
+            "zeroing_after_probe_flag": self.ZEROING_AFTER_PROBE_FLAG_DEFAULT,
+            "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
+            "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
+            "tool_probe_z_mpos": self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT,
+            "tool_probe_x_wpos": self.TOOL_PROBE_OFFSET_WPOS_X_DEFAULT,
+            "tool_probe_y_wpos": self.TOOL_PROBE_OFFSET_WPOS_Y_DEFAULT,
+            "tool_probe_z_wpos": self.TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT,
+            "tool_change_x_mpos": self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT,
+            "tool_change_y_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT,
+            "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT,
+            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT,
+            "alignment_drill_diameter": self.ALIGNMENT_DRILL_DIAMETER_DEFAULT,
+            "tool_camera_offset_x": self.TOOL_CAMERA_OFFSET_X_DEFAULT,
+            "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT,
+        }
 
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
@@ -195,38 +211,40 @@ class MachineSettingsHandler:
         machine_general["tool_camera_offset_y"] = str(self.tool_camera_offset_y)
 
         # Write machine ini file #
-        with open(self.machine_config_path, 'w') as configfile:
+        with open(self.machine_config_path, "w") as configfile:
             self.machine_settings.write(configfile)
 
     def restore_machine_settings(self):
-        """ Restore all machine settings to default and create ini file if it doesn't exist """
-        self.machine_settings["DEFAULT"] = {"probe_z_min": self.PROBE_Z_MIN_DEFAULT,
-                                            "probe_z_max": self.PROBE_Z_MAX_DEFAULT,
-                                            "x_bbox_step": self.X_BBOX_STEP_DEFAULT,
-                                            "y_bbox_step": self.Y_BBOX_STEP_DEFAULT,
-                                            "xy_step_idx": self.XY_STEP_IDX_DEFAULT,
-                                            "xy_step_value": self.XY_STEP_VALUE_DEFAULT,
-                                            "z_step_idx": self.Z_STEP_IDX_DEFAULT,
-                                            "z_step_value": self.Z_STEP_VALUE_DEFAULT,
-                                            "feedrate_xy": self.FEEDRATE_XY_DEFAULT,
-                                            "feedrate_z": self.FEEDRATE_Z_DEFAULT,
-                                            "feedrate_probe": self.FEEDRATE_PROBE_DEFAULT,
-                                            "tool_probe_relative_flag": self.TOOL_PROBE_REL_FLAG_DEFAULT,
-                                            "hold_on_probe_flag": self.HOLD_ON_PROBE_FLAG_DEFAULT,
-                                            "zeroing_after_probe_flag": self.ZEROING_AFTER_PROBE_FLAG_DEFAULT,
-                                            "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
-                                            "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
-                                            "tool_probe_z_mpos": self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT,
-                                            "tool_probe_x_wpos": self.TOOL_PROBE_OFFSET_WPOS_X_DEFAULT,
-                                            "tool_probe_y_wpos": self.TOOL_PROBE_OFFSET_WPOS_Y_DEFAULT,
-                                            "tool_probe_z_wpos": self.TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT,
-                                            "tool_change_x_mpos": self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT,
-                                            "tool_change_y_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT,
-                                            "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT,
-                                            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT,
-                                            "alignment_drill_diameter": self.ALIGNMENT_DRILL_DIAMETER_DEFAULT,
-                                            "tool_camera_offset_x": self.TOOL_CAMERA_OFFSET_X_DEFAULT,
-                                            "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT}
+        """Restore all machine settings to default and create ini file if it doesn't exist"""
+        self.machine_settings["DEFAULT"] = {
+            "probe_z_min": self.PROBE_Z_MIN_DEFAULT,
+            "probe_z_max": self.PROBE_Z_MAX_DEFAULT,
+            "x_bbox_step": self.X_BBOX_STEP_DEFAULT,
+            "y_bbox_step": self.Y_BBOX_STEP_DEFAULT,
+            "xy_step_idx": self.XY_STEP_IDX_DEFAULT,
+            "xy_step_value": self.XY_STEP_VALUE_DEFAULT,
+            "z_step_idx": self.Z_STEP_IDX_DEFAULT,
+            "z_step_value": self.Z_STEP_VALUE_DEFAULT,
+            "feedrate_xy": self.FEEDRATE_XY_DEFAULT,
+            "feedrate_z": self.FEEDRATE_Z_DEFAULT,
+            "feedrate_probe": self.FEEDRATE_PROBE_DEFAULT,
+            "tool_probe_relative_flag": self.TOOL_PROBE_REL_FLAG_DEFAULT,
+            "hold_on_probe_flag": self.HOLD_ON_PROBE_FLAG_DEFAULT,
+            "zeroing_after_probe_flag": self.ZEROING_AFTER_PROBE_FLAG_DEFAULT,
+            "tool_probe_x_mpos": self.TOOL_PROBE_OFFSET_MPOS_X_DEFAULT,
+            "tool_probe_y_mpos": self.TOOL_PROBE_OFFSET_MPOS_Y_DEFAULT,
+            "tool_probe_z_mpos": self.TOOL_PROBE_OFFSET_MPOS_Z_DEFAULT,
+            "tool_probe_x_wpos": self.TOOL_PROBE_OFFSET_WPOS_X_DEFAULT,
+            "tool_probe_y_wpos": self.TOOL_PROBE_OFFSET_WPOS_Y_DEFAULT,
+            "tool_probe_z_wpos": self.TOOL_PROBE_OFFSET_WPOS_Z_DEFAULT,
+            "tool_change_x_mpos": self.TOOL_CHANGE_OFFSET_MPOS_X_DEFAULT,
+            "tool_change_y_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Y_DEFAULT,
+            "tool_change_z_mpos": self.TOOL_CHANGE_OFFSET_MPOS_Z_DEFAULT,
+            "tool_probe_z_limit": self.TOOL_PROBE_Z_LIMIT_DEFAULT,
+            "alignment_drill_diameter": self.ALIGNMENT_DRILL_DIAMETER_DEFAULT,
+            "tool_camera_offset_x": self.TOOL_CAMERA_OFFSET_X_DEFAULT,
+            "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT,
+        }
 
         # GENERAL machine settings #
         self.machine_settings["GENERAL"] = {}
@@ -260,5 +278,5 @@ class MachineSettingsHandler:
         machine_general["tool_camera_offset_y"] = str(self.TOOL_CAMERA_OFFSET_Y_DEFAULT)
 
         # Write machine ini file #
-        with open(self.machine_config_path, 'w') as configfile:
+        with open(self.machine_config_path, "w") as configfile:
             self.machine_settings.write(configfile)

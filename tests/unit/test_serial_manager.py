@@ -174,8 +174,7 @@ class TestSerialManager:
         mock_port.standardBaudRates.return_value = [9600, 115200]
 
         # Mock the availablePorts method
-        mocker.patch('PySide6.QtSerialPort.QSerialPortInfo.availablePorts',
-                     return_value=[mock_port])
+        mocker.patch("PySide6.QtSerialPort.QSerialPortInfo.availablePorts", return_value=[mock_port])
 
         # Set up signal spy
         with qtbot.waitSignal(serial_manager.get_port_list_s, timeout=1000) as blocker:

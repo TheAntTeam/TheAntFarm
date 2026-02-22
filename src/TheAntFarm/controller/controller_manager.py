@@ -202,8 +202,9 @@ class ControllerWorker(QObject):
                         self.check_eof_and_idle()
                     elif re.match(r"^\[.*\]\s*$\s", element):
                         self.control_controller.parse_bracket_square(element)
-                        [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = \
+                        [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = (
                             self.control_controller.process_probe_and_abl()
+                        )
                         if ack_prb_flag:
                             self.touched_probe_s.emit()
                             self.ack_probe()
@@ -244,8 +245,9 @@ class ControllerWorker(QObject):
                                     self.tot_lines -= 1
                                 else:
                                     # self.tot_lines += 1
-                                    buff_available = (self.buffered_size + len(
-                                        cmd_to_send)) < self.REMOTE_RX_BUFFER_MAX_SIZE
+                                    buff_available = (
+                                        self.buffered_size + len(cmd_to_send)
+                                    ) < self.REMOTE_RX_BUFFER_MAX_SIZE
 
                             end_of_file = self.content_line >= self.tot_lines
 
@@ -257,7 +259,9 @@ class ControllerWorker(QObject):
 
                                 logger.debug(str(self.ack_lines) + " <-> " + str(self.sent_lines))
                                 # does data fit the buffer?
-                                buff_available = (self.buffered_size + len(cmd_to_send)) < self.REMOTE_RX_BUFFER_MAX_SIZE
+                                buff_available = (
+                                    self.buffered_size + len(cmd_to_send)
+                                ) < self.REMOTE_RX_BUFFER_MAX_SIZE
                             else:
                                 self.wait_tag_decoding = False
                                 buff_available = False
@@ -317,7 +321,7 @@ class ControllerWorker(QObject):
                 # DUMMY ELEMENT FREEZE WPO and MPO
                 freeze_dro = {
                     "WPO": self.control_controller.wpos_a.copy(),
-                    "MPO": self.control_controller.mpos_a.copy()
+                    "MPO": self.control_controller.mpos_a.copy(),
                 }
 
                 self.wait_tag_decoding = False
@@ -354,7 +358,7 @@ class ControllerWorker(QObject):
             self.send_gcode_lines(str_l)
 
     def execute_gcode_cmd(self, cmd_str):
-        """ Send generic G-CODE command coming from elsewhere. """
+        """Send generic G-CODE command coming from elsewhere."""
         logger.debug("Execute Gcode")
         parsed_cmd_str = self.decode_tag(cmd_str)
         logger.info("Sent GCODE: " + str(parsed_cmd_str))
@@ -473,8 +477,10 @@ class ControllerWorker(QObject):
             self.wait_tag_decoding = False
             logger.info("Total lines: " + str(self.tot_lines))
 
-            if self.sent_lines < self.tot_lines and \
-                    (self.buffered_size + len(self.file_content[self.content_line])) < self.REMOTE_RX_BUFFER_MAX_SIZE:
+            if (
+                self.sent_lines < self.tot_lines
+                and (self.buffered_size + len(self.file_content[self.content_line])) < self.REMOTE_RX_BUFFER_MAX_SIZE
+            ):
                 cmd_to_send = self.file_content[self.content_line]
                 cmd_to_send = self.macro_check(cmd_to_send)
                 self.send_to_tx_queue(cmd_to_send)
@@ -495,7 +501,7 @@ class ControllerWorker(QObject):
         if self.send_soft_reset:
             # send soft reset
             self.execute_gcode_cmd(b"!")
-            self.execute_gcode_cmd(b'\030')
+            self.execute_gcode_cmd(b"\030")
         self.send_soft_reset = True
         self.file_progress = 0.0
         self.cmds_to_ack = 0
@@ -539,7 +545,7 @@ class ControllerWorker(QObject):
         self.send_soft_reset = False
         self.send_gcode_lines(lines)
 
-# ***************** ALIGN related functions. ***************** #
+    # ***************** ALIGN related functions. ***************** #
 
     @Slot(str, str)
     def load_new_align_layer(self, layer, layer_path):
@@ -609,7 +615,7 @@ class ControllerWorker(QObject):
 
     def update_camera_selected(self, index):
         # Take in account that index 0 indicates NO CAMERA
-        self.align_controller.update_camera_selected(index-1)
+        self.align_controller.update_camera_selected(index - 1)
 
     @Slot(int)
     def update_camera_zoom_value(self, zoom_value):
@@ -646,13 +652,15 @@ class ControllerWorker(QObject):
             machine_sets.tool_change_offset_y_mpos,
             machine_sets.tool_change_offset_z_mpos,
         )
-        cfg = Od({
-            'tool_probe_pos': probe_pos,
-            'tool_probe_working': probe_working,  # False: machine pos or True: working pos
-            'tool_probe_min': machine_sets.tool_probe_z_limit,
-            'tool_change_pos': change_pos,
-            'tool_probe_feedrate': (machine_sets.feedrate_xy, machine_sets.feedrate_z, machine_sets.feedrate_probe),
-            'tool_probe_hold': machine_sets.hold_on_probe_flag,
-            'tool_probe_zero': machine_sets.zeroing_after_probe_flag,
-        })
+        cfg = Od(
+            {
+                "tool_probe_pos": probe_pos,
+                "tool_probe_working": probe_working,  # False: machine pos or True: working pos
+                "tool_probe_min": machine_sets.tool_probe_z_limit,
+                "tool_change_pos": change_pos,
+                "tool_probe_feedrate": (machine_sets.feedrate_xy, machine_sets.feedrate_z, machine_sets.feedrate_probe),
+                "tool_probe_hold": machine_sets.hold_on_probe_flag,
+                "tool_probe_zero": machine_sets.zeroing_after_probe_flag,
+            }
+        )
         self.gcr.load_cfg(cfg)

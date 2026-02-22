@@ -1,33 +1,30 @@
-#
 import time
 
 import shapely.geometry
 from shapely.geometry import Polygon, LineString
 from shapely.ops import substring
 from collections import OrderedDict
-from .geometry_manager import (merge_polygons_path, offset_polygon, offset_polygon_holes,
-                               get_bbox_area_sh, fill_holes_sh, get_poly_diameter, is_overlaping_multiple_polygons)
+from .geometry_manager import (
+    merge_polygons_path,
+    offset_polygon,
+    offset_polygon_holes,
+    get_bbox_area_sh,
+    fill_holes_sh,
+    get_poly_diameter,
+    is_overlaping_multiple_polygons,
+)
 from .path_optimizer import Optimizer
 import numpy as np
 
 
 class Gapper:
 
-    DEFAULT_STRATEGIES = (
-        "none",
-        "2h",
-        "2v",
-        "4p",
-        "4h",
-        "4v",
-        "8p",
-        "4x"
-    )
+    DEFAULT_STRATEGIES = ("none", "2h", "2v", "4p", "4h", "4v", "8p", "4x")
 
     def __init__(self, path, cfg):
         self.cfg = cfg
         self.in_path = path
-        self.gap_dim = self.cfg['taps_length'] + self.cfg['tool_diameter']
+        self.gap_dim = self.cfg["taps_length"] + self.cfg["tool_diameter"]
 
     @staticmethod
     def rotate(el, idx):
@@ -36,7 +33,7 @@ class Gapper:
     def get_available_strategies(self):
         return self.DEFAULT_STRATEGIES
 
-    def add_taps_on_external_path(self, strategy='4p'):
+    def add_taps_on_external_path(self, strategy="4p"):
         ex_path = self.in_path
         b = ex_path.bounds
 
@@ -46,15 +43,9 @@ class Gapper:
         x2 = np.linspace(b[0], b[2], 4)[1:3]
         y2 = np.linspace(b[1], b[3], 4)[1:3]
 
-        v2l = [
-            LineString(((x2[0], b[1]), (x2[0], b[3]))),
-            LineString(((x2[1], b[1]), (x2[1], b[3])))
-        ]
+        v2l = [LineString(((x2[0], b[1]), (x2[0], b[3]))), LineString(((x2[1], b[1]), (x2[1], b[3])))]
 
-        h2l = [
-            LineString(((b[0], y2[0]), (b[2], y2[0]))),
-            LineString(((b[0], y2[1]), (b[2], y2[1])))
-        ]
+        h2l = [LineString(((b[0], y2[0]), (b[2], y2[0]))), LineString(((b[0], y2[1]), (b[2], y2[1])))]
 
         # straight cross
         vl = LineString(((xm, b[1]), (xm, b[3])))
@@ -66,7 +57,7 @@ class Gapper:
 
         lines_list = None
 
-        if strategy == '8p':
+        if strategy == "8p":
             # find intersection points between
             # v2l h2l and the external perimeter.
             # extract indices of the segments crossed by.
@@ -75,7 +66,7 @@ class Gapper:
 
             lines_list = v2l + h2l
 
-        if strategy == '4p':
+        if strategy == "4p":
             # find intersection points between
             # vl hl and the external perimeter.
             # extract indices of the segments crossed by.
@@ -84,7 +75,7 @@ class Gapper:
 
             lines_list = [vl, hl]
 
-        if strategy == '4x':
+        if strategy == "4x":
             # find intersection points between
             # lrl rll and the external perimeter.
             # extract indices of the segments crossed by.
@@ -93,7 +84,7 @@ class Gapper:
 
             lines_list = [lrl, rll]
 
-        if strategy == '2h':
+        if strategy == "2h":
             # find intersection points between
             # hl and the external perimeter.
             # extract indices of the segments crossed by.
@@ -102,7 +93,7 @@ class Gapper:
 
             lines_list = [hl]
 
-        if strategy == '4h':
+        if strategy == "4h":
             # find intersection points between
             # h2l and the external perimeter.
             # extract indices of the segments crossed by.
@@ -111,7 +102,7 @@ class Gapper:
 
             lines_list = h2l
 
-        if strategy == '2v':
+        if strategy == "2v":
             # find intersection points between
             # vl and the external perimeter.
             # extract indices of the segments crossed by.
@@ -120,7 +111,7 @@ class Gapper:
 
             lines_list = [vl]
 
-        if strategy == '4v':
+        if strategy == "4v":
             # find intersection points between
             # v2l and the external perimeter.
             # extract indices of the segments crossed by.
@@ -174,7 +165,7 @@ class Gapper:
                 lsl.append(ls)
                 ls = [pids[c]]
                 c += 1
-                while ids[c-1] == ids[c]:
+                while ids[c - 1] == ids[c]:
                     lsl.append(ls + [pids[c]])
                     ls = [pids[c]]
                     c += 1
@@ -195,25 +186,25 @@ class MachinePath:
     MIN_AREA = 0.1e-1
     TD_COEFF = 0.999
 
-    def __init__(self, tag, machining_type='gerber'):
+    def __init__(self, tag, machining_type="gerber"):
         # machining type
         # gerber, profile
 
         self.tag = tag
 
         self.geom_list = []
-        if machining_type == 'gerber':
-            self.cfg = {'tool_diameter': 0.2, 'passages': 3, 'overlap': 0.3}
-            if self.cfg['passages'] < 1:
+        if machining_type == "gerber":
+            self.cfg = {"tool_diameter": 0.2, "passages": 3, "overlap": 0.3}
+            if self.cfg["passages"] < 1:
                 print("[WARNING] At Least One Pass")
-                self.cfg['passages'] = 1
-        elif machining_type == 'profile':
-            self.cfg = {'tool_diameter': 1.0, 'margin': 0.1, 'taps_type': 3, 'taps_length': 1.0}
-        elif machining_type == 'pocketing':
-            self.cfg = {'tool_diameter': 1.0}
-        elif machining_type == 'drill':
+                self.cfg["passages"] = 1
+        elif machining_type == "profile":
+            self.cfg = {"tool_diameter": 1.0, "margin": 0.1, "taps_type": 3, "taps_length": 1.0}
+        elif machining_type == "pocketing":
+            self.cfg = {"tool_diameter": 1.0}
+        elif machining_type == "drill":
             # self.cfg = {'tool_diameter': 1.0, 'bits_diameter': [1.0, 0.8, 0.6, 0.4]}
-            self.cfg = {'tool_diameter': None, 'bits_diameter': [0.8], 'optimize': False}
+            self.cfg = {"tool_diameter": None, "bits_diameter": [0.8], "optimize": False}
         else:
             self.cfg = {}
         self.type = machining_type
@@ -232,18 +223,18 @@ class MachinePath:
 
     def execute(self):
         elabs = None
-        if self.type == 'gerber':
+        if self.type == "gerber":
             self.execute_gerber()
-        elif self.type == 'profile':
+        elif self.type == "profile":
             self.execute_profile()
-        elif self.type == 'pocketing':
+        elif self.type == "pocketing":
             elabs = self.execute_pocketing()
-        elif self.type == 'drill':
+        elif self.type == "drill":
             # if there is a valid pocketing tool
             # the pocketing process is performed
             # otherwise only the holes are drilled
             elabs_p = None
-            if self.cfg['tool_diameter'] is not None and self.cfg['milling_tool']:
+            if self.cfg["tool_diameter"] is not None and self.cfg["milling_tool"]:
                 elabs_p = self.execute_pocketing()
 
             # if a pocketing process was performed
@@ -270,10 +261,10 @@ class MachinePath:
         t0 = time.time()
         og_list = []
         prev_poly = []
-        td = self.cfg['tool_diameter'] * self.TD_COEFF
+        td = self.cfg["tool_diameter"] * self.TD_COEFF
         for g in self.geom_list:
             prev_poly.append(g.geom)
-            og = offset_polygon(g, td/2.0)
+            og = offset_polygon(g, td / 2.0)
             if og is not None:
                 og_list.append(og)
 
@@ -295,12 +286,12 @@ class MachinePath:
         # make bollean or on it and then reduce it by the tool radius
         # at that point it is enlarged by the <diameter of the tool> * (1 - <overlap_percentage>)
         # todo: check the formula
-        for i in range(self.cfg['passages']-1):
+        for i in range(self.cfg["passages"] - 1):
             sub_og_list = self._subpath_execute(og_list)
             og_list += sub_og_list
 
         t1 = time.time()
-        print("Path Generation Done in " + str(t1-t0) + " sec")
+        print("Path Generation Done in " + str(t1 - t0) + " sec")
         print("DRC Check Output: " + str(len(invalid_path_ids)) + " invalid paths " + str(invalid_path_ids))
 
         og_list = self.check_min_area(og_list)
@@ -320,7 +311,7 @@ class MachinePath:
                 if ex_path.geom_type == "LinearRing" or ex_path.type == "LineString":
                     path.append(i)
                     path_counter += 1
-        t_d = self.cfg['tool_diameter']
+        t_d = self.cfg["tool_diameter"]
         self.path = [((t_d, "gerber"), path, invalid_paths)]
 
     def check_min_area(self, og_list):
@@ -351,10 +342,10 @@ class MachinePath:
         og_list = []
         prev_poly = []
         milled_list = []
-        td = self.cfg['tool_diameter'] * self.TD_COEFF
+        td = self.cfg["tool_diameter"] * self.TD_COEFF
         for g in self.geom_list:
             prev_poly.append(g.geom)
-            og = offset_polygon(g, - td / 2.0)
+            og = offset_polygon(g, -td / 2.0)
             if og is not None:
                 if not og.is_empty:
                     og_list.append(og)
@@ -370,7 +361,7 @@ class MachinePath:
         # todo: check the formula
 
         t1 = time.time()
-        print("Path Generation Done in " + str(t1-t0) + " sec")
+        print("Path Generation Done in " + str(t1 - t0) + " sec")
 
         # extract the linestring from paths polygons
         path = []
@@ -381,7 +372,7 @@ class MachinePath:
             for i in g.interiors:
                 if ex_path.type == "LinearRing" or ex_path.type == "LineString":
                     path.append(i)
-        t_d = self.cfg['tool_diameter']
+        t_d = self.cfg["tool_diameter"]
         self.path = [((t_d, "pocketing"), path)]
 
         return milled_list
@@ -389,7 +380,7 @@ class MachinePath:
     def execute_drill(self, not_to_drill=None):
         print("Drilling")
         t0 = time.time()
-        bd = self.cfg['bits_diameter'][:]
+        bd = self.cfg["bits_diameter"][:]
         bd.sort(reverse=True)
 
         to_drill = [True] * len(self.geom_list)
@@ -429,12 +420,12 @@ class MachinePath:
 
         for bit_k in drill_per_bit.keys():
             bit_points = drill_per_bit[bit_k]
-            if 'optimize' in self.cfg.keys():
-                if isinstance(self.cfg['optimize'], int):
+            if "optimize" in self.cfg.keys():
+                if isinstance(self.cfg["optimize"], int):
                     opt = Optimizer(bit_points)
                     availlable_opt_types = opt.get_optimization_types()
-                    if 0 <= self.cfg['optimize'] < len(availlable_opt_types):
-                        opt_type = availlable_opt_types[self.cfg['optimize']]
+                    if 0 <= self.cfg["optimize"] < len(availlable_opt_types):
+                        opt_type = availlable_opt_types[self.cfg["optimize"]]
                         opt.set_optimization_type(opt_type)
 
                     # opt = Optimizer(bit_points, optimizer_type="genetic")
@@ -463,7 +454,7 @@ class MachinePath:
             self.path = paths
 
         t1 = time.time()
-        print("Path Generation Done in " + str(t1-t0) + " sec")
+        print("Path Generation Done in " + str(t1 - t0) + " sec")
 
         return drilled_list
 
@@ -477,12 +468,13 @@ class MachinePath:
         t0 = time.time()
         og_list = []
         # prev_poly = [g.geom for g in self.geom_list]
-        td = self.cfg['tool_diameter'] * self.TD_COEFF
+        td = self.cfg["tool_diameter"] * self.TD_COEFF
         # uniqueness check of the profile
         if len(self.geom_list) == 1:
             # unique profile
-            ext_path = offset_polygon(fill_holes_sh(self.geom_list[0].geom),
-                                      td / 2.0 + self.cfg['margin'], shapely_poly=True)
+            ext_path = offset_polygon(
+                fill_holes_sh(self.geom_list[0].geom), td / 2.0 + self.cfg["margin"], shapely_poly=True
+            )
             if ext_path is not None:
                 og_list.append(ext_path)
         else:
@@ -503,19 +495,18 @@ class MachinePath:
             # todo: check, are all the remaining polygons contained in the biggest one?
 
             ext_p = self.geom_list[id]
-            ext_path = offset_polygon(fill_holes_sh(ext_p.geom),
-                                      td / 2.0 + self.cfg['margin'], shapely_poly=True)
+            ext_path = offset_polygon(fill_holes_sh(ext_p.geom), td / 2.0 + self.cfg["margin"], shapely_poly=True)
             if ext_path is not None:
                 og_list.append(ext_path)
 
             for i, g in enumerate(self.geom_list):
                 if i != id:
-                    og = offset_polygon_holes(g, - (td / 2.0 + self.cfg['margin']))
+                    og = offset_polygon_holes(g, -(td / 2.0 + self.cfg["margin"]))
                     if og is not None:
                         og_list.append(og)
 
         t1 = time.time()
-        print("Path Generation Done in " + str(t1-t0) + " sec")
+        print("Path Generation Done in " + str(t1 - t0) + " sec")
 
         # extracting linestring from the polygon path
         path = []
@@ -543,22 +534,22 @@ class MachinePath:
         # in case the hole had a perimeter greater than a fixed parameter such as 30mm
         # parameter could be set by GUI or settings page
 
-        t_d = self.cfg['tool_diameter']
+        t_d = self.cfg["tool_diameter"]
         self.path = [((t_d, "profile"), path)]
 
     def _subpath_execute(self, ppg_list):
 
-        ov = self.cfg['overlap']
+        ov = self.cfg["overlap"]
 
         # ppg_list pre path list
-        td = self.cfg['tool_diameter'] * self.TD_COEFF
-        pre_offset = td/2.0 * (1 + 0.5 - ov)
+        td = self.cfg["tool_diameter"] * self.TD_COEFF
+        pre_offset = td / 2.0 * (1 + 0.5 - ov)
         og_list = []
 
         for g in ppg_list:
             og = offset_polygon(g, pre_offset, shapely_poly=True)
             if og is not None:
-                if og.geom_type == 'MultiPolygon':
+                if og.geom_type == "MultiPolygon":
                     for sog in og:
                         og_list.append(sog)
                 else:
@@ -569,7 +560,7 @@ class MachinePath:
         for g in mg_list:
             mog = offset_polygon(g, -pre_offset, shapely_poly=True)
             if mog is not None:
-                if mog.geom_type == 'MultiPolygon':
+                if mog.geom_type == "MultiPolygon":
                     for smog in mog.geoms:
                         mog_list.append(smog)
                 else:
@@ -581,7 +572,7 @@ class MachinePath:
         for g in mog_list:
             ng = offset_polygon(g, td / 2.0 * (1 + 0.5 - ov), shapely_poly=True)
             if ng is not None:
-                if ng.geom_type == 'MultiPolygon':
+                if ng.geom_type == "MultiPolygon":
                     for sng in ng.geoms:
                         ng_list.append(sng)
                 else:

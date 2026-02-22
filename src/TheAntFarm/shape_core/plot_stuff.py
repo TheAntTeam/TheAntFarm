@@ -17,12 +17,8 @@ def ring_coding(ob):
 def pathify(polygon):
     # Convert coordinates to path vertices. Objects produced by Shapely's
     # analytic methods have the proper coordinate order, no need to sort.
-    vertices = concatenate(
-                    [asarray(polygon.exterior)]
-                    + [asarray(r) for r in polygon.interiors])
-    codes = concatenate(
-                [ring_coding(polygon.exterior)]
-                + [ring_coding(r) for r in polygon.interiors])
+    vertices = concatenate([asarray(polygon.exterior)] + [asarray(r) for r in polygon.interiors])
+    codes = concatenate([ring_coding(polygon.exterior)] + [ring_coding(r) for r in polygon.interiors])
     return Path(vertices, codes)
 
 
@@ -37,12 +33,12 @@ def plot_lines(ll1, ll2=None):
     fig, ax = pyplot.subplots(1, 1)
     for li in ll1:
         x, y = li.xy
-        ax.plot(x, y, 'k')
+        ax.plot(x, y, "k")
     if ll2 is not None:
         for li in ll2:
             x, y = li.xy
-            ax.plot(x, y, 'w')
-    ax.set_aspect('equal')
+            ax.plot(x, y, "w")
+    ax.set_aspect("equal")
     pyplot.show()
 
 
@@ -64,7 +60,7 @@ def plot_polygons(poly_list, color=None):
             if color is not None:
                 patch = PathPatch(path, facecolor=color, edgecolor=color)
             else:
-                patch = PathPatch(path, facecolor='#cccccc', edgecolor='#999999')
+                patch = PathPatch(path, facecolor="#cccccc", edgecolor="#999999")
             ax.add_patch(patch)
         else:
             print("[WARNING] poly with None geom")
@@ -77,9 +73,9 @@ def plot_polygons(poly_list, color=None):
     deltax = xmax - xmin
     deltay = ymax - ymin
 
-    ax.set_xlim(xmin - abs(deltax*0.1), xmax + abs(deltax*0.1))
-    ax.set_ylim(ymin - abs(deltay*0.1), ymax + abs(deltay*0.1))
-    ax.set_aspect('equal', 'box')
+    ax.set_xlim(xmin - abs(deltax * 0.1), xmax + abs(deltax * 0.1))
+    ax.set_ylim(ymin - abs(deltay * 0.1), ymax + abs(deltay * 0.1))
+    ax.set_aspect("equal", "box")
     fig.tight_layout()
 
     pyplot.show()
@@ -108,9 +104,9 @@ def plot_shapely(poly_list, color=None):
 
             path = pathify(poly)
             if color is not None:
-                patch = PathPatch(path, facecolor=color, edgecolor='#999999')
+                patch = PathPatch(path, facecolor=color, edgecolor="#999999")
             else:
-                patch = PathPatch(path, facecolor='#cccccc', edgecolor='#999999')
+                patch = PathPatch(path, facecolor="#cccccc", edgecolor="#999999")
             ax.add_patch(patch)
         else:
             print("[WARNING] poly with None geom")
@@ -132,7 +128,7 @@ def plot_shapely(poly_list, color=None):
     # deltay = ymax - ymin
     # ax.set_xlim(xmin - abs(deltax*0.1), xmax + abs(deltax*0.1))
     # ax.set_ylim(ymin - abs(deltay*0.1), ymax + abs(deltay*0.1))
-    ax.set_aspect('equal', 'box')
+    ax.set_aspect("equal", "box")
     ax.autoscale()
     # fig.tight_layout()
 
@@ -157,7 +153,7 @@ def plot_paths(grb_list, path_lists, grb_color=None, path_color=None):
             if grb_color is not None:
                 patch = PathPatch(path, facecolor=grb_color, edgecolor=grb_color)
             else:
-                patch = PathPatch(path, facecolor='#cccccc', edgecolor='#999999')
+                patch = PathPatch(path, facecolor="#cccccc", edgecolor="#999999")
             ax.add_patch(patch)
         else:
             print("[WARNING] poly with None geom")
@@ -173,9 +169,9 @@ def plot_paths(grb_list, path_lists, grb_color=None, path_color=None):
 
                 path = pathify(polygon)
                 if path_color is not None:
-                    patch = PathPatch(path, facecolor='none', edgecolor=path_color)
+                    patch = PathPatch(path, facecolor="none", edgecolor=path_color)
                 else:
-                    patch = PathPatch(path, facecolor='none', edgecolor='#999999')
+                    patch = PathPatch(path, facecolor="none", edgecolor="#999999")
                 patch.set_linewidth(0.5)
                 ax.add_patch(patch)
             else:
@@ -189,9 +185,9 @@ def plot_paths(grb_list, path_lists, grb_color=None, path_color=None):
     deltax = xmax - xmin
     deltay = ymax - ymin
 
-    ax.set_xlim(xmin - abs(deltax*0.1), xmax + abs(deltax*0.1))
-    ax.set_ylim(ymin - abs(deltay*0.1), ymax + abs(deltay*0.1))
-    ax.set_aspect('equal', 'box')
+    ax.set_xlim(xmin - abs(deltax * 0.1), xmax + abs(deltax * 0.1))
+    ax.set_ylim(ymin - abs(deltay * 0.1), ymax + abs(deltay * 0.1))
+    ax.set_aspect("equal", "box")
     fig.tight_layout()
 
     pyplot.show()

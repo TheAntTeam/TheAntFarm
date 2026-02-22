@@ -8,9 +8,9 @@ class TestGeometryManager:
     def geometry(self):
         # Create a simple square geometry
         gdata = {
-            'points': [(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)],  # Square with coordinates
-            'polarity': 'dark',  # dark for filled shapes
-            'closed': True  # closed polygon
+            "points": [(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)],  # Square with coordinates
+            "polarity": "dark",  # dark for filled shapes
+            "closed": True,  # closed polygon
         }
         return Geom(gdata)
 
@@ -23,16 +23,8 @@ class TestGeometryManager:
     def test_merge_polygons(self):
         """Test merging polygons"""
         # Create two overlapping squares
-        square1_data = {
-            'points': [(0, 0), (2, 0), (2, 2), (0, 2), (0, 0)],
-            'polarity': 'dark',
-            'closed': True
-        }
-        square2_data = {
-            'points': [(1, 1), (3, 1), (3, 3), (1, 3), (1, 1)],
-            'polarity': 'dark',
-            'closed': True
-        }
+        square1_data = {"points": [(0, 0), (2, 0), (2, 2), (0, 2), (0, 0)], "polarity": "dark", "closed": True}
+        square2_data = {"points": [(1, 1), (3, 1), (3, 3), (1, 3), (1, 1)], "polarity": "dark", "closed": True}
         geom1 = Geom(square1_data)
         geom2 = Geom(square2_data)
 
