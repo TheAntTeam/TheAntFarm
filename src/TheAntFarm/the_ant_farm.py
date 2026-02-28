@@ -3,6 +3,7 @@ import platform
 import sys
 import sysconfig
 from queue import Queue
+from typing import Any
 
 from PySide6.QtCore import QResource, QThread
 from PySide6.QtWidgets import QApplication, QMainWindow
@@ -62,8 +63,8 @@ def config_os():
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    serialRxQu = Queue()  # serial FIFO RX Queue
-    serialTxQu = Queue()  # serial FIFO TX Queue
+    serialRxQu: Queue[Any] = Queue()  # serial FIFO RX Queue
+    serialTxQu: Queue[Any] = Queue()  # serial FIFO TX Queue
 
     def __init__(self, local_path=""):
         super(MainWindow, self).__init__()
