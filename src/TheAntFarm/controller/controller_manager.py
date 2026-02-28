@@ -5,7 +5,7 @@ import time
 import traceback
 from collections import OrderedDict as Od
 
-from PySide6.QtCore import QTimer, Signal, Slot
+from PySide6.QtCore import QTimer, Slot
 from PySide6.QtGui import QPixmap
 from shape_core.gcode_manager import GCodeMacro, GCoder
 

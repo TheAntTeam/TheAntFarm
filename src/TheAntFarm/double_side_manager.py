@@ -57,7 +57,7 @@ class DoubleSideManager:
 
         crop_x = int((width - width_z) / 2)
         crop_y = int((height - height_z) / 2)
-        cropped = frame_in[crop_y : height - crop_y, crop_x : width - crop_x]
+        cropped = frame_in[crop_y: height - crop_y, crop_x: width - crop_x]
         frame = cv2.resize(cropped, None, fx=zoom_f, fy=zoom_f)
         # frame[:, :, 0] = 0
         # frame[:, :, 2] = 0
@@ -150,7 +150,7 @@ class DoubleSideManager:
         height = frame_in.shape[0]
         crop_x = int(width / (2 * zoom_f))
         crop_y = int(height / (2 * zoom_f))
-        cropped = frame_in[crop_y : 3 * crop_y, crop_x : 3 * crop_x]
+        cropped = frame_in[crop_y: 3 * crop_y, crop_x: 3 * crop_x]
         frame = cv2.resize(cropped, None, fx=zoom_f, fy=zoom_f)
 
         overlay = frame.copy()
