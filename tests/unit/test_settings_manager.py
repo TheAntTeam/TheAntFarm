@@ -1,5 +1,7 @@
-import pytest
 import os
+
+import pytest
+
 from TheAntFarm.settings_manager.settings_app import AppSettingsHandler
 
 

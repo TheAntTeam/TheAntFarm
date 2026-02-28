@@ -1,9 +1,10 @@
 # from: https://github.com/ezstoltz/genetic-algorithm
 # import numpy as np, random, operator, pandas as pd, matplotlib.pyplot as plt
+import operator
+import random
+
 import numpy as np
 from scipy.spatial import distance
-import random
-import operator
 
 # import matplotlib.pyplot as plt
 

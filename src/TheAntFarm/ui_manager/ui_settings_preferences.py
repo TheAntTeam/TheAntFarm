@@ -1,8 +1,9 @@
-from PySide6.QtCore import QObject, Signal, Slot
-from PySide6.QtWidgets import QColorDialog
-from PySide6.QtGui import QPalette
-from collections import OrderedDict as Od
 import logging
+from collections import OrderedDict as Od
+
+from PySide6.QtCore import QObject, Signal, Slot
+from PySide6.QtGui import QPalette
+from PySide6.QtWidgets import QColorDialog
 
 logger = logging.getLogger(__name__)
 

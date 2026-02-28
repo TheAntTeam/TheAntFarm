@@ -1,6 +1,7 @@
 import pytest
-from TheAntFarm.shape_core.geometry_manager import Geom, merge_polygons
+
 from TheAntFarm.shape_core.gcode_manager import GCoder
+from TheAntFarm.shape_core.geometry_manager import Geom, merge_polygons
 
 
 class TestGeometryManager:

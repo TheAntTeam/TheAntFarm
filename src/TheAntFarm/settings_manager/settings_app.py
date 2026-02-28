@@ -1,8 +1,9 @@
-from PySide6.QtCore import QPoint, QSize
-from collections import OrderedDict as Od
-from __init__ import __version__
 import configparser
 import os
+from collections import OrderedDict as Od
+
+from __init__ import __version__
+from PySide6.QtCore import QPoint, QSize
 
 
 class AppSettingsHandler:

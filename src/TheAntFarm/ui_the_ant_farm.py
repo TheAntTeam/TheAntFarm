@@ -8,29 +8,29 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
-    QCursor, QFont, QFontDatabase, QGradient,
-    QIcon, QImage, QKeySequence, QLinearGradient,
-    QPainter, QPalette, QPixmap, QRadialGradient,
-    QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QAbstractSpinBox, QApplication,
-    QCheckBox, QComboBox, QDoubleSpinBox, QFrame,
-    QGridLayout, QHBoxLayout, QHeaderView, QLabel,
-    QLayout, QLineEdit, QMainWindow, QMenu,
-    QMenuBar, QPlainTextEdit, QProgressBar, QPushButton,
-    QRadioButton, QSizePolicy, QSpacerItem, QSpinBox,
-    QStackedWidget, QStatusBar, QTabWidget, QTableWidget,
-    QTableWidgetItem, QTextEdit, QToolButton, QVBoxLayout,
-    QWidget)
-
+import app_resources_rc
 from combobox_filter_enter import ComboBoxFilterEnter
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
+                            QTime, QUrl)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient, QCursor,
+                           QFont, QFontDatabase, QGradient, QIcon, QImage,
+                           QKeySequence, QLinearGradient, QPainter, QPalette,
+                           QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
+                               QAbstractSpinBox, QApplication, QCheckBox,
+                               QComboBox, QDoubleSpinBox, QFrame, QGridLayout,
+                               QHBoxLayout, QHeaderView, QLabel, QLayout,
+                               QLineEdit, QMainWindow, QMenu, QMenuBar,
+                               QPlainTextEdit, QProgressBar, QPushButton,
+                               QRadioButton, QSizePolicy, QSpacerItem,
+                               QSpinBox, QStackedWidget, QStatusBar,
+                               QTableWidget, QTableWidgetItem, QTabWidget,
+                               QTextEdit, QToolButton, QVBoxLayout, QWidget)
 from qcamera_label import QCameraLabel
 from qledlabel import QLedLabel
 from vispy_qt_widget import VispyCanvas
-import app_resources_rc
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):

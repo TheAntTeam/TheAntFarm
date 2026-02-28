@@ -1,10 +1,11 @@
 import os
+import platform
 import sys
 import sysconfig
-import platform
-from PySide6.QtWidgets import QMainWindow, QApplication
-from PySide6.QtCore import QThread, QResource
 from queue import Queue
+
+from PySide6.QtCore import QResource, QThread
+from PySide6.QtWidgets import QApplication, QMainWindow
 from ui_the_ant_farm import Ui_MainWindow
 
 # To convert ui to py from the "src/TheAntFarm" folder
@@ -14,14 +15,15 @@ from ui_the_ant_farm import Ui_MainWindow
 # convert qrc to py: PySide6-rcc app_resources.qrc -o app_resources_rc.py
 # or:                python .\build.py res
 """ Custom imports """
-from executable_path_checker import ExecutablePathChecker
-from serial_manager import SerialWorker
+import logging.handlers
+
 from controller.controller_manager import ControllerWorker
+from executable_path_checker import ExecutablePathChecker
+from log_manager import FileLogHandler, LogHandler
+from serial_manager import SerialWorker
+from settings_manager.settings_manager import SettingsHandler
 from style_manager import StyleManager
 from ui_manager.ui_manager import UiManager
-from settings_manager.settings_manager import SettingsHandler
-from log_manager import LogHandler, FileLogHandler
-import logging.handlers
 
 
 def config_os():

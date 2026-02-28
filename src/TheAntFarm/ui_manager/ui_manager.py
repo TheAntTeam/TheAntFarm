@@ -1,15 +1,15 @@
-from PySide6.QtCore import Slot, QObject
+import logging
+
+from PySide6.QtCore import QObject, Slot
 from PySide6.QtGui import QActionGroup
 from shape_core.visual_manager import VisualLayer
 
+from .ui_about import UiAbout
 from .ui_align_tab import UiAlignTab
 from .ui_control_tab import UiControlTab
 from .ui_create_job_tab_manager import UiCreateJobLayerTab
-from .ui_view_load_layer_tab import UiViewLoadLayerTab
 from .ui_settings_preferences import UiSettingsPreferencesTab
-from .ui_about import UiAbout
-
-import logging
+from .ui_view_load_layer_tab import UiViewLoadLayerTab
 
 logger = logging.getLogger(__name__)
 

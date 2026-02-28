@@ -1,15 +1,16 @@
 import os
 import re
 import time
-import numpy as np
 from collections import OrderedDict as od
 from datetime import datetime
+
+import numpy as np
 import scipy.interpolate as spi
 from shapely.geometry import LineString
 
-from .macros_manager import Macros
-from .commands_manager import CommandManager
 from .align_manager import AlignManager
+from .commands_manager import CommandManager
+from .macros_manager import Macros
 
 
 class GCoder:

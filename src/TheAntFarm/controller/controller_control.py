@@ -1,12 +1,14 @@
-from PySide6.QtCore import QObject
-import re
 import logging
-import traceback
-import string
 import random
-import numpy as np
+import re
+import string
+import traceback
 from collections import OrderedDict, deque
-from shape_core.gcode_manager import GCoder, GCodeParser, GCodeLeveler, GCodeAlignment
+
+import numpy as np
+from PySide6.QtCore import QObject
+from shape_core.gcode_manager import (GCodeAlignment, GCodeLeveler,
+                                      GCodeParser, GCoder)
 
 logger = logging.getLogger(__name__)
 

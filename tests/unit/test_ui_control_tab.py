@@ -3,8 +3,9 @@ Test suite for UI Control Tab selection functionality.
 Tests focus on the simplified gcode table row selection behavior.
 """
 
-import pytest
 from unittest.mock import Mock
+
+import pytest
 from PySide6.QtWidgets import QApplication
 
 
@@ -96,8 +97,9 @@ class TestSelectMethodCodeQuality:
 
     def test_select_gcode_row_no_mode_switching(self, qapp):
         """Verify select_gcode_row doesn't use setSelectionMode"""
-        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
         import inspect
+
+        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
 
         source = inspect.getsource(UiControlTab.select_gcode_row)
 
@@ -107,8 +109,9 @@ class TestSelectMethodCodeQuality:
 
     def test_deselect_all_gcode_row_no_mode_switching(self, qapp):
         """Verify deselect_all_gcode_row doesn't use setSelectionMode"""
-        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
         import inspect
+
+        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
 
         source = inspect.getsource(UiControlTab.deselect_all_gcode_row)
 
@@ -122,8 +125,9 @@ class TestInitialization:
 
     def test_multiselection_mode_configured(self, qapp):
         """Verify NoSelection mode is used with cellClicked handler for column 0 only"""
-        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
         import inspect
+
+        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
 
         source = inspect.getsource(UiControlTab.__init__)
 
