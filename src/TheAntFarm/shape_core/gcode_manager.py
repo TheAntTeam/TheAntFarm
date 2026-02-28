@@ -3,6 +3,7 @@ import re
 import time
 from collections import OrderedDict as od
 from datetime import datetime
+from typing import Any
 
 import numpy as np
 import scipy.interpolate as spi
@@ -1099,7 +1100,7 @@ class GCodeLeveler:
 if __name__ == "__main__":
 
     gcode_path = "C:\\Users\\Mattia\\Documents\\PythonPrj\\TheAntLord\\gcode_tmp\\top_gerber.gcode"
-    cfg = {}
+    cfg: dict[str, Any] = {}
 
     gcp = GCodeParser(cfg)
     gcp.load_gcode_file(gcode_path)
