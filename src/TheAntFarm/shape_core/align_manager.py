@@ -58,7 +58,7 @@ class TpsCoefficients:
         tm[:k, 0] = 1
         tm[:k, 1:3] = cp
         tm[k, 3:] = 1
-        tm[k + 1 :, 3:] = cp.T
+        tm[k + 1:, 3:] = cp.T  # fmt: skip
         r = squareform(pdist(cp, metric="euclidean"))
         r = r * r
         r[r == 0] = 1  # a trick to make R ln(R) 0
