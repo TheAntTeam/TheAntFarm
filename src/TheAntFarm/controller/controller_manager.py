@@ -407,7 +407,7 @@ class ControllerWorker(ControllerSignals):
                 redraw_abl = self.control_controller.remove_abl(gcode_path)
             redraw = redraw_abl or redraw_align
             logger.debug("ABL Done")
-            (tag, v) = self.control_controller.get_gcode_tag_and_v(gcode_path)
+            tag, v = self.control_controller.get_gcode_tag_and_v(gcode_path)
             logger.debug("Update Gcode View: " + str(redraw))
             self.update_gcode_s.emit(tag, v, visible, redraw)
         else:
