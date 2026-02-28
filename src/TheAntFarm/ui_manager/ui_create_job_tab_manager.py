@@ -1,9 +1,10 @@
-from PySide6.QtWidgets import QLabel, QDoubleSpinBox, QHeaderView
-from PySide6.QtCore import Signal, Slot, QObject
-from PySide6.QtGui import Qt
-from collections import OrderedDict as Od
-import math
 import logging
+import math
+from collections import OrderedDict as Od
+
+from PySide6.QtCore import QObject, Signal, Slot
+from PySide6.QtGui import Qt
+from PySide6.QtWidgets import QDoubleSpinBox, QHeaderView, QLabel
 
 logger = logging.getLogger(__name__)
 

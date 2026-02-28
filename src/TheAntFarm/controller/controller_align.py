@@ -1,12 +1,12 @@
-import os.path
-
-from PySide6.QtCore import QObject
-import qimage2ndarray
-from shape_core.pcb_manager import PcbObj
-from shape_core.gcode_drill_converter import DrillGcodeConverter
-from double_side_manager import DoubleSideManager
 import logging
+import os.path
 import traceback
+
+import qimage2ndarray
+from double_side_manager import DoubleSideManager
+from PySide6.QtCore import QObject
+from shape_core.gcode_drill_converter import DrillGcodeConverter
+from shape_core.pcb_manager import PcbObj
 
 logger = logging.getLogger(__name__)
 

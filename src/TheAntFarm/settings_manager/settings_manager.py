@@ -1,7 +1,8 @@
 import os
+
 from .settings_app import AppSettingsHandler
-from .settings_job import JobSettingsHandler
 from .settings_gcode_files import GCodeFilesSettingsHandler
+from .settings_job import JobSettingsHandler
 from .settings_machine import MachineSettingsHandler
 
 

@@ -1,6 +1,7 @@
+from collections import OrderedDict as Od
+
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtGui import QPixmap
-from collections import OrderedDict as Od
 
 
 class ControllerSignals(QObject):

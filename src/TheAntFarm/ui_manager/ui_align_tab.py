@@ -1,11 +1,12 @@
-from PySide6.QtCore import Signal, Slot, QObject, Qt
-from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QLabel, QFileDialog, QHeaderView
-from collections import OrderedDict as Od
-from style_manager import StyleManager
 import logging
 import math
 import os
+from collections import OrderedDict as Od
+
+from PySide6.QtCore import QObject, Qt, Signal, Slot
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QFileDialog, QHeaderView, QLabel
+from style_manager import StyleManager
 
 logger = logging.getLogger(__name__)
 

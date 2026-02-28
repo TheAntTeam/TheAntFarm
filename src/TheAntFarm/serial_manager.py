@@ -1,7 +1,8 @@
-from PySide6.QtSerialPort import QSerialPort, QSerialPortInfo
-from PySide6.QtCore import QIODevice, Signal, Slot, QObject
 import logging
 import traceback
+
+from PySide6.QtCore import QIODevice, QObject, Signal, Slot
+from PySide6.QtSerialPort import QSerialPort, QSerialPortInfo
 
 logger = logging.getLogger(__name__)
 

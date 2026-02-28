@@ -1,10 +1,10 @@
 import vispy.app as vapp
 
 vapp.use_app("PySide6")
+import numpy as np
 from vispy.app.qt import QtSceneCanvas
 from vispy.scene import visuals
 from vispy.scene.cameras import TurntableCamera
-import numpy as np
 
 
 class VispyCanvas(QtSceneCanvas):

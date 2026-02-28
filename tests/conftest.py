@@ -1,6 +1,7 @@
-import pytest
 import sys
 from pathlib import Path
+
+import pytest
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtSerialPort import QSerialPort
 

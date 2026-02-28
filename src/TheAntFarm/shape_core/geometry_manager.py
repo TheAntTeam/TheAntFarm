@@ -1,5 +1,6 @@
-import time
 import logging
+import time
+
 import pyclipper as pc
 import shapely.geometry
 import shapely.geometry as shg

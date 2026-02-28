@@ -1,6 +1,6 @@
-from PySide6.QtCore import QSize, Qt, QObject
-from PySide6.QtWidgets import QDialog, QGridLayout, QLabel
+from PySide6.QtCore import QObject, QSize, Qt
 from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QDialog, QGridLayout, QLabel
 
 
 class UiAbout(QObject):

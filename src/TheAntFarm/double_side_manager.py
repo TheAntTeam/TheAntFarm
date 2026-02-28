@@ -1,6 +1,6 @@
-from PySide6 import QtMultimedia
 import cv2
 import numpy as np
+from PySide6 import QtMultimedia
 
 
 class DoubleSideManager:

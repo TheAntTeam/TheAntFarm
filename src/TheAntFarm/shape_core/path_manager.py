@@ -1,20 +1,17 @@
 import time
-
-import shapely.geometry
-from shapely.geometry import Polygon, LineString
-from shapely.ops import substring
 from collections import OrderedDict
-from .geometry_manager import (
-    merge_polygons_path,
-    offset_polygon,
-    offset_polygon_holes,
-    get_bbox_area_sh,
-    fill_holes_sh,
-    get_poly_diameter,
-    is_overlaping_multiple_polygons,
-)
-from .path_optimizer import Optimizer
+
 import numpy as np
+import shapely.geometry
+from shapely.geometry import LineString, Polygon
+from shapely.ops import substring
+
+from .geometry_manager import (fill_holes_sh, get_bbox_area_sh,
+                               get_poly_diameter,
+                               is_overlaping_multiple_polygons,
+                               merge_polygons_path, offset_polygon,
+                               offset_polygon_holes)
+from .path_optimizer import Optimizer
 
 
 class Gapper:

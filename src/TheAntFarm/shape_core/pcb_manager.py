@@ -1,18 +1,19 @@
+import math
 import os
 import time
+from collections import OrderedDict as Od
+
 import gerber as gbr
 import gerber.primitives
-from gerber.excellon_statements import ToolSelectionStmt, CoordinateStmt, EndOfProgramStmt, SlotStmt, FormatStmt
-
-# from gerber.render.cairo_backend import GerberCairoContext
-from gerber.excellon import DrillSlot, DrillHit, ExcellonParser
-from gerber.excellon import loads as exc_load
-from gerber.cam import FileSettings
-
 import numpy as np
-import math
+from gerber.cam import FileSettings
+# from gerber.render.cairo_backend import GerberCairoContext
+from gerber.excellon import DrillHit, DrillSlot, ExcellonParser
+from gerber.excellon import loads as exc_load
+from gerber.excellon_statements import (CoordinateStmt, EndOfProgramStmt,
+                                        FormatStmt, SlotStmt,
+                                        ToolSelectionStmt)
 from gerber.utils import convex_hull
-from collections import OrderedDict as Od
 
 from .geometry_manager import Geom, merge_polygons
 

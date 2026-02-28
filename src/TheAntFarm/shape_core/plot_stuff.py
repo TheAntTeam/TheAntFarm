@@ -1,6 +1,6 @@
 from matplotlib import pyplot
-from matplotlib.path import Path
 from matplotlib.patches import PathPatch
+from matplotlib.path import Path
 from numpy import asarray, concatenate, ones
 from shapely.geometry import *
 

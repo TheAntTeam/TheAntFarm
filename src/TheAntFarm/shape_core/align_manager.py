@@ -1,6 +1,6 @@
 import numpy as np
 import numpy.linalg as nl
-from scipy.spatial.distance import pdist, cdist, squareform
+from scipy.spatial.distance import cdist, pdist, squareform
 
 
 class TpsCoefficients:

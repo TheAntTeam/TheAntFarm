@@ -1,17 +1,18 @@
-import os
-from PySide6.QtCore import Slot, Signal, QTimer
-from PySide6.QtGui import QPixmap
-import re
-from collections import OrderedDict as Od
-from .controller_view import ViewController
-from .controller_control import ControlController
-from .controller_align import AlignController
-from .controller_signals import ControllerSignals
 import logging
-import traceback
+import os
+import re
 import time
+import traceback
+from collections import OrderedDict as Od
 
-from shape_core.gcode_manager import GCoder, GCodeMacro
+from PySide6.QtCore import QTimer, Signal, Slot
+from PySide6.QtGui import QPixmap
+from shape_core.gcode_manager import GCodeMacro, GCoder
+
+from .controller_align import AlignController
+from .controller_control import ControlController
+from .controller_signals import ControllerSignals
+from .controller_view import ViewController
 
 logger = logging.getLogger(__name__)
 

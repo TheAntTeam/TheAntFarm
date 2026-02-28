@@ -1,7 +1,9 @@
-import pytest
-from TheAntFarm.serial_manager import SerialWorker
-from PySide6.QtSerialPort import QSerialPort
 from queue import Queue
+
+import pytest
+from PySide6.QtSerialPort import QSerialPort
+
+from TheAntFarm.serial_manager import SerialWorker
 
 
 class TestSerialManager:

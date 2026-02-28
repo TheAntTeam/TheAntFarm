@@ -2,17 +2,18 @@
 # https://programtalk.com/vs2/python/7189/phy/phy/plot/tests/test_panzoom.py/
 # https://stackoverflow.com/questions/33942728/how-to-get-world-coordinates-from-screen-coordinates-in-vispy
 
-from vispy.scene import visuals, PanZoomCamera
-from vispy.color import Color
-from vispy.visuals.filters import Alpha
-from OpenGL import GLU
-import numpy as np
-from collections import OrderedDict
-import string
-import random
-from shapely.geometry import Point
-import shapely as sh
 import logging
+import random
+import string
+from collections import OrderedDict
+
+import numpy as np
+import shapely as sh
+from OpenGL import GLU
+from shapely.geometry import Point
+from vispy.color import Color
+from vispy.scene import PanZoomCamera, visuals
+from vispy.visuals.filters import Alpha
 
 logger = logging.getLogger(__name__)
 
