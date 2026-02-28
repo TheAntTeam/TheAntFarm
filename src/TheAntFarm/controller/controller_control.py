@@ -7,8 +7,7 @@ from collections import OrderedDict, deque
 
 import numpy as np
 from PySide6.QtCore import QObject
-from shape_core.gcode_manager import (GCodeAlignment, GCodeLeveler,
-                                      GCodeParser, GCoder)
+from shape_core.gcode_manager import GCodeAlignment, GCodeLeveler, GCodeParser, GCoder
 
 logger = logging.getLogger(__name__)
 

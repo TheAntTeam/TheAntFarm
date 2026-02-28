@@ -7,12 +7,11 @@ import gerber as gbr
 import gerber.primitives
 import numpy as np
 from gerber.cam import FileSettings
+
 # from gerber.render.cairo_backend import GerberCairoContext
 from gerber.excellon import DrillHit, DrillSlot, ExcellonParser
 from gerber.excellon import loads as exc_load
-from gerber.excellon_statements import (CoordinateStmt, EndOfProgramStmt,
-                                        FormatStmt, SlotStmt,
-                                        ToolSelectionStmt)
+from gerber.excellon_statements import CoordinateStmt, EndOfProgramStmt, FormatStmt, SlotStmt, ToolSelectionStmt
 from gerber.utils import convex_hull
 
 from .geometry_manager import Geom, merge_polygons

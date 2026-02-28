@@ -6,11 +6,15 @@ import shapely.geometry
 from shapely.geometry import LineString, Polygon
 from shapely.ops import substring
 
-from .geometry_manager import (fill_holes_sh, get_bbox_area_sh,
-                               get_poly_diameter,
-                               is_overlaping_multiple_polygons,
-                               merge_polygons_path, offset_polygon,
-                               offset_polygon_holes)
+from .geometry_manager import (
+    fill_holes_sh,
+    get_bbox_area_sh,
+    get_poly_diameter,
+    is_overlaping_multiple_polygons,
+    merge_polygons_path,
+    offset_polygon,
+    offset_polygon_holes,
+)
 from .path_optimizer import Optimizer
 
 

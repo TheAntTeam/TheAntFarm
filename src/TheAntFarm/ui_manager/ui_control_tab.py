@@ -2,11 +2,9 @@ import logging
 import os
 from collections import OrderedDict as Od
 
-from PySide6.QtCore import (QItemSelectionModel, QObject,
-                            QPersistentModelIndex, QSize, Qt, Signal, Slot)
+from PySide6.QtCore import QItemSelectionModel, QObject, QPersistentModelIndex, QSize, Qt, Signal, Slot
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (QAbstractItemView, QButtonGroup, QFileDialog,
-                               QHeaderView, QLabel, QRadioButton)
+from PySide6.QtWidgets import QAbstractItemView, QButtonGroup, QFileDialog, QHeaderView, QLabel, QRadioButton
 from style_manager import StyleManager
 
 logger = logging.getLogger(__name__)
