@@ -92,13 +92,13 @@ jobs:
         python -m pytest tests -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing
 
     - name: Upload coverage to Codecov
+      continue-on-error: true
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage.xml
         flags: unittests
         name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
-        fail_ci_if_error: true
         verbose: true  # Add more detailed upload information
     
     - name: Build Executable
