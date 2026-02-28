@@ -40,5 +40,6 @@ exclude = '''
 /(
     app_resources_rc\.py
   | ui_the_ant_farm\.py
+  | controller_signals\.py
 )/
 '''

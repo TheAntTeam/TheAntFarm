@@ -1,11 +1,12 @@
 import os
-from PySide6.QtCore import Slot, QObject, Signal, QTimer
+from PySide6.QtCore import Slot, Signal, QTimer
 from PySide6.QtGui import QPixmap
 import re
 from collections import OrderedDict as Od
 from .controller_view import ViewController
 from .controller_control import ControlController
 from .controller_align import AlignController
+from .controller_signals import ControllerSignals
 import logging
 import traceback
 import time
@@ -15,34 +16,7 @@ from shape_core.gcode_manager import GCoder, GCodeMacro
 logger = logging.getLogger(__name__)
 
 
-class ControllerWorker(QObject):
-    update_layer_s = Signal(Od, str, str, bool)  # Signal to update layer visualization
-    update_align_layer_s = Signal(Od, str, str, bool)  # Signal to update align layer visualization
-    update_align_layer_view_s = Signal(list)  # Signal to update align layer visualization (flipping)
-    update_path_s = Signal(str, list)            # Signal to update path visualization
-    update_camera_image_s = Signal(QPixmap)      # Signal to update Camera Image
-    update_camera_list_s = Signal(list)          # Signal to update Camera list detected
-    update_status_s = Signal(Od)                 # Signal to update controller status
-    update_console_text_s = Signal(str)          # Signal to send text to the console textEdit
-    serial_send_s = Signal(bytes)                # Signal to send text to the serial
-    serial_tx_available_s = Signal()             # Signal to send text to the serial
-    update_align_points_s = Signal(list)         # Signal to update the list of alignment points
-    touched_probe_s = Signal()                   # Signal the probe touched
-    update_probe_s = Signal(list)                # Signal to update probe value
-    send_abl_s = Signal(tuple, tuple)
-    update_abl_s = Signal(list)                  # Signal to update Auto-Bed-Levelling value
-    update_bbox_s = Signal(tuple)
-    update_gcode_s = Signal(str, list, bool, bool)
-    gcode_vectorized_s = Signal(str)
-
-    update_file_progress_s = Signal(float, str)  # Signal(progress_percent, elapsed_time_str)
-
-    reset_controller_status_s = Signal()
-    stop_send_s = Signal()
-    send_tool_change_s = Signal()                # Signal to start the tool change procedure
-
-    report_status_report_s = Signal(Od)
-
+class ControllerWorker(ControllerSignals):
     REMOTE_RX_BUFFER_MAX_SIZE = 128
 
     def __init__(self, serial_rx_queue, serial_tx_queue, settings):
