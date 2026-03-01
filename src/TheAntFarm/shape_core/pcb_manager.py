@@ -1,26 +1,26 @@
+import logging
 import math
 import os
 import time
 from collections import OrderedDict as Od
+from typing import List, Dict, Any, Optional, Union, Tuple
 
 import gerber as gbr
 import gerber.primitives
 import numpy as np
 from gerber.cam import FileSettings
-
-# from gerber.render.cairo_backend import GerberCairoContext
-from gerber.excellon import DrillHit, DrillSlot, ExcellonParser
+from gerber.excellon import DrillHit, DrillSlot
 from gerber.excellon import loads as exc_load
-from gerber.excellon_statements import CoordinateStmt, EndOfProgramStmt, FormatStmt, SlotStmt, ToolSelectionStmt
+from gerber.excellon_statements import CoordinateStmt, EndOfProgramStmt, FormatStmt, ToolSelectionStmt
 from gerber.utils import convex_hull
 
 from .geometry_manager import Geom, merge_polygons
 
-# import matplotlib.pyplot as plt
+logger = logging.getLogger(__name__)
 
 
 # workaround for pcb-tools read function
-def _new_pcb_tools_read_function(filename):
+def _new_pcb_tools_read_function(filename: str) -> Any:
     with open(filename, "r") as f:
         data = f.read()
     return gbr.loads(data, filename)
@@ -30,6 +30,10 @@ gbr.read = _new_pcb_tools_read_function
 
 
 class PcbObj:
+    """
+    Manages PCB data loaded from Gerber and Excellon files.
+    Handles parsing, unit conversion, and geometric conversion of PCB layers.
+    """
 
     GBR_KEYS = ["top", "bottom", "profile", "noncopper_top", "noncopper_bottom"]
     EXN_KEYS = ["drill"]
@@ -37,69 +41,68 @@ class PcbObj:
     MAX_ARC_CHORD_LEN = 0.5  # mm
     MIN_ARC_CHORD_LEN = 0.1  # mm
 
-    def __init__(self):
-
-        self.gerbers = Od({})
-        self.excellons = Od({})
+    def __init__(self) -> None:
+        self.gerbers: Od[str, Any] = Od({})
+        self.excellons: Od[str, Any] = Od({})
         self.init_data()
         self.arc_angle = 2.0 * math.pi / self.DEFAULT_ARC_SUBDIVISIONS
         self.arc_max_len = self.MAX_ARC_CHORD_LEN
         self.arc_min_len = self.MIN_ARC_CHORD_LEN
-        self.layers = Od({})
+        self.layers: Od[str, Any] = Od({})
         self.am_group = False
 
-    def get_arc_subdivisions(self):
+    def get_arc_subdivisions(self) -> int:
         return int(2.0 * math.pi / self.arc_angle)
 
-    def set_arc_subdivisions(self, arc_sub):
+    def set_arc_subdivisions(self, arc_sub: int) -> None:
         self.arc_angle = 2.0 * math.pi / arc_sub
 
-    def init_data(self):
+    def init_data(self) -> None:
         for k in self.GBR_KEYS:
             self.gerbers[k] = None
 
         for k in self.EXN_KEYS:
             self.excellons[k] = None
 
-    def get_gerber(self, tag):
+    def get_gerber(self, tag: str) -> Optional[Any]:
         if tag in self.GBR_KEYS:
             if self.gerbers[tag] is not None:
                 return self.gerbers[tag]
-            else:
-                pass
-        print("[ERROR] GERBER NOT FOUND")
+        logger.error(f"GERBER NOT FOUND: {tag}")
         return None
 
-    def get_excellon(self, tag):
+    def get_excellon(self, tag: str) -> Optional[Any]:
         if tag in self.EXN_KEYS:
             if self.excellons[tag] is not None:
                 return self.excellons[tag]
-            else:
-                pass
-        print("[ERROR] GERBER NOT FOUND")
+        logger.error(f"EXCELLON NOT FOUND: {tag}")
         return None
 
-    def load_gerber(self, path, tag):
+    def load_gerber(self, path: str, tag: str) -> bool:
         if tag not in self.GBR_KEYS:
-            print("[ERROR] GERBER TAG NOT RECOGNIZED")
+            logger.error(f"GERBER TAG NOT RECOGNIZED: {tag}")
             return False
         if not os.path.isfile(path):
-            print("[ERROR] GERBER FILE NOT FOUND")
+            logger.error(f"GERBER FILE NOT FOUND: {path}")
             return False
-        tmp = gbr.read(path)
-        self.gerbers[tag] = tmp
-        # unit conversion used to FIX bug in pcb-tools
-        if tmp.units == "inch":
-            self.gerbers[tag].to_metric()
-            self.gerbers[tag] = gbr.loads(self.dump_str(tmp))
-
-        # self.render_layer(tmp)
+        
+        try:
+            tmp = gbr.read(path)
+            self.gerbers[tag] = tmp
+            # unit conversion used to FIX bug in pcb-tools
+            if tmp.units == "inch":
+                logger.info(f"Converting Gerber {tag} from inch to metric")
+                self.gerbers[tag].to_metric()
+                self.gerbers[tag] = gbr.loads(self.dump_str(tmp))
+            return True
+        except Exception as e:
+            logger.error(f"Failed to load Gerber file {path}: {e}")
+            return False
 
     @staticmethod
-    def dump_str(gerber_obj, data_type="gerber", ext_settings=None):
+    def dump_str(gerber_obj: Any, data_type: str = "gerber", ext_settings: Optional[FileSettings] = None) -> str:
         # used to FIX bug in pcb-tools that doesn't work properly
         # tip: file conversion to metric before geom parser
-        print("Converting file units to metric")
         string = ""
         if ext_settings is not None:
             settings = ext_settings
@@ -110,9 +113,6 @@ class PcbObj:
             for stmt in gerber_obj.statements:
                 string += str(stmt.to_gerber(gerber_obj.settings)) + "\n"
         else:
-            # for stmt in gerber_obj.statements:
-            #     string += str(stmt.to_excellon(settings)) + "\n"
-
             for statement in gerber_obj.statements:
                 if not isinstance(statement, ToolSelectionStmt) and not isinstance(statement, FormatStmt):
                     string += statement.to_excellon(settings) + "\n"
@@ -136,82 +136,76 @@ class PcbObj:
                         elif isinstance(hit, DrillSlot):
                             string += CoordinateStmt(hit.start[0] * k, hit.start[1] * k).to_excellon(settings) + "\n"
                             string += CoordinateStmt(hit.end[0] * k, hit.end[1] * k).to_excellon(settings) + "\n"
-                            # string += SlotStmt(hit.start[0]*1e3, hit.start[1]*1e3, hit.end[0]*1e3, hit.end[1]*1e3).to_excellon(settings) + '\n'
             string += EndOfProgramStmt().to_excellon() + "\n"
         return string
 
-    def load_excellon(self, path, tag):
+    def load_excellon(self, path: str, tag: str) -> bool:
         if tag not in self.EXN_KEYS:
-            print("[ERROR] EXCELLON TAG NOT RECOGNIZED")
+            logger.error(f"EXCELLON TAG NOT RECOGNIZED: {tag}")
             return False
         if not os.path.isfile(path):
-            print("[ERROR] EXCELLON FILE NOT FOUND")
+            logger.error(f"EXCELLON FILE NOT FOUND: {path}")
             return False
 
-        tmp = gbr.read(path)
-        self.excellons[tag] = tmp
-        if tmp.units == "inch":
-            self.excellons[tag].to_metric()
-            """ Note: pcb-tools has a bug related to the inch -> metric conversion
-                a workaround is applied, during the dump process all the xy points
-                coordinates are converted in metric by default """
+        try:
+            tmp = gbr.read(path)
+            self.excellons[tag] = tmp
+            if tmp.units == "inch":
+                logger.info(f"Converting Excellon {tag} from inch to metric")
+                self.excellons[tag].to_metric()
+                """ Note: pcb-tools has a bug related to the inch -> metric conversion
+                    a workaround is applied, during the dump process all the xy points
+                    coordinates are converted in metric by default """
 
-            settings = FileSettings(
-                format=(3, 3), zero_suppression="leading", units="metric", notation="absolute", angle_units="degrees"
-            )
-            data = self.dump_str(self.excellons[tag], data_type="excellon", ext_settings=settings)
-            self.excellons[tag] = exc_load(data, settings=settings)
+                settings = FileSettings(
+                    format=(3, 3), zero_suppression="leading", units="metric", notation="absolute", angle_units="degrees"
+                )
+                data = self.dump_str(self.excellons[tag], data_type="excellon", ext_settings=settings)
+                self.excellons[tag] = exc_load(data, settings=settings)
+            return True
+        except Exception as e:
+            logger.error(f"Failed to load Excellon file {path}: {e}")
+            return False
 
-    # def render_layer(self, layer):
-    #
-    #     # Create a new drawing context
-    #     ctx = GerberCairoContext(1200)
-    #     ctx.color = (80. / 255, 80 / 255., 154 / 255.)
-    #     ctx.drill_color = ctx.color
-    #
-    #     # Draw the layer, and specify the rendering settings to use
-    #     layer.render(ctx)
-    #
-    #     outfile = os.path.join(os.path.dirname(__file__), 'pcb_top.png')
-    #
-    #     # Write output to png file
-    #     print("Writing output to: {}".format(outfile))
-    #     ctx.dump(os.path.join(os.path.dirname(__file__), 'outputs', outfile))
-
-    def get_gerber_layer(self, tag):
-        print("Get Gerber Layer")
+    def get_gerber_layer(self, tag: str) -> Any:
+        logger.info(f"Processing Gerber Layer: {tag}")
         start_time = time.time()
         g = self.get_gerber(tag)
+        if g is None:
+            return None
+            
         mp = []
-        print("*** %s seconds ---" % (time.time() - start_time))
         for primitive in g.primitives:
             primitive.to_metric()
             gdata = self._primitive_paths(primitive)
             for gd in gdata:
-                g = Geom(gd)
-                if g.closed:
-                    mp.append(g)
+                g_geom = Geom(gd)
+                if g_geom.closed:
+                    mp.append(g_geom)
 
-        print("**- %s seconds ---" % (time.time() - start_time))
+        logger.info(f"Gerber Layer {tag} processed in {time.time() - start_time:.4f} seconds")
         self.layers[tag] = merge_polygons(mp)
-        print("*-- %s seconds ---" % (time.time() - start_time))
         return self.layers[tag]
 
-    def get_excellon_layer(self, tag):
+    def get_excellon_layer(self, tag: str) -> Any:
         g = self.get_excellon(tag)
+        if g is None:
+            return None
+            
         mp = []
         for primitive in g.primitives:
             gdata = self._primitive_paths(primitive)
             for gd in gdata:
-                g = Geom(gd)
-                if g.closed:
-                    mp.append(g)
+                g_geom = Geom(gd)
+                if g_geom.closed:
+                    mp.append(g_geom)
         self.layers[tag] = merge_polygons(mp)
         return self.layers[tag]
 
     def _arc_segmentation(
-        self, center, radius, arc_start_angle, arc_end_angle, direction="clockwise", forced_divisions=None
-    ):
+        self, center: Tuple[float, float], radius: float, arc_start_angle: float, arc_end_angle: float, 
+        direction: str = "clockwise", forced_divisions: Optional[int] = None
+    ) -> List[Tuple[float, float]]:
 
         start_angle = arc_start_angle
         end_angle = arc_end_angle
@@ -234,9 +228,6 @@ class PcbObj:
                 divisions = int(abs(end_angle - start_angle) / self.arc_angle)
             else:
                 divisions = int(2.0 * math.pi / self.arc_angle)
-
-            # The coordinates of the arc
-            # theta = np.radians(np.linspace(start_angle, end_angle, self.arc_subdivisions))
 
             # chord length 2 * r * sin(theta/2)
             clen = abs(2.0 * radius * math.sin(0.5 * self.arc_angle))
@@ -267,10 +258,9 @@ class PcbObj:
         x = center[0] + radius * np.cos(theta)
         y = center[1] + radius * np.sin(theta)
         arc_discretization = np.column_stack((x, y))
-        arc_discretization = [tuple(x) for x in arc_discretization]
-        return arc_discretization
+        return [tuple(x) for x in arc_discretization]
 
-    def _get_enhanced_line(self, l_start, l_end, aperture):
+    def _get_enhanced_line(self, l_start: Tuple[float, float], l_end: Tuple[float, float], aperture: Any) -> List[Tuple[float, float]]:
         if l_start[0] - l_end[0] >= 0:
             start = l_start
             end = l_end
@@ -279,11 +269,10 @@ class PcbObj:
             end = l_start
 
         radius = 0.0
+        subdivisions = 4
 
         if isinstance(aperture, gbr.primitives.Rectangle):
             # radius = max(aperture.height, aperture.width) / 4.0
-            print(aperture.height)
-            print(aperture.width)
             radius = aperture.height / 4.0
             subdivisions = 4
         elif isinstance(aperture, gbr.primitives.Circle):
@@ -318,7 +307,7 @@ class PcbObj:
             return [l_start, l_end]
 
     @staticmethod
-    def _get_region_polygon(gdata, vectors=False):
+    def _get_region_polygon(gdata: List[Dict[str, Any]], vectors: bool = False) -> List[Tuple[float, float]]:
         points = []
         if not vectors:
             # EAGLE type polygon
@@ -344,180 +333,113 @@ class PcbObj:
             points.append(last)
         return points
 
-    def _primitive_paths(self, primitive, region=False):
-        gdata = []
-        verbose_flag = False
+    def _process_line(self, primitive: Any, region: bool) -> List[Dict[str, Any]]:
+        closed_flag = True
+        points = primitive.vertices
 
-        if isinstance(primitive, gbr.primitives.Line):
-            closed_flag = True
-            # open line type
-            if verbose_flag:
-                print("Open line")
-            points = primitive.vertices
-
-            if isinstance(primitive.aperture, gbr.primitives.Circle) or isinstance(
-                primitive.aperture, gbr.primitives.Rectangle
-            ):
-                # if verbose_flag:
-                #     print("\t with rounded end")
-                #     pts = [primitive.start, primitive.end]
-                #     print(pts)
-                if not region or self.am_group:
-                    points = self._get_enhanced_line(primitive.start, primitive.end, primitive.aperture)
-                else:
-                    points = [primitive.start, primitive.end]
-                    closed_flag = False
-                # print(points)
-
-            # if isinstance(primitive.aperture, gbr.primitives.Rectangle):
-            #     if not region:
-            #         points = self._get_enhanced_line(primitive.start, primitive.end, primitive.aperture)
-            #     else:
-            #         points = [primitive.start, primitive.end]
-            #         closed_flag = False
-            #     #print(points)
-
-            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": closed_flag}]
-            if points is None:
-                points = [primitive.start, primitive.end]
-                gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": False}]
-
-        elif isinstance(primitive, gbr.primitives.Arc):
-            # open line arc type
-            if verbose_flag:
-                print("Arc")
-            p = primitive
-            points = self._arc_segmentation(p.center, p.radius, p.start_angle, p.end_angle, direction=p.direction)
-
-            if (
-                isinstance(primitive.aperture, gbr.primitives.Circle)
-                or isinstance(primitive.aperture, gbr.primitives.Rectangle)
-            ) and not region:
-                pts = points.copy()
-                pp = pts.pop(0)
-                gdata = []
-                for npp in pts:
-                    l_points = self._get_enhanced_line(pp, npp, primitive.aperture)
-                    gdata.append({"points": l_points, "polarity": primitive.level_polarity, "closed": True})
-                    pp = npp
+        if isinstance(primitive.aperture, (gbr.primitives.Circle, gbr.primitives.Rectangle)):
+            if not region or self.am_group:
+                points = self._get_enhanced_line(primitive.start, primitive.end, primitive.aperture)
             else:
-                gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": False}]
+                points = [primitive.start, primitive.end]
+                closed_flag = False
+
+        gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": closed_flag}]
+        if points is None:
+            points = [primitive.start, primitive.end]
+            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": False}]
+        return gdata
+
+    def _process_arc(self, primitive: Any, region: bool) -> List[Dict[str, Any]]:
+        points = self._arc_segmentation(primitive.center, primitive.radius, primitive.start_angle, primitive.end_angle, direction=primitive.direction)
+
+        if isinstance(primitive.aperture, (gbr.primitives.Circle, gbr.primitives.Rectangle)) and not region:
+            pts = points.copy()
+            pp = pts.pop(0)
+            gdata = []
+            for npp in pts:
+                l_points = self._get_enhanced_line(pp, npp, primitive.aperture)
+                gdata.append({"points": l_points, "polarity": primitive.level_polarity, "closed": True})
+                pp = npp
+            return gdata
+        else:
+            return [{"points": points, "polarity": primitive.level_polarity, "closed": False}]
+
+    def _process_region(self, primitive: Any, region: bool) -> List[Dict[str, Any]]:
+        gdata = []
+        am_group = False
+        if isinstance(primitive, gbr.primitives.AMGroup):
+            self.am_group = True
+            am_group = True
+
+        if primitive.primitives is not None:
+            lines_flag = True
+            pp = primitive.primitives.copy()
+            for p in pp:
+                gdata += self._primitive_paths(p, region=True)
+                lines_flag &= isinstance(p, (gbr.primitives.Line, gbr.primitives.Arc))
+            
+            if lines_flag and primitive.primitives:
+                # check if the line is closed
+                p0 = primitive.primitives[0]
+                p1 = primitive.primitives[-1]
+                if p0.start != p1.end:
+                    points = [p1.end, p0.start]
+                    gd = [{"points": points, "polarity": primitive.level_polarity, "closed": False}]
+                    gdata += gd
+
+                vectors = False
+                if self.am_group and isinstance(primitive, gbr.primitives.Outline):
+                    vectors = p1.start == p1.end
+
+                points = self._get_region_polygon(gdata, vectors)
+                gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
+        
+        if am_group:
+            self.am_group = False
+        return gdata
+
+    def _primitive_paths(self, primitive: Any, region: bool = False) -> List[Dict[str, Any]]:
+        if isinstance(primitive, gbr.primitives.Line):
+            return self._process_line(primitive, region)
+        
+        elif isinstance(primitive, gbr.primitives.Arc):
+            return self._process_arc(primitive, region)
+        
+        elif isinstance(primitive, (gbr.primitives.Region, gbr.primitives.AMGroup, gbr.primitives.Outline)):
+            return self._process_region(primitive, region)
 
         elif isinstance(primitive, gbr.primitives.Rectangle):
-            # rectangle type
-            if verbose_flag:
-                print("Rectangle")
-            points = primitive.vertices
-            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
+            return [{"points": primitive.vertices, "polarity": primitive.level_polarity, "closed": True}]
+        
         elif isinstance(primitive, gbr.primitives.Polygon):
-            # polygon type
-            if verbose_flag:
-                print("Polygon")
-            points = primitive.vertices
-            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
+            return [{"points": primitive.vertices, "polarity": primitive.level_polarity, "closed": True}]
+        
         elif isinstance(primitive, gbr.primitives.Circle):
-            # circle type
-            if verbose_flag:
-                print("Circle")
-            p = primitive
-            points = self._arc_segmentation(p.position, p.radius, 0, 2 * math.pi)
-            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
+            points = self._arc_segmentation(primitive.position, primitive.radius, 0, 2 * math.pi)
+            return [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
+        
         elif isinstance(primitive, gbr.primitives.Obround):
-            # obround type
-            if verbose_flag:
-                print("Obround")
-            p = primitive
-            circle1 = p.subshapes["circle1"]
-            circle2 = p.subshapes["circle2"]
+            circle1 = primitive.subshapes["circle1"]
+            circle2 = primitive.subshapes["circle2"]
             points1 = self._arc_segmentation(circle1.position, circle1.radius, 0, 2 * math.pi)
             points2 = self._arc_segmentation(circle2.position, circle2.radius, 0, 2 * math.pi)
             points = convex_hull(points1 + points2)
-            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
-
-        elif (
-            isinstance(primitive, gbr.primitives.Region)
-            or isinstance(primitive, gbr.primitives.AMGroup)
-            or isinstance(primitive, gbr.primitives.Outline)
-        ):
-            # group type
-
-            am_group = False
-            if isinstance(primitive, gbr.primitives.AMGroup):
-                self.am_group = True
-                am_group = True
-
-            if verbose_flag:
-                if region:
-                    print("Region of Region")
-                else:
-                    if isinstance(primitive, gbr.primitives.AMGroup):
-                        print("AMGroup")
-                        print("Primitives: " + str(primitive.primitives))
-                    else:
-                        print("REGION")
-
-            if primitive.primitives is not None:
-                lines_flag = True
-                pp = primitive.primitives.copy()
-                for p in pp:
-                    gdata += self._primitive_paths(p, region=True)
-                    lines_flag &= isinstance(p, gbr.primitives.Line) or isinstance(p, gbr.primitives.Arc)
-                if lines_flag:
-                    # check if the line is closed
-                    p0 = primitive.primitives[0]
-                    p1 = primitive.primitives[-1]
-                    if p0.start != p1.end:
-                        points = [p1.end, p0.start]
-                        gd = [{"points": points, "polarity": primitive.level_polarity, "closed": False}]
-                        gdata += gd
-
-                    vectors = False
-                    if self.am_group and isinstance(primitive, gbr.primitives.Outline):
-                        vectors = p1.start == p1.end
-
-                    points = self._get_region_polygon(gdata, vectors)
-                    gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
-            if am_group:
-                self.am_group = False
-
+            return [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
+        
         elif isinstance(primitive, gbr.primitives.Drill):
-            # drill type
-            if verbose_flag:
-                print("Drill")
-            p = primitive
-            points = self._arc_segmentation(p.position, p.radius, 0, 2 * math.pi)
-            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
-
+            points = self._arc_segmentation(primitive.position, primitive.radius, 0, 2 * math.pi)
+            return [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
+        
         elif isinstance(primitive, gbr.primitives.Slot):
-            # drill type
-            if verbose_flag:
-                print("Slot")
-            p = primitive
-            points1 = self._arc_segmentation(p.start, p.diameter / 2.0, 0, 2 * math.pi)
-            points2 = self._arc_segmentation(p.end, p.diameter / 2.0, 0, 2 * math.pi)
+            points1 = self._arc_segmentation(primitive.start, primitive.diameter / 2.0, 0, 2 * math.pi)
+            points2 = self._arc_segmentation(primitive.end, primitive.diameter / 2.0, 0, 2 * math.pi)
             points = convex_hull(points1 + points2)
-            gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
-
-        # elif isinstance(primitive, gbr.primitives.AMGroup):
-        #     # group type
-        #     if verbose_flag:
-        #         print("AMGroup")
-        #     if primitive.primitives is not None:
-        #         lines_flag = True
-        #         for p in primitive.primitives:
-        #             gdata += self._primitive_paths(p, region=True)
-        #             lines_flag &= isinstance(p, gbr.primitives.Line)
-        #         if lines_flag:
-        #             points = self._get_region_polygon(gdata)
-        #             gdata = [{'points': points, 'polarity': primitive.level_polarity, 'closed': True}]
+            return [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
 
         else:
-            print("[ERROR] PRIMITIVE NOT RECOGNIZED")
-
-        return gdata
-
-
-# -----------------------------------------------------------------------------
+            logger.warning(f"PRIMITIVE NOT RECOGNIZED: {type(primitive)}")
+            return []
 
 
 if __name__ == "__main__":

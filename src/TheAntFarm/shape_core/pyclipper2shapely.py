@@ -1,165 +1,146 @@
 # FROM: https://www.programcreek.com/python/?code=tilezen%2Fmapbox-vector-tile%2Fmapbox-vector-tile-master%2Fmapbox_vector_tile%2Fpolygon.py
 # LICENSE: MIT
 
+import logging
+from typing import List, Tuple, Union, Any
+
 import pyclipper as pc
-from shapely.geometry import Polygon
+from shapely.geometry import Polygon, MultiPolygon, LinearRing
 from shapely.ops import unary_union
-from shapely.validation import explain_validity
+from shapely.validation import explain_validity, make_valid
+
+logger = logging.getLogger(__name__)
 
 
-def _generate_polys(contours, scale):
+def _contour_to_linear_ring(contour_in: Any, scale: float) -> LinearRing:
     """
-    Generator which yields a valid polygon for each contour input.
+    Converts a Clipper contour to a Shapely LinearRing.
     """
-
-    for c in contours:
-        p = _contour_to_poly(c, scale)
-        yield p
-
-
-def _union_in_blocks(contours, block_size, scale):
-    """
-    Generator which yields a valid shape for each block_size multiple of
-    input contours. This merges together the contours for each block before
-    yielding them.
-    """
-
-    n_contours = len(contours)
-    for i in range(0, n_contours, block_size):
-        j = min(i + block_size, n_contours)
-
-        inners = []
-        for c in contours[i:j]:
-            p = _contour_to_poly(c, scale)
-            if p.geom_type == "Polygon":
-                inners.append(p)
-            elif p.geom_type == "MultiPolygon":
-                inners.extend(p.geoms)
-        holes = unary_union(inners)
-        assert holes.is_valid
-
-        yield holes
-
-
-def _contour_to_poly(contour_in, scale):
     contour = contour_in
     if scale:
         contour = pc.scale_from_clipper(contour_in)
-    poly = Polygon(contour)
-    if not poly.is_valid:
-        poly = poly.buffer(0)
-    assert poly.is_valid, "Contour %r did not make valid polygon %s because %s" % (
-        contour,
-        poly.wkt,
-        explain_validity(poly),
-    )
-    return poly
+    
+    # Clipper contours might not be closed, Shapely LinearRings must be.
+    # Shapely auto-closes if the last point != first point, but let's be safe.
+    if len(contour) < 3:
+        return LinearRing() # Invalid ring
+
+    try:
+        ring = LinearRing(contour)
+    except Exception as e:
+        logger.warning(f"Failed to create LinearRing from contour: {e}")
+        return LinearRing()
+
+    if not ring.is_valid:
+        # Try to fix self-intersections or other issues
+        # make_valid on a LinearRing usually returns a MultiLineString or GeometryCollection
+        # We need a valid ring for the polygon constructor.
+        # If it's invalid, it's often better to let the Polygon constructor handle it via make_valid later,
+        # or try to simplify.
+        # For now, we return it as is, and the Polygon validation will catch it.
+        pass
+        
+    return ring
 
 
-def _polytree_node_to_shapely(node, scale):
+def _polytree_node_to_shapely(node: Any, scale: float) -> Tuple[List[Polygon], List[LinearRing]]:
     """
-    Recurses down a Clipper PolyTree, extracting the results as Shapely
-    objects.
-
-    Returns a tuple of (list of polygons, list of children)
+    Recurses down a Clipper PolyTree, extracting the results as Shapely objects.
+    
+    Logic:
+    - A PolyTree node represents a nesting level.
+    - If node.IsHole is False (Outer):
+        - It defines a Polygon Shell.
+        - Its children are Holes.
+        - Its grandchildren are nested Polygons (Islands).
+    - If node.IsHole is True (Hole):
+        - It defines a Hole for its parent.
+        - Its children are nested Polygons (Islands).
+    
+    Returns:
+        (polygons, holes)
+        - polygons: List of fully constructed Polygons found at this level and below.
+        - holes: List of LinearRings representing holes to be passed up to the parent.
     """
-
     polygons = []
-    children = []
+    holes = []
+    
+    # 1. Process Children
+    # Children of this node.
+    # If this node is Outer, children are Holes.
+    # If this node is Hole, children are Outers (Islands).
+    
+    child_holes = [] # Holes to be applied to THIS node (if it's an Outer)
+    
     for ch in node.Childs:
-        p, c = _polytree_node_to_shapely(ch, scale)
-        polygons.extend(p)
-        children.extend(c)
+        child_polys, child_rings = _polytree_node_to_shapely(ch, scale)
+        
+        # Any polygons found deeper down are independent islands, add them to our list
+        polygons.extend(child_polys)
+        
+        # Any rings returned by children are holes for US
+        child_holes.extend(child_rings)
 
-    if node.IsHole:
-        # check expectations: a node should be a hole, _or_ return children.
-        # this is because children of holes must be outers, and should be on
-        # the polygons list.
-        assert len(children) == 0
-        if node.Contour:
-            children = [node.Contour]
-        else:
-            children = []
+    # 2. Process Current Node
+    if node.Contour:
+        ring = _contour_to_linear_ring(node.Contour, scale)
+        
+        if not ring.is_empty:
+            if node.IsHole:
+                # If I am a hole, I pass my ring up to my parent to be used as a hole.
+                # My children (which are Outers) have already been processed and added to 'polygons'.
+                holes.append(ring)
+            else:
+                # If I am an Outer, I am a Polygon Shell.
+                # My children are holes for me.
+                try:
+                    poly = Polygon(shell=ring, holes=child_holes)
+                except Exception as e:
+                    logger.warning(f"Failed to construct Polygon: {e}")
+                    poly = Polygon()
 
-    elif node.Contour:
-        poly = _contour_to_poly(node.Contour, scale)
+                if not poly.is_valid:
+                    poly = make_valid(poly)
 
-        # we add each inner one-by-one so that we can reject them individually
-        # if they cause the polygon to become invalid. if the shape has lots
-        # of inners, then this can mean a proportional amount of work, and may
-        # take 1,000s of seconds. instead, we can group inners together, which
-        # reduces the number of times we call the expensive 'difference'
-        # method.
-        block_size = 200
-        if len(children) > block_size:
-            inners = _union_in_blocks(children, block_size, scale)
-        else:
-            inners = _generate_polys(children, scale)
-
-        for inner in inners:
-            # the difference of two valid polygons may fail, and in this
-            # situation we'd like to be able to display the polygon anyway.
-            # so we discard the bad inner and continue.
-            #
-            # see test_polygon_inners_crossing_outer for a test case.
-            try:
-                diff = poly.difference(inner)
-            except Exception:
-                continue
-
-            if not diff.is_valid:
-                diff = diff.buffer(0)
-
-            # keep this for when https://trac.osgeo.org/geos/ticket/789 is
-            # resolved.
-            #
-            #  assert diff.is_valid, \
-            #      "Difference of %s and %s did not make valid polygon %s " \
-            #      " because %s" \
-            #      % (poly.wkt, inner.wkt, diff.wkt, explain_validity(diff))
-            #
-            # NOTE: this throws away the inner ring if we can't produce a
-            # valid difference. not ideal, but we'd rather produce something
-            # that's valid than nothing.
-            if diff.is_valid:
-                poly = diff
-
-        assert poly.is_valid
-        if poly.geom_type == "MultiPolygon":
-            polygons.extend(poly.geoms)
-        else:
-            polygons.append(poly)
-        children = []
-
+                if poly.geom_type == "MultiPolygon":
+                    polygons.extend(poly.geoms)
+                elif poly.geom_type == "Polygon":
+                    polygons.append(poly)
+                elif poly.geom_type == "GeometryCollection":
+                     for g in poly.geoms:
+                         if g.geom_type in ["Polygon", "MultiPolygon"]:
+                             if g.geom_type == "MultiPolygon":
+                                 polygons.extend(g.geoms)
+                             else:
+                                 polygons.append(g)
     else:
-        # check expectations: this branch gets executed if this node is not a
-        # hole, and has no contour. in that situation we'd expect that it has
-        # no children, as it would not be possible to subtract children from
-        # an empty outer contour.
-        assert len(children) == 0
+        # Root node (usually has no contour, not a hole)
+        # Just pass up the polygons collected from children
+        pass
 
-    return (polygons, children)
+    return polygons, holes
 
 
-def _polytree_to_shapely(tree, scale):
-    polygons, children = _polytree_node_to_shapely(tree, scale)
+def _polytree_to_shapely(tree: Any, scale: float) -> Union[Polygon, MultiPolygon]:
+    polygons, holes = _polytree_node_to_shapely(tree, scale)
 
-    # expect no left over children - should all be incorporated into polygons
-    # by the time recursion returns to the root.
-    assert len(children) == 0
+    # The root should not return holes, only polygons.
+    if len(holes) > 0:
+        logger.warning("Root node returned holes, which should be impossible for a valid PolyTree.")
+
+    if not polygons:
+        return Polygon()
 
     union = unary_union(polygons)
-    assert union.is_valid
+    
+    if not union.is_valid:
+        union = make_valid(union)
+        
     return union
 
 
-def polytree_to_shapely(tree, scale):
-    res = _polytree_to_shapely(tree, scale)
-    # reso = []
-    # for p in res:
-    #     reso.append(shg.polygon.orient(p, sign=1.0))
-    # if len(reso) == 1:
-    #     return reso[0]
-    # else:
-    #     return shg.MultiPolygon(reso)
-    return res
+def polytree_to_shapely(tree: Any, scale: float = 1.0) -> Union[Polygon, MultiPolygon]:
+    """
+    Main entry point to convert a Clipper PolyTree to a Shapely geometry.
+    """
+    return _polytree_to_shapely(tree, scale)
