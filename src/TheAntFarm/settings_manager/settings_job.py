@@ -357,7 +357,7 @@ class JobSettingsHandler:
 
         # Section dedicated to drill bits #
         self.jobs_settings["DRILL_BITS"] = {}
-        drill_bits_settings = self.jobs_settings["DRILL_BITS"]
+        # drill_bits_settings = self.jobs_settings["DRILL_BITS"]
 
         # No-Copper Top job related settings #
         self.jobs_settings["NC_TOP"] = {}

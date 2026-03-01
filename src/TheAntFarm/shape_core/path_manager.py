@@ -1,13 +1,14 @@
 import logging
 import time
 from collections import OrderedDict
-from typing import List, Tuple, Dict, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import shapely.geometry
-from shapely.geometry import LineString, Polygon, MultiPolygon
+from shapely.geometry import LineString, MultiPolygon, Polygon
 from shapely.ops import substring
 
+from .drill_path_optimizer import DrillPathOptimizer
 from .geometry_manager import (
     fill_holes_sh,
     get_bbox_area_sh,
@@ -17,7 +18,6 @@ from .geometry_manager import (
     offset_polygon,
     offset_polygon_holes,
 )
-from .drill_path_optimizer import DrillPathOptimizer
 from .gerber_path_optimizer import GerberPathOptimizer
 
 logger = logging.getLogger(__name__)
@@ -156,17 +156,17 @@ class Gapper:
         pts = []
         for line in intersect_line:
             lb = line.boundary
-            if hasattr(lb, 'geoms'):
+            if hasattr(lb, "geoms"):
                 pts += [lb.geoms[0], lb.geoms[1]]
             else:
                 # Handle case where boundary might be a MultiPoint or similar
-                pts += list(lb) if hasattr(lb, '__iter__') else []
+                pts += list(lb) if hasattr(lb, "__iter__") else []
 
         pts_ll = []
         ids = []
         pids = []
         lids = []
-        
+
         for p in pts:
             d = ex_path.project(p)
             pt = ex_path.interpolate(d)
@@ -227,7 +227,7 @@ class MachinePath:
 
     MIN_AREA = 0.1e-1
     TD_COEFF = 0.999
-    
+
     # Machining Types
     TYPE_GERBER = "gerber"
     TYPE_PROFILE = "profile"
@@ -244,7 +244,7 @@ class MachinePath:
         self.tag = tag
         self.geom_list: List[Any] = []
         self.cfg: Dict[str, Any] = {}
-        
+
         if machining_type == self.TYPE_GERBER:
             self.cfg = {"tool_diameter": 0.2, "passages": 3, "overlap": 0.3}
             if self.cfg["passages"] < 1:
@@ -256,7 +256,7 @@ class MachinePath:
             self.cfg = {"tool_diameter": 1.0}
         elif machining_type == self.TYPE_DRILL:
             self.cfg = {"tool_diameter": None, "bits_diameter": [0.8], "optimize": False}
-        
+
         self.type = machining_type
         self.path: Optional[List[Tuple[Tuple[float, str], List[Any], Optional[List[int]]]]] = None
 
@@ -301,7 +301,7 @@ class MachinePath:
                 for i in range(len(elabs_d)):
                     elabs.append(elabs_p[i] or elabs_d[i])
             else:
-                elabs = elabs_d # If no pocketing, elabs is just drill results
+                elabs = elabs_d  # If no pocketing, elabs is just drill results
 
             if elabs is not None:
                 if not all(elabs):
@@ -315,7 +315,7 @@ class MachinePath:
         og_list = []
         prev_poly = []
         td = self.cfg["tool_diameter"] * self.TD_COEFF
-        
+
         for g in self.geom_list:
             prev_poly.append(g.geom)
             og = offset_polygon(g, td / 2.0)
@@ -361,7 +361,7 @@ class MachinePath:
                 if i.geom_type in ["LinearRing", "LineString"]:
                     path.append(i)
                     path_counter += 1
-        
+
         # OPTIMIZATION: Reorder Gerber paths to minimize travel distance
         if path:
             logger.info("Optimizing Gerber path...")
@@ -377,7 +377,7 @@ class MachinePath:
         big_poly = []
         old_poly_count = 0
         new_poly_count = 0
-        
+
         for p in og_list:
             old_poly_count += 1
             new_inners = []
@@ -385,7 +385,7 @@ class MachinePath:
                 old_poly_count += 1
                 if abs(Polygon(inner).area) >= self.MIN_AREA:
                     new_inners.append(inner)
-            
+
             if abs(Polygon(p.exterior).area) >= self.MIN_AREA:
                 p = Polygon(p.exterior, new_inners)
                 new_poly_count += 1 + len(p.interiors)
@@ -403,7 +403,7 @@ class MachinePath:
         og_list = []
         milled_list = []
         td = self.cfg["tool_diameter"] * self.TD_COEFF
-        
+
         for g in self.geom_list:
             # Offset inwards by tool radius
             og = offset_polygon(g, -td / 2.0)
@@ -429,7 +429,7 @@ class MachinePath:
             for i in g.interiors:
                 if i.geom_type in ["LinearRing", "LineString"]:
                     path.append(i)
-        
+
         t_d = self.cfg["tool_diameter"]
         self.path = [((t_d, self.TYPE_POCKETING), path)]
 
@@ -448,7 +448,7 @@ class MachinePath:
 
         drilled_list = []
         drills = []
-        
+
         for i, g in enumerate(self.geom_list):
             if to_drill[i]:
                 drilled_list.append(True)
@@ -464,8 +464,8 @@ class MachinePath:
 
         drill_per_bit = OrderedDict()
         if not bd:
-             logger.warning("No drill bits defined in configuration.")
-             return drilled_list
+            logger.warning("No drill bits defined in configuration.")
+            return drilled_list
 
         b = bd[0]
         c = 1
@@ -484,17 +484,17 @@ class MachinePath:
             if "optimize" in self.cfg:
                 optimize_cfg = self.cfg["optimize"]
                 # Check if optimization is enabled (can be boolean or int index)
-                if optimize_cfg is not False: 
+                if optimize_cfg is not False:
                     opt = DrillPathOptimizer(bit_points)
                     available_opt_types = opt.get_optimization_types()
-                    
+
                     # Handle integer index for optimization type (Backward Compatibility)
                     if isinstance(optimize_cfg, int) and 0 <= optimize_cfg < len(available_opt_types):
                         opt_type = available_opt_types[optimize_cfg]
                         opt.set_optimization_type(opt_type)
                     # Handle string name for optimization type (Preferred)
                     elif isinstance(optimize_cfg, str) and optimize_cfg in available_opt_types:
-                         opt.set_optimization_type(optimize_cfg)
+                        opt.set_optimization_type(optimize_cfg)
                     # Handle True boolean (Default to a good optimizer)
                     elif optimize_cfg is True:
                         # Default to hybrid_ils if available, else nearest_insertion
@@ -529,7 +529,7 @@ class MachinePath:
         t0 = time.time()
         og_list = []
         td = self.cfg["tool_diameter"] * self.TD_COEFF
-        
+
         # Uniqueness check of the profile
         if len(self.geom_list) == 1:
             # Unique profile
@@ -584,7 +584,7 @@ class MachinePath:
         # Add taps (gaps) based on the selected strategy
         t = Gapper(path[0], self.cfg)
         stl = t.get_available_strategies()
-        
+
         taps_type_idx = self.cfg.get("taps_type", 0)
         if 0 <= taps_type_idx < len(stl):
             st = stl[taps_type_idx]
@@ -613,7 +613,7 @@ class MachinePath:
                         og_list.append(sog)
                 else:
                     og_list.append(og)
-        
+
         mg_list = merge_polygons_path(og_list)
 
         mog_list = []

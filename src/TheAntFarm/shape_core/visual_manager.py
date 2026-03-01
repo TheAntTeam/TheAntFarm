@@ -6,7 +6,7 @@ import logging
 import random
 import string
 from collections import OrderedDict
-from typing import List, Tuple, Dict, Optional, Any, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import shapely as sh
@@ -15,7 +15,7 @@ from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 from shapely.strtree import STRtree
 from vispy.color import Color
-from vispy.scene import visuals, PanZoomCamera
+from vispy.scene import PanZoomCamera, visuals
 from vispy.visuals.filters import Alpha
 
 logger = logging.getLogger(__name__)
@@ -240,7 +240,7 @@ class VisualLayer:
             if tag == self.SELECTED_TAG:
                 continue
             for shape in shapes:
-                if hasattr(shape, 'geom') and shape.geom:
+                if hasattr(shape, "geom") and shape.geom:
                     geoms.append(shape.geom)
                     # Map the geometry ID back to the shape object wrapper
                     self.geom_id_to_shape[id(shape.geom)] = shape
@@ -329,7 +329,7 @@ class VisualLayer:
     def flip_camera(self, flipped: Tuple[bool, bool, bool]) -> None:
         """Manually flips the camera."""
         self.canvas.view.camera.up = "+z"
-        self.canvas.view.camera.flip = (flipped)
+        self.canvas.view.camera.flip = flipped
 
         for m in self.meshes.keys():
             self.meshes[m].order = self.TOP_ORDER[m]
@@ -373,8 +373,9 @@ class VisualLayer:
 
             # If an object is found, highlight it
             if found_shape:
-                self.add_layer(tag=self.SELECTED_TAG, geom_list=[found_shape], color="yellow", holes=False,
-                               auto_range=False)
+                self.add_layer(
+                    tag=self.SELECTED_TAG, geom_list=[found_shape], color="yellow", holes=False, auto_range=False
+                )
 
     def on_mouse_click(self, event: Any) -> None:
         """Handles single click events (toggles view orientation)."""
@@ -384,9 +385,9 @@ class VisualLayer:
     def flip_view(self, orientation: int = 0) -> None:
         """Flips the view based on orientation index."""
         if orientation == 0:
-            self.canvas.view.camera.up = '+z'
+            self.canvas.view.camera.up = "+z"
         else:
-            self.canvas.view.camera.up = '-z'
+            self.canvas.view.camera.up = "-z"
 
     def set_layer_visible(self, tag: str, visible: bool) -> None:
         """Sets the visibility of a mesh layer."""
@@ -438,8 +439,9 @@ class VisualLayer:
             if tag in self.paths_geom.keys():
                 del self.paths_geom[tag]
 
-    def add_layer(self, tag: str, geom_list: List[Any], color: Optional[Any] = None, holes: bool = False,
-                  auto_range: bool = True) -> None:
+    def add_layer(
+        self, tag: str, geom_list: List[Any], color: Optional[Any] = None, holes: bool = False, auto_range: bool = True
+    ) -> None:
         """
         Adds a new geometric layer to the scene.
         Triangulates the Shapely geometries and creates a VisPy mesh.
@@ -447,7 +449,7 @@ class VisualLayer:
         ldata: List[List[Any]] = [[], []]
         triangulizer = GLUTess()
         order = 0
-        order_d = self.TOP_ORDER if self.canvas.view.camera.up == '+z' else self.BTM_ORDER
+        order_d = self.TOP_ORDER if self.canvas.view.camera.up == "+z" else self.BTM_ORDER
         if tag in order_d:
             order = order_d[tag]
 
@@ -477,8 +479,7 @@ class VisualLayer:
             logger.warning("No Drill Information Loaded. Please Load a GCODE or EXCELLON file in the Alignment View")
         return None
 
-    def add_path(self, tag: str, geom_list: List[Any], color: Optional[Any] = None,
-                 warning_color: str = 'red') -> None:
+    def add_path(self, tag: str, geom_list: List[Any], color: Optional[Any] = None, warning_color: str = "red") -> None:
         """Adds a path (line) layer to the scene."""
         # todo: add zbuffer controll
         if geom_list:
@@ -505,7 +506,7 @@ class VisualLayer:
             logger.warning("Cannot Visualize an Empty Path")
         self.update_order()
 
-    def add_gcode(self, tag: str, gcode_list: List[Any], color: Tuple[str, str] = ('white', 'orange')) -> None:
+    def add_gcode(self, tag: str, gcode_list: List[Any], color: Tuple[str, str] = ("white", "orange")) -> None:
         """Adds a GCode path visualization, distinguishing between travel and cut moves."""
         if gcode_list:
             order = 0
@@ -555,8 +556,14 @@ class VisualLayer:
         self.canvas.freeze()
         visuals.XYZAxis(parent=self.canvas.view.scene)
 
-    def create_line(self, tag: str, ldata: List[Any], colors: Optional[Union[List[Any], Any]] = None, order: int = 0,
-                    width: float = 0.1) -> None:
+    def create_line(
+        self,
+        tag: str,
+        ldata: List[Any],
+        colors: Optional[Union[List[Any], Any]] = None,
+        order: int = 0,
+        width: float = 0.1,
+    ) -> None:
         """
         Creates a VisPy Line visual from a list of segments.
         Optimized to create a single Line object with 'connect' array instead of multiple objects.
@@ -584,16 +591,17 @@ class VisualLayer:
             for j in range(1, len(l)):
                 c = l[j]
                 coords.append(c)
-                connect.append((p, p+1))
+                connect.append((p, p + 1))
                 p += 1
             if colors_list:
                 all_colors += [colors_list[i]] * len(l)
-        
+
         coords_arr = np.array(coords)
         connect_arr = np.array(connect)
 
-        line = visuals.Line(pos=coords_arr, connect=connect_arr, width=width, color=all_colors,
-                            parent=self.canvas.view, antialias=True)
+        line = visuals.Line(
+            pos=coords_arr, connect=connect_arr, width=width, color=all_colors, parent=self.canvas.view, antialias=True
+        )
         line.order = order
         if tag in list(self.paths.keys()):
             self.paths[tag] += [line]
@@ -603,14 +611,15 @@ class VisualLayer:
         self.canvas.view.camera.set_range()
         self.canvas.freeze()
 
-    def create_mesh(self, tag: str, ldata: List[Any], color: Optional[Any] = None, order: int = 0,
-                    auto_range: bool = True) -> None:
+    def create_mesh(
+        self, tag: str, ldata: List[Any], color: Optional[Any] = None, order: int = 0, auto_range: bool = True
+    ) -> None:
         """
         Creates a VisPy Mesh visual from triangle data.
         """
         self.canvas.unfreeze()
         mesh = visuals.Mesh(parent=self.canvas.view)
-        mesh.set_gl_state('translucent', cull_face=False)
+        mesh.set_gl_state("translucent", cull_face=False)
         mesh.order = order
 
         tri = ldata[0]
@@ -618,8 +627,9 @@ class VisualLayer:
 
         if color:
             mesh_colors = [Color(color).rgba] * int(len(tri) / 3)
-            mesh.set_data(np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)),
-                          face_colors=np.asarray(mesh_colors))
+            mesh.set_data(
+                np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)), face_colors=np.asarray(mesh_colors)
+            )
         else:
             mesh.set_data(np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)))
         mesh._bounds_changed()

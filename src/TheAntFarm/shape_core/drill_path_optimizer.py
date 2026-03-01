@@ -2,7 +2,7 @@
 import logging
 import operator
 import random
-from typing import List, Tuple, Optional, Dict, Any, Union
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 from scipy.spatial import distance
@@ -106,7 +106,7 @@ class DrillPathOptimizer:
         best_path = path
         # We assume an open path (not returning to start) based on calculate_path_distance logic
         n = len(path)
-        
+
         improved = True
         while improved:
             improved = False
@@ -116,12 +116,12 @@ class DrillPathOptimizer:
                 for j in range(i + 1, n):
                     if j - i == 1:
                         continue
-                    
+
                     # Indices of points involved in the swap
                     # Segment to reverse is path[i:j]
                     # Edges removed: (path[i-1] -> path[i]) and (path[j-1] -> path[j])
                     # Edges added:   (path[i-1] -> path[j-1]) and (path[i] -> path[j])
-                    
+
                     p_a = best_path[i - 1]
                     p_b = best_path[i]
                     p_c = best_path[j - 1]
@@ -130,23 +130,23 @@ class DrillPathOptimizer:
                     # Current edges length
                     d_ab = self.distances[p_a, p_b]
                     d_cd = self.distances[p_c, p_d]
-                    
+
                     # New edges length
                     d_ac = self.distances[p_a, p_c]
                     d_bd = self.distances[p_b, p_d]
-                    
+
                     # Calculate delta
                     delta = (d_ac + d_bd) - (d_ab + d_cd)
 
-                    if delta < -1e-9: # Use a small epsilon for float comparison
+                    if delta < -1e-9:  # Use a small epsilon for float comparison
                         # Apply the move
                         best_path[i:j] = best_path[i:j][::-1]
                         improved = True
                         # Strategy: Restart scan after improvement (First Improvement)
                         # This is often faster for convergence than Best Improvement
-                        # break 
-                # if improved: break 
-            
+                        # break
+                # if improved: break
+
             path = best_path
 
         return best_path
@@ -162,12 +162,12 @@ class DrillPathOptimizer:
             # Fallback for very small paths
             random.shuffle(path)
             return path
-        
+
         # Choose 3 random cut points
         # Ensure segments have at least length 1
         cuts = sorted(random.sample(range(1, n - 1), 3))
         i, j, k = cuts
-        
+
         # Segments: A=[0:i], B=[i:j], C=[j:k], D=[k:n]
         # Reconnect as: A -> D -> C -> B
         return path[:i] + path[k:] + path[j:k] + path[i:j]
@@ -176,7 +176,7 @@ class DrillPathOptimizer:
         """
         Iterated Local Search (ILS) algorithm.
         Combines Local Search (2-opt) with Perturbation (Double Bridge) to find high-quality solutions.
-        
+
         :param path: Initial path.
         :param max_iterations: Number of perturbation-optimization cycles.
         """
@@ -184,26 +184,26 @@ class DrillPathOptimizer:
         current_path = self.two_opt(path)
         best_path = current_path
         best_distance = self.calculate_path_distance(best_path)
-        
+
         logger.info(f"ILS Start Distance: {best_distance:.4f}")
 
         for i in range(max_iterations):
             # 2. Perturbation
             perturbed_path = self._perturbation(current_path)
-            
+
             # 3. Local Search on perturbed solution
             optimized_path = self.two_opt(perturbed_path)
             optimized_distance = self.calculate_path_distance(optimized_path)
-            
+
             # 4. Acceptance Criterion (Simple: Accept if better)
             if optimized_distance < best_distance:
                 best_distance = optimized_distance
                 best_path = optimized_path
-                current_path = optimized_path # Move to the new basin of attraction
+                current_path = optimized_path  # Move to the new basin of attraction
                 logger.debug(f"ILS Improvement at iter {i}: {best_distance:.4f}")
             else:
                 # If not better, we stay at 'current_path' (which is 'best_path' in this simple version)
-                current_path = best_path 
+                current_path = best_path
 
         return best_path
 
@@ -248,6 +248,7 @@ class DrillPathOptimizer:
 
 class _Cities:
     """Helper class for GeneticOptimizer to manage city coordinates and distances."""
+
     def __init__(self, coords: np.ndarray, distances: Optional[np.ndarray] = None) -> None:
         self.coords = coords
         if distances is not None:
@@ -261,6 +262,7 @@ class _Cities:
 
 class _Fitness:
     """Helper class for GeneticOptimizer to calculate fitness of a route."""
+
     def __init__(self, route: np.ndarray, cities: _Cities) -> None:
         self.route = route
         self.cities = cities
@@ -278,7 +280,7 @@ class _Fitness:
         if self.fitness == 0:
             dist = self.route_distance()
             if dist == 0:
-                self.fitness = float('inf')
+                self.fitness = float("inf")
             else:
                 self.fitness = 1 / dist
         return self.fitness
@@ -318,10 +320,10 @@ class GeneticOptimizer:
         df = np.array(np.array(pop_ranked))
         cumsum = df[:, 1].cumsum()
         cum_perc = 100 * cumsum / df[:, 1].sum()
-        
+
         for i in range(0, elite_size):
             selection_results.append(int(pop_ranked[i][0]))
-            
+
         for _ in range(0, len(pop_ranked) - elite_size):
             pick = 100 * random.random()
             for i in range(0, len(pop_ranked)):
@@ -335,7 +337,7 @@ class GeneticOptimizer:
 
     def breed(self, parent1: np.ndarray, parent2: np.ndarray) -> np.ndarray:
         child_p1 = []
-        
+
         gene_a = int(random.random() * len(parent1))
         gene_b = int(random.random() * len(parent1))
 
@@ -354,7 +356,7 @@ class GeneticOptimizer:
         length = len(matingpool) - elite_size
         pool = matingpool.copy()
         random.shuffle(pool)
-        
+
         # Keep elite
         children.extend(matingpool[:elite_size])
 
@@ -390,13 +392,14 @@ class GeneticOptimizer:
         next_generation = self.mutate_population(children, mutation_rate)
         return next_generation
 
-    def genetic_algorithm(self, population: np.ndarray, pop_size: int, elite_size: int, mutation_rate: float,
-                          generations: int) -> np.ndarray:
+    def genetic_algorithm(
+        self, population: np.ndarray, pop_size: int, elite_size: int, mutation_rate: float, generations: int
+    ) -> np.ndarray:
         pop = self.initial_population(pop_size, population)
-        
+
         # Progress logging
         log_interval = max(1, int(generations / 10))
-        
+
         for i in range(0, generations):
             pop = self.next_generation(pop, elite_size, mutation_rate)
             if (i + 1) % log_interval == 0:
@@ -413,14 +416,14 @@ class GeneticOptimizer:
             city_list_arr = np.array(range(0, len(points_coord)))
         else:
             city_list_arr = np.array(city_list)
-            
+
         best_route = self.genetic_algorithm(
             population=city_list_arr, pop_size=400, elite_size=50, mutation_rate=0.02, generations=800
         )
 
         # Removed the rotation logic (np.roll) as it is incorrect for open paths.
         # The path should respect the order found by the genetic algorithm.
-        
+
         return best_route.tolist()
 
 

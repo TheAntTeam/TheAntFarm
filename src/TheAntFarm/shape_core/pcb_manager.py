@@ -3,7 +3,7 @@ import math
 import os
 import time
 from collections import OrderedDict as Od
-from typing import List, Dict, Any, Optional, Union, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import gerber as gbr
 import gerber.primitives
@@ -85,7 +85,7 @@ class PcbObj:
         if not os.path.isfile(path):
             logger.error(f"GERBER FILE NOT FOUND: {path}")
             return False
-        
+
         try:
             tmp = gbr.read(path)
             self.gerbers[tag] = tmp
@@ -158,7 +158,11 @@ class PcbObj:
                     coordinates are converted in metric by default """
 
                 settings = FileSettings(
-                    format=(3, 3), zero_suppression="leading", units="metric", notation="absolute", angle_units="degrees"
+                    format=(3, 3),
+                    zero_suppression="leading",
+                    units="metric",
+                    notation="absolute",
+                    angle_units="degrees",
                 )
                 data = self.dump_str(self.excellons[tag], data_type="excellon", ext_settings=settings)
                 self.excellons[tag] = exc_load(data, settings=settings)
@@ -173,7 +177,7 @@ class PcbObj:
         g = self.get_gerber(tag)
         if g is None:
             return None
-            
+
         mp = []
         for primitive in g.primitives:
             primitive.to_metric()
@@ -191,7 +195,7 @@ class PcbObj:
         g = self.get_excellon(tag)
         if g is None:
             return None
-            
+
         mp = []
         for primitive in g.primitives:
             gdata = self._primitive_paths(primitive)
@@ -203,8 +207,13 @@ class PcbObj:
         return self.layers[tag]
 
     def _arc_segmentation(
-        self, center: Tuple[float, float], radius: float, arc_start_angle: float, arc_end_angle: float, 
-        direction: str = "clockwise", forced_divisions: Optional[int] = None
+        self,
+        center: Tuple[float, float],
+        radius: float,
+        arc_start_angle: float,
+        arc_end_angle: float,
+        direction: str = "clockwise",
+        forced_divisions: Optional[int] = None,
     ) -> List[Tuple[float, float]]:
 
         start_angle = arc_start_angle
@@ -260,7 +269,9 @@ class PcbObj:
         arc_discretization = np.column_stack((x, y))
         return [tuple(x) for x in arc_discretization]
 
-    def _get_enhanced_line(self, l_start: Tuple[float, float], l_end: Tuple[float, float], aperture: Any) -> List[Tuple[float, float]]:
+    def _get_enhanced_line(
+        self, l_start: Tuple[float, float], l_end: Tuple[float, float], aperture: Any
+    ) -> List[Tuple[float, float]]:
         if l_start[0] - l_end[0] >= 0:
             start = l_start
             end = l_end
@@ -351,7 +362,13 @@ class PcbObj:
         return gdata
 
     def _process_arc(self, primitive: Any, region: bool) -> List[Dict[str, Any]]:
-        points = self._arc_segmentation(primitive.center, primitive.radius, primitive.start_angle, primitive.end_angle, direction=primitive.direction)
+        points = self._arc_segmentation(
+            primitive.center,
+            primitive.radius,
+            primitive.start_angle,
+            primitive.end_angle,
+            direction=primitive.direction,
+        )
 
         if isinstance(primitive.aperture, (gbr.primitives.Circle, gbr.primitives.Rectangle)) and not region:
             pts = points.copy()
@@ -378,7 +395,7 @@ class PcbObj:
             for p in pp:
                 gdata += self._primitive_paths(p, region=True)
                 lines_flag &= isinstance(p, (gbr.primitives.Line, gbr.primitives.Arc))
-            
+
             if lines_flag and primitive.primitives:
                 # check if the line is closed
                 p0 = primitive.primitives[0]
@@ -394,7 +411,7 @@ class PcbObj:
 
                 points = self._get_region_polygon(gdata, vectors)
                 gdata = [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
-        
+
         if am_group:
             self.am_group = False
         return gdata
@@ -402,23 +419,23 @@ class PcbObj:
     def _primitive_paths(self, primitive: Any, region: bool = False) -> List[Dict[str, Any]]:
         if isinstance(primitive, gbr.primitives.Line):
             return self._process_line(primitive, region)
-        
+
         elif isinstance(primitive, gbr.primitives.Arc):
             return self._process_arc(primitive, region)
-        
+
         elif isinstance(primitive, (gbr.primitives.Region, gbr.primitives.AMGroup, gbr.primitives.Outline)):
             return self._process_region(primitive, region)
 
         elif isinstance(primitive, gbr.primitives.Rectangle):
             return [{"points": primitive.vertices, "polarity": primitive.level_polarity, "closed": True}]
-        
+
         elif isinstance(primitive, gbr.primitives.Polygon):
             return [{"points": primitive.vertices, "polarity": primitive.level_polarity, "closed": True}]
-        
+
         elif isinstance(primitive, gbr.primitives.Circle):
             points = self._arc_segmentation(primitive.position, primitive.radius, 0, 2 * math.pi)
             return [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
-        
+
         elif isinstance(primitive, gbr.primitives.Obround):
             circle1 = primitive.subshapes["circle1"]
             circle2 = primitive.subshapes["circle2"]
@@ -426,11 +443,11 @@ class PcbObj:
             points2 = self._arc_segmentation(circle2.position, circle2.radius, 0, 2 * math.pi)
             points = convex_hull(points1 + points2)
             return [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
-        
+
         elif isinstance(primitive, gbr.primitives.Drill):
             points = self._arc_segmentation(primitive.position, primitive.radius, 0, 2 * math.pi)
             return [{"points": points, "polarity": primitive.level_polarity, "closed": True}]
-        
+
         elif isinstance(primitive, gbr.primitives.Slot):
             points1 = self._arc_segmentation(primitive.start, primitive.diameter / 2.0, 0, 2 * math.pi)
             points2 = self._arc_segmentation(primitive.end, primitive.diameter / 2.0, 0, 2 * math.pi)
