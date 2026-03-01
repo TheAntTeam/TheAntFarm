@@ -10,7 +10,7 @@ from scipy.spatial import distance
 logger = logging.getLogger(__name__)
 
 
-class DrillOptimizer:
+class DrillPathOptimizer:
     """
     Optimizes the path for visiting a set of 2D coordinates (Traveling Salesperson Problem).
     Provides multiple algorithms with different trade-offs between speed and optimality.

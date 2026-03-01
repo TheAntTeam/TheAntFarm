@@ -17,7 +17,8 @@ from .geometry_manager import (
     offset_polygon,
     offset_polygon_holes,
 )
-from .drill_path_optimizer import DrillOptimizer
+from .drill_path_optimizer import DrillPathOptimizer
+from .gerber_path_optimizer import GerberPathOptimizer
 
 logger = logging.getLogger(__name__)
 
@@ -361,6 +362,12 @@ class MachinePath:
                     path.append(i)
                     path_counter += 1
         
+        # OPTIMIZATION: Reorder Gerber paths to minimize travel distance
+        if path:
+            logger.info("Optimizing Gerber path...")
+            optimizer = GerberPathOptimizer(path)
+            path = optimizer.optimize()
+
         t_d = self.cfg["tool_diameter"]
         # Structure: (tool_info, path_geometry, invalid_indices)
         self.path = [((t_d, self.TYPE_GERBER), path, invalid_paths)]
@@ -478,7 +485,7 @@ class MachinePath:
                 optimize_cfg = self.cfg["optimize"]
                 # Check if optimization is enabled (can be boolean or int index)
                 if optimize_cfg is not False: 
-                    opt = DrillOptimizer(bit_points)
+                    opt = DrillPathOptimizer(bit_points)
                     available_opt_types = opt.get_optimization_types()
                     
                     # Handle integer index for optimization type (Backward Compatibility)
