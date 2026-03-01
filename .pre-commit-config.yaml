@@ -1,0 +1,56 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.1.1
+    hooks:
+      - id: black
+        language_version: python3.10
+        args: ["--line-length", "120"]
+        stages: [manual]
+        exclude: |
+          (?x)^(
+            .*app_resources_rc\.py|
+            .*ui_the_ant_farm\.py|
+            .*hook-vispy\.py
+          )$
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ["--profile=black", "--line-length", "120"]
+        stages: [manual]
+        exclude: |
+          (?x)^(
+            .*app_resources_rc\.py|
+            .*ui_the_ant_farm\.py|
+            .*hook-vispy\.py|
+            .*vispy_qt_widget\.py
+          )$
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        args: ["--extend-ignore=E203", "--max-line-length=120"]
+        stages: [manual]
+        exclude: |
+          (?x)^(
+            .*app_resources_rc\.py|
+            .*ui_the_ant_farm\.py|
+            .*hook-vispy\.py|
+            .*vispy_qt_widget\.py
+          )$
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        args: [--ignore-missing-imports]
+        stages: [manual]
+        exclude: |
+          (?x)^(
+            .*app_resources_rc\.py|
+            .*ui_the_ant_farm\.py|
+            .*hook-vispy\.py|
+            .*vispy_qt_widget\.py
+          )$

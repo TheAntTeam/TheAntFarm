@@ -69,23 +69,23 @@ jobs:
       continue-on-error: true
       run: |
         echo "Checking code formatting with Black (non-blocking)..."
-        black --check --diff --exclude="(.*app_resources_rc|.*ui_the_ant_farm)\.py" src/TheAntFarm tests || echo "Black formatting issues found - check output above"
-        isort --check-only --diff src/TheAntFarm tests || echo "Import sorting issues found - check output above"
+        black --check --diff --exclude="(.*app_resources_rc|.*ui_the_ant_farm|.*hook-vispy)\.py" src/TheAntFarm tests || echo "Black formatting issues found - check output above"
+        isort --check-only --diff --profile=black --line-length=120 --skip-glob="*app_resources_rc.py,*ui_the_ant_farm.py,*hook-vispy.py,*vispy_qt_widget.py" src tests || echo "Import sorting issues found - check output above"
 
     - name: Lint with flake8
       continue-on-error: true
       run: |
         echo "Running flake8 checks (non-blocking)..."
         # check for Python syntax errors or undefined names
-        flake8 . --exclude app_resources_rc.py,ui_the_ant_farm.py --count --select=E9,F63,F7,F82 --show-source --statistics || echo "Critical flake8 issues found - check output above"
+        flake8 . --exclude app_resources_rc.py,ui_the_ant_farm.py,hook-vispy.py,vispy_qt_widget.py --count --select=E9,F63,F7,F82 --show-source --statistics || echo "Critical flake8 issues found - check output above"
         # check for style issues
-        flake8 . --exclude app_resources_rc.py,ui_the_ant_farm.py --count --max-complexity=10 --max-line-length=127 --statistics || echo "Style issues found - check output above"
+        flake8 . --exclude app_resources_rc.py,ui_the_ant_farm.py,hook-vispy.py,vispy_qt_widget.py --count --max-complexity=10 --max-line-length=120 --extend-ignore=E203 --statistics || echo "Style issues found - check output above"
     
     - name: Type checking
       continue-on-error: true
       run: |
         echo "Running mypy type checking (non-blocking)..."
-        mypy src/TheAntFarm --ignore-missing-imports || echo "Type checking issues found - check output above"
+        mypy src/TheAntFarm tests --ignore-missing-imports || echo "Type checking issues found - check output above"
     
     - name: Run tests with coverage
       run: |

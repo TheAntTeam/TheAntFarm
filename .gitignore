@@ -6,6 +6,7 @@
 env/
 venv/
 .venv/
+venv*/
 
 # Files created by running
 src/TheAntFarm/app_logs/
@@ -13,3 +14,8 @@ gcode_temp_dir/
 src/TheAntFarm/configurations/
 src/TheAntFarm/gcode_temp_dir/
 /src/TheAntFarm/build/
+
+# Coverage files
+.coverage
+coverage.xml
+htmlcov/
