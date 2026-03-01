@@ -51,7 +51,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -2705,7 +2705,7 @@
                 <item>
                  <widget class="Line" name="line">
                   <property name="orientation">
-                   <enum>Qt::Vertical</enum>
+                   <enum>Qt::Horizontal</enum>
                   </property>
                  </widget>
                 </item>
@@ -3658,14 +3658,14 @@
                              <number>1</number>
                             </property>
                             <property name="orientation">
-                             <enum>Qt::Vertical</enum>
+                             <enum>Qt::Horizontal</enum>
                             </property>
                            </widget>
                           </item>
                           <item row="1" column="0">
                            <widget class="Line" name="line_5">
                             <property name="orientation">
-                             <enum>Qt::Vertical</enum>
+                             <enum>Qt::Horizontal</enum>
                             </property>
                            </widget>
                           </item>
@@ -3829,7 +3829,7 @@
                       <item>
                        <widget class="Line" name="line_3">
                         <property name="orientation">
-                         <enum>Qt::Vertical</enum>
+                         <enum>Qt::Horizontal</enum>
                         </property>
                        </widget>
                       </item>
@@ -4351,7 +4351,7 @@
                       <item>
                        <widget class="Line" name="line_4">
                         <property name="orientation">
-                         <enum>Qt::Vertical</enum>
+                         <enum>Qt::Horizontal</enum>
                         </property>
                        </widget>
                       </item>
@@ -5216,6 +5216,9 @@
             </property>
             <property name="text">
              <string>Not Connected</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -6534,14 +6537,14 @@
                         <number>1</number>
                        </property>
                        <property name="orientation">
-                        <enum>Qt::Vertical</enum>
+                        <enum>Qt::Horizontal</enum>
                        </property>
                       </widget>
                      </item>
                      <item row="1" column="0">
                       <widget class="Line" name="line_26">
                        <property name="orientation">
-                        <enum>Qt::Vertical</enum>
+                        <enum>Qt::Horizontal</enum>
                        </property>
                       </widget>
                      </item>
@@ -7327,7 +7330,7 @@
            <bool>true</bool>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="application_settings_tab">
            <attribute name="title">
@@ -7957,7 +7960,7 @@
             <item row="19" column="0">
              <widget class="Line" name="line_10">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -8027,7 +8030,7 @@
             <item row="6" column="0">
              <widget class="Line" name="line_16">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -8851,7 +8854,7 @@
               <item>
                <widget class="Line" name="line_6">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Horizontal</enum>
                 </property>
                </widget>
               </item>
@@ -9063,28 +9066,28 @@
             <item row="13" column="0">
              <widget class="Line" name="line_8">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="8" column="0">
              <widget class="Line" name="line_15">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="17" column="0">
              <widget class="Line" name="line_9">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="15" column="0">
              <widget class="Line" name="line_7">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -9104,7 +9107,7 @@
             <item row="0" column="0">
              <widget class="Line" name="line_12">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -9210,21 +9213,21 @@
             <item row="2" column="0">
              <widget class="Line" name="line_11">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="Line" name="line_13">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
             <item row="11" column="0">
              <widget class="Line" name="line_14">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
              </widget>
             </item>
@@ -9240,7 +9243,7 @@
               <item>
                <widget class="Line" name="line_21">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Horizontal</enum>
                 </property>
                </widget>
               </item>
@@ -9260,7 +9263,7 @@
               <item>
                <widget class="Line" name="line_22">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Horizontal</enum>
                 </property>
                </widget>
               </item>
@@ -9356,7 +9359,7 @@
               <item>
                <widget class="Line" name="line_23">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Horizontal</enum>
                 </property>
                </widget>
               </item>
@@ -9376,7 +9379,7 @@
               <item>
                <widget class="Line" name="line_24">
                 <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <enum>Qt::Horizontal</enum>
                 </property>
                </widget>
               </item>

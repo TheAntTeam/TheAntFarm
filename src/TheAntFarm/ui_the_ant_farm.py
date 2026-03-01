@@ -1493,7 +1493,7 @@ class Ui_MainWindow(object):
 
         self.line = QFrame(self.sender_tab)
         self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.Shape.VLine)
+        self.line.setFrameShape(QFrame.Shape.HLine)
         self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.controlsVerticalLayout.addWidget(self.line)
@@ -1867,14 +1867,14 @@ class Ui_MainWindow(object):
         self.line_2 = QFrame(self.jog_tab)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setLineWidth(1)
-        self.line_2.setFrameShape(QFrame.Shape.VLine)
+        self.line_2.setFrameShape(QFrame.Shape.HLine)
         self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.jogGridlayout.addWidget(self.line_2, 1, 1, 1, 1)
 
         self.line_5 = QFrame(self.jog_tab)
         self.line_5.setObjectName(u"line_5")
-        self.line_5.setFrameShape(QFrame.Shape.VLine)
+        self.line_5.setFrameShape(QFrame.Shape.HLine)
         self.line_5.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.jogGridlayout.addWidget(self.line_5, 1, 0, 1, 1)
@@ -1949,7 +1949,7 @@ class Ui_MainWindow(object):
 
         self.line_3 = QFrame(self.probe_terminal_tab)
         self.line_3.setObjectName(u"line_3")
-        self.line_3.setFrameShape(QFrame.Shape.VLine)
+        self.line_3.setFrameShape(QFrame.Shape.HLine)
         self.line_3.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_17.addWidget(self.line_3)
@@ -2151,7 +2151,7 @@ class Ui_MainWindow(object):
 
         self.line_4 = QFrame(self.probe_terminal_tab)
         self.line_4.setObjectName(u"line_4")
-        self.line_4.setFrameShape(QFrame.Shape.VLine)
+        self.line_4.setFrameShape(QFrame.Shape.HLine)
         self.line_4.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_17.addWidget(self.line_4)
@@ -2445,6 +2445,7 @@ class Ui_MainWindow(object):
         font2.setBold(True)
         self.status_l.setFont(font2)
         self.status_l.setFrameShape(QFrame.NoFrame)
+        self.status_l.setAlignment(Qt.AlignCenter)
         self.status_l.setWordWrap(True)
 
         self.verticalLayout_3.addWidget(self.status_l)
@@ -2961,14 +2962,14 @@ class Ui_MainWindow(object):
         self.line_25 = QFrame(self.frame_2)
         self.line_25.setObjectName(u"line_25")
         self.line_25.setLineWidth(1)
-        self.line_25.setFrameShape(QFrame.Shape.VLine)
+        self.line_25.setFrameShape(QFrame.Shape.HLine)
         self.line_25.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.jog_layout_2.addWidget(self.line_25, 1, 1, 1, 1)
 
         self.line_26 = QFrame(self.frame_2)
         self.line_26.setObjectName(u"line_26")
-        self.line_26.setFrameShape(QFrame.Shape.VLine)
+        self.line_26.setFrameShape(QFrame.Shape.HLine)
         self.line_26.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.jog_layout_2.addWidget(self.line_26, 1, 0, 1, 1)
@@ -3556,7 +3557,7 @@ class Ui_MainWindow(object):
 
         self.line_10 = QFrame(self.jobs_machine_settings_tab)
         self.line_10.setObjectName(u"line_10")
-        self.line_10.setFrameShape(QFrame.Shape.VLine)
+        self.line_10.setFrameShape(QFrame.Shape.HLine)
         self.line_10.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_10, 19, 0, 1, 1)
@@ -3585,7 +3586,7 @@ class Ui_MainWindow(object):
 
         self.line_16 = QFrame(self.jobs_machine_settings_tab)
         self.line_16.setObjectName(u"line_16")
-        self.line_16.setFrameShape(QFrame.Shape.VLine)
+        self.line_16.setFrameShape(QFrame.Shape.HLine)
         self.line_16.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_16, 6, 0, 1, 1)
@@ -3885,7 +3886,7 @@ class Ui_MainWindow(object):
 
         self.line_6 = QFrame(self.jobs_machine_settings_tab)
         self.line_6.setObjectName(u"line_6")
-        self.line_6.setFrameShape(QFrame.Shape.VLine)
+        self.line_6.setFrameShape(QFrame.Shape.HLine)
         self.line_6.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_5.addWidget(self.line_6)
@@ -3973,28 +3974,28 @@ class Ui_MainWindow(object):
 
         self.line_8 = QFrame(self.jobs_machine_settings_tab)
         self.line_8.setObjectName(u"line_8")
-        self.line_8.setFrameShape(QFrame.Shape.VLine)
+        self.line_8.setFrameShape(QFrame.Shape.HLine)
         self.line_8.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_8, 13, 0, 1, 1)
 
         self.line_15 = QFrame(self.jobs_machine_settings_tab)
         self.line_15.setObjectName(u"line_15")
-        self.line_15.setFrameShape(QFrame.Shape.VLine)
+        self.line_15.setFrameShape(QFrame.Shape.HLine)
         self.line_15.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_15, 8, 0, 1, 1)
 
         self.line_9 = QFrame(self.jobs_machine_settings_tab)
         self.line_9.setObjectName(u"line_9")
-        self.line_9.setFrameShape(QFrame.Shape.VLine)
+        self.line_9.setFrameShape(QFrame.Shape.HLine)
         self.line_9.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_9, 17, 0, 1, 1)
 
         self.line_7 = QFrame(self.jobs_machine_settings_tab)
         self.line_7.setObjectName(u"line_7")
-        self.line_7.setFrameShape(QFrame.Shape.VLine)
+        self.line_7.setFrameShape(QFrame.Shape.HLine)
         self.line_7.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_7, 15, 0, 1, 1)
@@ -4005,7 +4006,7 @@ class Ui_MainWindow(object):
 
         self.line_12 = QFrame(self.jobs_machine_settings_tab)
         self.line_12.setObjectName(u"line_12")
-        self.line_12.setFrameShape(QFrame.Shape.VLine)
+        self.line_12.setFrameShape(QFrame.Shape.HLine)
         self.line_12.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_12, 0, 0, 1, 1)
@@ -4054,21 +4055,21 @@ class Ui_MainWindow(object):
 
         self.line_11 = QFrame(self.jobs_machine_settings_tab)
         self.line_11.setObjectName(u"line_11")
-        self.line_11.setFrameShape(QFrame.Shape.VLine)
+        self.line_11.setFrameShape(QFrame.Shape.HLine)
         self.line_11.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_11, 2, 0, 1, 1)
 
         self.line_13 = QFrame(self.jobs_machine_settings_tab)
         self.line_13.setObjectName(u"line_13")
-        self.line_13.setFrameShape(QFrame.Shape.VLine)
+        self.line_13.setFrameShape(QFrame.Shape.HLine)
         self.line_13.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_13, 4, 0, 1, 1)
 
         self.line_14 = QFrame(self.jobs_machine_settings_tab)
         self.line_14.setObjectName(u"line_14")
-        self.line_14.setFrameShape(QFrame.Shape.VLine)
+        self.line_14.setFrameShape(QFrame.Shape.HLine)
         self.line_14.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_13.addWidget(self.line_14, 11, 0, 1, 1)
@@ -4082,7 +4083,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_15.setObjectName(u"verticalLayout_15")
         self.line_21 = QFrame(self.alignment_settings_tab)
         self.line_21.setObjectName(u"line_21")
-        self.line_21.setFrameShape(QFrame.Shape.VLine)
+        self.line_21.setFrameShape(QFrame.Shape.HLine)
         self.line_21.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_15.addWidget(self.line_21)
@@ -4095,7 +4096,7 @@ class Ui_MainWindow(object):
 
         self.line_22 = QFrame(self.alignment_settings_tab)
         self.line_22.setObjectName(u"line_22")
-        self.line_22.setFrameShape(QFrame.Shape.VLine)
+        self.line_22.setFrameShape(QFrame.Shape.HLine)
         self.line_22.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_15.addWidget(self.line_22)
@@ -4136,7 +4137,7 @@ class Ui_MainWindow(object):
 
         self.line_23 = QFrame(self.alignment_settings_tab)
         self.line_23.setObjectName(u"line_23")
-        self.line_23.setFrameShape(QFrame.Shape.VLine)
+        self.line_23.setFrameShape(QFrame.Shape.HLine)
         self.line_23.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_15.addWidget(self.line_23)
@@ -4149,7 +4150,7 @@ class Ui_MainWindow(object):
 
         self.line_24 = QFrame(self.alignment_settings_tab)
         self.line_24.setObjectName(u"line_24")
-        self.line_24.setFrameShape(QFrame.Shape.VLine)
+        self.line_24.setFrameShape(QFrame.Shape.HLine)
         self.line_24.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_15.addWidget(self.line_24)
@@ -4382,7 +4383,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(0)
+        self.main_tab_widget.setCurrentIndex(3)
         self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
         self.ctrl_tab_widget.setCurrentIndex(1)
@@ -4391,7 +4392,7 @@ class Ui_MainWindow(object):
         self.xy_step_cb.setCurrentIndex(3)
         self.z_step_cb_2.setCurrentIndex(3)
         self.xy_step_cb_2.setCurrentIndex(3)
-        self.settings_sub_tab.setCurrentIndex(0)
+        self.settings_sub_tab.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
