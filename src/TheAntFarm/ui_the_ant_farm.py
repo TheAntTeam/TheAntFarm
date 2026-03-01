@@ -122,6 +122,8 @@ class Ui_MainWindow(object):
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
+        self.gridLayout.setVerticalSpacing(6)
+        self.gridLayout.setContentsMargins(1, 1, 1, 1)
         self.no_copper_1_le = QLineEdit(self.load_layers_tab)
         self.no_copper_1_le.setObjectName(u"no_copper_1_le")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
@@ -296,18 +298,18 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.profile_view_chb, 3, 2, 1, 1)
 
-        self.horizontal_spacer = QSpacerItem(140, 17, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontal_spacer = QSpacerItem(140, 17, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.gridLayout.addItem(self.horizontal_spacer, 8, 0, 1, 1)
 
-        self.horizontal_spacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontal_spacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout.addItem(self.horizontal_spacer_2, 7, 0, 1, 1)
 
 
         self.verticalLayout_7.addLayout(self.gridLayout)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer = QSpacerItem(20, 400, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_7.addItem(self.verticalSpacer)
 
@@ -363,7 +365,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.top_n_passes_la, 1, 0, 1, 1)
 
-        self.top_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.top_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_2.addItem(self.top_vertical_spacer, 10, 0, 1, 2)
 
@@ -533,7 +535,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.bottom_overlap_dsb, 3, 1, 1, 1)
 
-        self.bottom_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.bottom_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_3.addItem(self.bottom_vertical_spacer, 11, 0, 1, 2)
 
@@ -709,7 +711,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.profile_tap_size_la, 12, 1, 1, 1)
 
-        self.profile_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.profile_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_4.addItem(self.profile_vertical_spacer, 15, 1, 1, 3)
 
@@ -893,7 +895,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.drill_milling_tool_diameter_la, 4, 1, 1, 1)
 
-        self.drill_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.drill_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_5.addItem(self.drill_vertical_spacer, 15, 1, 1, 2)
 
@@ -1029,7 +1031,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_6.addWidget(self.nc_top_z_feed_rate_dsb, 6, 1, 1, 1)
 
-        self.nc_top_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.nc_top_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_6.addItem(self.nc_top_vertical_spacer, 7, 0, 1, 2)
 
@@ -1111,7 +1113,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_7.addWidget(self.nc_bottom_tool_diameter_la, 0, 0, 1, 1)
 
-        self.nc_bottom_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.nc_bottom_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_7.addItem(self.nc_bottom_vertical_spacer, 8, 0, 1, 2)
 
@@ -1175,7 +1177,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
@@ -1506,7 +1508,7 @@ class Ui_MainWindow(object):
         sizePolicy8.setHeightForWidth(self.jog_probe_tab_widget.sizePolicy().hasHeightForWidth())
         self.jog_probe_tab_widget.setSizePolicy(sizePolicy8)
         self.jog_probe_tab_widget.setMinimumSize(QSize(0, 0))
-        self.jog_probe_tab_widget.setTabPosition(QTabWidget.TabPosition.South)
+        self.jog_probe_tab_widget.setTabPosition(QTabWidget.North)
         self.jog_probe_tab_widget.setTabBarAutoHide(True)
         self.jog_tab = QWidget()
         self.jog_tab.setObjectName(u"jog_tab")
@@ -1519,7 +1521,7 @@ class Ui_MainWindow(object):
         self.jogGridlayout.setObjectName(u"jogGridlayout")
         self.zMoveGridLayout = QGridLayout()
         self.zMoveGridLayout.setObjectName(u"zMoveGridLayout")
-        self.zMoveGridLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
+        self.zMoveGridLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.z_plus_pb = QPushButton(self.jog_tab)
         self.z_plus_pb.setObjectName(u"z_plus_pb")
         sizePolicy3.setHeightForWidth(self.z_plus_pb.sizePolicy().hasHeightForWidth())
@@ -1661,7 +1663,7 @@ class Ui_MainWindow(object):
         self.zStepAdjustmentVerticalLayout.setObjectName(u"zStepAdjustmentVerticalLayout")
         self.horizontalLayout_14 = QHBoxLayout()
         self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
-        self.horizontalLayout_14.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
+        self.horizontalLayout_14.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.z_jog_l_2 = QLabel(self.jog_tab)
         self.z_jog_l_2.setObjectName(u"z_jog_l_2")
         sizePolicy3.setHeightForWidth(self.z_jog_l_2.sizePolicy().hasHeightForWidth())
@@ -1669,9 +1671,8 @@ class Ui_MainWindow(object):
         self.z_jog_l_2.setMinimumSize(QSize(0, 20))
         self.z_jog_l_2.setMaximumSize(QSize(16777215, 23))
         self.z_jog_l_2.setFont(font)
-        self.z_jog_l_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.horizontalLayout_14.addWidget(self.z_jog_l_2, 0, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_14.addWidget(self.z_jog_l_2)
 
         self.z_step_cb = QComboBox(self.jog_tab)
         self.z_step_cb.addItem("")
@@ -1689,7 +1690,7 @@ class Ui_MainWindow(object):
         self.z_step_cb.setMaximumSize(QSize(75, 16777215))
         self.z_step_cb.setFont(font)
 
-        self.horizontalLayout_14.addWidget(self.z_step_cb, 0, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_14.addWidget(self.z_step_cb)
 
 
         self.zStepAdjustmentVerticalLayout.addLayout(self.horizontalLayout_14)
@@ -1701,8 +1702,7 @@ class Ui_MainWindow(object):
         self.z_step_val_dsb.setMinimumSize(QSize(70, 20))
         self.z_step_val_dsb.setMaximumSize(QSize(70, 16777215))
         self.z_step_val_dsb.setFont(font)
-        self.z_step_val_dsb.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.z_step_val_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.z_step_val_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
         self.z_step_val_dsb.setMinimum(0.010000000000000)
         self.z_step_val_dsb.setMaximum(1000.000000000000000)
         self.z_step_val_dsb.setSingleStep(0.100000000000000)
@@ -1767,16 +1767,15 @@ class Ui_MainWindow(object):
         self.xyStepAdjustmentVerticalLayout.setObjectName(u"xyStepAdjustmentVerticalLayout")
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.horizontalLayout_12.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
+        self.horizontalLayout_12.setSizeConstraint(QLayout.SetDefaultConstraint)
         self.xy_jog_l = QLabel(self.jog_tab)
         self.xy_jog_l.setObjectName(u"xy_jog_l")
         sizePolicy3.setHeightForWidth(self.xy_jog_l.sizePolicy().hasHeightForWidth())
         self.xy_jog_l.setSizePolicy(sizePolicy3)
         self.xy_jog_l.setMinimumSize(QSize(0, 0))
         self.xy_jog_l.setMaximumSize(QSize(16777215, 23))
-        self.xy_jog_l.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.horizontalLayout_12.addWidget(self.xy_jog_l, 0, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_12.addWidget(self.xy_jog_l)
 
         self.xy_step_cb = QComboBox(self.jog_tab)
         self.xy_step_cb.addItem("")
@@ -1793,7 +1792,7 @@ class Ui_MainWindow(object):
         self.xy_step_cb.setMinimumSize(QSize(75, 0))
         self.xy_step_cb.setMaximumSize(QSize(75, 23))
 
-        self.horizontalLayout_12.addWidget(self.xy_step_cb, 0, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_12.addWidget(self.xy_step_cb)
 
 
         self.xyStepAdjustmentVerticalLayout.addLayout(self.horizontalLayout_12)
@@ -1829,8 +1828,7 @@ class Ui_MainWindow(object):
         self.xy_step_val_dsb.setMinimumSize(QSize(70, 23))
         self.xy_step_val_dsb.setMaximumSize(QSize(70, 23))
         self.xy_step_val_dsb.setFont(font)
-        self.xy_step_val_dsb.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.xy_step_val_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.xy_step_val_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
         self.xy_step_val_dsb.setMinimum(0.010000000000000)
         self.xy_step_val_dsb.setMaximum(1000.000000000000000)
         self.xy_step_val_dsb.setSingleStep(0.100000000000000)
@@ -1869,14 +1867,14 @@ class Ui_MainWindow(object):
         self.line_2 = QFrame(self.jog_tab)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setLineWidth(1)
-        self.line_2.setFrameShape(QFrame.Shape.HLine)
+        self.line_2.setFrameShape(QFrame.Shape.VLine)
         self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.jogGridlayout.addWidget(self.line_2, 1, 1, 1, 1)
 
         self.line_5 = QFrame(self.jog_tab)
         self.line_5.setObjectName(u"line_5")
-        self.line_5.setFrameShape(QFrame.Shape.HLine)
+        self.line_5.setFrameShape(QFrame.Shape.VLine)
         self.line_5.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.jogGridlayout.addWidget(self.line_5, 1, 0, 1, 1)
@@ -1884,7 +1882,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_18.addLayout(self.jogGridlayout)
 
-        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.verticalLayout_18.addItem(self.verticalSpacer_7)
 
@@ -1906,7 +1904,7 @@ class Ui_MainWindow(object):
         self.probe_pb.setMinimumSize(QSize(0, 20))
         self.probe_pb.setMaximumSize(QSize(16777215, 23))
 
-        self.probeABLGridLayout.addWidget(self.probe_pb, 0, 0, 1, 1, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
+        self.probeABLGridLayout.addWidget(self.probe_pb, 0, 0, 1, 1)
 
         self.get_bbox_pb = QPushButton(self.probe_terminal_tab)
         self.get_bbox_pb.setObjectName(u"get_bbox_pb")
@@ -1916,7 +1914,7 @@ class Ui_MainWindow(object):
         self.get_bbox_pb.setMaximumSize(QSize(16777215, 23))
         self.get_bbox_pb.setFont(font)
 
-        self.probeABLGridLayout.addWidget(self.get_bbox_pb, 0, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignVCenter)
+        self.probeABLGridLayout.addWidget(self.get_bbox_pb, 0, 2, 1, 1)
 
         self.horizontalLayout_11 = QHBoxLayout()
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
@@ -1951,7 +1949,7 @@ class Ui_MainWindow(object):
 
         self.line_3 = QFrame(self.probe_terminal_tab)
         self.line_3.setObjectName(u"line_3")
-        self.line_3.setFrameShape(QFrame.Shape.HLine)
+        self.line_3.setFrameShape(QFrame.Shape.VLine)
         self.line_3.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_17.addWidget(self.line_3)
@@ -1969,7 +1967,6 @@ class Ui_MainWindow(object):
         self.min_l.setMinimumSize(QSize(0, 20))
         self.min_l.setMaximumSize(QSize(16777215, 23))
         self.min_l.setFont(font)
-        self.min_l.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.stepsGridLayout.addWidget(self.min_l, 0, 1, 1, 1)
 
@@ -1980,7 +1977,6 @@ class Ui_MainWindow(object):
         self.max_l.setMinimumSize(QSize(0, 20))
         self.max_l.setMaximumSize(QSize(16777215, 23))
         self.max_l.setFont(font)
-        self.max_l.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.stepsGridLayout.addWidget(self.max_l, 0, 2, 1, 1)
 
@@ -1991,7 +1987,6 @@ class Ui_MainWindow(object):
         self.step_l.setMinimumSize(QSize(0, 20))
         self.step_l.setMaximumSize(QSize(16777215, 23))
         self.step_l.setFont(font)
-        self.step_l.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.stepsGridLayout.addWidget(self.step_l, 0, 3, 1, 1)
 
@@ -2002,7 +1997,6 @@ class Ui_MainWindow(object):
         self.n_step_l.setMinimumSize(QSize(0, 20))
         self.n_step_l.setMaximumSize(QSize(16777215, 23))
         self.n_step_l.setFont(font)
-        self.n_step_l.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.stepsGridLayout.addWidget(self.n_step_l, 0, 4, 1, 1)
 
@@ -2013,7 +2007,6 @@ class Ui_MainWindow(object):
         self.x_l.setMinimumSize(QSize(0, 20))
         self.x_l.setMaximumSize(QSize(16777215, 23))
         self.x_l.setFont(font)
-        self.x_l.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.stepsGridLayout.addWidget(self.x_l, 1, 0, 1, 1)
 
@@ -2023,8 +2016,7 @@ class Ui_MainWindow(object):
         self.x_min_dsb.setSizePolicy(sizePolicy9)
         self.x_min_dsb.setMinimumSize(QSize(0, 20))
         self.x_min_dsb.setMaximumSize(QSize(16777215, 23))
-        self.x_min_dsb.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.x_min_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.x_min_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
         self.x_min_dsb.setMinimum(-1000.000000000000000)
         self.x_min_dsb.setMaximum(1000.000000000000000)
 
@@ -2036,8 +2028,7 @@ class Ui_MainWindow(object):
         self.x_max_dsb.setSizePolicy(sizePolicy9)
         self.x_max_dsb.setMinimumSize(QSize(0, 20))
         self.x_max_dsb.setMaximumSize(QSize(16777215, 23))
-        self.x_max_dsb.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.x_max_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.x_max_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
         self.x_max_dsb.setMinimum(-1000.000000000000000)
         self.x_max_dsb.setMaximum(1000.000000000000000)
 
@@ -2050,9 +2041,8 @@ class Ui_MainWindow(object):
         self.x_step_dsb.setSizePolicy(sizePolicy9)
         self.x_step_dsb.setMinimumSize(QSize(0, 20))
         self.x_step_dsb.setMaximumSize(QSize(16777215, 23))
-        self.x_step_dsb.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.x_step_dsb.setReadOnly(True)
-        self.x_step_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.x_step_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
 
         self.stepsGridLayout.addWidget(self.x_step_dsb, 1, 3, 1, 1)
 
@@ -2062,7 +2052,6 @@ class Ui_MainWindow(object):
         self.x_num_step_sb.setSizePolicy(sizePolicy9)
         self.x_num_step_sb.setMinimumSize(QSize(0, 20))
         self.x_num_step_sb.setMaximumSize(QSize(16777215, 23))
-        self.x_num_step_sb.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.x_num_step_sb.setMinimum(4)
 
         self.stepsGridLayout.addWidget(self.x_num_step_sb, 1, 4, 1, 1)
@@ -2074,7 +2063,6 @@ class Ui_MainWindow(object):
         self.y_l.setMinimumSize(QSize(0, 20))
         self.y_l.setMaximumSize(QSize(16777215, 23))
         self.y_l.setFont(font)
-        self.y_l.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.stepsGridLayout.addWidget(self.y_l, 2, 0, 1, 1)
 
@@ -2084,8 +2072,7 @@ class Ui_MainWindow(object):
         self.y_min_dsb.setSizePolicy(sizePolicy9)
         self.y_min_dsb.setMinimumSize(QSize(0, 20))
         self.y_min_dsb.setMaximumSize(QSize(16777215, 23))
-        self.y_min_dsb.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.y_min_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.y_min_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
         self.y_min_dsb.setMinimum(-1000.000000000000000)
         self.y_min_dsb.setMaximum(1000.000000000000000)
 
@@ -2097,8 +2084,7 @@ class Ui_MainWindow(object):
         self.y_max_dsb.setSizePolicy(sizePolicy9)
         self.y_max_dsb.setMinimumSize(QSize(0, 20))
         self.y_max_dsb.setMaximumSize(QSize(16777215, 23))
-        self.y_max_dsb.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.y_max_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.y_max_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
         self.y_max_dsb.setMinimum(-1000.000000000000000)
         self.y_max_dsb.setMaximum(1000.000000000000000)
 
@@ -2111,9 +2097,8 @@ class Ui_MainWindow(object):
         self.y_step_dsb.setSizePolicy(sizePolicy9)
         self.y_step_dsb.setMinimumSize(QSize(0, 20))
         self.y_step_dsb.setMaximumSize(QSize(16777215, 23))
-        self.y_step_dsb.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.y_step_dsb.setReadOnly(True)
-        self.y_step_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.y_step_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
 
         self.stepsGridLayout.addWidget(self.y_step_dsb, 2, 3, 1, 1)
 
@@ -2123,7 +2108,6 @@ class Ui_MainWindow(object):
         self.y_num_step_sb.setSizePolicy(sizePolicy9)
         self.y_num_step_sb.setMinimumSize(QSize(0, 20))
         self.y_num_step_sb.setMaximumSize(QSize(16777215, 23))
-        self.y_num_step_sb.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.y_num_step_sb.setMinimum(4)
 
         self.stepsGridLayout.addWidget(self.y_num_step_sb, 2, 4, 1, 1)
@@ -2135,7 +2119,6 @@ class Ui_MainWindow(object):
         self.z_l.setMinimumSize(QSize(0, 20))
         self.z_l.setMaximumSize(QSize(16777215, 23))
         self.z_l.setFont(font)
-        self.z_l.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.stepsGridLayout.addWidget(self.z_l, 3, 0, 1, 1)
 
@@ -2145,8 +2128,7 @@ class Ui_MainWindow(object):
         self.z_min_dsb.setSizePolicy(sizePolicy9)
         self.z_min_dsb.setMinimumSize(QSize(0, 20))
         self.z_min_dsb.setMaximumSize(QSize(16777215, 23))
-        self.z_min_dsb.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.z_min_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.z_min_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
         self.z_min_dsb.setMinimum(-1000.000000000000000)
         self.z_min_dsb.setMaximum(1000.000000000000000)
 
@@ -2158,8 +2140,7 @@ class Ui_MainWindow(object):
         self.z_max_dsb.setSizePolicy(sizePolicy9)
         self.z_max_dsb.setMinimumSize(QSize(0, 20))
         self.z_max_dsb.setMaximumSize(QSize(16777215, 23))
-        self.z_max_dsb.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.z_max_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.z_max_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
         self.z_max_dsb.setMinimum(-1000.000000000000000)
         self.z_max_dsb.setMaximum(1000.000000000000000)
 
@@ -2170,7 +2151,7 @@ class Ui_MainWindow(object):
 
         self.line_4 = QFrame(self.probe_terminal_tab)
         self.line_4.setObjectName(u"line_4")
-        self.line_4.setFrameShape(QFrame.Shape.HLine)
+        self.line_4.setFrameShape(QFrame.Shape.VLine)
         self.line_4.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.verticalLayout_17.addWidget(self.line_4)
@@ -2184,9 +2165,8 @@ class Ui_MainWindow(object):
         sizePolicy11.setHeightForWidth(self.serial_te.sizePolicy().hasHeightForWidth())
         self.serial_te.setSizePolicy(sizePolicy11)
         self.serial_te.setMinimumSize(QSize(0, 40))
-        self.serial_te.setFrameShadow(QFrame.Shadow.Sunken)
-        self.serial_te.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self.serial_te.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByKeyboard|Qt.TextInteractionFlag.TextSelectableByMouse)
+        self.serial_te.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.serial_te.setTextInteractionFlags(Qt.NoTextInteraction)
 
         self.verticalLayout_17.addWidget(self.serial_te)
 
@@ -2637,7 +2617,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_14.addWidget(self.frame)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_3 = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_14.addItem(self.verticalSpacer_3)
 
@@ -3148,7 +3128,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_14.addWidget(self.frame_2)
 
-        self.verticalSpacer_9 = QSpacerItem(20, 26, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_9 = QSpacerItem(20, 26, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.verticalLayout_14.addItem(self.verticalSpacer_9)
 
@@ -3182,7 +3162,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_28.addWidget(self.flip_vertically_tb)
 
-        self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.horizontalLayout_28.addItem(self.horizontalSpacer_14)
 
@@ -3245,7 +3225,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_29.addWidget(self.remove_point_tb)
 
-        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.horizontalLayout_29.addItem(self.horizontalSpacer_13)
 
@@ -3275,7 +3255,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_30.addWidget(self.label_17)
 
-        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.horizontalLayout_30.addItem(self.horizontalSpacer_15)
 
@@ -3322,7 +3302,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_9.addItem(self.verticalSpacer_12, 5, 0, 1, 1)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_9.addItem(self.horizontalSpacer_3, 1, 1, 2, 1)
 
@@ -3486,7 +3466,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_9.addWidget(self.layer_colors_section_la_2, 6, 0, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_9.addItem(self.verticalSpacer_2, 8, 0, 1, 1)
 
@@ -3551,7 +3531,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_20.addWidget(self.y_mirror_rb, 1, 2, 1, 1)
 
-        self.horizontalSpacer_9 = QSpacerItem(130, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_9 = QSpacerItem(130, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.gridLayout_20.addItem(self.horizontalSpacer_9, 0, 0, 1, 1)
 
@@ -3566,11 +3546,11 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.probe_settings_section_la, 7, 0, 1, 1)
 
-        self.verticalSpacer_6 = QSpacerItem(20, 10, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_6 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.gridLayout_13.addItem(self.verticalSpacer_6, 10, 0, 1, 1)
 
-        self.verticalSpacer_8 = QSpacerItem(20, 10, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_8 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_13.addItem(self.verticalSpacer_8, 21, 0, 1, 1)
 
@@ -3589,7 +3569,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.tool_change_section_la, 12, 0, 1, 1)
 
-        self.verticalSpacer_5 = QSpacerItem(20, 10, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_5 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_13.addItem(self.verticalSpacer_5, 5, 0, 1, 1)
 
@@ -3610,7 +3590,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.line_16, 6, 0, 1, 1)
 
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.gridLayout_13.addItem(self.horizontalSpacer_4, 14, 1, 1, 1)
 
@@ -3688,15 +3668,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout_19.addWidget(self.probe_feedrate_la, 2, 0, 1, 1)
 
-        self.horizontalSpacer_6 = QSpacerItem(200, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_6 = QSpacerItem(200, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.gridLayout_19.addItem(self.horizontalSpacer_6, 0, 2, 1, 1)
 
-        self.horizontalSpacer_7 = QSpacerItem(200, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_7 = QSpacerItem(200, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.gridLayout_19.addItem(self.horizontalSpacer_7, 1, 2, 1, 1)
 
-        self.horizontalSpacer_8 = QSpacerItem(200, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_8 = QSpacerItem(200, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.gridLayout_19.addItem(self.horizontalSpacer_8, 2, 2, 1, 1)
 
@@ -4019,7 +3999,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.line_7, 15, 0, 1, 1)
 
-        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_4 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_13.addItem(self.verticalSpacer_4, 16, 0, 1, 1)
 
@@ -4038,7 +4018,7 @@ class Ui_MainWindow(object):
         self.gridLayout_21.setObjectName(u"gridLayout_21")
         self.gridLayout_21.setHorizontalSpacing(0)
         self.gridLayout_21.setVerticalSpacing(2)
-        self.horizontalSpacer_10 = QSpacerItem(180, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_10 = QSpacerItem(180, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.gridLayout_21.addItem(self.horizontalSpacer_10, 0, 0, 1, 1)
 
@@ -4150,7 +4130,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_15.addLayout(self.horizontalLayout_25)
 
-        self.verticalSpacer_10 = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_10 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_15.addItem(self.verticalSpacer_10)
 
@@ -4232,14 +4212,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_15.addLayout(self.gridLayout_17)
 
-        self.verticalSpacer_11 = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_11 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_15.addItem(self.verticalSpacer_11)
 
 
         self.horizontalLayout_24.addLayout(self.verticalLayout_15)
 
-        self.horizontalSpacer_12 = QSpacerItem(623, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_12 = QSpacerItem(623, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.horizontalLayout_24.addItem(self.horizontalSpacer_12)
 
@@ -4249,7 +4229,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_16 = QHBoxLayout()
         self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
-        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.horizontalLayout_16.addItem(self.horizontalSpacer_11)
 
@@ -4263,7 +4243,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_16.addWidget(self.save_settings_preferences_pb)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.horizontalLayout_16.addItem(self.horizontalSpacer_5)
 
@@ -4402,8 +4382,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.main_tab_widget.setCurrentIndex(3)
-        self.prepare_widget.setCurrentIndex(1)
+        self.main_tab_widget.setCurrentIndex(0)
+        self.prepare_widget.setCurrentIndex(0)
         self.jobs_sw.setCurrentIndex(0)
         self.ctrl_tab_widget.setCurrentIndex(1)
         self.jog_probe_tab_widget.setCurrentIndex(1)
