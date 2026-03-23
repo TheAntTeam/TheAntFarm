@@ -1,0 +1,13 @@
+G04 Metric Trace Gerber for Testing*
+G04 Created for The Ant Farm unit tests*
+%FSLAX46Y46*%
+%MOMM*%
+%ADD10R,0.200X0.200*%
+%LPD*%
+D10*
+X0Y0D02*
+X1000000Y0D01*
+X1000000Y1000000D01*
+X0Y1000000D01*
+X0Y0D01*
+M02*
