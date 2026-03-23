@@ -1,0 +1,9 @@
+G04 Simple Circle Gerber for Testing*
+G04 Created for The Ant Farm unit tests*
+%FSLAX34Y34*%
+%MOIN*%
+%ADD10C,0.100*%
+%LPD*%
+D10*
+X5000Y5000D03*
+M02*

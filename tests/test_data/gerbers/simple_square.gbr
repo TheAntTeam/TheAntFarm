@@ -1,0 +1,13 @@
+G04 Simple Square Gerber for Testing*
+G04 Created for The Ant Farm unit tests*
+%FSLAX34Y34*%
+%MOIN*%
+%ADD10C,0.010*%
+%LPD*%
+D10*
+X0Y0D02*
+X10000Y0D01*
+X10000Y10000D01*
+X0Y10000D01*
+X0Y0D01*
+M02*
