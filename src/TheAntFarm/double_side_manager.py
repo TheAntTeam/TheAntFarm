@@ -29,7 +29,13 @@ class DoubleSideManager:
 
     def update_camera(self, index):
         if index >= 0:
-            self.cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+            import platform
+            if platform.system() == "Windows":
+                self.cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+            elif platform.system() == "Darwin":
+                self.cap = cv2.VideoCapture(index, cv2.CAP_AVFOUNDATION)
+            else:
+                self.cap = cv2.VideoCapture(index)
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
         else:
