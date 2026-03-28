@@ -1,3 +1,5 @@
+import platform
+
 import cv2
 import numpy as np
 from PySide6 import QtMultimedia
@@ -29,7 +31,6 @@ class DoubleSideManager:
 
     def update_camera(self, index):
         if index >= 0:
-            import platform
             if platform.system() == "Windows":
                 self.cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
             elif platform.system() == "Darwin":
