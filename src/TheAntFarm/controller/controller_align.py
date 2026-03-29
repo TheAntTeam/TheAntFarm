@@ -25,6 +25,8 @@ class AlignController(QObject):
         self.dgc = DrillGcodeConverter(cfg=dgc_cfg)
 
         self.double_side_manager = DoubleSideManager()
+        self.double_side_manager.set_camera_rotation(settings.app_settings.camera_rotation_angle)
+        self.double_side_manager.set_camera_flip(settings.app_settings.camera_flip_h, settings.app_settings.camera_flip_v)
         self.threshold_value = 0
         self.flipping_view = [False, False, False]
 
@@ -74,6 +76,18 @@ class AlignController(QObject):
 
     def update_threshold_value(self, new_threshold):
         self.threshold_value = new_threshold
+
+    def set_camera_rotation(self, angle: float) -> None:
+        """Set camera rotation angle."""
+        self.double_side_manager.set_camera_rotation(angle)
+
+    def set_camera_flip_h(self, flip_h: bool) -> None:
+        """Set camera horizontal flip."""
+        self.double_side_manager.flip_h = flip_h
+
+    def set_camera_flip_v(self, flip_v: bool) -> None:
+        """Set camera vertical flip."""
+        self.double_side_manager.flip_v = flip_v
 
     def get_camera_list(self):
         return self.double_side_manager.list_cameras_indexes()

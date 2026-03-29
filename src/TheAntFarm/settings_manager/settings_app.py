@@ -39,6 +39,9 @@ class AppSettingsHandler:
     CAMERA_SELECTED_OR_TOOL_DEFAULT = False  # Default selection should be tool, camera could be absent
     FLIP_HORIZONTAL_SELECTED_DEFAULT = False
     FLIP_VERTICAL_SELECTED_DEFAULT = False
+    CAMERA_ROTATION_ANGLE_DEFAULT = 180.0
+    CAMERA_FLIP_H_DEFAULT = False
+    CAMERA_FLIP_V_DEFAULT = False
     SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT = 3
     SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT = 10
 
@@ -98,6 +101,9 @@ class AppSettingsHandler:
         self.camera_selected_or_tool = self.CAMERA_SELECTED_OR_TOOL_DEFAULT
         self.flip_horizontal_selected = self.FLIP_HORIZONTAL_SELECTED_DEFAULT
         self.flip_vertical_selected = self.FLIP_VERTICAL_SELECTED_DEFAULT
+        self.camera_rotation_angle = self.CAMERA_ROTATION_ANGLE_DEFAULT
+        self.camera_flip_h = self.CAMERA_FLIP_H_DEFAULT
+        self.camera_flip_v = self.CAMERA_FLIP_V_DEFAULT
         self.serial_error_warning_threshold = self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
         self.serial_error_critical_threshold = self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
 
@@ -207,6 +213,11 @@ class AppSettingsHandler:
             self.flip_vertical_selected = app_general.getboolean(
                 "flip_vertical_selected", self.FLIP_VERTICAL_SELECTED_DEFAULT
             )
+            self.camera_rotation_angle = app_general.getfloat(
+                "camera_rotation_angle", self.CAMERA_ROTATION_ANGLE_DEFAULT
+            )
+            self.camera_flip_h = app_general.getboolean("camera_flip_h", self.CAMERA_FLIP_H_DEFAULT)
+            self.camera_flip_v = app_general.getboolean("camera_flip_v", self.CAMERA_FLIP_V_DEFAULT)
             self.serial_error_warning_threshold = app_general.getint(
                 "serial_error_warning_threshold", self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
             )
@@ -275,6 +286,9 @@ class AppSettingsHandler:
             "camera_selected_or_tool": self.CAMERA_SELECTED_OR_TOOL_DEFAULT,
             "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
             "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT,
+            "camera_rotation_angle": self.CAMERA_ROTATION_ANGLE_DEFAULT,
+            "camera_flip_h": self.CAMERA_FLIP_H_DEFAULT,
+            "camera_flip_v": self.CAMERA_FLIP_V_DEFAULT,
             "serial_error_warning_threshold": self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT,
             "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT,
         }
@@ -304,6 +318,9 @@ class AppSettingsHandler:
         app_general["camera_selected_or_tool"] = str(self.camera_selected_or_tool)
         app_general["flip_horizontal_selected"] = str(self.main_win.ui.flip_horizontally_tb.isChecked())
         app_general["flip_vertical_selected"] = str(self.main_win.ui.flip_vertically_tb.isChecked())
+        app_general["camera_rotation_angle"] = str(self.main_win.ui.camera_rotation_dsb.value())
+        app_general["camera_flip_h"] = str(self.main_win.ui.flip_cam_h_chb.isChecked())
+        app_general["camera_flip_v"] = str(self.main_win.ui.flip_cam_v_chb.isChecked())
         app_general["serial_error_warning_threshold"] = str(self.serial_error_warning_threshold)
         app_general["serial_error_critical_threshold"] = str(self.serial_error_critical_threshold)
 
@@ -359,6 +376,9 @@ class AppSettingsHandler:
             "last_serial_baud": self.LAST_SERIAL_BAUD_DEFAULT,
             "flip_horizontal_selected": self.FLIP_HORIZONTAL_SELECTED_DEFAULT,
             "flip_vertical_selected": self.FLIP_VERTICAL_SELECTED_DEFAULT,
+            "camera_rotation_angle": self.CAMERA_ROTATION_ANGLE_DEFAULT,
+            "camera_flip_h": self.CAMERA_FLIP_H_DEFAULT,
+            "camera_flip_v": self.CAMERA_FLIP_V_DEFAULT,
             "serial_error_warning_threshold": self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT,
             "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT,
         }
@@ -385,6 +405,9 @@ class AppSettingsHandler:
         app_general["camera_selected_or_tool"] = str(self.CAMERA_SELECTED_OR_TOOL_DEFAULT)
         app_general["flip_horizontal_selected"] = str(self.main_win.ui.flip_horizontally_tb.isChecked())
         app_general["flip_vertical_selected"] = str(self.main_win.ui.flip_vertically_tb.isChecked())
+        app_general["camera_rotation_angle"] = str(self.main_win.ui.camera_rotation_dsb.value())
+        app_general["camera_flip_h"] = str(self.main_win.ui.flip_cam_h_chb.isChecked())
+        app_general["camera_flip_v"] = str(self.main_win.ui.flip_cam_v_chb.isChecked())
         app_general["serial_error_warning_threshold"] = str(self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT)
         app_general["serial_error_critical_threshold"] = str(self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT)
 

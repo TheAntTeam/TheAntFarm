@@ -3,34 +3,34 @@
 ################################################################################
 ## Form generated from reading UI file 'the_ant_farm.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.0
+## Created by: Qt User Interface Compiler version 6.8.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-import app_resources_rc
-from combobox_filter_enter import ComboBoxFilterEnter
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient, QCursor,
-                           QFont, QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea,
-                               QAbstractSpinBox, QApplication, QCheckBox,
-                               QComboBox, QDoubleSpinBox, QFrame, QGridLayout,
-                               QHBoxLayout, QHeaderView, QLabel, QLayout,
-                               QLineEdit, QMainWindow, QMenu, QMenuBar,
-                               QPlainTextEdit, QProgressBar, QPushButton,
-                               QRadioButton, QSizePolicy, QSpacerItem,
-                               QSpinBox, QStackedWidget, QStatusBar,
-                               QTableWidget, QTableWidgetItem, QTabWidget,
-                               QTextEdit, QToolButton, QVBoxLayout, QWidget)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QAbstractSpinBox, QApplication,
+    QCheckBox, QComboBox, QDoubleSpinBox, QFrame,
+    QGridLayout, QHBoxLayout, QHeaderView, QLabel,
+    QLayout, QLineEdit, QMainWindow, QMenu,
+    QMenuBar, QPlainTextEdit, QProgressBar, QPushButton,
+    QRadioButton, QSizePolicy, QSpacerItem, QSpinBox,
+    QStackedWidget, QStatusBar, QTabWidget, QTableWidget,
+    QTableWidgetItem, QTextEdit, QToolButton, QVBoxLayout,
+    QWidget)
+
+from combobox_filter_enter import ComboBoxFilterEnter
 from qcamera_label import QCameraLabel
 from qledlabel import QLedLabel
 from vispy_qt_widget import VispyCanvas
-
+import app_resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -1882,7 +1882,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_18.addLayout(self.jogGridlayout)
 
-        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_18.addItem(self.verticalSpacer_7)
 
@@ -2245,7 +2245,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_9.addWidget(self.clear_terminal_pb)
 
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.horizontalLayout_9.addItem(self.horizontalSpacer_2)
 
@@ -2356,87 +2356,87 @@ class Ui_MainWindow(object):
         self.status_l.setMaximumSize(QSize(120, 16777215))
         palette = QPalette()
         brush = QBrush(QColor(0, 0, 0, 255))
-        brush.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.WindowText, brush)
+        brush.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.WindowText, brush)
         brush1 = QBrush(QColor(0, 255, 127, 255))
-        brush1.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.Button, brush1)
+        brush1.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Button, brush1)
         brush2 = QBrush(QColor(127, 255, 191, 255))
-        brush2.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.Light, brush2)
+        brush2.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Light, brush2)
         brush3 = QBrush(QColor(63, 255, 159, 255))
-        brush3.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.Midlight, brush3)
+        brush3.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Midlight, brush3)
         brush4 = QBrush(QColor(0, 127, 63, 255))
-        brush4.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.Dark, brush4)
+        brush4.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Dark, brush4)
         brush5 = QBrush(QColor(0, 170, 84, 255))
-        brush5.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.Mid, brush5)
+        brush5.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Mid, brush5)
         brush6 = QBrush(QColor(0, 255, 255, 255))
-        brush6.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.Text, brush6)
+        brush6.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Text, brush6)
         brush7 = QBrush(QColor(170, 170, 255, 255))
-        brush7.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.BrightText, brush7)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.ButtonText, brush)
+        brush7.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.BrightText, brush7)
+        palette.setBrush(QPalette.Active, QPalette.ButtonText, brush)
         brush8 = QBrush(QColor(255, 255, 255, 255))
-        brush8.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.Base, brush8)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.Window, brush1)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.Shadow, brush)
+        brush8.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.Base, brush8)
+        palette.setBrush(QPalette.Active, QPalette.Window, brush1)
+        palette.setBrush(QPalette.Active, QPalette.Shadow, brush)
         brush9 = QBrush(QColor(170, 170, 0, 255))
-        brush9.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.HighlightedText, brush9)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.AlternateBase, brush2)
+        brush9.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.HighlightedText, brush9)
+        palette.setBrush(QPalette.Active, QPalette.AlternateBase, brush2)
         brush10 = QBrush(QColor(255, 255, 220, 255))
-        brush10.setStyle(Qt.BrushStyle.SolidPattern)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.ToolTipBase, brush10)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.ToolTipText, brush)
+        brush10.setStyle(Qt.SolidPattern)
+        palette.setBrush(QPalette.Active, QPalette.ToolTipBase, brush10)
+        palette.setBrush(QPalette.Active, QPalette.ToolTipText, brush)
         brush11 = QBrush(QColor(255, 255, 127, 128))
-        brush11.setStyle(Qt.BrushStyle.SolidPattern)
+        brush11.setStyle(Qt.SolidPattern)
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette.setBrush(QPalette.ColorGroup.Active, QPalette.ColorRole.PlaceholderText, brush11)
+        palette.setBrush(QPalette.Active, QPalette.PlaceholderText, brush11)
 #endif
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.WindowText, brush)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Button, brush1)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Light, brush2)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Midlight, brush3)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Dark, brush4)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Mid, brush5)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Text, brush)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.BrightText, brush8)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.ButtonText, brush)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Base, brush8)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Window, brush1)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Shadow, brush)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.HighlightedText, brush)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.AlternateBase, brush2)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.ToolTipBase, brush10)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.ToolTipText, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.WindowText, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.Button, brush1)
+        palette.setBrush(QPalette.Inactive, QPalette.Light, brush2)
+        palette.setBrush(QPalette.Inactive, QPalette.Midlight, brush3)
+        palette.setBrush(QPalette.Inactive, QPalette.Dark, brush4)
+        palette.setBrush(QPalette.Inactive, QPalette.Mid, brush5)
+        palette.setBrush(QPalette.Inactive, QPalette.Text, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.BrightText, brush8)
+        palette.setBrush(QPalette.Inactive, QPalette.ButtonText, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.Base, brush8)
+        palette.setBrush(QPalette.Inactive, QPalette.Window, brush1)
+        palette.setBrush(QPalette.Inactive, QPalette.Shadow, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.HighlightedText, brush)
+        palette.setBrush(QPalette.Inactive, QPalette.AlternateBase, brush2)
+        palette.setBrush(QPalette.Inactive, QPalette.ToolTipBase, brush10)
+        palette.setBrush(QPalette.Inactive, QPalette.ToolTipText, brush)
         brush12 = QBrush(QColor(0, 0, 0, 128))
-        brush12.setStyle(Qt.BrushStyle.SolidPattern)
+        brush12.setStyle(Qt.SolidPattern)
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette.setBrush(QPalette.ColorGroup.Inactive, QPalette.ColorRole.PlaceholderText, brush12)
+        palette.setBrush(QPalette.Inactive, QPalette.PlaceholderText, brush12)
 #endif
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.WindowText, brush4)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Button, brush1)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Light, brush2)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Midlight, brush3)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Dark, brush4)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Mid, brush5)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Text, brush4)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.BrightText, brush8)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.ButtonText, brush4)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Base, brush1)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Window, brush1)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Shadow, brush)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.HighlightedText, brush8)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.AlternateBase, brush1)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.ToolTipBase, brush10)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.ToolTipText, brush)
+        palette.setBrush(QPalette.Disabled, QPalette.WindowText, brush4)
+        palette.setBrush(QPalette.Disabled, QPalette.Button, brush1)
+        palette.setBrush(QPalette.Disabled, QPalette.Light, brush2)
+        palette.setBrush(QPalette.Disabled, QPalette.Midlight, brush3)
+        palette.setBrush(QPalette.Disabled, QPalette.Dark, brush4)
+        palette.setBrush(QPalette.Disabled, QPalette.Mid, brush5)
+        palette.setBrush(QPalette.Disabled, QPalette.Text, brush4)
+        palette.setBrush(QPalette.Disabled, QPalette.BrightText, brush8)
+        palette.setBrush(QPalette.Disabled, QPalette.ButtonText, brush4)
+        palette.setBrush(QPalette.Disabled, QPalette.Base, brush1)
+        palette.setBrush(QPalette.Disabled, QPalette.Window, brush1)
+        palette.setBrush(QPalette.Disabled, QPalette.Shadow, brush)
+        palette.setBrush(QPalette.Disabled, QPalette.HighlightedText, brush8)
+        palette.setBrush(QPalette.Disabled, QPalette.AlternateBase, brush1)
+        palette.setBrush(QPalette.Disabled, QPalette.ToolTipBase, brush10)
+        palette.setBrush(QPalette.Disabled, QPalette.ToolTipText, brush)
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
-        palette.setBrush(QPalette.ColorGroup.Disabled, QPalette.ColorRole.PlaceholderText, brush12)
+        palette.setBrush(QPalette.Disabled, QPalette.PlaceholderText, brush12)
 #endif
         self.status_l.setPalette(palette)
         font2 = QFont()
@@ -3303,10 +3303,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout_9.addItem(self.verticalSpacer_12, 5, 0, 1, 1)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout_9.addItem(self.horizontalSpacer_3, 1, 1, 2, 1)
-
         self.gridLayout_10 = QGridLayout()
         self.gridLayout_10.setObjectName(u"gridLayout_10")
         self.allignment_drill_diameter_la_2 = QLabel(self.application_settings_tab)
@@ -3474,6 +3470,14 @@ class Ui_MainWindow(object):
         self.verticalSpacer_13 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_9.addItem(self.verticalSpacer_13, 3, 0, 1, 1)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_9.addItem(self.horizontalSpacer_3, 1, 1, 3, 1)
+
+        self.horizontalSpacer_17 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_9.addItem(self.horizontalSpacer_17, 7, 1, 1, 1)
 
         self.settings_sub_tab.addTab(self.application_settings_tab, "")
         self.jobs_machine_settings_tab = QWidget()
@@ -4074,6 +4078,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.line_14, 11, 0, 1, 1)
 
+        self.horizontalSpacer_16 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_13.addItem(self.horizontalSpacer_16, 13, 1, 1, 1)
+
         self.settings_sub_tab.addTab(self.jobs_machine_settings_tab, "")
         self.alignment_settings_tab = QWidget()
         self.alignment_settings_tab.setObjectName(u"alignment_settings_tab")
@@ -4158,16 +4166,20 @@ class Ui_MainWindow(object):
         self.gridLayout_17 = QGridLayout()
         self.gridLayout_17.setObjectName(u"gridLayout_17")
         self.gridLayout_17.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.tool_camera_offset_la = QLabel(self.alignment_settings_tab)
-        self.tool_camera_offset_la.setObjectName(u"tool_camera_offset_la")
-        sizePolicy3.setHeightForWidth(self.tool_camera_offset_la.sizePolicy().hasHeightForWidth())
-        self.tool_camera_offset_la.setSizePolicy(sizePolicy3)
-        self.tool_camera_offset_la.setMinimumSize(QSize(130, 20))
-        self.tool_camera_offset_la.setMaximumSize(QSize(130, 16777215))
-        self.tool_camera_offset_la.setFont(font)
-        self.tool_camera_offset_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.x_tool_camera_offset_dsb = QDoubleSpinBox(self.alignment_settings_tab)
+        self.x_tool_camera_offset_dsb.setObjectName(u"x_tool_camera_offset_dsb")
+        sizePolicy3.setHeightForWidth(self.x_tool_camera_offset_dsb.sizePolicy().hasHeightForWidth())
+        self.x_tool_camera_offset_dsb.setSizePolicy(sizePolicy3)
+        self.x_tool_camera_offset_dsb.setMinimumSize(QSize(80, 20))
+        self.x_tool_camera_offset_dsb.setMaximumSize(QSize(80, 16777215))
+        self.x_tool_camera_offset_dsb.setFont(font)
+        self.x_tool_camera_offset_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.x_tool_camera_offset_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.x_tool_camera_offset_dsb.setMinimum(-1000.000000000000000)
+        self.x_tool_camera_offset_dsb.setMaximum(1000.000000000000000)
+        self.x_tool_camera_offset_dsb.setSingleStep(0.100000000000000)
 
-        self.gridLayout_17.addWidget(self.tool_camera_offset_la, 0, 0, 1, 1)
+        self.gridLayout_17.addWidget(self.x_tool_camera_offset_dsb, 0, 1, 1, 1)
 
         self.y_tool_camera_offset_dsb = QDoubleSpinBox(self.alignment_settings_tab)
         self.y_tool_camera_offset_dsb.setObjectName(u"y_tool_camera_offset_dsb")
@@ -4195,20 +4207,66 @@ class Ui_MainWindow(object):
 
         self.gridLayout_17.addWidget(self.get_tool_camera_offset_pb, 0, 4, 1, 1)
 
-        self.x_tool_camera_offset_dsb = QDoubleSpinBox(self.alignment_settings_tab)
-        self.x_tool_camera_offset_dsb.setObjectName(u"x_tool_camera_offset_dsb")
-        sizePolicy3.setHeightForWidth(self.x_tool_camera_offset_dsb.sizePolicy().hasHeightForWidth())
-        self.x_tool_camera_offset_dsb.setSizePolicy(sizePolicy3)
-        self.x_tool_camera_offset_dsb.setMinimumSize(QSize(80, 20))
-        self.x_tool_camera_offset_dsb.setMaximumSize(QSize(80, 16777215))
-        self.x_tool_camera_offset_dsb.setFont(font)
-        self.x_tool_camera_offset_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
-        self.x_tool_camera_offset_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
-        self.x_tool_camera_offset_dsb.setMinimum(-1000.000000000000000)
-        self.x_tool_camera_offset_dsb.setMaximum(1000.000000000000000)
-        self.x_tool_camera_offset_dsb.setSingleStep(0.100000000000000)
+        self.tool_camera_offset_la = QLabel(self.alignment_settings_tab)
+        self.tool_camera_offset_la.setObjectName(u"tool_camera_offset_la")
+        sizePolicy3.setHeightForWidth(self.tool_camera_offset_la.sizePolicy().hasHeightForWidth())
+        self.tool_camera_offset_la.setSizePolicy(sizePolicy3)
+        self.tool_camera_offset_la.setMinimumSize(QSize(130, 20))
+        self.tool_camera_offset_la.setMaximumSize(QSize(130, 16777215))
+        self.tool_camera_offset_la.setFont(font)
+        self.tool_camera_offset_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
 
-        self.gridLayout_17.addWidget(self.x_tool_camera_offset_dsb, 0, 1, 1, 1)
+        self.gridLayout_17.addWidget(self.tool_camera_offset_la, 0, 0, 1, 1)
+
+        self.flip_cam_h_chb = QCheckBox(self.alignment_settings_tab)
+        self.flip_cam_h_chb.setObjectName(u"flip_cam_h_chb")
+        sizePolicy2.setHeightForWidth(self.flip_cam_h_chb.sizePolicy().hasHeightForWidth())
+        self.flip_cam_h_chb.setSizePolicy(sizePolicy2)
+        self.flip_cam_h_chb.setMinimumSize(QSize(150, 0))
+        self.flip_cam_h_chb.setMaximumSize(QSize(16777215, 16777215))
+        self.flip_cam_h_chb.setLayoutDirection(Qt.LeftToRight)
+
+        self.gridLayout_17.addWidget(self.flip_cam_h_chb, 4, 2, 1, 1, Qt.AlignHCenter)
+
+        self.flip_cam_v_chb = QCheckBox(self.alignment_settings_tab)
+        self.flip_cam_v_chb.setObjectName(u"flip_cam_v_chb")
+        sizePolicy2.setHeightForWidth(self.flip_cam_v_chb.sizePolicy().hasHeightForWidth())
+        self.flip_cam_v_chb.setSizePolicy(sizePolicy2)
+        self.flip_cam_v_chb.setMinimumSize(QSize(150, 0))
+        self.flip_cam_v_chb.setMaximumSize(QSize(16777215, 16777215))
+        self.flip_cam_v_chb.setLayoutDirection(Qt.LeftToRight)
+
+        self.gridLayout_17.addWidget(self.flip_cam_v_chb, 5, 2, 1, 1)
+
+        self.flip_cam_h_la = QLabel(self.alignment_settings_tab)
+        self.flip_cam_h_la.setObjectName(u"flip_cam_h_la")
+
+        self.gridLayout_17.addWidget(self.flip_cam_h_la, 4, 0, 1, 2)
+
+        self.flip_cam_v_la = QLabel(self.alignment_settings_tab)
+        self.flip_cam_v_la.setObjectName(u"flip_cam_v_la")
+
+        self.gridLayout_17.addWidget(self.flip_cam_v_la, 5, 0, 1, 2)
+
+        self.rotate_cam_la = QLabel(self.alignment_settings_tab)
+        self.rotate_cam_la.setObjectName(u"rotate_cam_la")
+
+        self.gridLayout_17.addWidget(self.rotate_cam_la, 1, 0, 1, 2)
+
+        self.camera_rotation_dsb = QDoubleSpinBox(self.alignment_settings_tab)
+        self.camera_rotation_dsb.setObjectName(u"camera_rotation_dsb")
+        sizePolicy3.setHeightForWidth(self.camera_rotation_dsb.sizePolicy().hasHeightForWidth())
+        self.camera_rotation_dsb.setSizePolicy(sizePolicy3)
+        self.camera_rotation_dsb.setMinimumSize(QSize(80, 20))
+        self.camera_rotation_dsb.setMaximumSize(QSize(80, 16777215))
+        self.camera_rotation_dsb.setFont(font)
+        self.camera_rotation_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+        self.camera_rotation_dsb.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+        self.camera_rotation_dsb.setMinimum(-180.000000000000000)
+        self.camera_rotation_dsb.setMaximum(180.000000000000000)
+        self.camera_rotation_dsb.setSingleStep(0.100000000000000)
+
+        self.gridLayout_17.addWidget(self.camera_rotation_dsb, 1, 2, 1, 1)
 
 
         self.verticalLayout_15.addLayout(self.gridLayout_17)
@@ -4219,6 +4277,10 @@ class Ui_MainWindow(object):
 
 
         self.horizontalLayout_24.addLayout(self.verticalLayout_15)
+
+        self.horizontalSpacer_18 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_24.addItem(self.horizontalSpacer_18)
 
         self.horizontalSpacer_12 = QSpacerItem(623, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -4392,7 +4454,7 @@ class Ui_MainWindow(object):
         self.xy_step_cb.setCurrentIndex(3)
         self.z_step_cb_2.setCurrentIndex(3)
         self.xy_step_cb_2.setCurrentIndex(3)
-        self.settings_sub_tab.setCurrentIndex(1)
+        self.settings_sub_tab.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -4817,9 +4879,13 @@ class Ui_MainWindow(object):
         self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.jobs_machine_settings_tab), QCoreApplication.translate("MainWindow", u"Jobs/Machine Settings", None))
         self.alignment_drill_section_la.setText(QCoreApplication.translate("MainWindow", u"ALIGNMENT DRILL SETTINGS", None))
         self.allignment_drill_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Alignment Drill diameter [mm]", None))
-        self.alignment_camera_tool_offset_section_la.setText(QCoreApplication.translate("MainWindow", u"CAMERA/TOOL OFFSET", None))
-        self.tool_camera_offset_la.setText(QCoreApplication.translate("MainWindow", u"Tool-Camera Offset", None))
+        self.alignment_camera_tool_offset_section_la.setText(QCoreApplication.translate("MainWindow", u"CAMERA/TOOL SETTINGS", None))
         self.get_tool_camera_offset_pb.setText(QCoreApplication.translate("MainWindow", u"Get Tool Camera Offset", None))
+        self.tool_camera_offset_la.setText(QCoreApplication.translate("MainWindow", u"Tool-Camera Offset", None))
+        self.flip_cam_v_chb.setText("")
+        self.flip_cam_h_la.setText(QCoreApplication.translate("MainWindow", u"Flip Camera Horizontally", None))
+        self.flip_cam_v_la.setText(QCoreApplication.translate("MainWindow", u"Flip Camera Vertically", None))
+        self.rotate_cam_la.setText(QCoreApplication.translate("MainWindow", u"Rotate Camera", None))
         self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.alignment_settings_tab), QCoreApplication.translate("MainWindow", u"Alignment Settings", None))
         self.restore_settings_preferences_pb.setText(QCoreApplication.translate("MainWindow", u"Restore Settings/Preferences", None))
         self.save_settings_preferences_pb.setText(QCoreApplication.translate("MainWindow", u"Save Settings/Preferences", None))

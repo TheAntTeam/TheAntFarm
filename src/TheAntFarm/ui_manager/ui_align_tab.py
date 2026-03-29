@@ -92,6 +92,15 @@ class UiAlignTab(QObject):
         self.ui.camera_la.mouse_wheel_up_or_down_s.connect(self.update_camera_zoom)
         self.update_zoom_value_s.connect(self.controlWo.update_camera_zoom_value)
 
+        self.ui.camera_rotation_dsb.setValue(self.app_settings.camera_rotation_angle)
+        self.ui.camera_rotation_dsb.valueChanged.connect(self.controlWo.set_camera_rotation)
+
+        self.ui.flip_cam_h_chb.setChecked(self.app_settings.camera_flip_h)
+        self.ui.flip_cam_h_chb.toggled.connect(self.controlWo.set_camera_flip_h)
+
+        self.ui.flip_cam_v_chb.setChecked(self.app_settings.camera_flip_v)
+        self.ui.flip_cam_v_chb.toggled.connect(self.controlWo.set_camera_flip_v)
+
     def camera_zoom_cb_init(self):
         self.ui.camera_zoom_cb.clear()
         self.ui.camera_zoom_cb.addItems(["1x", "2x", "3x", "4x", "5x"])

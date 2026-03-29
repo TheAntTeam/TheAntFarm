@@ -36,6 +36,9 @@ class TestAppSettingsHandler:
         mock_ui.serial_baud_cb.currentText.return_value = "115200"
         mock_ui.flip_horizontally_tb.isChecked.return_value = False
         mock_ui.flip_vertically_tb.isChecked.return_value = False
+        mock_ui.camera_rotation_dsb.value.return_value = 180.0
+        mock_ui.flip_cam_h_chb.isChecked.return_value = False
+        mock_ui.flip_cam_v_chb.isChecked.return_value = False
         mock_main_win.ui = mock_ui
 
         return mock_main_win

@@ -596,6 +596,21 @@ class ControllerWorker(ControllerSignals):
     def update_camera_zoom_value(self, zoom_value):
         self.camera_zoom = zoom_value
 
+    @Slot(float)
+    def set_camera_rotation(self, angle):
+        """Set camera rotation angle."""
+        self.align_controller.set_camera_rotation(angle)
+
+    @Slot(bool)
+    def set_camera_flip_h(self, flip_h):
+        """Set camera horizontal flip."""
+        self.align_controller.set_camera_flip_h(flip_h)
+
+    @Slot(bool)
+    def set_camera_flip_v(self, flip_v):
+        """Set camera vertical flip."""
+        self.align_controller.set_camera_flip_v(flip_v)
+
     @Slot(bool)
     def set_align_is_active(self, align_is_active):
         self.align_active = align_is_active

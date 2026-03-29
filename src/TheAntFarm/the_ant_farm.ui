@@ -3673,6 +3673,9 @@
                         </item>
                         <item>
                          <spacer name="verticalSpacer_7">
+                          <property name="orientation">
+                           <enum>Qt::Vertical</enum>
+                          </property>
                           <property name="sizeHint" stdset="0">
                            <size>
                             <width>20</width>
@@ -4528,6 +4531,9 @@
                         </item>
                         <item>
                          <spacer name="horizontalSpacer_2">
+                          <property name="orientation">
+                           <enum>Qt::Vertical</enum>
+                          </property>
                           <property name="sizeHint" stdset="0">
                            <size>
                             <width>40</width>
@@ -7330,7 +7336,7 @@
            <bool>true</bool>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="application_settings_tab">
            <attribute name="title">
@@ -7346,19 +7352,6 @@
                <size>
                 <width>20</width>
                 <height>10</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="1" column="1" rowspan="2">
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
                </size>
               </property>
              </spacer>
@@ -7738,6 +7731,32 @@
                <size>
                 <width>20</width>
                 <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="1" rowspan="3">
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="7" column="1">
+             <spacer name="horizontalSpacer_17">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
                </size>
               </property>
              </spacer>
@@ -9231,6 +9250,19 @@
               </property>
              </widget>
             </item>
+            <item row="13" column="1">
+             <spacer name="horizontalSpacer_16">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
            </layout>
           </widget>
           <widget class="QWidget" name="alignment_settings_tab">
@@ -9372,7 +9404,7 @@
                  </font>
                 </property>
                 <property name="text">
-                 <string>CAMERA/TOOL OFFSET</string>
+                 <string>CAMERA/TOOL SETTINGS</string>
                 </property>
                </widget>
               </item>
@@ -9388,8 +9420,8 @@
                 <property name="sizeConstraint">
                  <enum>QLayout::SetDefaultConstraint</enum>
                 </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="tool_camera_offset_la">
+                <item row="0" column="1">
+                 <widget class="QDoubleSpinBox" name="x_tool_camera_offset_dsb">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -9398,13 +9430,13 @@
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>130</width>
+                    <width>80</width>
                     <height>20</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>130</width>
+                    <width>80</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -9416,8 +9448,17 @@
                   <property name="locale">
                    <locale language="English" country="UnitedKingdom"/>
                   </property>
-                  <property name="text">
-                   <string>Tool-Camera Offset</string>
+                  <property name="buttonSymbols">
+                   <enum>QAbstractSpinBox::UpDownArrows</enum>
+                  </property>
+                  <property name="minimum">
+                   <double>-1000.000000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>1000.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
                   </property>
                  </widget>
                 </item>
@@ -9496,8 +9537,115 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1">
-                 <widget class="QDoubleSpinBox" name="x_tool_camera_offset_dsb">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="tool_camera_offset_la">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>130</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>130</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="locale">
+                   <locale language="English" country="UnitedKingdom"/>
+                  </property>
+                  <property name="text">
+                   <string>Tool-Camera Offset</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2" alignment="Qt::AlignHCenter">
+                 <widget class="QCheckBox" name="flip_cam_h_chb">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="2">
+                 <widget class="QCheckBox" name="flip_cam_v_chb">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0" colspan="2">
+                 <widget class="QLabel" name="flip_cam_h_la">
+                  <property name="text">
+                   <string>Flip Camera Horizontally</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0" colspan="2">
+                 <widget class="QLabel" name="flip_cam_v_la">
+                  <property name="text">
+                   <string>Flip Camera Vertically</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0" colspan="2">
+                 <widget class="QLabel" name="rotate_cam_la">
+                  <property name="text">
+                   <string>Rotate Camera</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QDoubleSpinBox" name="camera_rotation_dsb">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -9528,10 +9676,10 @@
                    <enum>QAbstractSpinBox::UpDownArrows</enum>
                   </property>
                   <property name="minimum">
-                   <double>-1000.000000000000000</double>
+                   <double>-180.000000000000000</double>
                   </property>
                   <property name="maximum">
-                   <double>1000.000000000000000</double>
+                   <double>180.000000000000000</double>
                   </property>
                   <property name="singleStep">
                    <double>0.100000000000000</double>
@@ -9554,6 +9702,19 @@
                </spacer>
               </item>
              </layout>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_18">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
             <item>
              <spacer name="horizontalSpacer_12">
