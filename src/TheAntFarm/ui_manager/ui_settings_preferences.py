@@ -77,6 +77,9 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.alignment_drill_diameter_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.x_tool_camera_offset_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.y_tool_camera_offset_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.camera_rotation_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.flip_cam_h_chb.clicked.connect(self.set_focus_lost)
+        self.ui.flip_cam_v_chb.clicked.connect(self.set_focus_lost)
         self.ui.restore_settings_preferences_pb.clicked.connect(self.restore_initial_settings)
 
         self.reset_application_settings()
@@ -163,6 +166,10 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.alignment_drill_diameter_dsb.setValue(self.machine_settings.alignment_drill_diameter)
         self.ui.x_tool_camera_offset_dsb.setValue(self.machine_settings.tool_camera_offset_x)
         self.ui.y_tool_camera_offset_dsb.setValue(self.machine_settings.tool_camera_offset_y)
+        self.ui.camera_rotation_dsb.setValue(self.app_settings.camera_rotation_angle)
+        self.ui.flip_cam_h_chb.setChecked(self.app_settings.camera_flip_h)
+        self.ui.flip_cam_v_chb.setChecked(self.app_settings.camera_flip_v)
+
 
     def restore_initial_settings(self):
         """Restore initial settings in ui fields."""
@@ -321,6 +328,11 @@ class UiSettingsPreferencesTab(QObject):
         # Save serial error thresholds to app settings
         self.app_settings.serial_error_warning_threshold = self.ui.serial_error_warning_threshold_sb.value()
         self.app_settings.serial_error_critical_threshold = self.ui.serial_error_critical_threshold_sb.value()
+
+        # Save camera rotation and flip settings to app settings
+        self.app_settings.camera_rotation_angle = self.ui.camera_rotation_dsb.value()
+        self.app_settings.camera_flip_h = self.ui.flip_cam_h_chb.isChecked()
+        self.app_settings.camera_flip_v = self.ui.flip_cam_v_chb.isChecked()
 
         self.load_gcoder_cfg_s.emit()
         # Emit a signal to write all settings

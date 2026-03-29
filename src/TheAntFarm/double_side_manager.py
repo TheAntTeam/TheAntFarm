@@ -11,6 +11,9 @@ class DoubleSideManager:
         self.detected_holes = []
         self.cap = None
         self.holes_detector = self.init_holes_detector()
+        self.rotation_angle = 180.0
+        self.flip_h = False
+        self.flip_v = False
 
     @staticmethod
     def list_cameras_indexes():
@@ -28,6 +31,15 @@ class DoubleSideManager:
         rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
         result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
         return result
+
+    def set_camera_rotation(self, angle: float) -> None:
+        """Set camera rotation angle in degrees."""
+        self.rotation_angle = angle
+
+    def set_camera_flip(self, flip_h: bool, flip_v: bool) -> None:
+        """Set camera flip state (horizontal and vertical)."""
+        self.flip_h = flip_h
+        self.flip_v = flip_v
 
     def update_camera(self, index):
         if index >= 0:
@@ -49,8 +61,12 @@ class DoubleSideManager:
             ret, frame = self.cap.read()
             if ret:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                # TODO: add rotation angle in the align settings
-                frame = self.rotate_image(frame, 180)
+                if self.rotation_angle != 0:
+                    frame = self.rotate_image(frame, self.rotation_angle)
+                if self.flip_h:
+                    frame = cv2.flip(frame, 1)
+                if self.flip_v:
+                    frame = cv2.flip(frame, 0)
         return frame
 
     @staticmethod
