@@ -315,12 +315,13 @@ class AppSettingsHandler:
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
         app_general["last_serial_port"] = str(self.main_win.ui.serial_ports_cb.currentText())
         app_general["last_serial_baud"] = str(self.main_win.ui.serial_baud_cb.currentText())
+
         app_general["camera_selected_or_tool"] = str(self.camera_selected_or_tool)
-        app_general["flip_horizontal_selected"] = str(self.main_win.ui.flip_horizontally_tb.isChecked())
-        app_general["flip_vertical_selected"] = str(self.main_win.ui.flip_vertically_tb.isChecked())
-        app_general["camera_rotation_angle"] = str(self.main_win.ui.camera_rotation_dsb.value())
-        app_general["camera_flip_h"] = str(self.main_win.ui.flip_cam_h_chb.isChecked())
-        app_general["camera_flip_v"] = str(self.main_win.ui.flip_cam_v_chb.isChecked())
+        app_general["flip_horizontal_selected"] = str(self.flip_horizontal_selected)
+        app_general["flip_vertical_selected"] = str(self.flip_vertical_selected)
+        app_general["camera_rotation_angle"] = str(self.camera_rotation_angle)
+        app_general["camera_flip_h"] = str(self.camera_flip_h)
+        app_general["camera_flip_v"] = str(self.camera_flip_v)
         app_general["serial_error_warning_threshold"] = str(self.serial_error_warning_threshold)
         app_general["serial_error_critical_threshold"] = str(self.serial_error_critical_threshold)
 
