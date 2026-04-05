@@ -75,7 +75,7 @@ class TestAppSettingsHandler:
         # Modify default settings through main window mock
         app_settings_handler.main_win.ui.actionHide_Show_Align_Tab.isChecked.return_value = True
         app_settings_handler.main_win.ui.actionSettings_Preferences.isChecked.return_value = True
-        app_settings_handler.main_win.ui.flip_horizontally_tb.isChecked.return_value = True
+        app_settings_handler.flip_horizontal_selected = True
 
         # Write settings
         app_settings_handler.write_all_app_settings()
