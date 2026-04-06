@@ -313,3 +313,89 @@ class TestAppSettingsHandler:
         # Verify thresholds are (0, 10)
         assert new_settings.serial_error_warning_threshold == 0
         assert new_settings.serial_error_critical_threshold == 10
+
+    def test_choose_version_both_invalid(self):
+        """Test choose_version when both version strings are invalid"""
+        result = AppSettingsHandler.choose_version("invalid", "bad_version")
+        assert result == "0.0.0"
+
+    def test_choose_version_actual_invalid(self):
+        """Test choose_version when actual version is invalid but default is valid"""
+        result = AppSettingsHandler.choose_version("abc", "1.2.3")
+        assert result == "1.2.3"
+
+    def test_choose_version_default_invalid(self):
+        """Test choose_version when default version is invalid but actual is valid"""
+        result = AppSettingsHandler.choose_version("2.0.0", "bad")
+        assert result == "2.0.0"
+
+    def test_choose_version_actual_lower(self):
+        """Test choose_version when actual version is lower than default"""
+        result = AppSettingsHandler.choose_version("1.0.0", "2.0.0")
+        assert result == "2.0.0"
+
+    def test_choose_version_actual_equal_minor(self):
+        """Test choose_version when minor version is lower"""
+        result = AppSettingsHandler.choose_version("2.0.0", "2.1.0")
+        assert result == "2.1.0"
+
+    def test_choose_version_actual_equal_patch(self):
+        """Test choose_version when patch version is lower"""
+        result = AppSettingsHandler.choose_version("2.1.0", "2.1.5")
+        assert result == "2.1.5"
+
+    def test_choose_version_actual_higher(self):
+        """Test choose_version when actual version is higher than default"""
+        result = AppSettingsHandler.choose_version("3.0.0", "1.2.3")
+        assert result == "3.0.0"
+
+    def test_logs_file_invalid_directory(self, mock_main_window, tmp_path):
+        """Test that invalid logs file directory falls back to default during load"""
+        config_folder = tmp_path / "config"
+        config_folder.mkdir()
+
+        mock_main_window.local_path = str(tmp_path)
+        app_settings = AppSettingsHandler(str(config_folder), mock_main_window)
+
+        import configparser
+        config = configparser.ConfigParser()
+        config["GENERAL"] = {"logs_file": "/nonexistent/path/app_logs.log"}
+        with open(str(config_folder / "app_config.ini"), "w") as f:
+            config.write(f)
+
+        app_settings.read_all_app_settings()
+
+        assert app_settings.logs_file == app_settings.logs_file_default
+
+    def test_invalid_serial_baud(self, mock_main_window, tmp_path):
+        """Test that invalid serial baud defaults to 115200"""
+        config_dir = tmp_path / "test_baud" / "configurations"
+        config_dir.mkdir(parents=True)
+
+        import configparser
+        config = configparser.ConfigParser()
+        config["GENERAL"] = {"last_serial_baud": "invalid_baud"}
+        with open(str(config_dir / "app_config.ini"), "w") as f:
+            config.write(f)
+
+        mock_main_window.local_path = str(tmp_path)
+        new_settings = AppSettingsHandler(str(config_dir), mock_main_window)
+        new_settings.read_all_app_settings()
+
+        assert new_settings.last_serial_baud == 115200
+
+    def test_init_with_invalid_local_path(self, mock_main_window):
+        """Test that invalid local path uses default directories"""
+        mock_main_window.local_path = "/nonexistent/path/that/does/not/exist"
+
+        config_folder = "/tmp/test_invalid_path_config"
+        import shutil
+        if os.path.exists(config_folder):
+            shutil.rmtree(config_folder)
+        os.makedirs(config_folder, exist_ok=True)
+
+        app_settings = AppSettingsHandler(config_folder, mock_main_window)
+
+        assert app_settings.logs_file_default == app_settings.LOGS_FILE_DEFAULT
+        assert app_settings.layer_last_dir_default == app_settings.LAYER_LAST_DIR_DEFAULT
+        assert app_settings.gcode_last_dir_default == app_settings.GCODE_LAST_DIR_DEFAULT

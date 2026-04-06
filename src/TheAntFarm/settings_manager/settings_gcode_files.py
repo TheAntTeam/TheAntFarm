@@ -8,6 +8,11 @@ class GCodeFilesSettingsHandler:
         if os.path.isdir(config_folder):
             local_path = os.path.dirname(config_folder)
             self.gcode_folder_default = os.path.join(local_path, "gcode_temp_dir")
+        else:
+            script_dir = os.path.dirname(os.path.dirname(__file__))
+            config_folder = os.path.join(script_dir, "..", "configurations")
+            os.makedirs(config_folder, exist_ok=True)
+            self.gcode_folder_default = os.path.join(config_folder, "gcode_temp_dir")
 
         self.gcf_config_path = os.path.normpath(os.path.join(config_folder, "gcode_files_config.ini"))
         self.gcode_folder = self.gcode_folder_default
