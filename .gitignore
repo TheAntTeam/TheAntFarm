@@ -19,3 +19,4 @@ src/TheAntFarm/gcode_temp_dir/
 .coverage
 coverage.xml
 htmlcov/
+.coveragerc
