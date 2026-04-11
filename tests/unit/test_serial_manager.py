@@ -197,3 +197,161 @@ class TestSerialManager:
         # Verify command was sent
         serial_manager.serial_port.write.assert_called_once_with(test_command.encode())
         assert serial_manager.count_queue_sent == 1
+
+    def test_open_port_no_port_selected(self, serial_manager, qtbot):
+        """Test open_port when no port is selected"""
+        serial_manager.serial_port.portName.return_value = ""
+
+        with qtbot.waitSignal(serial_manager.open_port_s, timeout=1000) as blocker:
+            serial_manager.open_port("", 115200)
+
+        assert blocker.args == [False]
+
+    def test_open_port_io_error(self, serial_manager, qtbot, mocker):
+        """Test open_port when IOError occurs (port already in use)"""
+        serial_manager.serial_port.open = mocker.Mock(side_effect=IOError("Port in use"))
+
+        with qtbot.waitSignal(serial_manager.open_port_s, timeout=1000) as blocker:
+            serial_manager.open_port("COM1", 115200)
+
+        assert blocker.args == [False]
+
+    def test_open_port_fails_to_open(self, serial_manager, qtbot, mocker):
+        """Test open_port when port fails to open (open returns False)"""
+        serial_manager.serial_port.open = mocker.Mock(return_value=False)
+        serial_manager.serial_port.errorString = mocker.Mock(return_value="Permission denied")
+
+        with qtbot.waitSignal(serial_manager.open_port_s, timeout=1000) as blocker:
+            serial_manager.open_port("COM1", 115200)
+
+        assert blocker.args == [False]
+
+    def test_receive_unicode_decode_error(self, serial_manager, mocker):
+        """Test receive when UnicodeDecodeError occurs"""
+        mock_data = mocker.Mock()
+        mock_data.data = mocker.Mock(return_value=b"\xff\xfe invalid")
+        serial_manager.serial_port.readAll = mocker.Mock(return_value=mock_data)
+        serial_manager.serial_port.canReadLine = mocker.Mock(return_value=True)
+
+        serial_manager.receive()
+
+        assert serial_manager.residual_string == ""
+
+    def test_receive_partial_line(self, serial_manager, mocker):
+        """Test receive with partial line (no newline)"""
+        mock_data = mocker.Mock()
+        mock_data.data = mocker.Mock(return_value=b"partial data")
+        serial_manager.serial_port.readAll = mocker.Mock(return_value=mock_data)
+        serial_manager.serial_port.canReadLine = mocker.Mock(return_value=True)
+
+        serial_manager.receive()
+
+        assert serial_manager.residual_string == "partial data"
+
+    def test_send_bytes_data(self, serial_manager, mocker):
+        """Test send with bytes data"""
+        serial_manager.serial_port.isOpen = mocker.Mock(return_value=True)
+        serial_manager.serial_port.write = mocker.Mock()
+        serial_manager.serial_port.waitForBytesWritten = mocker.Mock(return_value=True)
+
+        test_data = b"G0 X0 Y0"
+        serial_manager.send(test_data)
+
+        serial_manager.serial_port.write.assert_called_once_with(test_data)
+
+    def test_send_int_data(self, serial_manager, mocker):
+        """Test send with int data (should do nothing)"""
+        serial_manager.serial_port.isOpen = mocker.Mock(return_value=True)
+        serial_manager.serial_port.write = mocker.Mock()
+
+        test_data = 123
+        serial_manager.send(test_data)
+
+        serial_manager.serial_port.write.assert_not_called()
+
+    def test_send_port_not_open(self, serial_manager, mocker):
+        """Test send when port is not open"""
+        serial_manager.serial_port.isOpen = mocker.Mock(return_value=False)
+        serial_manager.serial_port.write = mocker.Mock()
+
+        serial_manager.send("G0 X0")
+
+        serial_manager.serial_port.write.assert_not_called()
+
+    def test_send_exception_handling(self, serial_manager, mocker):
+        """Test send exception handling"""
+        serial_manager.serial_port.isOpen = mocker.Mock(return_value=True)
+        serial_manager.serial_port.write = mocker.Mock(side_effect=AttributeError("Port closed"))
+
+        serial_manager.send("G0 X0")
+
+    def test_send_generic_exception(self, serial_manager, mocker):
+        """Test send generic exception handling"""
+        serial_manager.serial_port.isOpen = mocker.Mock(return_value=True)
+        serial_manager.serial_port.write = mocker.Mock(side_effect=Exception("Unknown error"))
+
+        serial_manager.send("G0 X0")
+
+    def test_send_from_queue_bytes_data(self, serial_manager, mocker):
+        """Test send_from_queue with bytes data"""
+        serial_manager.serial_port.write = mocker.Mock()
+        serial_manager.serial_port.waitForBytesWritten = mocker.Mock(return_value=True)
+
+        test_data = b"G0 X0 Y0"
+        serial_manager.serialTxQueue.put(test_data)
+
+        serial_manager.send_from_queue()
+
+        serial_manager.serial_port.write.assert_called_once_with(test_data)
+
+    def test_send_from_queue_int_data(self, serial_manager, mocker):
+        """Test send_from_queue with int data (should do nothing)"""
+        serial_manager.serial_port.write = mocker.Mock()
+
+        test_data = 456
+        serial_manager.serialTxQueue.put(test_data)
+
+        serial_manager.send_from_queue()
+
+        serial_manager.serial_port.write.assert_not_called()
+
+    def test_send_from_queue_port_not_open(self, serial_manager, mocker):
+        """Test send_from_queue when port is not open"""
+        serial_manager.serial_port.isOpen = mocker.Mock(return_value=False)
+        serial_manager.serial_port.write = mocker.Mock()
+
+        serial_manager.serialTxQueue.put("G0 X0")
+
+        serial_manager.send_from_queue()
+
+        serial_manager.serial_port.write.assert_not_called()
+
+    def test_send_from_queue_exception(self, serial_manager, mocker):
+        """Test send_from_queue exception handling"""
+        serial_manager.serial_port.isOpen = mocker.Mock(return_value=True)
+        serial_manager.serial_port.write = mocker.Mock(side_effect=Exception("Write error"))
+        serial_manager.serial_port.flush = mocker.Mock()
+
+        serial_manager.serialTxQueue.put("G0 X0")
+
+        serial_manager.send_from_queue()
+
+    def test_send_from_queue_generic_exception(self, serial_manager, mocker):
+        """Test send_from_queue generic exception handling"""
+        serial_manager.serial_port.isOpen = mocker.Mock(return_value=True)
+        serial_manager.serial_port.write = mocker.Mock(side_effect=Exception("Unknown"))
+        serial_manager.serial_port.flush = mocker.Mock()
+
+        serial_manager.serialTxQueue.put("G0 X0")
+
+        serial_manager.send_from_queue()
+
+    def test_send_from_queue_attribute_error(self, serial_manager, mocker):
+        """Test send_from_queue AttributeError handling"""
+        serial_manager.serial_port.isOpen = mocker.Mock(return_value=True)
+        serial_manager.serial_port.write = mocker.Mock(side_effect=AttributeError("No attribute"))
+        serial_manager.serial_port.flush = mocker.Mock()
+
+        serial_manager.serialTxQueue.put("G0 X0")
+
+        serial_manager.send_from_queue()
