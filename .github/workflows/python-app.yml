@@ -87,6 +87,27 @@ jobs:
         echo "Running mypy type checking (non-blocking)..."
         mypy src/TheAntFarm tests --ignore-missing-imports || echo "Type checking issues found - check output above"
     
+    - name: Run controller tests
+      continue-on-error: true
+      run: |
+        python -m pytest tests/unit/test_controller_*.py -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing
+    - name: Run settings tests
+      continue-on-error: true
+      run: |
+        python -m pytest tests/unit/test_settings_*.py -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing
+    - name: Run shape core tests
+      continue-on-error: true
+      run: |
+        python -m pytest tests/unit/test_shape_core.py tests/unit/test_pcb_manager.py tests/unit/test_gcode_manager.py -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing
+    - name: Run UI tests
+      continue-on-error: true
+      run: |
+        python -m pytest tests/unit/test_ui_*.py -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing
+    - name: Run integration tests
+      continue-on-error: true
+      run: |
+        python -m pytest tests/integration -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing
+
     - name: Run tests with coverage
       run: |
         python -m pytest tests -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing

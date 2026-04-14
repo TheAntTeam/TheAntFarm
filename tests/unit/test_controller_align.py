@@ -14,9 +14,10 @@ def mock_settings():
 
 @pytest.fixture(scope="module")
 def align_controller(mock_settings):
-    with patch("controller.controller_align.PcbObj"), \
-         patch("controller.controller_align.DrillGcodeConverter"), \
-         patch("controller.controller_align.DoubleSideManager"):
+    with patch("PySide6.QtMultimedia"), \
+         patch("double_side_manager.DoubleSideManager"), \
+         patch("controller.controller_align.PcbObj"), \
+         patch("controller.controller_align.DrillGcodeConverter"):
         from controller.controller_align import AlignController
         return AlignController(mock_settings)
 
