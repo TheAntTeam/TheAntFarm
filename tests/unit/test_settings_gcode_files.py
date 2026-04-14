@@ -49,17 +49,19 @@ class TestGCodeFilesSettingsHandler:
         assert handler.gcode_folder == expected_folder
         assert os.path.isdir(handler.gcode_folder)
 
-    def test_read_all_gcf_settings_loads_existing(self, config_folder):
+    def test_read_all_gcf_settings_loads_existing(self, config_folder, tmp_path):
         """Test reading existing config"""
         handler = GCodeFilesSettingsHandler(config_folder)
 
-        handler.gcode_folder = "/custom/gcode/folder"
+        custom_folder = tmp_path / "custom_gcode"
+        custom_folder.mkdir()
+        handler.gcode_folder = str(custom_folder)
         handler.write_all_gcf_settings()
 
         new_handler = GCodeFilesSettingsHandler(config_folder)
         new_handler.read_all_gcf_settings()
 
-        assert new_handler.gcode_folder == "/custom/gcode/folder"
+        assert new_handler.gcode_folder == str(custom_folder)
 
     def test_write_all_gcf_settings(self, config_folder):
         """Test writing gcode settings to file"""
@@ -99,16 +101,18 @@ class TestGCodeFilesSettingsHandler:
 
         assert os.path.isdir(handler.gcode_folder)
 
-    def test_gcode_folder_from_config(self, config_folder):
+    def test_gcode_folder_from_config(self, config_folder, tmp_path):
         """Test that gcode_folder is read from config file"""
         handler = GCodeFilesSettingsHandler(config_folder)
 
         import configparser
         config = configparser.ConfigParser()
-        config["FILES"] = {"gcode_folder": "/user/specified/folder"}
+        user_folder = tmp_path / "user_specified_folder"
+        user_folder.mkdir()
+        config["FILES"] = {"gcode_folder": str(user_folder)}
         with open(handler.gcf_config_path, "w") as f:
             config.write(f)
 
         handler.read_all_gcf_settings()
 
-        assert handler.gcode_folder == "/user/specified/folder"
+        assert handler.gcode_folder == str(user_folder)
