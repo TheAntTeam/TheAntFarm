@@ -19,4 +19,4 @@ types-setuptools>=69.0.0
 types-PyYAML>=6.0.0
 
 # UI testing
-PySide6>=6.10.0  # Match the version used in the main requirements
+PySide6>=6.8.3  # Match the version used in the main requirements
