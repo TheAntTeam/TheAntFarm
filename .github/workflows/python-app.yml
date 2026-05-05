@@ -121,22 +121,3 @@ jobs:
         flags: unittests
         name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
         verbose: true  # Add more detailed upload information
-    
-    - name: Build Executable
-      run: |
-        python -m pip install pyinstaller
-        cd src
-        cd TheAntFarm
-        pyinstaller the_ant_farm.spec
-        cd ..
-        cd ..
-    - if: ${{ matrix.os != 'windows-latest' }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}_${{ github.sha }}_${{ github.run_number }}
-        path: src/TheAntFarm/dist/the_ant_farm
-    - if: ${{ matrix.os == 'windows-latest' }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: the_ant_farm_${{ matrix.python-version }}_${{ matrix.os }}_${{ github.sha }}_${{ github.run_number }}
-        path: src/TheAntFarm/dist/the_ant_farm.exe
