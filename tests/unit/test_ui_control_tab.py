@@ -6,22 +6,13 @@ Tests focus on the simplified gcode table row selection behavior.
 from unittest.mock import Mock
 
 import pytest
-from PySide6.QtWidgets import QApplication
 
 
-@pytest.fixture
-def qapp():
-    """Create QApplication if it doesn't exist"""
-    app = QApplication.instance()
-    if app is None:
-        app = QApplication([])
-    return app
-
-
+@pytest.mark.usefixtures("qapp")
 class TestSelectGcodeRowImplementation:
     """Test select_gcode_row method logic"""
 
-    def test_select_row_when_not_selected(self, qapp):
+    def test_select_row_when_not_selected(self):
         """Verify selecting row when not selected"""
         mock_ui = Mock()
         mock_ui.gcode_tw = Mock()
@@ -41,7 +32,7 @@ class TestSelectGcodeRowImplementation:
         # Verify selectRow was called
         mock_ui.gcode_tw.selectRow.assert_called_once_with(0)
 
-    def test_deselect_single_row_when_selected(self, qapp):
+    def test_deselect_single_row_when_selected(self):
         """Verify deselecting only the clicked row when it's selected"""
         from unittest.mock import MagicMock
 
@@ -74,7 +65,7 @@ class TestSelectGcodeRowImplementation:
 class TestDeselectAllGcodeRowImplementation:
     """Test deselect_all_gcode_row method logic"""
 
-    def test_clears_selection(self, qapp):
+    def test_clears_selection(self):
         """Verify clearSelection is called"""
         mock_ui = Mock()
         mock_ui.gcode_tw = Mock()
@@ -95,7 +86,7 @@ class TestDeselectAllGcodeRowImplementation:
 class TestSelectMethodCodeQuality:
     """Test code quality and simplification of selection methods"""
 
-    def test_select_gcode_row_no_mode_switching(self, qapp):
+    def test_select_gcode_row_no_mode_switching(self):
         """Verify select_gcode_row doesn't use setSelectionMode"""
         import inspect
 
@@ -107,7 +98,7 @@ class TestSelectMethodCodeQuality:
         assert "setSelectionMode" not in source, "select_gcode_row should not switch modes"
         assert "setSelectionBehavior" not in source, "select_gcode_row should not set behavior"
 
-    def test_deselect_all_gcode_row_no_mode_switching(self, qapp):
+    def test_deselect_all_gcode_row_no_mode_switching(self):
         """Verify deselect_all_gcode_row doesn't use setSelectionMode"""
         import inspect
 
@@ -123,7 +114,7 @@ class TestSelectMethodCodeQuality:
 class TestInitialization:
     """Test initialization configuration"""
 
-    def test_multiselection_mode_configured(self, qapp):
+    def test_multiselection_mode_configured(self):
         """Verify NoSelection mode is used with cellClicked handler for column 0 only"""
         import inspect
 
