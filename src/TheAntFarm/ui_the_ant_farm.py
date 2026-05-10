@@ -83,6 +83,13 @@ class Ui_MainWindow(object):
         self.actionHide_Show_Align_Tab = QAction(MainWindow)
         self.actionHide_Show_Align_Tab.setObjectName(u"actionHide_Show_Align_Tab")
         self.actionHide_Show_Align_Tab.setCheckable(True)
+        self.actionDark = QAction(MainWindow)
+        self.actionDark.setObjectName(u"actionDark")
+        self.actionDark.setCheckable(True)
+        self.actionDark.setChecked(True)
+        self.actionLight = QAction(MainWindow)
+        self.actionLight.setObjectName(u"actionLight")
+        self.actionLight.setCheckable(True)
         self.central_widget = QWidget(MainWindow)
         self.central_widget.setObjectName(u"central_widget")
         sizePolicy.setHeightForWidth(self.central_widget.sizePolicy().hasHeightForWidth())
@@ -4339,6 +4346,8 @@ class Ui_MainWindow(object):
         self.menu_set_level.setInputMethodHints(Qt.InputMethodHint.ImhNone)
         self.menuAbout = QMenu(self.menubar)
         self.menuAbout.setObjectName(u"menuAbout")
+        self.menuStyle = QMenu(self.menubar)
+        self.menuStyle.setObjectName(u"menuStyle")
         MainWindow.setMenuBar(self.menubar)
         self.status_bar = QStatusBar(MainWindow)
         self.status_bar.setObjectName(u"status_bar")
@@ -4426,6 +4435,7 @@ class Ui_MainWindow(object):
 
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuConsole.menuAction())
+        self.menubar.addAction(self.menuStyle.menuAction())
         self.menubar.addAction(self.menuAbout.menuAction())
         self.menuFile.addAction(self.actionHide_Show_Align_Tab)
         self.menuFile.addAction(self.actionSettings_Preferences)
@@ -4439,6 +4449,8 @@ class Ui_MainWindow(object):
         self.menu_set_level.addAction(self.action_info)
         self.menu_set_level.addAction(self.action_debug)
         self.menuAbout.addAction(self.actionAbout)
+        self.menuStyle.addAction(self.actionDark)
+        self.menuStyle.addAction(self.actionLight)
 
         self.retranslateUi(MainWindow)
 
@@ -4491,6 +4503,8 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(shortcut)
         self.actionHide_Show_Align_Tab.setShortcut(QCoreApplication.translate("MainWindow", u"Shift+A", None))
 #endif // QT_CONFIG(shortcut)
+        self.actionDark.setText(QCoreApplication.translate("MainWindow", u"Dark", None))
+        self.actionLight.setText(QCoreApplication.translate("MainWindow", u"Light", None))
 #if QT_CONFIG(tooltip)
         self.no_copper_2_pb.setToolTip(QCoreApplication.translate("MainWindow", u"NO-COPPER BOTTOM load layer button", None))
 #endif // QT_CONFIG(tooltip)
@@ -4891,5 +4905,6 @@ class Ui_MainWindow(object):
         self.menuConsole.setTitle(QCoreApplication.translate("MainWindow", u"Console", None))
         self.menu_set_level.setTitle(QCoreApplication.translate("MainWindow", u"Set Level", None))
         self.menuAbout.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
+        self.menuStyle.setTitle(QCoreApplication.translate("MainWindow", u"Style", None))
     # retranslateUi
 

@@ -12,6 +12,7 @@ class StyleManager:
         self.default_palette = QPalette()
         self.default_style = "Fusion"
         self.dark_palette_action = None
+        self.light_palette_action = None
 
     def list_styles(self):
         """List the available application styles for the current OS."""
@@ -37,11 +38,22 @@ class StyleManager:
                 style_group.addAction(style_action)
                 if st.lower() == "fusion":
                     menu_style.addSeparator()
+
+                    # Light palette action
+                    self.light_palette_action = QWidgetAction(main_win)
+                    self.light_palette_action.setObjectName("Light")
+                    self.light_palette_action.setText("Light")
+                    self.light_palette_action.setCheckable(True)
+                    self.light_palette_action.setChecked(True)
+                    self.light_palette_action.setEnabled(True)
+                    menu_style.addAction(self.light_palette_action)
+                    palette_group.addAction(self.light_palette_action)
+
+                    # Dark palette action
                     self.dark_palette_action = QWidgetAction(main_win)
                     self.dark_palette_action.setObjectName("Dark")
                     self.dark_palette_action.setText("Dark")
                     self.dark_palette_action.setCheckable(True)
-                    # if self.default_style.lower() == "fusion":
                     self.dark_palette_action.setEnabled(True)
                     menu_style.addAction(self.dark_palette_action)
                     palette_group.addAction(self.dark_palette_action)
@@ -54,15 +66,44 @@ class StyleManager:
         self.change_style(self.default_style)
 
     def set_default_palette(self):
-        self.dark_palette_action.setChecked(True)
-        self.set_dark_palette()
+        self.light_palette_action.setChecked(True)
+        self.set_light_palette()
+
+    def connect_palette_actions(self, action_dark, action_light):
+        """Connect the palette actions to their respective palette methods."""
+        action_dark.triggered.connect(self.set_dark_palette)
+        action_light.triggered.connect(self.set_light_palette)
 
     def set_palette(self):
-        """Set default or dark palette according to menu selection."""
+        """Set light or dark palette according to menu selection."""
         if self.dark_palette_action.isChecked():
             self.set_dark_palette()
         else:
-            self.app_ptr.setPalette(self.default_palette)
+            self.set_light_palette()
+
+    def set_light_palette(self):
+        """Set the light palette (default system colors)."""
+        light_palette = QPalette()
+        light_palette.setColor(QPalette.Window, QColor(240, 240, 240))
+        light_palette.setColor(QPalette.WindowText, Qt.black)
+        light_palette.setColor(QPalette.Base, Qt.white)
+        light_palette.setColor(QPalette.AlternateBase, QColor(220, 220, 220))
+        light_palette.setColor(QPalette.ToolTipBase, QColor(255, 255, 220))
+        light_palette.setColor(QPalette.ToolTipText, Qt.black)
+        light_palette.setColor(QPalette.Text, Qt.black)
+        light_palette.setColor(QPalette.Button, QColor(240, 240, 240))
+        light_palette.setColor(QPalette.ButtonText, Qt.black)
+        light_palette.setColor(QPalette.Link, QColor(0, 0, 255))
+        light_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+        light_palette.setColor(QPalette.HighlightedText, Qt.white)
+
+        light_palette.setColor(QPalette.Active, QPalette.Button, QColor(220, 220, 220))
+        light_palette.setColor(QPalette.Disabled, QPalette.ButtonText, QColor(128, 128, 128))
+        light_palette.setColor(QPalette.Disabled, QPalette.WindowText, QColor(128, 128, 128))
+        light_palette.setColor(QPalette.Disabled, QPalette.Text, QColor(128, 128, 128))
+        light_palette.setColor(QPalette.Disabled, QPalette.Light, QColor(240, 240, 240))
+
+        self.app_ptr.setPalette(light_palette)
 
     def set_dark_palette(self):
         dark_gray = QColor(53, 53, 53)
@@ -71,7 +112,6 @@ class StyleManager:
         blue = QColor(42, 130, 218)
 
         dark_palette = QPalette()
-        dark_palette.setColor(QPalette.Window, dark_gray)
         dark_palette.setColor(QPalette.Window, dark_gray)
         dark_palette.setColor(QPalette.WindowText, Qt.white)
         dark_palette.setColor(QPalette.Base, black)

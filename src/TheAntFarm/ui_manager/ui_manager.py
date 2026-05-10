@@ -27,13 +27,14 @@ class UiManager(QObject):
         logging.CRITICAL: "purple",
     }
 
-    def __init__(self, main_win, ui, control_worker, serial_worker, settings):
+    def __init__(self, main_win, ui, control_worker, serial_worker, settings, style_manager=None):
         super(UiManager, self).__init__()
         self.main_win = main_win
         self.ui = ui
         self.controlWo = control_worker
         self.serialWo = serial_worker
         self.settings = settings
+        self.style_manager = style_manager
 
         self.hide_show_console()
         self.hide_show_preferences_tab()
@@ -64,6 +65,7 @@ class UiManager(QObject):
         self.ui.prepare_widget.currentChanged.connect(self.from_load_to_create)
         self.ui.actionSave_Settings.triggered.connect(self.save_all_settings)
         self.make_log_action_mutually_exclusive()
+        self.make_style_action_mutually_exclusive()
         if app_settings.win_maximized:
             self.main_win.showMaximized()
         self.main_win.move(app_settings.pos)  # Restore position
@@ -156,3 +158,14 @@ class UiManager(QObject):
         log_level_group.addAction(self.ui.action_info)
         log_level_group.addAction(self.ui.action_debug)
         log_level_group.setExclusive(True)
+
+    def make_style_action_mutually_exclusive(self):
+        """Creates an action group for the style action menu items and makes them mutually exclusive. """
+        style_group = QActionGroup(self.main_win)
+        style_group.addAction(self.ui.actionDark)
+        style_group.addAction(self.ui.actionLight)
+        style_group.setExclusive(True)
+
+        # Connect palette actions to style manager if style_manager is available
+        if self.style_manager:
+            self.style_manager.connect_palette_actions(self.ui.actionDark, self.ui.actionLight)

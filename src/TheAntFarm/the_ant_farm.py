@@ -66,10 +66,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu: Queue[Any] = Queue()  # serial FIFO RX Queue
     serialTxQu: Queue[Any] = Queue()  # serial FIFO TX Queue
 
-    def __init__(self, local_path=""):
+    def __init__(self, local_path="", style_manager=None):
         super(MainWindow, self).__init__()
 
         self.local_path = local_path
+        self.style_manager = style_manager
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -97,7 +98,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.serial_thread.start()
 
         # Important: this call should be after the thread creations.
-        self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo, self.settings)
+        self.ui_manager = UiManager(self, self.ui, self.controlWo, self.serialWo, self.settings, self.style_manager)
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
@@ -127,7 +128,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 def main(local_path=""):
     app = QApplication(sys.argv)
     style_man = StyleManager(app)
-    window = MainWindow(local_path=local_path)
+    window = MainWindow(local_path=local_path, style_manager=style_man)
 
     h = LogHandler(window.ui_manager.update_logging_status)
     h.set_handler_features()
