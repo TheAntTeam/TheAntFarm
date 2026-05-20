@@ -1,0 +1,19 @@
+* text=auto
+
+*.py text
+*.gcode text
+*.yml text
+*.yaml text
+*.json text
+*.md text
+*.txt text
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+*.qrc text
+*.ui text
+*.spec text
