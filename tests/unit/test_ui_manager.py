@@ -1,6 +1,6 @@
 import pytest
 from collections import OrderedDict as Od
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 
 class TestUiManagerConstants:
@@ -83,3 +83,107 @@ class TestHideShowPreferencesTab:
         ui_manager.ui = mock_ui
         ui_manager.hide_show_preferences_tab()
         mock_ui.main_tab_widget.setTabVisible.assert_called_with(3, False)
+
+
+class TestOnMainTabChanged:
+    """Test UiManager._on_main_tab_changed with unsaved settings."""
+
+    def setup_ui_manager(self, settings_tab_index=2, previous_index=0, dirty=True):
+        mock_ui = MagicMock()
+        mock_ui.main_tab_widget.indexOf.return_value = settings_tab_index
+        mock_ui.settings_tab = MagicMock()
+
+        from TheAntFarm.ui_manager.ui_manager import UiManager
+
+        ui_manager = UiManager.__new__(UiManager)
+        ui_manager.ui = mock_ui
+        ui_manager.main_win = MagicMock()
+        ui_manager.main_win.ui = mock_ui
+        ui_manager._previous_main_tab_index = previous_index
+        ui_manager._settings_switch_in_progress = False
+        ui_manager.ui_settings_tab_m = MagicMock()
+        ui_manager.ui_settings_tab_m.has_unsaved_changes.return_value = dirty
+
+        return ui_manager, mock_ui
+
+    @patch("TheAntFarm.ui_manager.ui_manager.QMessageBox")
+    def test_no_dialog_when_not_leaving_settings(self, mock_msgbox):
+        ui_manager, mock_ui = self.setup_ui_manager(
+            settings_tab_index=2, previous_index=0, dirty=True
+        )
+        ui_manager._on_main_tab_changed(1)
+
+        mock_msgbox.assert_not_called()
+        assert ui_manager._previous_main_tab_index == 1
+
+    @patch("TheAntFarm.ui_manager.ui_manager.QMessageBox")
+    def test_no_dialog_when_clean(self, mock_msgbox):
+        ui_manager, mock_ui = self.setup_ui_manager(
+            settings_tab_index=2, previous_index=2, dirty=False
+        )
+        ui_manager._on_main_tab_changed(1)
+
+        mock_msgbox.assert_not_called()
+        assert ui_manager._previous_main_tab_index == 1
+
+    @patch("TheAntFarm.ui_manager.ui_manager.QMessageBox")
+    def test_save_saves_and_switches(self, mock_msgbox):
+        ui_manager, mock_ui = self.setup_ui_manager(
+            settings_tab_index=2, previous_index=2, dirty=True
+        )
+
+        mock_dialog = MagicMock()
+        mock_msgbox.return_value = mock_dialog
+
+        save_btn = MagicMock()
+        discard_btn = MagicMock()
+        cancel_btn = MagicMock()
+        mock_dialog.addButton.side_effect = [save_btn, discard_btn, cancel_btn]
+        mock_dialog.clickedButton.return_value = save_btn
+
+        ui_manager._on_main_tab_changed(1)
+
+        ui_manager.ui_settings_tab_m.save_settings_preferences.assert_called_once()
+        ui_manager.ui_settings_tab_m.restore_initial_settings.assert_not_called()
+        assert ui_manager._previous_main_tab_index == 1
+
+    @patch("TheAntFarm.ui_manager.ui_manager.QMessageBox")
+    def test_discard_restores_and_switches(self, mock_msgbox):
+        ui_manager, mock_ui = self.setup_ui_manager(
+            settings_tab_index=2, previous_index=2, dirty=True
+        )
+
+        mock_dialog = MagicMock()
+        mock_msgbox.return_value = mock_dialog
+
+        save_btn = MagicMock()
+        discard_btn = MagicMock()
+        cancel_btn = MagicMock()
+        mock_dialog.addButton.side_effect = [save_btn, discard_btn, cancel_btn]
+        mock_dialog.clickedButton.return_value = discard_btn
+
+        ui_manager._on_main_tab_changed(1)
+
+        ui_manager.ui_settings_tab_m.restore_initial_settings.assert_called_once()
+        ui_manager.ui_settings_tab_m.save_settings_preferences.assert_not_called()
+        assert ui_manager._previous_main_tab_index == 1
+
+    @patch("TheAntFarm.ui_manager.ui_manager.QMessageBox")
+    def test_cancel_stays(self, mock_msgbox):
+        ui_manager, mock_ui = self.setup_ui_manager(
+            settings_tab_index=2, previous_index=2, dirty=True
+        )
+
+        mock_dialog = MagicMock()
+        mock_msgbox.return_value = mock_dialog
+
+        save_btn = MagicMock()
+        discard_btn = MagicMock()
+        cancel_btn = MagicMock()
+        mock_dialog.addButton.side_effect = [save_btn, discard_btn, cancel_btn]
+        mock_dialog.clickedButton.return_value = cancel_btn
+
+        ui_manager._on_main_tab_changed(1)
+
+        mock_ui.main_tab_widget.setCurrentIndex.assert_called_once_with(2)
+        assert ui_manager._previous_main_tab_index == 2

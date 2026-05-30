@@ -6,7 +6,7 @@ from queue import Queue
 from typing import Any
 
 from PySide6.QtCore import QResource, QThread
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from ui_the_ant_farm import Ui_MainWindow
 
 # To convert ui to py from the "src/TheAntFarm" folder
@@ -102,11 +102,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
-        # all_settings_od = {"jobs_settings": self.ui_manager.ui_create_job_m.get_all_settings()}
-        # self.settings.write_all_settings(all_settings_od)  # write_settings()
-        print("Saving Settings")
-        self.ui_manager.save_all_settings()
-        print("Settings Saved")
+        already_saved = False
+        if self.ui_manager.ui_settings_tab_m.has_unsaved_changes():
+            msg = QMessageBox(self)
+            msg.setWindowTitle("Unsaved Settings")
+            msg.setText("You have unsaved changes in the Settings/Preferences tab.")
+            msg.setInformativeText("Do you want to save your changes before closing?")
+            save_btn = msg.addButton("Save", QMessageBox.ActionRole)
+            discard_btn = msg.addButton("Discard", QMessageBox.DestructiveRole)
+            cancel_btn = msg.addButton("Cancel", QMessageBox.RejectRole)
+            msg.setDefaultButton(cancel_btn)
+            msg.exec()
+
+            clicked = msg.clickedButton()
+            if clicked == cancel_btn:
+                event.ignore()
+                return
+            elif clicked == save_btn:
+                self.ui_manager.ui_settings_tab_m.save_settings_preferences()
+                already_saved = True
+
+        if not already_saved:
+            print("Saving Settings")
+            self.ui_manager.save_all_settings()
+            print("Settings Saved")
         print("Stopping Threads")
         self.ui.camera_list_cb.setCurrentIndex(0)  # Select NO CAMERA before closing
         self.serialWo.close_port()

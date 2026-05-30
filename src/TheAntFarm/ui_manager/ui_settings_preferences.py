@@ -39,6 +39,7 @@ class UiSettingsPreferencesTab(QObject):
         self.get_tool_change_flag = False
         self.get_tool_probe_flag = False
         self.get_tool_camera_offset_flag = False
+        self.settings_dirty = False
 
         self.reset_tool_probe_initial_enables()
 
@@ -342,12 +343,18 @@ class UiSettingsPreferencesTab(QObject):
 
     def set_focus_lost(self):
         """When a setting is changed but not saved the focus is lost. We signal it coloring pushbutton in red."""
+        self.settings_dirty = True
         self.ui.save_settings_preferences_pb.setStyleSheet("background-color:red")
         self.ui.status_bar.showMessage("Settings/Preferences modified but still not saved.")
 
     def reset_focus_lost(self):
         """Reset lost focus to False, the changed settings have been saved or restored."""
+        self.settings_dirty = False
         self.ui.save_settings_preferences_pb.setStyleSheet("")
+
+    def has_unsaved_changes(self):
+        """Return True if settings have been modified but not saved."""
+        return self.settings_dirty
 
     def layer_color_choice(self, layer):
         """

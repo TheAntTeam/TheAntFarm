@@ -2,6 +2,7 @@ import logging
 
 from PySide6.QtCore import QObject, Slot
 from PySide6.QtGui import QActionGroup
+from PySide6.QtWidgets import QMessageBox
 from shape_core.visual_manager import VisualLayer
 
 from .ui_about import UiAbout
@@ -38,6 +39,8 @@ class UiManager(QObject):
 
         self.hide_show_console()
         self.hide_show_preferences_tab()
+        self._previous_main_tab_index = 0
+        self._settings_switch_in_progress = False
 
         self.vis_layer = VisualLayer(self.ui.viewCanvasWidget)
         self.ctrl_layer = VisualLayer(self.ui.controlCanvasWidget)
@@ -82,14 +85,48 @@ class UiManager(QObject):
         # Connect the hide show console action after the initial state has been set.
         self.ui.actionHide_Show_Console.triggered.connect(self.hide_show_console)
         self.main_win.ui.main_tab_widget.setCurrentIndex(app_settings.main_tab_index)
+        self._previous_main_tab_index = app_settings.main_tab_index
         self.main_win.ui.ctrl_tab_widget.setCurrentIndex(app_settings.ctrl_tab_index)
         self.main_win.ui.settings_sub_tab.setCurrentIndex(app_settings.settings_tab_index)
         self.main_win.ui.jog_probe_tab_widget.setCurrentIndex(app_settings.jog_probe_tab_index)
+        self.main_win.ui.main_tab_widget.currentChanged.connect(self._on_main_tab_changed)
 
     def save_all_settings(self):
         """Saves all settings in the configuration files."""
         all_settings_od = {"jobs_settings": self.ui_create_job_m.get_all_jobs_settings()}
         self.settings.write_all_settings(all_settings_od)
+
+    def _on_main_tab_changed(self, new_index):
+        """Prompt user to save unsaved settings when leaving the Settings/Preferences tab."""
+        if self._settings_switch_in_progress:
+            return
+
+        settings_tab_idx = self.ui.main_tab_widget.indexOf(self.ui.settings_tab)
+        settings_tab = self.ui_settings_tab_m
+
+        if self._previous_main_tab_index == settings_tab_idx and settings_tab.has_unsaved_changes():
+            msg = QMessageBox(self.main_win)
+            msg.setWindowTitle("Unsaved Settings")
+            msg.setText("You have unsaved changes in the Settings/Preferences tab.")
+            msg.setInformativeText("Do you want to save your changes before leaving?")
+            save_btn = msg.addButton("Save", QMessageBox.ActionRole)
+            discard_btn = msg.addButton("Discard", QMessageBox.DestructiveRole)
+            cancel_btn = msg.addButton("Cancel", QMessageBox.RejectRole)
+            msg.setDefaultButton(cancel_btn)
+            msg.exec()
+
+            clicked = msg.clickedButton()
+            if clicked == cancel_btn:
+                self._settings_switch_in_progress = True
+                self.ui.main_tab_widget.setCurrentIndex(self._previous_main_tab_index)
+                self._settings_switch_in_progress = False
+                return
+            elif clicked == save_btn:
+                settings_tab.save_settings_preferences()
+            elif clicked == discard_btn:
+                settings_tab.restore_initial_settings()
+
+        self._previous_main_tab_index = new_index
 
     def from_load_to_create(self):
         """Do all actions needed to pass from layer loading sub-tab
