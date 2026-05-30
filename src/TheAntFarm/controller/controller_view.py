@@ -1,17 +1,16 @@
 import logging
 
-from PySide6.QtCore import QObject
 from app.services.pcb_service import PcbService
 
 logger = logging.getLogger(__name__)
 
 
-class ViewController(QObject):
+class ViewController:
     GERBER_LAYER_TAGS = ("top", "bottom", "profile", "noncopper_top", "noncopper_bottom")
     EXCELLON_LAYER_TAGS = ("drill",)
 
     def __init__(self, settings):
-        super(ViewController, self).__init__()
+        super().__init__()
         self.settings = settings
         self._service = PcbService()
 
