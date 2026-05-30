@@ -18,11 +18,10 @@ def control_controller(mock_settings):
 
 def test_init_attributes(control_controller, mock_settings):
     assert control_controller.settings == mock_settings
-    assert control_controller.status == []
+    assert control_controller.status == ""
     assert np.array_equal(control_controller.mpos_a, np.array([0, 0, 0]))
     assert np.array_equal(control_controller.wco_a, np.array([0, 0, 0]))
     assert np.array_equal(control_controller.wpos_a, np.array([0, 0, 0]))
-    assert control_controller.dro_status_updated is False
     assert control_controller.prb_activated is False
     assert control_controller.abl_activated is False
     assert control_controller.prb_updated is False

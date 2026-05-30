@@ -268,8 +268,10 @@ class MachineService:
     def set_align_data(self, data: Any) -> None:
         if isinstance(data, (list, tuple)):
             self.align_data = data
+            logger.debug("Applied Alignment DATA")
 
     def get_align_data(self) -> Any:
+        logger.debug("GET ALIGN DATA")
         return self.align_data
 
     # ================================================================= #
@@ -277,6 +279,7 @@ class MachineService:
     # ================================================================= #
 
     def load_gcode_file(self, cfg: Dict[str, Any], path: str) -> None:
+        logger.debug("Load gcode file: %s", path)
         gcp = GCodeParser(cfg)
         gcp.load_gcode_file(path)
         gcp.interp()
@@ -313,6 +316,7 @@ class MachineService:
         return self.get_gcode_gcp(path).get_bbox()
 
     def apply_alignment(self, path: str) -> None:
+        logger.debug("Apply Alignment")
         gcp = self.get_gcode_gcp(path)
         align = GCodeAlignment(gcp.gc)
         align.update_align_info(self.align_data.copy())
@@ -326,6 +330,7 @@ class MachineService:
         return False
 
     def apply_abl(self, path: str) -> None:
+        logger.debug("Apply ABL")
         gcp = self.get_gcode_gcp(path)
         abl = GCodeLeveler(gcp.gc)
         abl_val = self.abl_val.copy()
