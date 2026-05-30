@@ -9,6 +9,7 @@ from app.adapters.qt_signal_bridge import camera_frame_to_pixmap
 from app.services.align_point_service import AlignPointService
 from app.services.file_send_service import FileSendService
 from app.services.manager_adapter_service import ManagerAdapterService
+from app.services.machine_service import MachineService
 from app.services.macro_service import MacroService
 from app.services.rx_coordinator_service import RxCoordinatorService
 from app.services.rx_line_service import RxLineService
@@ -16,7 +17,6 @@ from app.services.streaming_service import StreamingService
 from shape_core.gcode_manager import GCoder
 
 from .controller_align import AlignController
-from .controller_control import ControlController
 from .controller_signals import ControllerSignals
 from .controller_view import ViewController
 
@@ -25,6 +25,13 @@ logger = logging.getLogger(__name__)
 
 class ControllerWorker(ControllerSignals):
     REMOTE_RX_BUFFER_MAX_SIZE = 128
+
+    _STREAMING_DELEGATED = {
+        "buffered_cmds", "cmds_to_ack", "wait_tag_decoding",
+        "sending_file", "file_content", "content_line", "file_progress",
+        "sent_lines", "ack_lines", "tot_lines", "buffered_size",
+        "eof_wait_for_idle",
+    }
 
     def __init__(
         self,
@@ -40,17 +47,17 @@ class ControllerWorker(ControllerSignals):
         file_send_service=None,
         align_point_service=None,
         view_controller=None,
-        control_controller=None,
         align_controller=None,
+        machine_service=None,
         gcr=None,
     ):
-        super(ControllerWorker, self).__init__()
+        super().__init__()
 
         self.serialRxQueue = serial_rx_queue
         self.serialTxQueue = serial_tx_queue
         self.settings = settings
 
-        self.connected = False  # Flag to know if the controller is connected
+        self.connected = False
         self._manager_adapter = manager_adapter if manager_adapter is not None else ManagerAdapterService()
         self._macro = macro_service if macro_service is not None else MacroService()
         self._rx_coordinator = rx_coordinator_service if rx_coordinator_service is not None else RxCoordinatorService()
@@ -60,9 +67,9 @@ class ControllerWorker(ControllerSignals):
         )
         self._file_send = file_send_service if file_send_service is not None else FileSendService()
         self._align_point = align_point_service if align_point_service is not None else AlignPointService()
+        self._machine_service = machine_service if machine_service is not None else MachineService()
 
         self.view_controller = view_controller if view_controller is not None else ViewController(self.settings)
-        self.control_controller = control_controller if control_controller is not None else ControlController(self.settings)
         self.align_controller = align_controller if align_controller is not None else AlignController(self.settings)
 
         self.send_tool_change_s.connect(self.start_tool_change)
@@ -72,24 +79,11 @@ class ControllerWorker(ControllerSignals):
         self.progress_timer = None
 
         self.align_active = False
-
-        self.buffered_cmds = []
-        self.cmds_to_ack = 0
-        self.wait_tag_decoding = False
         self.dro_status_updated = False
 
         self.abl_apply_active = True
         self.align_apply_active = True
 
-        self.sending_file = False
-        self.file_content = []
-        self.content_line = 0
-        self.file_progress = 0.0
-        self.sent_lines = 0
-        self.ack_lines = 0
-        self.tot_lines = 0
-        self.buffered_size = 0
-        self.eof_wait_for_idle = False
         self.start_time = None
 
         self.active_gcode_path = ""
@@ -101,101 +95,17 @@ class ControllerWorker(ControllerSignals):
 
         self.camera_zoom = 1
 
-    @property
-    def buffered_cmds(self):
-        return self._streaming.buffered_cmds
+    def __getattr__(self, name):
+        if "_STREAMING_DELEGATED" in self.__class__.__dict__ and name in self._STREAMING_DELEGATED:
+            return getattr(self._streaming, name)
+        msg = f"'{type(self).__name__}' has no attribute '{name}'"
+        raise AttributeError(msg)
 
-    @buffered_cmds.setter
-    def buffered_cmds(self, value):
-        self._streaming.buffered_cmds = value
-
-    @property
-    def cmds_to_ack(self):
-        return self._streaming.cmds_to_ack
-
-    @cmds_to_ack.setter
-    def cmds_to_ack(self, value):
-        self._streaming.cmds_to_ack = value
-
-    @property
-    def wait_tag_decoding(self):
-        return self._streaming.wait_tag_decoding
-
-    @wait_tag_decoding.setter
-    def wait_tag_decoding(self, value):
-        self._streaming.wait_tag_decoding = value
-
-    @property
-    def sending_file(self):
-        return self._streaming.sending_file
-
-    @sending_file.setter
-    def sending_file(self, value):
-        self._streaming.sending_file = value
-
-    @property
-    def file_content(self):
-        return self._streaming.file_content
-
-    @file_content.setter
-    def file_content(self, value):
-        self._streaming.file_content = value
-
-    @property
-    def content_line(self):
-        return self._streaming.content_line
-
-    @content_line.setter
-    def content_line(self, value):
-        self._streaming.content_line = value
-
-    @property
-    def file_progress(self):
-        return self._streaming.file_progress
-
-    @file_progress.setter
-    def file_progress(self, value):
-        self._streaming.file_progress = value
-
-    @property
-    def sent_lines(self):
-        return self._streaming.sent_lines
-
-    @sent_lines.setter
-    def sent_lines(self, value):
-        self._streaming.sent_lines = value
-
-    @property
-    def ack_lines(self):
-        return self._streaming.ack_lines
-
-    @ack_lines.setter
-    def ack_lines(self, value):
-        self._streaming.ack_lines = value
-
-    @property
-    def tot_lines(self):
-        return self._streaming.tot_lines
-
-    @tot_lines.setter
-    def tot_lines(self, value):
-        self._streaming.tot_lines = value
-
-    @property
-    def buffered_size(self):
-        return self._streaming.buffered_size
-
-    @buffered_size.setter
-    def buffered_size(self, value):
-        self._streaming.buffered_size = value
-
-    @property
-    def eof_wait_for_idle(self):
-        return self._streaming.eof_wait_for_idle
-
-    @eof_wait_for_idle.setter
-    def eof_wait_for_idle(self, value):
-        self._streaming.eof_wait_for_idle = value
+    def __setattr__(self, name, value):
+        if "_STREAMING_DELEGATED" in self.__class__.__dict__ and name in self._STREAMING_DELEGATED:
+            setattr(self._streaming, name, value)
+        else:
+            super().__setattr__(name, value)
 
     @Slot(bool)
     def on_controller_connection(self, connected):
@@ -242,7 +152,7 @@ class ControllerWorker(ControllerSignals):
     # ***************** CONTROL related functions. ***************** #
     def check_eof_and_idle(self):
         if self.eof_wait_for_idle and self.cmds_to_ack == 0:
-            sta = self.control_controller.status_report_od["state"].lower()
+            sta = self._machine_service.status_report_od["state"].lower()
             if "idle" in sta:
                 self.stop_send_s.emit()
                 self.eof_wait_for_idle = False
@@ -274,7 +184,7 @@ class ControllerWorker(ControllerSignals):
                             line_kind,
                             element,
                             dro_status_updated=self.dro_status_updated,
-                            status_payload=self.control_controller.parse_bracket_angle(element),
+                            status_payload=self._machine_service.parse_status_report(element),
                         )
                         self.update_status_s.emit(result["status_payload"])
                         if result["mark_dro_updated"]:
@@ -282,9 +192,9 @@ class ControllerWorker(ControllerSignals):
                         if result["check_eof_and_idle"]:
                             self.check_eof_and_idle()
                     elif line_kind == "square":
-                        self.control_controller.parse_bracket_square(element)
+                        self._machine_service.parse_bracket_square(element)
                         square_flags = (
-                            self.control_controller.process_probe_and_abl()
+                            self._machine_service.process_probe_and_abl()
                         )
                         result = self._rx_coordinator.process_line(
                             line_kind,
@@ -312,7 +222,7 @@ class ControllerWorker(ControllerSignals):
                             macro=self._macro,
                             prepare_file_command=self.macro_check,
                             workspace_parameters=self.get_workspace_parameters(),
-                            probe_data=self.control_controller.prb_val,
+                            probe_data=self._machine_service.prb_val,
                         )
                         if result["acknowledged"]:
                             logger.debug("Acknowledged lines: " + str(self.ack_lines))
@@ -347,8 +257,8 @@ class ControllerWorker(ControllerSignals):
             cmd_to_send,
             self.ack_lines,
             self.sent_lines,
-            self.control_controller.wpos_a,
-            self.control_controller.mpos_a,
+            self._machine_service.wpos_a,
+            self._machine_service.mpos_a,
             self.settings.local_path,
             self.gcr,
         )
@@ -357,13 +267,7 @@ class ControllerWorker(ControllerSignals):
         return macro_result["command"]
 
     def decode_tag(self, gcode_str):
-        # status = self.control_controller.status
-        # probe_data = self.control_controller.prb_val
-        # wsp = self.get_workspace_parameters()
-        # ret_str = self.gcr.compute_tag(gcode_str, wsp, probe_data)
-        #
-        # if self.gcr.TAG in str(gcode_str):
-        #     logger.info("Tag Found: " + str(ret_str) + " [" + gcode_str + "]" )
+
         return gcode_str
 
     @Slot(str, tuple)
@@ -388,28 +292,33 @@ class ControllerWorker(ControllerSignals):
         self.serial_send_s.emit(parsed_cmd_str)
 
     def cmd_probe(self, probe_z_min):
-        self.control_controller.cmd_probe()
+        self._machine_service.arm_probe()
         self.execute_user_interface_cmd("probe", (None, None, probe_z_min))
 
     def ack_probe(self):
-        prb_val = self.control_controller.get_probe_value()
+        prb_val = self._machine_service.get_probe_value()
         logger.info("Probe: " + str(prb_val))
         self.update_probe_s.emit(prb_val)
 
     def cmd_auto_bed_levelling(self, bbox_t, steps_t):
         probe_feed_rate = self.settings.machine_settings.feedrate_probe
-        self.control_controller.cmd_auto_bed_levelling(bbox_t, steps_t, probe_feed_rate)
-        self.send_next_abl()  # Send first probe command.
+        xy_coord_list = self._machine_service.get_grid_coords(bbox_t, steps_t)
+        travel_z = bbox_t[5]
+        probe_z_min = bbox_t[2]
+        [abl_cmd_ls, prb_num_todo] = self._machine_service.make_cmd_auto_bed_levelling(
+            xy_coord_list, travel_z, probe_z_min, probe_feed_rate
+        )
+        self._machine_service.arm_auto_bed_levelling(abl_cmd_ls, prb_num_todo, (steps_t[0], steps_t[1]))
+        self.send_next_abl()
 
     def send_next_abl(self):
-        next_abl_cmd = self.control_controller.get_next_abl_cmd()
+        next_abl_cmd = self._machine_service.get_next_abl_command()
         logger.info(next_abl_cmd)
-        self.serial_send_s.emit(next_abl_cmd)  # Execute next Probe of Auto-Bed-Levelling
+        self.serial_send_s.emit(next_abl_cmd)
 
     def ack_auto_bed_levelling(self):
-        abl_val = self.control_controller.get_abl_value()
+        abl_val = self._machine_service.get_abl_value()
         logger.debug("ABL values: " + str(abl_val))
-        # self.update_abl_s.emit(abl_val)
         self.select_active_gcode(self.active_gcode_path)
 
     def set_abl_active(self, abl_active=True):
@@ -417,12 +326,12 @@ class ControllerWorker(ControllerSignals):
         self.select_active_gcode(self.active_gcode_path)
 
     def set_align_active(self, align_active=True, align_data=()):
-        self.control_controller.set_align_data(align_data)
+        self._machine_service.set_align_data(align_data)
         self.align_apply_active = align_active
         self.select_active_gcode(self.active_gcode_path)
 
     def vectorize_new_gcode_file(self, gcode_path):
-        self.control_controller.load_gcode_file({}, gcode_path)
+        self._machine_service.load_gcode_file({}, gcode_path)
         self.gcode_vectorized_s.emit(gcode_path)
 
     def select_active_gcode(self, gcode_path):
@@ -431,47 +340,52 @@ class ControllerWorker(ControllerSignals):
             redraw = False
             visible = True
 
-            abl_val = self.control_controller.get_abl_value()
+            abl_val = self._machine_service.get_abl_value()
             logger.debug("ABL_val " + str(abl_val))
             logger.debug("ABL_active " + str(self.abl_apply_active))
 
-            align_data = self.control_controller.get_align_data()
+            align_data = self._machine_service.get_align_data()
             logger.debug("Align_val " + str(align_data))
             logger.debug("Align_active " + str(self.align_apply_active))
 
             if align_data and self.align_apply_active:
                 logger.debug("Apply Alignment")
-                self.control_controller.apply_alignment(gcode_path)
+                self._machine_service.apply_alignment(gcode_path)
                 redraw_align = True
             else:
                 logger.debug("Remove Alignment")
-                redraw_align = self.control_controller.remove_alignment(gcode_path)
+                redraw_align = self._machine_service.remove_alignment(gcode_path)
 
             if abl_val and self.abl_apply_active:
                 logger.debug("Apply ABL")
-                self.control_controller.apply_abl(gcode_path)
+                self._machine_service.apply_abl(gcode_path)
                 redraw_abl = True
             else:
                 logger.debug("Remove ABL")
-                redraw_abl = self.control_controller.remove_abl(gcode_path)
+                redraw_abl = self._machine_service.remove_abl(gcode_path)
             redraw = redraw_abl or redraw_align
             logger.debug("ABL Done")
-            tag, v = self.control_controller.get_gcode_tag_and_v(gcode_path)
+            entry = self._machine_service.get_gcode_entry(gcode_path)
+            tag = entry["tag"]
+            v = entry["gcode"].get_gcode_vectors()
             logger.debug("Update Gcode View: " + str(redraw))
             self.update_gcode_s.emit(tag, v, visible, redraw)
         else:
             logger.warning("No GCode Data Available. Please select a valid gcode file.")
 
     def get_gcode_data(self, gcode_path):
-        return self.control_controller.get_gcode_tag_and_v(gcode_path)
+        entry = self._machine_service.get_gcode_entry(gcode_path)
+        tag = entry["tag"]
+        v = entry["gcode"].get_gcode_vectors()
+        return tag, v
 
     @Slot(str)
     def remove_gcode(self, gcode_path):
-        self.control_controller.remove_gcode_file(gcode_path)
+        self._machine_service.deregister_gcode(gcode_path)
 
     @Slot(str)
     def send_gcode_file(self, gcode_path):
-        lines = self.control_controller.get_gcode_lines(gcode_path)
+        lines = self._machine_service.get_gcode_lines(gcode_path)
         logger.info("Sending file: " + str(gcode_path))
         self.send_gcode_lines(lines)
 
@@ -505,8 +419,8 @@ class ControllerWorker(ControllerSignals):
         self.send_soft_reset = stop_state["next_send_soft_reset"]
 
     def pause_resume(self):
-        logger.info("Status: " + str(self.control_controller.status))
-        if "hold" in self.control_controller.status.lower():
+        logger.info("Status: " + str(self._machine_service.status))
+        if "hold" in self._machine_service.status.lower():
             logger.info("UnHold")
             self.execute_gcode_cmd(b"~")
         else:
@@ -515,24 +429,24 @@ class ControllerWorker(ControllerSignals):
 
     def get_boundary_box(self):
         if self.active_gcode_path != "":
-            bbox_t = self.control_controller.get_boundary_box(self.active_gcode_path)
+            bbox_t = self._machine_service.get_boundary_box(self.active_gcode_path)
             if bbox_t is not None:
                 self.update_bbox_s.emit(bbox_t)
 
     def get_status_report(self):
-        return self.control_controller.status_report_od
+        return self._machine_service.status_report_od
 
     @Slot()
     def report_status_report(self):
-        self.report_status_report_s.emit(self.control_controller.status_report_od)
+        self.report_status_report_s.emit(self._machine_service.status_report_od)
 
     def get_workspace_parameters(self):
-        return self.control_controller.workspace_params_od
+        return self._machine_service.workspace_params_od
 
     @Slot()
     def start_tool_change(self):
         logger.info("Tool change is starting!")
-        lines = self.control_controller.get_change_tool_lines()
+        lines = self._machine_service.get_change_tool_lines()
         self.send_soft_reset = False
         self.send_gcode_lines(lines)
 

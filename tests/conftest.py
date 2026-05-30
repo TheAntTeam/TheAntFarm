@@ -76,12 +76,12 @@ def controller_worker(qapp):
 
     view = MagicMock()
     align = MagicMock()
-    control = MagicMock()
-    control.status_report_od = {"state": "Idle"}
-    control.workspace_params_od = {}
-    control.prb_val = []
-    control.parse_bracket_angle.return_value = {"state": "Idle"}
-    control.process_probe_and_abl.return_value = [False, False, False, False]
+    machine_service = MagicMock()
+    machine_service.status_report_od = {"state": "Idle"}
+    machine_service.workspace_params_od = {}
+    machine_service.prb_val = []
+    machine_service.parse_status_report.return_value = {"state": "Idle"}
+    machine_service.process_probe_and_abl.return_value = [False, False, False, False]
 
     gcr = MagicMock()
     gcr.load_cfg = MagicMock()
@@ -94,9 +94,9 @@ def controller_worker(qapp):
         tx_queue,
         settings,
         view_controller=view,
-        control_controller=control,
+        machine_service=machine_service,
         align_controller=align,
         gcr=gcr,
     )
 
-    return worker, control, rx_queue
+    return worker, machine_service, rx_queue
