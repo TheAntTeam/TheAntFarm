@@ -13,7 +13,7 @@ class VispyCanvas(QtSceneCanvas):
 
         self.unfreeze()
         self.view = self.central_widget.add_view()
-        self.view.bgcolor = "#444444"
+        self.set_canvas_bgcolor(hex_color="#444444")
         self.view.camera = TurntableCamera(
             fov=0.0, distance=0.0, up="+z", center=(0.0, 0.0, 0.0), azimuth=0, elevation=90
         )
@@ -32,3 +32,6 @@ class VispyCanvas(QtSceneCanvas):
         self.freeze()
 
         visuals.XYZAxis(parent=self.view.scene)
+
+    def set_canvas_bgcolor(self, hex_color = "#444444"):
+        self.view.bgcolor = hex_color

@@ -169,3 +169,9 @@ class UiManager(QObject):
         # Connect palette actions to style manager if style_manager is available
         if self.style_manager:
             self.style_manager.connect_palette_actions(self.ui.actionDark, self.ui.actionLight)
+            self.ui.actionDark.triggered.connect(lambda : self.vis_layer.canvas.set_canvas_bgcolor(hex_color="#444444"))
+            self.ui.actionDark.triggered.connect(lambda : self.ctrl_layer.canvas.set_canvas_bgcolor(hex_color="#444444"))
+            self.ui.actionDark.triggered.connect(lambda : self.vis_align_layer.canvas.set_canvas_bgcolor(hex_color="#444444"))
+            self.ui.actionLight.triggered.connect(lambda : self.vis_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF"))
+            self.ui.actionLight.triggered.connect(lambda: self.ctrl_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF"))
+            self.ui.actionLight.triggered.connect(lambda: self.vis_align_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF"))
