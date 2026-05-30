@@ -546,3 +546,13 @@ class Geom:
                 geom = shg.LineString(self.points)
                 x, y = geom.xy
         return geom
+
+
+class FakeGeom:
+
+    def __init__(self, geom, complex=False):
+        self.points = [geom.exterior.coords] + [i.coords for i in geom.interiors]
+        self.closed = True
+        self.polarity = "dark"
+        self.complex = complex
+        self.geom = geom
