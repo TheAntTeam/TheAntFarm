@@ -1,35 +1,155 @@
 # The Ant Farm
 
-The Ant Farm is a program that aims to simplify the process of PCB-making using CNC machines.  
-In this software we included both the necessary CAM features and the CNC machine control capabilities, trying to simplify the user operations as much as possible.  
+[![Python 3.10 | 3.12](https://img.shields.io/badge/python-3.10%20|%203.12-blue)](https://www.python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://github.com/TheAntTeam/TheAntFarm/actions/workflows/python-app.yml/badge.svg)](https://github.com/TheAntTeam/TheAntFarm/actions/workflows/python-app.yml)
+[![Codecov](https://codecov.io/gh/TheAntTeam/TheAntFarm/branch/main/graph/badge.svg)](https://codecov.io/gh/TheAntTeam/TheAntFarm)
+![Version](https://img.shields.io/badge/version-0.3.2-green)
 
-# Actual status  
-This software is a pre-alpha, meaning that not all the functionalities are implemented, and the implemented ones may not work or not work properly.  
-The **View** tab can be used, and it's capable to generate gcode files from gerbers.  
-The **Control** tab is currently under development, and its functionalities may have some issues.  
-The **Align** tab is not developed at all.  
-Up to now, the application is compatible only with CNC machines using GRBL v1.1 firmware, and it has been tested using only some gerber and drill files generated using Autodesk's Eagle and KiCad EDA.  
-If you want to have some more information about the actual implemented features, you could watch this video:  
-  
-[![Software features video](https://img.youtube.com/vi/3Gy312kk_yw/0.jpg)](https://www.youtube.com/watch?v=3Gy312kk_yw)  
+**The Ant Farm** simplifies PCB manufacturing using CNC machines. It combines CAM features with machine control in a single application — import Gerber/Excellon files, generate G-code, and control GRBL-based CNC machines.
 
-# Getting started  
-  
-## Prerequisites and Installation  
+---
 
-The section describing the pre-requisites needed and the installation procedure has been moved in the wiki.  
-See the following link: [Prerequisites and Installation](https://github.com/TheAntTeam/TheAntFarm/wiki/How-to-install-and-pre-requisites)  
-    
-# Disclaimer  
-  
-The providers of this software decline any responsibility for damages to persons or things deriving from its use, and they will not be liable for any damages you may suffer in connection with using, modifying, or distributing this SOFTWARE PRODUCT.  
+## Features
 
+### View Tab
+- Import Gerber (TOP, BOTTOM) and Excellon (DRILL, EDGE) files
+- Visualize and inspect PCB layers
+- Generate optimized G-code from imported designs
 
-# Donation
+### Control Tab
+- Connect to CNC machines via serial port (GRBL v1.1)
+- Load and execute G-code files
+- Real-time progress tracking with elapsed time and percentage
+- Tool change automation and feedrate control
 
-Our projects requires a lot of work and often expensive hardware for testing (CNC machines).  
-Please consider a safe, secure and highly appreciated donation via the PayPal link below.  
-  
-  
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTRCVPZUZYW2E)  
-  
+### Align Tab
+- Double-sided PCB alignment using camera
+- Manual point selection and optical alignment
+- Path optimization algorithms (genetic, nearest insertion, 2-opt)
+
+### Development & Testing
+- Virtual serial port simulator for testing G-code without hardware
+- Cross-platform: Windows, Linux, macOS
+
+---
+
+## Development Status
+
+**Version 0.3.2** — active development.
+
+| Tab | Status | Notes |
+|-----|--------|-------|
+| **View** | Stable | Gerber import, gcode generation, visualization |
+| **Control** | Functional | GRBL v1.1 control, gcode execution, progress tracking |
+| **Align** | Functional | Double-sided alignment via camera, path optimization |
+
+**Compatibility:** Tested with Gerber/drill files from Autodesk Eagle and KiCad EDA. CNC machines using GRBL v1.1 firmware.
+
+---
+
+## Screenshots
+<!-- TODO: Add screenshots -->
+<!-- ![Main UI](docs/images/screenshot.png) -->
+
+---
+
+## Installation
+
+See [docs/INSTALL.md](docs/INSTALL.md) for prerequisites and setup instructions.
+
+---
+
+## Quick Start
+
+1. **Import** a Gerber file — the View tab renders the PCB
+2. **Configure tools** — set tool diameter, feed rate, depths
+3. **Generate G-code** — export to a `.nc` file
+4. **Connect CNC** — select port and baud rate in the Control tab
+5. **Run** — load the G-code and start machining
+
+---
+
+## Project Structure
+
+```
+src/TheAntFarm/
+├── the_ant_farm.py              # Application entry point
+├── controller/
+│   ├── controller_manager.py    # Main controller orchestrator
+│   ├── controller_view.py       # View tab logic
+│   ├── controller_control.py    # Control tab logic
+│   ├── controller_align.py      # Alignment tab logic
+│   └── controller_signals.py    # Signal definitions
+├── serial_manager.py            # Serial port communication
+├── virtual_serial_port.py       # GRBL simulator (dev/testing)
+├── settings_manager/
+│   ├── settings_manager.py      # Settings coordinator
+│   ├── settings_app.py          # Application settings
+│   ├── settings_machine.py      # Machine configuration
+│   ├── settings_job.py          # Job parameters
+│   └── settings_gcode_files.py  # G-code file settings
+├── ui_manager/
+│   ├── ui_manager.py            # Main UI coordinator
+│   ├── ui_view_load_layer_tab.py
+│   ├── ui_control_tab.py
+│   ├── ui_align_tab.py
+│   └── ui_settings_preferences.py
+├── shape_core/                  # Gerber/shape processing engine
+├── resources/                   # Application resources
+└── configurations/              # User configuration files
+```
+
+---
+
+## Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| Language  | Python 3.10 – 3.12 |
+| UI        | PySide6 (Qt6) |
+| 3D Rendering | vispy / PyOpenGL |
+| CNC Protocol | GRBL v1.1 |
+| PCB Parsing | pcb-tools |
+| Image Processing | OpenCV |
+| Math/Numerics | numpy, scipy, Shapely |
+
+---
+
+## Documentation
+
+- [docs/INSTALL.md](docs/INSTALL.md) — Installation guide
+- [CHANGELOG.md](CHANGELOG.md) — Release history
+- [.github/ISSUE_TEMPLATE/bug_report.md](.github/ISSUE_TEMPLATE/bug_report.md) — Bug report template
+
+---
+
+## Contributing
+
+Contributions are welcome! Please open an issue or pull request on GitHub.
+
+---
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+
+---
+
+## Credits
+
+**The Ant Team** — [GitHub](https://github.com/TheAntTeam)
+
+---
+
+## Disclaimer
+
+The providers of this software decline any responsibility for damages to persons or things deriving from its use, and they will not be liable for any damages you may suffer in connection with using, modifying, or distributing this software.
+
+---
+
+## Donation
+
+This project requires a lot of work and often expensive hardware for testing (CNC machines). Please consider a safe, secure and highly appreciated donation via the PayPal link below.
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTRCVPZUZYW2E)
