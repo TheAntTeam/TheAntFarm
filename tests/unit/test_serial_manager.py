@@ -173,6 +173,7 @@ class TestSerialManager:
         mock_port = mocker.Mock()
         mock_port.portName.return_value = "COM1"
         mock_port.description.return_value = "Test Port"
+        mock_port.hasVendorIdentifier.return_value = True
         mock_port.standardBaudRates.return_value = [9600, 115200]
 
         # Mock the availablePorts method
@@ -184,6 +185,52 @@ class TestSerialManager:
 
         # Verify port list
         assert blocker.args == [["COM1"], [9600, 115200]]
+
+    @pytest.mark.parametrize("platform,port_name,expected", [
+        ("linux", "ttyS0", False),
+        ("linux", "ttyUSB0", True),
+        ("linux", "ttyACM0", True),
+        ("linux", "ttyAMA0", True),
+        ("darwin", "cu.usbmodem101", True),
+        ("darwin", "cu.Bluetooth", False),
+        ("darwin", "tty.Bluetooth", False),
+        ("darwin", "tty.usbserial-1234", True),
+        ("win32", "COM1", True),
+        ("win32", "COM3", True),
+    ])
+    def test_get_port_list_filtering(self, serial_manager, mocker, qtbot, platform, port_name, expected):
+        """Test filtering behavior on different platforms"""
+        mock_port = mocker.Mock()
+        mock_port.portName.return_value = port_name
+        mock_port.hasVendorIdentifier.return_value = False
+        mock_port.standardBaudRates.return_value = [9600, 115200]
+
+        mocker.patch("PySide6.QtSerialPort.QSerialPortInfo.availablePorts", return_value=[mock_port])
+        mocker.patch("serial_manager.sys.platform", platform)
+
+        with qtbot.waitSignal(serial_manager.get_port_list_s, timeout=1000) as blocker:
+            serial_manager.get_port_list()
+
+        if expected:
+            assert blocker.args[0] == [port_name]
+        else:
+            assert blocker.args[0] == []
+
+    def test_get_port_list_vid_takes_priority(self, serial_manager, mocker, qtbot):
+        """Verify VID/PID check takes priority over platform name filter"""
+        mock_port = mocker.Mock()
+        mock_port.portName.return_value = "ttyS0"
+        mock_port.hasVendorIdentifier.return_value = True  # Has VID even though name is ttyS0
+        mock_port.standardBaudRates.return_value = [9600, 115200]
+
+        mocker.patch("PySide6.QtSerialPort.QSerialPortInfo.availablePorts", return_value=[mock_port])
+        mocker.patch("serial_manager.sys.platform", "linux")
+
+        with qtbot.waitSignal(serial_manager.get_port_list_s, timeout=1000) as blocker:
+            serial_manager.get_port_list()
+
+        # Should be included because it has vendor ID
+        assert blocker.args[0] == ["ttyS0"]
 
     def test_queue_handling(self, serial_manager):
         """Test queue operations"""
