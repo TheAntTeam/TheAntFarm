@@ -56,6 +56,7 @@ _DEFAULT_CFG: dict = {
         "xy_feedrate": 250.0,
         "z_feedrate": 40.0,
         "spindle": 1000.0,
+        "tool_diameter": 0.1,
         "mirror": False,
     },
     "profile": {
@@ -66,6 +67,7 @@ _DEFAULT_CFG: dict = {
         "spindle": 1000.0,
         "multi_depth": True,
         "depth_per_pass": 0.6,
+        "tool_diameter": 0.1,
         "mirror": False,
     },
     "drill": {
@@ -74,6 +76,7 @@ _DEFAULT_CFG: dict = {
         "xy_feedrate": 250.0,
         "z_feedrate": 40.0,
         "spindle": 1000.0,
+        "tool_diameter": 0.1,
         "mirror": False,
     },
     "pocketing": {
@@ -82,6 +85,7 @@ _DEFAULT_CFG: dict = {
         "xy_feedrate": 250.0,
         "z_feedrate": 40.0,
         "spindle": 1000.0,
+        "tool_diameter": 0.1,
         "mirror": False,
     },
 }
@@ -137,7 +141,7 @@ def cmd_generate(args: argparse.Namespace) -> int:
         logger.error("G-code generation failed.")
         return 1
 
-    print(f"Done → {gcode_result.gcode_path}")
+    print(f"Done -> {gcode_result.gcode_path}")
     return 0
 
 
