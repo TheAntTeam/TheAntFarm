@@ -1,4 +1,5 @@
 import logging
+import sys
 import traceback
 
 from PySide6.QtCore import QIODevice, QObject, Signal, Slot
@@ -39,7 +40,20 @@ class SerialWorker(QObject):
     def get_port_list(self):
         """Return serial port list."""
         port_l = QSerialPortInfo().availablePorts()
-        port_name_l = [port.portName() for port in port_l]
+        port_name_l = []
+        for port in port_l:
+            if port.hasVendorIdentifier():
+                port_name_l.append(port.portName())
+            else:
+                port_name = port.portName()
+                if sys.platform.startswith('linux'):
+                    if port_name.startswith(('ttyUSB', 'ttyACM', 'ttyAMA')):
+                        port_name_l.append(port_name)
+                elif sys.platform.startswith('darwin'):
+                    if 'usb' in port_name.lower():
+                        port_name_l.append(port_name)
+                else:  # Windows — show all
+                    port_name_l.append(port_name)
         port_name_l.sort()
         if port_l:
             bauds_ls = port_l[0].standardBaudRates()
