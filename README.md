@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/TheAntTeam/TheAntFarm/actions/workflows/python-app.yml/badge.svg)](https://github.com/TheAntTeam/TheAntFarm/actions/workflows/python-app.yml)
 [![Codecov](https://codecov.io/gh/TheAntTeam/TheAntFarm/branch/main/graph/badge.svg)](https://codecov.io/gh/TheAntTeam/TheAntFarm)
-![Version](https://img.shields.io/badge/version-0.3.2-green)
+[![Version](https://img.shields.io/github/v/release/TheAntTeam/TheAntFarm)](https://github.com/TheAntTeam/TheAntFarm/releases)
 
 **The Ant Farm** simplifies PCB manufacturing using CNC machines. It combines CAM features with machine control in a single application — import Gerber/Excellon files, generate G-code, and control GRBL-based CNC machines.
 
