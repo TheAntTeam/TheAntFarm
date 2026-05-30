@@ -1,6 +1,5 @@
 import logging
 
-import qimage2ndarray
 from PySide6.QtCore import QObject
 from app.services.align_service import AlignService
 
@@ -76,10 +75,7 @@ class AlignController(QObject):
         return self._service.update_camera(index)
 
     def camera_new_frame(self, zoom=1):
-        frame = self._service.get_camera_frame(zoom)
-        if frame is None:
-            return None
-        return qimage2ndarray.array2qimage(frame.data)
+        return self._service.get_camera_frame(zoom)
 
     def add_new_align_point(self, geom_point, working_position_point):
         return self._service.add_align_point(geom_point, working_position_point)

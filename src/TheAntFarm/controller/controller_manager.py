@@ -5,7 +5,7 @@ import traceback
 from collections import OrderedDict as Od
 
 from PySide6.QtCore import QTimer, Slot
-from PySide6.QtGui import QPixmap
+from app.adapters.qt_signal_bridge import camera_frame_to_pixmap
 from app.services.align_point_service import AlignPointService
 from app.services.file_send_service import FileSendService
 from app.services.manager_adapter_service import ManagerAdapterService
@@ -594,11 +594,10 @@ class ControllerWorker(ControllerSignals):
 
     def on_camera_timeout(self):
         if self.align_active:
-            image = self.align_controller.camera_new_frame(self.camera_zoom)
-            if image:
-                self.update_camera_image_s.emit(QPixmap.fromImage(image))
-            else:
-                self.update_camera_image_s.emit(QPixmap())  # empty image
+            pixmap = camera_frame_to_pixmap(
+                self.align_controller.camera_new_frame(self.camera_zoom)
+            )
+            self.update_camera_image_s.emit(pixmap)
 
     def refresh_camera_list(self):
         cam_list = self.align_controller.get_camera_list()
