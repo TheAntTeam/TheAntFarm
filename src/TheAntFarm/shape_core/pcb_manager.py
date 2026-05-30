@@ -5,6 +5,11 @@ import time
 from collections import OrderedDict as Od
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+from gerbyx import logger as gerbyx_logger
+from gerbyx.tokenizer import tokenize_gerber
+from gerbyx.parser import GerberParser
+from gerbyx.processor import GerberProcessor
+
 import gerber as gbr
 import gerber.primitives
 import numpy as np
@@ -13,8 +18,9 @@ from gerber.excellon import DrillHit, DrillSlot
 from gerber.excellon import loads as exc_load
 from gerber.excellon_statements import CoordinateStmt, EndOfProgramStmt, FormatStmt, ToolSelectionStmt
 from gerber.utils import convex_hull
+from shapely.geometry.multipolygon import MultiPolygon
 
-from .geometry_manager import Geom, merge_polygons
+from .geometry_manager import Geom, FakeGeom, merge_polygons
 
 logger = logging.getLogger(__name__)
 
@@ -87,14 +93,19 @@ class PcbObj:
             return False
 
         try:
-            tmp = gbr.read(path)
-            self.gerbers[tag] = tmp
-            # unit conversion used to FIX bug in pcb-tools
-            if tmp.units == "inch":
-                logger.info(f"Converting Gerber {tag} from inch to metric")
-                self.gerbers[tag].to_metric()
-                self.gerbers[tag] = gbr.loads(self.dump_str(tmp))
+            gerbyx_logger.set_level('INFO')  # or 'INFO' (default), 'WARNING', 'ERROR'
+
+            # Parse Gerber file
+            with open(path, 'r') as f:
+                gerber_source = f.read()
+
+            processor = GerberProcessor()
+            parser = GerberParser(processor)
+            tokens = tokenize_gerber(gerber_source)
+            parser.parse(tokens)
+            self.gerbers[tag] = processor
             return True
+
         except Exception as e:
             logger.error(f"Failed to load Gerber file {path}: {e}")
             return False
@@ -178,17 +189,10 @@ class PcbObj:
         if g is None:
             return None
 
-        mp = []
-        for primitive in g.primitives:
-            primitive.to_metric()
-            gdata = self._primitive_paths(primitive)
-            for gd in gdata:
-                g_geom = Geom(gd)
-                if g_geom.closed:
-                    mp.append(g_geom)
-
+        self.layers[tag] = ([FakeGeom(x) for x in g.geometries], ())
+        print(self.layers[tag])
         logger.info(f"Gerber Layer {tag} processed in {time.time() - start_time:.4f} seconds")
-        self.layers[tag] = merge_polygons(mp)
+
         return self.layers[tag]
 
     def get_excellon_layer(self, tag: str) -> Any:
