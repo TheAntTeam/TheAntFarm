@@ -1,35 +1,18 @@
 import logging
-import random
-import re
-import string
-import traceback
 from collections import OrderedDict, deque
 
 import numpy as np
+from app.services.machine_service import MachineService
 from PySide6.QtCore import QObject
-from shape_core.gcode_manager import GCodeAlignment, GCodeLeveler, GCodeParser, GCoder
 
 logger = logging.getLogger(__name__)
 
 
 class ControlController(QObject):
-    STATUSPAT = re.compile(
-        r"^<(\w*?),MPos:([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),"
-        r"([+\-]?\d*\.\d*),WPos:([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),"
-        r"([+\-]?\d*\.\d*),?(.*)>$"
-    )
-    POSPAT = re.compile(
-        r"^\[(...):([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),([+\-]?\d*\.\d*),"
-        r"([+\-]?\d*\.\d*):?(\d*)\]$"
-    )
-    TLOPAT = re.compile(r"^\[(...):([+\-]?\d*\.\d*)\]$")
-    DOLLARPAT = re.compile(r"^\[G\d* .*\]$")
-    SPLITPAT = re.compile(r"[:,]")
-    VARPAT = re.compile(r"^\$(\d+)=(\d*\.?\d*) *\(?.*")
-
     def __init__(self, settings):
         super(ControlController, self).__init__()
         self.settings = settings
+        self._service = MachineService()
 
         self.status = []
         self.mpos_a = np.array([0, 0, 0])
@@ -41,8 +24,6 @@ class ControlController(QObject):
         self.prb_updated = False
         self.abl_updated = False
         self.prb_val = deque([[-1.0, -1.0, -1.0], [-1.0, -1.0, -1.0]], maxlen=2)
-        self.abl_val = []
-        self.align_data = []
         self.abl_steps = ()
         self.abl_cmd_ls = []
         self.prb_num_todo = 0
@@ -50,307 +31,237 @@ class ControlController(QObject):
         self.prb_reps_todo = 1
         self.prb_reps_done = 0
 
-        self.status_report_od = OrderedDict({})
-        self.workspace_params_od = OrderedDict({})
+    @property
+    def status(self):
+        return self._service.status
 
-        self.gcodes_od = OrderedDict({})
+    @status.setter
+    def status(self, value):
+        self._service.status = value
+
+    @property
+    def mpos_a(self):
+        return self._service.mpos_a
+
+    @mpos_a.setter
+    def mpos_a(self, value):
+        self._service.mpos_a = np.array(value)
+
+    @property
+    def wco_a(self):
+        return self._service.wco_a
+
+    @wco_a.setter
+    def wco_a(self, value):
+        self._service.wco_a = np.array(value)
+
+    @property
+    def wpos_a(self):
+        return self._service.wpos_a
+
+    @wpos_a.setter
+    def wpos_a(self, value):
+        self._service.wpos_a = np.array(value)
+
+    @property
+    def status_report_od(self):
+        return self._service.status_report_od
+
+    @status_report_od.setter
+    def status_report_od(self, value):
+        self._service.status_report_od = OrderedDict(value)
+
+    @property
+    def workspace_params_od(self):
+        return self._service.workspace_params_od
+
+    @workspace_params_od.setter
+    def workspace_params_od(self, value):
+        self._service.workspace_params_od = OrderedDict(value)
+
+    @property
+    def align_data(self):
+        return self._service.align_data
+
+    @align_data.setter
+    def align_data(self, value):
+        self._service.align_data = value
+
+    @property
+    def abl_val(self):
+        return self._service.abl_val
+
+    @abl_val.setter
+    def abl_val(self, value):
+        self._service.abl_val = value
+
+    @property
+    def gcodes_od(self):
+        return self._service.gcodes_od
+
+    @gcodes_od.setter
+    def gcodes_od(self, value):
+        self._service.gcodes_od = value
+
+    @property
+    def prb_activated(self):
+        return self._service.prb_activated
+
+    @prb_activated.setter
+    def prb_activated(self, value):
+        self._service.prb_activated = value
+
+    @property
+    def abl_activated(self):
+        return self._service.abl_activated
+
+    @abl_activated.setter
+    def abl_activated(self, value):
+        self._service.abl_activated = value
+
+    @property
+    def prb_updated(self):
+        return self._service.prb_updated
+
+    @prb_updated.setter
+    def prb_updated(self, value):
+        self._service.prb_updated = value
+
+    @property
+    def abl_updated(self):
+        return self._service.abl_updated
+
+    @abl_updated.setter
+    def abl_updated(self, value):
+        self._service.abl_updated = value
+
+    @property
+    def abl_steps(self):
+        return self._service.abl_steps
+
+    @abl_steps.setter
+    def abl_steps(self, value):
+        self._service.abl_steps = value
+
+    @property
+    def abl_cmd_ls(self):
+        return self._service.abl_cmd_ls
+
+    @abl_cmd_ls.setter
+    def abl_cmd_ls(self, value):
+        self._service.abl_cmd_ls = value
+
+    @property
+    def prb_num_todo(self):
+        return self._service.prb_num_todo
+
+    @prb_num_todo.setter
+    def prb_num_todo(self, value):
+        self._service.prb_num_todo = value
+
+    @property
+    def prb_num_done(self):
+        return self._service.prb_num_done
+
+    @prb_num_done.setter
+    def prb_num_done(self, value):
+        self._service.prb_num_done = value
+
+    @property
+    def prb_reps_todo(self):
+        return self._service.prb_reps_todo
+
+    @prb_reps_todo.setter
+    def prb_reps_todo(self, value):
+        self._service.prb_reps_todo = value
+
+    @property
+    def prb_val(self):
+        return self._service.prb_val
+
+    @prb_val.setter
+    def prb_val(self, value):
+        self._service.prb_val = deque(list(value), maxlen=2)
 
     def get_probe_value(self):
-        return self.prb_val[0]
+        return self._service.get_probe_value()
 
     def set_align_data(self, align_data):
-        if isinstance(align_data, list) or isinstance(align_data, tuple):
-            self.align_data = align_data
-            print("Applied Alignment DATA")
+        if isinstance(align_data, (list, tuple)):
+            self._service.set_align_data(align_data)
+            logger.debug("Applied Alignment DATA")
 
     def get_align_data(self):
-        print("GET ALIGN DATA")
-        # WARNING INJECTING FAKE DATA FOR TESTING PURPOSE
-        if not self.align_data and False:
-            print("INJECT FAKE DATA")
-            # FAKE DATA
-            fake_align_data = [
-                [(-2.032, 18.110), (-3.860, 13.900)],
-                [(-8.230, 1.854), (-12.660, -1.100)],
-                [(-24.562, 8.026), (-27.660, 7.6)],
-                [(-18.415, 24.384), (-18.960, 22.600)],
-            ]
-            self.align_data = fake_align_data
-            return fake_align_data
-        else:
-            print("RETURN VALID DATA")
-            return self.align_data
+        logger.debug("GET ALIGN DATA")
+        return self._service.get_align_data()
 
     def get_abl_value(self):
-        return self.abl_val
+        return self._service.get_abl_value()
 
     def get_next_abl_cmd(self):
-        return self.abl_cmd_ls[self.prb_num_done]
+        return self._service.get_next_abl_command()
 
     def process_probe_and_abl(self):
-        ack_prb_flag = False
-        ack_abl_flag = False
-        send_next = False
-        other_cmd_flag = False
-        logger.debug("self.prb_activated: " + str(self.prb_activated))
-        logger.debug("self.prb_updated: " + str(self.prb_updated))
-        if self.prb_activated and self.prb_updated:
-            self.prb_activated = False
-            self.prb_updated = False
-            ack_prb_flag = True
-        elif self.abl_activated:
-            [ack_abl_flag, send_next] = self.update_abl()
-        else:
-            # logger.warning("Not a probe, nor an ABL.")
-            other_cmd_flag = True
-
-        return [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag]
+        return list(self._service.process_probe_and_abl())
 
     def parse_bracket_angle(self, line):
-        line_stripped = line.strip()
-        fields = line_stripped[1:-1].split("|")
-        self.status = fields[0]
-        self.status_report_od["state"] = fields[0]
-        self.status_report_od["pins"] = ""  # Cleaning limit pins status
-
-        for field in fields[1:]:
-            word = self.SPLITPAT.split(field.strip())
-            if word[0] == "MPos":
-                try:
-                    self.mpos_a = np.array([float(word[1]), float(word[2]), float(word[3])])
-                    self.status_report_od["mpos"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-                except (ValueError, IndexError) as e:
-                    logger.error(e, exc_info=True)
-                except Exception:
-                    logger.error("Uncaught exception: %s", traceback.format_exc())
-            elif word[0] == "F":
-                try:
-                    self.status_report_od["curfeed"] = float(word[1])
-                except (ValueError, IndexError) as e:
-                    logger.error(e, exc_info=True)
-                except Exception:
-                    logger.error("Uncaught exception: %s", traceback.format_exc())
-            elif word[0] == "FS":
-                try:
-                    self.status_report_od["curfeed"] = float(word[1])
-                    self.status_report_od["curspindle"] = float(word[2])
-                except (ValueError, IndexError) as e:
-                    logger.error(e, exc_info=True)
-                except Exception:
-                    logger.error("Uncaught exception: %s", traceback.format_exc())
-            elif word[0] == "Bf":
-                try:
-                    self.status_report_od["planner"] = int(word[1])
-                    self.status_report_od["rxbytes"] = int(word[2])
-                except (ValueError, IndexError) as e:
-                    logger.error(e, exc_info=True)
-                except Exception:
-                    logger.error("Uncaught exception: %s", traceback.format_exc())
-            elif word[0] == "Ov":
-                try:
-                    self.status_report_od["OvFeed"] = int(word[1])
-                    self.status_report_od["OvRapid"] = int(word[2])
-                    self.status_report_od["OvSpindle"] = int(word[3])
-                except (ValueError, IndexError) as e:
-                    logger.error(e, exc_info=True)
-                except Exception:
-                    logger.error("Uncaught exception: %s", traceback.format_exc())
-            elif word[0] == "WCO":
-                try:
-                    self.wco_a = np.array([float(word[1]), float(word[2]), float(word[3])])
-                    self.status_report_od["wco"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-                except (ValueError, IndexError) as e:
-                    logger.error(e, exc_info=True)
-                except Exception:
-                    logger.error("Uncaught exception: %s", traceback.format_exc())
-            elif word[0] == "Pn":
-                try:
-                    self.status_report_od["pins"] = word[1]
-                except (ValueError, IndexError) as e:
-                    logger.error(e, exc_info=True)
-                except Exception:
-                    logger.error("Uncaught exception: %s", traceback.format_exc())
-
-        self.wpos_a = self.mpos_a - self.wco_a
-        self.status_report_od["wpos"] = self.wpos_a
-        return self.status_report_od
+        return self._service.parse_status_report(line)
 
     def parse_bracket_square(self, line):
-        word = self.SPLITPAT.split(line.rstrip()[1:-1])
-
-        if word[0] == "PRB":
-            try:
-                self.prb_val.appendleft([float(word[1]), float(word[2]), float(word[3])])
-                self.prb_updated = True
-            except (ValueError, IndexError) as e:
-                logger.error(e, exc_info=True)
-            except Exception:
-                logger.error("Uncaught exception: %s", traceback.format_exc())
-        elif word[0] == "G54":
-            self.workspace_params_od["G54"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-        elif word[0] == "G55":
-            self.workspace_params_od["G55"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-        elif word[0] == "G56":
-            self.workspace_params_od["G56"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-        elif word[0] == "G57":
-            self.workspace_params_od["G57"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-        elif word[0] == "G58":
-            self.workspace_params_od["G58"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-        elif word[0] == "G59":
-            self.workspace_params_od["G59"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-        elif word[0] == "G28":
-            self.workspace_params_od["G28"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-        elif word[0] == "G30":
-            self.workspace_params_od["G30"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-        elif word[0] == "G92":
-            self.workspace_params_od["G92"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-        elif word[0] == "TLO":
-            self.workspace_params_od["TLO"] = float(word[1])
-
+        self._service.parse_bracket_square(line)
         return self.prb_val[0]
 
     def cmd_probe(self):
-        self.prb_updated = False
-        self.prb_activated = True
-        self.prb_num_todo = 1
-        self.prb_reps_todo = 1
+        self._service.arm_probe()
 
     def cmd_auto_bed_levelling(self, bbox_t, steps_t, feedrate_probe):
-        xy_coord_list = self.get_grid_coords(bbox_t, steps_t)
+        xy_coord_list = self._service.get_grid_coords(bbox_t, steps_t)
         travel_z = bbox_t[5]
         probe_z_min = bbox_t[2]
         logger.debug(xy_coord_list)
 
-        [self.abl_cmd_ls, self.prb_num_todo] = self.make_cmd_auto_bed_levelling(
+        [abl_cmd_ls, prb_num_todo] = self._service.make_cmd_auto_bed_levelling(
             xy_coord_list, travel_z, probe_z_min, feedrate_probe
         )
-        self.abl_val = []
-        self.abl_steps = (steps_t[0], steps_t[1])
-        self.prb_num_done = 0
-        self.prb_activated = False
-        self.prb_updated = False
-        self.abl_updated = False
-        self.abl_activated = True
+        self._service.arm_auto_bed_levelling(abl_cmd_ls, prb_num_todo, (steps_t[0], steps_t[1]))
 
         return [self.abl_cmd_ls, self.prb_num_todo]
 
-    @staticmethod
-    def get_grid_coords(bbox_t, steps_t):
-        xmin = bbox_t[0]
-        ymin = bbox_t[1]
-        xmax = bbox_t[3]
-        ymax = bbox_t[4]
-        x_step = steps_t[0]  # + 1
-        y_step = steps_t[1]  # + 1
-        xc = np.linspace(xmin, xmax, x_step)
-        yc = np.linspace(ymin, ymax, y_step)
-        xi, yi = np.meshgrid(xc, yc)
-        return list(zip(xi.ravel().tolist(), yi.ravel().tolist()))
-
-    @staticmethod
-    def make_cmd_auto_bed_levelling(xy_c_l, travel_z, probe_z_min, probe_feed_rate):
-
-        gcr = GCoder("dummy", "commander")
-        abl_cmd_ls, prb_num_todo = gcr.get_autobed_leveling_code(xy_c_l, travel_z, probe_z_min, probe_feed_rate)
-
-        logger.debug("ABL routine: " + str(abl_cmd_ls))
-        logger.debug("ABL points to do: " + str(prb_num_todo))
-
-        return [abl_cmd_ls, prb_num_todo]
-
-    def update_abl(self):
-        ack_flag = False
-        send_next = False
-        if self.prb_updated:
-            self.prb_updated = False
-            self.prb_num_done += 1
-            self.abl_val.append(self.prb_val[0])
-            # self.prb_val = []  # doesn't need anymore
-            if self.prb_num_done == self.prb_num_todo:
-                ack_flag = True
-                self.abl_activated = False
-            elif self.prb_num_done < self.prb_num_todo:
-                send_next = True
-            else:
-                logger.error("ABL: Number of probe done exceeded the number of probe to do.")
-
-        return [ack_flag, send_next]
-
-    # GCode Related
-    @staticmethod
-    def id_generator(size=4, chars=string.ascii_uppercase + string.digits):
-        return "".join(random.choice(chars) for _ in range(size))
-
-    def get_new_tag(self):
-        tag_l = [self.gcodes_od[k]["tag"] for k in self.gcodes_od.keys()]
-        new_tag = self.id_generator(4)
-        while new_tag in tag_l:
-            new_tag = self.id_generator(4)
-        return new_tag
-
     def load_gcode_file(self, cfg, gcode_path):
-        gcp = GCodeParser(cfg)
-        gcp.load_gcode_file(gcode_path)
-        gcp.interp()
-        gcp.vectorize()
-        # ov = gcp.get_gcode_original_vectors()
-        tag = self.get_new_tag()
-        if gcp is not None:
-            self.gcodes_od[gcode_path] = {"gcode": gcp, "tag": tag}
+        self._service.load_gcode_file(cfg, gcode_path)
 
     def remove_gcode_file(self, gcode_path):
-        if self.gcodes_od[gcode_path]:
-            del self.gcodes_od[gcode_path]
+        self._service.deregister_gcode(gcode_path)
 
     def get_gcode_tag_and_v(self, gcode_path):
-        v = self.gcodes_od[gcode_path]["gcode"].get_gcode_vectors()
-        tag = self.gcodes_od[gcode_path]["tag"]
+        entry = self._service.get_gcode_entry(gcode_path)
+        v = entry["gcode"].get_gcode_vectors()
+        tag = entry["tag"]
         return tag, v
 
     def apply_alignment(self, gcode_path):
-        print("Apply Alignment")
-        gcp = self.get_gcode_gcp(gcode_path)
-        align = GCodeAlignment(gcp.gc)
-        align.update_align_info(self.align_data.copy())
-        align.apply_align()
+        logger.debug("Apply Alignment")
+        self._service.apply_alignment(gcode_path)
 
     def remove_alignment(self, gcode_path):
-        gcp = self.get_gcode_gcp(gcode_path)
-        if gcp.gc.aligned_vectors:
-            gcp.gc.aligned_vectors = []
-            return True
-        else:
-            return False
+        return self._service.remove_alignment(gcode_path)
 
     def apply_abl(self, gcode_path):
-        print("Apply ABL")
-        gcp = self.get_gcode_gcp(gcode_path)
-        abl = GCodeLeveler(gcp.gc)
-        abl_val = self.abl_val.copy()
-        if abl_val != [] or True:
-            last_probe = abl_val.pop()
-            abl.get_grid_data(abl_val, self.abl_steps, last_probe, self.wco_a)
-        abl.interp_grid_data()
-        abl.apply_abl()
+        logger.debug("Apply ABL")
+        self._service.apply_abl(gcode_path)
 
     def remove_abl(self, gcode_path):
-        gcp = self.get_gcode_gcp(gcode_path)
-        if gcp.gc.modified_vectors:
-            gcp.gc.modified_vectors = []
-            return True
-        else:
-            return False
+        return self._service.remove_abl(gcode_path)
 
     def get_gcode_gcp(self, gcode_path):
-        return self.gcodes_od[gcode_path]["gcode"]
+        return self._service.get_gcode_gcp(gcode_path)
 
     def get_gcode_lines(self, gcode_path):
-        return self.gcodes_od[gcode_path]["gcode"].recode_gcode()
+        return self._service.get_gcode_lines(gcode_path)
 
     def get_change_tool_lines(self):
-        gcp = GCodeParser(None)
-        return gcp.get_change_tool_gcode()
+        return self._service.get_change_tool_lines()
 
     def get_boundary_box(self, gcode_path):
         logger.debug(gcode_path)
-        return self.gcodes_od[gcode_path]["gcode"].get_bbox()
+        return self._service.get_boundary_box(gcode_path)

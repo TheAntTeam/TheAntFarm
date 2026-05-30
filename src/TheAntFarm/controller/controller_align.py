@@ -1,109 +1,85 @@
 import logging
-import os.path
-import traceback
 
 import qimage2ndarray
-from double_side_manager import DoubleSideManager
 from PySide6.QtCore import QObject
-from shape_core.gcode_drill_converter import DrillGcodeConverter
-from shape_core.pcb_manager import PcbObj
+from app.services.align_service import AlignService
 
 logger = logging.getLogger(__name__)
 
 
 class AlignController(QObject):
 
-    EXCELLON_EXTENSIONS = (".xln", ".drl")
+    EXCELLON_LAYER_TAGS = ("drill",)
 
     def __init__(self, settings):
         super(AlignController, self).__init__()
         self.settings = settings
 
-        self.pcb = PcbObj()
-        # TODO: parametrize drill diameter for gcode conversion
-        dgc_cfg = {"default_gcode_drill_size": 0.7}
-        self.dgc = DrillGcodeConverter(cfg=dgc_cfg)
+        self._service = AlignService(
+            camera_rotation=settings.app_settings.camera_rotation_angle,
+            flip_h=settings.app_settings.camera_flip_h,
+            flip_v=settings.app_settings.camera_flip_v,
+        )
 
-        self.double_side_manager = DoubleSideManager()
-        self.double_side_manager.set_camera_rotation(settings.app_settings.camera_rotation_angle)
-        self.double_side_manager.set_camera_flip(settings.app_settings.camera_flip_h, settings.app_settings.camera_flip_v)
-        self.threshold_value = 0
-        self.flipping_view = [False, False, False]
+    @property
+    def flipping_view(self):
+        return self._service.flipping_view
 
-        self.align_data = []
+    @property
+    def align_data(self):
+        return self._service.align_data
+
+    @align_data.setter
+    def align_data(self, value):
+        self._service.align_data = value
+
+    @property
+    def threshold_value(self):
+        return self._service.threshold_value
 
     def load_new_align_layer(self, layer, layer_path):
-        try:
-            exc_tags = self.pcb.EXN_KEYS
-            if layer in exc_tags:
-                ext = os.path.splitext(layer_path)[1]
-                if ext.lower() in self.EXCELLON_EXTENSIONS:
-                    self.pcb.load_excellon(layer_path, layer)
-                    loaded_layer = self.pcb.get_excellon_layer(layer)
-                    if not loaded_layer[0]:
-                        loaded_layer = None
-                else:
-                    self.dgc.load_gcode(layer_path)
-                    self.dgc.convert()
-                    loaded_layer = self.dgc.get_drill_layer()
-                    if not loaded_layer[0]:
-                        loaded_layer = None
-                if loaded_layer is not None:
-                    self.align_data = []
-                return [loaded_layer, True]
-
-        except (AttributeError, ValueError, ZeroDivisionError, IndexError) as e:
-            logging.error(e, exc_info=True)
-        except Exception:
-            logger.error("Uncaught exception: %s", traceback.format_exc())
-
+        result = self._service.load_align_layer(layer, layer_path)
+        if result.ok and result.layer_data is not None:
+            return [result.layer_data, True]
+        if layer in self.EXCELLON_LAYER_TAGS:
+            return [None, True]
         return [None, None]
 
     def remove_align_points(self, selected_rows):
-        selected_rows.sort()
-        for r in selected_rows[::-1]:
-            if len(self.align_data) > r:
-                del self.align_data[r]
-            else:
-                logger.error("Invalid Alignment Points Row")
-        return self.align_data
+        return self._service.remove_align_points(selected_rows)
 
     def flip_align_layer_horizontally(self, flipped):
-        self.flipping_view[0] = flipped
+        self._service.flip_horizontally(flipped)
 
     def flip_align_layer_vertically(self, flipped):
-        self.flipping_view[1] = flipped
+        self._service.flip_vertically(flipped)
 
     def update_threshold_value(self, new_threshold):
-        self.threshold_value = new_threshold
+        self._service.set_threshold(new_threshold)
 
     def set_camera_rotation(self, angle: float) -> None:
         """Set camera rotation angle."""
-        self.double_side_manager.set_camera_rotation(angle)
+        self._service.set_camera_rotation(angle)
 
     def set_camera_flip_h(self, flip_h: bool) -> None:
         """Set camera horizontal flip."""
-        self.double_side_manager.flip_h = flip_h
+        self._service.set_camera_flip_h(flip_h)
 
     def set_camera_flip_v(self, flip_v: bool) -> None:
         """Set camera vertical flip."""
-        self.double_side_manager.flip_v = flip_v
+        self._service.set_camera_flip_v(flip_v)
 
     def get_camera_list(self):
-        return self.double_side_manager.list_cameras_indexes()
+        return self._service.get_camera_list()
 
     def update_camera_selected(self, index):
-        return self.double_side_manager.update_camera(index)
+        return self._service.update_camera(index)
 
     def camera_new_frame(self, zoom=1):
-        frame = self.double_side_manager.get_webcam_frame()
-        image = None
-        if frame is not None:
-            frame = self.double_side_manager.detect_holes(frame, self.threshold_value, zoom_f=zoom)
-            image = qimage2ndarray.array2qimage(frame)
-        return image
+        frame = self._service.get_camera_frame(zoom)
+        if frame is None:
+            return None
+        return qimage2ndarray.array2qimage(frame.data)
 
     def add_new_align_point(self, geom_point, working_position_point):
-        if geom_point is not None and working_position_point is not None:
-            self.align_data.append((geom_point, working_position_point))
-        return self.align_data
+        return self._service.add_align_point(geom_point, working_position_point)

@@ -1,13 +1,19 @@
 import logging
 import os
-import re
 import time
 import traceback
 from collections import OrderedDict as Od
 
 from PySide6.QtCore import QTimer, Slot
 from PySide6.QtGui import QPixmap
-from shape_core.gcode_manager import GCodeMacro, GCoder
+from app.services.align_point_service import AlignPointService
+from app.services.file_send_service import FileSendService
+from app.services.manager_adapter_service import ManagerAdapterService
+from app.services.macro_service import MacroService
+from app.services.rx_coordinator_service import RxCoordinatorService
+from app.services.rx_line_service import RxLineService
+from app.services.streaming_service import StreamingService
+from shape_core.gcode_manager import GCoder
 
 from .controller_align import AlignController
 from .controller_control import ControlController
@@ -20,7 +26,24 @@ logger = logging.getLogger(__name__)
 class ControllerWorker(ControllerSignals):
     REMOTE_RX_BUFFER_MAX_SIZE = 128
 
-    def __init__(self, serial_rx_queue, serial_tx_queue, settings):
+    def __init__(
+        self,
+        serial_rx_queue,
+        serial_tx_queue,
+        settings,
+        *,
+        manager_adapter=None,
+        macro_service=None,
+        rx_coordinator_service=None,
+        rx_line_service=None,
+        streaming_service=None,
+        file_send_service=None,
+        align_point_service=None,
+        view_controller=None,
+        control_controller=None,
+        align_controller=None,
+        gcr=None,
+    ):
         super(ControllerWorker, self).__init__()
 
         self.serialRxQueue = serial_rx_queue
@@ -28,10 +51,19 @@ class ControllerWorker(ControllerSignals):
         self.settings = settings
 
         self.connected = False  # Flag to know if the controller is connected
+        self._manager_adapter = manager_adapter if manager_adapter is not None else ManagerAdapterService()
+        self._macro = macro_service if macro_service is not None else MacroService()
+        self._rx_coordinator = rx_coordinator_service if rx_coordinator_service is not None else RxCoordinatorService()
+        self._rx_line = rx_line_service if rx_line_service is not None else RxLineService()
+        self._streaming = (
+            streaming_service if streaming_service is not None else StreamingService(self.REMOTE_RX_BUFFER_MAX_SIZE)
+        )
+        self._file_send = file_send_service if file_send_service is not None else FileSendService()
+        self._align_point = align_point_service if align_point_service is not None else AlignPointService()
 
-        self.view_controller = ViewController(self.settings)
-        self.control_controller = ControlController(self.settings)
-        self.align_controller = AlignController(self.settings)
+        self.view_controller = view_controller if view_controller is not None else ViewController(self.settings)
+        self.control_controller = control_controller if control_controller is not None else ControlController(self.settings)
+        self.align_controller = align_controller if align_controller is not None else AlignController(self.settings)
 
         self.send_tool_change_s.connect(self.start_tool_change)
 
@@ -41,7 +73,6 @@ class ControllerWorker(ControllerSignals):
 
         self.align_active = False
 
-        self.status_to_ack = 0
         self.buffered_cmds = []
         self.cmds_to_ack = 0
         self.wait_tag_decoding = False
@@ -49,16 +80,6 @@ class ControllerWorker(ControllerSignals):
 
         self.abl_apply_active = True
         self.align_apply_active = True
-        self.prb_activated = False
-        self.abl_activated = False
-        self.prb_updated = False
-        self.abl_updated = False
-        self.prb_val = []
-        self.abl_cmd_ls = []
-        self.prb_num_todo = 0
-        self.prb_num_done = 0
-        self.prb_reps_todo = 1
-        self.prb_reps_done = 0
 
         self.sending_file = False
         self.file_content = []
@@ -68,21 +89,113 @@ class ControllerWorker(ControllerSignals):
         self.ack_lines = 0
         self.tot_lines = 0
         self.buffered_size = 0
-        self.max_buffered_lines = 100
-        self.min_buffer_threshold = 80
         self.eof_wait_for_idle = False
         self.start_time = None
 
         self.active_gcode_path = ""
 
-        self.gcr = GCoder("dummy", "commander")
+        self.gcr = gcr if gcr is not None else GCoder("dummy", "commander")
         self.update_gerber_cfg()
-        self.macro_on = False
-        self.macro_obj = None
 
         self.send_soft_reset = True
 
         self.camera_zoom = 1
+
+    @property
+    def buffered_cmds(self):
+        return self._streaming.buffered_cmds
+
+    @buffered_cmds.setter
+    def buffered_cmds(self, value):
+        self._streaming.buffered_cmds = value
+
+    @property
+    def cmds_to_ack(self):
+        return self._streaming.cmds_to_ack
+
+    @cmds_to_ack.setter
+    def cmds_to_ack(self, value):
+        self._streaming.cmds_to_ack = value
+
+    @property
+    def wait_tag_decoding(self):
+        return self._streaming.wait_tag_decoding
+
+    @wait_tag_decoding.setter
+    def wait_tag_decoding(self, value):
+        self._streaming.wait_tag_decoding = value
+
+    @property
+    def sending_file(self):
+        return self._streaming.sending_file
+
+    @sending_file.setter
+    def sending_file(self, value):
+        self._streaming.sending_file = value
+
+    @property
+    def file_content(self):
+        return self._streaming.file_content
+
+    @file_content.setter
+    def file_content(self, value):
+        self._streaming.file_content = value
+
+    @property
+    def content_line(self):
+        return self._streaming.content_line
+
+    @content_line.setter
+    def content_line(self, value):
+        self._streaming.content_line = value
+
+    @property
+    def file_progress(self):
+        return self._streaming.file_progress
+
+    @file_progress.setter
+    def file_progress(self, value):
+        self._streaming.file_progress = value
+
+    @property
+    def sent_lines(self):
+        return self._streaming.sent_lines
+
+    @sent_lines.setter
+    def sent_lines(self, value):
+        self._streaming.sent_lines = value
+
+    @property
+    def ack_lines(self):
+        return self._streaming.ack_lines
+
+    @ack_lines.setter
+    def ack_lines(self, value):
+        self._streaming.ack_lines = value
+
+    @property
+    def tot_lines(self):
+        return self._streaming.tot_lines
+
+    @tot_lines.setter
+    def tot_lines(self, value):
+        self._streaming.tot_lines = value
+
+    @property
+    def buffered_size(self):
+        return self._streaming.buffered_size
+
+    @buffered_size.setter
+    def buffered_size(self, value):
+        self._streaming.buffered_size = value
+
+    @property
+    def eof_wait_for_idle(self):
+        return self._streaming.eof_wait_for_idle
+
+    @eof_wait_for_idle.setter
+    def eof_wait_for_idle(self, value):
+        self._streaming.eof_wait_for_idle = value
 
     @Slot(bool)
     def on_controller_connection(self, connected):
@@ -96,28 +209,18 @@ class ControllerWorker(ControllerSignals):
     def init_timers(self):
         self.poll_timer = QTimer()
         self.poll_timer.timeout.connect(self.on_poll_timeout)
-        self.poll_timer.setInterval(120)
+        self.poll_timer.setInterval(self._manager_adapter.POLL_INTERVAL_MS)
         # self.poll_timer.setSingleShot(True)
         # self.poll_timer.start()
 
         self.camera_timer = QTimer()
         self.camera_timer.timeout.connect(self.on_camera_timeout)
-        self.camera_timer.setInterval(120)
+        self.camera_timer.setInterval(self._manager_adapter.POLL_INTERVAL_MS)
         self.camera_timer.start()
 
     def on_progress_timeout(self):
-        elapsed_time = self._get_elapsed_time_str()
+        elapsed_time = self._manager_adapter.format_elapsed_time(self.start_time)
         self.update_file_progress_s.emit(-1.0, elapsed_time)
-
-    def _get_elapsed_time_str(self):
-        """Calculate elapsed time since start_time and return as HH:MM:SS format."""
-        if self.start_time is None:
-            return "00:00:00"
-        elapsed_seconds = int(time.time() - self.start_time)
-        hours = elapsed_seconds // 3600
-        minutes = (elapsed_seconds % 3600) // 60
-        seconds = elapsed_seconds % 60
-        return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
     # ***************** VIEW related functions. ***************** #
 
@@ -148,19 +251,15 @@ class ControllerWorker(ControllerSignals):
         self.dro_status_updated = False
 
     def send_to_tx_queue(self, data):
-        parsed_cmd_str = self.decode_tag(data)
+        parsed_cmd_str = self._manager_adapter.prepare_tx_payload(data, self.decode_tag)
         # logger.info(data)
         self.serialTxQueue.put(parsed_cmd_str)
         self.serial_tx_available_s.emit()
 
     def on_poll_timeout(self):
-        status_poll = b"?"
-        if not self.dro_status_updated:
-            self.serial_send_s.emit(status_poll)
-            # self.send_to_tx_queue(status_poll)
-        else:
-            self.serial_send_s.emit(status_poll)
-            # self.send_to_tx_queue(status_poll)
+        status_poll = self._manager_adapter.get_poll_payload()
+        self.serial_send_s.emit(status_poll)
+        # self.send_to_tx_queue(status_poll)
 
     @Slot()
     def parse_rx_queue(self):
@@ -168,145 +267,94 @@ class ControllerWorker(ControllerSignals):
             try:
                 element = self.serialRxQueue.get(block=False)
                 if element:
+                    line_kind = self._rx_line.classify(element)
                     # logger.debug("Element received: " + str(element))
-                    if re.match(r"^<.*>\s*$\s", element):
-                        self.update_status_s.emit(self.control_controller.parse_bracket_angle(element))
-                        # This variable should be set to true the first time an ack is received.
-                        if not self.dro_status_updated:
+                    if line_kind == "status":
+                        result = self._rx_coordinator.process_line(
+                            line_kind,
+                            element,
+                            dro_status_updated=self.dro_status_updated,
+                            status_payload=self.control_controller.parse_bracket_angle(element),
+                        )
+                        self.update_status_s.emit(result["status_payload"])
+                        if result["mark_dro_updated"]:
                             self.dro_status_updated = True
-                        self.check_eof_and_idle()
-                    elif re.match(r"^\[.*\]\s*$\s", element):
+                        if result["check_eof_and_idle"]:
+                            self.check_eof_and_idle()
+                    elif line_kind == "square":
                         self.control_controller.parse_bracket_square(element)
-                        [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = (
+                        square_flags = (
                             self.control_controller.process_probe_and_abl()
                         )
-                        if ack_prb_flag:
+                        result = self._rx_coordinator.process_line(
+                            line_kind,
+                            element,
+                            square_flags=square_flags,
+                        )
+                        if result["touched_probe"]:
                             self.touched_probe_s.emit()
+                        if result["ack_probe"]:
                             self.ack_probe()
-                        if ack_abl_flag:
+                        if result["ack_auto_bed_levelling"]:
                             self.ack_auto_bed_levelling()
-                        if send_next:
+                        if result["send_next_abl"]:
                             self.send_next_abl()
-                        if other_cmd_flag:
-                            if element:
-                                self.update_console_text_s.emit(element)
-                                logger.debug(element)
-                    elif re.match(r"ok\s*$\s", element):
+                        if result["console_text"] is not None:
+                            self.update_console_text_s.emit(result["console_text"])
+                            logger.debug(result["console_text"])
+                    elif line_kind == "ok":
                         logger.debug("buffered size: " + str(self.buffered_size))
                         self.update_console_text_s.emit(element)
-                        if self.sending_file and self.cmds_to_ack > 0:
-                            # Update progress #
-                            self.cmds_to_ack -= 1
-                            self.ack_lines += 1
-                            self.buffered_size -= len(self.buffered_cmds[0])
-                            self.buffered_cmds.pop(0)
-                            self.file_progress = (self.content_line / self.tot_lines) * 100
+                        result = self._rx_coordinator.process_line(
+                            line_kind,
+                            element,
+                            streaming=self._streaming,
+                            macro=self._macro,
+                            prepare_file_command=self.macro_check,
+                            workspace_parameters=self.get_workspace_parameters(),
+                            probe_data=self.control_controller.prb_val,
+                        )
+                        if result["acknowledged"]:
                             logger.debug("Acknowledged lines: " + str(self.ack_lines))
                             self.update_file_progress_s.emit(self.file_progress, "")
-
-                            # all lines have been sent?
-
-                            # print("End Of File: " + str(end_of_file))
-
-                            if self.macro_on:
-                                probe_data = self.control_controller.prb_val
-                                wsp = self.get_workspace_parameters()
-                                cmd_to_send = self.macro_obj.get_next_line(wsp, probe_data)
-                                # print(cmd_to_send)
-                                if cmd_to_send is None:
-                                    self.macro_on = False
-                                    self.macro_obj = None
-                                    self.wait_tag_decoding = False
-                                    self.tot_lines -= 1
-                                else:
-                                    # self.tot_lines += 1
-                                    buff_available = (
-                                        self.buffered_size + len(cmd_to_send)
-                                    ) < self.REMOTE_RX_BUFFER_MAX_SIZE
-
-                            end_of_file = self.content_line >= self.tot_lines
-
-                            if not end_of_file:
-                                if not self.macro_on:
-                                    cmd_to_send = self.file_content[self.content_line]
-                                    cmd_to_send = self.macro_check(cmd_to_send)
-                                    self.content_line += 1
-
-                                logger.debug(str(self.ack_lines) + " <-> " + str(self.sent_lines))
-                                # does data fit the buffer?
-                                buff_available = (
-                                    self.buffered_size + len(cmd_to_send)
-                                ) < self.REMOTE_RX_BUFFER_MAX_SIZE
-                            else:
-                                self.wait_tag_decoding = False
-                                buff_available = False
-
                             logger.debug("wait: " + str(self.wait_tag_decoding))
-
-                            if not end_of_file and buff_available and not self.wait_tag_decoding:
-                                # cmd_to_send = self.file_content[self.sent_lines]
-                                self.send_to_tx_queue(cmd_to_send)
-                                self.buffered_cmds.append(cmd_to_send)
-                                logger.debug("TX:" + cmd_to_send)
-                                self.update_console_text_s.emit(cmd_to_send)
-                                self.buffered_size += len(cmd_to_send)
-                                self.sent_lines += 1
-                                self.cmds_to_ack += 1
-
-                            # if self.ack_lines == self.tot_lines:
-                            if end_of_file:
-                                self.eof_wait_for_idle = True
-                                self.sending_file = False
-
-                                self.file_progress = (self.content_line / self.tot_lines) * 100
+                            if result["send_command"] is not None:
+                                self.send_to_tx_queue(result["send_command"])
+                                logger.debug("TX:" + result["send_command"])
+                                self.update_console_text_s.emit(result["send_command"])
+                            if result["finished_file"]:
                                 self.update_file_progress_s.emit(self.file_progress, "")
-
                                 logger.info("End of File sending.")
 
-                    elif "error" in element.lower():
-                        self.update_console_text_s.emit(element)
-                        logger.error(element)
+                    elif line_kind == "error":
+                        result = self._rx_coordinator.process_line(line_kind, element)
+                        self.update_console_text_s.emit(result["console_text"])
+                        logger.error(result["console_text"])
                         logger.debug(self.buffered_size)
                         logger.debug(self.sent_lines)
                         logger.debug(self.ack_lines)
                     else:
-                        self.update_console_text_s.emit(element)
-                        logger.debug(element)
+                        result = self._rx_coordinator.process_line(line_kind, element)
+                        self.update_console_text_s.emit(result["console_text"])
+                        logger.debug(result["console_text"])
             except BlockingIOError as e:
                 logger.error(e, exc_info=True)
             except Exception:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
     def macro_check(self, cmd_to_send):
-        # probe_data = self.control_controller.prb_val
-        # wsp = self.get_workspace_parameters()
-        ret_cmd_to_send = cmd_to_send
-
-        if self.gcr.is_macro(cmd_to_send):
-            macro_type = cmd_to_send.strip()
-            if self.ack_lines != self.sent_lines:
-                # wait that the machine execute all previous lines
-                # to be able to decode the tag
-                # print("Wait")
-                self.wait_tag_decoding = True
-            else:
-                # machine execution queue is empty, let's go
-                # print("Run")
-
-                # DUMMY ELEMENT FREEZE WPO and MPO
-                freeze_dro = {
-                    "WPO": self.control_controller.wpos_a.copy(),
-                    "MPO": self.control_controller.mpos_a.copy(),
-                }
-
-                self.wait_tag_decoding = False
-                local_path = self.settings.local_path
-                self.macro_obj = GCodeMacro(freeze_dro, macro_type, self.gcr, local_path=local_path)
-                ret_cmd_to_send = "$#\n"
-                # ret_cmd_to_send = self.macro_obj.get_next_line(probe_data, wsp)
-                self.tot_lines += 1
-                self.macro_on = True
-        return ret_cmd_to_send
+        macro_result = self._macro.prepare_command(
+            cmd_to_send,
+            self.ack_lines,
+            self.sent_lines,
+            self.control_controller.wpos_a,
+            self.control_controller.mpos_a,
+            self.settings.local_path,
+            self.gcr,
+        )
+        self.wait_tag_decoding = macro_result["wait_tag_decoding"]
+        self.tot_lines += macro_result["total_lines_delta"]
+        return macro_result["command"]
 
     def decode_tag(self, gcode_str):
         # status = self.control_controller.status
@@ -391,7 +439,7 @@ class ControllerWorker(ControllerSignals):
             logger.debug("Align_val " + str(align_data))
             logger.debug("Align_active " + str(self.align_apply_active))
 
-            if align_data != [] and self.align_apply_active:
+            if align_data and self.align_apply_active:
                 logger.debug("Apply Alignment")
                 self.control_controller.apply_alignment(gcode_path)
                 redraw_align = True
@@ -399,7 +447,7 @@ class ControllerWorker(ControllerSignals):
                 logger.debug("Remove Alignment")
                 redraw_align = self.control_controller.remove_alignment(gcode_path)
 
-            if abl_val != [] and self.abl_apply_active:
+            if abl_val and self.abl_apply_active:
                 logger.debug("Apply ABL")
                 self.control_controller.apply_abl(gcode_path)
                 redraw_abl = True
@@ -428,64 +476,33 @@ class ControllerWorker(ControllerSignals):
         self.send_gcode_lines(lines)
 
     def send_gcode_lines(self, lines):
-        self.file_content = lines
-        # with open(gcode_path+".abl", "w") as f:
-        #     f.writelines(self.file_content)
-        # with open(gcode_path) as f:            # DEBUG: take directly from file
-        #     self.file_content = f.readlines()
+        send_state = self._file_send.begin_send(self._streaming, lines, buffered_size=self.buffered_size)
         logger.debug(self.file_content)
-        if self.file_content:
+        if send_state["has_content"]:
             self.start_time = time.time()
             self.progress_timer = QTimer()
             self.progress_timer.timeout.connect(self.on_progress_timeout)
-            self.progress_timer.setInterval(500)
+            self.progress_timer.setInterval(self._manager_adapter.PROGRESS_INTERVAL_MS)
             self.progress_timer.start()
-            self.file_progress = 0.0
-            self.cmds_to_ack = 0
-            self.sent_lines = 0
-            self.content_line = 0
-            self.ack_lines = 0
-            self.tot_lines = len(self.file_content)
-            self.macro_on = False
-            self.macro_obj = None
-            self.eof_wait_for_idle = False
-            self.wait_tag_decoding = False
-            logger.info("Total lines: " + str(self.tot_lines))
+            self._macro.reset()
+            logger.info("Total lines: " + str(send_state["total_lines"]))
 
-            if (
-                self.sent_lines < self.tot_lines
-                and (self.buffered_size + len(self.file_content[self.content_line])) < self.REMOTE_RX_BUFFER_MAX_SIZE
-            ):
-                cmd_to_send = self.file_content[self.content_line]
-                cmd_to_send = self.macro_check(cmd_to_send)
+            initial_cmd = self._file_send.prepare_initial_command(self._streaming, self.macro_check)
+            cmd_to_send = initial_cmd["command"]
+            if cmd_to_send is not None:
                 self.send_to_tx_queue(cmd_to_send)
-                self.buffered_cmds.append(cmd_to_send)
                 self.update_console_text_s.emit(cmd_to_send)
                 logger.debug(cmd_to_send)
-                self.buffered_size += len(cmd_to_send)
-                self.sent_lines += 1
-                self.content_line += 1
-                self.cmds_to_ack += 1
 
             logger.debug("Buffered size: " + str(self.buffered_size))
-            self.sending_file = True
 
     def stop_gcode_file(self):
         self.sending_file = False
         self.progress_timer.stop()
-        if self.send_soft_reset:
-            # send soft reset
-            self.execute_gcode_cmd(b"!")
-            self.execute_gcode_cmd(b"\030")
-        self.send_soft_reset = True
-        self.file_progress = 0.0
-        self.cmds_to_ack = 0
-        self.sent_lines = 0
-        self.ack_lines = 0
-        self.tot_lines = 0
-        self.buffered_cmds = []
-        self.buffered_size = 0
-        self.wait_tag_decoding = False
+        stop_state = self._file_send.stop_send(self._streaming, self.send_soft_reset)
+        for cmd in stop_state["reset_commands"]:
+            self.execute_gcode_cmd(cmd)
+        self.send_soft_reset = stop_state["next_send_soft_reset"]
 
     def pause_resume(self):
         logger.info("Status: " + str(self.control_controller.status))
@@ -497,7 +514,7 @@ class ControllerWorker(ControllerSignals):
             self.execute_gcode_cmd(b"!")
 
     def get_boundary_box(self):
-        if not self.active_gcode_path == "":
+        if self.active_gcode_path != "":
             bbox_t = self.control_controller.get_boundary_box(self.active_gcode_path)
             if bbox_t is not None:
                 self.update_bbox_s.emit(bbox_t)
@@ -516,7 +533,6 @@ class ControllerWorker(ControllerSignals):
     def start_tool_change(self):
         logger.info("Tool change is starting!")
         lines = self.control_controller.get_change_tool_lines()
-        # print(lines)
         self.send_soft_reset = False
         self.send_gcode_lines(lines)
 
@@ -545,31 +561,31 @@ class ControllerWorker(ControllerSignals):
 
     @Slot(list, tuple)
     def add_new_align_point(self, geometry_point, offset_flag):
-        if self.connected:
-            status = self.get_status_report()
-            if status:
-                if "wpos" in status.keys():
-                    working_position_coords = status["wpos"]
-                    working_position_point = [working_position_coords[0], working_position_coords[1]]
-                    if offset_flag:
-                        ox = self.settings.machine_settings.tool_camera_offset_x
-                        oy = self.settings.machine_settings.tool_camera_offset_y
-                        offset_info = (ox, oy)
-                        working_position_point[0] -= offset_info[0]
-                        working_position_point[1] -= offset_info[1]
-                    flipping_info = self.align_controller.flipping_view
-                    if flipping_info[0]:
-                        geometry_point[0] *= -1.0
-                    if flipping_info[1]:
-                        geometry_point[1] *= -1.0
-                    align_data = self.align_controller.add_new_align_point(geometry_point, working_position_point)
-                    self.update_align_points_s.emit(align_data)
-                else:
-                    logger.warning("Invalid Working Position Information")
-            else:
+        result = self._align_point.prepare_align_point(
+            connected=self.connected,
+            status=self.get_status_report(),
+            geometry_point=geometry_point,
+            offset_flag=offset_flag,
+            camera_offset_xy=(
+                self.settings.machine_settings.tool_camera_offset_x,
+                self.settings.machine_settings.tool_camera_offset_y,
+            ),
+            flipping_view=self.align_controller.flipping_view,
+        )
+
+        if not result["ok"]:
+            if result["reason"] == "invalid_wpos":
+                logger.warning("Invalid Working Position Information")
+            elif result["reason"] == "invalid_status":
                 logger.warning("Invalid Machine Status Information")
-        else:
-            logger.warning("Machine Disconnected")
+            else:
+                logger.warning("Machine Disconnected")
+            return
+
+        align_data = self.align_controller.add_new_align_point(
+            result["geometry_point"], result["working_position_point"]
+        )
+        self.update_align_points_s.emit(align_data)
 
     @Slot(list)
     def remove_align_points(self, selected_rows):

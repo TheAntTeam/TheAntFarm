@@ -1,6 +1,6 @@
 import pytest
 from collections import OrderedDict, deque
-from unittest.mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch
 import numpy as np
 
 
@@ -12,9 +12,8 @@ def mock_settings():
 
 @pytest.fixture(scope="module")
 def control_controller(mock_settings):
-    with patch("controller.controller_control.GCoder"):
-        from controller.controller_control import ControlController
-        return ControlController(mock_settings)
+    from controller.controller_control import ControlController
+    return ControlController(mock_settings)
 
 
 def test_init_attributes(control_controller, mock_settings):
@@ -79,7 +78,7 @@ def test_process_probe_and_abl_abl_activated(control_controller):
     control_controller.prb_activated = False
     control_controller.prb_updated = False
     control_controller.abl_activated = True
-    with patch.object(control_controller, "update_abl", return_value=[False, True]):
+    with patch.object(control_controller._service, "process_probe_and_abl", return_value=(False, False, True, False)):
         result = control_controller.process_probe_and_abl()
         assert result[2] is True
 
@@ -157,53 +156,52 @@ def test_cmd_probe(control_controller):
     assert control_controller.prb_reps_todo == 1
 
 
-def test_get_grid_coords(control_controller):
-    bbox_t = (0, 0, 10, 10, 10, 5)
+def test_cmd_auto_bed_levelling_delegates_grid_and_cmd_builder(control_controller):
+    bbox_t = (0, 0, -1, 10, 10, 5)
     steps_t = (3, 3)
-    result = control_controller.get_grid_coords(bbox_t, steps_t)
-    assert len(result) == 9
+    with patch.object(control_controller._service, "get_grid_coords", return_value=[(0.0, 0.0)]), patch.object(
+        control_controller._service,
+        "make_cmd_auto_bed_levelling",
+        return_value=[["G38.2 Z-1 F100"], 1],
+    ), patch.object(control_controller._service, "arm_auto_bed_levelling") as arm_mock:
+        result = control_controller.cmd_auto_bed_levelling(bbox_t, steps_t, 100)
+
+    assert result[1] == 1
+    assert result[0] == control_controller.abl_cmd_ls
+    arm_mock.assert_called_once_with(["G38.2 Z-1 F100"], 1, (3, 3))
 
 
-def test_update_abl_probe_updated(control_controller):
+def test_process_probe_and_abl_sends_next_abl_probe(control_controller):
+    control_controller.prb_activated = False
+    control_controller.abl_activated = True
     control_controller.prb_updated = True
     control_controller.prb_num_done = 0
     control_controller.prb_num_todo = 5
     control_controller.abl_val = []
     control_controller.prb_val = deque([[1.0, 2.0, 3.0], [-1.0, -1.0, -1.0]], maxlen=2)
-    result = control_controller.update_abl()
-    assert result[1] is True
+    result = control_controller.process_probe_and_abl()
+    assert result[1] is False
+    assert result[2] is True
     assert len(control_controller.abl_val) == 1
 
 
-def test_update_abl_last_probe(control_controller):
+def test_process_probe_and_abl_acknowledges_last_abl_probe(control_controller):
+    control_controller.prb_activated = False
+    control_controller.abl_activated = True
     control_controller.prb_updated = True
     control_controller.prb_num_done = 4
     control_controller.prb_num_todo = 5
     control_controller.abl_val = [[1, 1, 1]]
     control_controller.prb_val = deque([[1.0, 2.0, 3.0], [-1.0, -1.0, -1.0]], maxlen=2)
-    result = control_controller.update_abl()
-    assert result[0] is True
+    result = control_controller.process_probe_and_abl()
+    assert result[1] is True
     assert control_controller.abl_activated is False
 
 
-def test_id_generator(control_controller):
-    result = control_controller.id_generator(4)
-    assert len(result) == 4
-
-
-def test_get_new_tag(control_controller):
-    control_controller.gcodes_od = OrderedDict()
-    result = control_controller.get_new_tag()
-    assert len(result) == 4
-
-
 def test_load_gcode_file(control_controller):
-    with patch("controller.controller_control.GCodeParser") as MockGCP:
-        mock_gcp = MagicMock()
-        mock_gcp.interp = MagicMock()
-        mock_gcp.vectorize = MagicMock()
-        MockGCP.return_value = mock_gcp
+    with patch.object(control_controller._service, "load_gcode_file") as load_mock:
         control_controller.load_gcode_file({}, "/test.gcode")
+    load_mock.assert_called_once_with({}, "/test.gcode")
 
 
 def test_remove_gcode_file(control_controller):
