@@ -165,8 +165,10 @@ class TestResetToolMachineInitialSettings:
 
 class TestRestoreInitialSettings:
     def test_restore_initial_settings(self, settings_tab, mock_ui, mock_settings):
+        settings_tab.settings_dirty = True
         settings_tab.restore_initial_settings()
         mock_ui.status_bar.showMessage.assert_called()
+        assert settings_tab.settings_dirty is False
 
 
 class TestUiToolProbeSetEnabling:
@@ -286,6 +288,39 @@ class TestGetAndManageStatusReport:
         assert settings_tab.get_tool_camera_offset_flag is False
 
 
+class TestSettingsDirtyFlag:
+    def test_initial_dirty_false(self, settings_tab):
+        assert settings_tab.settings_dirty is False
+
+    def test_set_focus_lost_sets_dirty(self, settings_tab):
+        settings_tab.set_focus_lost()
+        assert settings_tab.settings_dirty is True
+
+    def test_reset_focus_lost_clears_dirty(self, settings_tab):
+        settings_tab.settings_dirty = True
+        settings_tab.reset_focus_lost()
+        assert settings_tab.settings_dirty is False
+
+    def test_has_unsaved_changes_returns_true(self, settings_tab):
+        settings_tab.settings_dirty = True
+        assert settings_tab.has_unsaved_changes() is True
+
+    def test_has_unsaved_changes_returns_false(self, settings_tab):
+        settings_tab.settings_dirty = False
+        assert settings_tab.has_unsaved_changes() is False
+
+    def test_restore_initial_settings_clears_dirty(self, settings_tab, mock_ui, mock_settings):
+        settings_tab.settings_dirty = True
+        settings_tab.restore_initial_settings()
+        assert settings_tab.settings_dirty is False
+
+    def test_save_settings_preferences_clears_dirty(self, settings_tab, mock_ui):
+        settings_tab.settings_dirty = True
+        settings_tab.save_settings_preferences()
+        assert settings_tab.settings_dirty is False
+
+
 class TestSetFocusLost:
     def test_set_focus_lost(self, settings_tab):
         settings_tab.set_focus_lost()
+        assert settings_tab.settings_dirty is True
