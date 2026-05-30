@@ -1,23 +1,23 @@
 import logging
 
-from PySide6.QtCore import QObject
 from app.services.align_service import AlignService
 
 logger = logging.getLogger(__name__)
 
 
-class AlignController(QObject):
+class AlignController:
 
     EXCELLON_LAYER_TAGS = ("drill",)
 
     def __init__(self, settings):
-        super(AlignController, self).__init__()
+        super().__init__()
         self.settings = settings
 
         self._service = AlignService(
             camera_rotation=settings.app_settings.camera_rotation_angle,
             flip_h=settings.app_settings.camera_flip_h,
             flip_v=settings.app_settings.camera_flip_v,
+            drill_diameter=settings.machine_settings.alignment_drill_diameter,
         )
 
     @property

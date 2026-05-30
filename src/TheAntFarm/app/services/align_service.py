@@ -57,9 +57,11 @@ class AlignService:
         camera_rotation: float = 0.0,
         flip_h: bool = False,
         flip_v: bool = False,
+        drill_diameter: float = 0.7,
     ) -> None:
         self._pcb = PcbObj()
-        self._dgc = DrillGcodeConverter(cfg={"default_gcode_drill_size": 0.7})
+        dd = drill_diameter if drill_diameter else 0.7
+        self._dgc = DrillGcodeConverter(cfg={"default_gcode_drill_size": dd})
         self._dsm = DoubleSideManager()
         self._dsm.set_camera_rotation(camera_rotation)
         self._dsm.set_camera_flip(flip_h, flip_v)
