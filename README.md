@@ -120,6 +120,9 @@ src/TheAntFarm/
 
 - [docs/INSTALL.md](docs/INSTALL.md) — Installation guide
 - [CHANGELOG.md](CHANGELOG.md) — Release history
+- [CONTRIBUTING.md](CONTRIBUTING.md) — Contributor guide
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) — Community guidelines
+- [SECURITY.md](SECURITY.md) — Security policy
 - [Bug report](.github/ISSUE_TEMPLATE/bug_report.md)
 - [Feature request](.github/ISSUE_TEMPLATE/feature_request.md)
 - [Improvement](.github/ISSUE_TEMPLATE/improvement.md)
@@ -128,7 +131,7 @@ src/TheAntFarm/
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or pull request on GitHub.
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions, code style, testing, and pull request guidelines. All contributors must follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ---
 
