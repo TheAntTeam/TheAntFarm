@@ -120,7 +120,9 @@ src/TheAntFarm/
 
 - [docs/INSTALL.md](docs/INSTALL.md) — Installation guide
 - [CHANGELOG.md](CHANGELOG.md) — Release history
-- [.github/ISSUE_TEMPLATE/bug_report.md](.github/ISSUE_TEMPLATE/bug_report.md) — Bug report template
+- [Bug report](.github/ISSUE_TEMPLATE/bug_report.md)
+- [Feature request](.github/ISSUE_TEMPLATE/feature_request.md)
+- [Improvement](.github/ISSUE_TEMPLATE/improvement.md)
 
 ---
 
