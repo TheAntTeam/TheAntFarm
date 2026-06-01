@@ -1,18 +1,62 @@
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor, QPalette
+from PySide6.QtCore import QByteArray, QFile, QIODevice, QObject, Qt, Signal
+from PySide6.QtGui import QColor, QIcon, QPainter, QPalette, QPixmap
+from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QStyleFactory, QWidgetAction
 
 
-class StyleManager:
+class IconManager:
+    def __init__(self) -> None:
+        self._cache: dict[str, QIcon] = {}
+
+    def make_icon(self, resource_path: str, color: QColor) -> QIcon:
+        cache_key = f"{resource_path}:{color.name()}"
+        cached = self._cache.get(cache_key)
+        if cached is not None:
+            return cached
+        pixmap = self._render_colored(resource_path, color)
+        icon = QIcon(pixmap)
+        self._cache[cache_key] = icon
+        return icon
+
+    def clear_cache(self) -> None:
+        self._cache.clear()
+
+    @staticmethod
+    def _render_colored(path: str, color: QColor) -> QPixmap:
+        f = QFile(path)
+        f.open(QIODevice.ReadOnly)
+        data = QByteArray(f.readAll())
+        f.close()
+        renderer = QSvgRenderer(data)
+        size = renderer.defaultSize()
+        if size.isNull() or size.isEmpty():
+            size = QPixmap(512, 512).size()
+        pixmap = QPixmap(size)
+        pixmap.fill(Qt.transparent)
+        painter = QPainter(pixmap)
+        renderer.render(painter)
+        painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
+        painter.fillRect(pixmap.rect(), color)
+        painter.end()
+        return pixmap
+
+
+class StyleManager(QObject):
     """Style manager class"""
 
+    theme_changed = Signal(QColor, QColor)  # icon_color, disabled_color
+
     def __init__(self, app_ptr):
+        super().__init__()
         self.app_ptr = app_ptr
         self.native_styles = QStyleFactory.keys()
         self.default_palette = QPalette()
         self.default_style = "Fusion"
         self.dark_palette_action = None
         self.light_palette_action = None
+        self.icon_man = IconManager()
+        self.current_icon_color = Qt.white
+        self.current_disabled_color = QColor(128, 128, 128)
 
     def list_styles(self):
         """List the available application styles for the current OS."""
@@ -104,6 +148,10 @@ class StyleManager:
         light_palette.setColor(QPalette.Disabled, QPalette.Light, QColor(240, 240, 240))
 
         self.app_ptr.setPalette(light_palette)
+        self.current_icon_color = QColor(50, 50, 50)
+        self.current_disabled_color = QColor(180, 180, 180)
+        self.icon_man.clear_cache()
+        self.theme_changed.emit(self.current_icon_color, self.current_disabled_color)
 
     def set_dark_palette(self):
         dark_gray = QColor(53, 53, 53)
@@ -132,6 +180,10 @@ class StyleManager:
         dark_palette.setColor(QPalette.Disabled, QPalette.Light, dark_gray)
 
         self.app_ptr.setPalette(dark_palette)
+        self.current_icon_color = Qt.white
+        self.current_disabled_color = gray
+        self.icon_man.clear_cache()
+        self.theme_changed.emit(self.current_icon_color, self.current_disabled_color)
 
     @staticmethod
     def set_radio_btn_style_sheet():

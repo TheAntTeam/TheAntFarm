@@ -1,7 +1,7 @@
 import logging
 
 from PySide6.QtCore import QObject, Slot
-from PySide6.QtGui import QActionGroup
+from PySide6.QtGui import QActionGroup, QColor, QIcon
 from PySide6.QtWidgets import QMessageBox
 from shape_core.visual_manager import VisualLayer
 
@@ -60,6 +60,11 @@ class UiManager(QObject):
 
         self.ui.actionAbout.triggered.connect(self.ui_about_m.show_about_info)
         self.ui_settings_tab_m.save_all_settings_s.connect(self.save_all_settings)
+
+        self._icon_widgets: dict[str, list] = {}
+        if self.style_manager:
+            self._setup_icon_widgets()
+            self.style_manager.theme_changed.connect(self._on_theme_changed)
 
         self.apply_initial_window_settings(self.settings.app_settings)
 
@@ -184,6 +189,83 @@ class UiManager(QObject):
         else:
             self.ui.main_tab_widget.setTabVisible(setting_tab_idx, False)
             self.ui.main_tab_widget.setCurrentIndex(0)
+
+    def _setup_icon_widgets(self) -> None:
+        icon_map: dict[str, str] = {
+            "homing_tb": "home",
+            "unlock_tb": "unlock-padlock",
+            "play_tb": "play-button-arrowhead",
+            "pause_resume_tb": "pause-multimedia-big-gross-symbol-lines",
+            "stop_tb": "stop-button-black-rounded-square",
+            "tool_change_tb": "milling-machine",
+            "soft_reset_tb": "refresh",
+            "upload_temp_tb": "upload-file",
+            "open_gcode_tb": "open-folder",
+            "remove_gcode_tb": "delete",
+            "z_plus_pb": "white_north_arrow",
+            "z_minus_pb": "white_south_arrow",
+            "x_plus_y_plus_pb": "white_north_east_arrow",
+            "x_plus_y_minus_pb": "white_south_east_arrow",
+            "x_minus_y_plus_pb": "white_north_west_arrow",
+            "x_minus_y_minus_pb": "white_south_west_arrow",
+            "x_plus_pb": "white_east_arrow",
+            "x_minus_pb": "white_west_arrow",
+            "y_plus_pb": "white_north_arrow",
+            "y_minus_pb": "white_south_arrow",
+            "center_tb": "white_circle",
+            "z_plus_pb_2": "white_north_arrow",
+            "z_minus_pb_2": "white_south_arrow",
+            "x_plus_y_plus_pb_2": "white_north_east_arrow",
+            "x_plus_y_minus_pb_2": "white_south_east_arrow",
+            "x_minus_y_plus_pb_2": "white_north_west_arrow",
+            "x_minus_y_minus_pb_2": "white_south_west_arrow",
+            "x_plus_pb_2": "white_east_arrow",
+            "x_minus_pb_2": "white_west_arrow",
+            "y_plus_pb_2": "white_north_arrow",
+            "y_minus_pb_2": "white_south_arrow",
+            "center_tb_2": "white_circle",
+            "apply_alignment_tb_2": "black_apply_align",
+        }
+        for attr, name in icon_map.items():
+            widget = getattr(self.ui, attr, None)
+            if widget is not None:
+                self._icon_widgets.setdefault(name, []).append(widget)
+
+    def _build_icon(self, icon_name: str, color: QColor) -> QIcon:
+        path = f":/resources/resources/icons/{icon_name}.svg"
+        return self.style_manager.icon_man.make_icon(path, color)
+
+    def _make_toggle_icon(self, off_name: str, on_name: str, color: QColor) -> QIcon:
+        icon = QIcon()
+        off_pix = self.style_manager.icon_man.make_icon(f":/resources/resources/icons/{off_name}.svg", color)
+        on_pix = self.style_manager.icon_man.make_icon(f":/resources/resources/icons/{on_name}.svg", color)
+        icon.addPixmap(off_pix.pixmap(off_pix.availableSizes()[0]), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addPixmap(on_pix.pixmap(on_pix.availableSizes()[0]), QIcon.Mode.Normal, QIcon.State.On)
+        return icon
+
+    @Slot(QColor, QColor)
+    def _on_theme_changed(self, icon_color: QColor, disabled_color: QColor) -> None:
+        sm = self.style_manager
+        # Toolbar toggle icon (two states)
+        alignment_widgets = self._icon_widgets.get("black_apply_align", [])
+        if alignment_widgets:
+            toggle_icon = self._make_toggle_icon("black_apply_align", "black_alignment_applied", icon_color)
+            for w in alignment_widgets:
+                w.setIcon(toggle_icon)
+        # Single-state icons
+        single_names = [k for k in self._icon_widgets if k != "black_apply_align"]
+        for name in single_names:
+            icon = self._build_icon(name, icon_color)
+            disabled_icon = self._build_icon(name, disabled_color)
+            for w in self._icon_widgets[name]:
+                q = QIcon()
+                pix_size = icon.availableSizes()
+                fallback = pix_size[0] if pix_size else w.iconSize()
+                q.addPixmap(icon.pixmap(fallback), QIcon.Mode.Normal, QIcon.State.Off)
+                q.addPixmap(icon.pixmap(fallback), QIcon.Mode.Normal, QIcon.State.On)
+                q.addPixmap(disabled_icon.pixmap(fallback), QIcon.Mode.Disabled, QIcon.State.Off)
+                q.addPixmap(disabled_icon.pixmap(fallback), QIcon.Mode.Disabled, QIcon.State.On)
+                w.setIcon(q)
 
     def make_log_action_mutually_exclusive(self):
         """Creates an action group for the log level menu items and makes them mutually exclusive,

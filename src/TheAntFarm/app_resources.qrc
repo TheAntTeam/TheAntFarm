@@ -2,39 +2,19 @@
   <qresource prefix="resources">
     <file>resources/icons/black_alignment_applied.svg</file>
     <file>resources/icons/black_apply_align.svg</file>
-    <file>resources/icons/gray-refresh.svg</file>
-    <file>resources/icons/white-upload-file.svg</file>
-    <file>resources/icons/gray-upload-file.svg</file>
-    <file>resources/icons/white-refresh.svg</file>
-    <file>resources/icons/white-delete.svg</file>
-    <file>resources/icons/gray-play-and-pause-button.svg</file>
-    <file>resources/icons/gray-reset-hard.svg</file>
-    <file>resources/icons/black_east_arrow.svg</file>
-    <file>resources/icons/black_north_arrow.svg</file>
-    <file>resources/icons/white-reset-hard.svg</file>
-    <file>resources/icons/play-and-pause-button.svg</file>
-    <file>resources/icons/white-play-and-pause-button.svg</file>
-    <file>resources/icons/black_north_east_arrow.svg</file>
-    <file>resources/icons/black_north_west_arrow.svg</file>
-    <file>resources/icons/black_south_arrow.svg</file>
-    <file>resources/icons/black_south_east_arrow.svg</file>
-    <file>resources/icons/black_south_west_arrow.svg</file>
-    <file>resources/icons/black_west_arrow.svg</file>
-    <file>resources/icons/circle.svg</file>
+    <file>resources/icons/delete.svg</file>
     <file>resources/icons/focus.svg</file>
-    <file>resources/icons/gray-home.svg</file>
-    <file>resources/icons/gray-milling-machine.svg</file>
-    <file>resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg</file>
-    <file>resources/icons/gray-play-button-arrowhead.svg</file>
-    <file>resources/icons/gray-stop-button-black-rounded-square.svg</file>
-    <file>resources/icons/gray-unlock-padlock.svg</file>
     <file>resources/icons/home.svg</file>
     <file>resources/icons/milling-machine.svg</file>
     <file>resources/icons/open-folder.svg</file>
     <file>resources/icons/pause-multimedia-big-gross-symbol-lines.svg</file>
+    <file>resources/icons/play-and-pause-button.svg</file>
     <file>resources/icons/play-button-arrowhead.svg</file>
+    <file>resources/icons/refresh.svg</file>
+    <file>resources/icons/reset-hard.svg</file>
     <file>resources/icons/stop-button-black-rounded-square.svg</file>
     <file>resources/icons/unlock-padlock.svg</file>
+    <file>resources/icons/upload-file.svg</file>
     <file>resources/icons/white_circle.svg</file>
     <file>resources/icons/white_east_arrow.svg</file>
     <file>resources/icons/white_north_arrow.svg</file>
@@ -44,13 +24,6 @@
     <file>resources/icons/white_south_east_arrow.svg</file>
     <file>resources/icons/white_south_west_arrow.svg</file>
     <file>resources/icons/white_west_arrow.svg</file>
-    <file>resources/icons/white-home.svg</file>
-    <file>resources/icons/white-milling-machine.svg</file>
-    <file>resources/icons/white-open-folder.svg</file>
-    <file>resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</file>
-    <file>resources/icons/white-play-button-arrowhead.svg</file>
-    <file>resources/icons/white-stop-button-black-rounded-square.svg</file>
-    <file>resources/icons/white-unlock-padlock.svg</file>
     <file>resources/logo/the_ant_farm_logo.svg</file>
   </qresource>
 </RCC>

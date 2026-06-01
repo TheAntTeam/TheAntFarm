@@ -22,7 +22,7 @@
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
    id="defs41" /><sodipodi:namedview
-   pagecolor="#ffffff"
+   pagecolor="#000000"
    bordercolor="#666666"
    borderopacity="1"
    objecttolerance="10"
@@ -98,7 +98,7 @@
    id="g36">
 </g>
 <path
-   style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+   style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
    d="M 80.673715,357.57217 C 8.7419057,285.69262 -28.429831,247.05643 -28.429831,244.17033 c 0,-6.10777 216.453261,-222.46817 222.563661,-222.46817 9.32611,0 9.64947,2.232701 9.64947,66.625637 v 61.417123 h 136.64727 c 132.87802,0 136.70923,0.11578 138.89384,4.19776 1.4412,2.6929 2.24656,35.31337 2.24656,90.99406 0,76.0121 -0.42373,87.22003 -3.41034,90.20664 -3.02747,3.02747 -18.62065,3.41034 -138.89384,3.41034 H 203.7833 v 60.61104 c 0,52.20733 -0.47285,61.08388 -3.41034,64.02138 -1.87568,1.87569 -5.02705,3.41034 -7.00303,3.41034 -1.97596,0 -52.68927,-49.06093 -112.696215,-109.02431 z"
    id="path8659"
    inkscape:connector-curvature="0" /></svg>
