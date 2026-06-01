@@ -10,9 +10,19 @@ from gerbyx.tokenizer import tokenize_gerber
 from gerbyx.parser import GerberParser
 from gerbyx.processor import GerberProcessor
 
+
+from gerbyx.excellon import (
+    ExcellonState,
+    ExcellonParser,
+    ExcellonProcessor,
+    tokenize_excellon,
+)
+
+gerbyx_logger.set_level('WARNING')  # or 'INFO' (default), 'WARNING', 'ERROR'
+import numpy as np
+
 import gerber as gbr
 import gerber.primitives
-import numpy as np
 from gerber.cam import FileSettings
 from gerber.excellon import DrillHit, DrillSlot
 from gerber.excellon import loads as exc_load
@@ -150,7 +160,7 @@ class PcbObj:
             string += EndOfProgramStmt().to_excellon() + "\n"
         return string
 
-    def load_excellon(self, path: str, tag: str) -> bool:
+    def load_excellon_old(self, path: str, tag: str) -> bool:
         if tag not in self.EXN_KEYS:
             logger.error(f"EXCELLON TAG NOT RECOGNIZED: {tag}")
             return False
@@ -182,6 +192,33 @@ class PcbObj:
             logger.error(f"Failed to load Excellon file {path}: {e}")
             return False
 
+    def load_excellon(self, path: str, tag: str) -> bool:
+
+        if tag not in self.EXN_KEYS:
+            logger.error(f"EXCELLON TAG NOT RECOGNIZED: {tag}")
+            return False
+        if not os.path.isfile(path):
+            logger.error(f"EXCELLON FILE NOT FOUND: {path}")
+            return False
+
+        try:
+            # Parse Excellon file
+            with open(path, 'r') as f:
+                excellon_source = f.read()
+
+            state = ExcellonState(output_units="MM")  # oppure "INCH"
+            parser = ExcellonParser(state, auto_detect_coord_format=True)  # hint_units="INCH" se il file non dichiara le unità
+            parser.parse(tokenize_excellon(excellon_source))
+
+            proc = ExcellonProcessor(state)
+            proc.process(parser.primitives)
+
+            self.excellons[tag] = proc  # proc.geometries → lista di Shapely Polygon
+            return True
+        except Exception as e:
+            logger.error(f"Failed to load Excellon file {path}: {e}")
+            return False
+
     def get_gerber_layer(self, tag: str) -> Any:
         logger.info(f"Processing Gerber Layer: {tag}")
         start_time = time.time()
@@ -195,7 +232,7 @@ class PcbObj:
 
         return self.layers[tag]
 
-    def get_excellon_layer(self, tag: str) -> Any:
+    def get_excellon_layer_old(self, tag: str) -> Any:
         g = self.get_excellon(tag)
         if g is None:
             return None
@@ -208,6 +245,23 @@ class PcbObj:
                 if g_geom.closed:
                     mp.append(g_geom)
         self.layers[tag] = merge_polygons(mp)
+        return self.layers[tag]
+
+    def get_excellon_layer(self, tag: str) -> Any:
+        logger.info(f"Processing Excellon Layer: {tag}")
+        start_time = time.time()
+        g = self.get_excellon(tag)
+
+        print("Excellon:", g)
+        print(" - Geometries:", g.geometries)
+
+        if g is None:
+            return None
+
+        self.layers[tag] = ([FakeGeom(x) for x in g.geometries], ())
+        print(self.layers[tag])
+        logger.info(f"Excellon Layer {tag} processed in {time.time() - start_time:.4f} seconds")
+
         return self.layers[tag]
 
     def _arc_segmentation(

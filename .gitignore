@@ -20,3 +20,12 @@ src/TheAntFarm/gcode_temp_dir/
 coverage.xml
 htmlcov/
 .coveragerc
+check_camera.py
+src/TheAntFarm/check_docstring.py
+src/TheAntFarm/check_pcb_importer.py
+src/TheAntFarm/shape_core/check_align_class.py
+src/TheAntFarm/shape_core/check_excellon.py
+src/TheAntFarm/shape_core/check_interp2d.py
+src/TheAntFarm/shape_core/check_tps_algo.py
+src/TheAntFarm/shape_core/demo_out.svg
+src/TheAntFarm/shape_core/plot_rounded_rect.py

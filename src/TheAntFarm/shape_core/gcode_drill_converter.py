@@ -2,7 +2,7 @@ import math
 import os
 
 import numpy as np
-from gerber.excellon import ExcellonFile, ExcellonStatement
+# from gerber.excellon import ExcellonFile, ExcellonStatement
 
 from .gcode_manager import GCodeParser
 from .geometry_manager import Geom, merge_polygons
