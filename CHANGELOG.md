@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [Unreleased]
+
+### Changed
+
+- Completed cleanup of legacy pcb-tools usage in PCB manager, keeping the active parsing pipeline on gerbyx.
+- Removed legacy/unused pcb-tools-based code paths and backup file in shape_core.
+- Updated packaging and documentation references from pcb-tools to gerbyx.
+
+
 ## [0.3.2] - Jan 10, 2026
 
 ### Added
