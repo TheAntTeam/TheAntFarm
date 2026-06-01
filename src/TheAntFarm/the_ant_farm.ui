@@ -2070,10 +2070,10 @@
                   </property>
                   <property name="icon">
                    <iconset resource="app_resources.qrc">
-                    <normaloff>:/resources/resources/icons/white-upload-file.svg</normaloff>
-                    <normalon>:/resources/resources/icons/white-upload-file.svg</normalon>
-                    <disabledoff>:/resources/resources/icons/gray-upload-file.svg</disabledoff>
-                    <disabledon>:/resources/resources/icons/gray-upload-file.svg</disabledon>:/resources/resources/icons/white-upload-file.svg</iconset>
+                    <normaloff>:/resources/resources/icons/upload-file.svg</normaloff>
+                    <normalon>:/resources/resources/icons/upload-file.svg</normalon>
+                    <disabledoff>:/resources/resources/icons/upload-file.svg</disabledoff>
+                    <disabledon>:/resources/resources/icons/upload-file.svg</disabledon>:/resources/resources/icons/upload-file.svg</iconset>
                   </property>
                  </widget>
                 </item>
@@ -2099,7 +2099,7 @@
                   </property>
                   <property name="icon">
                    <iconset resource="app_resources.qrc">
-                    <normaloff>:/resources/resources/icons/white-open-folder.svg</normaloff>:/resources/resources/icons/white-open-folder.svg</iconset>
+                    <normaloff>:/resources/resources/icons/open-folder.svg</normaloff>:/resources/resources/icons/open-folder.svg</iconset>
                   </property>
                   <property name="shortcut">
                    <string>Ctrl+G</string>
@@ -2122,7 +2122,7 @@
                   </property>
                   <property name="icon">
                    <iconset resource="app_resources.qrc">
-                    <normaloff>:/resources/resources/icons/white-delete.svg</normaloff>:/resources/resources/icons/white-delete.svg</iconset>
+                    <normaloff>:/resources/resources/icons/delete.svg</normaloff>:/resources/resources/icons/delete.svg</iconset>
                   </property>
                  </widget>
                 </item>
@@ -4705,10 +4705,10 @@
             </property>
             <property name="icon">
              <iconset resource="app_resources.qrc">
-              <normaloff>:/resources/resources/icons/white-refresh.svg</normaloff>
-              <normalon>:/resources/resources/icons/white-refresh.svg</normalon>
-              <disabledoff>:/resources/resources/icons/gray-refresh.svg</disabledoff>
-              <disabledon>:/resources/resources/icons/gray-refresh.svg</disabledon>:/resources/resources/icons/white-refresh.svg</iconset>
+              <normaloff>:/resources/resources/icons/refresh.svg</normaloff>
+              <normalon>:/resources/resources/icons/refresh.svg</normalon>
+              <disabledoff>:/resources/resources/icons/refresh.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/refresh.svg</disabledon>:/resources/resources/icons/refresh.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5259,9 +5259,9 @@
             </property>
             <property name="icon">
              <iconset resource="app_resources.qrc">
-              <normaloff>:/resources/resources/icons/white-unlock-padlock.svg</normaloff>
-              <disabledoff>:/resources/resources/icons/gray-unlock-padlock.svg</disabledoff>
-              <disabledon>:/resources/resources/icons/gray-unlock-padlock.svg</disabledon>:/resources/resources/icons/white-unlock-padlock.svg</iconset>
+              <normaloff>:/resources/resources/icons/unlock-padlock.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/unlock-padlock.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/unlock-padlock.svg</disabledon>:/resources/resources/icons/unlock-padlock.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5302,9 +5302,9 @@
             </property>
             <property name="icon">
              <iconset resource="app_resources.qrc">
-              <normaloff>:/resources/resources/icons/white-home.svg</normaloff>
-              <disabledoff>:/resources/resources/icons/gray-home.svg</disabledoff>
-              <disabledon>:/resources/resources/icons/gray-home.svg</disabledon>:/resources/resources/icons/white-home.svg</iconset>
+              <normaloff>:/resources/resources/icons/home.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/home.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/home.svg</disabledon>:/resources/resources/icons/home.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5345,9 +5345,9 @@
             </property>
             <property name="icon">
              <iconset resource="app_resources.qrc">
-              <normaloff>:/resources/resources/icons/white-play-button-arrowhead.svg</normaloff>
-              <disabledoff>:/resources/resources/icons/gray-play-button-arrowhead.svg</disabledoff>
-              <disabledon>:/resources/resources/icons/gray-play-button-arrowhead.svg</disabledon>:/resources/resources/icons/white-play-button-arrowhead.svg</iconset>
+              <normaloff>:/resources/resources/icons/play-button-arrowhead.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/play-button-arrowhead.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/play-button-arrowhead.svg</disabledon>:/resources/resources/icons/play-button-arrowhead.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5388,9 +5388,9 @@
             </property>
             <property name="icon">
              <iconset resource="app_resources.qrc">
-              <normaloff>:/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</normaloff>
-              <disabledoff>:/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg</disabledoff>
-              <disabledon>:/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg</disabledon>:/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg</iconset>
+              <normaloff>:/resources/resources/icons/pause-multimedia-big-gross-symbol-lines.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/pause-multimedia-big-gross-symbol-lines.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/pause-multimedia-big-gross-symbol-lines.svg</disabledon>:/resources/resources/icons/pause-multimedia-big-gross-symbol-lines.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5431,9 +5431,9 @@
             </property>
             <property name="icon">
              <iconset resource="app_resources.qrc">
-              <normaloff>:/resources/resources/icons/white-stop-button-black-rounded-square.svg</normaloff>
-              <disabledoff>:/resources/resources/icons/gray-stop-button-black-rounded-square.svg</disabledoff>
-              <disabledon>:/resources/resources/icons/gray-stop-button-black-rounded-square.svg</disabledon>:/resources/resources/icons/white-stop-button-black-rounded-square.svg</iconset>
+              <normaloff>:/resources/resources/icons/stop-button-black-rounded-square.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/stop-button-black-rounded-square.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/stop-button-black-rounded-square.svg</disabledon>:/resources/resources/icons/stop-button-black-rounded-square.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5474,9 +5474,9 @@
             </property>
             <property name="icon">
              <iconset resource="app_resources.qrc">
-              <normaloff>:/resources/resources/icons/white-milling-machine.svg</normaloff>
-              <disabledoff>:/resources/resources/icons/gray-milling-machine.svg</disabledoff>
-              <disabledon>:/resources/resources/icons/gray-milling-machine.svg</disabledon>:/resources/resources/icons/white-milling-machine.svg</iconset>
+              <normaloff>:/resources/resources/icons/milling-machine.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/milling-machine.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/milling-machine.svg</disabledon>:/resources/resources/icons/milling-machine.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -7162,7 +7162,7 @@
                     </property>
                     <property name="icon">
                      <iconset resource="app_resources.qrc">
-                      <normaloff>:/resources/resources/icons/gray-refresh.svg</normaloff>:/resources/resources/icons/gray-refresh.svg</iconset>
+                      <normaloff>:/resources/resources/icons/refresh.svg</normaloff>:/resources/resources/icons/refresh.svg</iconset>
                     </property>
                     <property name="toolButtonStyle">
                      <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
