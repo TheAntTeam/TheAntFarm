@@ -110,7 +110,7 @@ src/TheAntFarm/
 | UI        | PySide6 (Qt6) |
 | 3D Rendering | vispy / PyOpenGL |
 | CNC Protocol | GRBL v1.1 |
-| PCB Parsing | pcb-tools |
+| PCB Parsing | gerbyx |
 | Image Processing | OpenCV |
 | Math/Numerics | numpy, scipy, Shapely |
 
