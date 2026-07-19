@@ -163,4 +163,6 @@ class CommandManager:
             str_l.append(cmd)
             if self.cfg["tool_probe_zero"]:
                 str_l += self.get_command_str("set_wps", (None, None, 0.0))
+                str_l += "\n"
+                str_l += self.get_command_str("jog", (None, None, 1.0))
         return str_l
