@@ -209,8 +209,9 @@ def _tlo(mode: str) -> Callable[[MacroContext], str]:
 
 
 def _spindle_stop(ctx: MacroContext) -> str:
-    dwell = ctx.fmt(ctx.cfg_value("spindle_stop_dwell"))
-    return f"M5\nG4 P{dwell}"
+    # One tag must expand to one line: the G-code streamer sends (and waits the
+    # ack of) a single line at a time. The dwell is a separate tag.
+    return "M5"
 
 
 def _spindle_start(ctx: MacroContext) -> str:
@@ -253,7 +254,8 @@ TAGS: Dict[str, Tag] = {
         Tag("PRE_POS_X", lambda ctx: ctx.fmt(ctx.dro["WPO"][0]), "Work X position before the macro"),
         Tag("PRE_POS_Y", lambda ctx: ctx.fmt(ctx.dro["WPO"][1]), "Work Y position before the macro"),
         Tag("PRE_POS_Z", lambda ctx: ctx.fmt(ctx.dro["WPO"][2]), "Work Z position before the macro"),
-        Tag("SPINDLE_STOP", _spindle_stop, "Stop the spindle and wait for it to spin down"),
+        Tag("SPINDLE_STOP", _spindle_stop, "Stop the spindle before the tool change"),
+        Tag("SPINDLE_DWELL", _cfg_scalar("spindle_stop_dwell"), "Dwell used to wait the spindle spin down"),
         Tag("SPINDLE_START", _spindle_start, "Restart the spindle at the job speed"),
         # -- tool length offset --------------------------------------------
         Tag("TLO_TYPE_A", _tlo("A"), "Tool length offset to apply (add to the current one)"),

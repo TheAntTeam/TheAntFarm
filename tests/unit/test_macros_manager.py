@@ -146,7 +146,8 @@ class TestTagCatalog:
             ("PRE_POS_X", "1.2340"),
             ("PRE_POS_Y", "2.3450"),
             ("PRE_POS_Z", "3.4560"),
-            ("SPINDLE_STOP", "M5\nG4 P1.0000"),
+            ("SPINDLE_STOP", "M5"),
+            ("SPINDLE_DWELL", "1.0000"),
             ("SPINDLE_START", "M3"),
             ("TLO_TYPE_A", "8.2500"),
             ("TLO_TYPE_N", "8.0000"),
@@ -155,6 +156,12 @@ class TestTagCatalog:
     def test_tag_value(self, macros, context, tag, expected):
         assert tag in TAGS
         assert macros.expand(f"@{tag}@", context) == expected
+
+    def test_no_tag_expands_to_more_than_one_line(self, macros, context):
+        """The job is streamed one line at a time: a tag must stay on one line."""
+        for name in TAGS:
+            value = macros.expand(f"@{name}@", context)
+            assert "\n" not in value, f"tag {name} expands to multiple lines"
 
     def test_catalog_entries_are_documented(self):
         assert TAGS
@@ -307,41 +314,46 @@ class TestMacrosFacade:
 
 GOLDEN_WCS = [
     "(The Ant Tool Change)",
+    "(Homing is required: the G53 moves use absolute machine positions)",
+    "G21",
+    "G49",
+    "M5",
+    "G4 P1.0000",
     "F80.0000",
-    "G53 G00 Z-1.0000 F80.0000",
+    "G53 G00 Z-1.0000",
     "G54",
     "G00 X-1.0000 Y-1.0000 F300.0000",
     "G54",
     "(NO HOLD)",
-    "G01 F50.0000",
-    "G38.2 Z-11.0000",
-    "G01 F80.0000",
+    "G38.2 Z-11.0000 F80.0000",
+    "G91 G00 Z1.5000",
+    "G90",
+    "G38.2 Z-11.0000 F50.0000",
     "G53 G00 Z-1.0000",
-    "(NO HOLD)",
-    "G01 F300.0000",
     "G53 G00 X-41.2000",
     "G53 G00 Y-120.8800",
-    "M0",
+    "M0 (Change the tool, then press Cycle Start)",
     "G53 G01 Z-1.0000 F80.0000",
     "G54",
     "G01 F300.0000",
     "G00 X-1.0000 Y-1.0000",
     "G54",
     "(NO HOLD)",
-    "G01 F50.0000",
-    "G38.2 Z-11.0000",
+    "G38.2 Z-11.0000 F80.0000",
+    "G91 G00 Z1.5000",
+    "G90",
+    "G38.2 Z-11.0000 F50.0000",
     "G10 P1 L20 Z-9.0000",
     "G53 G01 Z-1.0000 F80.0000",
-    "(NO HOLD)",
     "G54",
     "G01 F300.0000",
     "G00 X1.2340 Y2.3450",
-    "G01 F80.0000",
     "G00 Z3.4560",
+    "M3",
 ]
 
 GOLDEN_TLO = list(GOLDEN_WCS)
-GOLDEN_TLO[24] = "G43.1 Z8.2500"
+GOLDEN_TLO[30] = "G43.1 Z8.2500"
 
 
 class TestGoldenTemplates:
@@ -378,7 +390,7 @@ class TestGCodeMacro:
 
     def test_no_trailing_blank_line(self, gcr, frozen_dro, wsp, probe_data):
         macro = GCodeMacro(frozen_dro, "M6", gcr)
-        assert len(macro.macro_lines) == 32
+        assert len(macro.macro_lines) == 37
 
     def test_broken_template_does_not_break_the_job(self, macrodir, cfg, frozen_dro, wsp, probe_data):
         (macrodir / "macros" / "tool_change_wcs.gcode").write_text("G01 Z@NOT_A_TAG@\n", encoding="utf-8")
