@@ -12,7 +12,7 @@ from shapely.geometry import LineString
 
 from .align_manager import AlignManager
 from .commands_manager import CommandManager
-from .macros_manager import Macros
+from .macros_manager import MacroError, Macros
 
 logger = logging.getLogger(__name__)
 
@@ -544,16 +544,25 @@ class GCodeMacro:
             self.gcc = GCoder("dummy", machining_type="commander")
         else:
             self.gcc = gcr
-        self.macro_lines = self.gcc.get_macro_code(macro_type, local_path=local_path).split("\n")
+        try:
+            macro_code = self.gcc.get_macro_code(macro_type, local_path=local_path)
+        except MacroError as exc:
+            # A broken template must not stop the job: the macro is skipped and
+            # the reason is logged (the user has to fix the macro file).
+            logger.error(f"Macro {macro_type} cannot be executed: {exc}")
+            macro_code = ""
+        self.macro_lines = macro_code.splitlines()
 
     def get_next_line(self, wsp, probe_data):
         if self.id < len(self.macro_lines):
             line = self.macro_lines[self.id] + "\n"
-            parsered_line = self.gcc.compute_tag(line, wsp, probe_data, self.freezed_dro)
             self.id += 1
-            return parsered_line
-        else:
-            return None
+            try:
+                return self.gcc.compute_tag(line, wsp, probe_data, self.freezed_dro)
+            except MacroError as exc:
+                logger.error(f"Macro line {self.id} ({line.strip()!r}) cannot be resolved: {exc}")
+                raise
+        return None
 
 
 class GcodeLine:
