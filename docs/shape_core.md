@@ -187,28 +187,39 @@ application sends (`$H`) and reset on connect/reset/alarm.
 
 Detailed in `docs/macros.md` §4, item M-02.
 
-### 5.5 Packaging and dependencies
+### 5.5 Packaging and dependencies (done)
 
-**Where and what**
+Implemented on the `dev` branch (commit "Align the packaging with the
+dependencies of the application").
 
-| File | Line | Problem |
-|---|---|---|
-| `pyproject.toml` | 10 | `python = ">=3.8,<3.11"` while `gerbyx` requires `>=3.10` and the CI tests 3.12 |
-| `pyproject.toml` | 25 | `shiboken2` — the application uses PySide6, so `shiboken6` (as in `requirements.txt:15`) |
-| `pyproject.toml` | 11-12, 19 | `cairocffi`, `cffi`, `pycparser` were dependencies of pcb-tools, which is no longer used; nothing in `src` imports them |
-| `requirements.txt` | 2-3, 9 | same three packages; `freetype-py` (line 4) must stay, it is a dependency of `vispy==0.14.3` |
-| `src/TheAntFarm/the_ant_farm.spec` | 12 | the `hiddenimports` list does not contain `gerbyx` (nor its submodules): the PyInstaller executable fails on the first Gerber load |
-| `.github/workflows/python-app.yml` | 19 | the matrix (3.10, 3.12) is wider than the `pyproject` constraint |
-| `.github/workflows/python-app.yml` | 70-117 | every check is `continue-on-error: true`, so the tests of `shape_core` do not block a merge |
+| File | Change |
+|---|---|
+| `pyproject.toml` | `python = ">=3.10,<3.13"` (the `gerbyx` parser needs 3.10, the CI builds with 3.12); `shiboken2` → `shiboken6`; removed `cairocffi`, `cffi`, `pycparser` (they were dependencies of pcb-tools); `PyOpenGL` and `vispy` aligned to the `>=` of `requirements.txt`; removed the invalid `dynamic = ["version"]` stanza (the version is static) |
+| `requirements.txt` | removed `cairocffi`, `cffi`, `pycparser`; `freetype-py` stays (dependency of `vispy`) |
+| `src/TheAntFarm/the_ant_farm.spec` | the 23 `gerbyx` submodules used by the parser are collected with `collect_submodules`, excluding `gerbyx.cli` and `gerbyx.__main__` (they need typer and rich, the application does not use them) and `gerbyx.visualizer` (it needs matplotlib); `shiboken6.shiboken6` → `shiboken6.Shiboken` (the first name does not exist) |
+| `.github/workflows/build-executable.yml` | it called `pyinstaller theantfarm.spec`, a file that does not exist, and expected `dist/theantfarm`: now it uses `the_ant_farm.spec` and `dist/the_ant_farm` (the name in the spec) |
+| `.github/workflows/python-app.yml` | the shape core step is no longer `continue-on-error` and runs the whole core test set instead of three files |
+| `.gitignore` | `/src/TheAntFarm/dist/` (the build output next to `build/`) |
 
-**How** update the two dependency files together, add
-`collect_submodules("gerbyx")` to the spec (`from PyInstaller.utils.hooks
-import collect_submodules`) and make at least the `shape_core` test job
-blocking.
+**Verification** (Linux, Python 3.12, PyInstaller 6):
 
-**Done when** `pip install -r requirements.txt` in a clean environment, a
-`pytest tests/unit` run and a PyInstaller build all succeed, and a broken test
-in `shape_core` fails the CI.
+```
+pyinstaller --noconfirm --workpath /tmp/pyi/build --distpath /tmp/pyi/dist the_ant_farm.spec
+# exit 0, one file: /tmp/pyi/dist/the_ant_farm (212 MB)
+grep -c gerbyx /tmp/pyi/build/the_ant_farm/Analysis-00.toc   -> 23 modules
+grep typer|rich  ...                                          -> none
+QT_QPA_PLATFORM=offscreen ./the_ant_farm                       -> starts, no traceback
+```
+
+Two warnings are left and are harmless: `scipy.special._cdflib` (a scipy
+hook of PyInstaller) and the `.ico` icon, which PyInstaller only applies on
+Windows and macOS.
+
+**Residual note for the Linux artifact**: the triangulation of the layers uses
+`OpenGL.GLU`/`GLUT`, so the executable needs the system libraries
+`libGLU.so.0` and `libglut.so.0` at runtime (in Debian/Ubuntu: `libglu1-mesa`
+and `freeglut3`). The build machine only needs the `-dev` packages, which the
+workflow installs.
 
 ### 5.6 Test infrastructure
 

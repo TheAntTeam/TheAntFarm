@@ -6,6 +6,11 @@
 - **pip** (comes with Python)
 - **virtual environment** (recommended)
 - **Git** (to clone the repository)
+- **Linux only, for the packaged executable**: the OpenGL system libraries used
+  by the 3D view, i.e. `libGLU` and `libglut`
+  (Debian/Ubuntu: `sudo apt install libglu1-mesa freeglut3`).
+  When the application is run from the sources the `-dev` packages of the same
+  libraries are needed to build the Python bindings.
 
 ---
 
