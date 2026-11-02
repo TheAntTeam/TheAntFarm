@@ -539,7 +539,9 @@ class GCodeMacro:
 
     def __init__(self, freezed_dro, macro_type="M6", gcr=None, local_path=""):
         self.id = 0
+        self.macro_type = macro_type
         self.freezed_dro = freezed_dro
+        self.error = None
         if gcr is None:
             self.gcc = GCoder("dummy", machining_type="commander")
         else:
@@ -547,11 +549,16 @@ class GCodeMacro:
         try:
             macro_code = self.gcc.get_macro_code(macro_type, local_path=local_path)
         except MacroError as exc:
-            # A broken template must not stop the job: the macro is skipped and
-            # the reason is logged (the user has to fix the macro file).
-            logger.error(f"Macro {macro_type} cannot be executed: {exc}")
+            # The caller decides what to do: a tool change that cannot run must
+            # not be silently skipped, the tool length would be wrong.
+            self.error = exc
             macro_code = ""
         self.macro_lines = macro_code.splitlines()
+
+    @property
+    def ok(self):
+        """True when the macro could be loaded and can be streamed."""
+        return self.error is None
 
     def get_next_line(self, wsp, probe_data):
         if self.id < len(self.macro_lines):
@@ -561,6 +568,7 @@ class GCodeMacro:
                 return self.gcc.compute_tag(line, wsp, probe_data, self.freezed_dro)
             except MacroError as exc:
                 logger.error(f"Macro line {self.id} ({line.strip()!r}) cannot be resolved: {exc}")
+                self.error = exc
                 raise
         return None
 

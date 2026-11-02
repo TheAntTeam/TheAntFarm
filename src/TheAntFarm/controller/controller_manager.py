@@ -8,6 +8,7 @@ from collections import OrderedDict as Od
 from PySide6.QtCore import QTimer, Slot
 from PySide6.QtGui import QPixmap
 from shape_core.gcode_manager import GCodeMacro, GCoder
+from shape_core.macros_manager import MacroError
 
 from .controller_align import AlignController
 from .controller_control import ControlController
@@ -71,6 +72,7 @@ class ControllerWorker(ControllerSignals):
         self.max_buffered_lines = 100
         self.min_buffer_threshold = 80
         self.eof_wait_for_idle = False
+        self.job_aborted = False
         self.start_time = None
 
         self.active_gcode_path = ""
@@ -208,36 +210,43 @@ class ControllerWorker(ControllerSignals):
 
                             # print("End Of File: " + str(end_of_file))
 
+                            buff_available = False
+
                             if self.macro_on:
-                                probe_data = self.control_controller.prb_val
-                                wsp = self.get_workspace_parameters()
-                                cmd_to_send = self.macro_obj.get_next_line(wsp, probe_data)
-                                # print(cmd_to_send)
-                                if cmd_to_send is None:
+                                cmd_to_send = self.get_next_macro_line()
+                                if cmd_to_send is None and self.macro_on:
+                                    # the macro is finished: go on with the file
                                     self.macro_on = False
                                     self.macro_obj = None
                                     self.wait_tag_decoding = False
                                     self.tot_lines -= 1
-                                else:
+                                elif cmd_to_send is not None:
                                     # self.tot_lines += 1
                                     buff_available = (
                                         self.buffered_size + len(cmd_to_send)
                                     ) < self.REMOTE_RX_BUFFER_MAX_SIZE
 
-                            end_of_file = self.content_line >= self.tot_lines
+                            end_of_file = self.content_line >= self.tot_lines or self.job_aborted
 
                             if not end_of_file:
                                 if not self.macro_on:
                                     cmd_to_send = self.file_content[self.content_line]
                                     cmd_to_send = self.macro_check(cmd_to_send)
-                                    self.content_line += 1
+                                    if cmd_to_send is None:
+                                        # Nothing to send: either the macro has to
+                                        # wait for the machine to become idle (the
+                                        # same line is retried on the next ack) or
+                                        # the job has been aborted.
+                                        end_of_file = self.job_aborted
+                                    else:
+                                        self.content_line += 1
+                                        logger.debug(str(self.ack_lines) + " <-> " + str(self.sent_lines))
+                                        # does data fit the buffer?
+                                        buff_available = (
+                                            self.buffered_size + len(cmd_to_send)
+                                        ) < self.REMOTE_RX_BUFFER_MAX_SIZE
 
-                                logger.debug(str(self.ack_lines) + " <-> " + str(self.sent_lines))
-                                # does data fit the buffer?
-                                buff_available = (
-                                    self.buffered_size + len(cmd_to_send)
-                                ) < self.REMOTE_RX_BUFFER_MAX_SIZE
-                            else:
+                            if end_of_file:
                                 self.wait_tag_decoding = False
                                 buff_available = False
 
@@ -278,8 +287,17 @@ class ControllerWorker(ControllerSignals):
                 logger.error("Uncaught exception: %s", traceback.format_exc())
 
     def macro_check(self, cmd_to_send):
-        # probe_data = self.control_controller.prb_val
-        # wsp = self.get_workspace_parameters()
+        """Start the macro contained in ``cmd_to_send``, if it is one.
+
+        Returns
+        -------
+        str | None
+            The line to send to the machine (the command itself, or the ``$#``
+            request that freezes the machine state for the macro). ``None`` means
+            that nothing has to be sent now: either the machine still has to
+            execute the previous lines (the same command is retried with the next
+            ack) or the job has been aborted because the macro cannot run.
+        """
         ret_cmd_to_send = cmd_to_send
 
         if self.gcr.is_macro(cmd_to_send):
@@ -287,26 +305,55 @@ class ControllerWorker(ControllerSignals):
             if self.ack_lines != self.sent_lines:
                 # wait that the machine execute all previous lines
                 # to be able to decode the tag
-                # print("Wait")
                 self.wait_tag_decoding = True
-            else:
-                # machine execution queue is empty, let's go
-                # print("Run")
+                return None
 
-                # DUMMY ELEMENT FREEZE WPO and MPO
-                freeze_dro = {
-                    "WPO": self.control_controller.wpos_a.copy(),
-                    "MPO": self.control_controller.mpos_a.copy(),
-                }
+            # DUMMY ELEMENT FREEZE WPO and MPO
+            freeze_dro = {
+                "WPO": self.control_controller.wpos_a.copy(),
+                "MPO": self.control_controller.mpos_a.copy(),
+            }
 
-                self.wait_tag_decoding = False
-                local_path = self.settings.local_path
-                self.macro_obj = GCodeMacro(freeze_dro, macro_type, self.gcr, local_path=local_path)
-                ret_cmd_to_send = "$#\n"
-                # ret_cmd_to_send = self.macro_obj.get_next_line(probe_data, wsp)
-                self.tot_lines += 1
-                self.macro_on = True
+            self.wait_tag_decoding = False
+            local_path = self.settings.local_path
+            self.macro_obj = GCodeMacro(freeze_dro, macro_type, self.gcr, local_path=local_path)
+            if not self.macro_obj.ok:
+                self.abort_job_for_macro_error(macro_type, self.macro_obj.error)
+                return None
+
+            self.tot_lines += 1
+            self.macro_on = True
+            return "$#\n"
         return ret_cmd_to_send
+
+    def get_next_macro_line(self):
+        """Return the next line of the running macro, or None when it is finished."""
+        if self.macro_obj is None:
+            return None
+        probe_data = self.control_controller.prb_val
+        wsp = self.get_workspace_parameters()
+        try:
+            return self.macro_obj.get_next_line(wsp, probe_data)
+        except MacroError as exc:
+            self.abort_job_for_macro_error(self.macro_obj.macro_type, exc)
+            return None
+
+    def abort_job_for_macro_error(self, macro_type, error):
+        """Stop the job when a macro cannot be executed.
+
+        Skipping the macro would continue the job with the wrong tool or with the
+        wrong tool length offset, so the streaming is stopped and the user is
+        informed instead.
+        """
+        message = f"Macro {macro_type} cannot be executed: {error}. Job stopped."
+        logger.error(message)
+        self.update_console_text_s.emit(message)
+        self.macro_on = False
+        self.macro_obj = None
+        self.wait_tag_decoding = False
+        self.job_aborted = True
+        self.sending_file = False
+        self.eof_wait_for_idle = True
 
     def decode_tag(self, gcode_str):
         # status = self.control_controller.status
@@ -449,6 +496,7 @@ class ControllerWorker(ControllerSignals):
             self.macro_on = False
             self.macro_obj = None
             self.eof_wait_for_idle = False
+            self.job_aborted = False
             self.wait_tag_decoding = False
             logger.info("Total lines: " + str(self.tot_lines))
 
@@ -458,17 +506,18 @@ class ControllerWorker(ControllerSignals):
             ):
                 cmd_to_send = self.file_content[self.content_line]
                 cmd_to_send = self.macro_check(cmd_to_send)
-                self.send_to_tx_queue(cmd_to_send)
-                self.buffered_cmds.append(cmd_to_send)
-                self.update_console_text_s.emit(cmd_to_send)
-                logger.debug(cmd_to_send)
-                self.buffered_size += len(cmd_to_send)
-                self.sent_lines += 1
-                self.content_line += 1
-                self.cmds_to_ack += 1
+                if cmd_to_send is not None:
+                    self.send_to_tx_queue(cmd_to_send)
+                    self.buffered_cmds.append(cmd_to_send)
+                    self.update_console_text_s.emit(cmd_to_send)
+                    logger.debug(cmd_to_send)
+                    self.buffered_size += len(cmd_to_send)
+                    self.sent_lines += 1
+                    self.content_line += 1
+                    self.cmds_to_ack += 1
 
             logger.debug("Buffered size: " + str(self.buffered_size))
-            self.sending_file = True
+            self.sending_file = not self.job_aborted
 
     def stop_gcode_file(self):
         self.sending_file = False
