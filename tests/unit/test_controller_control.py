@@ -227,3 +227,60 @@ def test_get_boundary_box(control_controller):
     control_controller.gcodes_od = {"test.gcode": {"gcode": mock_gcp, "tag": "ABCD"}}
     result = control_controller.get_boundary_box("test.gcode")
     assert result == (0, 0, 10, 10)
+
+# ---- tool length offset report formats ------------------------------------
+
+
+def test_parse_bracket_square_tlo_grbl_single_value(control_controller):
+    """GRBL 1.1 reports a single tool length offset."""
+    control_controller.parse_bracket_square("[TLO:8.250]")
+    assert control_controller.workspace_params_od["TLO"] == pytest.approx(8.25)
+
+
+def test_parse_bracket_square_tlo_fluidnc_per_axis(control_controller):
+    """FluidNC reports one offset per axis: the Z one is the tool length offset."""
+    control_controller.parse_bracket_square("[TLO:0.000,0.000,8.250]")
+    assert control_controller.workspace_params_od["TLO"] == pytest.approx(8.25)
+
+
+def test_parse_bracket_square_tlo_empty_is_ignored(control_controller):
+    control_controller.workspace_params_od.pop("TLO", None)
+    control_controller.parse_bracket_square("[TLO:]")
+    assert "TLO" not in control_controller.workspace_params_od
+
+
+# ---- probe report success flag --------------------------------------------
+
+
+@pytest.fixture
+def fresh_probe(control_controller):
+    control_controller.prb_val = deque([[-1.0, -1.0, -1.0], [-1.0, -1.0, -1.0]], maxlen=2)
+    control_controller.prb_updated = False
+    control_controller.prb_succeeded = True
+    return control_controller
+
+
+def test_parse_bracket_square_prb_success(fresh_probe):
+    fresh_probe.parse_bracket_square("[PRB:1.000,2.000,3.000:1]")
+
+    assert fresh_probe.prb_updated is True
+    assert fresh_probe.get_probe_succeeded() is True
+    assert list(fresh_probe.prb_val[0]) == [1.0, 2.0, 3.0]
+
+
+def test_parse_bracket_square_prb_failure_is_discarded(fresh_probe):
+    """A failed probing cycle must not become a valid measurement."""
+    fresh_probe.parse_bracket_square("[PRB:1.000,2.000,3.000:0]")
+
+    assert fresh_probe.prb_updated is False
+    assert fresh_probe.get_probe_succeeded() is False
+    assert list(fresh_probe.prb_val[0]) == [-1.0, -1.0, -1.0]
+
+
+def test_parse_bracket_square_prb_without_flag_is_a_success(fresh_probe):
+    """Firmware that does not print the flag only reports successful probes."""
+    fresh_probe.parse_bracket_square("[PRB:4.000,5.000,6.000]")
+
+    assert fresh_probe.prb_updated is True
+    assert fresh_probe.get_probe_succeeded() is True
+    assert list(fresh_probe.prb_val[0]) == [4.0, 5.0, 6.0]

@@ -39,6 +39,7 @@ class ControlController(QObject):
         self.prb_activated = False
         self.abl_activated = False
         self.prb_updated = False
+        self.prb_succeeded = True
         self.abl_updated = False
         self.prb_val = deque([[-1.0, -1.0, -1.0], [-1.0, -1.0, -1.0]], maxlen=2)
         self.abl_val = []
@@ -57,6 +58,10 @@ class ControlController(QObject):
 
     def get_probe_value(self):
         return self.prb_val[0]
+
+    def get_probe_succeeded(self):
+        """True when the last probing cycle touched the workpiece."""
+        return self.prb_succeeded
 
     def set_align_data(self, align_data):
         if isinstance(align_data, list) or isinstance(align_data, tuple):
@@ -179,9 +184,10 @@ class ControlController(QObject):
         word = self.SPLITPAT.split(line.rstrip()[1:-1])
 
         if word[0] == "PRB":
+            self.parse_probe_report(word)
+        elif word[0] == "TLO":
             try:
-                self.prb_val.appendleft([float(word[1]), float(word[2]), float(word[3])])
-                self.prb_updated = True
+                self.parse_tlo_report(word)
             except (ValueError, IndexError) as e:
                 logger.error(e, exc_info=True)
             except Exception:
@@ -204,10 +210,55 @@ class ControlController(QObject):
             self.workspace_params_od["G30"] = np.array([float(word[1]), float(word[2]), float(word[3])])
         elif word[0] == "G92":
             self.workspace_params_od["G92"] = np.array([float(word[1]), float(word[2]), float(word[3])])
-        elif word[0] == "TLO":
-            self.workspace_params_od["TLO"] = float(word[1])
 
         return self.prb_val[0]
+
+    def parse_probe_report(self, word):
+        """Parse a ``[PRB:x,y,z:success]`` report.
+
+        GRBL and FluidNC report the probe position in machine coordinates and a
+        trailing flag: 1 when the probe triggered, 0 when the probing move
+        reached the limit without contact. A failed probing cycle must not be
+        recorded as a measurement, because the tool length correction and the
+        auto bed levelling would be computed from a wrong position.
+        """
+        try:
+            position = [float(word[1]), float(word[2]), float(word[3])]
+        except (ValueError, IndexError) as e:
+            logger.error(e, exc_info=True)
+            self.prb_succeeded = False
+            return
+        except Exception:
+            logger.error("Uncaught exception: %s", traceback.format_exc())
+            self.prb_succeeded = False
+            return
+
+        # The flag is optional: some firmwares do not report it.
+        flag = word[4].strip() if len(word) > 4 else "1"
+        self.prb_succeeded = flag.lower() not in ("0", "false")
+        if not self.prb_succeeded:
+            logger.error(
+                "Probe not triggered: the axis reached the probe limit without contact. "
+                "The measurement is discarded."
+            )
+            self.prb_updated = False
+            return
+
+        self.prb_val.appendleft(position)
+        self.prb_updated = True
+
+    def parse_tlo_report(self, word):
+        """Parse a ``[TLO:...]`` report.
+
+        GRBL 1.1 prints a single value (``[TLO:8.250]``) while FluidNC, which
+        keeps one offset per axis, prints one value per axis
+        (``[TLO:0.000,0.000,8.250]``). In both cases the value applied to Z is
+        used as tool length offset.
+        """
+        values = [float(item) for item in word[1:] if item.strip()]
+        if not values:
+            raise ValueError(f"Empty tool length offset report: {word}")
+        self.workspace_params_od["TLO"] = values[2] if len(values) > 2 else values[0]
 
     def cmd_probe(self):
         self.prb_updated = False
