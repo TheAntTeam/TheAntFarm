@@ -147,3 +147,27 @@ class TestCommandManager:
         cm = CommandManager(TestParent())
         result = cm.get_command_str("goto", [1.5, 2.5, None])
         assert "X1.50" in result[0]
+
+class TestSafePosition:
+    """The safe position is a default, not something the manager forces."""
+
+    def test_default_safe_position(self):
+        manager = CommandManager(MockParent())
+
+        assert manager.cfg["safe_pos"] == (-1.0, -1.0, -1.0)
+
+    def test_configured_safe_position_is_kept(self):
+        manager = CommandManager(MockParent())
+        manager.load_cfg({"safe_pos": (0.0, 0.0, 12.5), "tool_probe_min": -5.0})
+
+        assert manager.cfg["safe_pos"] == (0.0, 0.0, 12.5)
+        assert manager.cfg["tool_probe_min"] == -5.0
+
+    def test_the_caller_dictionary_is_not_modified(self):
+        user_cfg = {"safe_pos": (0.0, 0.0, 12.5)}
+        manager = CommandManager(MockParent())
+        manager.load_cfg(user_cfg)
+
+        manager.cfg["safe_pos"] = (1.0, 2.0, 3.0)
+
+        assert user_cfg["safe_pos"] == (0.0, 0.0, 12.5)

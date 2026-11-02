@@ -79,12 +79,15 @@ class CommandManager:
                 - tool_probe_zero (bool): Force zeroing Z axis after probing [default False]
                 - safe_pos (tuple): Unused
         """
+        # The configuration is copied: the caller (a GCoder) passes the same
+        # dictionary to the macro manager and overwriting a value here would
+        # change the macro configuration too.
         if cfg is not None:
-            self.cfg = cfg
+            self.cfg = dict(cfg)
         else:
             self.cfg = dict(PROBE_DEFAULTS)
 
-        self.cfg["safe_pos"] = (-1.0, -1.0, -1.0)
+        self.cfg.setdefault("safe_pos", (-1.0, -1.0, -1.0))
 
     def get_command_str(self, command, values):
         """
