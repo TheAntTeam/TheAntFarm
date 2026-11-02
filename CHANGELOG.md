@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Packaging: the project requires Python 3.10-3.12 (gerbyx needs 3.10), `shiboken2` is now `shiboken6`, the cairocffi dependency family of pcb-tools is gone, the PyInstaller spec bundles the gerbyx parser and the build workflow uses the right spec and artifact name.
-- `shape_core` publishes its API from the package (`from shape_core import GCoder, MachinePath, ...`); the visualization layer is imported on demand.
+- `shape_core` publishes its API from the package (`from shape_core import GCoder, MachinePath, ...`); the visualization layer is imported on demand and the controllers import the classes from the package instead of the single modules.
 - The toolpaths are `ToolPath` objects and the defaults of the toolpath generator, of the G-code writer and of the probe managers live in `shape_core/config.py`; a partial configuration is merged with the defaults instead of raising.
 - Completed cleanup of legacy pcb-tools usage in PCB manager, keeping the active parsing pipeline on gerbyx.
 - Removed legacy/unused pcb-tools-based code paths and backup file in shape_core.

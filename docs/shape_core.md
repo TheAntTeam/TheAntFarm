@@ -112,31 +112,30 @@ controllers pass the `ToolPath` lists, the `Geom` lists and the configuration
 dictionaries through without inspecting them. The following changes are
 outside the module and are **not** implemented yet; each one is independent.
 
-### 5.1 Adopt the public API in the consumers (optional, cosmetic)
+### 5.1 Adopt the public API in the consumers (done)
 
-**Where**
-* `controller/controller_control.py:10` —
-  `from shape_core.gcode_manager import GCodeAlignment, GCodeLeveler, GCodeParser, GCoder`
-* `controller/controller_manager.py:10-11` —
-  `from shape_core.gcode_manager import GCodeMacro, GCoder` and
-  `from shape_core.macros_manager import MacroError`
-* `controller/controller_view.py:6-8` — `GCoder`, `MachinePath`, `PcbObj`
-* `controller/controller_align.py:8-9` — `DrillGcodeConverter`, `PcbObj`
-* `ui_manager/ui_manager.py:6` — `from shape_core.visual_manager import VisualLayer`
-* `tests/conftest.py:17-20` — `sys.path.insert(...)` for `src` and
-  `src/TheAntFarm`
+The five consumers now import the classes from the package instead of the
+module that contains them: 9 import lines became 5, and nothing else changed.
 
-**Why** the imports work because `src/TheAntFarm` is on `sys.path`; with a
-proper package layout (`TheAntFarm.shape_core`) the two `sys.path` entries of
-the tests are not needed.
+| File | Import |
+|---|---|
+| `controller/controller_control.py` | `from shape_core import GCodeAlignment, GCodeLeveler, GCodeParser, GCoder` |
+| `controller/controller_manager.py` | `from shape_core import GCodeMacro, GCoder, MacroError` |
+| `controller/controller_view.py` | `from shape_core import GCoder, MachinePath, PcbObj` |
+| `controller/controller_align.py` | `from shape_core import DrillGcodeConverter, PcbObj` |
+| `ui_manager/ui_manager.py` | `from shape_core import VisualLayer` (loaded lazily) |
 
-**How** replace the imports with `from TheAntFarm.shape_core import ...` (or
-`from shape_core import ...` if `src/TheAntFarm` stays on the path) and remove
-the injections from `tests/conftest.py`. No behaviour change; do it in one
-commit so that a broken import is immediately visible.
+Verified with the whole test suite (679 tests, UI and controller tests
+included), by importing the four controllers, `UiManager` and the entry point
+`the_ant_farm`, and by checking that `import shape_core` still does not load
+vispy (`visual_manager` is imported on first access).
 
-**Done when** `python -c "from TheAntFarm.shape_core import GCoder"` works
-without `PYTHONPATH` and the tests still pass without the `sys.path` hack.
+**Not done, and why**: the imports still use the top level package
+`shape_core`, which is what `src/TheAntFarm` on `sys.path` provides. Using
+`TheAntFarm.shape_core` (the fully qualified name) would require `src` on the
+path instead, i.e. changing `the_ant_farm.py`, `tests/conftest.py`, the
+`pathex` of the PyInstaller spec and the launch of the application, with no
+functional gain. It is a separate task, to be done together with §5.6.
 
 ### 5.2 Expose the macro configuration in the settings and in the UI
 
