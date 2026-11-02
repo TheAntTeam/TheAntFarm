@@ -2,7 +2,7 @@ import pytest
 from shapely import geometry as shg
 from shapely.geometry import LineString, Point
 
-from TheAntFarm.shape_core.path_manager import Gapper, MachinePath
+from TheAntFarm.shape_core.path_manager import Gapper, MachinePath, remap_invalid_ids
 
 
 class TestGapper:
@@ -169,3 +169,70 @@ class TestMachinePathDrilling:
         machine_path.load_geom([self._GeomStub(self._circle(0, 0, 0.8))])
 
         assert machine_path.execute_drill() == [False]
+
+
+class _GeomStub:
+    """Minimal stand-in for Geom/FakeGeom: MachinePath only reads ``.geom``."""
+
+    def __init__(self, geom):
+        self.geom = geom
+
+
+class TestCheckMinArea:
+    """check_min_area must report the old index of every surviving polygon."""
+
+    @pytest.fixture
+    def machine_path(self):
+        return MachinePath("test_gerber", "gerber")
+
+    def test_small_polygon_is_dropped_and_old_indices_are_kept(self, machine_path):
+        small = shg.box(0, 0, 0.05, 0.05)  # area 0.0025 < MIN_AREA
+        big = shg.box(0, 0, 2, 2)
+        big2 = shg.box(5, 0, 7, 2)
+
+        polygons, kept_indices = machine_path.check_min_area([small, big, big2])
+
+        assert len(polygons) == 2
+        assert kept_indices == [1, 2]
+
+    def test_nothing_is_dropped(self, machine_path):
+        polygons, kept_indices = machine_path.check_min_area([shg.box(0, 0, 2, 2)])
+        assert len(polygons) == 1
+        assert kept_indices == [0]
+
+    def test_empty_list(self, machine_path):
+        assert machine_path.check_min_area([]) == ([], [])
+
+
+class TestRemapInvalidIds:
+    """DRC indices computed before filtering must be remapped after it."""
+
+    def test_without_filtering(self):
+        assert remap_invalid_ids([0, 1, 2], [1]) == [1]
+
+    def test_after_dropping_an_element(self):
+        # the polygon that was at position 2 is now at position 1
+        assert remap_invalid_ids([0, 2, 3], [2]) == [1]
+
+    def test_invalid_element_dropped(self):
+        assert remap_invalid_ids([0, 2], [1]) == []
+
+    def test_no_invalid_ids(self):
+        assert remap_invalid_ids([0, 1], []) == []
+
+    def test_empty_kept_indices(self):
+        assert remap_invalid_ids([], [0, 1]) == []
+
+
+class TestExecuteGerberInvalidIds:
+    """The invalid path indices of the generated path must index the path list."""
+
+    def test_invalid_path_ids_are_valid_path_indices(self):
+        machine_path = MachinePath("test_gerber", "gerber")
+        machine_path.load_geom([_GeomStub(shg.box(0, 0, 10, 10))])
+
+        machine_path.execute_gerber()
+
+        _tool, paths, invalid_path_ids = machine_path.path[0]
+        assert paths
+        assert all(0 <= path_id < len(paths) for path_id in invalid_path_ids)

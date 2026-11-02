@@ -1,7 +1,7 @@
 import logging
 import time
 from collections import OrderedDict
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
 import numpy as np
 import shapely.geometry
@@ -22,6 +22,31 @@ from .geometry_manager import (
 from .gerber_path_optimizer import GerberPathOptimizer
 
 logger = logging.getLogger(__name__)
+
+
+def remap_invalid_ids(kept_indices: List[int], invalid_ids: Iterable[int]) -> List[int]:
+    """Remap invalid path indices after a filtering step.
+
+    ``kept_indices[n]`` is the position, in the unfiltered list, of the element
+    that is now at position ``n``; ``invalid_ids`` contains positions in the
+    unfiltered list. The returned list contains positions in the filtered list,
+    so that the warning emitted on the generated path points to the right
+    geometry.
+
+    Parameters
+    ----------
+    kept_indices : list of int
+        Old indices of the elements that survived the filtering, in the new order.
+    invalid_ids : iterable of int
+        Old indices of the elements flagged as invalid.
+
+    Returns
+    -------
+    list of int
+        New indices of the invalid elements still present after the filtering.
+    """
+    invalid = set(invalid_ids)
+    return [new_index for new_index, old_index in enumerate(kept_indices) if old_index in invalid]
 
 
 class Gapper:
@@ -350,10 +375,14 @@ class MachinePath:
 
         t1 = time.time()
         logger.info(f"Path Generation Done in {t1 - t0:.4f} sec")
+
+        og_list, kept_indices = self.check_min_area(og_list)
+        # check_min_area drops the polygons that are too small to be milled, so
+        # the invalid path indices computed on the unfiltered list must be
+        # remapped, otherwise the DRC warning would point to the wrong path.
+        invalid_path_ids = remap_invalid_ids(kept_indices, invalid_path_ids)
         if invalid_path_ids:
             logger.warning(f"DRC Check Output: {len(invalid_path_ids)} invalid paths {invalid_path_ids}")
-
-        og_list = self.check_min_area(og_list)
 
         # Extract LineStrings from polygons
         path = []
@@ -381,13 +410,22 @@ class MachinePath:
         # Structure: (tool_info, path_geometry, invalid_indices)
         self.path = [((t_d, self.TYPE_GERBER), path, invalid_paths)]
 
-    def check_min_area(self, og_list: List[Polygon]) -> List[Polygon]:
-        """Filters out polygons smaller than MIN_AREA."""
+    def check_min_area(self, og_list: List[Polygon]) -> Tuple[List[Polygon], List[int]]:
+        """Filters out polygons smaller than MIN_AREA.
+
+        Returns
+        -------
+        tuple of (list of Polygon, list of int)
+            The surviving polygons and, for each of them, its position in
+            ``og_list``. The second list lets the caller remap every index that
+            was computed on the unfiltered list.
+        """
         big_poly = []
+        kept_indices = []
         old_poly_count = 0
         new_poly_count = 0
 
-        for p in og_list:
+        for index, p in enumerate(og_list):
             old_poly_count += 1
             new_inners = []
             for inner in p.interiors:
@@ -399,11 +437,12 @@ class MachinePath:
                 p = Polygon(p.exterior, new_inners)
                 new_poly_count += 1 + len(p.interiors)
                 big_poly.append(p)
+                kept_indices.append(index)
 
         removed_count = old_poly_count - new_poly_count
         if removed_count > 0:
             logger.info(f"REMOVED small polygons: {removed_count}")
-        return big_poly
+        return big_poly, kept_indices
 
     def execute_pocketing(self) -> List[bool]:
         """Generates pocketing paths (clearing area inside polygons)."""
