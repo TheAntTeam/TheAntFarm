@@ -350,30 +350,24 @@ macro work was continued:
 * `VisualLayer.add_gcode` no longer consumes the vector list of the parser (it
   removed the first vector from the model used to regenerate the G-code).
 
-What is left of that review is the structural part, tracked in
-`docs/macros.md` §4 of this document under "Structural backlog" below.
+What is left of that review was the structural part, now implemented and
+described in [`docs/shape_core.md`](shape_core.md) (see the *Structural
+backlog* section at the end of this section for the pointer).
 
-### M-09 — Test isolation
+### M-09 — Test isolation (documented)
 
+`tests/conftest.py` imports PySide6 at module level and
 `tests/unit/test_controller_align.py` patches `double_side_manager.DoubleSideManager`
-and imports `controller.controller_align` inside the `with` block: the fixture
-only works if no other test module imported `controller_align` first (the truth
-is bound at import time). `tests/unit/test_controller_manager.py` therefore
-imports the worker lazily inside its fixture (see the comment there). The proper
-fix is to patch `controller.controller_align.DoubleSideManager` and import at
-module level.
+before importing `controller.controller_align`, so the fixture only works if no
+other module imported `controller_align` first. The fix is described in
+[`docs/shape_core.md`](shape_core.md) §5.6.
 
-**Effort** ~30 min, low risk.
+### Structural backlog
 
-### Structural backlog (was "A9" in the review)
-
-| Item | Why | Risk |
-|---|---|---|
-| Public API in `shape_core/__init__.py` (still empty) | the consumers import from the submodules (`from shape_core.gcode_manager import GCoder`) and `tests/conftest.py` has to inject two paths in `sys.path` | low |
-| `ToolPath` dataclass instead of `((tool, type), [LineString], [invalid_ids])` | the tuple is an implicit contract between `path_manager`, `gcode_manager` and `visual_manager.add_path` (`len(d) > 2`) | medium, touches the controllers |
-| Single configuration object for `MachinePath.cfg`, `GCoder.cfg` and `Macros.DEFAULT_CFG` | the same defaults are copied in three places and a missing key is still a `KeyError` | medium |
-| `Geom` / `FakeGeom` as a dataclass with a validated geometry, and `FakeGeom` removed in favour of plain shapely geometries | a degenerate polygon raises a shapely `ValueError` without saying which primitive produced it | low |
-| `GcodePoint.get_string` uses 3 decimals while `GCoder.DIGITS` is 4 | two resolutions for the same coordinate | low |
+The structural part of the review (public API, `ToolPath` dataclass, single
+configuration, `Geom` validation, coordinate resolution) has been implemented
+in `shape_core` and is described, together with the changes that still need
+code outside the module, in [`docs/shape_core.md`](shape_core.md).
 
 ---
 
