@@ -193,18 +193,40 @@ def offset_polygon(polyg, offset, shapely_poly=False):
 
 
 def offset_polygon_holes(poly, offset):
+    """Offset the holes of ``poly`` and return them as a single geometry.
+
+    Parameters
+    ----------
+    poly : Geom
+        Geometry whose holes must be offset.
+    offset : float
+        Offset applied to every hole (negative values shrink the holes).
+
+    Returns
+    -------
+    shapely.geometry.Polygon | shapely.geometry.MultiPolygon | None
+        ``None`` when the polygon has no holes or when every hole disappears
+        after the offset (offset larger than the hole itself).
+    """
+    if poly is None or poly.geom is None:
+        return None
+
     res = []
-    g = poly.geom
-    for i in g.interiors:
+    for i in poly.geom.interiors:
         o = offset_polygon(shg.Polygon(i.coords), offset, shapely_poly=True)
+        if o is None or o.is_empty:
+            # the hole disappeared with this offset
+            continue
         if o.geom_type == "MultiPolygon":
             res.extend(o.geoms)
         else:
             res.append(o)
+
+    if not res:
+        return None
     if len(res) > 1:
         return shg.MultiPolygon(res)
-    else:
-        return res[0]
+    return res[0]
 
 
 def offset_polygon_old(polyg, offset, shapely_poly=False):

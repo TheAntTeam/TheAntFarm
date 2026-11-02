@@ -552,3 +552,33 @@ class TestHoleGeometry:
         assert len(parts) == len(diameters) == 2
         for part, diameter in zip(parts, diameters):
             assert diameter == pytest.approx(get_poly_diameter(part)[0])
+
+
+class TestOffsetPolygonHolesGuards:
+    """offset_polygon_holes must handle polygons without (surviving) holes."""
+
+    @staticmethod
+    def _poly_with_hole(hole_size):
+        exterior = [(0, 0), (10, 0), (10, 10), (0, 10), (0, 0)]
+        half = hole_size / 2.0
+        hole = [(5 - half, 5 - half), (5 + half, 5 - half), (5 + half, 5 + half), (5 - half, 5 + half)]
+        gdata = {"points": [exterior, hole], "polarity": "dark", "closed": True}
+        return Geom(gdata, complex=True)
+
+    def test_polygon_without_holes_returns_none(self):
+        gdata = {"points": [(0, 0), (10, 0), (10, 10), (0, 10), (0, 0)], "polarity": "dark", "closed": True}
+        assert offset_polygon_holes(Geom(gdata), 0.5) is None
+
+    def test_holes_that_disappear_return_none(self):
+        geom = self._poly_with_hole(1.0)
+        # the shrink offset is larger than the hole itself
+        assert offset_polygon_holes(geom, -2.0) is None
+
+    def test_none_geometry_returns_none(self):
+        assert offset_polygon_holes(None, 0.5) is None
+
+    def test_surviving_hole_is_returned(self):
+        geom = self._poly_with_hole(4.0)
+        result = offset_polygon_holes(geom, -0.5)
+        assert result is not None
+        assert result.area > 0.0
