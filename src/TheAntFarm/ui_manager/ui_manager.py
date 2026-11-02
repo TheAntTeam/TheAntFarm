@@ -3,7 +3,7 @@ import logging
 from PySide6.QtCore import QObject, Slot
 from PySide6.QtGui import QActionGroup
 from PySide6.QtWidgets import QMessageBox
-from shape_core.visual_manager import VisualLayer
+from shape_core import VisualLayer
 
 from .ui_about import UiAbout
 from .ui_align_tab import UiAlignTab

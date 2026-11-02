@@ -7,8 +7,7 @@ from collections import OrderedDict as Od
 
 from PySide6.QtCore import QTimer, Slot
 from PySide6.QtGui import QPixmap
-from shape_core.gcode_manager import GCodeMacro, GCoder
-from shape_core.macros_manager import MacroError
+from shape_core import GCodeMacro, GCoder, MacroError
 
 from .controller_align import AlignController
 from .controller_control import ControlController

@@ -5,8 +5,7 @@ import traceback
 import qimage2ndarray
 from double_side_manager import DoubleSideManager
 from PySide6.QtCore import QObject
-from shape_core.gcode_drill_converter import DrillGcodeConverter
-from shape_core.pcb_manager import PcbObj
+from shape_core import DrillGcodeConverter, PcbObj
 
 logger = logging.getLogger(__name__)
 
