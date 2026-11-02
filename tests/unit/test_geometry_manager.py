@@ -12,6 +12,7 @@ from TheAntFarm.shape_core.geometry_manager import (
     fill_holes_sh,
     get_bbox_area_sh,
     get_poly_diameter,
+    get_poly_parts,
     merge_polygons,
     merge_polygons_path,
     offset_polygon,
@@ -500,3 +501,54 @@ class TestPathProcessing:
         poly = shg.Polygon(exterior, [hole])
         result = offset_polygon(poly, 0.5, shapely_poly=True)
         assert result is not None
+
+
+class TestHoleGeometry:
+    """Helpers used to drill holes: polygon parts and inscribed diameter."""
+
+    @staticmethod
+    def _circle(x, y, diameter, segments=64):
+        """Circle as an N-gon, the same shape gerbyx/gerber tools produce."""
+        return shg.Point(x, y).buffer(diameter / 2.0, quad_segs=segments // 4)
+
+    def test_get_poly_parts_single_polygon(self):
+        poly = Polygon([(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)])
+        assert get_poly_parts(poly) == [poly]
+
+    def test_get_poly_parts_multipolygon(self):
+        poly1 = Polygon([(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)])
+        poly2 = Polygon([(5, 0), (6, 0), (6, 1), (5, 1), (5, 0)])
+        parts = get_poly_parts(shg.MultiPolygon([poly1, poly2]))
+        assert len(parts) == 2
+
+    def test_get_poly_parts_unsupported_geometry(self):
+        assert get_poly_parts(None) == []
+        assert get_poly_parts(shg.MultiPolygon()) == []
+        assert get_poly_parts(shg.LineString([(0, 0), (1, 1)])) == []
+
+    def test_get_poly_diameter_circle_matches_nominal_diameter(self):
+        """A circular hole keeps its nominal diameter (within discretization error)."""
+        diameter = get_poly_diameter(self._circle(0, 0, 0.8))[0]
+        assert diameter == pytest.approx(0.8, rel=2e-3)
+
+    def test_get_poly_diameter_slot_is_the_slot_width(self):
+        """A 2 mm wide, 20 mm long slot must not be measured as ~20 mm long."""
+        slot = shg.LineString([(0, 0), (20, 0)]).buffer(1.0)
+        diameter = get_poly_diameter(slot)[0]
+        assert diameter == pytest.approx(2.0, rel=2e-3)
+
+    def test_get_poly_diameter_rectangle_is_the_short_side(self):
+        rectangle = shg.box(0, 0, 10, 2)
+        assert get_poly_diameter(rectangle)[0] == pytest.approx(2.0)
+
+    def test_get_poly_diameter_degenerate_part(self):
+        degenerate = shg.Polygon([(0, 0), (1, 1), (2, 2)])
+        assert get_poly_diameter(degenerate) == [0.0]
+
+    def test_get_poly_diameter_multipolygon_is_aligned_with_parts(self):
+        multipoly = shg.MultiPolygon([self._circle(0, 0, 0.5), self._circle(5, 0, 1.0)])
+        parts = get_poly_parts(multipoly)
+        diameters = get_poly_diameter(multipoly)
+        assert len(parts) == len(diameters) == 2
+        for part, diameter in zip(parts, diameters):
+            assert diameter == pytest.approx(get_poly_diameter(part)[0])

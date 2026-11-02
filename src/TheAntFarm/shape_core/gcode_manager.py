@@ -274,10 +274,16 @@ class GCoder:
             cs = list(p.coords)
             if mirror:
                 cs = self.mirror_coords(cs)
+            previous = None
             for c in cs:
+                # A single hole drill path is a zero length segment: the same
+                # coordinate must not be drilled twice.
+                if previous is not None and tuple(c) == tuple(previous):
+                    continue
                 self.go_to(c)
                 self.make_drill()
                 self.go_travel()
+                previous = c
 
     def compute_gerber_paths(self, paths, mirror=False):
         for p in paths:

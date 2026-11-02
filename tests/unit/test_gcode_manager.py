@@ -352,3 +352,19 @@ class TestLoadPath:
         test_path = [("data", [LineString([(0, 0), (1, 1)])])]
         gcoder.load_path(test_path)
         assert gcoder.path == test_path
+
+
+class TestZeroLengthDrillPath:
+    """A bit used for a single hole is written as a zero length segment."""
+
+    def test_zero_length_segment_drills_the_hole_once(self):
+        gcoder = GCoder(tag="test", machining_type="drill")
+        gcoder.gcode = []
+        gcoder.go_travel()  # same state of compute_drill before the drilling loop
+        zero_length = LineString([(1.0, 2.0), (1.0, 2.0)])
+
+        gcoder.compute_drill_paths([zero_length])
+
+        gcode = "".join(gcoder.gcode)
+        assert len(re.findall(r"G0?0 X", gcode)) == 1
+        assert gcode.count("G01 Z") == gcoder.STEPS

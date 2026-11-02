@@ -69,15 +69,64 @@ def fill_holes_sh(poly_sh):
     return ret
 
 
-def get_poly_diameter(poly_sh):
-    pl = [poly_sh]
+def get_poly_parts(poly_sh):
+    """Return the list of Polygon parts that compose ``poly_sh``.
+
+    The order is stable, so the returned list can be zipped with the list
+    returned by :func:`get_poly_diameter`.
+
+    Parameters
+    ----------
+    poly_sh : shapely.geometry.Polygon | shapely.geometry.MultiPolygon | None
+
+    Returns
+    -------
+    list of shapely.geometry.Polygon
+        One element for a Polygon, one element for each part of a MultiPolygon
+        and an empty list for empty or unsupported geometries.
+    """
+    if poly_sh is None or poly_sh.is_empty:
+        return []
     if poly_sh.geom_type == "MultiPolygon":
-        pl = [p for p in poly_sh.geoms]
+        return list(poly_sh.geoms)
+    if poly_sh.geom_type == "Polygon":
+        return [poly_sh]
+    return []
+
+
+def get_poly_diameter(poly_sh):
+    """Inscribed diameter of every part of ``poly_sh``, in drawing units.
+
+    The value is computed as ``2 * distance(centroid, boundary)``, i.e. the
+    diameter of the biggest round tool that surely fits inside the part: this is
+    the correct value to choose a drill bit for the hole.
+
+    It replaces the circumscribed diameter (``2 * max distance from the
+    centroid``), which on non circular holes (slots, obrounds, rectangles) is
+    larger than the hole width and could select an oversized bit.
+
+    Notes
+    -----
+    The centroid is used as an approximation of the centre of the inscribed
+    circle: the returned diameter is never larger than the circumscribed one and
+    for a regular part it matches the real inscribed diameter.
+
+    Parameters
+    ----------
+    poly_sh : shapely.geometry.Polygon | shapely.geometry.MultiPolygon | None
+
+    Returns
+    -------
+    list of float
+        One diameter for each part, in the same order of :func:`get_poly_parts`.
+        Degenerate parts give ``0.0``.
+    """
     diameters = []
-    for p in pl:
-        c = p.centroid
-        r = get_max_distance(c, p.exterior.coords)
-        diameters.append(2.0 * r)
+    for p in get_poly_parts(poly_sh):
+        if p.area <= 0.0:
+            diameters.append(0.0)
+            continue
+        diameters.append(2.0 * p.centroid.distance(p.boundary))
     return diameters
 
 

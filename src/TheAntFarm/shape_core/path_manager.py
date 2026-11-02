@@ -13,6 +13,7 @@ from .geometry_manager import (
     fill_holes_sh,
     get_bbox_area_sh,
     get_poly_diameter,
+    get_poly_parts,
     is_overlaping_multiple_polygons,
     merge_polygons_path,
     offset_polygon,
@@ -227,6 +228,14 @@ class MachinePath:
 
     MIN_AREA = 0.1e-1
     TD_COEFF = 0.999
+    # Relative tolerance used to compare a hole diameter with a bit diameter.
+    # A circular hole is stored as a polygon, and the inscribed diameter of a
+    # regular N-gon is smaller than the nominal circle diameter
+    # (2*cos(pi/N): ~0.1% with N=64, ~0.3% with N=40); the tolerance absorbs this
+    # discretization error so that a bit with the same nominal diameter of the
+    # hole is still accepted. Real bits are spaced by at least 0.05 mm, so a 2%
+    # tolerance cannot select an oversized bit.
+    DIAMETER_TOL = 0.02
 
     # Machining Types
     TYPE_GERBER = "gerber"
@@ -446,37 +455,44 @@ class MachinePath:
         if not_to_drill is not None:
             to_drill = [not elem for elem in not_to_drill]
 
-        drilled_list = []
+        drilled_list = [False] * len(self.geom_list)
         drills = []
 
+        # A hole can be made of several polygons (e.g. a slot joined to a pad):
+        # every part has its own centre and its own diameter and is drilled
+        # separately, so the i-th element of the list refers to the i-th geom.
         for i, g in enumerate(self.geom_list):
-            if to_drill[i]:
-                drilled_list.append(True)
-                c = g.geom.centroid
-                ds = get_poly_diameter(g.geom)
-                # Select the best bit: closest diameter <= hole diameter
-                for j, d in enumerate(ds):
-                    drills.append([i, c.coords[j], d])
-            else:
-                drilled_list.append(False)
+            if not to_drill[i]:
+                continue
+            drilled_list[i] = True
+            for part, d in zip(get_poly_parts(g.geom), get_poly_diameter(g.geom)):
+                center = part.centroid
+                drills.append([i, (center.x, center.y), d])
 
         drills.sort(key=lambda x: x[2], reverse=True)
 
         drill_per_bit = OrderedDict()
         if not bd:
             logger.warning("No drill bits defined in configuration.")
-            return drilled_list
+            return [False] * len(self.geom_list)
 
         b = bd[0]
         c = 1
         for dd in drills:
             d = dd[2]
-            while b > d and c < len(bd):
+            max_hole_diameter = d * (1.0 + self.DIAMETER_TOL)
+            while b > max_hole_diameter and c < len(bd):
                 b = bd[c]
                 c += 1
-            if b not in drill_per_bit:
-                drill_per_bit[b] = []
-            drill_per_bit[b].append(dd[1])
+            if b > max_hole_diameter:
+                # No bit is small enough: drilling the hole would produce an
+                # oversized hole, so it is skipped and reported to the caller.
+                logger.warning(
+                    f"Hole of diameter {d:.3f} mm is smaller than the smallest bit ({bd[-1]} mm): not drilled"
+                )
+                drilled_list[dd[0]] = False
+                continue
+            drill_per_bit.setdefault(b, []).append(dd[1])
 
         # Optimize path for each bit
         for bit_k in drill_per_bit.keys():
@@ -508,8 +524,14 @@ class MachinePath:
 
         paths = []
         for k in drill_per_bit:
+            points = drill_per_bit[k]
+            if len(points) == 1:
+                # LineString needs at least two points: a bit used for a single
+                # hole is represented as a zero length segment, the G-code
+                # writer drills duplicated consecutive points only once.
+                points = points + points
             # Convert points back to LineString for consistency
-            paths.append(((k, self.TYPE_DRILL), [LineString(drill_per_bit[k])]))
+            paths.append(((k, self.TYPE_DRILL), [LineString(points)]))
 
         if not_to_drill is not None:
             if any(not_to_drill) and self.path is not None:
