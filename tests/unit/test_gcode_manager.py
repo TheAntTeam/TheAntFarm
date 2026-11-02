@@ -5,10 +5,11 @@ Covers requirements: RGC-001 to RGC-004, DGC-001 to DGC-003, VAL-001 to VAL-004
 
 import re
 
+import numpy as np
 import pytest
 from shapely.geometry import LineString, Polygon
 
-from TheAntFarm.shape_core.gcode_manager import GCoder
+from TheAntFarm.shape_core.gcode_manager import GCode, GCodeAlignment, GCoder, GcodePoint
 
 
 class TestGCoderInitialization:
@@ -424,3 +425,50 @@ class TestMachiningConfigGuards:
         gcode = "".join(gcoder.gcode)
         assert gcode.count("G01 Z-") == 3
         assert "G01 Z-1.5000" in gcode
+
+
+class TestGCodeAlignmentGuards:
+    """Alignment must fail cleanly when the sampled points are unusable."""
+
+    @staticmethod
+    def _gcode_with_three_points():
+        gc = GCode(lines=[])
+        gc.original_vectors = []
+        for coords in ((0.0, 0.0, 0.0), (10.0, 0.0, 0.0), (0.0, 10.0, 0.0)):
+            point = GcodePoint()
+            point.coords = np.array(coords)
+            gc.original_vectors.append(point)
+        return gc
+
+    def test_collinear_alignment_is_refused(self):
+        gc = self._gcode_with_three_points()
+        alignment = GCodeAlignment(gc)
+        alignment.update_align_info(
+            [((0.0, 0.0), (0.0, 0.0)), ((1.0, 0.0), (0.5, 0.0)), ((2.0, 0.0), (1.0, 0.0))]
+        )
+
+        assert alignment.apply_align() is False
+        assert gc.aligned_vectors == []
+        assert gc.aligned_bb is None
+
+    def test_missing_alignment_points_are_refused(self):
+        gc = self._gcode_with_three_points()
+        alignment = GCodeAlignment(gc)
+
+        assert alignment.apply_align() is False
+        assert gc.aligned_vectors == []
+
+    def test_valid_alignment_is_applied(self):
+        gc = self._gcode_with_three_points()
+        alignment = GCodeAlignment(gc)
+        alignment.update_align_info(
+            [
+                ((0.0, 0.0), (0.2, 0.1)),
+                ((10.0, 0.0), (10.1, 0.3)),
+                ((0.0, 10.0), (-0.2, 10.2)),
+            ]
+        )
+
+        assert alignment.apply_align() is True
+        assert len(gc.aligned_vectors) == 3
+        assert gc.aligned_bb is not None

@@ -1,6 +1,14 @@
+import logging
+
 import numpy as np
 import numpy.linalg as nl
 from scipy.spatial.distance import cdist, pdist, squareform
+
+logger = logging.getLogger(__name__)
+
+# A thin plate spline needs at least three non collinear control points: with
+# fewer points the linear system is underdetermined or singular.
+MIN_POINTS = 3
 
 
 class TpsCoefficients:
@@ -35,18 +43,29 @@ class TpsCoefficients:
     def compute_tps_coeff(self):
 
         cx = cy = None
-        if self.sampled_points is not []:
-            cps = self.get_control_points_stack()
-            sps = self.get_sampled_points_stack()
+        if len(self.sampled_points) < MIN_POINTS:
+            logger.warning(
+                f"At least {MIN_POINTS} sampled points are needed to compute the alignment, "
+                f"{len(self.sampled_points)} given: alignment not available"
+            )
+            return cx, cy
 
-            # construct T Matrix
-            tm = self.compute_t_matrix(cps)
+        cps = self.get_control_points_stack()
+        sps = self.get_sampled_points_stack()
 
-            # solve cx, cy (coefficients for x and y)
-            xt_aug = np.concatenate([sps[:, 0], np.zeros(3)])
-            yt_aug = np.concatenate([sps[:, 1], np.zeros(3)])
+        # construct T Matrix
+        tm = self.compute_t_matrix(cps)
+
+        # solve cx, cy (coefficients for x and y)
+        xt_aug = np.concatenate([sps[:, 0], np.zeros(3)])
+        yt_aug = np.concatenate([sps[:, 1], np.zeros(3)])
+        try:
             cx = nl.solve(tm, xt_aug)  # [K+3]
             cy = nl.solve(tm, yt_aug)
+        except nl.LinAlgError:
+            # Collinear or duplicated control points: the system is singular.
+            logger.warning("Sampled points are collinear or duplicated: alignment not available")
+            cx = cy = None
         return cx, cy
 
     @staticmethod
@@ -85,6 +104,9 @@ class TpsCoefficients:
 
     def compute_points_transform(self, gps):
 
+        if self.cx is None or self.cy is None:
+            return None, None
+
         cps = self.get_control_points_stack()
 
         # transform
@@ -105,26 +127,29 @@ class AlignManager:
         self.update_tps_coefficients()
 
     def is_sampled_point_loaded(self):
-        return self.sampled_points != []
+        """True when the loaded sampled points are enough to compute the alignment."""
+        return len(self.sampled_points) >= MIN_POINTS
 
     def update_tps_coefficients(self):
         self.tps_coeff = TpsCoefficients(self.sampled_points)
 
     def compute_points_transform(self, points):
-        if self.tps_coeff is not None and len(points) > 0:
-            zgs = None
-            if len(points[0]) == 3:
-                xgs, ygs, zgs = list(zip(*points))
-            else:
-                xgs, ygs = list(zip(*points))
-
-            gps = np.vstack([xgs, ygs]).T
-            nxgs, nygs = self.tps_coeff.compute_points_transform(gps)
-
-            if len(points[0]) == 3:
-                new_points_coord = list(zip(nxgs, nygs, zgs))
-            else:
-                new_points_coord = list(zip(nxgs, nygs))
-            return new_points_coord
-        else:
+        if not self.is_sampled_point_loaded() or self.tps_coeff is None:
             return None
+        if self.tps_coeff.cx is None or len(points) == 0:
+            return None
+
+        zgs = None
+        if len(points[0]) == 3:
+            xgs, ygs, zgs = list(zip(*points))
+        else:
+            xgs, ygs = list(zip(*points))
+
+        gps = np.vstack([xgs, ygs]).T
+        nxgs, nygs = self.tps_coeff.compute_points_transform(gps)
+
+        if len(points[0]) == 3:
+            new_points_coord = list(zip(nxgs, nygs, zgs))
+        else:
+            new_points_coord = list(zip(nxgs, nygs))
+        return new_points_coord

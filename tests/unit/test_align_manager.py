@@ -22,21 +22,43 @@ class TestTpsCoefficients:
         assert tps.cy is not None
 
     def test_init_with_empty_sampled_points(self):
-        """Test TpsCoefficients initialization with empty list - raises IndexError."""
-        with pytest.raises(IndexError):
-            TpsCoefficients([])
+        """An empty list gives no coefficients instead of raising."""
+        tps = TpsCoefficients([])
+        assert tps.cx is None
+        assert tps.cy is None
 
     def test_load_empty_sampled_points(self):
-        """Test load_sampled_points with empty list - raises IndexError."""
+        """Loading an empty alignment must not raise and must disable alignment."""
         align_mgr = AlignManager()
-        with pytest.raises(IndexError):
-            align_mgr.load_sampled_points([])
+        align_mgr.load_sampled_points([])
+
+        assert align_mgr.is_sampled_point_loaded() is False
+        assert align_mgr.compute_points_transform([(0.0, 0.0)]) is None
+
+    def test_init_with_two_sampled_points(self):
+        """Two points are not enough to solve the thin plate spline."""
+        tps = TpsCoefficients([((0.0, 0.0), (0.0, 0.0)), ((1.0, 0.0), (1.0, 0.0))])
+        assert tps.cx is None
+        assert tps.cy is None
+
+    def test_init_with_collinear_sampled_points(self):
+        """Collinear points make the system singular: no coefficients, no crash."""
+        collinear = [((0.0, 0.0), (0.0, 0.0)), ((1.0, 0.0), (1.0, 0.0)), ((2.0, 0.0), (2.0, 0.0))]
+        tps = TpsCoefficients(collinear)
+        assert tps.cx is None
+        assert tps.cy is None
 
     def test_is_sampled_point_loaded_true(self):
-        """Test is_sampled_point_loaded returns True when points loaded."""
+        """Test is_sampled_point_loaded returns True with enough points."""
+        align_mgr = AlignManager()
+        align_mgr.sampled_points = [((0.0, 0.0), (0.0, 0.0)), ((1.0, 0.0), (1.0, 0.0)), ((0.0, 1.0), (0.0, 1.0))]
+        assert align_mgr.is_sampled_point_loaded() is True
+
+    def test_is_sampled_point_loaded_with_one_point(self):
+        """One point is loaded but not enough for the alignment."""
         align_mgr = AlignManager()
         align_mgr.sampled_points = [((0.0, 0.0), (0.0, 0.0))]
-        assert align_mgr.is_sampled_point_loaded() is True
+        assert align_mgr.is_sampled_point_loaded() is False
 
     def test_is_sampled_point_loaded_false(self):
         """Test is_sampled_point_loaded returns False when no points."""

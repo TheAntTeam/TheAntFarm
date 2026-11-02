@@ -927,32 +927,39 @@ class GCodeAlignment:
 
     def apply_align(self):
         print("GCode Alignment Start")
-        align_flag = True
+
+        new_coords = None
         if self.gc is not None and self.am.is_sampled_point_loaded():
             print("Sampled Point Loaded")
             coords = [p.coords.copy() for p in self.gc.original_vectors]
             new_coords = self.am.compute_points_transform(coords)
-            avl = self.gc.get_gcode_original_vectors_copy()
-            bb_max = [-1e6, -1e6, -1e6]
-            bb_min = [1e6, 1e6, 1e6]
-            for i, p in enumerate(avl):
-                nc = np.array(new_coords[i])
-                for z, e in enumerate(nc):
-                    bb_max[z] = max(bb_max[z], nc[z])
-                    bb_min[z] = min(bb_min[z], nc[z])
-                p.coords = nc
 
-            self.gc.aligned_vectors = avl
-            self.gc.aligned_bb = tuple(bb_min + bb_max)
-            align_flag = True
-        else:
+        if self.gc is None or new_coords is None:
+            # No G-code loaded, not enough sampled points or degenerate samples
+            # (collinear/duplicated points): the alignment cannot be applied.
             print("Sampled Point NOT Loaded")
-            self.gc.aligned_vectors = []
-            self.gc.aligned_bb = None
-            align_flag = False
+            if self.gc is not None:
+                self.gc.aligned_vectors = []
+                self.gc.aligned_bb = None
+            print("GCode Alignment Stop")
+            print(False)
+            return False
+
+        avl = self.gc.get_gcode_original_vectors_copy()
+        bb_max = [-1e6, -1e6, -1e6]
+        bb_min = [1e6, 1e6, 1e6]
+        for i, p in enumerate(avl):
+            nc = np.array(new_coords[i])
+            for z, e in enumerate(nc):
+                bb_max[z] = max(bb_max[z], nc[z])
+                bb_min[z] = min(bb_min[z], nc[z])
+            p.coords = nc
+
+        self.gc.aligned_vectors = avl
+        self.gc.aligned_bb = tuple(bb_min + bb_max)
         print("GCode Alignment Stop")
-        print(align_flag)
-        return align_flag
+        print(True)
+        return True
 
 
 class GCodeLeveler:
