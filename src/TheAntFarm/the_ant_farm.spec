@@ -1,7 +1,16 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from PyInstaller.utils.hooks import collect_submodules
 
 block_cipher = None
+
+# gerbyx is the Gerber/Excellon parser of The Ant Team: shape_core imports its
+# submodules, some of them inside functions, so they are collected explicitly.
+# The command line interface of gerbyx (and its typer/rich dependency) and the
+# matplotlib based visualizer are not used by the application and are kept out
+# of the bundle.
+_EXCLUDED_GERBYX = ("gerbyx.cli", "gerbyx.__main__", "gerbyx.visualizer")
+gerbyx_modules = collect_submodules("gerbyx", filter=lambda name: name not in _EXCLUDED_GERBYX)
 
 
 a = Analysis(
@@ -9,7 +18,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[('controller','controller'),('macros','macros'),('resources','resources'),('settings_manager','settings_manager'),('shape_core','shape_core'),('ui_manager','ui_manager'),('style_manager.py', '.'),('double_side_manager.py', '.'),('log_manager.py', '.'),('serial_manager.py', '.'),('ui_the_ant_farm.py', '.'),('vispy_qt_widget.py', '.'),('app_resources_rc.py', '.'),('the_ant_farm.ui', '.'),('serial_manager.py', '.'),('executable_path_checker.py', '.'),('combobox_filter_enter.py', '.'),('qledlabel.py', '.'),('qcamera_label.py', '.'),('__init__.py', '.')],
-    hiddenimports=['PySide6.QtCore', 'PySide6.QtGui', 'PySide6.QtSerialPort', 'PySide6.QtMultimedia', 'shiboken6.shiboken6', 'vispy', 'vispy.app.backends._pyside6', 'vispy.app.qt', 'pyclipper', 'shapely', 'shapely.ops', 'shapely.validation', 'scipy.interpolate', 'qimage2ndarray', 'cv2', 'OpenGL', 'OpenGL.GL', 'OpenGL.GLU', 'OpenGL.GLUT', 'OpenGL.platform.egl'],
+    hiddenimports=['PySide6.QtCore', 'PySide6.QtGui', 'PySide6.QtSerialPort', 'PySide6.QtMultimedia', 'shiboken6.Shiboken', 'vispy', 'vispy.app.backends._pyside6', 'vispy.app.qt', 'pyclipper', 'shapely', 'shapely.ops', 'shapely.validation', 'scipy.interpolate', 'qimage2ndarray', 'cv2', 'OpenGL', 'OpenGL.GL', 'OpenGL.GLU', 'OpenGL.GLUT', 'OpenGL.platform.egl'] + gerbyx_modules,
     hookspath=['.'],
     hooksconfig={},
     runtime_hooks=[],

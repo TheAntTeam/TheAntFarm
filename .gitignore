@@ -14,6 +14,7 @@ gcode_temp_dir/
 src/TheAntFarm/configurations/
 src/TheAntFarm/gcode_temp_dir/
 /src/TheAntFarm/build/
+/src/TheAntFarm/dist/
 
 # Coverage files
 .coverage

@@ -97,9 +97,16 @@ jobs:
       run: |
         python -m pytest tests/unit/test_settings_*.py -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing
     - name: Run shape core tests
-      continue-on-error: true
       run: |
-        python -m pytest tests/unit/test_shape_core.py tests/unit/test_pcb_manager.py tests/unit/test_gcode_manager.py -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing
+        python -m pytest \
+          tests/unit/test_shape_core.py tests/unit/test_config.py \
+          tests/unit/test_pcb_manager.py tests/unit/test_geometry_manager.py \
+          tests/unit/test_path_manager.py tests/unit/test_align_manager.py \
+          tests/unit/test_gcode_manager.py tests/unit/test_gcode_drill_converter.py \
+          tests/unit/test_macros_manager.py tests/unit/test_commands_manager.py \
+          tests/unit/test_drill_path_optimizer.py tests/unit/test_gerber_path_optimizer.py \
+          tests/unit/test_pyclipper2shapely.py \
+          -v --cov=src/TheAntFarm --cov-report=xml --cov-report=term-missing
     - name: Run UI tests
       continue-on-error: true
       run: |
