@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Rebuilt the macro system around a single validated tag catalog: unknown or malformed placeholders are refused instead of being sent to the machine, templates are validated when loaded and the expansion of every template is covered by golden tests.
+- Added three selectable tool change procedures: work zero re-datum (`wcs`, default), dynamic tool length offset (`tlo`) and fixed tool setter (`setter`), selected with `tool_change_mode`.
+- Tool change macro: two stage probing, spindle stop with dwell and restart, `G21`/`G49` and an explicit message on the manual change.
+- Added `docs/macros.md`: design of the macro system, firmware capabilities and the backlog of the open work.
+
+### Fixed
+
+- Drilling: the centre and the diameter of a hole are now computed per polygon part (a slot joined to a pad no longer raises), the bit is never larger than the hole and a bit used for a single hole is drilled once.
+- Design rule check: the invalid path indices are remapped after the minimum area filter, so the warning points to the right path.
+- G-code writer: a missing `multi_depth` key and a zero cut depth no longer raise (`KeyError`/`ZeroDivisionError`).
+- Alignment: an empty or degenerate (collinear) set of alignment points is refused instead of crashing the application.
+- Tool change: the FluidNC per-axis tool length offset report is parsed, a failed probing cycle is discarded instead of being used as a measurement, the job is stopped when the macro cannot run, and the tool change reliably starts only when the machine is idle.
+- `offset_polygon_holes` returns `None` when no hole survives the offset.
+
 ### Changed
 
 - Completed cleanup of legacy pcb-tools usage in PCB manager, keeping the active parsing pipeline on gerbyx.
