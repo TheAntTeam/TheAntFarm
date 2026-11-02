@@ -37,6 +37,28 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
+### Packaged executable: Linux icon
+
+The Linux archive produced by the build workflow contains the executable, the
+`the_ant_farm.desktop` entry and the icons of the theme. An ELF executable
+cannot carry an icon, so the launcher gets it from the desktop entry; the icon
+of the application window is embedded and works without this step.
+
+```bash
+tar -xzf the_ant_farm-linux.tar.gz -C ~/.local/opt/the_ant_farm
+ln -s ~/.local/opt/the_ant_farm/the_ant_farm ~/.local/bin/the_ant_farm   # must be in PATH
+
+# desktop entry and icon theme (the size of the icons is in the folder name)
+cp ~/.local/opt/the_ant_farm/the_ant_farm.desktop ~/.local/share/applications/
+cp -r ~/.local/opt/the_ant_farm/icons/* ~/.local/share/icons/hicolor/
+update-desktop-database ~/.local/share/applications 2>/dev/null || true
+gtk-update-icon-cache -f -t ~/.local/share/icons/hicolor 2>/dev/null || true
+```
+
+If the executable is not in `PATH`, replace `Exec=the_ant_farm` in the desktop
+entry with its absolute path. The same entry is what makes the icon appear in
+the application menu and in the dock of GNOME, KDE and Xfce.
+
 ### 3. Install dependencies
 
 ```bash

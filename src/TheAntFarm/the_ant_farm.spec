@@ -50,5 +50,8 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    # PyInstaller applies the icon only on Windows (.exe) and macOS (.app): on
+    # Linux an ELF executable has no icon, it comes from the desktop entry in
+    # packaging/linux (the window icon is set at runtime through Qt, see the_ant_farm.ui)
     icon='./resources/logo/the_ant_farm_logo.ico',
 )
