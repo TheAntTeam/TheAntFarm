@@ -160,7 +160,13 @@ use) and the setter fields are enabled only when the mode is `setter`.
 
 The section collects every parameter of a tool change in the order the
 procedure uses them: the probe position (MPos/WPos, Z limit, working
-position), the change position and, below them, the procedure. The two rows
+position), the change position and, below them, the procedure. It is a
+single grid with the columns of the original rows (label, X, Y, Z,
+checkbox/button): the tool setter uses the X and Y columns, the safe Z the Z
+column, and every numeric field is 80 px wide without unit, as the original
+probe fields. The label column is as wide as the longest label (measured
+with the font of the application, 160 px). The page is scrollable, so the
+section keeps its spacing when the window is shorter than the form. The two rows
 were moved with their containers, so their alignment is unchanged and no
 widget changed its name; the old "TOOL CHANGE" section disappeared. The
 combo is filled from the macro registry: a new procedure appears in the
