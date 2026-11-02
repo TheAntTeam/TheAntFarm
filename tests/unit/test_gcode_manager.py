@@ -472,3 +472,44 @@ class TestGCodeAlignmentGuards:
         assert alignment.apply_align() is True
         assert len(gc.aligned_vectors) == 3
         assert gc.aligned_bb is not None
+
+
+class TestFormattingEdgeCases:
+    """The G-code writer must not produce confusing numbers."""
+
+    @pytest.fixture
+    def gcoder(self):
+        return GCoder(tag="test", machining_type="gerber")
+
+    def test_negative_zero_is_written_as_zero(self, gcoder):
+        assert gcoder.format_float(-0.00001) == "0.0000"
+        assert gcoder.format_float(-0.0) == "0.0000"
+
+    def test_rounded_to_zero_is_written_as_zero(self, gcoder):
+        assert gcoder.format_float(-0.00004) == "0.0000"
+
+    def test_negative_values_keep_their_sign(self, gcoder):
+        assert gcoder.format_float(-1.23456) == "-1.2346"
+
+
+class TestGCodeBoundingBox:
+    """The bounding box of the vectors that will be written."""
+
+    @pytest.fixture
+    def gc(self):
+        gc = GCode(lines=[])
+        gc.bb = (0.0, 0.0, 0.0, 10.0, 10.0, 0.0)
+        return gc
+
+    def test_original_box_without_alignment(self, gc):
+        assert gc.get_bbox() == gc.bb
+        assert gc.get_bbox("original") == gc.bb
+
+    def test_aligned_box_when_an_alignment_is_applied(self, gc):
+        gc.aligned_bb = (0.0, 0.0, 0.0, 11.0, 11.0, 0.0)
+        gc.aligned_vectors = [GcodePoint()]
+
+        assert gc.get_bbox() == gc.aligned_bb
+        assert gc.get_bbox("aligned") == gc.aligned_bb
+        assert gc.get_bbox("modified") == gc.aligned_bb
+        assert gc.get_bbox("original") == gc.bb

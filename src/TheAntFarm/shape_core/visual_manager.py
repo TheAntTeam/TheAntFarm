@@ -15,7 +15,6 @@ from shapely.geometry.polygon import Polygon
 from shapely.strtree import STRtree
 from vispy.color import Color
 from vispy.scene import PanZoomCamera, visuals
-from vispy.visuals.filters import Alpha
 
 logger = logging.getLogger(__name__)
 
@@ -203,7 +202,6 @@ class VisualLayer:
         """
         self.canvas = canvas
         self.canvas.view.camera = PanZoomCamera(aspect=1)
-        self.translucent_filter = Alpha()
 
         # Data storage
         self.meshes: OrderedDict[str, visuals.Mesh] = OrderedDict({})
@@ -545,16 +543,6 @@ class VisualLayer:
     def remove_gcode(self, tag: str) -> None:
         """Removes a GCode layer."""
         self.remove_path(tag)
-
-    def add_triploy(self, tri: List[Any], pts: List[Any]) -> None:
-        """Directly adds a mesh from triangles and points (debug utility)."""
-        self.canvas.unfreeze()
-        mesh = visuals.Mesh()
-        mesh.set_data(np.asarray(pts), np.asarray(tri, dtype=np.uint32).reshape((-1, 3)))
-        mesh._bounds_changed()
-        self.canvas.view.add(mesh)
-        self.canvas.freeze()
-        visuals.XYZAxis(parent=self.canvas.view.scene)
 
     def create_line(
         self,

@@ -4,6 +4,7 @@ import re
 import time
 from collections import OrderedDict as od
 from datetime import datetime
+from typing import Any, Optional
 
 import numpy as np
 import scipy.interpolate as spi
@@ -115,9 +116,12 @@ class GCoder:
 
     def format_float(self, f):
         ff = round(f, self.DIGITS)
+        if ff == 0.0:
+            # round() keeps the sign of a negative zero: "-0.0000" is valid but
+            # confusing in a G-code file
+            ff = 0.0
         fs = "{:." + str(self.DIGITS) + "f}"
-        f_str = fs.format(ff)
-        return f_str
+        return fs.format(ff)
 
     def load_path(self, path):
         self.path = path
@@ -703,24 +707,20 @@ class GCode:
             govc.append(nwp)
         return govc
 
-    def get_bbox(self, type=None):
-        if type is None:
-            if self.aligned_vectors:
-                return self.aligned_bb
-            else:
-                return self.bb
-        elif type == "original":
+    def get_bbox(self, which: Optional[str] = None) -> Optional[Any]:
+        """Return the bounding box of the vectors.
+
+        Parameters
+        ----------
+        which : str, optional
+            ``"original"`` for the bounding box of the loaded file, ``None``
+            (or ``"aligned"`` / ``"modified"``) for the bounding box of the
+            vectors that will be written, i.e. the aligned ones when an
+            alignment has been applied.
+        """
+        if which == "original" or not self.aligned_vectors:
             return self.bb
-        elif type == "modified":
-            if self.aligned_vectors:
-                return self.aligned_bb
-            else:
-                return self.bb
-        elif type == "aligned":
-            if self.aligned_vectors:
-                return self.aligned_bb
-            else:
-                return self.bb
+        return self.aligned_bb
 
 
 class GCodeParser:
@@ -903,16 +903,6 @@ class GCodeParser:
     def get_gcode(self):
         return self.gc
 
-    def get_gcode_original_vectors(self):
-        return self.gc.original_vectors
-
-    def get_gcode_original_vectors_copy(self):
-        govc = []
-        for p in self.gc.original_vectors:
-            nwp = p.copy()
-            govc.append(nwp)
-        return govc
-
     def get_gcode_vectors(self):
         if self.gc.modified_vectors:
             return self.gc.modified_vectors
@@ -1026,13 +1016,6 @@ class GCodeLeveler:
         self.grid_data = [X, Y, Z]
         return X, Y, Z
 
-    def abl_to_working_pos(self, abl_values, wco_a):
-        wp_abl_values = []
-        for v in abl_values:
-            d = [v[0] - wco_a[0], v[1] - wco_a[1], v[2] - wco_a[2]]
-            wp_abl_values.append(d)
-        return wp_abl_values
-
     def interp_grid_data(self):
         if self.grid_data is not None:
             X, Y, Z = self.grid_data
@@ -1041,17 +1024,6 @@ class GCodeLeveler:
             # r = spi.bisplrep(X, Y, Z, kx=3, ky=3, s=0)
             r = spi.bisplrep(X, Y, Z, kx=3, ky=3)
             self.ig = lambda xnew, ynew: spi.bisplev(xnew, ynew, r).T
-
-    def apply(self):
-        logger.info("Auto bed levelling start")
-        if self.gc is not None and self.ig is not None:
-            mvl = []
-            for p in self.gc.original_vectors:
-                cnp = p.copy()
-                delta = self.ig(cnp.coords[0], cnp.coords[1])
-                cnp.coords[2] += delta
-                mvl.append(cnp)
-        logger.info("Auto bed levelling done")
 
     def apply_abl(self):
         # this routine puts in place strategies to fit the whole
