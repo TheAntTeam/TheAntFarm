@@ -27,6 +27,8 @@ import re
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, Iterator, List, Mapping, Optional, Sequence, Tuple
 
+from .config import PROBE_DEFAULTS
+
 logger = logging.getLogger(__name__)
 
 AXES = ("X", "Y", "Z")
@@ -134,20 +136,7 @@ class MacroContext:
 
 #: Default configuration of the macros. The values provided by the application
 #: (machine settings) override them, see :meth:`Macros.load_cfg`.
-DEFAULT_CFG: Dict[str, Any] = {
-    "tool_probe_pos": (-1.0, -1.0, -11.0),
-    "tool_probe_working": True,  # False: machine position, True: working position
-    "tool_probe_min": -11.0,
-    "tool_change_pos": (-41.2, -120.88, -1.0),
-    "tool_probe_feedrate": (300.0, 80.0, 50.0),  # XY, fast, slow
-    "tool_probe_hold": False,
-    "tool_probe_zero": False,
-    "safe_pos": (-1.0, -1.0, -1.0),
-    "tool_probe_backoff": 1.5,
-    "spindle_stop_dwell": 1.0,
-    "tool_setter_pos": None,  # (X, Y) of the fixed tool setter, see load_cfg
-    "tool_setter_working": False,  # False: machine position, True: working position
-}
+DEFAULT_CFG: Dict[str, Any] = dict(PROBE_DEFAULTS)
 
 
 @dataclass(frozen=True)

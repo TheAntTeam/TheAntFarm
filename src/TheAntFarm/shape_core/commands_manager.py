@@ -1,3 +1,9 @@
+import logging
+
+from .config import PROBE_DEFAULTS
+
+logger = logging.getLogger(__name__)
+
 class CommandManager:
     """
     A CommandManager Object manages requests of gcode translation for a set of known commands.
@@ -76,15 +82,8 @@ class CommandManager:
         if cfg is not None:
             self.cfg = cfg
         else:
-            self.cfg = {
-                "tool_probe_pos": (-1.0, -1.0, -11.0),
-                "tool_probe_working": True,  # False: machine pos or True: working pos
-                "tool_probe_min": -11.0,
-                "tool_change_pos": (-41.2, -120.88, -1.0),
-                "tool_probe_feedrate": (300.0, 80.0, 50.0),
-                "tool_probe_hold": False,
-                "tool_probe_zero": False,
-            }
+            self.cfg = dict(PROBE_DEFAULTS)
+
         self.cfg["safe_pos"] = (-1.0, -1.0, -1.0)
 
     def get_command_str(self, command, values):

@@ -10,6 +10,8 @@ import pytest
 from shapely.geometry import LineString, Polygon
 
 from TheAntFarm.shape_core.gcode_manager import GCode, GCodeAlignment, GCoder, GcodePoint
+from TheAntFarm.shape_core.path_manager import MachinePath
+from TheAntFarm.shape_core.path_types import ToolPath
 
 
 class TestGCoderInitialization:
@@ -347,12 +349,18 @@ class TestMultiPassMilling:
 class TestLoadPath:
     """Tests for path loading."""
 
-    def test_load_path(self):
+    def test_load_path(self, qapp):
         """Test loading path into GCoder."""
         gcoder = GCoder(tag="test", machining_type="gerber")
-        test_path = [("data", [LineString([(0, 0), (1, 1)])])]
+        test_path = [ToolPath(tool_diameter=1.0, machining_type="gerber", paths=[LineString([(0, 0), (1, 1)])])]
         gcoder.load_path(test_path)
         assert gcoder.path == test_path
+
+    def test_load_path_refuses_the_old_tuple_structure(self, qapp):
+        gcoder = GCoder(tag="test", machining_type="gerber")
+
+        with pytest.raises(TypeError, match="ToolPath"):
+            gcoder.load_path([((1.0, "gerber"), [LineString([(0, 0), (1, 1)])])])
 
 
 class TestZeroLengthDrillPath:
@@ -376,7 +384,7 @@ class TestMachiningConfigGuards:
 
     @pytest.fixture
     def simple_path(self):
-        return [((1.0, "pocketing"), [LineString([(0, 0), (10, 0), (10, 10), (0, 0)])])]
+        return [ToolPath(1.0, "pocketing", [LineString([(0, 0), (10, 0), (10, 10), (0, 0)])])]
 
     def test_pocketing_default_cfg_has_multi_depth(self):
         gcoder = GCoder(tag="test", machining_type="pocketing")
@@ -419,7 +427,7 @@ class TestMachiningConfigGuards:
     def test_profile_multi_depth_generates_one_pass_per_increment(self):
         gcoder = GCoder(tag="test", machining_type="profile")
         gcoder.cfg.update({"multi_depth": True, "depth_per_pass": 0.5, "cut": -1.5})
-        gcoder.load_path([((1.0, "profile"), [LineString([(0, 0), (10, 0), (10, 10), (0, 0)])])])
+        gcoder.load_path([ToolPath(1.0, "profile", [LineString([(0, 0), (10, 0), (10, 10), (0, 0)])])])
 
         assert gcoder.compute() is True
         gcode = "".join(gcoder.gcode)
@@ -531,3 +539,29 @@ class TestGcodePointString:
         point.pos = point.MACHINE_POS
 
         assert point.get_string().startswith("G53 G0 X1.000")
+
+
+class TestPartialConfiguration:
+    """A job configuration cannot be assumed to be complete."""
+
+    def test_gcode_defaults_fill_the_missing_keys(self, qapp):
+        gcoder = GCoder(tag="test", machining_type="gerber")
+        # only the keys of the toolpath generator, as they come from a settings
+        # file that was written for another job type
+        gcoder.load_cfg({"tool_diameter": 0.2, "passages": 2, "overlap": 0.3})
+        gcoder.load_path([ToolPath(0.2, "gerber", [LineString([(0, 0), (10, 0)])])])
+
+        assert gcoder.compute() is True
+        assert "G01 Z-0.0700" in "".join(gcoder.gcode)
+
+
+class TestPartialPathConfiguration:
+    """Same for the toolpath generator."""
+
+    def test_path_defaults_fill_the_missing_keys(self):
+        machine_path = MachinePath("test", "gerber")
+
+        machine_path.load_cfg({"tool_diameter": 0.3})
+
+        assert machine_path.cfg["tool_diameter"] == 0.3
+        assert machine_path.cfg["passages"] == 3

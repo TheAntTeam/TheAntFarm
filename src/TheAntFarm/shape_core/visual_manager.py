@@ -481,12 +481,10 @@ class VisualLayer:
         # todo: add zbuffer controll
         if geom_list:
             order = 0
-            for d in geom_list:
+            for tool_path in geom_list:
                 ldata = []
-                gl = d[1]
-                special_gl_ids = []
-                if len(d) > 2:
-                    special_gl_ids = d[2]
+                gl = tool_path.paths
+                special_gl_ids = tool_path.invalid_ids
                 colors = []
                 for i, g in enumerate(gl):
                     if g.geom_type == "LineString":

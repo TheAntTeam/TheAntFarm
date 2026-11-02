@@ -8,6 +8,7 @@ import shapely.geometry
 from shapely.geometry import LineString, Polygon
 from shapely.ops import substring
 
+from .config import default_config, merge_config
 from .drill_path_optimizer import DrillPathOptimizer
 from .geometry_manager import (
     fill_holes_sh,
@@ -20,6 +21,7 @@ from .geometry_manager import (
     offset_polygon_holes,
 )
 from .gerber_path_optimizer import GerberPathOptimizer
+from .path_types import ToolPath
 
 logger = logging.getLogger(__name__)
 
@@ -277,27 +279,22 @@ class MachinePath:
         """
         self.tag = tag
         self.geom_list: List[Any] = []
-        self.cfg: Dict[str, Any] = {}
-
-        if machining_type == self.TYPE_GERBER:
-            self.cfg = {"tool_diameter": 0.2, "passages": 3, "overlap": 0.3}
-            if self.cfg["passages"] < 1:
-                logger.warning("At Least One Pass required. Setting passages to 1.")
-                self.cfg["passages"] = 1
-        elif machining_type == self.TYPE_PROFILE:
-            self.cfg = {"tool_diameter": 1.0, "margin": 0.1, "taps_type": 3, "taps_length": 1.0}
-        elif machining_type == self.TYPE_POCKETING:
-            self.cfg = {"tool_diameter": 1.0}
-        elif machining_type == self.TYPE_DRILL:
-            self.cfg = {"tool_diameter": None, "bits_diameter": [0.8], "optimize": False}
+        self.cfg: Dict[str, Any] = default_config("path", machining_type)
+        if machining_type == self.TYPE_GERBER and self.cfg["passages"] < 1:
+            logger.warning("At Least One Pass required. Setting passages to 1.")
+            self.cfg["passages"] = 1
 
         self.type = machining_type
-        self.path: Optional[List[Tuple[Tuple[float, str], List[Any], Optional[List[int]]]]] = None
+        self.path: Optional[List[ToolPath]] = None
 
     def load_cfg(self, cfg: Dict[str, Any]) -> None:
-        """Loads configuration settings."""
+        """Merge the configuration of the job on top of the defaults.
+
+        A missing key falls back to :mod:`shape_core.config`, so a partial job
+        configuration cannot raise ``KeyError`` while the toolpath is generated.
+        """
         logger.debug(f"Loading Config: {cfg}")
-        self.cfg = cfg
+        self.cfg = merge_config("path", self.type, cfg)
 
     def get_path(self) -> Optional[List[Any]]:
         """Returns the generated path."""
@@ -407,8 +404,7 @@ class MachinePath:
             path = optimizer.optimize()
 
         t_d = self.cfg["tool_diameter"]
-        # Structure: (tool_info, path_geometry, invalid_indices)
-        self.path = [((t_d, self.TYPE_GERBER), path, invalid_paths)]
+        self.path = [ToolPath(t_d, self.TYPE_GERBER, path, invalid_paths)]
 
     def check_min_area(self, og_list: List[Polygon]) -> Tuple[List[Polygon], List[int]]:
         """Filters out polygons smaller than MIN_AREA.
@@ -479,7 +475,7 @@ class MachinePath:
                     path.append(i)
 
         t_d = self.cfg["tool_diameter"]
-        self.path = [((t_d, self.TYPE_POCKETING), path)]
+        self.path = [ToolPath(t_d, self.TYPE_POCKETING, path)]
 
         return milled_list
 
@@ -513,6 +509,10 @@ class MachinePath:
         drill_per_bit = OrderedDict()
         if not bd:
             logger.warning("No drill bits defined in configuration.")
+            if self.path is None:
+                # an empty result is still a result: the caller must not have to
+                # distinguish between None and "nothing to machine"
+                self.path = []
             return [False] * len(self.geom_list)
 
         b = bd[0]
@@ -570,7 +570,7 @@ class MachinePath:
                 # writer drills duplicated consecutive points only once.
                 points = points + points
             # Convert points back to LineString for consistency
-            paths.append(((k, self.TYPE_DRILL), [LineString(points)]))
+            paths.append(ToolPath(k, self.TYPE_DRILL, [LineString(points)]))
 
         if not_to_drill is not None:
             if any(not_to_drill) and self.path is not None:
@@ -657,7 +657,7 @@ class MachinePath:
             logger.warning(f"Invalid taps_type index: {taps_type_idx}")
 
         t_d = self.cfg["tool_diameter"]
-        self.path = [((t_d, self.TYPE_PROFILE), path)]
+        self.path = [ToolPath(t_d, self.TYPE_PROFILE, path)]
 
     def _subpath_execute(self, ppg_list: List[Polygon]) -> List[Polygon]:
         """Helper to generate subsequent passes for Gerber milling."""

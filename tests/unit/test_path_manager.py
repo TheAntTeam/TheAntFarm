@@ -3,6 +3,7 @@ from shapely import geometry as shg
 from shapely.geometry import LineString, Point
 
 from TheAntFarm.shape_core.path_manager import Gapper, MachinePath, remap_invalid_ids
+from TheAntFarm.shape_core.path_types import ToolPath
 
 
 class TestGapper:
@@ -83,7 +84,7 @@ class TestMachinePathDrilling:
 
     @staticmethod
     def _bit_diameters(machine_path):
-        return sorted(bit for (bit, _kind), _paths in machine_path.path)
+        return sorted(tool_path.tool_diameter for tool_path in machine_path.path)
 
     def test_multipart_hole_is_drilled_at_every_part(self, machine_path):
         """A hole made of two polygons used to raise IndexError (c.coords[j])."""
@@ -93,9 +94,10 @@ class TestMachinePathDrilling:
         drilled = machine_path.execute_drill()
 
         assert drilled == [True]
-        (bit, kind), paths = machine_path.path[0]
-        coords = list(paths[0].coords)
-        assert kind == "drill"
+        tool_path = machine_path.path[0]
+        assert isinstance(tool_path, ToolPath)
+        coords = list(tool_path.paths[0].coords)
+        assert tool_path.machining_type == "drill"
         assert len(coords) == 2
         assert sorted(round(c[0], 3) for c in coords) == [0.0, 5.0]
 
@@ -106,7 +108,7 @@ class TestMachinePathDrilling:
         drilled = machine_path.execute_drill()
 
         assert drilled == [True]
-        line = machine_path.path[0][1][0]
+        line = machine_path.path[0].paths[0]
         assert len(line.coords) == 2
         assert line.length == pytest.approx(0.0, abs=1e-9)
 
@@ -233,6 +235,54 @@ class TestExecuteGerberInvalidIds:
 
         machine_path.execute_gerber()
 
-        _tool, paths, invalid_path_ids = machine_path.path[0]
-        assert paths
-        assert all(0 <= path_id < len(paths) for path_id in invalid_path_ids)
+        tool_path = machine_path.path[0]
+        assert isinstance(tool_path, ToolPath)
+        assert tool_path.paths
+        assert all(0 <= path_id < len(tool_path.paths) for path_id in tool_path.invalid_ids)
+
+
+class TestMachinePathOutput:
+    """Every generator returns a list of ToolPath."""
+
+    def test_gerber_returns_tool_paths(self):
+        machine_path = MachinePath("test", "gerber")
+        machine_path.load_geom([_GeomStub(shg.box(0, 0, 10, 10))])
+
+        machine_path.execute_gerber()
+
+        assert len(machine_path.path) == 1
+        tool_path = machine_path.path[0]
+        assert isinstance(tool_path, ToolPath)
+        assert tool_path.machining_type == "gerber"
+        assert tool_path.paths
+        assert tool_path.tool_diameter == machine_path.cfg["tool_diameter"]
+
+    def test_pocketing_returns_tool_paths(self):
+        machine_path = MachinePath("test", "pocketing")
+        machine_path.load_geom([_GeomStub(shg.box(0, 0, 10, 10))])
+
+        milled = machine_path.execute_pocketing()
+
+        assert milled == [True]
+        tool_path = machine_path.path[0]
+        assert isinstance(tool_path, ToolPath)
+        assert tool_path.machining_type == "pocketing"
+
+    def test_profile_returns_tool_paths(self):
+        machine_path = MachinePath("test", "profile")
+        machine_path.load_geom([_GeomStub(shg.box(0, 0, 20, 20))])
+
+        machine_path.execute_profile()
+
+        tool_path = machine_path.path[0]
+        assert isinstance(tool_path, ToolPath)
+        assert tool_path.machining_type == "profile"
+        assert tool_path.paths
+
+    def test_drill_without_bits_returns_no_tool_path(self):
+        machine_path = MachinePath("test", "drill")
+        machine_path.cfg["bits_diameter"] = []
+        machine_path.load_geom([_GeomStub(shg.Point(0, 0).buffer(0.5))])
+
+        assert machine_path.execute_drill() == [False]
+        assert machine_path.path == []

@@ -11,8 +11,10 @@ import scipy.interpolate as spi
 from shapely.geometry import LineString
 
 from .align_manager import AlignManager
+from .config import default_config, merge_config
 from .commands_manager import CommandManager
 from .macros_manager import MacroError, Macros
+from .path_types import ToolPath
 
 logger = logging.getLogger(__name__)
 
@@ -52,68 +54,25 @@ class GCoder:
         self.user_cmd = None
 
         self.geom_list = []
-        if machining_type == "gerber":
-            self.cfg = {
-                "cut": -0.07,
-                "travel": 0.7,
-                "xy_feedrate": 250.0,
-                "z_feedrate": 40.0,
-                "spindle": 1000.0,
-                "mirror": False,
-            }
-        elif machining_type == "profile":
-            self.cfg = {
-                "cut": -1.8,
-                "travel": 0.7,
-                "xy_feedrate": 250.0,
-                "z_feedrate": 40.0,
-                "spindle": 1000.0,
-                "multi_depth": True,
-                "depth_per_pass": 0.6,
-                "mirror": False,
-            }
-        elif machining_type == "pocketing":
-            self.cfg = {
-                "cut": -0.07,
-                "travel": 0.7,
-                "xy_feedrate": 250.0,
-                "z_feedrate": 40.0,
-                "spindle": 1000.0,
-                "multi_depth": False,
-                "depth_per_pass": 0.0,
-                "mirror": False,
-            }
-        elif machining_type == "drill":
-            self.cfg = {
-                "cut": -2.1,
-                "travel": 0.7,
-                "xy_feedrate": 250.0,
-                "z_feedrate": 40.0,
-                "spindle": 1000.0,
-                "mirror": False,
-            }
-        elif machining_type == "commander":
-            self.cfg = {
-                "tool_probe_pos": (-1.0, -1.0, -11.0),
-                "tool_probe_working": True,  # False: machine pos or True: working pos
-                "tool_probe_min": -11.0,
-                "tool_change_pos": (-41.2, -120.88, -1.0),
-                "tool_probe_feedrate": (300.0, 80.0, 50.0),  # SLOW FAST XY
-                "tool_probe_hold": False,
-                "tool_probe_zero": False,
-            }
+        self.cfg = default_config("gcode", machining_type)
+        if machining_type == "commander":
             self.macro = Macros(parent=self)
             self.macro.load_cfg(self.cfg)
             self.user_cmd = CommandManager(parent=self)
             self.user_cmd.load_cfg(self.cfg)
-        else:
-            self.cfg = {}
+
         self.type = machining_type
         self.path = None
         self.gcode = []
 
     def load_cfg(self, cfg):
-        self.cfg = cfg
+        """Merge the configuration of the job on top of the defaults.
+
+        A partial configuration (a job type that does not list every key, or a
+        settings file with an empty value) cannot raise ``KeyError`` while the
+        G-code is generated.
+        """
+        self.cfg = merge_config("gcode", self.type, cfg)
         if self.macro is not None:
             self.macro.load_cfg(self.cfg)
         if self.user_cmd is not None:
@@ -129,6 +88,9 @@ class GCoder:
         return fs.format(ff)
 
     def load_path(self, path):
+        """Set the toolpaths to machine (a list of :class:`ToolPath`)."""
+        if path and not isinstance(path[0], ToolPath):
+            raise TypeError(f"Expected a list of ToolPath, got {type(path[0]).__name__}")
         self.path = path
 
     def compute(self):
@@ -166,25 +128,23 @@ class GCoder:
 
         logger.info("Compute Drill:")
         tool_change = -1
-        for d in self.path:
-            data = d[0]
-            path = d[1]
-            if data[1] == "pocketing":
-                logger.info(f" - Pocketing, bit diameter {data[0]}")
+        for tool_path in self.path:
+            diameter = tool_path.tool_diameter
+            if tool_path.machining_type == "pocketing":
+                logger.info(f" - Pocketing, bit diameter {diameter}")
                 self.insert_comment("Pocketing Section in Drill Procedure")
-                self.insert_comment("Tool Diameter: " + str(data[0]))
+                self.insert_comment("Tool Diameter: " + str(diameter))
                 sign = cut / abs(cut)
-                dpp = data[0]
-                n = int(abs(cut) // dpp) + 1
-                dpp = abs(cut) / n
-                pass_list = [sign * dpp * x for x in range(1, n)] + [cut]
+                n = int(abs(cut) // diameter) + 1
+                depth_per_pass = abs(cut) / n
+                pass_list = [sign * depth_per_pass * x for x in range(1, n)] + [cut]
                 pass_list.sort(reverse=True)
-                self.compute_pocketing_paths(path, pass_list, mirror=mirror)
+                self.compute_pocketing_paths(tool_path.paths, pass_list, mirror=mirror)
             else:
-                logger.info(f" - Drilling, bit diameter {data[0]}")
+                logger.info(f" - Drilling, bit diameter {diameter}")
                 self.insert_comment("Drill Section in Drill Procedure")
-                self.insert_comment("Tool Diameter: " + str(data[0]))
-                self.compute_drill_paths(path, tool_change=tool_change, mirror=mirror)
+                self.insert_comment("Tool Diameter: " + str(diameter))
+                self.compute_drill_paths(tool_path.paths, tool_change=tool_change, mirror=mirror)
             tool_change += 1
 
         self.spindle_on(False)
@@ -213,9 +173,8 @@ class GCoder:
         # follow the path and finally
         # return in travel mode
 
-        for d in self.path:
-            paths = d[1]
-            self.compute_gerber_paths(paths, mirror=mirror)
+        for tool_path in self.path:
+            self.compute_gerber_paths(tool_path.paths, mirror=mirror)
 
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
@@ -252,8 +211,8 @@ class GCoder:
             logger.error("Cut depth is 0: nothing could be milled")
             return False
 
-        for d in self.path:
-            paths = d[1]
+        for tool_path in self.path:
+            paths = tool_path.paths
             if multi_pass:
                 sign = cut / abs(cut)
                 dpp = self.cfg["depth_per_pass"]
