@@ -508,39 +508,40 @@ class VisualLayer:
 
     def add_gcode(self, tag: str, gcode_list: List[Any], color: Tuple[str, str] = ("white", "orange")) -> None:
         """Adds a GCode path visualization, distinguishing between travel and cut moves."""
-        if gcode_list:
-            order = 0
-            gcode_paths: Dict[str, List[Any]] = {}
-            pre_d = gcode_list.pop(0)
-            coords = [pre_d.coords]
-            pre_d = gcode_list[0]
-
-            # Group segments by type (Travel vs Cut) to optimize rendering
-            for d in gcode_list:
-                if d.type == pre_d.type:
-                    coords.append(d.coords)
-                else:
-                    c = color[1] if pre_d.type == pre_d.TRAVEL else color[0]
-                    if c not in gcode_paths.keys():
-                        gcode_paths[c] = [coords]
-                    else:
-                        gcode_paths[c].append(coords)
-                    coords = [pre_d.coords]
-                    coords.append(d.coords)
-                pre_d = d
-
-            # Handle the last segment
-            c = color[1] if pre_d.type == pre_d.TRAVEL else color[0]
-            if c not in gcode_paths.keys():
-                gcode_paths[c] = [coords]
-            else:
-                gcode_paths[c].append(coords)
-
-            for col in gcode_paths.keys():
-                self.create_line(tag, gcode_paths[col], col, order)
-            self.paths_geom[tag] = gcode_list
-        else:
+        if not gcode_list:
             logger.warning("Cannot Visualize an Empty GCode")
+            return
+
+        # Work on a copy: the caller passes the vector list of the parser, which
+        # is the model used to regenerate the G-code (alignment, bed levelling).
+        vectors = list(gcode_list)
+        order = 0
+        gcode_paths: Dict[str, List[Any]] = {}
+        coords = [vectors[0].coords]
+        previous = vectors[0]
+
+        # Group segments by type (Travel vs Cut) to optimize rendering
+        for vector in vectors[1:]:
+            if vector.type == previous.type:
+                coords.append(vector.coords)
+            else:
+                c = color[1] if previous.type == previous.TRAVEL else color[0]
+                gcode_paths.setdefault(c, []).append(coords)
+                # the new group starts where the previous one ended
+                coords = [previous.coords, vector.coords]
+            previous = vector
+
+        # Handle the last segment
+        c = color[1] if previous.type == previous.TRAVEL else color[0]
+        gcode_paths.setdefault(c, []).append(coords)
+
+        # A single point cannot be drawn as a segment: duplicate it
+        for col in gcode_paths:
+            gcode_paths[col] = [group if len(group) > 1 else [group[0], group[0]] for group in gcode_paths[col]]
+
+        for col in gcode_paths:
+            self.create_line(tag, gcode_paths[col], col, order)
+        self.paths_geom[tag] = vectors
 
     def remove_gcode(self, tag: str) -> None:
         """Removes a GCode layer."""
