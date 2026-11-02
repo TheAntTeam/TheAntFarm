@@ -169,34 +169,13 @@ Consequences:
 Items are ordered by priority. Each one lists what to change, where, and how to
 know that it is done.
 
-### M-01 — Expose the macro configuration in the settings and in the UI
+### M-01 — Expose the macro configuration in the settings and in the UI (done)
 
-**Why** the new keys (`tool_change_mode`, `tool_setter_pos`,
-`tool_setter_working`, `tool_probe_backoff`, `spindle_stop_dwell`,
-`tool_change_working`, `tool_change_feedrate`) work when passed in the
-configuration but the application never provides them: today the setter mode
-can only be enabled by editing the code.
-
-**Where**
-* `settings_manager/settings_machine.py`: defaults near the other
-  `tool_probe_*` values (lines 44-70), `load_machine_settings()` (from line 88),
-  `write_all_machine_settings()` (line 149, `DEFAULT` section at line 162).
-* `controller/controller_manager.py:694` (`update_gerber_cfg`): add the new keys
-  to the `Od({...})` that feeds `GCoder.load_cfg`.
-* `ui_manager/ui_settings_preferences.py`: the probe widgets are wired at lines
-  61-70; the `.ui` file (`the_ant_farm.ui`) needs the new widgets (mode combo,
-  setter X/Y, working flag, backoff, spindle dwell).
-
-**How** add the values as machine settings (they are per machine, not per job),
-read them in `update_gerber_cfg`, and let the preferences write them. Validate
-the mode against `MACROS["M6"].variants` and show a message box for an invalid
-value instead of failing at job start.
-
-**Done when** selecting a mode in the preferences changes the template that runs
-(a test can check `update_gerber_cfg()["tool_change_mode"]`), and an invalid
-mode is refused by the preferences.
-
-**Effort** ~3 h, low risk (settings are covered by `test_settings_machine.py`).
+The six parameters of the tool change procedures are machine settings and
+have a section in `Preferences -> Jobs/Machine Settings`; the combo of the
+procedures is filled from `MACROS["M6"].variants`.
+See [`docs/shape_core.md`](shape_core.md) §5.2 for the table of the
+parameters and for the ones deliberately left out.
 
 ### M-02 — Refuse to start the macro when the machine is not homed
 

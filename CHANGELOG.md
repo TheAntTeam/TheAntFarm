@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added three selectable tool change procedures: work zero re-datum (`wcs`, default), dynamic tool length offset (`tlo`) and fixed tool setter (`setter`), selected with `tool_change_mode`.
 - Tool change macro: two stage probing, spindle stop with dwell and restart, `G21`/`G49` and an explicit message on the manual change.
 - Added `docs/macros.md`: design of the macro system, firmware capabilities and the backlog of the open work.
+- Tool change procedure settings in `Preferences -> Jobs/Machine Settings`: procedure selection (work zero re-datum, dynamic TLO, fixed tool setter), tool setter position and coordinate system, safe Z, probe backoff and spindle stop dwell.
 
 ### Fixed
 
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Design rule check: the invalid path indices are remapped after the minimum area filter, so the warning points to the right path.
 - G-code writer: a missing `multi_depth` key and a zero cut depth no longer raise (`KeyError`/`ZeroDivisionError`).
 - Alignment: an empty or degenerate (collinear) set of alignment points is refused instead of crashing the application.
+- The command manager no longer overwrites the configured safe position with its default when the commander configuration is loaded.
 - Tool change: the FluidNC per-axis tool length offset report is parsed, a failed probing cycle is discarded instead of being used as a measurement, the job is stopped when the macro cannot run, and the tool change reliably starts only when the machine is idle.
 - `offset_polygon_holes` returns `None` when no hole survives the offset.
 

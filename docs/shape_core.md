@@ -137,26 +137,42 @@ path instead, i.e. changing `the_ant_farm.py`, `tests/conftest.py`, the
 `pathex` of the PyInstaller spec and the launch of the application, with no
 functional gain. It is a separate task, to be done together with §5.6.
 
-### 5.2 Expose the macro configuration in the settings and in the UI
+### 5.2 Expose the macro configuration in the settings and in the UI (done)
 
-**Where** `controller/controller_manager.py:694` (`update_gerber_cfg`, the
-`Od({...})` that feeds `GCoder.load_cfg`), `settings_manager/settings_machine.py`
-(defaults at lines 44-70, load from 88, write at 149 with the `DEFAULT`
-section at 162) and `ui_manager/ui_settings_preferences.py` (the probe widgets
-are wired at lines 61-70; the `.ui` file needs the new widgets).
+The tool change procedures need six values that the application did not
+provide, so the macros always used the defaults of
+`shape_core/config.py`: the `setter` procedure could not be selected and
+`safe_pos` was the constant `-1`. They are now machine settings, exposed in
+`Preferences -> Jobs/Machine Settings`:
 
-**Why** the tool change has three selectable procedures (`tool_change_mode` =
-`wcs` | `tlo` | `setter`) and a set of new keys (`tool_setter_pos`,
-`tool_setter_working`, `tool_probe_backoff`, `spindle_stop_dwell`,
-`tool_change_working`, `tool_change_feedrate`) that the application never
-provides: today the defaults of `shape_core/config.py` are always used, which
-means the `setter` procedure cannot be selected from the UI.
+| Setting (ini key) | Default | UI widget | Used by |
+|---|---|---|---|
+| `safe_z` | `-1.0` | `safe_z_dsb` (mm, machine coordinates) | `@SAFE_POS_Z@`, in all three procedures |
+| `tool_change_mode` | `wcs` | `tool_change_mode_cb` (items from `MACROS["M6"].variants`) | chooses the template |
+| `tool_setter_x` / `tool_setter_y` | `0.0` | `tool_setter_x_dsb` / `tool_setter_y_dsb` (mm) | `@SETTER_POS_X/Y@` |
+| `tool_setter_relative_flag` | `False` | `tool_setter_wpos_chb` ("Setter WPos") | `@SETTER_TYPE_POS@` |
+| `tool_probe_backoff` | `1.5` | `tool_probe_backoff_dsb` (mm) | `@PROBE_BACKOFF@` |
+| `spindle_stop_dwell` | `1.0` | `spindle_stop_dwell_dsb` (s) | `@SPINDLE_DWELL@` |
 
-**How** add the values as machine settings, read them in `update_gerber_cfg`
-and let the preferences write them; validate the mode against
-`MACROS["M6"].variants` and show a message box for an invalid value.
+`ControllerWorker.update_gerber_cfg()` passes them to the commander
+configuration (`safe_pos` receives only the Z, which is what the macros
+use), the setter fields are enabled only when the mode is `setter` and the
+section is appended to the existing grid of the page, so no other row
+changed. The COMBO is filled from the macro registry: a new procedure
+appears in the preferences without touching the UI.
 
-Detailed in `docs/macros.md` §4, item M-01.
+Not exposed on purpose: `tool_change_working` and `tool_change_feedrate`
+(fall back to the probe values, the change position is already a machine
+position in the settings), and the spindle speed for `@SPINDLE_START@` (the
+job already programs `M3 S<speed>` before the change, a second value would
+be a second place to keep in sync).
+
+Verified with the tests of `settings_machine` (defaults, write/read
+round-trip, restore), of the worker (`update_gerber_cfg` produces the six
+keys and the macro configuration matches the settings, an invalid mode is
+refused by the registry) and of the preferences (combo filled from the
+registry, enabling of the setter fields, save/restore), plus a manual run of
+the application on the `setter` procedure.
 
 ### 5.3 Stop the job when the machine raises an alarm while streaming
 
