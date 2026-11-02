@@ -145,6 +145,8 @@ DEFAULT_CFG: Dict[str, Any] = {
     "safe_pos": (-1.0, -1.0, -1.0),
     "tool_probe_backoff": 1.5,
     "spindle_stop_dwell": 1.0,
+    "tool_setter_pos": None,  # (X, Y) of the fixed tool setter, see load_cfg
+    "tool_setter_working": False,  # False: machine position, True: working position
 }
 
 
@@ -175,6 +177,14 @@ def _feed(index: int) -> Callable[[MacroContext], str]:
 
 def _probe_value(when: str, axis: str) -> Callable[[MacroContext], str]:
     return lambda ctx: ctx.fmt(ctx.probe(when, axis))
+
+
+def _setter_pos(axis: str) -> Callable[[MacroContext], str]:
+    return lambda ctx: ctx.fmt(ctx.cfg_value("tool_setter_pos")[_pos(axis)])
+
+
+def _setter_type(ctx: MacroContext) -> str:
+    return "G54" if ctx.cfg_value("tool_setter_working") else "G53"
 
 
 def _probe_type(ctx: MacroContext) -> str:
@@ -235,6 +245,10 @@ TAGS: Dict[str, Tag] = {
         Tag("PROBE_FEED_SLOW", _feed(2), "Feed rate for the measuring move"),
         Tag("PROBE_HOLD_BEFORE", _probe_hold, "Optional M0 before the probing move"),
         Tag("PROBE_BACKOFF", _cfg_scalar("tool_probe_backoff"), "Retract distance between the two probes"),
+        # -- fixed tool setter ----------------------------------------------
+        Tag("SETTER_POS_X", _setter_pos("X"), "Tool setter X coordinate"),
+        Tag("SETTER_POS_Y", _setter_pos("Y"), "Tool setter Y coordinate"),
+        Tag("SETTER_TYPE_POS", _setter_type, "Coordinate system of the tool setter (G54/G53)"),
         # -- measured values (work coordinates) -----------------------------
         Tag("PROBE_VALUE_PREX", _probe_value("PRE", "X"), "Previous probe, X"),
         Tag("PROBE_VALUE_PREY", _probe_value("PRE", "Y"), "Previous probe, Y"),
@@ -280,7 +294,11 @@ class MacroSpec:
 MACROS: Dict[str, MacroSpec] = {
     "M6": MacroSpec(
         id="M6",
-        variants={"wcs": "tool_change_wcs.gcode", "tlo": "tool_change_tlo.gcode"},
+        variants={
+            "wcs": "tool_change_wcs.gcode",  # probe the workpiece, re-datum G54
+            "tlo": "tool_change_tlo.gcode",  # probe the workpiece, apply a TLO
+            "setter": "tool_change_setter.gcode",  # probe the fixed tool setter
+        },
         default_variant="wcs",
         mode_key="tool_change_mode",
         description="Tool change with tool length correction",
@@ -339,6 +357,13 @@ class Macros:
         merged = dict(DEFAULT_CFG)
         if cfg is not None:
             merged.update(cfg)
+        if merged.get("tool_setter_pos") is None:
+            # A setter that is not configured falls back to the probe position,
+            # which is a position the user already trusts, instead of failing
+            # in the middle of a tool change.
+            merged["tool_setter_pos"] = tuple(merged["tool_probe_pos"])[:2]
+            if str(merged.get("tool_change_mode", "")).lower() == "setter":
+                logger.warning("tool_setter_pos not configured: probing the probe position instead")
         self.cfg = merged
 
     @property

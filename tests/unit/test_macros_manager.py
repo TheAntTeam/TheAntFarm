@@ -139,6 +139,9 @@ class TestTagCatalog:
             ("CHANGE_POS_X", "-41.2000"),
             ("CHANGE_POS_Y", "-120.8800"),
             ("CHANGE_POS_Z", "-1.0000"),
+            ("SETTER_POS_X", "-1.0000"),
+            ("SETTER_POS_Y", "-1.0000"),
+            ("SETTER_TYPE_POS", "G53"),
             ("CHANGE_TYPE_POS", "G54"),
             ("CHANGE_FEED_SLOW", "50.0000"),
             ("CHANGE_FEED_FAST", "80.0000"),
@@ -225,7 +228,7 @@ class TestExpand:
 
 
 class TestTemplateValidation:
-    @pytest.mark.parametrize("mode", ["wcs", "tlo"])
+    @pytest.mark.parametrize("mode", ["wcs", "tlo", "setter"])
     def test_shipped_templates_are_valid(self, macros, mode):
         macros.cfg["tool_change_mode"] = mode
         text = macros.get_macro_string("M6")
@@ -257,6 +260,26 @@ class TestMacrosFacade:
         macros.cfg["tool_change_mode"] = "tlo"
         assert macros.get_mode("M6") == "tlo"
         assert macros.get_macro_path("M6").endswith("tool_change_tlo.gcode")
+
+    def test_setter_variant_can_be_selected(self, macros):
+        macros.cfg["tool_change_mode"] = "setter"
+        assert macros.get_mode("M6") == "setter"
+        assert macros.get_macro_path("M6").endswith("tool_change_setter.gcode")
+
+    def test_setter_position_falls_back_to_the_probe_position(self):
+        manager = Macros(MockParent())
+        manager.load_cfg({"tool_probe_pos": (12.0, 34.0, -5.0)})
+        assert manager.cfg["tool_setter_pos"] == (12.0, 34.0)
+
+    def test_configured_setter_position_is_kept(self):
+        manager = Macros(MockParent())
+        manager.load_cfg({"tool_setter_pos": (-200.0, -150.0)})
+        assert manager.cfg["tool_setter_pos"] == (-200.0, -150.0)
+
+    def test_setter_type_can_use_working_coordinates(self, macros, context):
+        macros.cfg["tool_setter_working"] = True
+        context = macros.make_context({}, [[7.0, 8.0, 9.0], [1.0, 1.0, 1.0]], {"WPO": [0, 0, 0], "MPO": [0, 0, 0]})
+        assert macros.expand("@SETTER_TYPE_POS@", context) == "G54"
 
     def test_unknown_variant_raises(self, macros):
         macros.cfg["tool_change_mode"] = "nope"
@@ -355,13 +378,52 @@ GOLDEN_WCS = [
 GOLDEN_TLO = list(GOLDEN_WCS)
 GOLDEN_TLO[30] = "G43.1 Z8.2500"
 
+GOLDEN_SETTER = [
+    "(The Ant Tool Change - fixed tool setter)",
+    "(Tool length is measured on the setter, the work zero is not modified)",
+    "(Homing is required: the G53 moves use absolute machine positions)",
+    "G21",
+    "G49",
+    "M5",
+    "G4 P1.0000",
+    "G53 G00 Z-1.0000",
+    "G53",
+    "G00 X-200.0000 Y-150.0000 F300.0000",
+    "G38.2 Z-11.0000 F80.0000",
+    "G91 G00 Z1.5000",
+    "G90",
+    "G38.2 Z-11.0000 F50.0000",
+    "G53 G00 Z-1.0000",
+    "G53 G00 X-41.2000",
+    "G53 G00 Y-120.8800",
+    "M0 (Change the tool, then press Cycle Start)",
+    "G53",
+    "G00 X-200.0000 Y-150.0000 F300.0000",
+    "G38.2 Z-11.0000 F80.0000",
+    "G91 G00 Z1.5000",
+    "G90",
+    "G38.2 Z-11.0000 F50.0000",
+    "G43.1 Z8.2500",
+    "G53 G01 Z-1.0000 F80.0000",
+    "G54",
+    "G01 F300.0000",
+    "G00 X1.2340 Y2.3450",
+    "G00 Z3.4560",
+    "M3",
+]
+
 
 class TestGoldenTemplates:
     """Freeze the expanded output of the shipped tool change templates."""
 
-    @pytest.mark.parametrize("mode, expected", [("wcs", GOLDEN_WCS), ("tlo", GOLDEN_TLO)])
+    @pytest.mark.parametrize(
+        "mode, expected",
+        [("wcs", GOLDEN_WCS), ("tlo", GOLDEN_TLO), ("setter", GOLDEN_SETTER)],
+    )
     def test_tool_change_template(self, macros, context, mode, expected):
         macros.cfg["tool_change_mode"] = mode
+        if mode == "setter":
+            macros.cfg["tool_setter_pos"] = (-200.0, -150.0)
         text = macros.get_macro_string("M6")
         expanded = list(macros.expand_lines(text.splitlines(), context))
         assert expanded == expected
