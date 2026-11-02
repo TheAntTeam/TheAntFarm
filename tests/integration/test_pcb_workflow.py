@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from TheAntFarm.shape_core.gcode_manager import GCoder
+from TheAntFarm.shape_core.path_types import ToolPath
 from TheAntFarm.shape_core.geometry_manager import Geom, merge_polygons, offset_polygon
 from TheAntFarm.shape_core.pcb_manager import PcbObj
 
@@ -79,7 +80,7 @@ class TestGeometryToGCodeIntegration:
         assert geom.geom.is_valid
 
         gcoder = GCoder(tag="test", machining_type="gerber")
-        gcoder.path = [(None, [geom.geom.exterior])]
+        gcoder.path = [ToolPath(0.2, "gerber", [geom.geom.exterior])]
         result = gcoder.compute()
         assert result is True
         assert len(gcoder.gcode) > 0
@@ -98,7 +99,7 @@ class TestGeometryToGCodeIntegration:
         assert offset_geom.area > geom.geom.area
 
         gcoder = GCoder(tag="test", machining_type="gerber")
-        gcoder.path = [(None, [offset_geom.exterior])]
+        gcoder.path = [ToolPath(0.2, "gerber", [offset_geom.exterior])]
         result = gcoder.compute()
         assert result is True
 
@@ -157,7 +158,7 @@ class TestGCodeGenerationIntegration:
         path = LineString([(0, 0), (10, 0), (10, 10), (0, 10), (0, 0)])
 
         gcoder = GCoder(tag="gerber_test", machining_type="gerber")
-        gcoder.path = [(None, [path])]
+        gcoder.path = [ToolPath(0.2, "gerber", [path])]
         result = gcoder.compute()
 
         assert result is True
@@ -184,7 +185,7 @@ class TestGCodeGenerationIntegration:
         path = LineString([(0, 0), (50, 0), (50, 50), (0, 50), (0, 0)])
 
         gcoder = GCoder(tag="profile_test", machining_type="profile")
-        gcoder.path = [(None, [path])]
+        gcoder.path = [ToolPath(0.2, "gerber", [path])]
         result = gcoder.compute()
 
         assert result is True

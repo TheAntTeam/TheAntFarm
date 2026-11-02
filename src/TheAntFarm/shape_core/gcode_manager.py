@@ -89,9 +89,21 @@ class GCoder:
 
     def load_path(self, path):
         """Set the toolpaths to machine (a list of :class:`ToolPath`)."""
-        if path and not isinstance(path[0], ToolPath):
-            raise TypeError(f"Expected a list of ToolPath, got {type(path[0]).__name__}")
         self.path = path
+
+    @property
+    def path(self):
+        """The toolpaths to machine, a list of :class:`ToolPath`."""
+        return self._path
+
+    @path.setter
+    def path(self, value):
+        if value and not isinstance(value[0], ToolPath):
+            raise TypeError(
+                f"Expected a list of ToolPath, got {type(value[0]).__name__}: "
+                "the ((tool, type), paths, invalid_ids) tuple is no longer supported"
+            )
+        self._path = value
 
     def compute(self):
         mirror = self.cfg.get("mirror", False)
