@@ -32,6 +32,14 @@ class MachineSettingsHandler:
     HOLD_ON_PROBE_FLAG_DEFAULT = False
     ZEROING_AFTER_PROBE_FLAG_DEFAULT = False
 
+    SAFE_Z_DEFAULT = -1.0
+    TOOL_CHANGE_MODE_DEFAULT = "wcs"
+    TOOL_SETTER_X_DEFAULT = 0.0
+    TOOL_SETTER_Y_DEFAULT = 0.0
+    TOOL_SETTER_REL_FLAG_DEFAULT = False
+    TOOL_PROBE_BACKOFF_DEFAULT = 1.5
+    SPINDLE_STOP_DWELL_DEFAULT = 1.0
+
     ALIGNMENT_DRILL_DIAMETER_DEFAULT = 0.0
     TOOL_CAMERA_OFFSET_X_DEFAULT = 0.0
     TOOL_CAMERA_OFFSET_Y_DEFAULT = 0.0
@@ -68,6 +76,14 @@ class MachineSettingsHandler:
         self.tool_probe_rel_flag = self.TOOL_PROBE_REL_FLAG_DEFAULT
         self.hold_on_probe_flag = self.HOLD_ON_PROBE_FLAG_DEFAULT
         self.zeroing_after_probe_flag = self.ZEROING_AFTER_PROBE_FLAG_DEFAULT
+
+        self.safe_z = self.SAFE_Z_DEFAULT
+        self.tool_change_mode = self.TOOL_CHANGE_MODE_DEFAULT
+        self.tool_setter_x = self.TOOL_SETTER_X_DEFAULT
+        self.tool_setter_y = self.TOOL_SETTER_Y_DEFAULT
+        self.tool_setter_rel_flag = self.TOOL_SETTER_REL_FLAG_DEFAULT
+        self.tool_probe_backoff = self.TOOL_PROBE_BACKOFF_DEFAULT
+        self.spindle_stop_dwell = self.SPINDLE_STOP_DWELL_DEFAULT
 
         self.alignment_drill_diameter = self.ALIGNMENT_DRILL_DIAMETER_DEFAULT
         self.tool_camera_offset_x = self.TOOL_CAMERA_OFFSET_X_DEFAULT
@@ -136,6 +152,18 @@ class MachineSettingsHandler:
                 "zeroing_after_probe_flag", self.ZEROING_AFTER_PROBE_FLAG_DEFAULT
             )
 
+            self.safe_z = machine_general.getfloat("safe_z", self.SAFE_Z_DEFAULT)
+            self.tool_change_mode = machine_general.get("tool_change_mode", self.TOOL_CHANGE_MODE_DEFAULT)
+            self.tool_setter_x = machine_general.getfloat("tool_setter_x", self.TOOL_SETTER_X_DEFAULT)
+            self.tool_setter_y = machine_general.getfloat("tool_setter_y", self.TOOL_SETTER_Y_DEFAULT)
+            self.tool_setter_rel_flag = machine_general.getboolean(
+                "tool_setter_relative_flag", self.TOOL_SETTER_REL_FLAG_DEFAULT
+            )
+            self.tool_probe_backoff = machine_general.getfloat("tool_probe_backoff", self.TOOL_PROBE_BACKOFF_DEFAULT)
+            self.spindle_stop_dwell = machine_general.getfloat(
+                "spindle_stop_dwell", self.SPINDLE_STOP_DWELL_DEFAULT
+            )
+
             self.alignment_drill_diameter = machine_general.getfloat(
                 "alignment_drill_diameter", self.ALIGNMENT_DRILL_DIAMETER_DEFAULT
             )
@@ -176,6 +204,13 @@ class MachineSettingsHandler:
             "alignment_drill_diameter": self.ALIGNMENT_DRILL_DIAMETER_DEFAULT,
             "tool_camera_offset_x": self.TOOL_CAMERA_OFFSET_X_DEFAULT,
             "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT,
+            "safe_z": self.SAFE_Z_DEFAULT,
+            "tool_change_mode": self.TOOL_CHANGE_MODE_DEFAULT,
+            "tool_setter_x": self.TOOL_SETTER_X_DEFAULT,
+            "tool_setter_y": self.TOOL_SETTER_Y_DEFAULT,
+            "tool_setter_relative_flag": self.TOOL_SETTER_REL_FLAG_DEFAULT,
+            "tool_probe_backoff": self.TOOL_PROBE_BACKOFF_DEFAULT,
+            "spindle_stop_dwell": self.SPINDLE_STOP_DWELL_DEFAULT,
         }
 
         # GENERAL machine settings #
@@ -209,6 +244,13 @@ class MachineSettingsHandler:
         machine_general["alignment_drill_diameter"] = str(self.alignment_drill_diameter)
         machine_general["tool_camera_offset_x"] = str(self.tool_camera_offset_x)
         machine_general["tool_camera_offset_y"] = str(self.tool_camera_offset_y)
+        machine_general["safe_z"] = str(self.safe_z)
+        machine_general["tool_change_mode"] = str(self.tool_change_mode)
+        machine_general["tool_setter_x"] = str(self.tool_setter_x)
+        machine_general["tool_setter_y"] = str(self.tool_setter_y)
+        machine_general["tool_setter_relative_flag"] = str(self.tool_setter_rel_flag)
+        machine_general["tool_probe_backoff"] = str(self.tool_probe_backoff)
+        machine_general["spindle_stop_dwell"] = str(self.spindle_stop_dwell)
 
         # Write machine ini file #
         with open(self.machine_config_path, "w") as configfile:
@@ -244,6 +286,13 @@ class MachineSettingsHandler:
             "alignment_drill_diameter": self.ALIGNMENT_DRILL_DIAMETER_DEFAULT,
             "tool_camera_offset_x": self.TOOL_CAMERA_OFFSET_X_DEFAULT,
             "tool_camera_offset_y": self.TOOL_CAMERA_OFFSET_Y_DEFAULT,
+            "safe_z": self.SAFE_Z_DEFAULT,
+            "tool_change_mode": self.TOOL_CHANGE_MODE_DEFAULT,
+            "tool_setter_x": self.TOOL_SETTER_X_DEFAULT,
+            "tool_setter_y": self.TOOL_SETTER_Y_DEFAULT,
+            "tool_setter_relative_flag": self.TOOL_SETTER_REL_FLAG_DEFAULT,
+            "tool_probe_backoff": self.TOOL_PROBE_BACKOFF_DEFAULT,
+            "spindle_stop_dwell": self.SPINDLE_STOP_DWELL_DEFAULT,
         }
 
         # GENERAL machine settings #
@@ -276,6 +325,13 @@ class MachineSettingsHandler:
         machine_general["alignment_drill_diameter"] = str(self.ALIGNMENT_DRILL_DIAMETER_DEFAULT)
         machine_general["tool_camera_offset_x"] = str(self.TOOL_CAMERA_OFFSET_X_DEFAULT)
         machine_general["tool_camera_offset_y"] = str(self.TOOL_CAMERA_OFFSET_Y_DEFAULT)
+        machine_general["safe_z"] = str(self.SAFE_Z_DEFAULT)
+        machine_general["tool_change_mode"] = str(self.TOOL_CHANGE_MODE_DEFAULT)
+        machine_general["tool_setter_x"] = str(self.TOOL_SETTER_X_DEFAULT)
+        machine_general["tool_setter_y"] = str(self.TOOL_SETTER_Y_DEFAULT)
+        machine_general["tool_setter_relative_flag"] = str(self.TOOL_SETTER_REL_FLAG_DEFAULT)
+        machine_general["tool_probe_backoff"] = str(self.TOOL_PROBE_BACKOFF_DEFAULT)
+        machine_general["spindle_stop_dwell"] = str(self.SPINDLE_STOP_DWELL_DEFAULT)
 
         # Write machine ini file #
         with open(self.machine_config_path, "w") as configfile:

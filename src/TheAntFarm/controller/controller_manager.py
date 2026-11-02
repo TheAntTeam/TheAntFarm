@@ -699,6 +699,12 @@ class ControllerWorker(ControllerSignals):
                 "tool_probe_feedrate": (machine_sets.feedrate_xy, machine_sets.feedrate_z, machine_sets.feedrate_probe),
                 "tool_probe_hold": machine_sets.hold_on_probe_flag,
                 "tool_probe_zero": machine_sets.zeroing_after_probe_flag,
+                "safe_pos": (0.0, 0.0, machine_sets.safe_z),  # only the Z is used by the macros
+                "tool_change_mode": machine_sets.tool_change_mode,
+                "tool_setter_pos": (machine_sets.tool_setter_x, machine_sets.tool_setter_y),
+                "tool_setter_working": machine_sets.tool_setter_rel_flag,
+                "tool_probe_backoff": machine_sets.tool_probe_backoff,
+                "spindle_stop_dwell": machine_sets.spindle_stop_dwell,
             }
         )
         self.gcr.load_cfg(cfg)

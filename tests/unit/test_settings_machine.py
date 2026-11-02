@@ -241,3 +241,65 @@ class TestMachineSettingsHandler:
         assert machine_settings.alignment_drill_diameter == 0.0
         assert machine_settings.tool_camera_offset_x == 0.0
         assert machine_settings.tool_camera_offset_y == 0.0
+
+class TestToolChangeProcedureSettings:
+    """Settings of the tool change procedure (shape_core macros)."""
+
+    @pytest.fixture
+    def mock_main_window(self, mocker):
+        return mocker.Mock()
+
+    @pytest.fixture
+    def config_folder(self, tmp_path):
+        folder = tmp_path / "configurations"
+        folder.mkdir()
+        return str(folder)
+
+    @pytest.fixture
+    def machine_settings(self, config_folder, mock_main_window):
+        return MachineSettingsHandler(config_folder, mock_main_window)
+
+    def test_default_values(self, machine_settings):
+        machine_settings.read_all_machine_settings()
+
+        assert machine_settings.safe_z == -1.0
+        assert machine_settings.tool_change_mode == "wcs"
+        assert machine_settings.tool_setter_x == 0.0
+        assert machine_settings.tool_setter_y == 0.0
+        assert machine_settings.tool_setter_rel_flag is False
+        assert machine_settings.tool_probe_backoff == 1.5
+        assert machine_settings.spindle_stop_dwell == 1.0
+
+    def test_values_are_written_and_read_back(self, machine_settings, config_folder):
+        machine_settings.safe_z = 12.5
+        machine_settings.tool_change_mode = "setter"
+        machine_settings.tool_setter_x = -200.0
+        machine_settings.tool_setter_y = -150.5
+        machine_settings.tool_setter_rel_flag = True
+        machine_settings.tool_probe_backoff = 2.5
+        machine_settings.spindle_stop_dwell = 3.0
+
+        machine_settings.write_all_machine_settings()
+
+        new_handler = MachineSettingsHandler(config_folder, machine_settings.main_win)
+        new_handler.read_all_machine_settings()
+
+        assert new_handler.safe_z == 12.5
+        assert new_handler.tool_change_mode == "setter"
+        assert new_handler.tool_setter_x == -200.0
+        assert new_handler.tool_setter_y == -150.5
+        assert new_handler.tool_setter_rel_flag is True
+        assert new_handler.tool_probe_backoff == 2.5
+        assert new_handler.spindle_stop_dwell == 3.0
+
+    def test_restore_returns_the_defaults(self, machine_settings, config_folder):
+        machine_settings.tool_change_mode = "tlo"
+        machine_settings.safe_z = 30.0
+
+        machine_settings.restore_machine_settings()
+
+        new_handler = MachineSettingsHandler(config_folder, machine_settings.main_win)
+        new_handler.read_all_machine_settings()
+
+        assert new_handler.tool_change_mode == "wcs"
+        assert new_handler.safe_z == -1.0

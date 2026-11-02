@@ -4,6 +4,7 @@ from collections import OrderedDict as Od
 from PySide6.QtCore import QObject, Signal, Slot
 from PySide6.QtGui import QPalette
 from PySide6.QtWidgets import QColorDialog
+from shape_core import MACROS
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +44,8 @@ class UiSettingsPreferencesTab(QObject):
 
         self.reset_tool_probe_initial_enables()
 
+        self.ui.tool_change_mode_cb.addItems(list(MACROS["M6"].variants))
+
         self.ui.tool_probe_wm_pos_chb.clicked.connect(self.tool_probe_wm_pos_checked)
         self.ui.get_tool_probe_pb.clicked.connect(self.ask_tool_probe_position)
         self.ask_status_report_s.connect(self.control_wo.report_status_report)
@@ -70,6 +73,13 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.tool_probe_z_limit_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.hold_on_probe_chb.clicked.connect(self.set_focus_lost)
         self.ui.zeroing_after_probe_chb.clicked.connect(self.set_focus_lost)
+        self.ui.tool_change_mode_cb.currentIndexChanged.connect(self.tool_change_mode_changed)
+        self.ui.tool_setter_x_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_setter_y_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_setter_wpos_chb.clicked.connect(self.set_focus_lost)
+        self.ui.safe_z_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.tool_probe_backoff_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.spindle_stop_dwell_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.feedrate_xy_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.feedrate_z_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.feedrate_probe_dsb.valueChanged.connect(self.set_focus_lost)
@@ -160,6 +170,8 @@ class UiSettingsPreferencesTab(QObject):
 
         self.ui.tool_probe_z_limit_dsb.setValue(self.machine_settings.tool_probe_z_limit)
 
+        self.reset_tool_change_procedure_settings()
+
         self.ui.feedrate_xy_dsb.setValue(self.machine_settings.feedrate_xy)
         self.ui.feedrate_z_dsb.setValue(self.machine_settings.feedrate_z)
         self.ui.feedrate_probe_dsb.setValue(self.machine_settings.feedrate_probe)
@@ -171,6 +183,17 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.flip_cam_h_chb.setChecked(self.app_settings.camera_flip_h)
         self.ui.flip_cam_v_chb.setChecked(self.app_settings.camera_flip_v)
 
+
+    def reset_tool_change_procedure_settings(self):
+        """Initialize or re-initialize ui value from initial tool change procedure settings."""
+        self.ui.tool_change_mode_cb.setCurrentText(self.machine_settings.tool_change_mode)
+        self.ui.tool_setter_x_dsb.setValue(self.machine_settings.tool_setter_x)
+        self.ui.tool_setter_y_dsb.setValue(self.machine_settings.tool_setter_y)
+        self.ui.tool_setter_wpos_chb.setChecked(self.machine_settings.tool_setter_rel_flag)
+        self.ui.safe_z_dsb.setValue(self.machine_settings.safe_z)
+        self.ui.tool_probe_backoff_dsb.setValue(self.machine_settings.tool_probe_backoff)
+        self.ui.spindle_stop_dwell_dsb.setValue(self.machine_settings.spindle_stop_dwell)
+        self.ui_tool_setter_set_enabling(self.ui.tool_change_mode_cb.currentText() == "setter")
 
     def restore_initial_settings(self):
         """Restore initial settings in ui fields."""
@@ -190,6 +213,18 @@ class UiSettingsPreferencesTab(QObject):
     def ui_tool_change_set_enabling(self, enable=False):
         """Enable or disable tool change get button."""
         self.ui.get_tool_change_pb.setEnabled(enable)
+
+    def ui_tool_setter_set_enabling(self, enable=False):
+        """Enable or disable tool setter fields."""
+        self.ui.tool_setter_x_dsb.setEnabled(enable)
+        self.ui.tool_setter_y_dsb.setEnabled(enable)
+        self.ui.tool_setter_wpos_chb.setEnabled(enable)
+
+    @Slot()
+    def tool_change_mode_changed(self):
+        """Enable the tool setter fields only when the setter procedure is selected."""
+        self.ui_tool_setter_set_enabling(self.ui.tool_change_mode_cb.currentText() == "setter")
+        self.set_focus_lost()
 
     @Slot()
     def tool_probe_wm_pos_checked(self):
@@ -309,6 +344,14 @@ class UiSettingsPreferencesTab(QObject):
         self.machine_settings.tool_probe_z_limit = self.ui.tool_probe_z_limit_dsb.value()
         self.machine_settings.hold_on_probe_flag = self.ui.hold_on_probe_chb.isChecked()
         self.machine_settings.zeroing_after_probe_flag = self.ui.zeroing_after_probe_chb.isChecked()
+
+        self.machine_settings.tool_change_mode = self.ui.tool_change_mode_cb.currentText()
+        self.machine_settings.tool_setter_x = self.ui.tool_setter_x_dsb.value()
+        self.machine_settings.tool_setter_y = self.ui.tool_setter_y_dsb.value()
+        self.machine_settings.tool_setter_rel_flag = self.ui.tool_setter_wpos_chb.isChecked()
+        self.machine_settings.safe_z = self.ui.safe_z_dsb.value()
+        self.machine_settings.tool_probe_backoff = self.ui.tool_probe_backoff_dsb.value()
+        self.machine_settings.spindle_stop_dwell = self.ui.spindle_stop_dwell_dsb.value()
 
         self.machine_settings.feedrate_xy = self.ui.feedrate_xy_dsb.value()
         self.machine_settings.feedrate_z = self.ui.feedrate_z_dsb.value()

@@ -32,6 +32,13 @@ def settings():
     machine.feedrate_probe = 50.0
     machine.hold_on_probe_flag = False
     machine.zeroing_after_probe_flag = False
+    machine.safe_z = -1.0
+    machine.tool_change_mode = "wcs"
+    machine.tool_setter_x = -200.0
+    machine.tool_setter_y = -150.0
+    machine.tool_setter_rel_flag = False
+    machine.tool_probe_backoff = 1.5
+    machine.spindle_stop_dwell = 1.0
     settings.machine_settings = machine
     return settings
 
@@ -139,3 +146,46 @@ class TestBrokenMacro:
         assert worker.sending_file is False
         assert worker.content_line == 1  # the M6 line has not been consumed
         assert worker.serialTxQueue.qsize() == 1  # nothing else has been queued
+
+
+class TestToolChangeSettings:
+    """The tool change procedure settings reach the macro configuration."""
+
+    def test_update_gerber_cfg_passes_the_procedure_settings(self, worker):
+        settings = worker.settings.machine_settings
+        settings.safe_z = 12.5
+        settings.tool_change_mode = "setter"
+        settings.tool_setter_x = -200.0
+        settings.tool_setter_y = -150.5
+        settings.tool_setter_rel_flag = False
+        settings.tool_probe_backoff = 2.0
+        settings.spindle_stop_dwell = 3.0
+
+        worker.update_gerber_cfg()
+
+        cfg = worker.gcr.cfg
+        assert cfg["safe_pos"] == (0.0, 0.0, 12.5)
+        assert cfg["tool_change_mode"] == "setter"
+        assert cfg["tool_setter_pos"] == (-200.0, -150.5)
+        assert cfg["tool_setter_working"] is False
+        assert cfg["tool_probe_backoff"] == 2.0
+        assert cfg["spindle_stop_dwell"] == 3.0
+
+    def test_the_macro_configuration_matches_the_settings(self, worker):
+        settings = worker.settings.machine_settings
+        settings.tool_change_mode = "tlo"
+        settings.safe_z = 5.0
+
+        worker.update_gerber_cfg()
+
+        assert worker.gcr.macro.get_mode("M6") == "tlo"
+        assert worker.gcr.macro.cfg["safe_pos"] == (0.0, 0.0, 5.0)
+
+    def test_an_invalid_mode_is_rejected_by_the_macro(self, worker):
+        from shape_core.macros_manager import MacroError
+
+        worker.settings.machine_settings.tool_change_mode = "not_a_mode"
+        worker.update_gerber_cfg()
+
+        with pytest.raises(MacroError, match="available modes"):
+            worker.gcr.macro.get_macro_string("M6")
