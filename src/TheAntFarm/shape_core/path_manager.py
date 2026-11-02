@@ -1,11 +1,11 @@
 import logging
 import time
 from collections import OrderedDict
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import numpy as np
 import shapely.geometry
-from shapely.geometry import LineString, MultiPolygon, Polygon
+from shapely.geometry import LineString, Polygon
 from shapely.ops import substring
 
 from .drill_path_optimizer import DrillPathOptimizer

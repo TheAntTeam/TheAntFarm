@@ -7,7 +7,7 @@ from typing import Any, List, Tuple, Union
 import pyclipper as pc
 from shapely.geometry import LinearRing, MultiPolygon, Polygon
 from shapely.ops import unary_union
-from shapely.validation import explain_validity, make_valid
+from shapely.validation import make_valid
 
 logger = logging.getLogger(__name__)
 

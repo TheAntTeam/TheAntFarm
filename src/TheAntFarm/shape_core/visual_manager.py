@@ -9,7 +9,6 @@ from collections import OrderedDict
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
-import shapely as sh
 from OpenGL import GLU
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon

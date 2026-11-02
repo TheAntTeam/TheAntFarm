@@ -4,7 +4,6 @@ import re
 import time
 from collections import OrderedDict as od
 from datetime import datetime
-from typing import Any
 
 import numpy as np
 import scipy.interpolate as spi
@@ -505,8 +504,7 @@ class GCoder:
         return abl_cmd_ls, prb_num_todo
 
     def get_macro_code(self, macro_type="M6", to_comment="", local_path=""):
-        print("Get Macro Code")
-        print(macro_type)
+        logger.debug(f"Loading the {macro_type} macro template")
         s = ""
         if to_comment != "":
             s += self.gcode_comment(to_comment)
@@ -518,17 +516,14 @@ class GCoder:
         return self.tag.lower() + "_" + self.type.lower() + ".gcode"
 
     def write(self, file_path):
-        print("Writing gcode file:")
-        print("\t " + str(os.path.abspath(file_path)))
+        logger.info(f"Writing G-code file: {os.path.abspath(file_path)}")
         with open(file_path, "w") as f:
             f.write("".join(self.gcode))
-        print("Done")
+        logger.info("G-code file written")
 
     # macro section
 
     def is_macro(self, cmd):
-        # print("Is Macro")
-        # print(cmd)
         if self.macro is not None:
             return self.macro.is_macro(cmd)
         else:
@@ -702,7 +697,6 @@ class GCode:
         self.aligned_bb = None
 
     def get_gcode_original_vectors_copy(self):
-        print("GCODEX")
         govc = []
         for p in self.original_vectors:
             nwp = p.copy()
@@ -742,8 +736,7 @@ class GCodeParser:
         self.gc = None
 
     def load_gcode_file(self, gcode_path):
-        print("GCoder Loading GCode File:")
-        print(gcode_path)
+        logger.info(f"Loading G-code file: {gcode_path}")
         if os.path.isfile(gcode_path):
             self.gcode_path = gcode_path
             with open(self.gcode_path) as f:
@@ -752,7 +745,7 @@ class GCodeParser:
                     # GCode file loaded
                     self.gc = GCode(lines)
         else:
-            print("Invalid GCode File Path")
+            logger.error(f"Invalid G-code file path: {gcode_path}")
 
     def interp(self, single_line=None):
         gcll = []
@@ -795,8 +788,7 @@ class GCodeParser:
                                 if splitted[0].upper().startswith("G"):
                                     # second command
                                     # TODO: issue with munich gerber gcode. check
-                                    print("splitted")
-                                    print(splitted)
+                                    logger.debug(f"Second command in the same line: {splitted}")
                                     cmd = splitted.pop(0)
                                     ct = cmd[0]
                                     cd = [int(x) for x in cmd[1::].split(".")]
@@ -943,23 +935,22 @@ class GCodeAlignment:
         self.am.load_sampled_points(align_point_data)
 
     def apply_align(self):
-        print("GCode Alignment Start")
+        logger.info("G-code alignment start")
 
         new_coords = None
         if self.gc is not None and self.am.is_sampled_point_loaded():
-            print("Sampled Point Loaded")
+            logger.debug("Sampled points loaded")
             coords = [p.coords.copy() for p in self.gc.original_vectors]
             new_coords = self.am.compute_points_transform(coords)
 
         if self.gc is None or new_coords is None:
             # No G-code loaded, not enough sampled points or degenerate samples
             # (collinear/duplicated points): the alignment cannot be applied.
-            print("Sampled Point NOT Loaded")
+            logger.error("Alignment not applied: sampled points missing or invalid")
             if self.gc is not None:
                 self.gc.aligned_vectors = []
                 self.gc.aligned_bb = None
-            print("GCode Alignment Stop")
-            print(False)
+            return False
             return False
 
         avl = self.gc.get_gcode_original_vectors_copy()
@@ -974,8 +965,7 @@ class GCodeAlignment:
 
         self.gc.aligned_vectors = avl
         self.gc.aligned_bb = tuple(bb_min + bb_max)
-        print("GCode Alignment Stop")
-        print(True)
+        logger.info("G-code alignment done")
         return True
 
 
@@ -1053,7 +1043,7 @@ class GCodeLeveler:
             self.ig = lambda xnew, ynew: spi.bisplev(xnew, ynew, r).T
 
     def apply(self):
-        print("Auto Bed Leveler Start")
+        logger.info("Auto bed levelling start")
         if self.gc is not None and self.ig is not None:
             mvl = []
             for p in self.gc.original_vectors:
@@ -1061,7 +1051,7 @@ class GCodeLeveler:
                 delta = self.ig(cnp.coords[0], cnp.coords[1])
                 cnp.coords[2] += delta
                 mvl.append(cnp)
-        print("Auto Bed Leveler Stop")
+        logger.info("Auto bed levelling done")
 
     def apply_abl(self):
         # this routine puts in place strategies to fit the whole
@@ -1073,17 +1063,17 @@ class GCodeLeveler:
 
         if self.gc is not None and self.ig is not None:
             ta = time.time()
-            print("Advanced Auto Bed Leveler Start")
+            logger.info("Advanced auto bed levelling start")
             mvl = []
             pre_pc = None
             min_step = min(self.grid_step)
-            print("Min Step ", min_step)
+            logger.debug(f"Minimum grid step: {min_step}")
 
             if self.gc.aligned_vectors:
-                print("Apply ABL: Loaded Aligned Vectors")
+                logger.debug("Applying the ABL to the aligned vectors")
                 data = self.gc.aligned_vectors
             else:
-                print("Apply ABL: Loaded Originals Vectors")
+                logger.debug("Applying the ABL to the original vectors")
                 data = self.gc.original_vectors
 
             for p in data:
@@ -1118,12 +1108,9 @@ class GCodeLeveler:
                 mvl += np_l
                 pre_pc = np.array(p.coords[:2])
             self.gc.modified_vectors = mvl
-            print("Advanced Auto Bed Leveler Stop")
+            logger.info("Advanced auto bed levelling done")
             tb = time.time()
-            print("Done in " + "{:.3f}".format(tb - ta) + " sec")
-            # Debug purpse
-            # for gcv in mvl:
-            #    print(gcv.coords)
+            logger.info(f"Advanced auto bed levelling completed in {tb - ta:.3f} s")
             return True
         else:
             return False
@@ -1138,19 +1125,3 @@ class GCodeLeveler:
                 i_l.append(i)
         return i_l
 
-
-if __name__ == "__main__":
-
-    gcode_path = "C:\\Users\\Mattia\\Documents\\PythonPrj\\TheAntLord\\gcode_tmp\\top_gerber.gcode"
-    cfg: dict[str, Any] = {}
-
-    gcp = GCodeParser(cfg)
-    gcp.load_gcode_file(gcode_path)
-    gcp.interp()
-    gcp.vectorize()
-    lines = gcp.recode_gcode()
-
-    # abl = GCodeLeveler(gcp.gc)
-    # abl.get_dummy_grid_data()
-    # abl.interp_grid_data()
-    # abl.apply_abl()

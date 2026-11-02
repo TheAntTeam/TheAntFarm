@@ -1,3 +1,4 @@
+import logging
 import math
 import os
 
@@ -5,6 +6,8 @@ import numpy as np
 
 from .gcode_manager import GCodeParser
 from .geometry_manager import Geom, merge_polygons
+
+logger = logging.getLogger(__name__)
 
 
 class DrillGcodeConverter:
@@ -23,7 +26,7 @@ class DrillGcodeConverter:
                 self.parser.interp()
                 self.parser.vectorize()
             else:
-                print("Invalid GCode Path")
+                logger.error(f"Invalid G-code path: {self.gcode_path}")
 
     def get_drill_layer(self):
         layer = None
@@ -47,14 +50,14 @@ class DrillGcodeConverter:
                             mp.append(g)
 
                     layer = merge_polygons(mp)
-                    print(layer)
+                    logger.debug(f"Drill layer: {layer}")
 
                 else:
-                    print("No Vectorized GCode")
+                    logger.error("No vectorized G-code loaded")
             else:
-                print("No Loaded GCode")
+                logger.error("No G-code loaded")
         else:
-            print("No Active GCode Parser")
+            logger.error("No active G-code parser")
 
         return layer
 
