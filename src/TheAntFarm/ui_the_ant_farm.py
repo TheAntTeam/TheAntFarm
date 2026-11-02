@@ -3495,7 +3495,7 @@ class Ui_MainWindow(object):
         self.gridLayout_13.setObjectName(u"gridLayout_13")
         self.horizontalSpacer_tool_change = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout_13.addItem(self.horizontalSpacer_tool_change, 24, 1, 1, 1)
+        self.gridLayout_13.addItem(self.horizontalSpacer_tool_change, 26, 1, 1, 1)
 
         self.gridLayout_20 = QGridLayout()
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -4069,7 +4069,8 @@ class Ui_MainWindow(object):
         self.tool_change_mode_cb.setObjectName(u"tool_change_mode_cb")
         sizePolicy3.setHeightForWidth(self.tool_change_mode_cb.sizePolicy().hasHeightForWidth())
         self.tool_change_mode_cb.setSizePolicy(sizePolicy3)
-        self.tool_change_mode_cb.setMinimumSize(QSize(120, 20))
+        self.tool_change_mode_cb.setMinimumSize(QSize(80, 20))
+        self.tool_change_mode_cb.setMaximumSize(QSize(80, 16777215))
         self.tool_change_mode_cb.setFont(font)
         self.tool_change_mode_cb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
 
