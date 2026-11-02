@@ -326,20 +326,32 @@ lines sent in blocks of 5, and the golden test still passes.
 
 **Effort** ~4 h, medium risk (shared with the streaming state machine).
 
-### M-08 — Cleanup left from the shape_core review
+### M-08 — Cleanup left from the shape_core review (done)
 
-* `print` in `shape_core/gcode_manager.py` (32), `geometry_manager.py` (21),
-  `gcode_drill_converter.py` (5) → `logger`.
-* `shape_core/plot_stuff.py` (193 lines, matplotlib, never imported) → delete.
-* `PcbObj.get_gerber_layer` / `get_excellon_layer`: `self.layers[tag]` is
-  assigned but never used as a cache.
-* `pcb_manager.py:71`: `gerbyx_logger.set_level("INFO")` inside `load_gerber`
-  overrides the module level `WARNING` and makes the console verbose.
-* `pcb_manager.py`: `__main__` block with Windows paths.
-* `controller_control.py`: `TLOPAT`, `DOLLARPAT` regexes are unused after the
-  switch to the new parsers.
+Completed in the commits `ad2ae24..1c565bf` of the `dev` branch, before the
+macro work was continued:
 
-**Effort** ~4 h, no risk, no behaviour change (except the log level).
+* the `print` calls of `shape_core` are now `logger` calls (there are none left
+  in the module);
+* `plot_stuff.py` (193 lines, matplotlib, never imported) is deleted;
+* `geometry_manager.py` lost the unreachable pyclipper implementation
+  (`use_shapely` branches, `offset_polygon_old`, `_offset_polylist`,
+  `_offset_multiple_polylist`, `_merge_polylist`, `_clip_polylist`,
+  `get_max_distance`), 629 -> 405 lines;
+* `PcbObj.get_gerber_layer` / `get_excellon_layer` use the layer cache and the
+  loaders invalidate it;
+* `pcb_manager.py` no longer raises the gerbyx logger to INFO and reads the
+  files with an explicit encoding;
+* the `__main__` blocks with hardcoded paths, the unused members
+  (`VisualLayer.add_triploy`, `translucent_filter`, `GCodeLeveler.apply`,
+  `GCodeLeveler.abl_to_working_pos`, the duplicated `GCodeParser` accessors)
+  and the unused imports are gone;
+* `GCoder.format_float` no longer writes `-0.0000`;
+* `VisualLayer.add_gcode` no longer consumes the vector list of the parser (it
+  removed the first vector from the model used to regenerate the G-code).
+
+What is left of that review is the structural part, tracked in
+`docs/macros.md` §4 of this document under "Structural backlog" below.
 
 ### M-09 — Test isolation
 
@@ -352,6 +364,16 @@ fix is to patch `controller.controller_align.DoubleSideManager` and import at
 module level.
 
 **Effort** ~30 min, low risk.
+
+### Structural backlog (was "A9" in the review)
+
+| Item | Why | Risk |
+|---|---|---|
+| Public API in `shape_core/__init__.py` (still empty) | the consumers import from the submodules (`from shape_core.gcode_manager import GCoder`) and `tests/conftest.py` has to inject two paths in `sys.path` | low |
+| `ToolPath` dataclass instead of `((tool, type), [LineString], [invalid_ids])` | the tuple is an implicit contract between `path_manager`, `gcode_manager` and `visual_manager.add_path` (`len(d) > 2`) | medium, touches the controllers |
+| Single configuration object for `MachinePath.cfg`, `GCoder.cfg` and `Macros.DEFAULT_CFG` | the same defaults are copied in three places and a missing key is still a `KeyError` | medium |
+| `Geom` / `FakeGeom` as a dataclass with a validated geometry, and `FakeGeom` removed in favour of plain shapely geometries | a degenerate polygon raises a shapely `ValueError` without saying which primitive produced it | low |
+| `GcodePoint.get_string` uses 3 decimals while `GCoder.DIGITS` is 4 | two resolutions for the same coordinate | low |
 
 ---
 
