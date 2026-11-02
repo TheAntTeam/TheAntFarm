@@ -4,6 +4,7 @@ import time
 import pyclipper as pc
 import shapely.geometry
 import shapely.geometry as shg
+from shapely.errors import GEOSException
 from shapely.ops import unary_union
 
 from .pyclipper2shapely import polytree_to_shapely
@@ -366,40 +367,76 @@ def is_overlaping_multiple_polygons(polygon, polygon_list, shapely_poly=False):
 
 
 class Geom:
+    """A geometry read from a Gerber/Excellon file, with its polarity.
+
+    Parameters
+    ----------
+    gdata : mapping
+        ``{"points": [...], "closed": bool, "polarity": "dark" | "clear"}``.
+    complex : bool
+        True when ``points`` is a list of rings: the first one is the exterior
+        ring, the others are the holes.
+
+    Raises
+    ------
+    ValueError
+        When the points do not describe a valid geometry (a closed path needs
+        at least three distinct points). The message reports the shape of the
+        data, so that the primitive that produced it can be identified.
+    """
 
     def __init__(self, gdata, complex=False):
-        self.points = gdata["points"]
+        self.points = list(gdata["points"]) if gdata.get("points") else []
         self.closed = gdata["closed"]
         self.polarity = gdata["polarity"]
         self.complex = complex
         self.geom = self._make_geom()
 
+    @classmethod
+    def from_shapely(cls, geom, polarity: str = "dark", complex: bool = True) -> "Geom":
+        """Build a Geom from an existing shapely geometry, without converting it.
+
+        Used for the geometries produced by the gerbyx parser, which are already
+        shapely polygons.
+        """
+        if geom is None:
+            raise ValueError("Cannot build a Geom from a None geometry")
+        if geom.geom_type == "Polygon":
+            points = [geom.exterior.coords] + [interior.coords for interior in geom.interiors]
+        elif geom.geom_type == "LineString":
+            points = [list(geom.coords)]
+        else:
+            raise ValueError(
+                f"Unsupported geometry type: {geom.geom_type} (split a MultiPolygon with get_poly_parts)"
+            )
+
+        obj = cls.__new__(cls)
+        obj.points = points
+        obj.closed = geom.geom_type == "Polygon"
+        obj.polarity = polarity
+        obj.complex = complex
+        obj.geom = geom
+        return obj
+
     def _make_geom(self):
-        geom = None
-        if self.points:
+        if not self.points:
+            return None
+        try:
             if self.closed:
                 if self.complex:
-                    pts = self.points[:]
-                    ext = pts.pop(0)
-                    holes = pts
-                    geom = shg.Polygon(ext, holes=holes)
-                    geom = shg.polygon.orient(geom, sign=1.0)
-                    x, y = geom.exterior.xy
+                    rings = list(self.points)
+                    geom = shg.Polygon(rings[0], holes=rings[1:])
                 else:
                     geom = shg.Polygon(self.points)
-                    geom = shg.polygon.orient(geom, sign=1.0)
-                    x, y = geom.exterior.xy
-            else:
-                geom = shg.LineString(self.points)
-                x, y = geom.xy
-        return geom
+                return shg.polygon.orient(geom, sign=1.0)
+            return shg.LineString(self.points)
+        except (ValueError, TypeError, GEOSException) as exc:
+            kind = "polygon" if self.closed else "line"
+            raise ValueError(
+                f"Invalid {kind} geometry: {len(self.points)} points, "
+                f"complex={self.complex}, first point={self.points[0]!r}: {exc}"
+            ) from exc
 
-
-class FakeGeom:
-
-    def __init__(self, geom, complex=False):
-        self.points = [geom.exterior.coords] + [i.coords for i in geom.interiors]
-        self.closed = True
-        self.polarity = "dark"
-        self.complex = complex
-        self.geom = geom
+    def __repr__(self) -> str:
+        kind = "polygon" if self.closed else "line"
+        return f"Geom({kind}, polarity={self.polarity!r}, points={len(self.points)})"

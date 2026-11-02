@@ -16,6 +16,11 @@ from .macros_manager import MacroError, Macros
 
 logger = logging.getLogger(__name__)
 
+# Decimals used when a G-code point is written back to a file (rewriting after
+# an alignment or a bed levelling): 3 decimals is the 1 um resolution that GRBL
+# and FluidNC work with, while new files are generated with GCoder.DIGITS.
+POSITION_DIGITS = 3
+
 
 class GCoder:
     """This class could be the parent class
@@ -679,10 +684,10 @@ class GcodePoint:
             s += "G0"
         else:
             s += "G1"
-        s += " X" + "{:.3f}".format(self.coords[0])
-        s += " Y" + "{:.3f}".format(self.coords[1])
+        s += " X" + f"{self.coords[0]:.{POSITION_DIGITS}f}"
+        s += " Y" + f"{self.coords[1]:.{POSITION_DIGITS}f}"
         if len(self.coords) > 2:
-            s += " Z" + "{:.3f}".format(self.coords[2])
+            s += " Z" + f"{self.coords[2]:.{POSITION_DIGITS}f}"
         for k in self.params.keys():
             s += " " + str(k).upper() + str(self.params[k])
         s += "\n"

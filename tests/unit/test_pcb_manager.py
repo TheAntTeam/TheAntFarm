@@ -318,3 +318,33 @@ class TestLayerCache:
         pcb.load_gerber(str(gerber_data_path / "simple_square.gbr"), "top")
 
         assert gerbyx_logger.logger.level == level_before
+
+
+class TestLayerGeometryType:
+    """The layer is a list of Geom wrappers of the parsed polygons."""
+
+    def test_gerber_layer_contains_geom_objects(self):
+        from TheAntFarm.shape_core.geometry_manager import Geom
+
+        pcb = PcbObj()
+        gerber = Path(__file__).parent.parent / "test_data" / "gerbers" / "simple_square.gbr"
+        pcb.load_gerber(str(gerber), "top")
+
+        geoms, others = pcb.get_gerber_layer("top")
+
+        assert geoms
+        assert others == ()
+        for geom in geoms:
+            assert isinstance(geom, Geom)
+            assert geom.geom.geom_type in ("Polygon", "LineString")
+
+    def test_excellon_layer_contains_polygons(self):
+        pcb = PcbObj()
+        drill = Path(__file__).parent.parent / "test_data" / "gerbers" / "simple_drill.drl"
+        pcb.load_excellon(str(drill), "drill")
+
+        geoms, _ = pcb.get_excellon_layer("drill")
+
+        assert geoms
+        for geom in geoms:
+            assert geom.geom.geom_type == "Polygon"

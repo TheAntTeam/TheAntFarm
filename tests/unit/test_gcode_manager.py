@@ -513,3 +513,21 @@ class TestGCodeBoundingBox:
         assert gc.get_bbox("aligned") == gc.aligned_bb
         assert gc.get_bbox("modified") == gc.aligned_bb
         assert gc.get_bbox("original") == gc.bb
+
+
+class TestGcodePointString:
+    """The text of a point written back to a file."""
+
+    def test_coordinates_use_the_named_resolution(self):
+        point = GcodePoint()
+        point.coords = np.array([1.23456, -2.5, 0.0])
+
+        assert point.get_string() == "G1 X1.235 Y-2.500 Z0.000\n"
+
+    def test_travel_and_machine_position(self):
+        point = GcodePoint()
+        point.coords = np.array([1.0, 2.0, 3.0])
+        point.type = point.TRAVEL
+        point.pos = point.MACHINE_POS
+
+        assert point.get_string().startswith("G53 G0 X1.000")

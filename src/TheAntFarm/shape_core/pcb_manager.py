@@ -15,12 +15,27 @@ from gerbyx.parser import GerberParser
 from gerbyx.processor import GerberProcessor
 from gerbyx.tokenizer import tokenize_gerber
 
-from .geometry_manager import FakeGeom
+from .geometry_manager import Geom
 
 # gerbyx is verbose at INFO level: keep its output out of the application log
 gerbyx_logger.set_level("WARNING")
 
 logger = logging.getLogger(__name__)
+
+
+def _shapes_to_geoms(shapes):
+    """Wrap the shapely geometries of a layer into Geom objects.
+
+    A MultiPolygon is split into its parts: the rest of the CAM works one
+    polygon at a time (offset, toolpath, drilling).
+    """
+    geoms = []
+    for shape in shapes:
+        if shape.geom_type == "MultiPolygon":
+            geoms.extend(Geom.from_shapely(part) for part in shape.geoms)
+        else:
+            geoms.append(Geom.from_shapely(shape))
+    return geoms
 
 
 class PcbObj:
@@ -115,7 +130,7 @@ class PcbObj:
     def get_gerber_layer(self, tag: str) -> Any:
         """Return the geometries of a loaded Gerber layer.
 
-        The result is cached: the conversion of the primitives to ``FakeGeom``
+        The result is cached: the conversion of the primitives to ``Geom``
         is needed every time a job is created from the layer, while the layer
         itself only changes when a new file is loaded.
         """
@@ -128,7 +143,7 @@ class PcbObj:
         if g is None:
             return None
 
-        self.layers[tag] = ([FakeGeom(x) for x in g.geometries], ())
+        self.layers[tag] = (_shapes_to_geoms(g.geometries), ())
         logger.debug("Gerber layer %s geometries: %s", tag, self.layers[tag])
         logger.info(f"Gerber Layer {tag} processed in {time.perf_counter() - start_time:.4f} seconds")
 
@@ -148,7 +163,7 @@ class PcbObj:
         if g is None:
             return None
 
-        self.layers[tag] = ([FakeGeom(x) for x in g.geometries], ())
+        self.layers[tag] = (_shapes_to_geoms(g.geometries), ())
         logger.debug("Excellon layer %s geometries: %s", tag, self.layers[tag])
         logger.info(f"Excellon Layer {tag} processed in {time.perf_counter() - start_time:.4f} seconds")
 

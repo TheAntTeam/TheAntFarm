@@ -573,3 +573,67 @@ class TestOffsetPolygonHolesGuards:
         result = offset_polygon_holes(geom, -0.5)
         assert result is not None
         assert result.area > 0.0
+
+
+class TestGeomValidation:
+    """Geom must reject invalid data with a message that identifies it."""
+
+    def test_closed_geometry_needs_three_points(self):
+        gdata = {"points": [(0, 0), (1, 1)], "polarity": "dark", "closed": True}
+
+        with pytest.raises(ValueError, match="Invalid polygon geometry"):
+            Geom(gdata)
+
+    def test_error_message_reports_the_data_shape(self):
+        gdata = {"points": [(0, 0), (1, 1)], "polarity": "dark", "closed": True}
+
+        with pytest.raises(ValueError, match=r"2 points"):
+            Geom(gdata)
+
+    def test_open_geometry_needs_two_points(self):
+        gdata = {"points": [(0, 0)], "polarity": "dark", "closed": False}
+
+        with pytest.raises(ValueError, match="Invalid line geometry"):
+            Geom(gdata)
+
+    def test_empty_points_gives_no_geometry(self):
+        gdata = {"points": [], "polarity": "dark", "closed": True}
+        assert Geom(gdata).geom is None
+
+    def test_repr(self):
+        gdata = {"points": [(0, 0), (1, 0), (1, 1)], "polarity": "clear", "closed": True}
+        text = repr(Geom(gdata))
+        assert "polygon" in text
+        assert "clear" in text
+
+
+class TestGeomFromShapely:
+    """The wrapper of an already computed shapely geometry."""
+
+    def test_polygon_with_hole_keeps_the_geometry(self):
+        exterior = [(0, 0), (10, 0), (10, 10), (0, 10), (0, 0)]
+        hole = [(3, 3), (7, 3), (7, 7), (3, 7), (3, 3)]
+        polygon = shg.Polygon(exterior, [hole])
+
+        geom = Geom.from_shapely(polygon)
+
+        assert geom.geom is polygon
+        assert geom.closed is True
+        assert len(geom.points) == 2  # exterior + one hole
+
+    def test_linestring_is_open(self):
+        line = shg.LineString([(0, 0), (1, 1)])
+        geom = Geom.from_shapely(line)
+
+        assert geom.geom is line
+        assert geom.closed is False
+
+    def test_none_is_refused(self):
+        with pytest.raises(ValueError):
+            Geom.from_shapely(None)
+
+    def test_multipolygon_must_be_split(self):
+        multipolygon = shg.MultiPolygon([shg.box(0, 0, 1, 1), shg.box(2, 2, 3, 3)])
+
+        with pytest.raises(ValueError, match="get_poly_parts"):
+            Geom.from_shapely(multipolygon)
