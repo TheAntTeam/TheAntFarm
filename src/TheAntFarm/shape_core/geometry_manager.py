@@ -6,59 +6,27 @@ import shapely.geometry
 import shapely.geometry as shg
 from shapely.ops import unary_union
 
-# from .plot_stuff import plot_polygons, plot_shapely
 from .pyclipper2shapely import polytree_to_shapely
 
 logger = logging.getLogger(__name__)
 
+# Tolerance used when simplifying the offset polygons: it removes the redundant
+# vertices produced by the buffer operation (1 um, well below any tool size).
+SIMPLIFY_TOLERANCE = 0.001
+
 
 def merge_polygons_path(poly_set):
-    merged = []
+    """Merge a set of closed paths into non overlapping polygons.
 
-    use_shapely = True
-
-    if not use_shapely:
-        dark = poly_set
-        dark_poly = []
-        clear_poly = []
-        to_merge = [g.exterior.coords for g in dark]
-        if to_merge:
-            dark_poly = _merge_polylist(to_merge)
-            ito_merge = []
-            for g in dark:
-                ito_merge += [i.coords for i in g.interiors]
-            if ito_merge:
-                clear_poly = _merge_polylist(ito_merge)
-            if clear_poly:
-                geoms = _clip_polylist(clear_poly, dark_poly)
-            else:
-                geoms = dark_poly
-
-            if geoms:
-                tmp = [geoms.pop(0)]
-                for li in geoms:
-                    if not pc.Orientation(li):
-                        # hole detected
-                        tmp.append(li)
-                    else:
-                        g = Geom({"points": tmp, "polarity": "dark", "closed": True}, complex=True).geom
-                        merged.append(g)
-                        tmp = [li]
-                if tmp:
-                    g = Geom({"points": tmp, "polarity": "dark", "closed": True}, complex=True).geom
-                    merged.append(g)
-    else:
-        for i, p in enumerate(poly_set):
-            poly_set[i] = p = p.buffer(0)
-            # if not p.is_valid:
-            #    plot_shapely([p])
-        # merged = cascaded_union(poly_set)
-        merged = unary_union(poly_set)
-        if merged.geom_type != "MultiPolygon":
-            merged = [merged]
-        else:
-            merged = list(merged.geoms)
-    return merged
+    Every path is repaired with ``buffer(0)`` before the union, so invalid
+    self-intersecting geometries coming from the CAM do not abort the merge.
+    The input list is not modified.
+    """
+    polygons = [p.buffer(0) for p in poly_set]
+    merged = unary_union(polygons)
+    if merged.geom_type != "MultiPolygon":
+        return [merged]
+    return list(merged.geoms)
 
 
 def fill_holes_sh(poly_sh):
@@ -130,66 +98,29 @@ def get_poly_diameter(poly_sh):
     return diameters
 
 
-def get_max_distance(c, pl):
-    d_max = 0.0
-    for p in pl:
-        d = c.distance(shg.Point(p))
-        d_max = max(d, d_max)
-    return d_max
-
-
 def offset_polygon(polyg, offset, shapely_poly=False):
+    """Offset a polygon (positive values grow it, negative values shrink it).
 
-    use_shapely = True
+    Parameters
+    ----------
+    polyg : Geom | shapely.geometry.Polygon
+        Geometry to offset: a ``Geom`` wrapper unless ``shapely_poly`` is True.
+    offset : float
+        Offset distance in drawing units.
+    shapely_poly : bool
+        True when ``polyg`` is already a shapely geometry.
 
-    if not use_shapely:
-        # t0 = time.time()
-        if shapely_poly:
-            poly = polyg
-        else:
-            poly = polyg.geom
-
-        ext = poly.exterior.coords
-        mmp = [ext]
-        for i in poly.interiors:
-            g = shg.Polygon(i.coords)
-            mmp.append(shg.polygon.orient(g, sign=1.0).exterior.coords)
-
-        geoms = _offset_multiple_polylist(mmp, offset)
-
-        merged = []
-
-        if geoms:
-            tmp = [geoms.pop(0)]
-            for li in geoms:
-                if not pc.Orientation(li):
-                    tmp.append(li)
-                else:
-                    g = shg.Polygon(tmp.pop(0), holes=tmp)
-                    merged.append(g)
-                    tmp = [li]
-            if tmp:
-                g = shg.Polygon(tmp.pop(0), holes=tmp)
-                merged.append(g)
-
-        if len(merged) == 0:
-            opoly = None
-        elif len(merged) == 1:
-            opoly = merged[0]
-        else:
-            opoly = shg.MultiPolygon(merged)
-        # t1 = time.time()
-        # print("\t-Time " + str(t1-t0))
-
+    Returns
+    -------
+    shapely.geometry.Polygon | shapely.geometry.MultiPolygon
+        The offset geometry, simplified at :data:`SIMPLIFY_TOLERANCE`.
+    """
+    if shapely_poly:
+        opoly = polyg.buffer(offset)
     else:
-        if shapely_poly:
-            opoly = polyg.buffer(offset)
-        else:
-            opoly = polyg.geom.buffer(offset)
+        opoly = polyg.geom.buffer(offset)
 
-    opoly = opoly.simplify(0.001, preserve_topology=True)
-
-    return opoly
+    return opoly.simplify(SIMPLIFY_TOLERANCE, preserve_topology=True)
 
 
 def offset_polygon_holes(poly, offset):
@@ -229,127 +160,8 @@ def offset_polygon_holes(poly, offset):
     return res[0]
 
 
-def offset_polygon_old(polyg, offset, shapely_poly=False):
-
-    use_shapely = True
-
-    if not use_shapely:
-        # t0 = time.time()
-        if shapely_poly:
-            poly = polyg
-        else:
-            poly = polyg.geom
-        ext = poly.exterior.coords
-        tmp = _offset_polylist(ext, offset)
-        oext = []
-        if len(tmp) > 0:
-            oext = tmp[0]
-        oint = []
-        for i in poly.interiors:
-            tmp = _offset_polylist(i.coords, -offset)
-            if len(tmp) > 0:
-                oint.append(tmp[0])
-
-        if oext:
-            opoly = shg.Polygon(oext, holes=oint)
-            opoly = shg.polygon.orient(opoly, sign=1.0)
-            x, y = opoly.exterior.xy
-        else:
-            opoly = None
-            print("[WARNING] OFFSET JUST HOLES")
-            print(oint)
-        # t1 = time.time()
-        # print("\t-Time " + str(t1-t0))
-    else:
-        if shapely_poly:
-            opoly = polyg.buffer(offset)
-        else:
-            opoly = polyg.geom.buffer(offset)
-
-    return opoly
-
-
-def _offset_polylist(mp, offset_in, scale=True):
-
-    # t0 = time.time()
-    pco = pc.PyclipperOffset()
-    polys = mp
-    offset = offset_in
-
-    # t1 = time.time()
-    # print("Init Time: " + str(t1 - t0))
-    if scale:
-        polys = pc.scale_to_clipper(mp)
-        offset = pc.scale_to_clipper(offset_in)
-
-    # t2 = time.time()
-    # print("Scale Time: " + str(t2 - t1))
-
-    pco.AddPath(polys, pc.JT_MITER, pc.ET_CLOSEDPOLYGON)
-    opoly = pco.Execute(offset)
-
-    # t3 = time.time()
-    # print("Exec Time: " + str(t3 - t2))
-
-    results = []
-    if scale:
-        opoly = pc.scale_from_clipper(opoly)
-
-    # t4 = time.time()
-    # print("Scale Time: " + str(t4 - t3))
-
-    results.extend([cp for cp in opoly])
-    pco.Clear()
-
-    # t5 = time.time()
-    # print("Result Time: " + str(t5 - t4))
-
-    return results
-
-
-def _offset_multiple_polylist(mmp, offset_in, scale=True):
-
-    # t0 = time.time()
-    pco = pc.PyclipperOffset()
-    polysl = mmp
-
-    # t1 = time.time()
-    # print("Init Time: " + str(t1 - t0))
-    offset = offset_in
-    if scale:
-        offset = pc.scale_to_clipper(offset_in)
-
-    for polys in polysl:
-        if scale:
-            polys = pc.scale_to_clipper(polys)
-
-        # t2 = time.time()
-        # print("Scale Time: " + str(t2 - t1))
-
-        pco.AddPath(polys, pc.JT_MITER, pc.ET_CLOSEDPOLYGON)
-
-    opoly = pco.Execute(offset)
-
-    # t3 = time.time()
-    # print("Exec Time: " + str(t3 - t2))
-
-    results = []
-    if scale:
-        opoly = pc.scale_from_clipper(opoly)
-
-    # t4 = time.time()
-    # print("Scale Time: " + str(t4 - t3))
-
-    results.extend([cp for cp in opoly])
-    pco.Clear()
-
-    # t5 = time.time()
-    # print("Result Time: " + str(t5 - t4))
-
-    return results
-
-
 def _merge_poly_set(poly_set, pure_merge=False):
+    """Merge the dark polygons of a layer and subtract the clear ones."""
     merged = []
     dark = poly_set[0]
     clear = poly_set[1]
@@ -361,9 +173,9 @@ def _merge_poly_set(poly_set, pure_merge=False):
             init_holes.append(i.coords)
 
     if to_merge:
-        start_time = time.time()
+        start_time = time.perf_counter()
         dark_poly_sh = _merge_polylist_shapely(to_merge)
-        print("--- %s seconds ---" % (time.time() - start_time))
+        logger.debug(f"Dark polygons merged in {time.perf_counter() - start_time:.4f} s")
         to_merge = [g.geom.exterior.coords for g in clear]
 
         if to_merge or pure_merge:
@@ -410,8 +222,15 @@ def _merge_poly_set(poly_set, pure_merge=False):
 
 
 def merge_polygons(mp):
-    print("Collect Geom")
-    start_time = time.time()
+    """Merge a layer of Geom objects, applying the dark/clear polarity.
+
+    Returns
+    -------
+    tuple of (list of Geom, list of Geom)
+        The merged closed geometries and the open ones, which are not part of
+        the filling area.
+    """
+    start_time = time.perf_counter()
     others = []
 
     merged = []
@@ -436,20 +255,19 @@ def merge_polygons(mp):
                 elif p.polarity == "clear":
                     poly_set[1].append(p)
                 else:
-                    print("[ERROR] Polarity not recognized")
+                    logger.error(f"Polarity not recognized: {p.polarity}")
 
                 pre_pol = p.polarity
             else:
                 others.append(p)
-    print("--- %s seconds ---" % (time.time() - start_time))
-    print("Geom Collected")
+    logger.debug(f"Geometries collected in {time.perf_counter() - start_time:.4f} s")
 
     if len(poly_set) > 0:
         if poly_set[0]:
             merged += _merge_poly_set(poly_set)
 
-    print("Final Merging")
-    start_time = time.time()
+    logger.debug("Final merging")
+    start_time = time.perf_counter()
 
     merged_final = []
     tmp_p = [m.geom for m in merged]
@@ -472,28 +290,9 @@ def merge_polygons(mp):
             merged_final.append(g)
 
     layer = merged_final
-    print("--- %s seconds ---" % (time.time() - start_time))
+    logger.debug(f"Final merging done in {time.perf_counter() - start_time:.4f} s")
 
     return layer, others
-
-
-def _merge_polylist(mp, scale=True):
-
-    pco = pc.Pyclipper()
-    polys = mp
-
-    if scale:
-        polys = pc.scale_to_clipper(mp)
-
-    results = []
-    pco.AddPaths(polys, pc.PT_SUBJECT, True)
-    clip_polys = pco.Execute(pc.CT_UNION, pc.PFT_NONZERO, pc.PFT_NONZERO)
-
-    if scale:
-        clip_polys = pc.scale_from_clipper(clip_polys)
-    results.extend([cp for cp in clip_polys])
-    pco.Clear()
-    return results
 
 
 def _merge_polylist_shapely(mp, scale=True):
@@ -524,29 +323,6 @@ def _clip_polylist_sh(clip_in, subj_in, scale=True):
     pco.AddPaths(subj, pc.PT_SUBJECT, True)
     sol_tree = pco.Execute2(pc.CT_DIFFERENCE, pc.PFT_EVENODD, pc.PFT_EVENODD)
     results = polytree_to_shapely(sol_tree, scale)
-    pco.Clear()
-    return results
-
-
-def _clip_polylist(clip_in, subj_in, scale=True):
-
-    pco = pc.Pyclipper()
-    clip = clip_in
-    if scale:
-        clip = pc.scale_to_clipper(clip_in)
-    subj = subj_in
-    if scale:
-        subj = pc.scale_to_clipper(subj_in)
-
-    results = []
-    pco.AddPaths(clip, pc.PT_CLIP, True)
-    pco.AddPaths(subj, pc.PT_SUBJECT, True)
-    sol = pco.Execute(pc.CT_DIFFERENCE, pc.PFT_EVENODD, pc.PFT_EVENODD)
-
-    if scale:
-        sol = pc.scale_from_clipper(sol)
-
-    results.extend([cp for cp in sol])
     pco.Clear()
     return results
 

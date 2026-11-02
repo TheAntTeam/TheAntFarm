@@ -424,15 +424,6 @@ class TestPathProcessing:
         assert isinstance(result, list)
         assert len(result) >= 1
 
-    def test_get_max_distance(self):
-        """Test get_max_distance function."""
-        from TheAntFarm.shape_core.geometry_manager import get_max_distance
-        coords = [(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)]
-        center = shg.Point(0.5, 0.5)
-        max_dist = get_max_distance(center, coords)
-        assert max_dist > 0
-        assert max_dist <= 0.71
-
     def test_merge_polygons_with_clear_and_dark(self):
         """Test merge_polygons with mixed clear and dark polarities."""
         dark_data = {
