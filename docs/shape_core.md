@@ -156,10 +156,15 @@ provide, so the macros always used the defaults of
 
 `ControllerWorker.update_gerber_cfg()` passes them to the commander
 configuration (`safe_pos` receives only the Z, which is what the macros
-use), the setter fields are enabled only when the mode is `setter` and the
-section is appended to the existing grid of the page, so no other row
-changed. The COMBO is filled from the macro registry: a new procedure
-appears in the preferences without touching the UI.
+use) and the setter fields are enabled only when the mode is `setter`.
+
+The section collects every parameter of a tool change in the order the
+procedure uses them: the probe position (MPos/WPos, Z limit, working
+position), the change position and, below them, the procedure. The two rows
+were moved with their containers, so their alignment is unchanged and no
+widget changed its name; the old "TOOL CHANGE" section disappeared. The
+combo is filled from the macro registry: a new procedure appears in the
+preferences without touching the UI.
 
 Not exposed on purpose: `tool_change_working` and `tool_change_feedrate`
 (fall back to the probe values, the change position is already a machine
