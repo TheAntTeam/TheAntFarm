@@ -274,3 +274,47 @@ class TestUnitConversion:
         gerber = pcb.get_gerber("top")
         assert gerber is not None
         assert len(gerber.geometries) > 0
+
+
+class TestLayerCache:
+    """The conversion of a layer is cached until a new file is loaded."""
+
+    @pytest.fixture
+    def pcb(self):
+        return PcbObj()
+
+    @pytest.fixture
+    def gerber_data_path(self):
+        return Path(__file__).parent.parent / "test_data" / "gerbers"
+
+    def test_gerber_layer_is_computed_once(self, pcb, gerber_data_path):
+        assert pcb.load_gerber(str(gerber_data_path / "simple_square.gbr"), "top") is True
+
+        first = pcb.get_gerber_layer("top")
+        second = pcb.get_gerber_layer("top")
+
+        assert first is second
+
+    def test_loading_a_new_file_invalidates_the_cache(self, pcb, gerber_data_path):
+        pcb.load_gerber(str(gerber_data_path / "simple_square.gbr"), "top")
+        first = pcb.get_gerber_layer("top")
+
+        pcb.load_gerber(str(gerber_data_path / "simple_square.gbr"), "top")
+        second = pcb.get_gerber_layer("top")
+
+        assert first is not second
+        assert len(first[0]) == len(second[0])
+
+    def test_excellon_layer_is_computed_once(self, pcb, gerber_data_path):
+        assert pcb.load_excellon(str(gerber_data_path / "simple_drill.drl"), "drill") is True
+
+        assert pcb.get_excellon_layer("drill") is pcb.get_excellon_layer("drill")
+
+    def test_loading_does_not_change_the_gerbyx_log_level(self, pcb, gerber_data_path):
+        from gerbyx import logger as gerbyx_logger
+
+        level_before = gerbyx_logger.logger.level
+
+        pcb.load_gerber(str(gerber_data_path / "simple_square.gbr"), "top")
+
+        assert gerbyx_logger.logger.level == level_before

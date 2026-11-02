@@ -5,20 +5,20 @@ from collections import OrderedDict as Od
 from typing import Any, Optional
 
 from gerbyx import logger as gerbyx_logger
-from gerbyx.tokenizer import tokenize_gerber
-from gerbyx.parser import GerberParser
-from gerbyx.processor import GerberProcessor
-
-
 from gerbyx.excellon import (
-    ExcellonState,
     ExcellonParser,
     ExcellonProcessor,
+    ExcellonState,
     tokenize_excellon,
 )
+from gerbyx.parser import GerberParser
+from gerbyx.processor import GerberProcessor
+from gerbyx.tokenizer import tokenize_gerber
 
-gerbyx_logger.set_level('WARNING')  # or 'INFO' (default), 'WARNING', 'ERROR'
 from .geometry_manager import FakeGeom
+
+# gerbyx is verbose at INFO level: keep its output out of the application log
+gerbyx_logger.set_level("WARNING")
 
 logger = logging.getLogger(__name__)
 
@@ -67,12 +67,11 @@ class PcbObj:
             logger.error(f"GERBER FILE NOT FOUND: {path}")
             return False
 
+        # a new file invalidates the geometry computed from the previous one
+        self.layers.pop(tag, None)
         try:
-            gerbyx_logger.set_level('INFO')  # or 'INFO' (default), 'WARNING', 'ERROR'
-
-            # Parse Gerber file
-            with open(path, 'r') as f:
-                gerber_source = f.read()
+            with open(path, "r", encoding="utf-8", errors="replace") as gerber_file:
+                gerber_source = gerber_file.read()
 
             processor = GerberProcessor()
             parser = GerberParser(processor)
@@ -94,10 +93,11 @@ class PcbObj:
             logger.error(f"EXCELLON FILE NOT FOUND: {path}")
             return False
 
+        # a new file invalidates the geometry computed from the previous one
+        self.layers.pop(tag, None)
         try:
-            # Parse Excellon file
-            with open(path, 'r') as f:
-                excellon_source = f.read()
+            with open(path, "r", encoding="utf-8", errors="replace") as excellon_file:
+                excellon_source = excellon_file.read()
 
             state = ExcellonState(output_units="MM")  # oppure "INCH"
             parser = ExcellonParser(state, auto_detect_coord_format=True)  # hint_units="INCH" se il file non dichiara le unità
@@ -113,21 +113,34 @@ class PcbObj:
             return False
 
     def get_gerber_layer(self, tag: str) -> Any:
+        """Return the geometries of a loaded Gerber layer.
+
+        The result is cached: the conversion of the primitives to ``FakeGeom``
+        is needed every time a job is created from the layer, while the layer
+        itself only changes when a new file is loaded.
+        """
+        if tag in self.layers and self.layers[tag] is not None:
+            return self.layers[tag]
+
         logger.info(f"Processing Gerber Layer: {tag}")
-        start_time = time.time()
+        start_time = time.perf_counter()
         g = self.get_gerber(tag)
         if g is None:
             return None
 
         self.layers[tag] = ([FakeGeom(x) for x in g.geometries], ())
         logger.debug("Gerber layer %s geometries: %s", tag, self.layers[tag])
-        logger.info(f"Gerber Layer {tag} processed in {time.time() - start_time:.4f} seconds")
+        logger.info(f"Gerber Layer {tag} processed in {time.perf_counter() - start_time:.4f} seconds")
 
         return self.layers[tag]
 
     def get_excellon_layer(self, tag: str) -> Any:
+        """Return the geometries of a loaded Excellon layer (cached, see above)."""
+        if tag in self.layers and self.layers[tag] is not None:
+            return self.layers[tag]
+
         logger.info(f"Processing Excellon Layer: {tag}")
-        start_time = time.time()
+        start_time = time.perf_counter()
         g = self.get_excellon(tag)
 
         logger.debug("Excellon processor: %s", g)
@@ -137,7 +150,7 @@ class PcbObj:
 
         self.layers[tag] = ([FakeGeom(x) for x in g.geometries], ())
         logger.debug("Excellon layer %s geometries: %s", tag, self.layers[tag])
-        logger.info(f"Excellon Layer {tag} processed in {time.time() - start_time:.4f} seconds")
+        logger.info(f"Excellon Layer {tag} processed in {time.perf_counter() - start_time:.4f} seconds")
 
         return self.layers[tag]
 
