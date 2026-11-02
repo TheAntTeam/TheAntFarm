@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import time
@@ -12,6 +13,8 @@ from shapely.geometry import LineString
 from .align_manager import AlignManager
 from .commands_manager import CommandManager
 from .macros_manager import Macros
+
+logger = logging.getLogger(__name__)
 
 
 class GCoder:
@@ -71,6 +74,8 @@ class GCoder:
                 "xy_feedrate": 250.0,
                 "z_feedrate": 40.0,
                 "spindle": 1000.0,
+                "multi_depth": False,
+                "depth_per_pass": 0.0,
                 "mirror": False,
             }
         elif machining_type == "drill":
@@ -119,27 +124,29 @@ class GCoder:
         self.path = path
 
     def compute(self):
-        if "mirror" not in self.cfg.keys():
-            mirror = False
-        else:
-            mirror = self.cfg["mirror"]
+        mirror = self.cfg.get("mirror", False)
         if self.type == "gerber":
             self.compute_gerber(mirror=mirror)
-        elif self.type == "profile":
-            self.compute_pocketing(mirror=mirror)
+        elif self.type in ("profile", "pocketing"):
+            if not self.compute_pocketing(mirror=mirror):
+                return False
         elif self.type == "drill":
-            self.compute_drill(mirror=mirror)
-        elif self.type == "pocketing":
-            self.compute_pocketing(mirror=mirror)
+            if not self.compute_drill(mirror=mirror):
+                return False
         elif self.type == "commander":
-            print("Nothing to do!")
+            logger.info("Nothing to do for the commander machining type")
         else:
-            print("Machining Type not supported")
+            logger.error(f"Machining Type not supported: {self.type}")
             return False
         return True
 
     def compute_drill(self, mirror=False):
         # compute GCode from a drill path
+
+        cut = self.cfg.get("cut", 0.0)
+        if cut == 0:
+            logger.error("Cut depth is 0: nothing could be drilled")
+            return False
 
         self.gcode = []
         self.create_header()
@@ -149,16 +156,15 @@ class GCoder:
         self.go_travel()
         self.spindle_on(True)
 
-        print("Compute Drill:")
+        logger.info("Compute Drill:")
         tool_change = -1
         for d in self.path:
             data = d[0]
             path = d[1]
             if data[1] == "pocketing":
-                print(" - Pocketing, bit diameter " + str(data[0]))
+                logger.info(f" - Pocketing, bit diameter {data[0]}")
                 self.insert_comment("Pocketing Section in Drill Procedure")
                 self.insert_comment("Tool Diameter: " + str(data[0]))
-                cut = self.cfg["cut"]
                 sign = cut / abs(cut)
                 dpp = data[0]
                 n = int(abs(cut) // dpp) + 1
@@ -167,7 +173,7 @@ class GCoder:
                 pass_list.sort(reverse=True)
                 self.compute_pocketing_paths(path, pass_list, mirror=mirror)
             else:
-                print(" - Drilling, bit diameter " + str(data[0]))
+                logger.info(f" - Drilling, bit diameter {data[0]}")
                 self.insert_comment("Drill Section in Drill Procedure")
                 self.insert_comment("Tool Diameter: " + str(data[0]))
                 self.compute_drill_paths(path, tool_change=tool_change, mirror=mirror)
@@ -175,6 +181,7 @@ class GCoder:
 
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
+        return True
 
     def compute_gerber(self, mirror=False):
         # essentially it's about following the points indicated by the paths
@@ -228,14 +235,18 @@ class GCoder:
         # follow the path and finally
         # return in travel mode
 
-        multi_pass = False
-        if self.cfg["multi_depth"]:
-            multi_pass = self.cfg["depth_per_pass"] > 0.0
+        multi_pass = bool(self.cfg.get("multi_depth", False))
+        if multi_pass:
+            multi_pass = self.cfg.get("depth_per_pass", 0.0) > 0.0
+
+        cut = self.cfg.get("cut", 0.0)
+        if cut == 0:
+            logger.error("Cut depth is 0: nothing could be milled")
+            return False
 
         for d in self.path:
             paths = d[1]
             if multi_pass:
-                cut = self.cfg["cut"]
                 sign = cut / abs(cut)
                 dpp = self.cfg["depth_per_pass"]
                 n = int(abs(cut) // dpp)
@@ -247,6 +258,7 @@ class GCoder:
 
         self.spindle_on(False)
         self.go_to((0.0, 0.0))
+        return True
 
     def mirror_coords(self, cs):
         csa = np.array(cs)

@@ -368,3 +368,59 @@ class TestZeroLengthDrillPath:
         gcode = "".join(gcoder.gcode)
         assert len(re.findall(r"G0?0 X", gcode)) == 1
         assert gcode.count("G01 Z") == gcoder.STEPS
+
+
+class TestMachiningConfigGuards:
+    """Configuration guards: missing multi_depth key and zero cut depth."""
+
+    @pytest.fixture
+    def simple_path(self):
+        return [((1.0, "pocketing"), [LineString([(0, 0), (10, 0), (10, 10), (0, 0)])])]
+
+    def test_pocketing_default_cfg_has_multi_depth(self):
+        gcoder = GCoder(tag="test", machining_type="pocketing")
+        assert gcoder.cfg["multi_depth"] is False
+        assert gcoder.cfg["depth_per_pass"] == 0.0
+
+    def test_pocketing_without_multi_depth_key_does_not_raise(self, simple_path):
+        """A user configuration may not provide the multi depth keys."""
+        gcoder = GCoder(tag="test", machining_type="pocketing")
+        gcoder.cfg.pop("multi_depth")
+        gcoder.cfg.pop("depth_per_pass")
+        gcoder.load_path(simple_path)
+
+        assert gcoder.compute() is True
+
+    def test_pocketing_with_zero_cut_fails(self, simple_path):
+        gcoder = GCoder(tag="test", machining_type="pocketing")
+        gcoder.cfg["multi_depth"] = True
+        gcoder.cfg["depth_per_pass"] = 0.5
+        gcoder.cfg["cut"] = 0.0
+        gcoder.load_path(simple_path)
+
+        assert gcoder.compute() is False
+
+    def test_drill_with_zero_cut_fails(self, simple_path):
+        gcoder = GCoder(tag="test", machining_type="drill")
+        gcoder.cfg["cut"] = 0.0
+        gcoder.load_path(simple_path)
+
+        assert gcoder.compute() is False
+
+    def test_drill_does_not_divide_by_zero_with_zero_cut(self, simple_path):
+        """compute_drill used to raise ZeroDivisionError (cut / abs(cut))."""
+        gcoder = GCoder(tag="test", machining_type="drill")
+        gcoder.cfg["cut"] = 0.0
+        gcoder.load_path(simple_path)
+
+        assert gcoder.compute() is False
+
+    def test_profile_multi_depth_generates_one_pass_per_increment(self):
+        gcoder = GCoder(tag="test", machining_type="profile")
+        gcoder.cfg.update({"multi_depth": True, "depth_per_pass": 0.5, "cut": -1.5})
+        gcoder.load_path([((1.0, "profile"), [LineString([(0, 0), (10, 0), (10, 10), (0, 0)])])])
+
+        assert gcoder.compute() is True
+        gcode = "".join(gcoder.gcode)
+        assert gcode.count("G01 Z-") == 3
+        assert "G01 Z-1.5000" in gcode
