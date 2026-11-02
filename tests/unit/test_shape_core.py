@@ -53,3 +53,69 @@ class TestGCoder:
         """Test G-code generation from geometry"""
         # TODO: Implement with sample geometry
         pass
+
+
+class TestPublicApi:
+    """The package exposes a stable API instead of the single modules."""
+
+    def test_core_classes_are_exported(self):
+        import importlib
+
+        shape_core = importlib.import_module("TheAntFarm.shape_core")
+
+        for name in (
+            "GCoder",
+            "GCodeParser",
+            "GCodeMacro",
+            "MachinePath",
+            "Gapper",
+            "ToolPath",
+            "PcbObj",
+            "Geom",
+            "Macros",
+            "MacroContext",
+            "AlignManager",
+            "CommandManager",
+            "DrillGcodeConverter",
+        ):
+            assert hasattr(shape_core, name), name
+            assert name in shape_core.__all__
+
+    def test_configuration_helpers_are_exported(self):
+        import importlib
+
+        shape_core = importlib.import_module("TheAntFarm.shape_core")
+
+        assert "default_config" in shape_core.__all__
+        assert "merge_config" in shape_core.__all__
+        assert shape_core.PROBE_DEFAULTS["tool_probe_min"] == -11.0
+
+    def test_visual_layer_is_imported_on_demand(self):
+        import importlib
+        import sys
+
+        shape_core = importlib.import_module("TheAntFarm.shape_core")
+        module_name = "TheAntFarm.shape_core.visual_manager"
+
+        visual_layer = shape_core.VisualLayer
+
+        assert visual_layer.__name__ == "VisualLayer"
+        assert module_name in sys.modules
+
+    def test_unknown_name_raises_attribute_error(self):
+        import importlib
+
+        import pytest
+
+        shape_core = importlib.import_module("TheAntFarm.shape_core")
+
+        with pytest.raises(AttributeError):
+            shape_core.NotAnExport
+
+    def test_dir_lists_the_public_names(self):
+        import importlib
+
+        shape_core = importlib.import_module("TheAntFarm.shape_core")
+
+        assert "GCoder" in dir(shape_core)
+        assert "VisualLayer" in dir(shape_core)
