@@ -46,11 +46,11 @@ class SerialWorker(QObject):
                 port_name_l.append(port.portName())
             else:
                 port_name = port.portName()
-                if sys.platform.startswith('linux'):
-                    if port_name.startswith(('ttyUSB', 'ttyACM', 'ttyAMA')):
+                if sys.platform.startswith("linux"):
+                    if port_name.startswith(("ttyUSB", "ttyACM", "ttyAMA")):
                         port_name_l.append(port_name)
-                elif sys.platform.startswith('darwin'):
-                    if 'usb' in port_name.lower():
+                elif sys.platform.startswith("darwin"):
+                    if "usb" in port_name.lower():
                         port_name_l.append(port_name)
                 else:  # Windows — show all
                     port_name_l.append(port_name)
