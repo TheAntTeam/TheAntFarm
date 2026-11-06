@@ -186,18 +186,21 @@ class TestSerialManager:
         # Verify port list
         assert blocker.args == [["COM1"], [9600, 115200]]
 
-    @pytest.mark.parametrize("platform,port_name,expected", [
-        ("linux", "ttyS0", False),
-        ("linux", "ttyUSB0", True),
-        ("linux", "ttyACM0", True),
-        ("linux", "ttyAMA0", True),
-        ("darwin", "cu.usbmodem101", True),
-        ("darwin", "cu.Bluetooth", False),
-        ("darwin", "tty.Bluetooth", False),
-        ("darwin", "tty.usbserial-1234", True),
-        ("win32", "COM1", True),
-        ("win32", "COM3", True),
-    ])
+    @pytest.mark.parametrize(
+        "platform,port_name,expected",
+        [
+            ("linux", "ttyS0", False),
+            ("linux", "ttyUSB0", True),
+            ("linux", "ttyACM0", True),
+            ("linux", "ttyAMA0", True),
+            ("darwin", "cu.usbmodem101", True),
+            ("darwin", "cu.Bluetooth", False),
+            ("darwin", "tty.Bluetooth", False),
+            ("darwin", "tty.usbserial-1234", True),
+            ("win32", "COM1", True),
+            ("win32", "COM3", True),
+        ],
+    )
     def test_get_port_list_filtering(self, serial_manager, mocker, qtbot, platform, port_name, expected):
         """Test filtering behavior on different platforms"""
         mock_port = mocker.Mock()
