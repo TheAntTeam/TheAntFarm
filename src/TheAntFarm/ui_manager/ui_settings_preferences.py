@@ -15,6 +15,7 @@ class UiSettingsPreferencesTab(QObject):
     ask_status_report_s = Signal()
     load_gcoder_cfg_s = Signal()
     save_all_settings_s = Signal()
+    grbl_simulator_settings_changed_s = Signal(bool, float)
 
     def __init__(self, ui, control_worker, settings):
         """
@@ -95,6 +96,9 @@ class UiSettingsPreferencesTab(QObject):
 
         self.reset_application_settings()
         self.reset_serial_error_thresholds()
+        self.reset_grbl_simulator_settings()
+        self.ui.grbl_simulator_chb.clicked.connect(self.grbl_simulator_checked)
+        self.ui.grbl_simulator_speed_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("top"))
         self.ui.bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("bottom"))
         self.ui.profile_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("profile"))
@@ -136,6 +140,17 @@ class UiSettingsPreferencesTab(QObject):
         """Reset serial error threshold UI elements according to application settings."""
         self.ui.serial_error_warning_threshold_sb.setValue(self.app_settings.serial_error_warning_threshold)
         self.ui.serial_error_critical_threshold_sb.setValue(self.app_settings.serial_error_critical_threshold)
+
+    def reset_grbl_simulator_settings(self) -> None:
+        """Reset the GRBL simulator UI elements according to application settings."""
+        self.ui.grbl_simulator_chb.setChecked(self.app_settings.grbl_simulator_enabled)
+        self.ui.grbl_simulator_speed_dsb.setValue(self.app_settings.grbl_simulator_speed)
+        self.ui.grbl_simulator_speed_dsb.setEnabled(self.app_settings.grbl_simulator_enabled)
+
+    def grbl_simulator_checked(self) -> None:
+        """Enable the simulator speed only when the simulator is listed."""
+        self.ui.grbl_simulator_speed_dsb.setEnabled(self.ui.grbl_simulator_chb.isChecked())
+        self.set_focus_lost()
 
     def reset_jobs_common_initial_settings(self):
         """Reset status of common jobs settings."""
@@ -199,6 +214,7 @@ class UiSettingsPreferencesTab(QObject):
         """Restore initial settings in ui fields."""
         self.reset_application_settings()
         self.reset_serial_error_thresholds()
+        self.reset_grbl_simulator_settings()
         self.reset_jobs_common_initial_settings()
         self.reset_probe_initial_settings()
         self.reset_tool_machine_initial_settings()
@@ -373,6 +389,8 @@ class UiSettingsPreferencesTab(QObject):
         self.app_settings.serial_error_warning_threshold = self.ui.serial_error_warning_threshold_sb.value()
         self.app_settings.serial_error_critical_threshold = self.ui.serial_error_critical_threshold_sb.value()
 
+        self.save_grbl_simulator_settings()
+
         # Save camera rotation and flip settings to app settings
         self.app_settings.camera_rotation_angle = self.ui.camera_rotation_dsb.value()
         self.app_settings.camera_flip_h = self.ui.flip_cam_h_chb.isChecked()
@@ -383,6 +401,15 @@ class UiSettingsPreferencesTab(QObject):
         self.save_all_settings_s.emit()
         self.ui.status_bar.showMessage("Settings/Preferences saved.")
         self.reset_focus_lost()
+
+    def save_grbl_simulator_settings(self) -> None:
+        """Store the GRBL simulator settings and announce them when they change."""
+        enabled = self.ui.grbl_simulator_chb.isChecked()
+        speed = self.ui.grbl_simulator_speed_dsb.value()
+        if (enabled, speed) != (self.app_settings.grbl_simulator_enabled, self.app_settings.grbl_simulator_speed):
+            self.app_settings.grbl_simulator_enabled = enabled
+            self.app_settings.grbl_simulator_speed = speed
+            self.grbl_simulator_settings_changed_s.emit(enabled, speed)
 
     def set_focus_lost(self):
         """When a setting is changed but not saved the focus is lost. We signal it coloring pushbutton in red."""

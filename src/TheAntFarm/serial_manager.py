@@ -1,7 +1,9 @@
 import logging
 import sys
 import traceback
+from typing import Optional
 
+from grbl_simulator import SIMULATOR_PORT_NAME, SimulatedSerialPort
 from PySide6.QtCore import QIODevice, QObject, Signal, Slot
 from PySide6.QtSerialPort import QSerialPort, QSerialPortInfo
 
@@ -15,6 +17,7 @@ class SerialWorker(QObject):
     refresh_port_list_s = Signal()
     get_port_list_s = Signal(list, list)
     close_for_error_s = Signal()
+    set_simulator_s = Signal(bool, float)
 
     def __init__(self, serial_rx_queue, serial_tx_queue):
         super(SerialWorker, self).__init__()
@@ -22,6 +25,12 @@ class SerialWorker(QObject):
         self.serial_port.readyRead.connect(self.receive)
         self.serial_port.errorOccurred.connect(self.serial_error_manager)
         self.refresh_port_list_s.connect(self.get_port_list)
+
+        self._hardware_port = self.serial_port
+        self.simulated_port: Optional[SimulatedSerialPort] = None
+        self.simulator_enabled = False
+        self.simulator_speed = 1.0
+        self.set_simulator_s.connect(self.set_simulator)
 
         self.serialRxQueue = serial_rx_queue  # FIFO RX Queue to pass data to control thread
         self.serialTxQueue = serial_tx_queue  # FIFO TX Queue to get data from control thread
@@ -55,9 +64,33 @@ class SerialWorker(QObject):
                 else:  # Windows — show all
                     port_name_l.append(port_name)
         port_name_l.sort()
-        if port_l:
-            bauds_ls = port_l[0].standardBaudRates()
+        if self.simulator_enabled:
+            port_name_l.append(SIMULATOR_PORT_NAME)
+        if port_l or self.simulator_enabled:
+            bauds_ls = port_l[0].standardBaudRates() if port_l else QSerialPortInfo.standardBaudRates()
             self.get_port_list_s.emit(port_name_l, bauds_ls)
+
+    @Slot(bool, float)
+    def set_simulator(self, enabled: bool, speed: float) -> None:
+        """List the GRBL simulator among the ports, or not, and set its speed."""
+        if enabled != self.simulator_enabled:
+            logger.info(f"{SIMULATOR_PORT_NAME} {'listed among' if enabled else 'removed from'} the serial ports.")
+        self.simulator_enabled = enabled
+        self.simulator_speed = speed
+        if self.simulated_port is not None:
+            self.simulated_port.speed = speed
+
+    def _select_port(self, port: str) -> None:
+        """Use the simulator for its port name and the hardware port for any other."""
+        if port == SIMULATOR_PORT_NAME and self.simulator_enabled:
+            if self.simulated_port is None:
+                self.simulated_port = SimulatedSerialPort(self, speed=self.simulator_speed)
+                self.simulated_port.readyRead.connect(self.receive)
+            if self.serial_port is not self.simulated_port:
+                self._hardware_port = self.serial_port
+                self.serial_port = self.simulated_port
+        elif self.serial_port is self.simulated_port:
+            self.serial_port = self._hardware_port
 
     def open_port(self, port, baud_rate):
         """Open passed serial port. Return outcome of operation. True if success, otherwise False."""
@@ -65,6 +98,7 @@ class SerialWorker(QObject):
             logger.debug("Opening " + port)
             self.update_console_text_s.emit("Opening " + port)
             try:
+                self._select_port(port)
                 self.serial_port.setPortName(port)
                 if self.serial_port.open(QIODevice.ReadWrite):
                     self.serial_port.setBaudRate(baud_rate)

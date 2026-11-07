@@ -39,6 +39,8 @@ def mock_ui():
     ui.flip_cam_v_chb = MagicMock()
     ui.serial_error_warning_threshold_sb = MagicMock()
     ui.serial_error_critical_threshold_sb = MagicMock()
+    ui.grbl_simulator_chb.isChecked.return_value = False
+    ui.grbl_simulator_speed_dsb.value.return_value = 1.0
     ui.get_tool_probe_pb = MagicMock()
     ui.get_tool_change_pb = MagicMock()
     ui.top_layer_color_pb = MagicMock()
@@ -79,6 +81,8 @@ def mock_settings():
     settings.app_settings.camera_rotation_angle = 0
     settings.app_settings.camera_flip_h = False
     settings.app_settings.camera_flip_v = False
+    settings.app_settings.grbl_simulator_enabled = False
+    settings.app_settings.grbl_simulator_speed = 1.0
     settings.jobs_settings = MagicMock()
     settings.jobs_settings.jobs_settings_od = {"common": {"mirroring_axis": "X"}}
     return settings
@@ -127,6 +131,41 @@ class TestResetApplicationSettings:
         mock_ui.top_layer_color_la = MagicMock()
         settings_tab.reset_application_settings()
         mock_ui.top_layer_color_la.setStyleSheet.assert_called()
+
+
+class TestGrblSimulatorSettings:
+    def test_reset_shows_the_stored_settings(self, settings_tab, mock_ui, mock_settings):
+        mock_settings.app_settings.grbl_simulator_enabled = True
+        mock_settings.app_settings.grbl_simulator_speed = 10.0
+
+        settings_tab.reset_grbl_simulator_settings()
+
+        mock_ui.grbl_simulator_chb.setChecked.assert_called_with(True)
+        mock_ui.grbl_simulator_speed_dsb.setValue.assert_called_with(10.0)
+        mock_ui.grbl_simulator_speed_dsb.setEnabled.assert_called_with(True)
+
+    def test_checking_enables_the_speed_and_marks_unsaved(self, settings_tab, mock_ui):
+        mock_ui.grbl_simulator_chb.isChecked.return_value = True
+
+        settings_tab.grbl_simulator_checked()
+
+        mock_ui.grbl_simulator_speed_dsb.setEnabled.assert_called_with(True)
+        assert settings_tab.has_unsaved_changes()
+
+    def test_saving_a_change_stores_and_announces_it(self, settings_tab, mock_ui, mock_settings, qtbot):
+        mock_ui.grbl_simulator_chb.isChecked.return_value = True
+        mock_ui.grbl_simulator_speed_dsb.value.return_value = 5.0
+
+        with qtbot.waitSignal(settings_tab.grbl_simulator_settings_changed_s, timeout=1000) as blocker:
+            settings_tab.save_grbl_simulator_settings()
+
+        assert blocker.args == [True, 5.0]
+        assert mock_settings.app_settings.grbl_simulator_enabled is True
+        assert mock_settings.app_settings.grbl_simulator_speed == 5.0
+
+    def test_saving_unchanged_settings_announces_nothing(self, settings_tab, qtbot):
+        with qtbot.assertNotEmitted(settings_tab.grbl_simulator_settings_changed_s):
+            settings_tab.save_grbl_simulator_settings()
 
 
 class TestResetSerialErrorThresholds:

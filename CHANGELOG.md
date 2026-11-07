@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- GRBL 1.1 simulator for development and tests: enabled in `Preferences -> Application Settings` (with its speed), it is listed last among the serial ports as `GRBL simulator`. See `docs/grbl_simulator.md`.
 - Rebuilt the macro system around a single validated tag catalog: unknown or malformed placeholders are refused instead of being sent to the machine, templates are validated when loaded and the expansion of every template is covered by golden tests.
 - Added three selectable tool change procedures: work zero re-datum (`wcs`, default), dynamic tool length offset (`tlo`) and fixed tool setter (`setter`), selected with `tool_change_mode`.
 - Tool change macro: two stage probing, spindle stop with dwell and restart, `G21`/`G49` and an explicit message on the manual change.
