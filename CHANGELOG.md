@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - The command manager no longer overwrites the configured safe position with its default when the commander configuration is loaded.
 - Tool change: the FluidNC per-axis tool length offset report is parsed, a failed probing cycle is discarded instead of being used as a measurement, the job is stopped when the macro cannot run, and the tool change reliably starts only when the machine is idle.
 - `offset_polygon_holes` returns `None` when no hole survives the offset.
+- Serial port selector (#72): Connect with no port or baud rate selected shows a message instead of raising `ValueError`; Refresh with no ports at all empties the list instead of keeping the last port; Refresh keeps the selected port by name instead of by position; a late serial error signal can only disconnect, never connect.
 
 ### Changed
 

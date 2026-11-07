@@ -237,6 +237,16 @@ class TestSerialManager:
         # Should be included because it has vendor ID
         assert blocker.args[0] == ["ttyS0"]
 
+    def test_get_port_list_without_any_port(self, serial_manager, mocker, qtbot):
+        """With no port at all the empty list is still sent, so the UI does not keep a stale port."""
+        mocker.patch("PySide6.QtSerialPort.QSerialPortInfo.availablePorts", return_value=[])
+
+        with qtbot.waitSignal(serial_manager.get_port_list_s, timeout=1000) as blocker:
+            serial_manager.get_port_list()
+
+        assert blocker.args[0] == []
+        assert 115200 in blocker.args[1]
+
     def test_queue_handling(self, serial_manager):
         """Test queue operations"""
         # Put test command in TX queue

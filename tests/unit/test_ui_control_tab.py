@@ -234,3 +234,107 @@ class TestRejectedLinePrompt:
         assert ui_tab.rejected_line_prompt is None
         assert ui_tab.stops == [1]
         assert ui_tab.resumes == []
+
+
+class FakeCombo:
+    """The part of QComboBox used by the port selector (the tests run without a QApplication)."""
+
+    def __init__(self, items=(), current=""):
+        self.items = list(items)
+        self.index = self.items.index(current) if current in self.items else (0 if self.items else -1)
+
+    def clear(self):
+        self.items, self.index = [], -1
+
+    def addItems(self, items):
+        self.items.extend(items)
+        if self.index == -1 and self.items:
+            self.index = 0
+
+    def findText(self, text):
+        return self.items.index(text) if text in self.items else -1
+
+    def setCurrentIndex(self, index):
+        self.index = index
+
+    def currentText(self):
+        return self.items[self.index] if 0 <= self.index < len(self.items) else ""
+
+
+@pytest.mark.usefixtures("qapp")
+class TestSerialPortSelector:
+    BAUDS = [9600, 57600, 115200]
+
+    def _tab(self, ports=(), port="", bauds=(), baud="", last_port="", last_baud=115200, connected=False):
+        from PySide6.QtCore import QObject
+
+        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
+
+        ui_tab = UiControlTab.__new__(UiControlTab)
+        QObject.__init__(ui_tab)
+        ui_tab.ui = Mock()
+        ui_tab.ui.serial_ports_cb = FakeCombo(ports, port)
+        ui_tab.ui.serial_baud_cb = FakeCombo([str(b) for b in bauds], baud)
+        ui_tab.app_settings = Mock(last_serial_port=last_port, last_serial_baud=last_baud)
+        ui_tab.serial_connection_status = connected
+        ui_tab.opened = []
+        ui_tab.ui_serial_open_s.connect(lambda port_name, baud_rate: ui_tab.opened.append((port_name, baud_rate)))
+        return ui_tab
+
+    def test_refresh_keeps_the_selected_port_when_a_port_is_added_before_it(self):
+        ui_tab = self._tab(["ttyUSB1"], "ttyUSB1", self.BAUDS, "115200")
+
+        ui_tab.get_ports_and_bauds(["ttyACM0", "ttyUSB1"], self.BAUDS)
+
+        assert ui_tab.ui.serial_ports_cb.currentText() == "ttyUSB1"
+        assert ui_tab.ui.serial_baud_cb.currentText() == "115200"
+
+    def test_refresh_falls_back_to_the_saved_port_when_the_selected_one_is_gone(self):
+        ui_tab = self._tab(["COM3", "COM7"], "COM7", self.BAUDS, "9600", last_port="COM5")
+
+        ui_tab.get_ports_and_bauds(["COM3", "COM5"], self.BAUDS)
+
+        assert ui_tab.ui.serial_ports_cb.currentText() == "COM5"
+        assert ui_tab.ui.serial_baud_cb.currentText() == "9600"
+
+    def test_refresh_with_no_ports_empties_the_list(self):
+        ui_tab = self._tab(["COM3"], "COM3", self.BAUDS, "115200")
+
+        ui_tab.get_ports_and_bauds([], self.BAUDS)
+
+        assert ui_tab.ui.serial_ports_cb.currentText() == ""
+        ui_tab.ui.serial_te.append.assert_called_with("No serial ports available.")
+
+    def test_connect_without_a_port_shows_a_message(self):
+        ui_tab = self._tab()
+
+        ui_tab.handle_connect_button()
+
+        assert ui_tab.opened == []
+        ui_tab.ui.serial_te.append.assert_called_once()
+        assert "No serial port selected" in ui_tab.ui.serial_te.append.call_args[0][0]
+
+    def test_connect_opens_the_selected_port(self):
+        ui_tab = self._tab(["COM3"], "COM3", self.BAUDS, "115200")
+
+        ui_tab.handle_connect_button()
+
+        assert ui_tab.opened == [("COM3", 115200)]
+
+    def test_serial_errors_while_disconnected_never_connect(self):
+        ui_tab = self._tab(["COM3"], "COM3", self.BAUDS, "115200")
+
+        ui_tab.close_for_error()
+
+        assert ui_tab.opened == []
+
+    def test_serial_errors_while_connected_disconnect(self):
+        ui_tab = self._tab(["COM3"], "COM3", self.BAUDS, "115200", connected=True)
+        ui_tab.act_on_disconnection = Mock()
+        closed = []
+        ui_tab.ui_serial_close_s.connect(lambda: closed.append(1))
+
+        ui_tab.close_for_error()
+
+        assert closed == [1]
+        ui_tab.act_on_disconnection.assert_called_once()
