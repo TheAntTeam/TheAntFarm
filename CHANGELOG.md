@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - The command manager no longer overwrites the configured safe position with its default when the commander configuration is loaded.
 - Tool change: the FluidNC per-axis tool length offset report is parsed, a failed probing cycle is discarded instead of being used as a measurement, the job is stopped when the macro cannot run, and the tool change reliably starts only when the machine is idle.
 - `offset_polygon_holes` returns `None` when no hole survives the offset.
+- Tool change: the macro waits for the machine to report idle after the last acknowledged line before requesting `$#`; GRBL acknowledges a line when it is queued, so `$#` could arrive while the machine was still moving, be refused with `error:8` and stall the job (#75).
 
 ### Changed
 
