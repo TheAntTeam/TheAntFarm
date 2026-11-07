@@ -94,7 +94,7 @@ class UiControlTab(QObject):
         # From Serial Manager to UI Manager
         self.serialWo.get_port_list_s.connect(self.get_ports_and_bauds)
         self.serialWo.open_port_s.connect(self.act_on_connection)
-        self.serialWo.close_for_error_s.connect(self.handle_connect_button)
+        self.serialWo.close_for_error_s.connect(self.close_for_error)
         self.serialWo.update_console_text_s.connect(self.update_console_text)
 
         # From Serial Manager to Control Manager
@@ -707,8 +707,6 @@ class UiControlTab(QObject):
         self.serial_ports_baudrate_ls = baudrates
         current_port = self.ui.serial_ports_cb.currentText()
         current_baud = self.ui.serial_baud_cb.currentText()
-        idx_last_serial = self.ui.serial_ports_cb.findText(current_port)
-        idx_last_baud = self.ui.serial_baud_cb.findText(current_baud)
         if self.serial_ports_name_ls:
             logger.debug("Available ports: " + str(self.serial_ports_name_ls))
             self.ui.serial_ports_cb.clear()
@@ -721,6 +719,8 @@ class UiControlTab(QObject):
             self.ui.serial_ports_cb.clear()
             self.ui.serial_baud_cb.clear()
 
+        idx_last_serial = self.ui.serial_ports_cb.findText(current_port) if current_port else -1
+        idx_last_baud = self.ui.serial_baud_cb.findText(current_baud) if current_baud else -1
         if idx_last_serial != -1:
             self.ui.serial_ports_cb.setCurrentIndex(idx_last_serial)
         else:
@@ -745,10 +745,21 @@ class UiControlTab(QObject):
         creates the serial worker thread. If the thread was
         already created previously and paused, it revives it."""
         if not self.serial_connection_status:
-            self.ui_serial_open_s.emit(self.ui.serial_ports_cb.currentText(), int(self.ui.serial_baud_cb.currentText()))
+            port = self.ui.serial_ports_cb.currentText()
+            baud = self.ui.serial_baud_cb.currentText()
+            if not port or not baud.isdigit():
+                self.ui.serial_te.append("No serial port selected: connect the machine and press Refresh.")
+                return
+            self.ui_serial_open_s.emit(port, int(baud))
         else:
             self.ui_serial_close_s.emit()
             self.act_on_disconnection()
+
+    @Slot()
+    def close_for_error(self) -> None:
+        """Disconnect after too many serial errors; never connect, even if the signal arrives late."""
+        if self.serial_connection_status:
+            self.handle_connect_button()
 
     @Slot(bool)
     def act_on_connection(self, connection_status):

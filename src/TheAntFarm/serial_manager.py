@@ -66,9 +66,8 @@ class SerialWorker(QObject):
         port_name_l.sort()
         if self.simulator_enabled:
             port_name_l.append(SIMULATOR_PORT_NAME)
-        if port_l or self.simulator_enabled:
-            bauds_ls = port_l[0].standardBaudRates() if port_l else QSerialPortInfo.standardBaudRates()
-            self.get_port_list_s.emit(port_name_l, bauds_ls)
+        bauds_ls = port_l[0].standardBaudRates() if port_l else QSerialPortInfo.standardBaudRates()
+        self.get_port_list_s.emit(port_name_l, bauds_ls)
 
     @Slot(bool, float)
     def set_simulator(self, enabled: bool, speed: float) -> None:
