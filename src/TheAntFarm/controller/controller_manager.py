@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 
 class ControllerWorker(ControllerSignals):
     REMOTE_RX_BUFFER_MAX_SIZE = 128
+    SPINDLE_RESTART_DELAY_MS = 4000
+    SPINDLE_STOP_TOGGLE = b"\x9e"
 
     def __init__(self, serial_rx_queue, serial_tx_queue, settings):
         super(ControllerWorker, self).__init__()
@@ -72,6 +74,10 @@ class ControllerWorker(ControllerSignals):
         self.min_buffer_threshold = 80
         self.eof_wait_for_idle = False
         self.job_aborted = False
+        self.rejected_line_pending = False
+        self.rejected_line_prompted = False
+        self.rejected_line_resuming = False
+        self.rejected_line_error = ""
         self.start_time = None
 
         self.active_gcode_path = ""
@@ -93,6 +99,7 @@ class ControllerWorker(ControllerSignals):
             self.poll_timer.start()
         else:
             self.poll_timer.stop()
+            self._clear_rejected_line()
 
     def init_timers(self):
         self.poll_timer = QTimer()
@@ -176,6 +183,7 @@ class ControllerWorker(ControllerSignals):
                         if not self.dro_status_updated:
                             self.dro_status_updated = True
                         self.check_eof_and_idle()
+                        self._prompt_when_held()
                     elif re.match(r"^\[.*\]\s*$\s", element):
                         self.control_controller.parse_bracket_square(element)
                         [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = (
@@ -195,88 +203,21 @@ class ControllerWorker(ControllerSignals):
                     elif re.match(r"ok\s*$\s", element):
                         logger.debug("buffered size: " + str(self.buffered_size))
                         self.update_console_text_s.emit(element)
-                        if self.sending_file and self.cmds_to_ack > 0:
-                            # Update progress #
-                            self.cmds_to_ack -= 1
-                            self.ack_lines += 1
-                            self.buffered_size -= len(self.buffered_cmds[0])
-                            self.buffered_cmds.pop(0)
-                            self.file_progress = (self.content_line / self.tot_lines) * 100
-                            logger.debug("Acknowledged lines: " + str(self.ack_lines))
-                            self.update_file_progress_s.emit(self.file_progress, "")
-
-                            # all lines have been sent?
-
-                            # print("End Of File: " + str(end_of_file))
-
-                            buff_available = False
-
-                            if self.macro_on:
-                                cmd_to_send = self.get_next_macro_line()
-                                if cmd_to_send is None and self.macro_on:
-                                    # the macro is finished: go on with the file
-                                    self.macro_on = False
-                                    self.macro_obj = None
-                                    self.wait_tag_decoding = False
-                                    self.tot_lines -= 1
-                                elif cmd_to_send is not None:
-                                    # self.tot_lines += 1
-                                    buff_available = (
-                                        self.buffered_size + len(cmd_to_send)
-                                    ) < self.REMOTE_RX_BUFFER_MAX_SIZE
-
-                            end_of_file = self.content_line >= self.tot_lines or self.job_aborted
-
-                            if not end_of_file:
-                                if not self.macro_on:
-                                    cmd_to_send = self.file_content[self.content_line]
-                                    cmd_to_send = self.macro_check(cmd_to_send)
-                                    if cmd_to_send is None:
-                                        # Nothing to send: either the macro has to
-                                        # wait for the machine to become idle (the
-                                        # same line is retried on the next ack) or
-                                        # the job has been aborted.
-                                        end_of_file = self.job_aborted
-                                    else:
-                                        self.content_line += 1
-                                        logger.debug(str(self.ack_lines) + " <-> " + str(self.sent_lines))
-                                        # does data fit the buffer?
-                                        buff_available = (
-                                            self.buffered_size + len(cmd_to_send)
-                                        ) < self.REMOTE_RX_BUFFER_MAX_SIZE
-
-                            if end_of_file:
-                                self.wait_tag_decoding = False
-                                buff_available = False
-
-                            logger.debug("wait: " + str(self.wait_tag_decoding))
-
-                            if not end_of_file and buff_available and not self.wait_tag_decoding:
-                                # cmd_to_send = self.file_content[self.sent_lines]
-                                self.send_to_tx_queue(cmd_to_send)
-                                self.buffered_cmds.append(cmd_to_send)
-                                logger.debug("TX:" + cmd_to_send)
-                                self.update_console_text_s.emit(cmd_to_send)
-                                self.buffered_size += len(cmd_to_send)
-                                self.sent_lines += 1
-                                self.cmds_to_ack += 1
-
-                            # if self.ack_lines == self.tot_lines:
-                            if end_of_file:
-                                self.eof_wait_for_idle = True
-                                self.sending_file = False
-
-                                self.file_progress = (self.content_line / self.tot_lines) * 100
-                                self.update_file_progress_s.emit(self.file_progress, "")
-
-                                logger.info("End of File sending.")
-
+                        if self.sending_file and self.cmds_to_ack > 0 and not self.rejected_line_pending:
+                            self._ack_line_and_send_next()
+                    elif re.match(r"alarm:", element, re.IGNORECASE):
+                        self.update_console_text_s.emit(element)
+                        logger.error(element)
+                        if self.sending_file or self.eof_wait_for_idle:
+                            self.abort_stream(f"Machine alarm ({element.strip()})")
                     elif "error" in element.lower():
                         self.update_console_text_s.emit(element)
                         logger.error(element)
                         logger.debug(self.buffered_size)
                         logger.debug(self.sent_lines)
                         logger.debug(self.ack_lines)
+                        if self.sending_file and self.cmds_to_ack > 0 and not self.rejected_line_pending:
+                            self._handle_rejected_line(element.strip())
                     else:
                         self.update_console_text_s.emit(element)
                         logger.debug(element)
@@ -284,6 +225,148 @@ class ControllerWorker(ControllerSignals):
                 logger.error(e, exc_info=True)
             except Exception:
                 logger.error("Uncaught exception: %s", traceback.format_exc())
+
+    def _ack_line_and_send_next(self) -> None:
+        """Close the line in flight and send the next one of the job."""
+        # Update progress #
+        self.cmds_to_ack -= 1
+        self.ack_lines += 1
+        self.buffered_size -= len(self.buffered_cmds[0])
+        self.buffered_cmds.pop(0)
+        self.file_progress = (self.content_line / self.tot_lines) * 100
+        logger.debug("Acknowledged lines: " + str(self.ack_lines))
+        self.update_file_progress_s.emit(self.file_progress, "")
+
+        # all lines have been sent?
+
+        # print("End Of File: " + str(end_of_file))
+
+        buff_available = False
+
+        if self.macro_on:
+            cmd_to_send = self.get_next_macro_line()
+            if cmd_to_send is None and self.macro_on:
+                # the macro is finished: go on with the file
+                self.macro_on = False
+                self.macro_obj = None
+                self.wait_tag_decoding = False
+                self.tot_lines -= 1
+            elif cmd_to_send is not None:
+                # self.tot_lines += 1
+                buff_available = (self.buffered_size + len(cmd_to_send)) < self.REMOTE_RX_BUFFER_MAX_SIZE
+
+        end_of_file = self.content_line >= self.tot_lines or self.job_aborted
+
+        if not end_of_file:
+            if not self.macro_on:
+                cmd_to_send = self.file_content[self.content_line]
+                cmd_to_send = self.macro_check(cmd_to_send)
+                if cmd_to_send is None:
+                    # Nothing to send: either the macro has to
+                    # wait for the machine to become idle (the
+                    # same line is retried on the next ack) or
+                    # the job has been aborted.
+                    end_of_file = self.job_aborted
+                else:
+                    self.content_line += 1
+                    logger.debug(str(self.ack_lines) + " <-> " + str(self.sent_lines))
+                    # does data fit the buffer?
+                    buff_available = (self.buffered_size + len(cmd_to_send)) < self.REMOTE_RX_BUFFER_MAX_SIZE
+
+        if end_of_file:
+            self.wait_tag_decoding = False
+            buff_available = False
+
+        logger.debug("wait: " + str(self.wait_tag_decoding))
+
+        if not end_of_file and buff_available and not self.wait_tag_decoding:
+            # cmd_to_send = self.file_content[self.sent_lines]
+            self.send_to_tx_queue(cmd_to_send)
+            self.buffered_cmds.append(cmd_to_send)
+            logger.debug("TX:" + cmd_to_send)
+            self.update_console_text_s.emit(cmd_to_send)
+            self.buffered_size += len(cmd_to_send)
+            self.sent_lines += 1
+            self.cmds_to_ack += 1
+
+        # if self.ack_lines == self.tot_lines:
+        if end_of_file:
+            self.eof_wait_for_idle = True
+            self.sending_file = False
+
+            self.file_progress = (self.content_line / self.tot_lines) * 100
+            self.update_file_progress_s.emit(self.file_progress, "")
+
+            logger.info("End of File sending.")
+
+    def _handle_rejected_line(self, error: str) -> None:
+        """Hold the machine so that the user can decide, or stop if it cannot go on."""
+        line = self.buffered_cmds[0].strip()
+        if error.lower() == "error:9":
+            self.abort_stream(f"Machine locked ({error}) on line: {line}")
+        elif self.macro_on:
+            self.abort_stream(f"Macro line rejected by the machine ({error}): {line}")
+        else:
+            message = f"Line rejected by the machine ({error}): {line}. Feed hold."
+            logger.error(message)
+            self.update_console_text_s.emit(message)
+            self.rejected_line_pending = True
+            self.rejected_line_error = error
+            self.execute_gcode_cmd(b"!")
+
+    def _prompt_when_held(self) -> None:
+        """Stop the spindle and ask the user once the hold is complete.
+
+        GRBL ignores the spindle stop out of the hold state and the cycle start
+        until the hold is complete, so both wait for the ``Hold:0`` status.
+        """
+        if not self.rejected_line_pending or self.rejected_line_prompted:
+            return
+        if self.control_controller.status.lower() == "hold:0":
+            self.rejected_line_prompted = True
+            self.execute_gcode_cmd(self.SPINDLE_STOP_TOGGLE)
+            self.line_rejected_s.emit(self.rejected_line_error, self.buffered_cmds[0].strip())
+
+    @Slot()
+    def resume_after_rejected_line(self) -> None:
+        """Restart the spindle, then go on with the job without the rejected line.
+
+        GRBL does not wait for the spindle when a cycle start restores it, so the
+        spindle is restored first and the cycle start follows after a delay.
+        """
+        if self.rejected_line_prompted and not self.rejected_line_resuming:
+            self.rejected_line_resuming = True
+            self.update_console_text_s.emit("Restarting the spindle, the job continues without the rejected line.")
+            self.execute_gcode_cmd(self.SPINDLE_STOP_TOGGLE)
+            QTimer.singleShot(self.SPINDLE_RESTART_DELAY_MS, self._finish_resume)
+
+    def _finish_resume(self) -> None:
+        """Release the hold, unless the job has been stopped in the meantime."""
+        if self.rejected_line_resuming:
+            self._clear_rejected_line()
+            self.execute_gcode_cmd(b"~")
+            self._ack_line_and_send_next()
+
+    def _clear_rejected_line(self) -> None:
+        self.rejected_line_pending = False
+        self.rejected_line_prompted = False
+        self.rejected_line_resuming = False
+        self.rejected_line_error = ""
+
+    def abort_stream(self, reason: str) -> None:
+        """Stop the job now and reset the machine through the regular stop path."""
+        message = f"{reason}. Job stopped."
+        logger.error(message)
+        self.update_console_text_s.emit(message)
+        self._clear_rejected_line()
+        self.macro_on = False
+        self.macro_obj = None
+        self.wait_tag_decoding = False
+        self.job_aborted = True
+        self.sending_file = False
+        self.eof_wait_for_idle = False
+        self.send_soft_reset = True
+        self.stop_send_s.emit()
 
     def macro_check(self, cmd_to_send):
         """Start the macro contained in ``cmd_to_send``, if it is one.
@@ -480,6 +563,8 @@ class ControllerWorker(ControllerSignals):
         # with open(gcode_path) as f:            # DEBUG: take directly from file
         #     self.file_content = f.readlines()
         logger.debug(self.file_content)
+        if self._refuse_too_long_line():
+            return
         if self.file_content:
             self.start_time = time.time()
             self.progress_timer = QTimer()
@@ -496,6 +581,7 @@ class ControllerWorker(ControllerSignals):
             self.macro_obj = None
             self.eof_wait_for_idle = False
             self.job_aborted = False
+            self._clear_rejected_line()
             self.wait_tag_decoding = False
             logger.info("Total lines: " + str(self.tot_lines))
 
@@ -518,9 +604,26 @@ class ControllerWorker(ControllerSignals):
             logger.debug("Buffered size: " + str(self.buffered_size))
             self.sending_file = not self.job_aborted
 
+    def _refuse_too_long_line(self) -> bool:
+        """Refuse a job with a line that can never fit the buffer of the machine."""
+        for number, line in enumerate(self.file_content, start=1):
+            if len(line) >= self.REMOTE_RX_BUFFER_MAX_SIZE:
+                message = (
+                    f"Line {number} is too long for the machine buffer "
+                    f"({len(line)} of {self.REMOTE_RX_BUFFER_MAX_SIZE} characters). Job not started."
+                )
+                logger.error(message)
+                self.update_console_text_s.emit(message)
+                self.send_soft_reset = False
+                self.stop_send_s.emit()
+                return True
+        return False
+
     def stop_gcode_file(self):
         self.sending_file = False
-        self.progress_timer.stop()
+        self._clear_rejected_line()
+        if self.progress_timer is not None:
+            self.progress_timer.stop()
         if self.send_soft_reset:
             # send soft reset
             self.execute_gcode_cmd(b"!")
@@ -536,6 +639,9 @@ class ControllerWorker(ControllerSignals):
         self.wait_tag_decoding = False
 
     def pause_resume(self):
+        if self.rejected_line_pending:
+            logger.warning("Pause/resume ignored: the job is on hold for a rejected line.")
+            return
         logger.info("Status: " + str(self.control_controller.status))
         if "hold" in self.control_controller.status.lower():
             logger.info("UnHold")
