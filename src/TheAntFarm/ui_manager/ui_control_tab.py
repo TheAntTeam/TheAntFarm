@@ -301,6 +301,12 @@ class UiControlTab(QObject):
 
     def init_serial_port_cb(self):
         """Initialize the serial ports' ui elements."""
+        self.apply_simulator_settings(self.app_settings.grbl_simulator_enabled, self.app_settings.grbl_simulator_speed)
+
+    @Slot(bool, float)
+    def apply_simulator_settings(self, enabled: bool, speed: float) -> None:
+        """Pass the GRBL simulator settings to the serial worker and refresh the port list."""
+        self.serialWo.set_simulator_s.emit(enabled, speed)
         self.handle_refresh_button()
 
     @Slot(Od)

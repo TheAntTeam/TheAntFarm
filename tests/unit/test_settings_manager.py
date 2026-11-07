@@ -314,6 +314,58 @@ class TestAppSettingsHandler:
         assert new_settings.serial_error_warning_threshold == 0
         assert new_settings.serial_error_critical_threshold == 10
 
+    def test_grbl_simulator_defaults(self, app_settings_handler):
+        assert app_settings_handler.grbl_simulator_enabled is False
+        assert app_settings_handler.grbl_simulator_speed == 1.0
+
+    def test_grbl_simulator_save_and_load(self, app_settings_handler, tmp_path):
+        config_dir = tmp_path / "test_grbl_simulator" / "configurations"
+        config_dir.mkdir(parents=True)
+        app_settings_handler.app_config_path = str(config_dir / "app_config.ini")
+        app_settings_handler.grbl_simulator_enabled = True
+        app_settings_handler.grbl_simulator_speed = 12.5
+
+        app_settings_handler.write_all_app_settings()
+        new_settings = AppSettingsHandler(str(config_dir), app_settings_handler.main_win)
+        new_settings.read_all_app_settings()
+
+        assert new_settings.grbl_simulator_enabled is True
+        assert new_settings.grbl_simulator_speed == 12.5
+
+    def test_grbl_simulator_restore_defaults(self, app_settings_handler, tmp_path):
+        config_dir = tmp_path / "test_restore_grbl_simulator" / "configurations"
+        config_dir.mkdir(parents=True)
+        app_settings_handler.app_config_path = str(config_dir / "app_config.ini")
+        app_settings_handler.grbl_simulator_enabled = True
+        app_settings_handler.write_all_app_settings()
+
+        app_settings_handler.restore_app_settings()
+        new_settings = AppSettingsHandler(str(config_dir), app_settings_handler.main_win)
+        new_settings.read_all_app_settings()
+
+        assert new_settings.grbl_simulator_enabled is False
+        assert new_settings.grbl_simulator_speed == 1.0
+
+    @pytest.mark.parametrize(
+        "enabled, speed",
+        [("maybe", "fast"), ("yes", "0"), ("on", "-2"), ("1", "1000")],
+    )
+    def test_grbl_simulator_invalid_values_fall_back(self, app_settings_handler, tmp_path, enabled, speed):
+        import configparser
+
+        config_dir = tmp_path / "test_invalid_grbl_simulator" / "configurations"
+        config_dir.mkdir(parents=True)
+        config = configparser.ConfigParser()
+        config["GENERAL"] = {"grbl_simulator_enabled": enabled, "grbl_simulator_speed": speed}
+        with open(str(config_dir / "app_config.ini"), "w") as f:
+            config.write(f)
+
+        new_settings = AppSettingsHandler(str(config_dir), app_settings_handler.main_win)
+        new_settings.read_all_app_settings()
+
+        assert new_settings.grbl_simulator_enabled is (enabled != "maybe")
+        assert new_settings.grbl_simulator_speed == new_settings.GRBL_SIMULATOR_SPEED_DEFAULT
+
     def test_choose_version_both_invalid(self):
         """Test choose_version when both version strings are invalid"""
         result = AppSettingsHandler.choose_version("invalid", "bad_version")

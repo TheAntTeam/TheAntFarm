@@ -128,3 +128,30 @@ class TestInitialization:
         assert (
             "cellClicked.connect(self._handle_table_cell_click)" in source
         ), "cellClicked should be connected to _handle_table_cell_click"
+
+
+@pytest.mark.usefixtures("qapp")
+class TestGrblSimulatorSettings:
+    def _tab(self, enabled=False, speed=1.0):
+        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
+
+        ui_tab = UiControlTab.__new__(UiControlTab)
+        ui_tab.serialWo = Mock()
+        ui_tab.app_settings = Mock(grbl_simulator_enabled=enabled, grbl_simulator_speed=speed)
+        return ui_tab
+
+    def test_startup_applies_the_stored_settings_then_lists_the_ports(self):
+        ui_tab = self._tab(enabled=True, speed=4.0)
+
+        ui_tab.init_serial_port_cb()
+
+        ui_tab.serialWo.set_simulator_s.emit.assert_called_once_with(True, 4.0)
+        ui_tab.serialWo.refresh_port_list_s.emit.assert_called_once_with()
+
+    def test_new_settings_refresh_the_port_list(self):
+        ui_tab = self._tab()
+
+        ui_tab.apply_simulator_settings(False, 2.0)
+
+        ui_tab.serialWo.set_simulator_s.emit.assert_called_once_with(False, 2.0)
+        ui_tab.serialWo.refresh_port_list_s.emit.assert_called_once_with()

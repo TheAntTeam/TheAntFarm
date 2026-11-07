@@ -60,6 +60,7 @@ class UiManager(QObject):
 
         self.ui.actionAbout.triggered.connect(self.ui_about_m.show_about_info)
         self.ui_settings_tab_m.save_all_settings_s.connect(self.save_all_settings)
+        self.ui_settings_tab_m.grbl_simulator_settings_changed_s.connect(self.ui_control_tab_m.apply_simulator_settings)
 
         self.apply_initial_window_settings(self.settings.app_settings)
 

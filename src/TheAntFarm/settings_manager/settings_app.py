@@ -44,6 +44,10 @@ class AppSettingsHandler:
     CAMERA_FLIP_V_DEFAULT = False
     SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT = 3
     SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT = 10
+    GRBL_SIMULATOR_ENABLED_DEFAULT = False
+    GRBL_SIMULATOR_SPEED_DEFAULT = 1.0
+    GRBL_SIMULATOR_SPEED_MIN = 0.1
+    GRBL_SIMULATOR_SPEED_MAX = 100.0
 
     def __init__(self, config_folder, main_win):
 
@@ -106,6 +110,8 @@ class AppSettingsHandler:
         self.camera_flip_v = self.CAMERA_FLIP_V_DEFAULT
         self.serial_error_warning_threshold = self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
         self.serial_error_critical_threshold = self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
+        self.grbl_simulator_enabled = self.GRBL_SIMULATOR_ENABLED_DEFAULT
+        self.grbl_simulator_speed = self.GRBL_SIMULATOR_SPEED_DEFAULT
 
     @staticmethod
     def choose_version(version_s, version_default_s):
@@ -233,6 +239,7 @@ class AppSettingsHandler:
             if self.serial_error_warning_threshold > self.serial_error_critical_threshold:
                 self.serial_error_warning_threshold = self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
                 self.serial_error_critical_threshold = self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
+            self._read_grbl_simulator_settings(app_general)
 
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
@@ -252,6 +259,22 @@ class AppSettingsHandler:
         if "GCODES" in self.app_settings:
             app_gcode_settings = self.app_settings["GCODES"]
             self.gcode_last_dir = app_gcode_settings.get("gcode_last_dir", self.gcode_last_dir_default)
+
+    def _read_grbl_simulator_settings(self, app_general: configparser.SectionProxy) -> None:
+        """Read the GRBL simulator settings, falling back to the defaults on an invalid value."""
+        try:
+            self.grbl_simulator_enabled = app_general.getboolean(
+                "grbl_simulator_enabled", self.GRBL_SIMULATOR_ENABLED_DEFAULT
+            )
+        except ValueError:
+            self.grbl_simulator_enabled = self.GRBL_SIMULATOR_ENABLED_DEFAULT
+        try:
+            speed = app_general.getfloat("grbl_simulator_speed", self.GRBL_SIMULATOR_SPEED_DEFAULT)
+        except ValueError:
+            speed = self.GRBL_SIMULATOR_SPEED_DEFAULT
+        if not self.GRBL_SIMULATOR_SPEED_MIN <= speed <= self.GRBL_SIMULATOR_SPEED_MAX:
+            speed = self.GRBL_SIMULATOR_SPEED_DEFAULT
+        self.grbl_simulator_speed = speed
 
     def write_all_app_settings(self):
         """Write all application settings to ini files"""
@@ -291,6 +314,8 @@ class AppSettingsHandler:
             "camera_flip_v": self.CAMERA_FLIP_V_DEFAULT,
             "serial_error_warning_threshold": self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT,
             "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT,
+            "grbl_simulator_enabled": self.GRBL_SIMULATOR_ENABLED_DEFAULT,
+            "grbl_simulator_speed": self.GRBL_SIMULATOR_SPEED_DEFAULT,
         }
 
         # GENERAL application settings #
@@ -324,6 +349,8 @@ class AppSettingsHandler:
         app_general["camera_flip_v"] = str(self.camera_flip_v)
         app_general["serial_error_warning_threshold"] = str(self.serial_error_warning_threshold)
         app_general["serial_error_critical_threshold"] = str(self.serial_error_critical_threshold)
+        app_general["grbl_simulator_enabled"] = str(self.grbl_simulator_enabled)
+        app_general["grbl_simulator_speed"] = str(self.grbl_simulator_speed)
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
@@ -382,6 +409,8 @@ class AppSettingsHandler:
             "camera_flip_v": self.CAMERA_FLIP_V_DEFAULT,
             "serial_error_warning_threshold": self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT,
             "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT,
+            "grbl_simulator_enabled": self.GRBL_SIMULATOR_ENABLED_DEFAULT,
+            "grbl_simulator_speed": self.GRBL_SIMULATOR_SPEED_DEFAULT,
         }
 
         # GENERAL application settings #
@@ -411,6 +440,8 @@ class AppSettingsHandler:
         app_general["camera_flip_v"] = str(self.camera_flip_v)
         app_general["serial_error_warning_threshold"] = str(self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT)
         app_general["serial_error_critical_threshold"] = str(self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT)
+        app_general["grbl_simulator_enabled"] = str(self.GRBL_SIMULATOR_ENABLED_DEFAULT)
+        app_general["grbl_simulator_speed"] = str(self.GRBL_SIMULATOR_SPEED_DEFAULT)
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
