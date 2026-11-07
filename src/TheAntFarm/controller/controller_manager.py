@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 class ControllerWorker(ControllerSignals):
     REMOTE_RX_BUFFER_MAX_SIZE = 128
     SPINDLE_STOP_TOGGLE = b"\x9e"
+    MACRO_IDLE_REPORTS = 2
 
     def __init__(self, serial_rx_queue, serial_tx_queue, settings):
         super(ControllerWorker, self).__init__()
@@ -48,6 +49,7 @@ class ControllerWorker(ControllerSignals):
         self.buffered_line_numbers: List[int] = []
         self.cmds_to_ack = 0
         self.wait_tag_decoding = False
+        self.macro_idle_reports = 0
         self.dro_status_updated = False
 
         self.abl_apply_active = True
@@ -197,6 +199,7 @@ class ControllerWorker(ControllerSignals):
                             self.dro_status_updated = True
                         self.check_eof_and_idle()
                         self._prompt_when_held()
+                        self.count_idle_reports_for_macro()
                     elif re.match(r"^\[.*\]\s*$\s", element):
                         self.control_controller.parse_bracket_square(element)
                         [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = (
@@ -277,9 +280,9 @@ class ControllerWorker(ControllerSignals):
                 cmd_to_send = self.file_content[self.content_line]
                 cmd_to_send = self.macro_check(cmd_to_send)
                 if cmd_to_send is None:
-                    # Nothing to send: either the macro has to
-                    # wait for the machine to become idle (the
-                    # same line is retried on the next ack) or
+                    # Nothing to send: either the macro waits for
+                    # the machine to become idle (the line is
+                    # retried on the next ack or status report) or
                     # the job has been aborted.
                     end_of_file = self.job_aborted
                 else:
@@ -296,15 +299,7 @@ class ControllerWorker(ControllerSignals):
         logger.debug("wait: " + str(self.wait_tag_decoding))
 
         if not end_of_file and buff_available and not self.wait_tag_decoding:
-            # cmd_to_send = self.file_content[self.sent_lines]
-            self.send_to_tx_queue(cmd_to_send)
-            self.buffered_cmds.append(cmd_to_send)
-            self.buffered_line_numbers.append(line_number)
-            logger.debug("TX:" + cmd_to_send)
-            self.update_console_text_s.emit(cmd_to_send)
-            self.buffered_size += len(cmd_to_send)
-            self.sent_lines += 1
-            self.cmds_to_ack += 1
+            self.send_job_line(cmd_to_send, line_number)
 
         # if self.ack_lines == self.tot_lines:
         if end_of_file:
@@ -315,6 +310,42 @@ class ControllerWorker(ControllerSignals):
             self.update_file_progress_s.emit(self.file_progress, "")
 
             logger.info("End of File sending.")
+
+    def send_job_line(self, cmd_to_send: str, line_number: int) -> None:
+        """Send a line of the job and account for it in the remote buffer."""
+        self.send_to_tx_queue(cmd_to_send)
+        self.buffered_cmds.append(cmd_to_send)
+        self.buffered_line_numbers.append(line_number)
+        logger.debug("TX:" + cmd_to_send)
+        self.update_console_text_s.emit(cmd_to_send)
+        self.buffered_size += len(cmd_to_send)
+        self.sent_lines += 1
+        self.cmds_to_ack += 1
+
+    def count_idle_reports_for_macro(self) -> None:
+        """Start the waiting macro once enough status reports show the machine idle.
+
+        Only the reports received after every streamed line has been acknowledged
+        are counted, and they must be consecutive: GRBL acknowledges a line when it
+        is queued, not when it is executed, and the report sent together with the
+        last acknowledgement can still show Idle before the queued moves start.
+        """
+        waiting = self.sending_file and self.wait_tag_decoding and self.cmds_to_ack == 0
+        state = self.control_controller.status_report_od.get("state", "")
+        if not waiting or "idle" not in str(state).lower():
+            self.macro_idle_reports = 0
+            return
+        self.macro_idle_reports += 1
+        if self.macro_idle_reports >= self.MACRO_IDLE_REPORTS:
+            self.send_waiting_macro()
+
+    def send_waiting_macro(self) -> None:
+        """Send the request that starts the macro the job is waiting on."""
+        line_number = self.file_line_numbers[self.content_line]
+        cmd_to_send = self.macro_check(self.file_content[self.content_line])
+        if cmd_to_send is not None:
+            self.content_line += 1
+            self.send_job_line(cmd_to_send, line_number)
 
     def _handle_rejected_line(self, error: str) -> None:
         """Hold the machine so that the user can decide, or stop if it cannot go on."""
@@ -395,6 +426,11 @@ class ControllerWorker(ControllerSignals):
     def macro_check(self, cmd_to_send):
         """Start the macro contained in ``cmd_to_send``, if it is one.
 
+        The macro starts only when every previous line has been acknowledged and
+        status reports have then shown the machine idle (see
+        ``count_idle_reports_for_macro``): GRBL refuses ``$#`` with ``error:8``
+        while the machine moves, and the frozen position must be the final one.
+
         Returns
         -------
         str | None
@@ -402,17 +438,17 @@ class ControllerWorker(ControllerSignals):
             request that freezes the machine state for the macro). ``None`` means
             that nothing has to be sent now: either the machine still has to
             execute the previous lines (the same command is retried with the next
-            ack) or the job has been aborted because the macro cannot run.
+            ack or status report) or the job has been aborted because the macro
+            cannot run.
         """
         ret_cmd_to_send = cmd_to_send
 
         if self.gcr.is_macro(cmd_to_send):
             macro_type = cmd_to_send.strip()
-            if self.ack_lines != self.sent_lines:
-                # wait that the machine execute all previous lines
-                # to be able to decode the tag
+            if self.ack_lines != self.sent_lines or self.macro_idle_reports < self.MACRO_IDLE_REPORTS:
                 self.wait_tag_decoding = True
                 return None
+            self.macro_idle_reports = 0
 
             # DUMMY ELEMENT FREEZE WPO and MPO
             freeze_dro = {
@@ -609,6 +645,7 @@ class ControllerWorker(ControllerSignals):
             self.job_aborted = False
             self._clear_rejected_line()
             self.wait_tag_decoding = False
+            self.macro_idle_reports = 0
             logger.info("Total lines: " + str(self.tot_lines))
 
             if (
@@ -675,6 +712,7 @@ class ControllerWorker(ControllerSignals):
         self.buffered_line_numbers = []
         self.buffered_size = 0
         self.wait_tag_decoding = False
+        self.macro_idle_reports = 0
 
     def pause_resume(self):
         if self.rejected_line_pending:

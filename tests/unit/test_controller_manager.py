@@ -1,8 +1,9 @@
 """Tests for the macro start flow of the controller worker.
 
 A tool change must start only when the machine has executed every previously
-streamed line, and a macro that cannot run must stop the job instead of being
-silently skipped (the tool length offset would be wrong).
+streamed line (every line acknowledged, then the machine reported idle), and a
+macro that cannot run must stop the job instead of being silently skipped (the
+tool length offset would be wrong).
 """
 
 import queue
@@ -55,11 +56,29 @@ def worker(settings, qapp):
     return ControllerWorker(queue.Queue(), queue.Queue(), settings)
 
 
+IDLE = "<Idle|MPos:0.000,0.000,0.000|FS:0,0>\n"
+RUN = "<Run|MPos:1.000,0.000,0.000|FS:300,0>\n"
+
+
 def _start_macro(worker):
     """Put the worker in the state where the next file line is processed."""
     worker.ack_lines = worker.sent_lines = 0
     worker.tot_lines = 10
+    worker.macro_idle_reports = worker.MACRO_IDLE_REPORTS
     return worker.macro_check("M6")
+
+
+def _receive(worker, *elements):
+    for element in elements:
+        worker.serialRxQueue.put(element)
+        worker.parse_rx_queue()
+
+
+def _sent(worker):
+    lines = []
+    while not worker.serialTxQueue.empty():
+        lines.append(worker.serialTxQueue.get())
+    return lines
 
 
 class TestMacroStart:
@@ -71,6 +90,14 @@ class TestMacroStart:
         """The M6 line must not be consumed while unacked lines are pending."""
         worker.ack_lines = 1
         worker.sent_lines = 3
+
+        assert worker.macro_check("M6") is None
+        assert worker.macro_on is False
+        assert worker.wait_tag_decoding is True
+
+    def test_acknowledged_lines_are_not_enough(self, worker):
+        """GRBL acknowledges a line when it is queued: the machine may still move."""
+        worker.ack_lines = worker.sent_lines = 3
 
         assert worker.macro_check("M6") is None
         assert worker.macro_on is False
@@ -141,10 +168,9 @@ class TestBrokenMacro:
         assert worker.serialTxQueue.qsize() == 1
         assert worker.job_aborted is False
 
-        worker.serialRxQueue.put("ok\n")
-        worker.parse_rx_queue()
+        _receive(worker, "ok\n", IDLE, IDLE)
 
-        # the M6 line is reached, the macro cannot start and the job is stopped
+        # the M6 line is reached, the machine is idle, the macro cannot start and the job is stopped
         assert worker.job_aborted is True
         assert worker.sending_file is False
         assert worker.content_line == 1  # the M6 line has not been consumed
@@ -318,7 +344,7 @@ class TestRejectedLine:
 
     def test_rejected_macro_line_stops_the_job(self, worker):
         rig = StreamRig(worker, ["G21\n", "M6\n", "G1 X1.000 Y1.000 Z-0.100\n"])
-        rig.feed("ok\n")
+        rig.feed("ok\n", IDLE, IDLE)
         assert rig.sent()[-1] == "$#\n"
 
         rig.feed("error:20\n")
@@ -624,3 +650,67 @@ class TestStopJobForClose:
 
         assert rig.realtime == [FEED_HOLD, SOFT_RESET]
         assert worker.sending_file is False
+
+
+class TestMacroWaitsForIdleReports:
+    """The $# request is sent only after two idle reports that follow the last ack."""
+
+    def test_the_macro_starts_after_two_idle_reports(self, worker):
+        worker.send_gcode_lines(["G21\n", "M6\n", "G00 X10\n"])
+        assert _sent(worker) == ["G21\n"]
+
+        _receive(worker, "ok\n")
+        assert _sent(worker) == []
+
+        _receive(worker, IDLE)
+        assert _sent(worker) == []
+
+        _receive(worker, IDLE)
+        assert _sent(worker) == ["$#\n"]
+        assert worker.macro_on is True
+        assert worker.content_line == 2
+        assert worker.wait_tag_decoding is False
+
+    def test_a_moving_machine_restarts_the_count(self, worker):
+        worker.send_gcode_lines(["G00 X1\n", "M6\n"])
+        _sent(worker)
+
+        _receive(worker, "ok\n", IDLE, RUN, IDLE)
+        assert _sent(worker) == []
+
+        _receive(worker, IDLE)
+        assert _sent(worker) == ["$#\n"]
+
+    def test_reports_before_the_last_ack_are_not_counted(self, worker):
+        worker.send_gcode_lines(["G00 X1\n", "M6\n"])
+        _sent(worker)
+
+        _receive(worker, IDLE, IDLE, "ok\n", IDLE)
+        assert _sent(worker) == []
+
+        _receive(worker, IDLE)
+        assert _sent(worker) == ["$#\n"]
+
+    def test_the_frozen_position_is_the_one_reported_idle(self, worker):
+        stopped = IDLE.replace("0.000,0.000,0.000", "5.000,0.000,0.000")
+        worker.send_gcode_lines(["G00 X5\n", "M6\n"])
+
+        _receive(worker, "ok\n", RUN, stopped, stopped)
+
+        assert list(worker.macro_obj.freezed_dro["MPO"]) == [5.0, 0.0, 0.0]
+
+    def test_a_job_starting_with_the_macro_waits_too(self, worker):
+        worker.send_gcode_lines(["M6\n", "G00 X10\n"])
+        assert _sent(worker) == []
+
+        _receive(worker, IDLE, IDLE)
+        assert _sent(worker) == ["$#\n"]
+
+    def test_stopping_the_job_clears_the_count(self, worker):
+        worker.send_gcode_lines(["G00 X1\n", "M6\n"])
+        _receive(worker, "ok\n", IDLE)
+
+        worker.stop_gcode_file()
+
+        assert worker.macro_idle_reports == 0
+        assert worker.wait_tag_decoding is False
