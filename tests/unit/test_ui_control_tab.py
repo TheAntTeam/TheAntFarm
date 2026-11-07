@@ -3,7 +3,7 @@ Test suite for UI Control Tab selection functionality.
 Tests focus on the simplified gcode table row selection behavior.
 """
 
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -155,3 +155,81 @@ class TestGrblSimulatorSettings:
 
         ui_tab.serialWo.set_simulator_s.emit.assert_called_once_with(False, 2.0)
         ui_tab.serialWo.refresh_port_list_s.emit.assert_called_once_with()
+
+
+class TestRejectedLinePrompt:
+    """The user decides how a job on hold for a rejected line goes on."""
+
+    @pytest.fixture
+    def message_box(self):
+        with patch("TheAntFarm.ui_manager.ui_control_tab.QMessageBox") as message_box:
+            buttons = {"Resume": Mock(), "Stop": Mock()}
+            roles = {id(buttons["Resume"]): message_box.AcceptRole, id(buttons["Stop"]): message_box.RejectRole}
+            prompt = message_box.return_value
+            prompt.addButton.side_effect = lambda text, role: buttons[text]
+            prompt.buttonRole.side_effect = lambda button: roles[id(button)]
+            message_box.buttons = buttons
+            yield message_box
+
+    @pytest.fixture
+    def ui_tab(self, message_box):
+        from PySide6.QtCore import QObject
+
+        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
+
+        ui_tab = UiControlTab.__new__(UiControlTab)
+        QObject.__init__(ui_tab)
+        ui_tab.ui = Mock()
+        ui_tab.rejected_line_prompt = None
+        ui_tab.enable_gcode_rb = Mock()
+        ui_tab.enable_after_send = Mock()
+        ui_tab.resumes = []
+        ui_tab.stops = []
+        ui_tab.resume_rejected_line_s.connect(lambda: ui_tab.resumes.append(1))
+        ui_tab.stop_gcode_s.connect(lambda: ui_tab.stops.append(1))
+        return ui_tab
+
+    def test_prompt_shows_the_error_and_the_line(self, ui_tab, message_box):
+        ui_tab.show_rejected_line_prompt("error:20", "G1 X2.000 Y2.000 Z-0.100")
+
+        prompt = message_box.return_value
+        text = prompt.setText.call_args.args[0]
+        assert "error:20" in text
+        assert "G1 X2.000 Y2.000 Z-0.100" in text
+        prompt.open.assert_called_once()
+
+    def test_stop_is_the_default_and_the_escape_button(self, ui_tab, message_box):
+        ui_tab.show_rejected_line_prompt("error:20", "G1 X2")
+
+        prompt = message_box.return_value
+        prompt.setDefaultButton.assert_called_once_with(message_box.buttons["Stop"])
+        prompt.setEscapeButton.assert_called_once_with(message_box.buttons["Stop"])
+
+    def test_resume_button_resumes_the_job(self, ui_tab, message_box):
+        ui_tab.show_rejected_line_prompt("error:20", "G1 X2")
+
+        ui_tab._on_rejected_line_prompt_clicked(message_box.buttons["Resume"])
+
+        assert ui_tab.resumes == [1]
+        assert ui_tab.stops == []
+        assert ui_tab.rejected_line_prompt is None
+
+    def test_stop_button_stops_the_job(self, ui_tab, message_box):
+        ui_tab.show_rejected_line_prompt("error:20", "G1 X2")
+
+        ui_tab._on_rejected_line_prompt_clicked(message_box.buttons["Stop"])
+
+        assert ui_tab.stops == [1]
+        assert ui_tab.resumes == []
+        assert ui_tab.rejected_line_prompt is None
+        ui_tab.enable_after_send.assert_called_once()
+
+    def test_job_stopped_elsewhere_closes_the_prompt(self, ui_tab, message_box):
+        ui_tab.show_rejected_line_prompt("error:20", "G1 X2")
+
+        ui_tab.stop_send_file()
+
+        message_box.return_value.hide.assert_called_once()
+        assert ui_tab.rejected_line_prompt is None
+        assert ui_tab.stops == [1]
+        assert ui_tab.resumes == []

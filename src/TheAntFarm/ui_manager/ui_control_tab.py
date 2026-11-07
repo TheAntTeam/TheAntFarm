@@ -4,7 +4,15 @@ from collections import OrderedDict as Od
 
 from PySide6.QtCore import QItemSelectionModel, QObject, QPersistentModelIndex, QSize, Qt, Signal, Slot
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QAbstractItemView, QButtonGroup, QFileDialog, QHeaderView, QLabel, QRadioButton
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QButtonGroup,
+    QFileDialog,
+    QHeaderView,
+    QLabel,
+    QMessageBox,
+    QRadioButton,
+)
 from style_manager import StyleManager
 
 logger = logging.getLogger(__name__)
@@ -21,6 +29,7 @@ class UiControlTab(QObject):
     send_gcode_s = Signal(str)  # Signal to start sending a gcode file
     stop_gcode_s = Signal()  # Signal to stop sending a gcode file
     pause_resume_gcode_s = Signal()  # Signal to pause/resume sending a gcode file
+    resume_rejected_line_s = Signal()  # Signal to go on with a job on hold for a rejected line
 
     precalc_gcode_s = Signal(str)
     select_gcode_s = Signal(str)
@@ -55,6 +64,7 @@ class UiControlTab(QObject):
         self.machine_settings = settings.machine_settings
 
         self.holding_status = False
+        self.rejected_line_prompt = None
         self.serial_connection_status = False
         self.serial_ports_name_ls = []
         self.serial_ports_baudrate_ls = []
@@ -73,6 +83,8 @@ class UiControlTab(QObject):
         self.send_gcode_s.connect(self.controlWo.send_gcode_file)
         self.stop_gcode_s.connect(self.controlWo.stop_gcode_file)
         self.pause_resume_gcode_s.connect(self.controlWo.pause_resume)
+        self.resume_rejected_line_s.connect(self.controlWo.resume_after_rejected_line)
+        self.controlWo.line_rejected_s.connect(self.show_rejected_line_prompt)
 
         # From Controller Manager to Serial Manager
         self.controlWo.gcode_vectorized_s.connect(self.enable_gcode_cb)
@@ -604,12 +616,50 @@ class UiControlTab(QObject):
                 self.disable_during_send()
 
     def stop_send_file(self):
+        self.close_rejected_line_prompt()
         self.stop_gcode_s.emit()
         self.enable_gcode_rb(True)
         self.enable_after_send()
 
     def pause_resume(self):
         self.pause_resume_gcode_s.emit()
+
+    @Slot(str, str)
+    def show_rejected_line_prompt(self, error: str, line: str) -> None:
+        """Ask the user how to go on with a job on hold for a rejected line."""
+        self.close_rejected_line_prompt()
+        prompt = QMessageBox(self.ui.stop_tb.window())
+        prompt.setIcon(QMessageBox.Warning)
+        prompt.setWindowTitle("Line rejected by the machine")
+        prompt.setText(f"The machine rejected this line ({error}):\n\n{line}")
+        prompt.setInformativeText(
+            "The machine is on hold and the spindle is stopped.\n\n"
+            "Resume: restart the spindle and, after a few seconds, go on WITHOUT this line. "
+            "The machine moves straight to the next point.\n\n"
+            "Stop: end the job."
+        )
+        prompt.addButton("Resume", QMessageBox.AcceptRole)
+        stop_button = prompt.addButton("Stop", QMessageBox.RejectRole)
+        prompt.setDefaultButton(stop_button)
+        prompt.setEscapeButton(stop_button)
+        prompt.setWindowModality(Qt.WindowModal)
+        prompt.buttonClicked.connect(self._on_rejected_line_prompt_clicked)
+        self.rejected_line_prompt = prompt
+        prompt.open()
+
+    def _on_rejected_line_prompt_clicked(self, button) -> None:
+        resume = self.rejected_line_prompt.buttonRole(button) == QMessageBox.AcceptRole
+        self.close_rejected_line_prompt()
+        if resume:
+            self.resume_rejected_line_s.emit()
+        else:
+            self.stop_send_file()
+
+    def close_rejected_line_prompt(self) -> None:
+        if self.rejected_line_prompt is not None:
+            self.rejected_line_prompt.hide()
+            self.rejected_line_prompt.deleteLater()
+            self.rejected_line_prompt = None
 
     def enable_gcode_rb(self, enabling):
         num_rows = self.ui.gcode_tw.rowCount()
@@ -725,6 +775,7 @@ class UiControlTab(QObject):
             self.ui.get_tool_change_pb.setEnabled(True)
 
     def act_on_disconnection(self):
+        self.close_rejected_line_prompt()
         self.controlWo.reset_controller_status_s.emit()
         self.serial_connection_status = False
         self.ui.connect_pb.setText("Connect")
