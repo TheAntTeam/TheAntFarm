@@ -173,6 +173,14 @@ SPINDLE_STOP_TOGGLE = b"\x9e"
 STATUS_LINE = "<{}|MPos:0.000,0.000,0.000|FS:0,0|WCO:0.000,0.000,0.000>\n"
 
 
+def _wait_for_cycle_start(rig: "StreamRig", timeout_ms: int = 2000) -> None:
+    """Process events until the delayed cycle start of a resume is sent."""
+    waited = 0
+    while CYCLE_START not in rig.realtime and waited < timeout_ms:
+        QTest.qWait(5)
+        waited += 5
+
+
 class StreamRig:
     """Drive the real streaming code with the responses of the machine."""
 
@@ -342,7 +350,7 @@ class TestResumeAfterRejectedLine:
         rig.sent()
 
         worker.resume_after_rejected_line()
-        QTest.qWait(20)
+        _wait_for_cycle_start(rig)
 
         assert rig.realtime == [FEED_HOLD, SPINDLE_STOP_TOGGLE, SPINDLE_STOP_TOGGLE, CYCLE_START]
         assert rig.sent() == [JOB[8]]
@@ -350,7 +358,7 @@ class TestResumeAfterRejectedLine:
 
     def test_job_finishes_after_resuming(self, worker, rig):
         worker.resume_after_rejected_line()
-        QTest.qWait(20)
+        _wait_for_cycle_start(rig)
 
         rig.feed(*["ok\n"] * (len(JOB) - 8))
         rig.status("Idle")
@@ -365,7 +373,7 @@ class TestResumeAfterRejectedLine:
         rig.hold_and_prompt(len(JOB) - 1)
 
         worker.resume_after_rejected_line()
-        QTest.qWait(20)
+        _wait_for_cycle_start(rig)
         rig.status("Idle")
 
         assert rig.stops == [1]
@@ -382,7 +390,7 @@ class TestResumeAfterRejectedLine:
     def test_second_resume_is_ignored(self, worker, rig):
         worker.resume_after_rejected_line()
         worker.resume_after_rejected_line()
-        QTest.qWait(20)
+        _wait_for_cycle_start(rig)
 
         assert rig.realtime.count(SPINDLE_STOP_TOGGLE) == 2
         assert rig.realtime.count(CYCLE_START) == 1
