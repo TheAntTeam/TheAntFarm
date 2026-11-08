@@ -269,6 +269,7 @@ class TestToolChangeProcedureSettings:
         assert machine_settings.tool_setter_rel_flag is False
         assert machine_settings.tool_probe_backoff == 1.5
         assert machine_settings.spindle_stop_dwell == 1.0
+        assert machine_settings.spindle_restart_delay == 4.0
 
     def test_values_are_written_and_read_back(self, machine_settings, config_folder):
         machine_settings.safe_z = 12.5
@@ -278,6 +279,7 @@ class TestToolChangeProcedureSettings:
         machine_settings.tool_setter_rel_flag = True
         machine_settings.tool_probe_backoff = 2.5
         machine_settings.spindle_stop_dwell = 3.0
+        machine_settings.spindle_restart_delay = 7.5
 
         machine_settings.write_all_machine_settings()
 
@@ -291,6 +293,7 @@ class TestToolChangeProcedureSettings:
         assert new_handler.tool_setter_rel_flag is True
         assert new_handler.tool_probe_backoff == 2.5
         assert new_handler.spindle_stop_dwell == 3.0
+        assert new_handler.spindle_restart_delay == 7.5
 
     def test_restore_returns_the_defaults(self, machine_settings, config_folder):
         machine_settings.tool_change_mode = "tlo"

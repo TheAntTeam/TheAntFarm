@@ -39,6 +39,7 @@ class MachineSettingsHandler:
     TOOL_SETTER_REL_FLAG_DEFAULT = False
     TOOL_PROBE_BACKOFF_DEFAULT = 1.5
     SPINDLE_STOP_DWELL_DEFAULT = 1.0
+    SPINDLE_RESTART_DELAY_DEFAULT = 4.0
 
     ALIGNMENT_DRILL_DIAMETER_DEFAULT = 0.0
     TOOL_CAMERA_OFFSET_X_DEFAULT = 0.0
@@ -84,6 +85,7 @@ class MachineSettingsHandler:
         self.tool_setter_rel_flag = self.TOOL_SETTER_REL_FLAG_DEFAULT
         self.tool_probe_backoff = self.TOOL_PROBE_BACKOFF_DEFAULT
         self.spindle_stop_dwell = self.SPINDLE_STOP_DWELL_DEFAULT
+        self.spindle_restart_delay = self.SPINDLE_RESTART_DELAY_DEFAULT
 
         self.alignment_drill_diameter = self.ALIGNMENT_DRILL_DIAMETER_DEFAULT
         self.tool_camera_offset_x = self.TOOL_CAMERA_OFFSET_X_DEFAULT
@@ -163,6 +165,9 @@ class MachineSettingsHandler:
             self.spindle_stop_dwell = machine_general.getfloat(
                 "spindle_stop_dwell", self.SPINDLE_STOP_DWELL_DEFAULT
             )
+            self.spindle_restart_delay = machine_general.getfloat(
+                "spindle_restart_delay", self.SPINDLE_RESTART_DELAY_DEFAULT
+            )
 
             self.alignment_drill_diameter = machine_general.getfloat(
                 "alignment_drill_diameter", self.ALIGNMENT_DRILL_DIAMETER_DEFAULT
@@ -211,6 +216,7 @@ class MachineSettingsHandler:
             "tool_setter_relative_flag": self.TOOL_SETTER_REL_FLAG_DEFAULT,
             "tool_probe_backoff": self.TOOL_PROBE_BACKOFF_DEFAULT,
             "spindle_stop_dwell": self.SPINDLE_STOP_DWELL_DEFAULT,
+            "spindle_restart_delay": self.SPINDLE_RESTART_DELAY_DEFAULT,
         }
 
         # GENERAL machine settings #
@@ -251,6 +257,7 @@ class MachineSettingsHandler:
         machine_general["tool_setter_relative_flag"] = str(self.tool_setter_rel_flag)
         machine_general["tool_probe_backoff"] = str(self.tool_probe_backoff)
         machine_general["spindle_stop_dwell"] = str(self.spindle_stop_dwell)
+        machine_general["spindle_restart_delay"] = str(self.spindle_restart_delay)
 
         # Write machine ini file #
         with open(self.machine_config_path, "w") as configfile:
@@ -293,6 +300,7 @@ class MachineSettingsHandler:
             "tool_setter_relative_flag": self.TOOL_SETTER_REL_FLAG_DEFAULT,
             "tool_probe_backoff": self.TOOL_PROBE_BACKOFF_DEFAULT,
             "spindle_stop_dwell": self.SPINDLE_STOP_DWELL_DEFAULT,
+            "spindle_restart_delay": self.SPINDLE_RESTART_DELAY_DEFAULT,
         }
 
         # GENERAL machine settings #
@@ -332,6 +340,7 @@ class MachineSettingsHandler:
         machine_general["tool_setter_relative_flag"] = str(self.TOOL_SETTER_REL_FLAG_DEFAULT)
         machine_general["tool_probe_backoff"] = str(self.TOOL_PROBE_BACKOFF_DEFAULT)
         machine_general["spindle_stop_dwell"] = str(self.SPINDLE_STOP_DWELL_DEFAULT)
+        machine_general["spindle_restart_delay"] = str(self.SPINDLE_RESTART_DELAY_DEFAULT)
 
         # Write machine ini file #
         with open(self.machine_config_path, "w") as configfile:

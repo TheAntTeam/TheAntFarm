@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 class ControllerWorker(ControllerSignals):
     REMOTE_RX_BUFFER_MAX_SIZE = 128
-    SPINDLE_RESTART_DELAY_MS = 4000
     SPINDLE_STOP_TOGGLE = b"\x9e"
 
     def __init__(self, serial_rx_queue, serial_tx_queue, settings):
@@ -332,13 +331,17 @@ class ControllerWorker(ControllerSignals):
         """Restart the spindle, then go on with the job without the rejected line.
 
         GRBL does not wait for the spindle when a cycle start restores it, so the
-        spindle is restored first and the cycle start follows after a delay.
+        spindle is restored first and the cycle start follows after the spindle
+        restart delay of the machine settings.
         """
         if self.rejected_line_prompted and not self.rejected_line_resuming:
             self.rejected_line_resuming = True
-            self.update_console_text_s.emit("Restarting the spindle, the job continues without the rejected line.")
+            delay_s = self.settings.machine_settings.spindle_restart_delay
+            self.update_console_text_s.emit(
+                f"Restarting the spindle, the job continues in {delay_s:g} s without the rejected line."
+            )
             self.execute_gcode_cmd(self.SPINDLE_STOP_TOGGLE)
-            QTimer.singleShot(self.SPINDLE_RESTART_DELAY_MS, self._finish_resume)
+            QTimer.singleShot(int(delay_s * 1000), self._finish_resume)
 
     def _finish_resume(self) -> None:
         """Release the hold, unless the job has been stopped in the meantime."""
