@@ -81,6 +81,7 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.safe_z_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.tool_probe_backoff_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.spindle_stop_dwell_dsb.valueChanged.connect(self.set_focus_lost)
+        self.ui.spindle_restart_delay_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.feedrate_xy_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.feedrate_z_dsb.valueChanged.connect(self.set_focus_lost)
         self.ui.feedrate_probe_dsb.valueChanged.connect(self.set_focus_lost)
@@ -208,6 +209,7 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.safe_z_dsb.setValue(self.machine_settings.safe_z)
         self.ui.tool_probe_backoff_dsb.setValue(self.machine_settings.tool_probe_backoff)
         self.ui.spindle_stop_dwell_dsb.setValue(self.machine_settings.spindle_stop_dwell)
+        self.ui.spindle_restart_delay_dsb.setValue(self.machine_settings.spindle_restart_delay)
         self.ui_tool_setter_set_enabling(self.ui.tool_change_mode_cb.currentText() == "setter")
 
     def restore_initial_settings(self):
@@ -368,6 +370,7 @@ class UiSettingsPreferencesTab(QObject):
         self.machine_settings.safe_z = self.ui.safe_z_dsb.value()
         self.machine_settings.tool_probe_backoff = self.ui.tool_probe_backoff_dsb.value()
         self.machine_settings.spindle_stop_dwell = self.ui.spindle_stop_dwell_dsb.value()
+        self.machine_settings.spindle_restart_delay = self.ui.spindle_restart_delay_dsb.value()
 
         self.machine_settings.feedrate_xy = self.ui.feedrate_xy_dsb.value()
         self.machine_settings.feedrate_z = self.ui.feedrate_z_dsb.value()

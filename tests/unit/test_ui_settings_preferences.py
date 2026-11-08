@@ -26,6 +26,7 @@ def mock_ui():
     ui.safe_z_dsb = MagicMock()
     ui.tool_probe_backoff_dsb = MagicMock()
     ui.spindle_stop_dwell_dsb = MagicMock()
+    ui.spindle_restart_delay_dsb = MagicMock()
     ui.feedrate_xy_dsb = MagicMock()
     ui.feedrate_z_dsb = MagicMock()
     ui.feedrate_probe_dsb = MagicMock()
@@ -416,6 +417,7 @@ class TestToolChangeProcedure:
         mock_settings.machine_settings.safe_z = 5.0
         mock_settings.machine_settings.tool_probe_backoff = 2.0
         mock_settings.machine_settings.spindle_stop_dwell = 3.0
+        mock_settings.machine_settings.spindle_restart_delay = 6.0
 
         settings_tab.reset_tool_change_procedure_settings()
 
@@ -426,6 +428,7 @@ class TestToolChangeProcedure:
         mock_ui.safe_z_dsb.setValue.assert_called_with(5.0)
         mock_ui.tool_probe_backoff_dsb.setValue.assert_called_with(2.0)
         mock_ui.spindle_stop_dwell_dsb.setValue.assert_called_with(3.0)
+        mock_ui.spindle_restart_delay_dsb.setValue.assert_called_with(6.0)
 
     def test_save_settings_preferences_writes_the_procedure(self, settings_tab, mock_ui, mock_settings):
         mock_ui.tool_change_mode_cb.currentText.return_value = "tlo"
@@ -435,6 +438,7 @@ class TestToolChangeProcedure:
         mock_ui.safe_z_dsb.value.return_value = 7.0
         mock_ui.tool_probe_backoff_dsb.value.return_value = 2.0
         mock_ui.spindle_stop_dwell_dsb.value.return_value = 4.0
+        mock_ui.spindle_restart_delay_dsb.value.return_value = 8.0
 
         settings_tab.save_settings_preferences()
 
@@ -445,3 +449,4 @@ class TestToolChangeProcedure:
         assert mock_settings.machine_settings.safe_z == 7.0
         assert mock_settings.machine_settings.tool_probe_backoff == 2.0
         assert mock_settings.machine_settings.spindle_stop_dwell == 4.0
+        assert mock_settings.machine_settings.spindle_restart_delay == 8.0

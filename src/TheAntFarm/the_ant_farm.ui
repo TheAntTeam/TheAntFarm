@@ -9764,6 +9764,87 @@
                   </property>
                  </widget>
                 </item>
+                <item row="10" column="0">
+                 <widget class="QLabel" name="spindle_restart_delay_la">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                     <size>
+                      <width>160</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                     <size>
+                      <width>160</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>Time given to the spindle to get back to speed when a job is resumed after a rejected line, before the motion restarts.</string>
+                  </property>
+                  <property name="locale">
+                   <locale language="English" country="UnitedKingdom"/>
+                  </property>
+                  <property name="text">
+                   <string>Spindle Restart Delay [s]</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="1">
+                 <widget class="QDoubleSpinBox" name="spindle_restart_delay_dsb">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                     <size>
+                      <width>80</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                     <size>
+                      <width>80</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>Time given to the spindle to get back to speed when a job is resumed after a rejected line, before the motion restarts.</string>
+                  </property>
+                  <property name="buttonSymbols">
+                   <enum>QAbstractSpinBox::ButtonSymbols::UpDownArrows</enum>
+                  </property>
+                  <property name="minimum">
+                   <double>1.00</double>
+                  </property>
+                  <property name="maximum">
+                   <double>30.00</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.50</double>
+                  </property>
+                  <property name="value">
+                   <double>4.00</double>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
              </layout>

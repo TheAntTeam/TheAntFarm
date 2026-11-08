@@ -4242,6 +4242,32 @@ class Ui_MainWindow(object):
 
         self.gridLayout_tool_change.addWidget(self.spindle_stop_dwell_dsb, 9, 1, 1, 1)
 
+        self.spindle_restart_delay_la = QLabel(self.jobs_machine_settings_tab_scroll)
+        self.spindle_restart_delay_la.setObjectName(u"spindle_restart_delay_la")
+        sizePolicy3.setHeightForWidth(self.spindle_restart_delay_la.sizePolicy().hasHeightForWidth())
+        self.spindle_restart_delay_la.setSizePolicy(sizePolicy3)
+        self.spindle_restart_delay_la.setMinimumSize(QSize(160, 20))
+        self.spindle_restart_delay_la.setMaximumSize(QSize(160, 16777215))
+        self.spindle_restart_delay_la.setFont(font)
+        self.spindle_restart_delay_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_tool_change.addWidget(self.spindle_restart_delay_la, 10, 0, 1, 1)
+
+        self.spindle_restart_delay_dsb = QDoubleSpinBox(self.jobs_machine_settings_tab_scroll)
+        self.spindle_restart_delay_dsb.setObjectName(u"spindle_restart_delay_dsb")
+        sizePolicy3.setHeightForWidth(self.spindle_restart_delay_dsb.sizePolicy().hasHeightForWidth())
+        self.spindle_restart_delay_dsb.setSizePolicy(sizePolicy3)
+        self.spindle_restart_delay_dsb.setMinimumSize(QSize(80, 20))
+        self.spindle_restart_delay_dsb.setMaximumSize(QSize(80, 16777215))
+        self.spindle_restart_delay_dsb.setFont(font)
+        self.spindle_restart_delay_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.UpDownArrows)
+        self.spindle_restart_delay_dsb.setMinimum(1.000000000000000)
+        self.spindle_restart_delay_dsb.setMaximum(30.000000000000000)
+        self.spindle_restart_delay_dsb.setSingleStep(0.500000000000000)
+        self.spindle_restart_delay_dsb.setValue(4.000000000000000)
+
+        self.gridLayout_tool_change.addWidget(self.spindle_restart_delay_dsb, 10, 1, 1, 1)
+
 
         self.verticalLayout_tool_change.addLayout(self.gridLayout_tool_change)
 
@@ -5071,6 +5097,13 @@ class Ui_MainWindow(object):
         self.safe_z_la.setText(QCoreApplication.translate("MainWindow", u"Safe Z MPos", None))
         self.tool_probe_backoff_la.setText(QCoreApplication.translate("MainWindow", u"Probe Backoff", None))
         self.spindle_stop_dwell_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Stop Dwell [s]", None))
+#if QT_CONFIG(tooltip)
+        self.spindle_restart_delay_la.setToolTip(QCoreApplication.translate("MainWindow", u"Time given to the spindle to get back to speed when a job is resumed after a rejected line, before the motion restarts.", None))
+#endif // QT_CONFIG(tooltip)
+        self.spindle_restart_delay_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Restart Delay [s]", None))
+#if QT_CONFIG(tooltip)
+        self.spindle_restart_delay_dsb.setToolTip(QCoreApplication.translate("MainWindow", u"Time given to the spindle to get back to speed when a job is resumed after a rejected line, before the motion restarts.", None))
+#endif // QT_CONFIG(tooltip)
         self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.jobs_machine_settings_tab), QCoreApplication.translate("MainWindow", u"Jobs/Machine Settings", None))
         self.alignment_drill_section_la.setText(QCoreApplication.translate("MainWindow", u"ALIGNMENT DRILL SETTINGS", None))
         self.allignment_drill_diameter_la.setText(QCoreApplication.translate("MainWindow", u"Alignment Drill diameter [mm]", None))

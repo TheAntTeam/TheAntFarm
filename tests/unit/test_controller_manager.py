@@ -41,6 +41,7 @@ def settings():
     machine.tool_setter_rel_flag = False
     machine.tool_probe_backoff = 1.5
     machine.spindle_stop_dwell = 1.0
+    machine.spindle_restart_delay = 4.0
     settings.machine_settings = machine
     return settings
 
@@ -332,19 +333,29 @@ class TestRejectedLine:
 class TestResumeAfterRejectedLine:
     @pytest.fixture
     def rig(self, worker):
-        worker.SPINDLE_RESTART_DELAY_MS = 1
+        worker.settings.machine_settings.spindle_restart_delay = 0.001
         rig = StreamRig(worker, JOB)
         rig.hold_and_prompt()
         return rig
 
     def test_spindle_restarts_before_any_motion(self, worker, rig):
         rig.sent()
-        worker.SPINDLE_RESTART_DELAY_MS = 60000
+        worker.settings.machine_settings.spindle_restart_delay = 60.0
 
         worker.resume_after_rejected_line()
 
         assert rig.realtime == [FEED_HOLD, SPINDLE_STOP_TOGGLE, SPINDLE_STOP_TOGGLE]
         assert rig.sent() == []
+
+    def test_cycle_start_waits_for_the_spindle_restart_delay_setting(self, worker, rig, monkeypatch):
+        delays = []
+        monkeypatch.setattr("controller.controller_manager.QTimer.singleShot", lambda ms, callback: delays.append(ms))
+        worker.settings.machine_settings.spindle_restart_delay = 2.5
+
+        worker.resume_after_rejected_line()
+
+        assert delays == [2500]
+        assert CYCLE_START not in rig.realtime
 
     def test_job_continues_without_the_rejected_line(self, worker, rig):
         rig.sent()
@@ -368,7 +379,7 @@ class TestResumeAfterRejectedLine:
         assert worker.job_aborted is False
 
     def test_rejected_last_line_ends_the_job_after_resuming(self, worker):
-        worker.SPINDLE_RESTART_DELAY_MS = 1
+        worker.settings.machine_settings.spindle_restart_delay = 0.001
         rig = StreamRig(worker, JOB)
         rig.hold_and_prompt(len(JOB) - 1)
 
