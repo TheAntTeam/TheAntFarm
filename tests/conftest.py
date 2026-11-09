@@ -1,15 +1,19 @@
+import os
 import sys
 from pathlib import Path
 
 import pytest
-from PySide6.QtCore import QCoreApplication
 from PySide6.QtSerialPort import QSerialPort
+from PySide6.QtWidgets import QApplication
+
+# Widgets, pixmaps and icons need a GUI application; offscreen works without a display (CI runners).
+os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 
 @pytest.fixture(scope="session")
 def qapp():
     """Create QApplication instance for tests."""
-    app = QCoreApplication([])
+    app = QApplication.instance() or QApplication([])
     yield app
     app.quit()
 
