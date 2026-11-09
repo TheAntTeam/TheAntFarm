@@ -398,6 +398,9 @@ class ControlController(QObject):
     def get_gcode_lines(self, gcode_path):
         return self.gcodes_od[gcode_path]["gcode"].recode_gcode()
 
+    def get_gcode_numbered_lines(self, gcode_path):
+        return self.gcodes_od[gcode_path]["gcode"].recode_gcode_numbered()
+
     def get_change_tool_lines(self):
         gcp = GCodeParser(None)
         return gcp.get_change_tool_gcode()

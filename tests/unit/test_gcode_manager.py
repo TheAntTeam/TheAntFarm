@@ -9,7 +9,7 @@ import numpy as np
 import pytest
 from shapely.geometry import LineString, Polygon
 
-from TheAntFarm.shape_core.gcode_manager import GCode, GCodeAlignment, GCoder, GcodePoint
+from TheAntFarm.shape_core.gcode_manager import GCode, GCodeAlignment, GCodeParser, GCoder, GcodePoint
 from TheAntFarm.shape_core.path_manager import MachinePath
 from TheAntFarm.shape_core.path_types import ToolPath
 
@@ -539,6 +539,39 @@ class TestGcodePointString:
         point.pos = point.MACHINE_POS
 
         assert point.get_string().startswith("G53 G0 X1.000")
+
+
+class TestRecodeLineNumbers:
+    """Each recoded line keeps the number of the file line it comes from."""
+
+    def _parser(self, tmp_path, text):
+        gcode_file = tmp_path / "job.nc"
+        gcode_file.write_text(text)
+        parser = GCodeParser(None)
+        parser.load_gcode_file(str(gcode_file))
+        parser.interp()
+        parser.vectorize()
+        return parser
+
+    def test_blank_and_comment_lines_are_counted(self, tmp_path):
+        parser = self._parser(tmp_path, "G21\n\n; comment\nG90\nG1 X1 Y1 Z-0.1 F100\n(note)\nG1 X2 Y2\nM5\n")
+
+        numbered = parser.recode_gcode_numbered()
+
+        assert [number for _, number in numbered] == [1, 4, 5, 7, 8]
+        assert [line for line, _ in numbered] == parser.recode_gcode()
+        assert numbered[3][0].startswith("G1 X2.000 Y2.000")
+
+    def test_split_moves_keep_the_line_of_the_file(self, tmp_path):
+        parser = self._parser(tmp_path, "G21\nG1 X1 Y1 Z-0.1 F100\nG1 X3 Y1\n")
+        moves = parser.gc.get_gcode_original_vectors_copy()
+        half = moves[-1].copy()
+        half.coords = (moves[-2].coords + moves[-1].coords) / 2
+        parser.gc.modified_vectors = moves[:-1] + [half] + moves[-1:]
+
+        numbered = parser.recode_gcode_numbered()
+
+        assert [number for _, number in numbered] == [1, 2, 3, 3]
 
 
 class TestPartialConfiguration:

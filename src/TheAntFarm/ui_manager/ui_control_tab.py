@@ -624,14 +624,14 @@ class UiControlTab(QObject):
     def pause_resume(self):
         self.pause_resume_gcode_s.emit()
 
-    @Slot(str, str)
-    def show_rejected_line_prompt(self, error: str, line: str) -> None:
-        """Ask the user how to go on with a job on hold for a rejected line."""
+    @Slot(str, str, int)
+    def show_rejected_line_prompt(self, error: str, line: str, number: int) -> None:
+        """Ask the user how to go on with a job on hold for a rejected line, ``number`` in the G-code file."""
         self.close_rejected_line_prompt()
         prompt = QMessageBox(self.ui.stop_tb.window())
         prompt.setIcon(QMessageBox.Warning)
         prompt.setWindowTitle("Line rejected by the machine")
-        prompt.setText(f"The machine rejected this line ({error}):\n\n{line}")
+        prompt.setText(f"The machine rejected line {number} ({error}):\n\n{line}")
         prompt.setInformativeText(
             "The machine is on hold and the spindle is stopped.\n\n"
             "Resume: restart the spindle and, after a few seconds, go on WITHOUT this line. "

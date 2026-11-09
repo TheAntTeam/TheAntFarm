@@ -190,23 +190,24 @@ class TestRejectedLinePrompt:
         return ui_tab
 
     def test_prompt_shows_the_error_and_the_line(self, ui_tab, message_box):
-        ui_tab.show_rejected_line_prompt("error:20", "G1 X2.000 Y2.000 Z-0.100")
+        ui_tab.show_rejected_line_prompt("error:20", "G1 X2.000 Y2.000 Z-0.100", 42)
 
         prompt = message_box.return_value
         text = prompt.setText.call_args.args[0]
         assert "error:20" in text
+        assert "line 42" in text
         assert "G1 X2.000 Y2.000 Z-0.100" in text
         prompt.open.assert_called_once()
 
     def test_stop_is_the_default_and_the_escape_button(self, ui_tab, message_box):
-        ui_tab.show_rejected_line_prompt("error:20", "G1 X2")
+        ui_tab.show_rejected_line_prompt("error:20", "G1 X2", 3)
 
         prompt = message_box.return_value
         prompt.setDefaultButton.assert_called_once_with(message_box.buttons["Stop"])
         prompt.setEscapeButton.assert_called_once_with(message_box.buttons["Stop"])
 
     def test_resume_button_resumes_the_job(self, ui_tab, message_box):
-        ui_tab.show_rejected_line_prompt("error:20", "G1 X2")
+        ui_tab.show_rejected_line_prompt("error:20", "G1 X2", 3)
 
         ui_tab._on_rejected_line_prompt_clicked(message_box.buttons["Resume"])
 
@@ -215,7 +216,7 @@ class TestRejectedLinePrompt:
         assert ui_tab.rejected_line_prompt is None
 
     def test_stop_button_stops_the_job(self, ui_tab, message_box):
-        ui_tab.show_rejected_line_prompt("error:20", "G1 X2")
+        ui_tab.show_rejected_line_prompt("error:20", "G1 X2", 3)
 
         ui_tab._on_rejected_line_prompt_clicked(message_box.buttons["Stop"])
 
@@ -225,7 +226,7 @@ class TestRejectedLinePrompt:
         ui_tab.enable_after_send.assert_called_once()
 
     def test_job_stopped_elsewhere_closes_the_prompt(self, ui_tab, message_box):
-        ui_tab.show_rejected_line_prompt("error:20", "G1 X2")
+        ui_tab.show_rejected_line_prompt("error:20", "G1 X2", 3)
 
         ui_tab.stop_send_file()
 

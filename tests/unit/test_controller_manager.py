@@ -185,18 +185,20 @@ def _wait_for_cycle_start(rig: "StreamRig", timeout_ms: int = 2000) -> None:
 class StreamRig:
     """Drive the real streaming code with the responses of the machine."""
 
-    def __init__(self, worker: Any, lines: Optional[List[str]] = None) -> None:
+    def __init__(
+        self, worker: Any, lines: Optional[List[str]] = None, line_numbers: Optional[List[int]] = None
+    ) -> None:
         self.worker = worker
         self.stops: List[int] = []
         self.console: List[str] = []
-        self.prompts: List[Tuple[str, str]] = []
+        self.prompts: List[Tuple[str, str, int]] = []
         self.realtime: List[bytes] = []
         worker.stop_send_s.connect(lambda: self.stops.append(1))
         worker.update_console_text_s.connect(self.console.append)
-        worker.line_rejected_s.connect(lambda error, line: self.prompts.append((error, line)))
+        worker.line_rejected_s.connect(lambda error, line, number: self.prompts.append((error, line, number)))
         worker.serial_send_s.connect(self.realtime.append)
         if lines is not None:
-            worker.send_gcode_lines(list(lines))
+            worker.send_gcode_lines(list(lines), line_numbers)
 
     def feed(self, *responses: str) -> None:
         for response in responses:
@@ -247,8 +249,32 @@ class TestRejectedLine:
         assert rig.realtime == [FEED_HOLD]
 
         rig.status("Hold:0")
-        assert rig.prompts == [("error:20", JOB[7].strip())]
+        assert rig.prompts == [("error:20", JOB[7].strip(), 8)]
         assert rig.realtime == [FEED_HOLD, SPINDLE_STOP_TOGGLE]
+
+    def test_prompt_and_console_give_the_line_number_of_the_file(self, worker):
+        file_lines = [2 * number + 10 for number in range(len(JOB))]
+        rig = StreamRig(worker, JOB, file_lines)
+        rig.run_until_line(7)
+
+        rig.feed("error:20\n")
+        rig.status("Hold:0")
+
+        assert rig.prompts == [("error:20", JOB[7].strip(), file_lines[7])]
+        assert any(message.startswith(f"Line {file_lines[7]} rejected") for message in rig.console)
+
+    def test_line_number_follows_the_job_after_resuming(self, worker):
+        worker.settings.machine_settings.spindle_restart_delay = 0.001
+        file_lines = [3 * number + 1 for number in range(len(JOB))]
+        rig = StreamRig(worker, JOB, file_lines)
+        rig.hold_and_prompt(3)
+        worker.resume_after_rejected_line()
+        _wait_for_cycle_start(rig)
+
+        rig.feed("ok\n", "ok\n", "error:20\n")
+        rig.status("Hold:0")
+
+        assert rig.prompts[-1] == ("error:20", JOB[6].strip(), file_lines[6])
 
     def test_spindle_toggle_is_sent_only_once(self, worker):
         rig = StreamRig(worker, JOB)
@@ -288,6 +314,7 @@ class TestRejectedLine:
         assert worker.job_aborted is True
         assert rig.stops == [1]
         assert rig.realtime == []
+        assert any("on line 8:" in message for message in rig.console)
 
     def test_rejected_macro_line_stops_the_job(self, worker):
         rig = StreamRig(worker, ["G21\n", "M6\n", "G1 X1.000 Y1.000 Z-0.100\n"])
@@ -478,6 +505,11 @@ class TestLineTooLong:
         assert worker.sending_file is False
         assert rig.stops == [1]
         assert any("Line 2" in message for message in rig.console)
+
+    def test_refusal_gives_the_line_number_of_the_file(self, worker):
+        rig = StreamRig(worker, ["G21\n", self.LONG_LINE, "M5\n"], [1, 5, 6])
+
+        assert any("Line 5 is too long" in message for message in rig.console)
 
     def test_refused_job_does_not_reset_the_machine(self, worker, qapp):
         rig = StreamRig(worker)
