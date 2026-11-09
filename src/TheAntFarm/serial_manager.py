@@ -114,6 +114,7 @@ class SerialWorker(QObject):
             self.update_console_text_s.emit("No port selected.")
             self.open_port_s.emit(False)
 
+    @Slot()
     def close_port(self):
         """Close serial port."""
         logger.debug("Closing " + self.serial_port.portName())
