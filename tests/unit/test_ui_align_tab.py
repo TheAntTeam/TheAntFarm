@@ -118,3 +118,51 @@ class TestFlipAlignLayer:
         ui.vis_align_layer = mock_vis_align_layer
         ui.flip_align_layer([True, False])
         mock_vis_align_layer.flip_camera.assert_called()
+
+
+class TestAlignmentToggleState:
+    """The alignment toggles: theme colours when not ready, black on yellow when ready, white on blue when applied."""
+
+    @staticmethod
+    def _tab():
+        from TheAntFarm.ui_manager.ui_align_tab import UiAlignTab
+
+        tab = UiAlignTab.__new__(UiAlignTab)
+        tab.ui = MagicMock()
+        tab.style_manager = MagicMock()
+        return tab
+
+    @staticmethod
+    def _buttons(tab):
+        return (tab.ui.apply_alignment_tb, tab.ui.apply_alignment_tb_2)
+
+    def test_not_ready_follows_the_theme(self):
+        tab = self._tab()
+
+        tab.update_ui_alignment_applied(False, 3)
+
+        for button in self._buttons(tab):
+            button.setStyleSheet.assert_called_once_with("")
+            tab.style_manager.set_themed_icon.assert_any_call(button, "apply-align", "alignment-applied", None)
+
+    def test_ready_is_black_on_yellow(self):
+        tab = self._tab()
+
+        tab.update_ui_alignment_applied(False, 4)
+
+        for button in self._buttons(tab):
+            assert "background-color: yellow" in button.setStyleSheet.call_args.args[0]
+            tab.style_manager.set_themed_icon.assert_any_call(
+                button, "apply-align", "alignment-applied", tab.READY_ICON_COLOR
+            )
+
+    def test_applied_is_white_on_blue(self):
+        tab = self._tab()
+
+        tab.update_ui_alignment_applied(True, 4)
+
+        for button in self._buttons(tab):
+            assert "background-color: blue" in button.setStyleSheet.call_args.args[0]
+            tab.style_manager.set_themed_icon.assert_any_call(
+                button, "apply-align", "alignment-applied", tab.APPLIED_ICON_COLOR
+            )
