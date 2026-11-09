@@ -613,3 +613,14 @@ class TestStopTimers:
             qInstallMessageHandler(previous)
 
         assert [message for message in warnings if "Timer" in message] == []
+
+
+class TestStopJobForClose:
+    def test_machine_is_reset_also_during_a_tool_change(self, worker):
+        rig = StreamRig(worker, JOB)
+        worker.send_soft_reset = False  # as during a tool change or a long user command
+
+        worker.stop_job_for_close()
+
+        assert rig.realtime == [FEED_HOLD, SOFT_RESET]
+        assert worker.sending_file is False
