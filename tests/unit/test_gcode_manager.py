@@ -129,7 +129,6 @@ class TestGCodeGeneration:
         """VAL-002: G-code should include job information."""
         gcoder_gerber.gcode = []
         gcoder_gerber.add_job_info()
-        info = "".join(gcoder_gerber.gcode)
         assert len(gcoder_gerber.gcode) >= 0
 
     def test_add_init(self, gcoder_gerber):

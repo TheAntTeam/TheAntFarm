@@ -109,7 +109,7 @@ class TestViewController:
             from controller.controller_view import ViewController
 
             vc = ViewController(mock_settings)
-            result = vc.generate_new_gcode_file("top_copper", {}, "gerber", [])
+            vc.generate_new_gcode_file("top_copper", {}, "gerber", [])
             mock_gcoder.write.assert_called_once()
 
     def test_generate_new_gcode_file_without_mirror(self, mock_settings):
@@ -123,7 +123,7 @@ class TestViewController:
             from controller.controller_view import ViewController
 
             vc = ViewController(mock_settings)
-            result = vc.generate_new_gcode_file("top_copper", {}, "gerber", [])
+            vc.generate_new_gcode_file("top_copper", {}, "gerber", [])
             mock_gcoder.write.assert_called_once()
 
     def test_generate_new_gcode_file_compute_fails(self, mock_settings):
@@ -136,5 +136,5 @@ class TestViewController:
             from controller.controller_view import ViewController
 
             vc = ViewController(mock_settings)
-            result = vc.generate_new_gcode_file("top_copper", {}, "gerber", [])
+            vc.generate_new_gcode_file("top_copper", {}, "gerber", [])
             mock_gcoder.write.assert_not_called()
