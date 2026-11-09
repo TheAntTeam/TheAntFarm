@@ -151,9 +151,9 @@ class TestThemedIconsOfTheWindow:
 
         assert [name for name in sorted(names) if not QFile.exists(icon_path(name))] == []
 
-    def test_every_icon_of_the_ui_file_is_a_resource(self, resources):
+    def test_every_resource_of_the_ui_file_exists(self, resources):
         text = (APP_DIR / "the_ant_farm.ui").read_text(encoding="utf-8")
-        paths = set(re.findall(r":/resources/resources/icons/[\w.-]+", text))
+        paths = set(re.findall(r":/resources/resources/[\w/.-]+", text))
 
         assert paths
         assert [path for path in sorted(paths) if not QFile.exists(path)] == []
