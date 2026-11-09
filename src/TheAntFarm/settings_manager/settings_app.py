@@ -276,6 +276,15 @@ class AppSettingsHandler:
             speed = self.GRBL_SIMULATOR_SPEED_DEFAULT
         self.grbl_simulator_speed = speed
 
+    def _update_last_serial_port(self) -> None:
+        """Take the port and baud rate of the selectors, keeping the saved ones when a selector is empty."""
+        port = self.main_win.ui.serial_ports_cb.currentText()
+        baud = self.main_win.ui.serial_baud_cb.currentText()
+        if port:
+            self.last_serial_port = port
+        if baud.isdigit():
+            self.last_serial_baud = int(baud)
+
     def write_all_app_settings(self):
         """Write all application settings to ini files"""
         # Ensure the directory exists
@@ -338,8 +347,9 @@ class AppSettingsHandler:
         app_general["logs_file"] = str(self.logs_file_default)
         app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
-        app_general["last_serial_port"] = str(self.main_win.ui.serial_ports_cb.currentText())
-        app_general["last_serial_baud"] = str(self.main_win.ui.serial_baud_cb.currentText())
+        self._update_last_serial_port()
+        app_general["last_serial_port"] = str(self.last_serial_port)
+        app_general["last_serial_baud"] = str(self.last_serial_baud)
 
         app_general["camera_selected_or_tool"] = str(self.camera_selected_or_tool)
         app_general["flip_horizontal_selected"] = str(self.flip_horizontal_selected)

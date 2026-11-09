@@ -346,6 +346,44 @@ class TestAppSettingsHandler:
         assert new_settings.grbl_simulator_enabled is False
         assert new_settings.grbl_simulator_speed == 1.0
 
+    def _save_ports_and_reload(self, handler, port, baud):
+        handler.main_win.ui.serial_ports_cb.currentText.return_value = port
+        handler.main_win.ui.serial_baud_cb.currentText.return_value = baud
+        handler.write_all_app_settings()
+        reloaded = AppSettingsHandler(os.path.dirname(handler.app_config_path), handler.main_win)
+        reloaded.read_all_app_settings()
+        return reloaded
+
+    @pytest.fixture
+    def saved_port_handler(self, app_settings_handler, tmp_path):
+        config_dir = tmp_path / "test_last_serial_port" / "configurations"
+        config_dir.mkdir(parents=True)
+        app_settings_handler.app_config_path = str(config_dir / "app_config.ini")
+        return self._save_ports_and_reload(app_settings_handler, "COM7", "250000")
+
+    def test_selected_port_and_baud_rate_are_saved(self, saved_port_handler):
+        assert saved_port_handler.last_serial_port == "COM7"
+        assert saved_port_handler.last_serial_baud == 250000
+
+    def test_empty_selectors_keep_the_saved_port_and_baud_rate(self, saved_port_handler):
+        reloaded = self._save_ports_and_reload(saved_port_handler, "", "")
+
+        assert reloaded.last_serial_port == "COM7"
+        assert reloaded.last_serial_baud == 250000
+
+    def test_empty_selectors_keep_them_across_several_closes(self, saved_port_handler):
+        once = self._save_ports_and_reload(saved_port_handler, "", "")
+        twice = self._save_ports_and_reload(once, "", "")
+
+        assert twice.last_serial_port == "COM7"
+        assert twice.last_serial_baud == 250000
+
+    def test_a_new_selection_replaces_the_saved_port(self, saved_port_handler):
+        reloaded = self._save_ports_and_reload(saved_port_handler, "COM3", "115200")
+
+        assert reloaded.last_serial_port == "COM3"
+        assert reloaded.last_serial_baud == 115200
+
     @pytest.mark.parametrize(
         "enabled, speed",
         [("maybe", "fast"), ("yes", "0"), ("on", "-2"), ("1", "1000")],
