@@ -184,12 +184,8 @@ class UiAlignTab(QObject):
             self.ui.apply_alignment_tb_2.setStatusTip("Alignment OFF")
         else:
             self._set_alignment_icons(None)
-            self.ui.apply_alignment_tb.setStyleSheet(
-                StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)", color="white")
-            )
-            self.ui.apply_alignment_tb_2.setStyleSheet(
-                StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)", color="white")
-            )
+            self.ui.apply_alignment_tb.setStyleSheet("")
+            self.ui.apply_alignment_tb_2.setStyleSheet("")
             self.ui.apply_alignment_tb.setStatusTip("Alignment OFF")
             self.ui.apply_alignment_tb_2.setStatusTip("Alignment OFF")
 
