@@ -114,14 +114,14 @@ class PcbObj:
             with open(path, "r", encoding="utf-8", errors="replace") as excellon_file:
                 excellon_source = excellon_file.read()
 
-            state = ExcellonState(output_units="MM")  # oppure "INCH"
-            parser = ExcellonParser(state, auto_detect_coord_format=True)  # hint_units="INCH" se il file non dichiara le unità
+            state = ExcellonState(output_units="MM")  # or "INCH"
+            parser = ExcellonParser(state, auto_detect_coord_format=True)  # hint_units="INCH" if the file declares no units
             parser.parse(tokenize_excellon(excellon_source))
 
             proc = ExcellonProcessor(state)
             proc.process(parser.primitives)
 
-            self.excellons[tag] = proc  # proc.geometries → lista di Shapely Polygon
+            self.excellons[tag] = proc  # proc.geometries → list of Shapely Polygons
             return True
         except Exception as e:
             logger.error(f"Failed to load Excellon file {path}: {e}")

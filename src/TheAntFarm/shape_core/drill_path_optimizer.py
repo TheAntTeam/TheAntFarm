@@ -34,8 +34,8 @@ class DrillPathOptimizer:
     def set_optimization_type(self, opt_type: str) -> bool:
         """Sets the optimization algorithm."""
         if opt_type in self.OPTIMIZATION_TYPES:
-            # TODO: modificare la lista dei tipi di ottimizzazione eliminando genetic ed inserendo hybrid_ils.
-            #       Quando fatto rimuovere il codice relativo all'algoritmo genetico.
+            # TODO: change the list of optimization types, removing genetic and adding hybrid_ils.
+            #       Once done, remove the code of the genetic algorithm.
             if opt_type == "genetic":
                 self.optimizer_type = "hybrid_ils"
             else:
