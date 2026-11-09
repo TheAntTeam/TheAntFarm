@@ -4,7 +4,7 @@ import re
 import time
 from collections import OrderedDict as od
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, List, Optional, Tuple
 
 import numpy as np
 import scipy.interpolate as spi
@@ -554,6 +554,7 @@ class GcodeLine:
         self.params = od({})
         self.comment = ""
         self.tag = False
+        self.file_line = 0
 
     def get_string(self):
         s = ""
@@ -733,7 +734,7 @@ class GCodeParser:
                     ls = self.gc.modified_lines
                 else:
                     ls = self.gc.original_lines
-            for li in ls:
+            for file_line, li in enumerate(ls, start=1):
                 d = li.strip()
                 d = d.replace("(", ";")
                 d = d.replace("%", ";")
@@ -743,6 +744,7 @@ class GCodeParser:
                 data, comment = tmp[0:2]
                 if data or comment:
                     gcl = GcodeLine()
+                    gcl.file_line = file_line
                     # store the comment if needed
                     gcl.comment = comment.strip()
                     # decode the commands
@@ -783,8 +785,11 @@ class GCodeParser:
                 self.gc.gcll = gcll
         return gcll
 
-    def recode_gcode(self):
-        # Recode Gcode
+    def recode_gcode(self) -> List[str]:
+        return [line for line, _ in self.recode_gcode_numbered()]
+
+    def recode_gcode_numbered(self) -> List[Tuple[str, int]]:
+        """Recode the G-code, each line with the number of the file line it comes from."""
         gcls = []
         if self.gc.modified_vectors:
             # - Modified Loaded
@@ -809,15 +814,15 @@ class GCodeParser:
                     nl = -1
                 if nl == li:
                     cl_flag = True
-                    gcls.append(gcv[vi].get_string())
+                    gcls.append((gcv[vi].get_string(), gcl[li].file_line))
                     while cl_flag and vi < gcv_len - 1:
                         vi += 1
                         cl_flag = gcv[vi].line == li
                         if cl_flag:
-                            gcls.append(gcv[vi].get_string())
+                            gcls.append((gcv[vi].get_string(), gcl[li].file_line))
                 else:
                     if gcl[li].command:
-                        gcls.append(gcl[li].get_string())
+                        gcls.append((gcl[li].get_string(), gcl[li].file_line))
         return gcls
 
     def get_change_tool_gcode(self):

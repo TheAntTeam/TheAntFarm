@@ -4,6 +4,7 @@ import re
 import time
 import traceback
 from collections import OrderedDict as Od
+from typing import List, Optional
 
 from PySide6.QtCore import QTimer, Slot
 from PySide6.QtGui import QPixmap
@@ -44,6 +45,7 @@ class ControllerWorker(ControllerSignals):
 
         self.status_to_ack = 0
         self.buffered_cmds = []
+        self.buffered_line_numbers: List[int] = []
         self.cmds_to_ack = 0
         self.wait_tag_decoding = False
         self.dro_status_updated = False
@@ -63,6 +65,7 @@ class ControllerWorker(ControllerSignals):
 
         self.sending_file = False
         self.file_content = []
+        self.file_line_numbers: List[int] = []
         self.content_line = 0
         self.file_progress = 0.0
         self.sent_lines = 0
@@ -232,6 +235,7 @@ class ControllerWorker(ControllerSignals):
         self.ack_lines += 1
         self.buffered_size -= len(self.buffered_cmds[0])
         self.buffered_cmds.pop(0)
+        self.buffered_line_numbers.pop(0)
         self.file_progress = (self.content_line / self.tot_lines) * 100
         logger.debug("Acknowledged lines: " + str(self.ack_lines))
         self.update_file_progress_s.emit(self.file_progress, "")
@@ -241,6 +245,7 @@ class ControllerWorker(ControllerSignals):
         # print("End Of File: " + str(end_of_file))
 
         buff_available = False
+        line_number = 0
 
         if self.macro_on:
             cmd_to_send = self.get_next_macro_line()
@@ -267,6 +272,7 @@ class ControllerWorker(ControllerSignals):
                     # the job has been aborted.
                     end_of_file = self.job_aborted
                 else:
+                    line_number = self.file_line_numbers[self.content_line]
                     self.content_line += 1
                     logger.debug(str(self.ack_lines) + " <-> " + str(self.sent_lines))
                     # does data fit the buffer?
@@ -282,6 +288,7 @@ class ControllerWorker(ControllerSignals):
             # cmd_to_send = self.file_content[self.sent_lines]
             self.send_to_tx_queue(cmd_to_send)
             self.buffered_cmds.append(cmd_to_send)
+            self.buffered_line_numbers.append(line_number)
             logger.debug("TX:" + cmd_to_send)
             self.update_console_text_s.emit(cmd_to_send)
             self.buffered_size += len(cmd_to_send)
@@ -301,12 +308,13 @@ class ControllerWorker(ControllerSignals):
     def _handle_rejected_line(self, error: str) -> None:
         """Hold the machine so that the user can decide, or stop if it cannot go on."""
         line = self.buffered_cmds[0].strip()
+        number = self.buffered_line_numbers[0]
         if error.lower() == "error:9":
-            self.abort_stream(f"Machine locked ({error}) on line: {line}")
+            self.abort_stream(f"Machine locked ({error}) on line {number}: {line}")
         elif self.macro_on:
             self.abort_stream(f"Macro line rejected by the machine ({error}): {line}")
         else:
-            message = f"Line rejected by the machine ({error}): {line}. Feed hold."
+            message = f"Line {number} rejected by the machine ({error}): {line}. Feed hold."
             logger.error(message)
             self.update_console_text_s.emit(message)
             self.rejected_line_pending = True
@@ -324,7 +332,9 @@ class ControllerWorker(ControllerSignals):
         if self.control_controller.status.lower() == "hold:0":
             self.rejected_line_prompted = True
             self.execute_gcode_cmd(self.SPINDLE_STOP_TOGGLE)
-            self.line_rejected_s.emit(self.rejected_line_error, self.buffered_cmds[0].strip())
+            self.line_rejected_s.emit(
+                self.rejected_line_error, self.buffered_cmds[0].strip(), self.buffered_line_numbers[0]
+            )
 
     @Slot()
     def resume_after_rejected_line(self) -> None:
@@ -555,12 +565,14 @@ class ControllerWorker(ControllerSignals):
 
     @Slot(str)
     def send_gcode_file(self, gcode_path):
-        lines = self.control_controller.get_gcode_lines(gcode_path)
+        numbered_lines = self.control_controller.get_gcode_numbered_lines(gcode_path)
         logger.info("Sending file: " + str(gcode_path))
-        self.send_gcode_lines(lines)
+        self.send_gcode_lines([line for line, _ in numbered_lines], [number for _, number in numbered_lines])
 
-    def send_gcode_lines(self, lines):
+    def send_gcode_lines(self, lines: List[str], line_numbers: Optional[List[int]] = None) -> None:
+        """Send a job; ``line_numbers`` are the file line numbers of ``lines``, by default their positions."""
         self.file_content = lines
+        self.file_line_numbers = line_numbers if line_numbers is not None else list(range(1, len(lines) + 1))
         # with open(gcode_path+".abl", "w") as f:
         #     f.writelines(self.file_content)
         # with open(gcode_path) as f:            # DEBUG: take directly from file
@@ -597,6 +609,7 @@ class ControllerWorker(ControllerSignals):
                 if cmd_to_send is not None:
                     self.send_to_tx_queue(cmd_to_send)
                     self.buffered_cmds.append(cmd_to_send)
+                    self.buffered_line_numbers.append(self.file_line_numbers[self.content_line])
                     self.update_console_text_s.emit(cmd_to_send)
                     logger.debug(cmd_to_send)
                     self.buffered_size += len(cmd_to_send)
@@ -609,7 +622,7 @@ class ControllerWorker(ControllerSignals):
 
     def _refuse_too_long_line(self) -> bool:
         """Refuse a job with a line that can never fit the buffer of the machine."""
-        for number, line in enumerate(self.file_content, start=1):
+        for number, line in zip(self.file_line_numbers, self.file_content):
             if len(line) >= self.REMOTE_RX_BUFFER_MAX_SIZE:
                 message = (
                     f"Line {number} is too long for the machine buffer "
@@ -638,6 +651,7 @@ class ControllerWorker(ControllerSignals):
         self.ack_lines = 0
         self.tot_lines = 0
         self.buffered_cmds = []
+        self.buffered_line_numbers = []
         self.buffered_size = 0
         self.wait_tag_decoding = False
 
