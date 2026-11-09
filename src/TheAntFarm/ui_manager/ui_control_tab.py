@@ -37,7 +37,7 @@ class UiControlTab(QObject):
 
     ui_send_cmd_s = Signal(str, tuple)
 
-    def __init__(self, ui, control_worker, serial_worker, ctrl_layer, settings):
+    def __init__(self, ui, control_worker, serial_worker, ctrl_layer, settings, style_manager=None):
         """
         Initialize ui elements of Control tab and connect signals coming and going to other classes/workers.
 
@@ -53,6 +53,8 @@ class UiControlTab(QObject):
             VisualLayer object that contain the openGL canvas.
         settings: SettingsHandler
             Handler object that allows the access to all the settings.
+        style_manager: StyleManager, optional
+            Draws the icons in the colours of the theme.
         """
         super(UiControlTab, self).__init__()
         self.ui = ui
@@ -62,6 +64,7 @@ class UiControlTab(QObject):
         self.app_settings = settings.app_settings
         self.gcf_settings = settings.gcf_settings
         self.machine_settings = settings.machine_settings
+        self.style_manager = style_manager
 
         self.holding_status = False
         self.rejected_line_prompt = None
@@ -366,46 +369,22 @@ class UiControlTab(QObject):
         if holding:
             if not self.holding_status:
                 self.holding_status = True
-                icon = QIcon()
-                icon.addFile(
-                    ":/resources/resources/icons/white-play-and-pause-button.svg", QSize(), QIcon.Normal, QIcon.Off
-                )
-                icon.addFile(
-                    ":/resources/resources/icons/gray-play-and-pause-button.svg", QSize(), QIcon.Disabled, QIcon.Off
-                )
-                icon.addFile(
-                    ":/resources/resources/icons/gray-play-and-pause-button.svg", QSize(), QIcon.Disabled, QIcon.On
-                )
-                self.ui.pause_resume_tb.setIcon(icon)
-                self.ui.pause_resume_tb.setIconSize(QSize(64, 64))
-                self.ui.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
+                self._set_pause_resume_icon("play-and-pause-button")
         else:
             if self.holding_status:
                 self.holding_status = False
-                icon = QIcon()
-                icon.addFile(
-                    ":/resources/resources/icons/white-pause-multimedia-big-gross-symbol-lines.svg",
-                    QSize(),
-                    QIcon.Normal,
-                    QIcon.Off,
-                )
-                icon.addFile(
-                    ":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg",
-                    QSize(),
-                    QIcon.Disabled,
-                    QIcon.Off,
-                )
-                icon.addFile(
-                    ":/resources/resources/icons/gray-pause-multimedia-big-gross-symbol-lines.svg",
-                    QSize(),
-                    QIcon.Disabled,
-                    QIcon.On,
-                )
-                self.ui.pause_resume_tb.setIcon(icon)
-                self.ui.pause_resume_tb.setIconSize(QSize(64, 64))
-                self.ui.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
+                self._set_pause_resume_icon("pause-multimedia-big-gross-symbol-lines")
 
         self.ui.pause_resume_tb.setEnabled(enabled)
+
+    def _set_pause_resume_icon(self, name: str) -> None:
+        """Show the icon ``name`` on the pause/resume button, in the colours of the theme."""
+        if self.style_manager is not None:
+            self.style_manager.set_themed_icon(self.ui.pause_resume_tb, name)
+        else:
+            self.ui.pause_resume_tb.setIcon(QIcon(f":/resources/resources/icons/{name}.svg"))
+        self.ui.pause_resume_tb.setIconSize(QSize(64, 64))
+        self.ui.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
 
     def update_status_colors(self, status):
         sta = status.lower()
