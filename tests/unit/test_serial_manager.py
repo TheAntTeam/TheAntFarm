@@ -1,8 +1,10 @@
 from queue import Queue
 
 import pytest
+from PySide6.QtCore import QMetaObject, QObject, Qt, QThread, Signal, qInstallMessageHandler
 from PySide6.QtSerialPort import QSerialPort
 
+from TheAntFarm.grbl_simulator import SIMULATOR_PORT_NAME
 from TheAntFarm.serial_manager import SerialWorker
 
 
@@ -405,3 +407,38 @@ class TestSerialManager:
         serial_manager.serialTxQueue.put("G0 X0")
 
         serial_manager.send_from_queue()
+
+
+class _Opener(QObject):
+    open_s = Signal(str, int)
+
+
+class TestCloseFromTheGuiThread:
+    """The app closes the port of the serial thread while it shuts down."""
+
+    @pytest.fixture
+    def threaded_worker(self, qapp, qtbot):
+        thread = QThread()
+        worker = SerialWorker(Queue(), Queue())
+        worker.moveToThread(thread)
+        thread.start()
+        worker.set_simulator_s.emit(True, 100.0)
+        opener = _Opener()
+        opener.open_s.connect(worker.open_port)
+        with qtbot.waitSignal(worker.open_port_s, timeout=2000) as opened:
+            opener.open_s.emit(SIMULATOR_PORT_NAME, 115200)
+        assert opened.args == [True]
+        yield worker
+        thread.quit()
+        thread.wait(2000)
+
+    def test_blocking_close_stops_the_simulator_without_a_timer_warning(self, threaded_worker):
+        warnings = []
+        previous = qInstallMessageHandler(lambda mode, context, message: warnings.append(message))
+        try:
+            QMetaObject.invokeMethod(threaded_worker, "close_port", Qt.BlockingQueuedConnection)
+        finally:
+            qInstallMessageHandler(previous)
+
+        assert threaded_worker.serial_port.isOpen() is False
+        assert [message for message in warnings if "Timer" in message] == []

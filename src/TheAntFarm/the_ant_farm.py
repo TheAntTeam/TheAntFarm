@@ -5,7 +5,7 @@ import sysconfig
 from queue import Queue
 from typing import Any
 
-from PySide6.QtCore import QResource, QThread
+from PySide6.QtCore import QMetaObject, QResource, Qt, QThread
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from ui_the_ant_farm import Ui_MainWindow
 
@@ -128,7 +128,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             print("Settings Saved")
         print("Stopping Threads")
         self.ui.camera_list_cb.setCurrentIndex(0)  # Select NO CAMERA before closing
-        self.serialWo.close_port()
+        QMetaObject.invokeMethod(self.serialWo, "close_port", Qt.BlockingQueuedConnection)
         self.serial_thread.quit()
         self.control_thread.quit()
         self.serial_thread.wait(10)

@@ -1,8 +1,22 @@
 from unittest.mock import MagicMock, patch
 
+import pytest
+from PySide6.QtCore import Qt
+
 
 class TestCloseEvent:
     """Test MainWindow.closeEvent with unsaved settings changes dialog."""
+
+    @pytest.fixture(autouse=True)
+    def meta_object(self):
+        with patch("TheAntFarm.the_ant_farm.QMetaObject") as meta_object:
+            self.meta_object = meta_object
+            yield meta_object
+
+    def assert_port_closed_in_the_serial_thread(self, main_window):
+        self.meta_object.invokeMethod.assert_called_once_with(
+            main_window.serialWo, "close_port", Qt.BlockingQueuedConnection
+        )
 
     def setup_main_window(self, has_unsaved=True):
         from TheAntFarm.the_ant_farm import MainWindow
@@ -30,7 +44,7 @@ class TestCloseEvent:
         mock_msgbox.assert_not_called()
         main_window.ui_manager.save_all_settings.assert_called_once()
         main_window.ui_manager.ui_settings_tab_m.save_settings_preferences.assert_not_called()
-        main_window.serialWo.close_port.assert_called_once()
+        self.assert_port_closed_in_the_serial_thread(main_window)
         mock_event.ignore.assert_not_called()
 
     @patch("TheAntFarm.the_ant_farm.QMessageBox")
@@ -51,7 +65,7 @@ class TestCloseEvent:
 
         main_window.ui_manager.ui_settings_tab_m.save_settings_preferences.assert_called_once()
         main_window.ui_manager.save_all_settings.assert_not_called()
-        main_window.serialWo.close_port.assert_called_once()
+        self.assert_port_closed_in_the_serial_thread(main_window)
         mock_event.ignore.assert_not_called()
 
     @patch("TheAntFarm.the_ant_farm.QMessageBox")
@@ -72,7 +86,7 @@ class TestCloseEvent:
 
         main_window.ui_manager.ui_settings_tab_m.save_settings_preferences.assert_not_called()
         main_window.ui_manager.save_all_settings.assert_called_once()
-        main_window.serialWo.close_port.assert_called_once()
+        self.assert_port_closed_in_the_serial_thread(main_window)
         mock_event.ignore.assert_not_called()
 
     @patch("TheAntFarm.the_ant_farm.QMessageBox")
@@ -94,3 +108,4 @@ class TestCloseEvent:
         main_window.ui_manager.ui_settings_tab_m.save_settings_preferences.assert_not_called()
         main_window.ui_manager.save_all_settings.assert_not_called()
         mock_event.ignore.assert_called_once()
+        self.meta_object.invokeMethod.assert_not_called()
