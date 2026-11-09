@@ -10558,15 +10558,6 @@
     <string>DEBUG</string>
    </property>
   </action>
-  <action name="actionICON">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/resources/resources/logo/the_ant_logo.png</normaloff>:/resources/resources/logo/the_ant_logo.png</iconset>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </action>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
