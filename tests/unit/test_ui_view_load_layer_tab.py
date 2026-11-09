@@ -1,15 +1,11 @@
-import pytest
-from collections import OrderedDict as Od
 from unittest.mock import MagicMock
-
-
-
 
 
 class TestHideShowLayers:
     def test_hide_show_layers_true(self):
         mock_chb = MagicMock()
         from TheAntFarm.ui_manager.ui_view_load_layer_tab import UiViewLoadLayerTab
+
         ui = UiViewLoadLayerTab.__new__(UiViewLoadLayerTab)
         ui.layers_chb = {"top": mock_chb}
         ui.hide_show_layers(True)
@@ -18,6 +14,7 @@ class TestHideShowLayers:
     def test_hide_show_layers_false(self):
         mock_chb = MagicMock()
         from TheAntFarm.ui_manager.ui_view_load_layer_tab import UiViewLoadLayerTab
+
         ui = UiViewLoadLayerTab.__new__(UiViewLoadLayerTab)
         ui.layers_chb = {"top": mock_chb}
         ui.hide_show_layers(False)
@@ -28,6 +25,7 @@ class TestSetLayerVisible:
     def test_set_layer_visible(self):
         mock_vis_layer = MagicMock()
         from TheAntFarm.ui_manager.ui_view_load_layer_tab import UiViewLoadLayerTab
+
         ui = UiViewLoadLayerTab.__new__(UiViewLoadLayerTab)
         ui.vis_layer = mock_vis_layer
         ui.set_layer_visible("top", True)
@@ -39,6 +37,7 @@ class TestGetLoadedLayers:
         mock_main_win = MagicMock()
         mock_main_win.ui.top_file_le.text.return_value = "/test/file.gbr"
         from TheAntFarm.ui_manager.ui_view_load_layer_tab import UiViewLoadLayerTab
+
         ui = UiViewLoadLayerTab.__new__(UiViewLoadLayerTab)
         ui.ui = mock_main_win.ui
         ui.lay_tags = ("top",)

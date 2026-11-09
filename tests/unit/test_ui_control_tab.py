@@ -125,9 +125,9 @@ class TestInitialization:
         # Check for NoSelection mode (to prevent default row selection on any click)
         assert "QAbstractItemView.NoSelection" in source, "NoSelection mode should be configured"
         # Check that cellClicked is connected (for custom column-specific selection)
-        assert (
-            "cellClicked.connect(self._handle_table_cell_click)" in source
-        ), "cellClicked should be connected to _handle_table_cell_click"
+        assert "cellClicked.connect(self._handle_table_cell_click)" in source, (
+            "cellClicked should be connected to _handle_table_cell_click"
+        )
 
 
 @pytest.mark.usefixtures("qapp")

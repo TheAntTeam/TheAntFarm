@@ -21,18 +21,18 @@ class TestGCodeFilesSettingsHandler:
     def test_init_valid_config_folder(self, config_folder):
         """Test initialization with valid config folder"""
         handler = GCodeFilesSettingsHandler(config_folder)
-        assert handler.gcf_config_path == os.path.normpath(
-            os.path.join(config_folder, "gcode_files_config.ini")
-        )
+        assert handler.gcf_config_path == os.path.normpath(os.path.join(config_folder, "gcode_files_config.ini"))
         expected_folder = os.path.join(os.path.dirname(config_folder), "gcode_temp_dir")
         assert handler.gcode_folder_default == expected_folder
 
     def test_init_invalid_config_folder(self, invalid_config_folder):
         """Test initialization with invalid config folder falls back to script directory"""
         from TheAntFarm.settings_manager.settings_gcode_files import GCodeFilesSettingsHandler
+
         handler = GCodeFilesSettingsHandler(invalid_config_folder)
 
         import TheAntFarm.settings_manager.settings_gcode_files as gcf_module
+
         module_file = gcf_module.__file__
         script_dir = os.path.dirname(os.path.dirname(module_file))
         fallback_folder = os.path.join(script_dir, "..", "configurations")
@@ -72,6 +72,7 @@ class TestGCodeFilesSettingsHandler:
         assert os.path.exists(handler.gcf_config_path)
 
         import configparser
+
         config = configparser.ConfigParser()
         config.read(handler.gcf_config_path)
 
@@ -87,6 +88,7 @@ class TestGCodeFilesSettingsHandler:
         expected_folder = os.path.join(os.path.dirname(config_folder), "gcode_temp_dir")
 
         import configparser
+
         config = configparser.ConfigParser()
         config.read(handler.gcf_config_path)
 
@@ -106,6 +108,7 @@ class TestGCodeFilesSettingsHandler:
         handler = GCodeFilesSettingsHandler(config_folder)
 
         import configparser
+
         config = configparser.ConfigParser()
         user_folder = tmp_path / "user_specified_folder"
         user_folder.mkdir()

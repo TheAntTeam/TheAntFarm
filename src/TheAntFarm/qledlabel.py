@@ -3,7 +3,6 @@ from PySide6.QtWidgets import QLabel
 
 
 class QLedLabel(QLabel):
-
     grey_ss = (
         "color: white;background-color: qlineargradient(spread:pad, x1:0.145, "
         "y1:0.16, x2:1, y2:1, stop:0 rgba(200, 200, 200, 120), stop:1 rgba(220, 220, 220, 255));"

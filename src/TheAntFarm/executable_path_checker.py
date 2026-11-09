@@ -4,7 +4,6 @@ import sys
 
 
 class ExecutablePathChecker:
-
     def __init__(self):
 
         self.script_path = ""

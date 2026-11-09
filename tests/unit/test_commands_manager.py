@@ -140,6 +140,7 @@ class TestCommandManager:
 
     def test_format_float_integration(self, parent):
         """Test that format_float is called correctly for values."""
+
         class TestParent:
             def format_float(self, value):
                 return f"{value:.2f}"
@@ -147,6 +148,7 @@ class TestCommandManager:
         cm = CommandManager(TestParent())
         result = cm.get_command_str("goto", [1.5, 2.5, None])
         assert "X1.50" in result[0]
+
 
 class TestSafePosition:
     """The safe position is a default, not something the manager forces."""

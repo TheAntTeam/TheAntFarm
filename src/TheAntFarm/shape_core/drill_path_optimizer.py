@@ -425,4 +425,3 @@ class GeneticOptimizer:
         # The path should respect the order found by the genetic algorithm.
 
         return best_route.tolist()
-

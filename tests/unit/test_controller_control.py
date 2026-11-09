@@ -1,7 +1,8 @@
-import pytest
 from collections import OrderedDict, deque
-from unittest.mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch
+
 import numpy as np
+import pytest
 
 
 @pytest.fixture(scope="module")
@@ -14,6 +15,7 @@ def mock_settings():
 def control_controller(mock_settings):
     with patch("controller.controller_control.GCoder"):
         from controller.controller_control import ControlController
+
         return ControlController(mock_settings)
 
 
@@ -227,6 +229,7 @@ def test_get_boundary_box(control_controller):
     control_controller.gcodes_od = {"test.gcode": {"gcode": mock_gcp, "tag": "ABCD"}}
     result = control_controller.get_boundary_box("test.gcode")
     assert result == (0, 0, 10, 10)
+
 
 # ---- tool length offset report formats ------------------------------------
 

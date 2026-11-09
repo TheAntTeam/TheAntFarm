@@ -6,7 +6,6 @@ from PySide6 import QtMultimedia
 
 
 class DoubleSideManager:
-
     def __init__(self):
         self.detected_holes = []
         self.cap = None

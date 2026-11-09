@@ -198,7 +198,7 @@ class UiManager(QObject):
         log_level_group.setExclusive(True)
 
     def make_style_action_mutually_exclusive(self):
-        """Creates an action group for the style action menu items and makes them mutually exclusive. """
+        """Creates an action group for the style action menu items and makes them mutually exclusive."""
         style_group = QActionGroup(self.main_win)
         style_group.addAction(self.ui.actionDark)
         style_group.addAction(self.ui.actionLight)
@@ -207,9 +207,15 @@ class UiManager(QObject):
         # Connect palette actions to style manager if style_manager is available
         if self.style_manager:
             self.style_manager.connect_palette_actions(self.ui.actionDark, self.ui.actionLight)
-            self.ui.actionDark.triggered.connect(lambda : self.vis_layer.canvas.set_canvas_bgcolor(hex_color="#444444"))
-            self.ui.actionDark.triggered.connect(lambda : self.ctrl_layer.canvas.set_canvas_bgcolor(hex_color="#444444"))
-            self.ui.actionDark.triggered.connect(lambda : self.vis_align_layer.canvas.set_canvas_bgcolor(hex_color="#444444"))
-            self.ui.actionLight.triggered.connect(lambda : self.vis_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF"))
-            self.ui.actionLight.triggered.connect(lambda: self.ctrl_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF"))
-            self.ui.actionLight.triggered.connect(lambda: self.vis_align_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF"))
+            self.ui.actionDark.triggered.connect(lambda: self.vis_layer.canvas.set_canvas_bgcolor(hex_color="#444444"))
+            self.ui.actionDark.triggered.connect(lambda: self.ctrl_layer.canvas.set_canvas_bgcolor(hex_color="#444444"))
+            self.ui.actionDark.triggered.connect(
+                lambda: self.vis_align_layer.canvas.set_canvas_bgcolor(hex_color="#444444")
+            )
+            self.ui.actionLight.triggered.connect(lambda: self.vis_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF"))
+            self.ui.actionLight.triggered.connect(
+                lambda: self.ctrl_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF")
+            )
+            self.ui.actionLight.triggered.connect(
+                lambda: self.vis_align_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF")
+            )

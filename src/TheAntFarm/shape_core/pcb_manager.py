@@ -115,7 +115,9 @@ class PcbObj:
                 excellon_source = excellon_file.read()
 
             state = ExcellonState(output_units="MM")  # or "INCH"
-            parser = ExcellonParser(state, auto_detect_coord_format=True)  # hint_units="INCH" if the file declares no units
+            parser = ExcellonParser(
+                state, auto_detect_coord_format=True
+            )  # hint_units="INCH" if the file declares no units
             parser.parse(tokenize_excellon(excellon_source))
 
             proc = ExcellonProcessor(state)
@@ -168,4 +170,3 @@ class PcbObj:
         logger.info(f"Excellon Layer {tag} processed in {time.perf_counter() - start_time:.4f} seconds")
 
         return self.layers[tag]
-

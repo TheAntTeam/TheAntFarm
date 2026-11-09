@@ -4,6 +4,7 @@ from .config import PROBE_DEFAULTS
 
 logger = logging.getLogger(__name__)
 
+
 class CommandManager:
     """
     A CommandManager Object manages requests of gcode translation for a set of known commands.

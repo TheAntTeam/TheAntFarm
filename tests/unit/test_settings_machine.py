@@ -28,9 +28,7 @@ class TestMachineSettingsHandler:
         """Test initialization with default values"""
         handler = MachineSettingsHandler(config_folder, mock_main_window)
 
-        assert handler.machine_config_path == os.path.normpath(
-            os.path.join(config_folder, "machine_config.ini")
-        )
+        assert handler.machine_config_path == os.path.normpath(os.path.join(config_folder, "machine_config.ini"))
         assert handler.main_win == mock_main_window
         assert handler.probe_z_min == -11.0
         assert handler.probe_z_max == 1.0
@@ -241,6 +239,7 @@ class TestMachineSettingsHandler:
         assert machine_settings.alignment_drill_diameter == 0.0
         assert machine_settings.tool_camera_offset_x == 0.0
         assert machine_settings.tool_camera_offset_y == 0.0
+
 
 class TestToolChangeProcedureSettings:
     """Settings of the tool change procedure (shape_core macros)."""

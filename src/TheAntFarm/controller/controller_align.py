@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 class AlignController(QObject):
-
     EXCELLON_EXTENSIONS = (".xln", ".drl")
 
     def __init__(self, settings):
@@ -25,7 +24,9 @@ class AlignController(QObject):
 
         self.double_side_manager = DoubleSideManager()
         self.double_side_manager.set_camera_rotation(settings.app_settings.camera_rotation_angle)
-        self.double_side_manager.set_camera_flip(settings.app_settings.camera_flip_h, settings.app_settings.camera_flip_v)
+        self.double_side_manager.set_camera_flip(
+            settings.app_settings.camera_flip_h, settings.app_settings.camera_flip_v
+        )
         self.threshold_value = 0
         self.flipping_view = [False, False, False]
 

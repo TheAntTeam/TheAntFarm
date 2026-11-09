@@ -7,9 +7,9 @@ import re
 
 import numpy as np
 import pytest
-from shapely.geometry import LineString, Polygon
+from shapely.geometry import LineString
 
-from TheAntFarm.shape_core.gcode_manager import GCode, GCodeAlignment, GCodeParser, GCoder, GcodePoint
+from TheAntFarm.shape_core.gcode_manager import GCode, GCodeAlignment, GCodeParser, GcodePoint, GCoder
 from TheAntFarm.shape_core.path_manager import MachinePath
 from TheAntFarm.shape_core.path_types import ToolPath
 
@@ -451,9 +451,7 @@ class TestGCodeAlignmentGuards:
     def test_collinear_alignment_is_refused(self):
         gc = self._gcode_with_three_points()
         alignment = GCodeAlignment(gc)
-        alignment.update_align_info(
-            [((0.0, 0.0), (0.0, 0.0)), ((1.0, 0.0), (0.5, 0.0)), ((2.0, 0.0), (1.0, 0.0))]
-        )
+        alignment.update_align_info([((0.0, 0.0), (0.0, 0.0)), ((1.0, 0.0), (0.5, 0.0)), ((2.0, 0.0), (1.0, 0.0))])
 
         assert alignment.apply_align() is False
         assert gc.aligned_vectors == []

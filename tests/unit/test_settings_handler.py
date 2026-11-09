@@ -27,8 +27,9 @@ class TestSettingsHandler:
         return mock_main_win
 
     def test_init_default_config_folder(self, mock_main_window):
-        from TheAntFarm.settings_manager.settings_manager import SettingsHandler
         import TheAntFarm.settings_manager.settings_manager as sm_module
+        from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         mock_main_window.local_path = ""
 
         handler = SettingsHandler(mock_main_window)
@@ -38,6 +39,7 @@ class TestSettingsHandler:
 
     def test_init_custom_config_folder(self, mock_main_window, tmp_path):
         from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         mock_main_window.local_path = str(tmp_path)
 
         handler = SettingsHandler(mock_main_window)
@@ -47,6 +49,7 @@ class TestSettingsHandler:
 
     def test_init_creates_config_folder(self, mock_main_window, tmp_path):
         from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         mock_main_window.local_path = str(tmp_path / "new_project")
 
         handler = SettingsHandler(mock_main_window)
@@ -55,6 +58,7 @@ class TestSettingsHandler:
 
     def test_init_sets_local_path(self, mock_main_window, tmp_path):
         from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         mock_main_window.local_path = str(tmp_path)
 
         handler = SettingsHandler(mock_main_window)
@@ -62,11 +66,11 @@ class TestSettingsHandler:
         assert handler.local_path == str(tmp_path)
 
     def test_init_creates_all_settings_handlers(self, mock_main_window, tmp_path):
-        from TheAntFarm.settings_manager.settings_manager import SettingsHandler
         from TheAntFarm.settings_manager.settings_app import AppSettingsHandler
-        from TheAntFarm.settings_manager.settings_job import JobSettingsHandler
         from TheAntFarm.settings_manager.settings_gcode_files import GCodeFilesSettingsHandler
+        from TheAntFarm.settings_manager.settings_job import JobSettingsHandler
         from TheAntFarm.settings_manager.settings_machine import MachineSettingsHandler
+        from TheAntFarm.settings_manager.settings_manager import SettingsHandler
 
         mock_main_window.local_path = str(tmp_path)
         handler = SettingsHandler(mock_main_window)
@@ -78,6 +82,7 @@ class TestSettingsHandler:
 
     def test_read_all_settings(self, mock_main_window, tmp_path):
         from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         mock_main_window.local_path = str(tmp_path)
         handler = SettingsHandler(mock_main_window)
 
@@ -90,6 +95,7 @@ class TestSettingsHandler:
 
     def test_write_all_settings_default(self, mock_main_window, tmp_path):
         from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         mock_main_window.local_path = str(tmp_path)
         handler = SettingsHandler(mock_main_window)
 
@@ -103,6 +109,7 @@ class TestSettingsHandler:
 
     def test_write_all_settings_with_jobs(self, mock_main_window, tmp_path):
         from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         mock_main_window.local_path = str(tmp_path)
         handler = SettingsHandler(mock_main_window)
 
@@ -181,6 +188,7 @@ class TestSettingsHandler:
         handler.write_all_settings({"jobs_settings": test_jobs_settings})
 
         from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         new_handler = SettingsHandler(handler.main_win)
         new_handler.read_all_settings()
 
@@ -190,6 +198,7 @@ class TestSettingsHandler:
 
     def test_write_all_settings_empty_dict(self, mock_main_window, tmp_path):
         from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         mock_main_window.local_path = str(tmp_path)
         handler = SettingsHandler(mock_main_window)
 
@@ -199,6 +208,7 @@ class TestSettingsHandler:
 
     def test_config_folder_uses_local_path_when_directory(self, mock_main_window, tmp_path):
         from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         mock_main_window.local_path = str(tmp_path)
 
         handler = SettingsHandler(mock_main_window)
@@ -207,8 +217,9 @@ class TestSettingsHandler:
         assert handler.config_folder == expected
 
     def test_config_folder_fallback_to_default(self, mock_main_window):
-        from TheAntFarm.settings_manager.settings_manager import SettingsHandler
         import TheAntFarm.settings_manager.settings_manager as sm_module
+        from TheAntFarm.settings_manager.settings_manager import SettingsHandler
+
         mock_main_window.local_path = "/nonexistent/path"
 
         handler = SettingsHandler(mock_main_window)

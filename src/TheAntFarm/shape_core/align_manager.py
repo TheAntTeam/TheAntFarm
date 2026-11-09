@@ -12,7 +12,6 @@ MIN_POINTS = 3
 
 
 class TpsCoefficients:
-
     def __init__(self, sampled_points):
         """
         Parameters
@@ -117,7 +116,6 @@ class TpsCoefficients:
 
 
 class AlignManager:
-
     def __init__(self):
         self.sampled_points = []
         self.tps_coeff = None

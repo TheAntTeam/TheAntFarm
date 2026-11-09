@@ -162,9 +162,7 @@ class MachineSettingsHandler:
                 "tool_setter_relative_flag", self.TOOL_SETTER_REL_FLAG_DEFAULT
             )
             self.tool_probe_backoff = machine_general.getfloat("tool_probe_backoff", self.TOOL_PROBE_BACKOFF_DEFAULT)
-            self.spindle_stop_dwell = machine_general.getfloat(
-                "spindle_stop_dwell", self.SPINDLE_STOP_DWELL_DEFAULT
-            )
+            self.spindle_stop_dwell = machine_general.getfloat("spindle_stop_dwell", self.SPINDLE_STOP_DWELL_DEFAULT)
             self.spindle_restart_delay = machine_general.getfloat(
                 "spindle_restart_delay", self.SPINDLE_RESTART_DELAY_DEFAULT
             )

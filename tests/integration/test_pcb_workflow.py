@@ -8,8 +8,8 @@ from pathlib import Path
 import pytest
 
 from TheAntFarm.shape_core.gcode_manager import GCoder
+from TheAntFarm.shape_core.geometry_manager import Geom, offset_polygon
 from TheAntFarm.shape_core.path_types import ToolPath
-from TheAntFarm.shape_core.geometry_manager import Geom, merge_polygons, offset_polygon
 from TheAntFarm.shape_core.pcb_manager import PcbObj
 
 
@@ -168,7 +168,6 @@ class TestGCodeGenerationIntegration:
 
     def test_generate_drill_gcode(self):
         """Test generating G-code for drilling."""
-        from shapely.geometry import Point
 
         gcoder = GCoder(tag="drill_test", machining_type="drill")
         gcoder.path = []

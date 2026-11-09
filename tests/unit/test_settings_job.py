@@ -21,9 +21,7 @@ class TestJobSettingsHandler:
     def test_init(self, config_folder):
         """Test initialization"""
         handler = JobSettingsHandler(config_folder)
-        assert handler.jobs_config_path == os.path.normpath(
-            os.path.join(config_folder, "jobs_sets_config.ini")
-        )
+        assert handler.jobs_config_path == os.path.normpath(os.path.join(config_folder, "jobs_sets_config.ini"))
         assert isinstance(handler.jobs_settings, object)
         assert handler.jobs_settings_od == {}
 
