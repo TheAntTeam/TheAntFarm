@@ -67,6 +67,7 @@ class UiControlTab(QObject):
         self.style_manager = style_manager
 
         self.holding_status = False
+        self.job_running = False  # a G-code file or a tool change is being sent to the machine
         self.rejected_line_prompt = None
         self.serial_connection_status = False
         self.serial_ports_name_ls = []
@@ -570,6 +571,7 @@ class UiControlTab(QObject):
         return checked_row
 
     def disable_during_send(self):
+        self.job_running = True
         self.ui.play_tb.setEnabled(False)
         self.ui.stop_tb.setEnabled(True)
         self.ui.unlock_tb.setEnabled(False)
@@ -578,6 +580,7 @@ class UiControlTab(QObject):
         self.enable_gcode_rb(False)
 
     def enable_after_send(self):
+        self.job_running = False
         self.ui.stop_tb.setEnabled(False)
         self.ui.unlock_tb.setEnabled(True)
         self.ui.homing_tb.setEnabled(True)

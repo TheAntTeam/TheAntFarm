@@ -98,6 +98,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
+        if not self.confirm_close():
+            event.ignore()
+            return
         already_saved = False
         if self.ui_manager.ui_settings_tab_m.has_unsaved_changes():
             msg = QMessageBox(self)
@@ -124,6 +127,41 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             logger.info("Settings saved")
         self.stop_threads()
         self.close()
+
+    def confirm_close(self) -> bool:
+        """Ask before closing while connected to the machine, and stop a running job if the user confirms.
+
+        Closing only closes the serial port: a running job would go on with the lines the machine already
+        has, with the spindle still on. Returns ``False`` when the user cancels.
+        """
+        control_tab = self.ui_manager.ui_control_tab_m
+        if control_tab.job_running:
+            text = "A job is running."
+            informative_text = "Closing stops it: the machine is put on feed hold and reset."
+            close_label = "Stop and Close"
+        elif control_tab.serial_connection_status:
+            text = "Close The Ant Farm?"
+            informative_text = "The machine will be disconnected."
+            close_label = "Close"
+        else:
+            return True
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Warning)
+        msg.setWindowTitle("Close The Ant Farm")
+        msg.setText(text)
+        msg.setInformativeText(informative_text)
+        close_btn = msg.addButton(close_label, QMessageBox.AcceptRole)
+        cancel_btn = msg.addButton("Cancel", QMessageBox.RejectRole)
+        msg.setDefaultButton(cancel_btn)
+        msg.setEscapeButton(cancel_btn)
+        msg.exec()
+        if msg.clickedButton() != close_btn:
+            return False
+        if control_tab.job_running:
+            # Blocking: the hold and reset are queued to the serial thread before the port is closed.
+            logger.info("Stopping the running job before closing")
+            QMetaObject.invokeMethod(self.controlWo, "stop_job_for_close", Qt.BlockingQueuedConnection)
+        return True
 
     def stop_threads(self) -> None:
         """Close the serial port and stop the worker threads, waiting for them up to a shared deadline.

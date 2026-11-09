@@ -646,6 +646,16 @@ class ControllerWorker(ControllerSignals):
                 return True
         return False
 
+    @Slot()
+    def stop_job_for_close(self) -> None:
+        """Stop the job and reset the machine, also during a tool change, before the application closes.
+
+        The Stop button does not reset the machine during a tool change or a long user command, but after
+        the application has closed nothing would stop the moves the machine has already received.
+        """
+        self.send_soft_reset = True
+        self.stop_gcode_file()
+
     def stop_gcode_file(self):
         self.sending_file = False
         self._clear_rejected_line()

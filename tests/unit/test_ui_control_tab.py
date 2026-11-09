@@ -406,3 +406,32 @@ class TestSerialRow:
         ui_tab.act_on_connection(False)
 
         ui_tab.ui.serial_row_sw.setCurrentWidget.assert_not_called()
+
+
+class TestJobRunning:
+    """The control tab knows when a job runs, for the close confirmation."""
+
+    @pytest.fixture
+    def ui_tab(self):
+        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
+
+        ui_tab = UiControlTab.__new__(UiControlTab)
+        ui_tab.ui = Mock()
+        ui_tab.controlWo = Mock()
+        ui_tab.job_running = False
+        ui_tab.serial_connection_status = True
+        ui_tab.get_selected_file = Mock(return_value=0)
+        ui_tab.enable_gcode_rb = Mock()
+        return ui_tab
+
+    def test_a_file_job_runs_until_it_ends(self, ui_tab):
+        ui_tab.disable_during_send()
+        assert ui_tab.job_running is True
+
+        ui_tab.enable_after_send()
+        assert ui_tab.job_running is False
+
+    def test_a_tool_change_is_a_running_job(self, ui_tab):
+        ui_tab.handle_tool_change_start()
+
+        assert ui_tab.job_running is True
