@@ -345,7 +345,9 @@ class TestRejectedLine:
 
     def test_rejected_macro_line_stops_the_job(self, worker):
         rig = StreamRig(worker, ["G21\n", "M6\n", "G1 X1.000 Y1.000 Z-0.100\n"])
-        rig.feed("ok\n", IDLE, IDLE)
+        rig.feed("ok\n")
+        rig.status("Idle")
+        rig.status("Idle")
         assert rig.sent()[-1] == "$#\n"
 
         rig.feed("error:20\n")
@@ -1245,3 +1247,78 @@ class TestMacroWaitsForIdleReports:
 
         assert worker.macro_idle_reports == 0
         assert worker.wait_tag_decoding is False
+
+
+TOOL_CHANGE_JOB = [
+    "G21\n",
+    "G90\n",
+    "M3 S1000.0\n",
+    "G0 X1.000 Y1.000 Z1.000\n",
+    "G1 F300.0\n",
+    "G1 X5.000 Y1.000 Z1.000\n",
+    "G0 X5.000 Y1.000 Z5.000\n",
+    "T2\n",
+    "M6\n",
+    "G0 X6.000 Y2.000 Z1.000\n",
+    "M5\n",
+]
+
+
+class TestToolChangeOnTheSimulator:
+    """The job of #75 streamed into the GRBL simulator through the real worker."""
+
+    STEP_S = 0.05
+
+    def _run(self, worker, seconds):
+        from grbl_simulator import GrblSimulator
+
+        sim = GrblSimulator()
+        console: List[str] = []
+        stops: List[int] = []
+        self.macro_start: List[Tuple[str, List[float]]] = []
+
+        def to_simulator(data):
+            data = data if isinstance(data, bytes) else data.encode()
+            if data.startswith(b"$#"):
+                self.macro_start.append((sim.state, list(sim.mpos)))
+            sim.receive(data)
+
+        worker.serial_send_s.connect(to_simulator)
+        worker.update_console_text_s.connect(console.append)
+        worker.stop_send_s.connect(lambda: stops.append(1))
+
+        def deliver():
+            for line in sim.read_output().decode().splitlines(True):
+                worker.serialRxQueue.put(line)
+                worker.parse_rx_queue()
+
+        worker.send_gcode_lines(list(TOOL_CHANGE_JOB))
+        for _ in range(round(seconds / self.STEP_S)):
+            while not worker.serialTxQueue.empty():
+                to_simulator(worker.serialTxQueue.get())
+            deliver()
+            if sim.state == "Hold" and sim.hold_complete:
+                sim.receive(CYCLE_START)
+            sim.receive(b"?")
+            sim.advance(self.STEP_S)
+            deliver()
+            if stops:
+                break
+        return sim, console, stops
+
+    def test_job_with_a_tool_change_runs_to_the_end(self, worker):
+        sim, console, stops = self._run(worker, 120.0)
+
+        assert not [text for text in console if "error" in text.lower()]
+        assert stops == [1]
+        assert worker.job_aborted is False
+        assert sim.mpos[0] == pytest.approx(6.0)
+        assert sim.state == "Idle"
+
+    def test_macro_starts_only_once_the_machine_is_idle(self, worker):
+        self._run(worker, 120.0)
+
+        assert len(self.macro_start) == 1
+        state, mpos = self.macro_start[0]
+        assert state == "Idle"
+        assert mpos == pytest.approx([5.0, 1.0, 5.0])
