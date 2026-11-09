@@ -1,36 +1,51 @@
-from PySide6.QtCore import QByteArray, QFile, QIODevice, QObject, Qt, Signal
+import logging
+from typing import Dict, Tuple
+
+from PySide6.QtCore import QByteArray, QFile, QIODevice, QObject, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QIcon, QPainter, QPalette, QPixmap
 from PySide6.QtSvg import QSvgRenderer
-from PySide6.QtWidgets import QStyleFactory, QWidgetAction
+from PySide6.QtWidgets import QAbstractButton, QStyleFactory, QWidgetAction
+
+logger = logging.getLogger(__name__)
+
+ICON_RESOURCE_PATH = ":/resources/resources/icons/{}.svg"
 
 
 class IconManager:
+    """Render the single-colour SVG icons in any colour, with a cache."""
+
+    RENDER_SIZE = 256
+
     def __init__(self) -> None:
-        self._cache: dict[str, QIcon] = {}
+        self._cache: Dict[Tuple[str, str], QPixmap] = {}
+
+    def make_pixmap(self, resource_path: str, color: QColor) -> QPixmap:
+        """Return the icon at ``resource_path`` with every visible pixel painted ``color``."""
+        cache_key = (resource_path, QColor(color).name(QColor.HexArgb))
+        pixmap = self._cache.get(cache_key)
+        if pixmap is None:
+            pixmap = self._render_colored(resource_path, QColor(color))
+            self._cache[cache_key] = pixmap
+        return pixmap
 
     def make_icon(self, resource_path: str, color: QColor) -> QIcon:
-        cache_key = f"{resource_path}:{color.name()}"
-        cached = self._cache.get(cache_key)
-        if cached is not None:
-            return cached
-        pixmap = self._render_colored(resource_path, color)
-        icon = QIcon(pixmap)
-        self._cache[cache_key] = icon
-        return icon
+        return QIcon(self.make_pixmap(resource_path, color))
 
     def clear_cache(self) -> None:
         self._cache.clear()
 
-    @staticmethod
-    def _render_colored(path: str, color: QColor) -> QPixmap:
-        f = QFile(path)
-        f.open(QIODevice.ReadOnly)
-        data = QByteArray(f.readAll())
-        f.close()
+    def _render_colored(self, path: str, color: QColor) -> QPixmap:
+        svg_file = QFile(path)
+        if not svg_file.open(QIODevice.ReadOnly):
+            logger.warning(f"Icon not found: {path}")
+            return QPixmap()
+        data = QByteArray(svg_file.readAll())
+        svg_file.close()
         renderer = QSvgRenderer(data)
         size = renderer.defaultSize()
-        if size.isNull() or size.isEmpty():
-            size = QPixmap(512, 512).size()
+        if size.isEmpty():
+            size = QSize(self.RENDER_SIZE, self.RENDER_SIZE)
+        size = size.scaled(self.RENDER_SIZE, self.RENDER_SIZE, Qt.KeepAspectRatio)
         pixmap = QPixmap(size)
         pixmap.fill(Qt.transparent)
         painter = QPainter(pixmap)
@@ -46,6 +61,11 @@ class StyleManager(QObject):
 
     theme_changed = Signal(QColor, QColor)  # icon_color, disabled_color
 
+    DARK_ICON_COLOR = QColor(255, 255, 255)
+    DARK_DISABLED_ICON_COLOR = QColor(128, 128, 128)
+    LIGHT_ICON_COLOR = QColor(50, 50, 50)
+    LIGHT_DISABLED_ICON_COLOR = QColor(180, 180, 180)
+
     def __init__(self, app_ptr):
         super().__init__()
         self.app_ptr = app_ptr
@@ -55,8 +75,30 @@ class StyleManager(QObject):
         self.dark_palette_action = None
         self.light_palette_action = None
         self.icon_man = IconManager()
-        self.current_icon_color = Qt.white
-        self.current_disabled_color = QColor(128, 128, 128)
+        self.current_icon_color = QColor(self.DARK_ICON_COLOR)
+        self.current_disabled_color = QColor(self.DARK_DISABLED_ICON_COLOR)
+        self._themed_widgets: Dict[QAbstractButton, str] = {}
+
+    def themed_icon(self, name: str) -> QIcon:
+        """Return the single-colour icon ``name`` in the colours of the theme, also when disabled."""
+        path = ICON_RESOURCE_PATH.format(name)
+        icon = QIcon()
+        icon.addPixmap(self.icon_man.make_pixmap(path, self.current_icon_color), QIcon.Normal)
+        icon.addPixmap(self.icon_man.make_pixmap(path, self.current_disabled_color), QIcon.Disabled)
+        return icon
+
+    def set_themed_icon(self, widget: QAbstractButton, name: str) -> None:
+        """Give ``widget`` the icon ``name`` and keep it in the colours of the theme when the theme changes."""
+        self._themed_widgets[widget] = name
+        widget.setIcon(self.themed_icon(name))
+
+    def _apply_icon_colors(self, icon_color: QColor, disabled_color: QColor) -> None:
+        self.current_icon_color = QColor(icon_color)
+        self.current_disabled_color = QColor(disabled_color)
+        self.icon_man.clear_cache()
+        for widget, name in self._themed_widgets.items():
+            widget.setIcon(self.themed_icon(name))
+        self.theme_changed.emit(self.current_icon_color, self.current_disabled_color)
 
     def list_styles(self):
         """List the available application styles for the current OS."""
@@ -148,10 +190,7 @@ class StyleManager(QObject):
         light_palette.setColor(QPalette.Disabled, QPalette.Light, QColor(240, 240, 240))
 
         self.app_ptr.setPalette(light_palette)
-        self.current_icon_color = QColor(50, 50, 50)
-        self.current_disabled_color = QColor(180, 180, 180)
-        self.icon_man.clear_cache()
-        self.theme_changed.emit(self.current_icon_color, self.current_disabled_color)
+        self._apply_icon_colors(self.LIGHT_ICON_COLOR, self.LIGHT_DISABLED_ICON_COLOR)
 
     def set_dark_palette(self):
         dark_gray = QColor(53, 53, 53)
@@ -180,10 +219,7 @@ class StyleManager(QObject):
         dark_palette.setColor(QPalette.Disabled, QPalette.Light, dark_gray)
 
         self.app_ptr.setPalette(dark_palette)
-        self.current_icon_color = Qt.white
-        self.current_disabled_color = gray
-        self.icon_man.clear_cache()
-        self.theme_changed.emit(self.current_icon_color, self.current_disabled_color)
+        self._apply_icon_colors(self.DARK_ICON_COLOR, self.DARK_DISABLED_ICON_COLOR)
 
     @staticmethod
     def set_radio_btn_style_sheet():
