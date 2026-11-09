@@ -46,7 +46,7 @@ class TestDrillGcodeConverter:
         mock_parser.interp = mocker.Mock()
         mock_parser.vectorize = mocker.Mock()
         converter.parser = mock_parser
-        result = converter.convert()
+        converter.convert()
         mock_parser.load_gcode_file.assert_called_once()
         mock_parser.interp.assert_called_once()
         mock_parser.vectorize.assert_called_once()

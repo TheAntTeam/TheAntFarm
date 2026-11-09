@@ -570,17 +570,17 @@ class VisualLayer:
         all_colors = []
 
         # Flatten all segments into a single coordinate array and connection array
-        for i, l in enumerate(ldata):
+        for i, segment in enumerate(ldata):
             p += 1
-            c = l[0]
+            c = segment[0]
             coords.append(c)
-            for j in range(1, len(l)):
-                c = l[j]
+            for j in range(1, len(segment)):
+                c = segment[j]
                 coords.append(c)
                 connect.append((p, p + 1))
                 p += 1
             if colors_list:
-                all_colors += [colors_list[i]] * len(l)
+                all_colors += [colors_list[i]] * len(segment)
 
         coords_arr = np.array(coords)
         connect_arr = np.array(connect)

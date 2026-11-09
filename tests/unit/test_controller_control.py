@@ -129,25 +129,25 @@ def test_parse_bracket_angle_wco(control_controller):
 def test_parse_bracket_square_prb(control_controller):
     control_controller.prb_updated = False
     line = "[PRB:1.000,2.000,3.000:1]"
-    result = control_controller.parse_bracket_square(line)
+    control_controller.parse_bracket_square(line)
     assert control_controller.prb_updated is True
 
 
 def test_parse_bracket_square_g54(control_controller):
     line = "[G54:1.000,2.000,3.000]"
-    result = control_controller.parse_bracket_square(line)
+    control_controller.parse_bracket_square(line)
     assert "G54" in control_controller.workspace_params_od
 
 
 def test_parse_bracket_square_g55(control_controller):
     line = "[G55:1.000,2.000,3.000]"
-    result = control_controller.parse_bracket_square(line)
+    control_controller.parse_bracket_square(line)
     assert "G55" in control_controller.workspace_params_od
 
 
 def test_parse_bracket_square_tlo(control_controller):
     line = "[TLO:1.234]"
-    result = control_controller.parse_bracket_square(line)
+    control_controller.parse_bracket_square(line)
     assert control_controller.workspace_params_od["TLO"] == 1.234
 
 

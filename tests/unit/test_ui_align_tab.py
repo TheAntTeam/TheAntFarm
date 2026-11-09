@@ -24,7 +24,6 @@ class TestUpdateCameraZoom:
 
 class TestUpdateZoomValue:
     def test_update_zoom_value(self):
-        mock_control_wo = MagicMock()
         from TheAntFarm.ui_manager.ui_align_tab import UiAlignTab
 
         ui = UiAlignTab.__new__(UiAlignTab)

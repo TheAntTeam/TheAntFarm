@@ -1,3 +1,11 @@
+# To convert ui to py from the "src/TheAntFarm" folder
+# do: PySide6-uic the_ant_farm.ui > ui_the_ant_farm.py
+# or: python .\build.py ui
+# Whenever you change resources in qrc, go into the "src/TheAntFarm" folder
+# convert qrc to py: PySide6-rcc app_resources.qrc -o app_resources_rc.py
+# or:                python .\build.py res
+
+import logging.handlers
 import os
 import platform
 import sys
@@ -5,26 +13,16 @@ import sysconfig
 from queue import Queue
 from typing import Any
 
-from PySide6.QtCore import QMetaObject, QResource, Qt, QThread
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
-from ui_the_ant_farm import Ui_MainWindow
-
-# To convert ui to py from the "src/TheAntFarm" folder
-# do: PySide6-uic the_ant_farm.ui > ui_the_ant_farm.py
-# or: python .\build.py ui
-# Whenever you change resources in qrc, go into the "src/TheAntFarm" folder
-# convert qrc to py: PySide6-rcc app_resources.qrc -o app_resources_rc.py
-# or:                python .\build.py res
-""" Custom imports """
-import logging.handlers
-
 from controller.controller_manager import ControllerWorker
 from executable_path_checker import ExecutablePathChecker
 from log_manager import FileLogHandler, LogHandler
+from PySide6.QtCore import QMetaObject, QResource, Qt, QThread
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from serial_manager import SerialWorker
 from settings_manager.settings_manager import SettingsHandler
 from style_manager import StyleManager
 from ui_manager.ui_manager import UiManager
+from ui_the_ant_farm import Ui_MainWindow
 
 
 def config_os():
@@ -109,7 +107,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             msg.setText("You have unsaved changes in the Settings/Preferences tab.")
             msg.setInformativeText("Do you want to save your changes before closing?")
             save_btn = msg.addButton("Save", QMessageBox.ActionRole)
-            discard_btn = msg.addButton("Discard", QMessageBox.DestructiveRole)
+            msg.addButton("Discard", QMessageBox.DestructiveRole)  # neither Save nor Cancel
             cancel_btn = msg.addButton("Cancel", QMessageBox.RejectRole)
             msg.setDefaultButton(cancel_btn)
             msg.exec()
