@@ -15,7 +15,7 @@ from typing import Any
 from controller.controller_manager import ControllerWorker
 from executable_path_checker import ExecutablePathChecker
 from log_manager import FileLogHandler, LogHandler
-from PySide6.QtCore import QMetaObject, QResource, Qt, QThread
+from PySide6.QtCore import QDeadlineTimer, QMetaObject, QResource, Qt, QThread
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from serial_manager import SerialWorker
 from settings_manager.settings_manager import SettingsHandler
@@ -49,9 +49,13 @@ def config_os():
         os.environ["QT_QPA_PLATFORM"] = "wayland;xcb"
 
 
+logger = logging.getLogger(__name__)
+
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu: Queue[Any] = Queue()  # serial FIFO RX Queue
     serialTxQu: Queue[Any] = Queue()  # serial FIFO TX Queue
+    THREAD_STOP_TIMEOUT_MS = 3000  # shared by the threads, more than a blocking serial write (1 s)
 
     def __init__(self, local_path="", style_manager=None):
         super(MainWindow, self).__init__()
@@ -77,6 +81,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.controlWo = ControllerWorker(self.serialRxQu, self.serialTxQu, self.settings)
         self.controlWo.moveToThread(self.control_thread)
         self.controlWo.init_timers()
+        # Timers can only be stopped from their own thread: the control thread stops its own ones
+        # right before it finishes (finished is emitted from that thread).
+        self.control_thread.finished.connect(self.controlWo.stop_timers, Qt.DirectConnection)
         self.control_thread.start()
 
         # Serial Worker Thread.
@@ -112,25 +119,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 already_saved = True
 
         if not already_saved:
-            print("Saving Settings")
+            logger.info("Saving settings")
             self.ui_manager.save_all_settings()
-            print("Settings Saved")
-        print("Stopping Threads")
+            logger.info("Settings saved")
+        self.stop_threads()
+        self.close()
+
+    def stop_threads(self) -> None:
+        """Close the serial port and stop the worker threads, waiting for them up to a shared deadline.
+
+        ``quit()`` does not interrupt a slot that is running: the thread stops when the slot returns. A
+        thread still running at the deadline is logged and left behind rather than terminated, which could
+        leave the serial port or Qt in a broken state.
+        """
+        logger.info("Stopping threads")
         self.ui.camera_list_cb.setCurrentIndex(0)  # Select NO CAMERA before closing
         QMetaObject.invokeMethod(self.serialWo, "close_port", Qt.BlockingQueuedConnection)
+        self.controlWo.stop_timers()  # the timers of the GUI thread
         self.serial_thread.quit()
         self.control_thread.quit()
-        self.serial_thread.wait(10)
-        self.control_thread.wait(10)
-        if self.serial_thread.isRunning():
-            print("Serial Thread still running")
-        else:
-            print("Serial Thread stopped")
-        if self.control_thread.isRunning():
-            print("Control Thread still running")
-        else:
-            print("Control Thread stopped")
-        self.close()
+        deadline = QDeadlineTimer(self.THREAD_STOP_TIMEOUT_MS)
+        for name, thread in (("Serial", self.serial_thread), ("Control", self.control_thread)):
+            if thread.wait(deadline):
+                logger.info(f"{name} thread stopped")
+            else:
+                logger.warning(f"{name} thread still running {self.THREAD_STOP_TIMEOUT_MS} ms after the close")
 
 
 def main(local_path=""):

@@ -6,7 +6,7 @@ import traceback
 from collections import OrderedDict as Od
 from typing import List, Optional
 
-from PySide6.QtCore import QTimer, Slot
+from PySide6.QtCore import QThread, QTimer, Slot
 from PySide6.QtGui import QPixmap
 from shape_core import GCodeMacro, GCoder, MacroError
 
@@ -114,6 +114,17 @@ class ControllerWorker(ControllerSignals):
         self.camera_timer.timeout.connect(self.on_camera_timeout)
         self.camera_timer.setInterval(120)
         self.camera_timer.start()
+
+    def stop_timers(self) -> None:
+        """Stop the timers that belong to the calling thread.
+
+        A timer can only be stopped from its own thread: the GUI thread owns the poll and camera timers
+        (created by ``init_timers``), the control thread owns the progress timer of a job. Called by the
+        GUI thread when the application closes, and from the control thread right before it finishes.
+        """
+        for timer in (self.poll_timer, self.camera_timer, self.progress_timer):
+            if timer is not None and timer.thread() is QThread.currentThread():
+                timer.stop()
 
     def on_progress_timeout(self):
         elapsed_time = self._get_elapsed_time_str()
