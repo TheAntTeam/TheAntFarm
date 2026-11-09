@@ -184,3 +184,69 @@ class TestOnMainTabChanged:
 
         mock_ui.main_tab_widget.setCurrentIndex.assert_called_once_with(2)
         assert ui_manager._previous_main_tab_index == 2
+
+
+class TestStyleActions:
+    """Dark and Light are exclusive and also set the background of the three canvases."""
+
+    @staticmethod
+    def _ui_manager(style_manager):
+        from TheAntFarm.ui_manager.ui_manager import UiManager
+
+        ui_manager = UiManager.__new__(UiManager)
+        ui_manager.ui = MagicMock()
+        ui_manager.main_win = MagicMock()
+        ui_manager.style_manager = style_manager
+        ui_manager.vis_layer = MagicMock()
+        ui_manager.ctrl_layer = MagicMock()
+        ui_manager.vis_align_layer = MagicMock()
+        return ui_manager
+
+    @staticmethod
+    def _trigger(action):
+        for call in action.triggered.connect.call_args_list:
+            call.args[0]()
+
+    def _canvases(self, ui_manager):
+        return [layer.canvas for layer in (ui_manager.vis_layer, ui_manager.ctrl_layer, ui_manager.vis_align_layer)]
+
+    @patch("TheAntFarm.ui_manager.ui_manager.QActionGroup")
+    def test_dark_sets_the_dark_background_on_every_canvas(self, mock_group):
+        ui_manager = self._ui_manager(MagicMock())
+
+        ui_manager.make_style_action_mutually_exclusive()
+        self._trigger(ui_manager.ui.actionDark)
+
+        for canvas in self._canvases(ui_manager):
+            canvas.set_canvas_bgcolor.assert_called_once_with(hex_color="#444444")
+
+    @patch("TheAntFarm.ui_manager.ui_manager.QActionGroup")
+    def test_light_sets_the_light_background_on_every_canvas(self, mock_group):
+        ui_manager = self._ui_manager(MagicMock())
+
+        ui_manager.make_style_action_mutually_exclusive()
+        self._trigger(ui_manager.ui.actionLight)
+
+        for canvas in self._canvases(ui_manager):
+            canvas.set_canvas_bgcolor.assert_called_once_with(hex_color="#FFFFFF")
+
+    @patch("TheAntFarm.ui_manager.ui_manager.QActionGroup")
+    def test_actions_are_exclusive_and_given_to_the_style_manager(self, mock_group):
+        style_manager = MagicMock()
+        ui_manager = self._ui_manager(style_manager)
+
+        ui_manager.make_style_action_mutually_exclusive()
+
+        mock_group.return_value.setExclusive.assert_called_once_with(True)
+        style_manager.connect_palette_actions.assert_called_once_with(
+            ui_manager.ui.actionDark, ui_manager.ui.actionLight
+        )
+
+    @patch("TheAntFarm.ui_manager.ui_manager.QActionGroup")
+    def test_without_style_manager_nothing_is_connected(self, mock_group):
+        ui_manager = self._ui_manager(None)
+
+        ui_manager.make_style_action_mutually_exclusive()
+
+        ui_manager.ui.actionDark.triggered.connect.assert_not_called()
+        ui_manager.ui.actionLight.triggered.connect.assert_not_called()

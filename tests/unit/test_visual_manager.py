@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock, patch
+
 import numpy as np
 
 from TheAntFarm.shape_core.gcode_manager import GcodePoint
@@ -110,3 +112,63 @@ class TestAddGCode:
 
         assert layer.calls == []
         assert "gcode" not in layer.paths_geom
+
+
+class TestCreateLine:
+    """create_line draws all the segments of a tag as one VisPy line."""
+
+    @staticmethod
+    def _layer():
+        layer = object.__new__(VisualLayer)
+        layer.canvas = MagicMock()
+        layer.paths = {}
+        return layer
+
+    @staticmethod
+    def _segments():
+        return [
+            [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0)],
+            [(5.0, 5.0), (6.0, 5.0)],
+        ]
+
+    def test_segments_are_flattened_and_connected_inside_each_segment(self):
+        layer = self._layer()
+
+        with patch("TheAntFarm.shape_core.visual_manager.visuals") as mock_visuals:
+            layer.create_line("top", self._segments(), colors="red")
+
+        kwargs = mock_visuals.Line.call_args.kwargs
+        assert kwargs["pos"].tolist() == [[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [5.0, 5.0], [6.0, 5.0]]
+        assert kwargs["connect"].tolist() == [[0, 1], [1, 2], [3, 4]]
+        assert kwargs["color"] == ["red"] * 5
+
+    def test_one_colour_per_segment(self):
+        layer = self._layer()
+
+        with patch("TheAntFarm.shape_core.visual_manager.visuals") as mock_visuals:
+            layer.create_line("top", self._segments(), colors=["red", "blue"])
+
+        assert mock_visuals.Line.call_args.kwargs["color"] == ["red"] * 3 + ["blue"] * 2
+
+    def test_lines_of_the_same_tag_are_kept_together(self):
+        layer = self._layer()
+
+        with patch("TheAntFarm.shape_core.visual_manager.visuals") as mock_visuals:
+            first, second = MagicMock(), MagicMock()
+            mock_visuals.Line.side_effect = [first, second]
+            layer.create_line("top", self._segments(), colors="red", order=3)
+            layer.create_line("top", self._segments(), colors="red")
+
+        assert layer.paths["top"] == [first, second]
+        assert first.order == 3
+        layer.canvas.view.add.assert_any_call(first)
+        layer.canvas.freeze.assert_called()
+
+    def test_missing_colours_are_logged(self, caplog):
+        layer = self._layer()
+
+        with patch("TheAntFarm.shape_core.visual_manager.visuals") as mock_visuals:
+            layer.create_line("top", self._segments())
+
+        assert "Path Colors List not Set" in caplog.text
+        assert mock_visuals.Line.call_args.kwargs["color"] == []
