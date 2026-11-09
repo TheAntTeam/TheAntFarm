@@ -563,3 +563,53 @@ class TestToolChangeSettings:
 
         with pytest.raises(MacroError, match="available modes"):
             worker.gcr.macro.get_macro_string("M6")
+
+
+class TestStopTimers:
+    """Each timer is stopped from its own thread when the application closes."""
+
+    def test_only_the_timers_of_the_calling_thread_are_stopped(self, worker):
+        worker.init_timers()
+        worker.progress_timer = MagicMock()
+        worker.progress_timer.thread.return_value = object()
+        worker.poll_timer.start()
+
+        worker.stop_timers()
+
+        assert not worker.poll_timer.isActive()
+        assert not worker.camera_timer.isActive()
+        worker.progress_timer.stop.assert_not_called()
+
+    def test_job_timer_is_stopped_in_the_control_thread_without_a_warning(self, worker):
+        from PySide6.QtCore import Qt, QThread, QTimer, qInstallMessageHandler
+
+        thread = QThread()
+        worker.moveToThread(thread)
+        thread.finished.connect(worker.stop_timers, Qt.DirectConnection)
+        thread.start()
+        started = []
+
+        def start_job_timer():
+            worker.progress_timer = QTimer()
+            worker.progress_timer.start(500)
+            started.append(1)
+
+        warnings = []
+        previous = qInstallMessageHandler(lambda mode, context, message: warnings.append(message))
+        try:
+            QTimer.singleShot(0, worker, start_job_timer)  # runs in the control thread, as a job start
+            for _ in range(400):
+                if started:
+                    break
+                QTest.qWait(5)
+            assert worker.progress_timer.isActive()
+            assert worker.progress_timer.thread() is thread
+
+            thread.quit()
+            assert thread.wait(2000)
+            assert not worker.progress_timer.isActive()
+            worker.progress_timer = None  # destroyed here, in the GUI thread, as at the exit of the app
+        finally:
+            qInstallMessageHandler(previous)
+
+        assert [message for message in warnings if "Timer" in message] == []
