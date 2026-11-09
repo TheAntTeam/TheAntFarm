@@ -1,12 +1,13 @@
+from unittest.mock import patch
+
 import pytest
-from collections import OrderedDict as Od
-from unittest.mock import MagicMock, patch
 
 
 @pytest.fixture(scope="module")
 def signals():
     with patch("PySide6.QtCore.QObject"):
         from controller.controller_signals import ControllerSignals
+
         return ControllerSignals()
 
 

@@ -448,6 +448,7 @@ class TestAppSettingsHandler:
         app_settings = AppSettingsHandler(str(config_folder), mock_main_window)
 
         import configparser
+
         config = configparser.ConfigParser()
         config["GENERAL"] = {"logs_file": "/nonexistent/path/app_logs.log"}
         with open(str(config_folder / "app_config.ini"), "w") as f:
@@ -463,6 +464,7 @@ class TestAppSettingsHandler:
         config_dir.mkdir(parents=True)
 
         import configparser
+
         config = configparser.ConfigParser()
         config["GENERAL"] = {"last_serial_baud": "invalid_baud"}
         with open(str(config_dir / "app_config.ini"), "w") as f:
@@ -480,6 +482,7 @@ class TestAppSettingsHandler:
 
         config_folder = "/tmp/test_invalid_path_config"
         import shutil
+
         if os.path.exists(config_folder):
             shutil.rmtree(config_folder)
         os.makedirs(config_folder, exist_ok=True)

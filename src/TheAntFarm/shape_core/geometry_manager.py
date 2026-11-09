@@ -406,9 +406,7 @@ class Geom:
         elif geom.geom_type == "LineString":
             points = [list(geom.coords)]
         else:
-            raise ValueError(
-                f"Unsupported geometry type: {geom.geom_type} (split a MultiPolygon with get_poly_parts)"
-            )
+            raise ValueError(f"Unsupported geometry type: {geom.geom_type} (split a MultiPolygon with get_poly_parts)")
 
         obj = cls.__new__(cls)
         obj.points = points

@@ -3,7 +3,6 @@ import os
 
 
 class GCodeFilesSettingsHandler:
-
     def __init__(self, config_folder):
         if os.path.isdir(config_folder):
             local_path = os.path.dirname(config_folder)

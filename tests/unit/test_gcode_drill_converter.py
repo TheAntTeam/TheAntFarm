@@ -1,6 +1,6 @@
 import math
+
 import pytest
-import numpy as np
 
 from TheAntFarm.shape_core.gcode_drill_converter import DrillGcodeConverter
 

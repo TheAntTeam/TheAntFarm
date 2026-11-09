@@ -1,6 +1,6 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from collections import OrderedDict as Od
-from unittest.mock import MagicMock, patch, PropertyMock
 
 
 class TestViewController:
@@ -16,11 +16,13 @@ class TestViewController:
     def view_controller(self, mock_settings):
         with patch("controller.controller_view.PcbObj"):
             from controller.controller_view import ViewController
+
             return ViewController(mock_settings)
 
     def test_init(self, mock_settings):
         with patch("controller.controller_view.PcbObj"):
             from controller.controller_view import ViewController
+
             vc = ViewController(mock_settings)
             assert vc.settings == mock_settings
 
@@ -99,13 +101,13 @@ class TestViewController:
     def test_generate_new_gcode_file_with_mirror(self, mock_settings):
         mock_settings.jobs_settings.jobs_settings_od = {"common": {"mirroring_axis": "X"}}
         mock_settings.gcf_settings.gcode_folder = "/test/gcode"
-        with patch("controller.controller_view.PcbObj"), \
-             patch("controller.controller_view.GCoder") as MockGC:
+        with patch("controller.controller_view.PcbObj"), patch("controller.controller_view.GCoder") as MockGC:
             mock_gcoder = MagicMock()
             mock_gcoder.compute.return_value = True
             mock_gcoder.get_file_name.return_value = "test.nc"
             MockGC.return_value = mock_gcoder
             from controller.controller_view import ViewController
+
             vc = ViewController(mock_settings)
             result = vc.generate_new_gcode_file("top_copper", {}, "gerber", [])
             mock_gcoder.write.assert_called_once()
@@ -113,13 +115,13 @@ class TestViewController:
     def test_generate_new_gcode_file_without_mirror(self, mock_settings):
         mock_settings.jobs_settings.jobs_settings_od = {"common": {}}
         mock_settings.gcf_settings.gcode_folder = "/test/gcode"
-        with patch("controller.controller_view.PcbObj"), \
-             patch("controller.controller_view.GCoder") as MockGC:
+        with patch("controller.controller_view.PcbObj"), patch("controller.controller_view.GCoder") as MockGC:
             mock_gcoder = MagicMock()
             mock_gcoder.compute.return_value = True
             mock_gcoder.get_file_name.return_value = "test.nc"
             MockGC.return_value = mock_gcoder
             from controller.controller_view import ViewController
+
             vc = ViewController(mock_settings)
             result = vc.generate_new_gcode_file("top_copper", {}, "gerber", [])
             mock_gcoder.write.assert_called_once()
@@ -127,12 +129,12 @@ class TestViewController:
     def test_generate_new_gcode_file_compute_fails(self, mock_settings):
         mock_settings.jobs_settings.jobs_settings_od = {"common": {}}
         mock_settings.gcf_settings.gcode_folder = "/test/gcode"
-        with patch("controller.controller_view.PcbObj"), \
-             patch("controller.controller_view.GCoder") as MockGC:
+        with patch("controller.controller_view.PcbObj"), patch("controller.controller_view.GCoder") as MockGC:
             mock_gcoder = MagicMock()
             mock_gcoder.compute.return_value = False
             MockGC.return_value = mock_gcoder
             from controller.controller_view import ViewController
+
             vc = ViewController(mock_settings)
             result = vc.generate_new_gcode_file("top_copper", {}, "gerber", [])
             mock_gcoder.write.assert_not_called()

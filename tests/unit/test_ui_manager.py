@@ -1,19 +1,20 @@
-import pytest
-from collections import OrderedDict as Od
 from unittest.mock import MagicMock, patch
 
 
 class TestUiManagerConstants:
     def test_l_tags(self):
         from TheAntFarm.ui_manager.ui_manager import UiManager
+
         assert UiManager.L_TAGS == ("top", "bottom", "profile", "drill", "nc_top", "nc_bottom")
 
     def test_l_names(self):
         from TheAntFarm.ui_manager.ui_manager import UiManager
+
         assert UiManager.L_NAMES == ("TOP", "BOTTOM", "PROFILE", "DRILL", "NO COPPER TOP", "NO COPPER BOTTOM")
 
     def test_log_colors(self):
         from TheAntFarm.ui_manager.ui_manager import UiManager
+
         assert UiManager.LOG_COLORS[10] == "white"
         assert UiManager.LOG_COLORS[20] == "light blue"
         assert UiManager.LOG_COLORS[30] == "orange"
@@ -26,6 +27,7 @@ class TestHideShowConsole:
         mock_ui = MagicMock()
         mock_ui.actionHide_Show_Console.isChecked.return_value = True
         from TheAntFarm.ui_manager.ui_manager import UiManager
+
         ui_manager = UiManager.__new__(UiManager)
         ui_manager.ui = mock_ui
         ui_manager.hide_show_console()
@@ -35,6 +37,7 @@ class TestHideShowConsole:
         mock_ui = MagicMock()
         mock_ui.actionHide_Show_Console.isChecked.return_value = False
         from TheAntFarm.ui_manager.ui_manager import UiManager
+
         ui_manager = UiManager.__new__(UiManager)
         ui_manager.ui = mock_ui
         ui_manager.hide_show_console()
@@ -47,6 +50,7 @@ class TestHideShowAlignTab:
         mock_ui.actionHide_Show_Align_Tab.isChecked.return_value = True
         mock_ui.main_tab_widget.indexOf.return_value = 2
         from TheAntFarm.ui_manager.ui_manager import UiManager
+
         ui_manager = UiManager.__new__(UiManager)
         ui_manager.ui = mock_ui
         ui_manager.hide_show_align_tab()
@@ -57,6 +61,7 @@ class TestHideShowAlignTab:
         mock_ui.actionHide_Show_Align_Tab.isChecked.return_value = False
         mock_ui.main_tab_widget.indexOf.return_value = 2
         from TheAntFarm.ui_manager.ui_manager import UiManager
+
         ui_manager = UiManager.__new__(UiManager)
         ui_manager.ui = mock_ui
         ui_manager.hide_show_align_tab()
@@ -69,6 +74,7 @@ class TestHideShowPreferencesTab:
         mock_ui.actionSettings_Preferences.isChecked.return_value = True
         mock_ui.main_tab_widget.indexOf.return_value = 3
         from TheAntFarm.ui_manager.ui_manager import UiManager
+
         ui_manager = UiManager.__new__(UiManager)
         ui_manager.ui = mock_ui
         ui_manager.hide_show_preferences_tab()
@@ -79,6 +85,7 @@ class TestHideShowPreferencesTab:
         mock_ui.actionSettings_Preferences.isChecked.return_value = False
         mock_ui.main_tab_widget.indexOf.return_value = 3
         from TheAntFarm.ui_manager.ui_manager import UiManager
+
         ui_manager = UiManager.__new__(UiManager)
         ui_manager.ui = mock_ui
         ui_manager.hide_show_preferences_tab()
@@ -108,9 +115,7 @@ class TestOnMainTabChanged:
 
     @patch("TheAntFarm.ui_manager.ui_manager.QMessageBox")
     def test_no_dialog_when_not_leaving_settings(self, mock_msgbox):
-        ui_manager, mock_ui = self.setup_ui_manager(
-            settings_tab_index=2, previous_index=0, dirty=True
-        )
+        ui_manager, mock_ui = self.setup_ui_manager(settings_tab_index=2, previous_index=0, dirty=True)
         ui_manager._on_main_tab_changed(1)
 
         mock_msgbox.assert_not_called()
@@ -118,9 +123,7 @@ class TestOnMainTabChanged:
 
     @patch("TheAntFarm.ui_manager.ui_manager.QMessageBox")
     def test_no_dialog_when_clean(self, mock_msgbox):
-        ui_manager, mock_ui = self.setup_ui_manager(
-            settings_tab_index=2, previous_index=2, dirty=False
-        )
+        ui_manager, mock_ui = self.setup_ui_manager(settings_tab_index=2, previous_index=2, dirty=False)
         ui_manager._on_main_tab_changed(1)
 
         mock_msgbox.assert_not_called()
@@ -128,9 +131,7 @@ class TestOnMainTabChanged:
 
     @patch("TheAntFarm.ui_manager.ui_manager.QMessageBox")
     def test_save_saves_and_switches(self, mock_msgbox):
-        ui_manager, mock_ui = self.setup_ui_manager(
-            settings_tab_index=2, previous_index=2, dirty=True
-        )
+        ui_manager, mock_ui = self.setup_ui_manager(settings_tab_index=2, previous_index=2, dirty=True)
 
         mock_dialog = MagicMock()
         mock_msgbox.return_value = mock_dialog
@@ -149,9 +150,7 @@ class TestOnMainTabChanged:
 
     @patch("TheAntFarm.ui_manager.ui_manager.QMessageBox")
     def test_discard_restores_and_switches(self, mock_msgbox):
-        ui_manager, mock_ui = self.setup_ui_manager(
-            settings_tab_index=2, previous_index=2, dirty=True
-        )
+        ui_manager, mock_ui = self.setup_ui_manager(settings_tab_index=2, previous_index=2, dirty=True)
 
         mock_dialog = MagicMock()
         mock_msgbox.return_value = mock_dialog
@@ -170,9 +169,7 @@ class TestOnMainTabChanged:
 
     @patch("TheAntFarm.ui_manager.ui_manager.QMessageBox")
     def test_cancel_stays(self, mock_msgbox):
-        ui_manager, mock_ui = self.setup_ui_manager(
-            settings_tab_index=2, previous_index=2, dirty=True
-        )
+        ui_manager, mock_ui = self.setup_ui_manager(settings_tab_index=2, previous_index=2, dirty=True)
 
         mock_dialog = MagicMock()
         mock_msgbox.return_value = mock_dialog

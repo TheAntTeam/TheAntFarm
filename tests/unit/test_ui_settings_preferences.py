@@ -1,6 +1,6 @@
+from unittest.mock import MagicMock
+
 import pytest
-from collections import OrderedDict as Od
-from unittest.mock import MagicMock, Mock, patch
 
 
 @pytest.fixture
@@ -76,7 +76,14 @@ def mock_control_worker():
 def mock_settings():
     settings = MagicMock()
     settings.app_settings = MagicMock()
-    settings.app_settings.layer_color = {"top": "blue", "bottom": "red", "profile": "green", "drill": "yellow", "nc_top": "gray", "nc_bottom": "white"}
+    settings.app_settings.layer_color = {
+        "top": "blue",
+        "bottom": "red",
+        "profile": "green",
+        "drill": "yellow",
+        "nc_top": "gray",
+        "nc_bottom": "white",
+    }
     settings.app_settings.serial_error_warning_threshold = 5
     settings.app_settings.serial_error_critical_threshold = 10
     settings.app_settings.camera_rotation_angle = 0
@@ -124,6 +131,7 @@ def ui_settings_preferences(mock_settings, mock_machine_settings):
 @pytest.fixture
 def settings_tab(mock_ui, mock_control_worker, mock_settings):
     from TheAntFarm.ui_manager.ui_settings_preferences import UiSettingsPreferencesTab
+
     return UiSettingsPreferencesTab(mock_ui, mock_control_worker, mock_settings)
 
 
@@ -372,12 +380,14 @@ class TestSetFocusLost:
         settings_tab.set_focus_lost()
         assert settings_tab.settings_dirty is True
 
+
 class TestToolChangeProcedure:
     """Tool change procedure widgets (shape_core macros)."""
 
     def test_mode_combo_is_populated_from_the_macro_registry(self, mock_ui):
-        from TheAntFarm.ui_manager.ui_settings_preferences import UiSettingsPreferencesTab
         from shape_core import MACROS
+
+        from TheAntFarm.ui_manager.ui_settings_preferences import UiSettingsPreferencesTab
 
         mock_ui.tool_change_mode_cb.addItems.reset_mock()
 

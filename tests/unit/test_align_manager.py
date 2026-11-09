@@ -1,4 +1,3 @@
-import numpy as np
 import pytest
 
 from TheAntFarm.shape_core.align_manager import AlignManager, TpsCoefficients

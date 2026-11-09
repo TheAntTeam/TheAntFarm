@@ -1,6 +1,7 @@
-import pytest
+from unittest.mock import MagicMock, patch
+
 import numpy as np
-from unittest.mock import MagicMock, patch, PropertyMock
+import pytest
 
 
 @pytest.fixture(scope="module")
@@ -14,11 +15,14 @@ def mock_settings():
 
 @pytest.fixture(scope="module")
 def align_controller(mock_settings):
-    with patch("PySide6.QtMultimedia", create=True), \
-         patch("double_side_manager.DoubleSideManager"), \
-         patch("controller.controller_align.PcbObj"), \
-         patch("controller.controller_align.DrillGcodeConverter"):
+    with (
+        patch("PySide6.QtMultimedia", create=True),
+        patch("double_side_manager.DoubleSideManager"),
+        patch("controller.controller_align.PcbObj"),
+        patch("controller.controller_align.DrillGcodeConverter"),
+    ):
         from controller.controller_align import AlignController
+
         return AlignController(mock_settings)
 
 

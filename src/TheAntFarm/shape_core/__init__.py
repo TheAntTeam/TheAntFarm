@@ -23,12 +23,12 @@ from .gcode_manager import (
     POSITION_DIGITS,
     GCode,
     GCodeAlignment,
-    GCoder,
     GCodeLeveler,
+    GcodeLine,
     GCodeMacro,
     GCodeParser,
-    GcodeLine,
     GcodePoint,
+    GCoder,
 )
 from .geometry_manager import (
     Geom,

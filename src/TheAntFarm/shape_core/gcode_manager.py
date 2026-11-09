@@ -11,8 +11,8 @@ import scipy.interpolate as spi
 from shapely.geometry import LineString
 
 from .align_manager import AlignManager
-from .config import default_config, merge_config
 from .commands_manager import CommandManager
+from .config import default_config, merge_config
 from .macros_manager import MacroError, Macros
 from .path_types import ToolPath
 
@@ -511,7 +511,6 @@ class GCoder:
 
 
 class GCodeMacro:
-
     def __init__(self, freezed_dro, macro_type="M6", gcr=None, local_path=""):
         self.id = 0
         self.macro_type = macro_type
@@ -701,7 +700,6 @@ class GCode:
 
 
 class GCodeParser:
-
     COORD_TAG = ["x", "y", "z"]
     PARAM_TAG = ["f", "p"]
     CHANGE_TOOL_COMMAND = ("m", 6)
@@ -941,7 +939,6 @@ class GCodeAlignment:
 
 
 class GCodeLeveler:
-
     def __init__(self, gc, grid_data=None):
         self.gc = gc
         if grid_data is not None:
@@ -1077,4 +1074,3 @@ class GCodeLeveler:
             if i:
                 i_l.append(i)
         return i_l
-

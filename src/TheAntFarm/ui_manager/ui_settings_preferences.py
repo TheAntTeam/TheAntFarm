@@ -199,7 +199,6 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.flip_cam_h_chb.setChecked(self.app_settings.camera_flip_h)
         self.ui.flip_cam_v_chb.setChecked(self.app_settings.camera_flip_v)
 
-
     def reset_tool_change_procedure_settings(self):
         """Initialize or re-initialize ui value from initial tool change procedure settings."""
         self.ui.tool_change_mode_cb.setCurrentText(self.machine_settings.tool_change_mode)

@@ -1,6 +1,4 @@
 import numpy as np
-import pytest
-from shapely.geometry import Polygon
 
 from TheAntFarm.shape_core.gcode_manager import GcodePoint
 from TheAntFarm.shape_core.visual_manager import GLUTess, VisualLayer
@@ -34,6 +32,7 @@ class TestGLUTess:
     def test_on_end_primitive(self):
         tess = GLUTess()
         tess._on_end_primitive()
+
 
 class TestAddGCode:
     """add_gcode must not touch the vector list of the parser (it is the model)."""

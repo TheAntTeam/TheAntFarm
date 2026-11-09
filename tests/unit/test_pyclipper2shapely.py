@@ -1,5 +1,3 @@
-import pytest
-
 from TheAntFarm.shape_core.pyclipper2shapely import (
     _contour_to_linear_ring,
     polytree_to_shapely,
@@ -40,9 +38,10 @@ class TestPyClipper2Shapely:
         contour = [(0, 0), (5, 0), (5, 5), (0, 5)]
         ring = _contour_to_linear_ring(contour, scale=1.0)
         from shapely.geometry import LinearRing
+
         assert isinstance(ring, LinearRing)
 
     def test_contour_to_linear_ring_large_contour(self):
-        contour = [(i*10, i*10) for i in range(100)]
+        contour = [(i * 10, i * 10) for i in range(100)]
         ring = _contour_to_linear_ring(contour, scale=1.0)
         assert ring is not None

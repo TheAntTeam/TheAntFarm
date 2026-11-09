@@ -4,8 +4,8 @@ Covers requirements: GEO-001 to GEO-003, PTH-001 to PTH-004, MRG-001 to MRG-003
 """
 
 import pytest
-from shapely.geometry import Polygon
 from shapely import geometry as shg
+from shapely.geometry import Polygon
 
 from TheAntFarm.shape_core.geometry_manager import (
     Geom,

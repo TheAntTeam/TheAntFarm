@@ -63,6 +63,7 @@ class TestGapper:
         result = gapper.add_taps_on_external_path(strategy="invalid")
         assert len(result) > 0
 
+
 class TestMachinePathDrilling:
     """Drilling: hole position per polygon part, bit selection, DRC of the bits."""
 

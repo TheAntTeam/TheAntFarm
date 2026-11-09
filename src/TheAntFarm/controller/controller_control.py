@@ -238,8 +238,7 @@ class ControlController(QObject):
         self.prb_succeeded = flag.lower() not in ("0", "false")
         if not self.prb_succeeded:
             logger.error(
-                "Probe not triggered: the axis reached the probe limit without contact. "
-                "The measurement is discarded."
+                "Probe not triggered: the axis reached the probe limit without contact. The measurement is discarded."
             )
             self.prb_updated = False
             return

@@ -377,10 +377,7 @@ class Macros:
             return spec.default_variant
         mode = str(self.cfg.get(spec.mode_key, spec.default_variant)).lower()
         if mode not in spec.variants:
-            raise MacroError(
-                f"Unknown mode '{mode}' for macro {spec.id}: "
-                f"available modes are {sorted(spec.variants)}"
-            )
+            raise MacroError(f"Unknown mode '{mode}' for macro {spec.id}: available modes are {sorted(spec.variants)}")
         return mode
 
     def get_macro_path(self, macro: str, local_path: str = "") -> str:
