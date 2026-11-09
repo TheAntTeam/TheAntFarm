@@ -122,6 +122,23 @@ class TestThemedIcons:
         expected = style_manager.themed_icon("play-and-pause-button").pixmap(64, 64).toImage()
         assert button.icon().pixmap(64, 64).toImage() == expected
 
+    def test_checked_button_shows_the_checked_icon(self, style_manager):
+        icon = style_manager.themed_icon("apply-align", "alignment-applied")
+
+        unchecked = icon.pixmap(64, 64, QIcon.Normal, QIcon.Off).toImage()
+        checked = icon.pixmap(64, 64, QIcon.Normal, QIcon.On).toImage()
+        assert checked == style_manager.themed_icon("alignment-applied").pixmap(64, 64).toImage()
+        assert unchecked != checked
+
+    def test_fixed_colour_is_kept_after_a_theme_change(self, style_manager):
+        button = QToolButton()
+        style_manager.set_themed_icon(button, "apply-align", "alignment-applied", RED)
+
+        style_manager.set_light_palette()
+
+        assert icon_colors(button.icon()) == {RED.name()}
+        assert icon_colors(button.icon(), QIcon.Disabled) == {style_manager.LIGHT_DISABLED_ICON_COLOR.name()}
+
     def test_theme_change_is_signalled(self, style_manager):
         received = []
         style_manager.theme_changed.connect(lambda icon, disabled: received.append((icon.name(), disabled.name())))
@@ -150,6 +167,19 @@ class TestThemedIconsOfTheWindow:
         names = set(UiManager.THEMED_ICONS.values()) | {"play-and-pause-button"}
 
         assert [name for name in sorted(names) if not QFile.exists(icon_path(name))] == []
+
+    def test_every_icon_of_the_resources_is_used(self):
+        qrc = (APP_DIR / "app_resources.qrc").read_text(encoding="utf-8")
+        icons = re.findall(r"resources/icons/([\w.-]+)\.svg", qrc)
+        sources = [(APP_DIR / "the_ant_farm.ui").read_text(encoding="utf-8")] + [
+            path.read_text(encoding="utf-8")
+            for path in APP_DIR.rglob("*.py")
+            if path.name not in ("ui_the_ant_farm.py", "app_resources_rc.py")
+        ]
+        used = "\n".join(sources)
+
+        assert icons
+        assert [name for name in icons if f"icons/{name}.svg" not in used and f'"{name}"' not in used] == []
 
     def test_every_resource_of_the_ui_file_exists(self, resources):
         text = (APP_DIR / "the_ant_farm.ui").read_text(encoding="utf-8")
@@ -183,3 +213,46 @@ class TestPauseResumeIcon:
 
         icon = tab.ui.pause_resume_tb.setIcon.call_args.args[0]
         assert not icon.isNull()
+
+
+class TestAlignmentToggleIcons:
+    """The alignment toggles stay readable on the coloured backgrounds of the alignment state."""
+
+    @pytest.fixture
+    def align_tab(self):
+        from ui_manager.ui_align_tab import UiAlignTab
+
+        tab = UiAlignTab.__new__(UiAlignTab)
+        tab.ui = Mock()
+        tab.style_manager = Mock()
+        return tab
+
+    def _colors(self, align_tab):
+        calls = align_tab.style_manager.set_themed_icon.call_args_list
+        assert [call.args[:3] for call in calls] == [
+            (align_tab.ui.apply_alignment_tb, "apply-align", "alignment-applied"),
+            (align_tab.ui.apply_alignment_tb_2, "apply-align", "alignment-applied"),
+        ]
+        return {None if call.args[3] is None else call.args[3].name() for call in calls}
+
+    def test_applied_alignment_draws_white_on_blue(self, align_tab):
+        align_tab.update_ui_alignment_applied(True, 4)
+
+        assert self._colors(align_tab) == {align_tab.APPLIED_ICON_COLOR.name()}
+
+    def test_alignment_ready_draws_black_on_yellow(self, align_tab):
+        align_tab.update_ui_alignment_applied(False, align_tab.MIN_ALIGNMENT_POINTS_NUMBER)
+
+        assert self._colors(align_tab) == {align_tab.READY_ICON_COLOR.name()}
+
+    def test_alignment_not_ready_follows_the_theme(self, align_tab):
+        align_tab.update_ui_alignment_applied(False, 1)
+
+        assert self._colors(align_tab) == {None}
+
+    def test_without_a_style_manager_the_icons_of_the_ui_file_stay(self, align_tab):
+        align_tab.style_manager = None
+
+        align_tab.update_ui_alignment_applied(True, 4)
+
+        align_tab.ui.apply_alignment_tb.setIcon.assert_not_called()

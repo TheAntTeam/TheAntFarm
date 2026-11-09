@@ -1531,7 +1531,7 @@ class Ui_MainWindow(object):
         self.z_plus_pb.setMinimumSize(QSize(0, 24))
         self.z_plus_pb.setMaximumSize(QSize(100, 16777215))
         icon4 = QIcon()
-        icon4.addFile(u":/resources/resources/icons/white_north_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon4.addFile(u":/resources/resources/icons/north-arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.z_plus_pb.setIcon(icon4)
 
         self.zMoveGridLayout.addWidget(self.z_plus_pb, 0, 0, 1, 1)
@@ -1543,7 +1543,7 @@ class Ui_MainWindow(object):
         self.z_minus_pb.setMinimumSize(QSize(0, 24))
         self.z_minus_pb.setMaximumSize(QSize(100, 16777215))
         icon5 = QIcon()
-        icon5.addFile(u":/resources/resources/icons/white_south_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon5.addFile(u":/resources/resources/icons/south-arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.z_minus_pb.setIcon(icon5)
 
         self.zMoveGridLayout.addWidget(self.z_minus_pb, 1, 0, 1, 1)
@@ -1561,7 +1561,7 @@ class Ui_MainWindow(object):
         self.x_minus_y_plus_pb.setMinimumSize(QSize(0, 22))
         self.x_minus_y_plus_pb.setMaximumSize(QSize(50, 16777215))
         icon6 = QIcon()
-        icon6.addFile(u":/resources/resources/icons/white_north_west_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon6.addFile(u":/resources/resources/icons/north-west-arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_minus_y_plus_pb.setIcon(icon6)
 
         self.xyMoveGridLayout.addWidget(self.x_minus_y_plus_pb, 0, 0, 1, 1)
@@ -1573,7 +1573,7 @@ class Ui_MainWindow(object):
         self.x_plus_y_minus_pb.setMinimumSize(QSize(0, 22))
         self.x_plus_y_minus_pb.setMaximumSize(QSize(50, 16777215))
         icon7 = QIcon()
-        icon7.addFile(u":/resources/resources/icons/white_south_east_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon7.addFile(u":/resources/resources/icons/south-east-arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_plus_y_minus_pb.setIcon(icon7)
 
         self.xyMoveGridLayout.addWidget(self.x_plus_y_minus_pb, 2, 2, 1, 1)
@@ -1585,7 +1585,7 @@ class Ui_MainWindow(object):
         self.x_minus_pb.setMinimumSize(QSize(0, 22))
         self.x_minus_pb.setMaximumSize(QSize(50, 16777215))
         icon8 = QIcon()
-        icon8.addFile(u":/resources/resources/icons/white_west_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon8.addFile(u":/resources/resources/icons/west-arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_minus_pb.setIcon(icon8)
 
         self.xyMoveGridLayout.addWidget(self.x_minus_pb, 1, 0, 1, 1)
@@ -1597,7 +1597,7 @@ class Ui_MainWindow(object):
         self.x_minus_y_minus_pb.setMinimumSize(QSize(0, 22))
         self.x_minus_y_minus_pb.setMaximumSize(QSize(50, 16777215))
         icon9 = QIcon()
-        icon9.addFile(u":/resources/resources/icons/white_south_west_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon9.addFile(u":/resources/resources/icons/south-west-arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_minus_y_minus_pb.setIcon(icon9)
 
         self.xyMoveGridLayout.addWidget(self.x_minus_y_minus_pb, 2, 0, 1, 1)
@@ -1619,7 +1619,7 @@ class Ui_MainWindow(object):
         self.center_tb.setMinimumSize(QSize(0, 22))
         self.center_tb.setMaximumSize(QSize(50, 16777215))
         icon10 = QIcon()
-        icon10.addFile(u":/resources/resources/icons/white_circle.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon10.addFile(u":/resources/resources/icons/circle.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.center_tb.setIcon(icon10)
 
         self.xyMoveGridLayout.addWidget(self.center_tb, 1, 1, 1, 1)
@@ -1641,7 +1641,7 @@ class Ui_MainWindow(object):
         self.x_plus_y_plus_pb.setMinimumSize(QSize(0, 22))
         self.x_plus_y_plus_pb.setMaximumSize(QSize(50, 16777215))
         icon11 = QIcon()
-        icon11.addFile(u":/resources/resources/icons/white_north_east_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon11.addFile(u":/resources/resources/icons/north-east-arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_plus_y_plus_pb.setIcon(icon11)
 
         self.xyMoveGridLayout.addWidget(self.x_plus_y_plus_pb, 0, 2, 1, 1)
@@ -1653,7 +1653,7 @@ class Ui_MainWindow(object):
         self.x_plus_pb.setMinimumSize(QSize(0, 22))
         self.x_plus_pb.setMaximumSize(QSize(50, 16777215))
         icon12 = QIcon()
-        icon12.addFile(u":/resources/resources/icons/white_east_arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon12.addFile(u":/resources/resources/icons/east-arrow.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.x_plus_pb.setIcon(icon12)
 
         self.xyMoveGridLayout.addWidget(self.x_plus_pb, 1, 2, 1, 1)
@@ -2310,8 +2310,8 @@ class Ui_MainWindow(object):
         self.apply_alignment_tb_2.setObjectName(u"apply_alignment_tb_2")
         self.apply_alignment_tb_2.setMinimumSize(QSize(30, 30))
         icon13 = QIcon()
-        icon13.addFile(u":/resources/resources/icons/black_apply_align.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon13.addFile(u":/resources/resources/icons/black_alignment_applied.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon13.addFile(u":/resources/resources/icons/apply-align.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon13.addFile(u":/resources/resources/icons/alignment-applied.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         self.apply_alignment_tb_2.setIcon(icon13)
         self.apply_alignment_tb_2.setCheckable(True)
 
@@ -2520,9 +2520,9 @@ class Ui_MainWindow(object):
         self.stop_tb.setMinimumSize(QSize(120, 80))
         self.stop_tb.setMaximumSize(QSize(120, 16777215))
         icon19 = QIcon()
-        icon19.addFile(u":/resources/resources/icons/stop-button-black-rounded-square.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon19.addFile(u":/resources/resources/icons/stop-button-black-rounded-square.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon19.addFile(u":/resources/resources/icons/stop-button-black-rounded-square.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon19.addFile(u":/resources/resources/icons/stop-button-rounded-square.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon19.addFile(u":/resources/resources/icons/stop-button-rounded-square.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon19.addFile(u":/resources/resources/icons/stop-button-rounded-square.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.stop_tb.setIcon(icon19)
         self.stop_tb.setIconSize(QSize(64, 64))
         self.stop_tb.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
