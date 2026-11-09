@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Tuple
+from typing import Dict, Optional, Tuple
 
 from PySide6.QtCore import QByteArray, QFile, QIODevice, QObject, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QIcon, QPainter, QPalette, QPixmap
@@ -77,27 +77,35 @@ class StyleManager(QObject):
         self.icon_man = IconManager()
         self.current_icon_color = QColor(self.DARK_ICON_COLOR)
         self.current_disabled_color = QColor(self.DARK_DISABLED_ICON_COLOR)
-        self._themed_widgets: Dict[QAbstractButton, str] = {}
+        self._themed_widgets: Dict[QAbstractButton, Tuple[str, Optional[str], Optional[QColor]]] = {}
 
-    def themed_icon(self, name: str) -> QIcon:
-        """Return the single-colour icon ``name`` in the colours of the theme, also when disabled."""
-        path = ICON_RESOURCE_PATH.format(name)
+    def themed_icon(self, name: str, checked_name: Optional[str] = None, color: Optional[QColor] = None) -> QIcon:
+        """Return the single-colour icon ``name`` in the colours of the theme.
+
+        ``checked_name`` is the icon of a checked button, ``color`` replaces the colour of the theme (the
+        disabled colour still comes from the theme), for a button whose background is not the theme's.
+        """
+        normal_color = self.current_icon_color if color is None else QColor(color)
         icon = QIcon()
-        icon.addPixmap(self.icon_man.make_pixmap(path, self.current_icon_color), QIcon.Normal)
-        icon.addPixmap(self.icon_man.make_pixmap(path, self.current_disabled_color), QIcon.Disabled)
+        for state, icon_name in ((QIcon.Off, name), (QIcon.On, checked_name or name)):
+            path = ICON_RESOURCE_PATH.format(icon_name)
+            icon.addPixmap(self.icon_man.make_pixmap(path, normal_color), QIcon.Normal, state)
+            icon.addPixmap(self.icon_man.make_pixmap(path, self.current_disabled_color), QIcon.Disabled, state)
         return icon
 
-    def set_themed_icon(self, widget: QAbstractButton, name: str) -> None:
-        """Give ``widget`` the icon ``name`` and keep it in the colours of the theme when the theme changes."""
-        self._themed_widgets[widget] = name
-        widget.setIcon(self.themed_icon(name))
+    def set_themed_icon(
+        self, widget: QAbstractButton, name: str, checked_name: Optional[str] = None, color: Optional[QColor] = None
+    ) -> None:
+        """Give ``widget`` the icon ``name`` and draw it again when the theme changes (see ``themed_icon``)."""
+        self._themed_widgets[widget] = (name, checked_name, color)
+        widget.setIcon(self.themed_icon(name, checked_name, color))
 
     def _apply_icon_colors(self, icon_color: QColor, disabled_color: QColor) -> None:
         self.current_icon_color = QColor(icon_color)
         self.current_disabled_color = QColor(disabled_color)
         self.icon_man.clear_cache()
-        for widget, name in self._themed_widgets.items():
-            widget.setIcon(self.themed_icon(name))
+        for widget, (name, checked_name, color) in self._themed_widgets.items():
+            widget.setIcon(self.themed_icon(name, checked_name, color))
         self.theme_changed.emit(self.current_icon_color, self.current_disabled_color)
 
     def list_styles(self):

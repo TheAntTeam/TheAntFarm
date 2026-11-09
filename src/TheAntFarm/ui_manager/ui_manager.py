@@ -57,7 +57,9 @@ class UiManager(QObject):
         self.ui_control_tab_m = UiControlTab(
             ui, control_worker, serial_worker, self.ctrl_layer, self.settings, style_manager
         )
-        self.ui_align_tab_m = UiAlignTab(main_win, control_worker, self.vis_align_layer, self.settings.app_settings)
+        self.ui_align_tab_m = UiAlignTab(
+            main_win, control_worker, self.vis_align_layer, self.settings.app_settings, style_manager
+        )
         self.ui_settings_tab_m = UiSettingsPreferencesTab(ui, control_worker, self.settings)
         self.ui_about_m = UiAbout(main_win, app_settings=self.settings.app_settings)
 
@@ -197,7 +199,7 @@ class UiManager(QObject):
         "unlock_tb": "unlock-padlock",
         "play_tb": "play-button-arrowhead",
         "pause_resume_tb": "pause-multimedia-big-gross-symbol-lines",
-        "stop_tb": "stop-button-black-rounded-square",
+        "stop_tb": "stop-button-rounded-square",
         "tool_change_tb": "milling-machine",
         "soft_reset_tb": "refresh",
         "upload_temp_tb": "upload-file",
@@ -208,17 +210,17 @@ class UiManager(QObject):
             f"{button}{suffix}": icon
             for suffix in ("", "_2")
             for button, icon in (
-                ("z_plus_pb", "white_north_arrow"),
-                ("z_minus_pb", "white_south_arrow"),
-                ("x_plus_y_plus_pb", "white_north_east_arrow"),
-                ("x_plus_y_minus_pb", "white_south_east_arrow"),
-                ("x_minus_y_plus_pb", "white_north_west_arrow"),
-                ("x_minus_y_minus_pb", "white_south_west_arrow"),
-                ("x_plus_pb", "white_east_arrow"),
-                ("x_minus_pb", "white_west_arrow"),
-                ("y_plus_pb", "white_north_arrow"),
-                ("y_minus_pb", "white_south_arrow"),
-                ("center_tb", "white_circle"),
+                ("z_plus_pb", "north-arrow"),
+                ("z_minus_pb", "south-arrow"),
+                ("x_plus_y_plus_pb", "north-east-arrow"),
+                ("x_plus_y_minus_pb", "south-east-arrow"),
+                ("x_minus_y_plus_pb", "north-west-arrow"),
+                ("x_minus_y_minus_pb", "south-west-arrow"),
+                ("x_plus_pb", "east-arrow"),
+                ("x_minus_pb", "west-arrow"),
+                ("y_plus_pb", "north-arrow"),
+                ("y_minus_pb", "south-arrow"),
+                ("center_tb", "circle"),
             )
         },
     }

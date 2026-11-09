@@ -1,9 +1,8 @@
 <RCC>
   <qresource prefix="resources">
-    <file>resources/icons/black_alignment_applied.svg</file>
-    <file>resources/icons/black_apply_align.svg</file>
+    <file>resources/icons/alignment-applied.svg</file>
+    <file>resources/icons/apply-align.svg</file>
     <file>resources/icons/delete.svg</file>
-    <file>resources/icons/focus.svg</file>
     <file>resources/icons/home.svg</file>
     <file>resources/icons/milling-machine.svg</file>
     <file>resources/icons/open-folder.svg</file>
@@ -11,19 +10,18 @@
     <file>resources/icons/play-and-pause-button.svg</file>
     <file>resources/icons/play-button-arrowhead.svg</file>
     <file>resources/icons/refresh.svg</file>
-    <file>resources/icons/reset-hard.svg</file>
-    <file>resources/icons/stop-button-black-rounded-square.svg</file>
+    <file>resources/icons/stop-button-rounded-square.svg</file>
     <file>resources/icons/unlock-padlock.svg</file>
     <file>resources/icons/upload-file.svg</file>
-    <file>resources/icons/white_circle.svg</file>
-    <file>resources/icons/white_east_arrow.svg</file>
-    <file>resources/icons/white_north_arrow.svg</file>
-    <file>resources/icons/white_north_east_arrow.svg</file>
-    <file>resources/icons/white_north_west_arrow.svg</file>
-    <file>resources/icons/white_south_arrow.svg</file>
-    <file>resources/icons/white_south_east_arrow.svg</file>
-    <file>resources/icons/white_south_west_arrow.svg</file>
-    <file>resources/icons/white_west_arrow.svg</file>
+    <file>resources/icons/circle.svg</file>
+    <file>resources/icons/east-arrow.svg</file>
+    <file>resources/icons/north-arrow.svg</file>
+    <file>resources/icons/north-east-arrow.svg</file>
+    <file>resources/icons/north-west-arrow.svg</file>
+    <file>resources/icons/south-arrow.svg</file>
+    <file>resources/icons/south-east-arrow.svg</file>
+    <file>resources/icons/south-west-arrow.svg</file>
+    <file>resources/icons/west-arrow.svg</file>
     <file>resources/logo/the_ant_farm_logo.svg</file>
   </qresource>
 </RCC>

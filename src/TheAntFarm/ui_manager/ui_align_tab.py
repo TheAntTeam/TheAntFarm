@@ -2,9 +2,10 @@ import logging
 import math
 import os
 from collections import OrderedDict as Od
+from typing import Optional
 
 from PySide6.QtCore import QObject, Qt, Signal, Slot
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QColor, QPixmap
 from PySide6.QtWidgets import QFileDialog, QHeaderView, QLabel
 from style_manager import StyleManager
 
@@ -23,14 +24,18 @@ class UiAlignTab(QObject):
     update_zoom_value_s = Signal(int)
 
     MIN_ALIGNMENT_POINTS_NUMBER = 4
+    APPLIED_ICON_COLOR = QColor(255, 255, 255)  # on the blue background of an applied alignment
+    READY_ICON_COLOR = QColor(0, 0, 0)  # on the yellow background of an alignment ready to apply
 
-    def __init__(self, main_win, control_worker, vis_align_layer, app_settings):
+    def __init__(self, main_win, control_worker, vis_align_layer, app_settings, style_manager=None):
         super(UiAlignTab, self).__init__()
         self.main_win = main_win
         self.ui = self.main_win.ui
         self.controlWo = control_worker
         self.vis_align_layer = vis_align_layer
         self.app_settings = app_settings
+        self.style_manager = style_manager
+        self._set_alignment_icons(None)
 
         self.layer_colors = self.app_settings.layer_color
 
@@ -151,8 +156,16 @@ class UiAlignTab(QObject):
         for cam in camera_list:
             self.ui.camera_list_cb.addItem(str(cam))
 
+    def _set_alignment_icons(self, color: Optional[QColor]) -> None:
+        """Draw the alignment toggles in ``color``, or in the colours of the theme when it is ``None``."""
+        if self.style_manager is None:
+            return
+        for button in (self.ui.apply_alignment_tb, self.ui.apply_alignment_tb_2):
+            self.style_manager.set_themed_icon(button, "apply-align", "alignment-applied", color)
+
     def update_ui_alignment_applied(self, alignment_applied_flag, num_points):
         if alignment_applied_flag:
+            self._set_alignment_icons(self.APPLIED_ICON_COLOR)
             self.ui.apply_alignment_tb.setStyleSheet(StyleManager.set_tool_button_color(bg_color="blue", color="black"))
             self.ui.apply_alignment_tb_2.setStyleSheet(
                 StyleManager.set_tool_button_color(bg_color="blue", color="black")
@@ -160,6 +173,7 @@ class UiAlignTab(QObject):
             self.ui.apply_alignment_tb.setStatusTip("Alignment ON")
             self.ui.apply_alignment_tb_2.setStatusTip("Alignment ON")
         elif num_points >= self.MIN_ALIGNMENT_POINTS_NUMBER:
+            self._set_alignment_icons(self.READY_ICON_COLOR)
             self.ui.apply_alignment_tb.setStyleSheet(
                 StyleManager.set_tool_button_color(bg_color="yellow", color="black")
             )
@@ -169,6 +183,7 @@ class UiAlignTab(QObject):
             self.ui.apply_alignment_tb.setStatusTip("Alignment OFF")
             self.ui.apply_alignment_tb_2.setStatusTip("Alignment OFF")
         else:
+            self._set_alignment_icons(None)
             self.ui.apply_alignment_tb.setStyleSheet(
                 StyleManager.set_tool_button_color(bg_color="QColor(53, 53, 53)", color="white")
             )
