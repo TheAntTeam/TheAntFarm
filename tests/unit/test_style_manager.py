@@ -256,3 +256,55 @@ class TestAlignmentToggleIcons:
         align_tab.update_ui_alignment_applied(True, 4)
 
         align_tab.ui.apply_alignment_tb.setIcon.assert_not_called()
+
+
+class TestIconManagerFallbacks:
+    def test_icon_is_drawn_in_the_colour(self, resources):
+        from style_manager import IconManager
+
+        icon = IconManager().make_icon(icon_path("home"), RED)
+
+        assert icon_colors(icon) == {RED.name()}
+
+    def test_svg_without_a_size_is_rendered_at_the_render_size(self, qapp, tmp_path):
+        from style_manager import IconManager
+
+        svg = tmp_path / "no-size.svg"
+        svg.write_text('<svg xmlns="http://www.w3.org/2000/svg"/>', encoding="utf-8")
+
+        pixmap = IconManager().make_pixmap(str(svg), RED)
+
+        assert (pixmap.width(), pixmap.height()) == (IconManager.RENDER_SIZE, IconManager.RENDER_SIZE)
+
+
+class TestPauseResumeIconOnHold:
+    """The pause/resume button shows resume during a hold and pause otherwise, changing only on a transition."""
+
+    @staticmethod
+    def _tab(holding):
+        from ui_manager.ui_control_tab import UiControlTab
+
+        tab = UiControlTab.__new__(UiControlTab)
+        tab.ui = Mock()
+        tab.style_manager = Mock()
+        tab.holding_status = holding
+        return tab
+
+    def test_entering_a_hold_shows_the_resume_icon_once(self):
+        tab = self._tab(holding=False)
+
+        tab.update_status_buttons("Hold:0")
+        tab.update_status_buttons("Hold:1")
+
+        tab.style_manager.set_themed_icon.assert_called_once_with(tab.ui.pause_resume_tb, "play-and-pause-button")
+        assert tab.holding_status
+
+    def test_leaving_a_hold_shows_the_pause_icon_again(self):
+        tab = self._tab(holding=True)
+
+        tab.update_status_buttons("Run")
+
+        tab.style_manager.set_themed_icon.assert_called_once_with(
+            tab.ui.pause_resume_tb, "pause-multimedia-big-gross-symbol-lines"
+        )
+        assert not tab.holding_status

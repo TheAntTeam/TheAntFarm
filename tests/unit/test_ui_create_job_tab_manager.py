@@ -61,3 +61,35 @@ class TestVisualizeActiveLayer:
         ui.lay_names = ("TOP", "BOTTOM", "PROFILE", "DRILL")
         ui.visualize_active_layer()
         mock_vis_layer.set_layer_visible.assert_called()
+
+
+class TestAddNewPath:
+    """Toolpaths are drawn in the foreground colour of the theme; only the selected layer's path stays visible."""
+
+    @staticmethod
+    def _tab(selected_name):
+        from TheAntFarm.ui_manager.ui_create_job_tab_manager import UiCreateJobLayerTab
+
+        tab = UiCreateJobLayerTab.__new__(UiCreateJobLayerTab)
+        tab.vis_layer = MagicMock()
+        tab.ui = MagicMock()
+        tab.lay_tags = ("top", "bottom")
+        tab.lay_names = ("TOP", "BOTTOM")
+        tab.ui.layer_choice_cb.currentText.return_value = selected_name
+        return tab
+
+    def test_path_is_drawn_in_the_foreground_colour(self):
+        tab = self._tab("TOP")
+
+        tab.add_new_path("top", ["path"])
+
+        tab.vis_layer.remove_path.assert_called_once_with("top")
+        tab.vis_layer.add_path.assert_called_once_with("top", ["path"], color=tab.vis_layer.FOREGROUND)
+        tab.vis_layer.set_path_visible.assert_not_called()
+
+    def test_path_of_another_layer_is_hidden(self):
+        tab = self._tab("BOTTOM")
+
+        tab.add_new_path("top", ["path"])
+
+        tab.vis_layer.set_path_visible.assert_called_once_with("top", False)
