@@ -40,6 +40,8 @@ jobs:
           libegl1 \
           libgl1-mesa-dri \
           libglu1-mesa \
+          libpulse0 \
+          libpulse-mainloop-glib0 \
           libxcb-icccm4 \
           libxcb-image0 \
           libxcb-keysyms1 \
