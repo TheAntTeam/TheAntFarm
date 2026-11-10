@@ -124,6 +124,8 @@ class TestCreateLine:
         layer.paths = {}
         layer.line_colors = {}
         layer.dark_background = True
+        layer.meshes = {}
+        layer.mesh_colors = {}
         return layer
 
     @staticmethod

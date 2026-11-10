@@ -215,6 +215,8 @@ class VisualLayer:
         self.paths_geom: OrderedDict[str, List[Any]] = OrderedDict({})
         # Colours of every line as requested, FOREGROUND included, by id of the line
         self.line_colors: Dict[int, List[Any]] = {}
+        # Colour of every layer as requested: one colour, or a (dark theme, light theme) pair
+        self.mesh_colors: Dict[str, Any] = {}
         self.dark_background: bool = True
 
         # Spatial Index for fast selection
@@ -429,6 +431,7 @@ class VisualLayer:
             to_remove.parent = None
             del self.meshes[tag]
             del self.meshes_geom[tag]
+            self.mesh_colors.pop(tag, None)
             self._rebuild_index()
 
     def remove_path(self, tag: str) -> None:
@@ -466,7 +469,8 @@ class VisualLayer:
             ldata[0] += tri_off
             ldata[1] += pts[:]
 
-        self.create_mesh(tag, ldata, color, order, auto_range=auto_range)
+        self.mesh_colors[tag] = color
+        self.create_mesh(tag, ldata, self._resolve_layer_color(color), order, auto_range=auto_range)
         self.meshes_geom[tag] = geom_list
         self._rebuild_index()
 
@@ -616,8 +620,15 @@ class VisualLayer:
         foreground = self.FOREGROUND_COLORS[self.dark_background]
         return [foreground if color == self.FOREGROUND else color for color in colors]
 
+    def _resolve_layer_color(self, color: Any) -> Any:
+        """The colour of a layer for the current background: a (dark, light) pair gives one of the two."""
+        if isinstance(color, tuple):
+            return color[0] if self.dark_background else color[1]
+        return color
+
     def set_dark_background(self, dark: bool) -> None:
-        """Set the background of the canvas for the theme and redraw the FOREGROUND lines in its colour."""
+        """Set the background of the canvas for the theme, and redraw in its colours the FOREGROUND lines and
+        the layers that have a colour per theme."""
         self.dark_background = dark
         self.canvas.set_canvas_bgcolor(hex_color=self.BACKGROUND_COLORS[dark])
         live_colors = {}
@@ -630,6 +641,14 @@ class VisualLayer:
                 if self.FOREGROUND in colors:
                     line.set_data(color=self._resolve_colors(colors))
         self.line_colors = live_colors
+        for tag, mesh in self.meshes.items():
+            color = self.mesh_colors.get(tag)
+            if isinstance(color, tuple):
+                mesh_data = mesh.mesh_data
+                mesh_data.set_face_colors(
+                    np.asarray([Color(self._resolve_layer_color(color)).rgba] * mesh_data.n_faces)
+                )
+                mesh.mesh_data_changed()
 
     def create_mesh(
         self, tag: str, ldata: List[Any], color: Optional[Any] = None, order: int = 0, auto_range: bool = True

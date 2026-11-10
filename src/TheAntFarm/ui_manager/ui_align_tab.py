@@ -37,8 +37,6 @@ class UiAlignTab(QObject):
         self.style_manager = style_manager
         self._set_alignment_icons(None)
 
-        self.layer_colors = self.app_settings.layer_color
-
         align_extensions = "Excellon (*.xln *.XLN *.drl *.DRL)"
 
         align_points_tw_horizontal_headers = self.ui.align_points_tw.horizontalHeader()
@@ -274,7 +272,9 @@ class UiAlignTab(QObject):
         if loaded_layer is None or layer_path == "":
             self.ui.status_bar.showMessage("WARNING: user tried to load an empty layer.", 3000)
         else:
-            self.vis_align_layer.add_layer(layer_tag, loaded_layer[0], self.layer_colors[layer_tag], holes)
+            self.vis_align_layer.add_layer(
+                layer_tag, loaded_layer[0], self.app_settings.layer_colors_of(layer_tag), holes
+            )
 
     @Slot(list)
     def flip_align_layer(self, flip_info):

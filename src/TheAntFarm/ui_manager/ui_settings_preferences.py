@@ -2,7 +2,7 @@ import logging
 from collections import OrderedDict as Od
 
 from PySide6.QtCore import QObject, Signal, Slot
-from PySide6.QtGui import QPalette
+from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QColorDialog
 from shape_core import MACROS
 
@@ -16,6 +16,9 @@ class UiSettingsPreferencesTab(QObject):
     load_gcoder_cfg_s = Signal()
     save_all_settings_s = Signal()
     grbl_simulator_settings_changed_s = Signal(bool, float)
+
+    LAYER_TAGS = ("top", "bottom", "profile", "drill", "nc_top", "nc_bottom")
+    LAYER_COLORS_TITLE = "LAYER COLORS ({} THEME)"
 
     def __init__(self, ui, control_worker, settings):
         """
@@ -42,6 +45,7 @@ class UiSettingsPreferencesTab(QObject):
         self.get_tool_probe_flag = False
         self.get_tool_camera_offset_flag = False
         self.settings_dirty = False
+        self.dark_theme = True
 
         self.reset_tool_probe_initial_enables()
 
@@ -120,22 +124,24 @@ class UiSettingsPreferencesTab(QObject):
 
     def reset_application_settings(self):
         """Resets ui elements values according to application settings."""
-        self.ui.top_layer_color_la.setStyleSheet("background-color: {}".format(self.app_settings.layer_color["top"]))
-        self.ui.bottom_layer_color_la.setStyleSheet(
-            "background-color: {}".format(self.app_settings.layer_color["bottom"])
-        )
-        self.ui.profile_layer_color_la.setStyleSheet(
-            "background-color: {}".format(self.app_settings.layer_color["profile"])
-        )
-        self.ui.drill_layer_color_la.setStyleSheet(
-            "background-color: {}".format(self.app_settings.layer_color["drill"])
-        )
-        self.ui.nc_top_layer_color_la.setStyleSheet(
-            "background-color: {}".format(self.app_settings.layer_color["nc_top"])
-        )
-        self.ui.nc_bottom_layer_color_la.setStyleSheet(
-            "background-color: {}".format(self.app_settings.layer_color["nc_bottom"])
-        )
+        # Colours being edited, per theme (True: dark), until they are saved
+        self.pending_layer_colors = {
+            True: dict(self.app_settings.layer_color),
+            False: dict(self.app_settings.layer_color_light),
+        }
+        self._show_layer_colors()
+
+    def _show_layer_colors(self) -> None:
+        """Show the colours of the current theme in the swatches, and the theme in the section title."""
+        colors = self.pending_layer_colors[self.dark_theme]
+        for tag in self.LAYER_TAGS:
+            getattr(self.ui, f"{tag}_layer_color_la").setStyleSheet(f"background-color: {colors[tag]}")
+        self.ui.layer_colors_section_la.setText(self.LAYER_COLORS_TITLE.format("DARK" if self.dark_theme else "LIGHT"))
+
+    def set_dark_theme(self, dark: bool) -> None:
+        """Show and edit the layer colours of the dark theme, or of the light one."""
+        self.dark_theme = dark
+        self._show_layer_colors()
 
     def reset_serial_error_thresholds(self):
         """Reset serial error threshold UI elements according to application settings."""
@@ -379,13 +385,8 @@ class UiSettingsPreferencesTab(QObject):
         self.machine_settings.tool_camera_offset_x = self.ui.x_tool_camera_offset_dsb.value()
         self.machine_settings.tool_camera_offset_y = self.ui.y_tool_camera_offset_dsb.value()
 
-        self.app_settings.layer_color["top"] = self.ui.top_layer_color_la.palette().window().color().name()
-        self.app_settings.layer_color["bottom"] = self.ui.bottom_layer_color_la.palette().window().color().name()
-        self.app_settings.layer_color["profile"] = self.ui.profile_layer_color_la.palette().window().color().name()
-        self.app_settings.layer_color["drill"] = self.ui.drill_layer_color_la.palette().window().color().name()
-        self.app_settings.layer_color["nc_top"] = self.ui.nc_top_layer_color_la.palette().window().color().name()
-        self.app_settings.layer_color["nc_bottom"] = self.ui.nc_bottom_layer_color_la.palette().window().color().name()
-        self.app_settings.layer_color["nc_bottom"] = self.ui.nc_bottom_layer_color_la.palette().window().color().name()
+        self.app_settings.layer_color.update(self.pending_layer_colors[True])
+        self.app_settings.layer_color_light.update(self.pending_layer_colors[False])
 
         # Save serial error thresholds to app settings
         self.app_settings.serial_error_warning_threshold = self.ui.serial_error_warning_threshold_sb.value()
@@ -438,27 +439,15 @@ class UiSettingsPreferencesTab(QObject):
             Name of the layer for which the new color is chosen.
 
         """
-        current_label = None
-        if layer == "top":
-            current_label = self.ui.top_layer_color_la
-        elif layer == "bottom":
-            current_label = self.ui.bottom_layer_color_la
-        elif layer == "profile":
-            current_label = self.ui.profile_layer_color_la
-        elif layer == "drill":
-            current_label = self.ui.drill_layer_color_la
-        elif layer == "nc_top":
-            current_label = self.ui.nc_top_layer_color_la
-        elif layer == "nc_bottom":
-            current_label = self.ui.nc_bottom_layer_color_la
-        if current_label:
-            current_color = current_label.palette().color(QPalette.Window)
-            logger.debug(current_color)
-            color = QColorDialog.getColor(initial=current_color)
-            if color.isValid():
-                logger.debug("color " + str(color.name()))
-                current_label.setStyleSheet("background-color: {}".format(color.name()))
-                self.set_focus_lost()
+        if layer not in self.LAYER_TAGS:
+            return
+        colors = self.pending_layer_colors[self.dark_theme]
+        color = QColorDialog.getColor(initial=QColor(colors[layer]))
+        if color.isValid():
+            logger.debug("color " + str(color.name()))
+            colors[layer] = color.name()
+            getattr(self.ui, f"{layer}_layer_color_la").setStyleSheet(f"background-color: {color.name()}")
+            self.set_focus_lost()
 
     def set_serial_error_thresholds(self, warning_threshold, critical_threshold):
         # Ensure both thresholds are at least 0
