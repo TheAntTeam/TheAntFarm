@@ -161,6 +161,32 @@ class TestLayerMeshColors:
         assert "top" not in layer.mesh_colors
 
 
+class TestPointerColors:
+    """The tool position is drawn in a colour readable on the canvas of each theme, and follows the theme."""
+
+    @pytest.mark.parametrize("dark", [True, False])
+    def test_the_pointer_is_readable_on_its_canvas(self, dark):
+        color = QColor(VisualLayer.POINTER_COLOR[0 if dark else 1]).name()
+
+        assert contrast(color, VisualLayer.BACKGROUND_COLORS[dark]) >= 3
+
+    def test_a_line_with_a_pair_gets_the_colour_of_the_background(self):
+        layer = TestLayerMeshColors._layer(dark=False)
+
+        assert layer._resolve_colors([("#ff0000", "#0000ff"), "red", layer.FOREGROUND]) == ["#0000ff", "red", "black"]
+
+    def test_switching_theme_recolours_a_line_with_a_pair(self):
+        layer = TestLayerMeshColors._layer()
+        paired, single = MagicMock(), MagicMock()
+        layer.paths = {"pointer": [paired], "other": [single]}
+        layer.line_colors = {id(paired): [("#ff0000", "#0000ff")] * 3, id(single): ["red"] * 3}
+
+        layer.set_dark_background(False)
+
+        paired.set_data.assert_called_once_with(color=["#0000ff"] * 3)
+        single.set_data.assert_not_called()
+
+
 class TestTabsDrawLayersWithBothColours:
     """The View and Align tabs give the canvas the (dark, light) colours of the loaded layer."""
 

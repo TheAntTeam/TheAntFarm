@@ -186,7 +186,8 @@ class VisualLayer:
 
     # Pointer settings
     POINTER_RADIUS = 0.5
-    POINTER_COLOR = "yellow"
+    # The tool position, in the dark and in the light theme
+    POINTER_COLOR = ("yellow", "#0057D9")
     POINTER_SEGMENTS = 20
 
     # Lines drawn in FOREGROUND take the colour of the theme and change with it
@@ -616,9 +617,10 @@ class VisualLayer:
         self.canvas.freeze()
 
     def _resolve_colors(self, colors: List[Any]) -> List[Any]:
-        """Replace FOREGROUND with the foreground colour of the current background."""
+        """Replace FOREGROUND with the foreground colour of the current background, and a (dark, light) pair with
+        the colour of the current background."""
         foreground = self.FOREGROUND_COLORS[self.dark_background]
-        return [foreground if color == self.FOREGROUND else color for color in colors]
+        return [foreground if color == self.FOREGROUND else self._resolve_layer_color(color) for color in colors]
 
     def _resolve_layer_color(self, color: Any) -> Any:
         """The colour of a layer for the current background: a (dark, light) pair gives one of the two."""
@@ -628,7 +630,7 @@ class VisualLayer:
 
     def set_dark_background(self, dark: bool) -> None:
         """Set the background of the canvas for the theme, and redraw in its colours the FOREGROUND lines and
-        the layers that have a colour per theme."""
+        the lines and layers that have a colour per theme."""
         self.dark_background = dark
         self.canvas.set_canvas_bgcolor(hex_color=self.BACKGROUND_COLORS[dark])
         live_colors = {}
@@ -638,7 +640,7 @@ class VisualLayer:
                 if colors is None:
                     continue
                 live_colors[id(line)] = colors
-                if self.FOREGROUND in colors:
+                if any(color == self.FOREGROUND or isinstance(color, tuple) for color in colors):
                     line.set_data(color=self._resolve_colors(colors))
         self.line_colors = live_colors
         for tag, mesh in self.meshes.items():
