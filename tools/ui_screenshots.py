@@ -18,6 +18,18 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP_DIR = os.path.join(REPO, "src", "TheAntFarm")
 SAMPLE_GERBER = os.path.join(REPO, "tests", "test_data", "gerbers", "metric_trace.gbr")
 SAMPLE_DRILL = os.path.join(REPO, "tests", "test_data", "gerbers", "simple_drill.drl")
+# A board outline in millimetres around the samples (the inch samples are not converted to millimetres)
+SAMPLE_PROFILE_GERBER = """%FSLAX46Y46*%
+%MOMM*%
+%ADD10C,0.100*%
+D10*
+X-1000000Y-1000000D02*
+X4500000Y-1000000D01*
+X4500000Y3000000D01*
+X-1000000Y3000000D01*
+X-1000000Y-1000000D01*
+M02*
+"""
 STATUSES = ["Not Connected", "Idle", "Run", "Hold:0", "Jog", "Alarm", "Door:0", "Check", "Home", "Sleep"]
 ALIGNMENT_STATES = [("not_ready", False, 1), ("ready", False, 4), ("applied", True, 4)]
 
@@ -81,6 +93,9 @@ def main() -> int:
     # The application keeps its settings next to its data: use a scratch copy, not the source tree.
     local_path = tempfile.mkdtemp(prefix="the_ant_farm_")
     shutil.copytree(os.path.join(APP_DIR, "macros"), os.path.join(local_path, "macros"))
+    sample_profile = os.path.join(local_path, "profile.gbr")
+    with open(sample_profile, "w", encoding="utf-8") as profile_file:
+        profile_file.write(SAMPLE_PROFILE_GERBER)
     os.chdir(APP_DIR)
 
     import the_ant_farm
@@ -98,8 +113,9 @@ def main() -> int:
 
     ui = window.ui
     manager = window.ui_manager
-    manager.ui_load_layer_m.load_layer_s.emit("top", SAMPLE_GERBER)
-    ready = wait_for(lambda: "top" in manager.vis_layer.meshes, 30, "Gerber layer")
+    for tag, path in (("top", SAMPLE_GERBER), ("profile", sample_profile), ("drill", SAMPLE_DRILL)):
+        manager.ui_load_layer_m.load_layer_s.emit(tag, path)
+    ready = wait_for(lambda: {"top", "profile", "drill"} <= set(manager.vis_layer.meshes), 30, "layers")
     ui.prepare_widget.setCurrentWidget(ui.create_job_tab)
     QTest.qWait(200)
     manager.ui_create_job_m.generate_top_path()
