@@ -4,9 +4,12 @@ from typing import Dict, Optional, Tuple
 from PySide6.QtCore import QByteArray, QFile, QIODevice, QObject, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QIcon, QPainter, QPalette, QPixmap
 from PySide6.QtSvg import QSvgRenderer
-from PySide6.QtWidgets import QAbstractButton, QStyleFactory, QWidgetAction
+from PySide6.QtWidgets import QAbstractButton, QStyleFactory, QWidget, QWidgetAction
 
 logger = logging.getLogger(__name__)
+
+# QFont::SizeResolved: the font size was set on the widget itself, not inherited (PySide6 does not name it)
+FONT_SIZE_RESOLVED = 0x0002
 
 ICON_RESOURCE_PATH = ":/resources/resources/icons/{}.svg"
 
@@ -65,6 +68,21 @@ class StyleManager(QObject):
     DARK_DISABLED_ICON_COLOR = QColor(128, 128, 128)
     LIGHT_ICON_COLOR = QColor(50, 50, 50)
     LIGHT_DISABLED_ICON_COLOR = QColor(180, 180, 180)
+
+    # The fixed font sizes of the .ui are chosen on Windows (96 dpi); macOS draws a point as one pixel (72 dpi)
+    MACOS_FONT_SCALE = 96 / 72
+
+    @staticmethod
+    def scale_fixed_font_sizes(root: QWidget, factor: float) -> None:
+        """Multiply by ``factor`` the font sizes set on ``root`` and its children; inherited sizes follow them."""
+        for widget in [root] + root.findChildren(QWidget):
+            if not widget.testAttribute(Qt.WA_SetFont):
+                continue
+            font = widget.font()
+            if not font.resolveMask() & FONT_SIZE_RESOLVED or font.pointSizeF() <= 0:
+                continue
+            font.setPointSizeF(font.pointSizeF() * factor)
+            widget.setFont(font)
 
     def __init__(self, app_ptr):
         super().__init__()

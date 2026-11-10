@@ -2354,7 +2354,6 @@ class Ui_MainWindow(object):
         self.status_l.setMinimumSize(QSize(120, 50))
         self.status_l.setMaximumSize(QSize(120, 16777215))
         font2 = QFont()
-        font2.setFamilies([u"MS Shell Dlg 2"])
         font2.setPointSize(10)
         font2.setBold(True)
         self.status_l.setFont(font2)
