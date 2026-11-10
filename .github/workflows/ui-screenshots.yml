@@ -1,0 +1,78 @@
+# Start the application on Linux, Windows and macOS and save screenshots of every tab in the dark and light themes.
+# Run it from the Actions page ("Run workflow", once this file is on the default branch), or on a pull request by
+# adding the "screenshots" label: it then runs again at every push while the label is there.
+# The screenshots are uploaded as one artifact per operating system.
+
+name: UI screenshots
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ main, dev ]
+    types: [ labeled, synchronize ]
+
+jobs:
+  screenshots:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'screenshots')
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+        cache: pip
+        cache-dependency-path: requirements.txt
+
+    - name: Install Linux system dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          xvfb \
+          libegl1 \
+          libgl1-mesa-dri \
+          libglu1-mesa \
+          libxcb-icccm4 \
+          libxcb-image0 \
+          libxcb-keysyms1 \
+          libxcb-randr0 \
+          libxcb-render-util0 \
+          libxcb-shape0 \
+          libxcb-xinerama0 \
+          libxcb-xfixes0 \
+          libxcb-cursor0 \
+          libxkbcommon-x11-0
+
+    # The Windows machines have no GPU: Mesa provides an OpenGL that draws in software for the canvases.
+    - name: Install Mesa (software OpenGL)
+      if: runner.os == 'Windows'
+      uses: ssciwr/setup-mesa-dist-win@v2
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Take the screenshots (Linux)
+      if: runner.os == 'Linux'
+      run: xvfb-run -a -s "-screen 0 1920x1080x24" python tools/ui_screenshots.py --out ui_screenshots
+
+    - name: Take the screenshots
+      if: runner.os != 'Linux'
+      run: python tools/ui_screenshots.py --out ui_screenshots
+
+    - name: Upload the screenshots
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ui-screenshots-${{ runner.os }}-${{ github.event.pull_request.head.sha || github.sha }}
+        path: ui_screenshots
+        if-no-files-found: warn
