@@ -46,7 +46,9 @@ def config_os():
     else:
         print("Linux Env")
         os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
-        os.environ["QT_QPA_PLATFORM"] = "wayland;xcb"
+        os.environ.setdefault("QT_QPA_PLATFORM", "wayland;xcb")
+        # GTK3 (Qt's GNOME theme) aborts on Wayland with gnome-settings-daemon 50: let it use XWayland
+        os.environ.setdefault("GDK_BACKEND", "x11")
 
 
 logger = logging.getLogger(__name__)
