@@ -21,6 +21,7 @@ class TestSettingsHandler:
         mock_ui.actionHide_Show_Align_Tab.isChecked.return_value = False
         mock_ui.actionSettings_Preferences.isChecked.return_value = False
         mock_ui.actionHide_Show_Console.isChecked.return_value = False
+        mock_ui.actionDark.isChecked.return_value = True
         mock_ui.serial_ports_cb.currentText.return_value = ""
         mock_ui.serial_baud_cb.currentText.return_value = "115200"
         mock_main_win.ui = mock_ui

@@ -159,9 +159,6 @@ def main(local_path=""):
     root.addHandler(fh)
     root.setLevel(logging.DEBUG)  # Set root log level to the lowest between the log lever of the handlers.
 
-    style_man.change_style("Fusion")
-    style_man.set_dark_palette()
-
     window.show()
     sys.exit(app.exec())
 
