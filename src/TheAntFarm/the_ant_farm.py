@@ -72,6 +72,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        if platform.system() == "Darwin":
+            StyleManager.scale_fixed_font_sizes(self, StyleManager.MACOS_FONT_SCALE)
 
         # After the UI is set up, register the resources root path relatively to this file path.
         resources_rel_path = os.path.normpath(os.path.join(os.path.dirname(__file__)))
