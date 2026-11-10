@@ -115,23 +115,6 @@ class DoubleSideManager:
         frame_out = frame
 
         if True:
-            black_holes = cv2.HoughCircles(
-                image,
-                cv2.HOUGH_GRADIENT,
-                1,
-                20,
-                param1=50,
-                param2=30,
-                minRadius=0,
-                maxRadius=0,
-            )
-
-            black_holes = None
-            if black_holes is not None:
-                black_circles = np.round(black_holes[0, :]).astype("int")
-                for x, y, r in black_circles:
-                    cv2.circle(frame_out, (x, y), r, (255, 0, 255), 2)
-
             cnts, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             # loop over the contours
             for c in cnts:
