@@ -227,3 +227,21 @@ class TestThemeColours:
         layer.set_dark_background(False)
 
         assert layer.line_colors == {}
+
+
+class TestThemeColoursOfANewLayer:
+    def test_a_new_layer_starts_on_the_dark_background_with_no_lines(self):
+        layer = VisualLayer(MagicMock())
+
+        assert layer.dark_background
+        assert layer.line_colors == {}
+
+    def test_lines_without_recorded_colours_are_left_alone(self):
+        layer = TestCreateLine._layer()
+        line = MagicMock()
+        layer.paths = {"other": [line]}
+
+        layer.set_dark_background(False)
+
+        line.set_data.assert_not_called()
+        assert layer.line_colors == {}

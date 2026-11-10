@@ -250,3 +250,36 @@ class TestStyleActions:
 
         ui_manager.ui.actionDark.triggered.connect.assert_not_called()
         ui_manager.ui.actionLight.triggered.connect.assert_not_called()
+
+
+class TestSetupThemedIcons:
+    """Every button of THEMED_ICONS is given to the style manager with its icon; a missing button is reported."""
+
+    @staticmethod
+    def _ui_manager(ui):
+        from TheAntFarm.ui_manager.ui_manager import UiManager
+
+        ui_manager = UiManager.__new__(UiManager)
+        ui_manager.ui = ui
+        ui_manager.style_manager = MagicMock()
+        return ui_manager
+
+    def test_every_themed_button_gets_its_icon(self):
+        from TheAntFarm.ui_manager.ui_manager import UiManager
+
+        ui_manager = self._ui_manager(MagicMock())
+
+        ui_manager._setup_themed_icons()
+
+        calls = ui_manager.style_manager.set_themed_icon.call_args_list
+        assert [call.args for call in calls] == [
+            (getattr(ui_manager.ui, attr), name) for attr, name in UiManager.THEMED_ICONS.items()
+        ]
+
+    def test_a_missing_button_is_reported_and_skipped(self, caplog):
+        ui_manager = self._ui_manager(object())
+
+        ui_manager._setup_themed_icons()
+
+        ui_manager.style_manager.set_themed_icon.assert_not_called()
+        assert "No widget" in caplog.text
