@@ -395,7 +395,7 @@ class UiControlTab(QObject):
             txt_c = "white"
         elif "run" in sta:
             bkg_c = "green"
-            txt_c = "black"
+            txt_c = "white"
         elif "jog" in sta:
             bkg_c = "blue"
             txt_c = "white"
@@ -403,8 +403,8 @@ class UiControlTab(QObject):
             bkg_c = "yellow"
             txt_c = "black"
         elif "not connected" in sta:
-            bkg_c = "dark gray"
-            txt_c = "black"
+            self.ui.status_l.setStyleSheet("")  # the colours of the theme
+            return
 
         self.ui.status_l.setStyleSheet("QLabel { background-color : " + bkg_c + "; color : " + txt_c + "; }")
 

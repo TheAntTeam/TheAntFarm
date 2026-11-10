@@ -338,3 +338,35 @@ class TestSerialPortSelector:
 
         assert closed == [1]
         ui_tab.act_on_disconnection.assert_called_once()
+
+
+class TestStatusColors:
+    """Each machine state has its colours; Not Connected takes the colours of the theme."""
+
+    @staticmethod
+    def _style_for(status):
+        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
+
+        ui_tab = UiControlTab.__new__(UiControlTab)
+        ui_tab.ui = Mock()
+        ui_tab.update_status_colors(status)
+        return ui_tab.ui.status_l.setStyleSheet.call_args.args[0]
+
+    def test_not_connected_follows_the_theme(self):
+        assert self._style_for("Not Connected") == ""
+
+    @pytest.mark.parametrize(
+        "status, background, text",
+        [
+            ("Idle", "yellow", "black"),
+            ("Run", "green", "white"),
+            ("Jog", "blue", "white"),
+            ("Alarm", "red", "white"),
+            ("Hold:0", "gray", "white"),
+        ],
+    )
+    def test_machine_states_have_readable_colours(self, status, background, text):
+        style = self._style_for(status)
+
+        assert f"background-color : {background};" in style
+        assert f"color : {text};" in style
