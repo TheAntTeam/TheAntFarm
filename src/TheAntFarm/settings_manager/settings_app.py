@@ -26,6 +26,7 @@ class AppSettingsHandler:
     SHOW_ALIGN_TAB_DEFAULT = False
     SHOW_SETTINGS_TAB_DEFAULT = False
     SHOW_CONSOLE_DEFAULT = False
+    DARK_THEME_DEFAULT = True
     LAST_SERIAL_PORT_DEFAULT = ""
     LAST_SERIAL_BAUD_DEFAULT = 115200
     LAYER_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../.."))
@@ -105,6 +106,7 @@ class AppSettingsHandler:
         self.align_tab_visibility = self.SHOW_ALIGN_TAB_DEFAULT
         self.settings_tab_visibility = self.SHOW_SETTINGS_TAB_DEFAULT
         self.console_visibility = self.SHOW_CONSOLE_DEFAULT
+        self.dark_theme = self.DARK_THEME_DEFAULT
         self.last_serial_port = self.LAST_SERIAL_PORT_DEFAULT
         self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
         self.layer_last_dir = self.layer_last_dir_default
@@ -210,6 +212,7 @@ class AppSettingsHandler:
                 "settings_tab_visibility", self.SHOW_SETTINGS_TAB_DEFAULT
             )
             self.console_visibility = app_general.getboolean("console_visibility", self.SHOW_CONSOLE_DEFAULT)
+            self.dark_theme = app_general.getboolean("dark_theme", self.DARK_THEME_DEFAULT)
             self.logs_file = app_general.get("logs_file", self.logs_file_default)
             if not os.path.isdir(os.path.dirname(os.path.abspath(self.logs_file))):
                 self.logs_file = self.logs_file_default  # restore logs file with the default path
@@ -327,6 +330,7 @@ class AppSettingsHandler:
             "align_tab_visibility": self.SHOW_ALIGN_TAB_DEFAULT,
             "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
             "console_visibility": self.console_visibility,
+            "dark_theme": self.DARK_THEME_DEFAULT,
             "layer_last_dir": self.layer_last_dir_default,
             **self._layer_color_defaults(),
             "gcode_last_dir": self.gcode_last_dir_default,
@@ -364,6 +368,7 @@ class AppSettingsHandler:
         app_general["align_tab_visibility"] = str(self.main_win.ui.actionHide_Show_Align_Tab.isChecked())
         app_general["settings_tab_visibility"] = str(self.main_win.ui.actionSettings_Preferences.isChecked())
         app_general["console_visibility"] = str(self.main_win.ui.actionHide_Show_Console.isChecked())
+        app_general["dark_theme"] = str(self.main_win.ui.actionDark.isChecked())
         app_general["logs_file"] = str(self.logs_file_default)
         app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)
@@ -416,6 +421,7 @@ class AppSettingsHandler:
             "align_tab_visibility": self.SHOW_ALIGN_TAB_DEFAULT,
             "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
             "console_visibility": self.console_visibility,
+            "dark_theme": self.DARK_THEME_DEFAULT,
             "layer_last_dir": self.layer_last_dir_default,
             **self._layer_color_defaults(),
             "gcode_last_dir": self.gcode_last_dir_default,
@@ -449,6 +455,7 @@ class AppSettingsHandler:
         app_general["align_tab_visibility"] = str(self.main_win.ui.actionHide_Show_Align_Tab.isChecked())
         app_general["settings_tab_visibility"] = str(self.main_win.ui.actionSettings_Preferences.isChecked())
         app_general["console_visibility"] = str(self.SHOW_CONSOLE_DEFAULT)
+        app_general["dark_theme"] = str(self.DARK_THEME_DEFAULT)
         app_general["logs_file"] = str(self.logs_file_default)
         app_general["logs_max_bytes"] = str(self.LOGS_MAX_BYTES)
         app_general["logs_backup_count"] = str(self.LOGS_BACKUP_COUNT)

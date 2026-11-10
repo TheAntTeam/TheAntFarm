@@ -78,6 +78,7 @@ class UiManager(QObject):
         self.ui.actionSave_Settings.triggered.connect(self.save_all_settings)
         self.make_log_action_mutually_exclusive()
         self.make_style_action_mutually_exclusive()
+        self.apply_theme(app_settings.dark_theme)
         if app_settings.win_maximized:
             self.main_win.showMaximized()
         self.main_win.move(app_settings.pos)  # Restore position
@@ -257,6 +258,16 @@ class UiManager(QObject):
             self.style_manager.connect_palette_actions(self.ui.actionDark, self.ui.actionLight)
             self.ui.actionDark.triggered.connect(lambda: self.set_dark_canvases(True))
             self.ui.actionLight.triggered.connect(lambda: self.set_dark_canvases(False))
+
+    def apply_theme(self, dark: bool) -> None:
+        """Check the menu entry of the theme, and give the application and the canvases its colours."""
+        (self.ui.actionDark if dark else self.ui.actionLight).setChecked(True)
+        if self.style_manager:
+            if dark:
+                self.style_manager.set_dark_palette()
+            else:
+                self.style_manager.set_light_palette()
+        self.set_dark_canvases(dark)
 
     def set_dark_canvases(self, dark: bool) -> None:
         """Give the three canvases the colours of the theme, and show its layer colours in the Settings tab."""
