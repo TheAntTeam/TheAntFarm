@@ -9,7 +9,6 @@ import logging.handlers
 import os
 import platform
 import sys
-import sysconfig
 from queue import Queue
 from typing import Any
 
@@ -38,19 +37,9 @@ def config_os():
     print(sys_name)
     if sys_name == "Windows":
         print("Windows Env")
-        # https://bugreports.qt.io/browse/PYSIDE-2935?attachmentViewMode=list
-        pyside6_dll_lib_path = ""
-        ps6_stdlib_path = os.path.normpath(os.path.join(sysconfig.get_path("stdlib"), "PySide6"))
-        ps6_purelib_path = os.path.normpath(os.path.join(sysconfig.get_path("purelib"), "PySide6"))
-        if os.path.isdir(ps6_stdlib_path):
-            pyside6_dll_lib_path = ps6_stdlib_path
-        elif os.path.isdir(ps6_purelib_path):
-            # Fallback to purelib if standard library path is not found
-            pyside6_dll_lib_path = ps6_purelib_path
-        else:
-            logging.error("PySide6 library path not found.")
-        if not pyside6_dll_lib_path == "":
-            os.add_dll_directory(pyside6_dll_lib_path)
+        # https://bugreports.qt.io/browse/PYSIDE-2935: the PySide6 DLLs are in the folder of its module, also in
+        # the executable built with PyInstaller
+        os.add_dll_directory(os.path.dirname(sys.modules["PySide6"].__file__))
     elif sys_name == "Darwin":
         print("Mac Env")
         os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
