@@ -255,15 +255,10 @@ class UiManager(QObject):
         # Connect palette actions to style manager if style_manager is available
         if self.style_manager:
             self.style_manager.connect_palette_actions(self.ui.actionDark, self.ui.actionLight)
-            self.ui.actionDark.triggered.connect(lambda: self.vis_layer.canvas.set_canvas_bgcolor(hex_color="#444444"))
-            self.ui.actionDark.triggered.connect(lambda: self.ctrl_layer.canvas.set_canvas_bgcolor(hex_color="#444444"))
-            self.ui.actionDark.triggered.connect(
-                lambda: self.vis_align_layer.canvas.set_canvas_bgcolor(hex_color="#444444")
-            )
-            self.ui.actionLight.triggered.connect(lambda: self.vis_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF"))
-            self.ui.actionLight.triggered.connect(
-                lambda: self.ctrl_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF")
-            )
-            self.ui.actionLight.triggered.connect(
-                lambda: self.vis_align_layer.canvas.set_canvas_bgcolor(hex_color="#FFFFFF")
-            )
+            self.ui.actionDark.triggered.connect(lambda: self.set_dark_canvases(True))
+            self.ui.actionLight.triggered.connect(lambda: self.set_dark_canvases(False))
+
+    def set_dark_canvases(self, dark: bool) -> None:
+        """Give the three canvases the background of the theme, and their lines its foreground colour."""
+        for layer in (self.vis_layer, self.ctrl_layer, self.vis_align_layer):
+            layer.set_dark_background(dark)

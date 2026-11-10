@@ -207,8 +207,8 @@ class TestStyleActions:
         for call in action.triggered.connect.call_args_list:
             call.args[0]()
 
-    def _canvases(self, ui_manager):
-        return [layer.canvas for layer in (ui_manager.vis_layer, ui_manager.ctrl_layer, ui_manager.vis_align_layer)]
+    def _layers(self, ui_manager):
+        return [ui_manager.vis_layer, ui_manager.ctrl_layer, ui_manager.vis_align_layer]
 
     @patch("TheAntFarm.ui_manager.ui_manager.QActionGroup")
     def test_dark_sets_the_dark_background_on_every_canvas(self, mock_group):
@@ -217,8 +217,8 @@ class TestStyleActions:
         ui_manager.make_style_action_mutually_exclusive()
         self._trigger(ui_manager.ui.actionDark)
 
-        for canvas in self._canvases(ui_manager):
-            canvas.set_canvas_bgcolor.assert_called_once_with(hex_color="#444444")
+        for layer in self._layers(ui_manager):
+            layer.set_dark_background.assert_called_once_with(True)
 
     @patch("TheAntFarm.ui_manager.ui_manager.QActionGroup")
     def test_light_sets_the_light_background_on_every_canvas(self, mock_group):
@@ -227,8 +227,8 @@ class TestStyleActions:
         ui_manager.make_style_action_mutually_exclusive()
         self._trigger(ui_manager.ui.actionLight)
 
-        for canvas in self._canvases(ui_manager):
-            canvas.set_canvas_bgcolor.assert_called_once_with(hex_color="#FFFFFF")
+        for layer in self._layers(ui_manager):
+            layer.set_dark_background.assert_called_once_with(False)
 
     @patch("TheAntFarm.ui_manager.ui_manager.QActionGroup")
     def test_actions_are_exclusive_and_given_to_the_style_manager(self, mock_group):

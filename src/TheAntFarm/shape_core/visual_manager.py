@@ -189,6 +189,11 @@ class VisualLayer:
     POINTER_COLOR = "yellow"
     POINTER_SEGMENTS = 20
 
+    # Lines drawn in FOREGROUND take the colour of the theme and change with it
+    FOREGROUND = "foreground"
+    BACKGROUND_COLORS = {True: "#444444", False: "#FFFFFF"}
+    FOREGROUND_COLORS = {True: "white", False: "black"}
+
     DELTA = 1
 
     def __init__(self, canvas: Any, selectable: bool = False) -> None:
@@ -208,6 +213,9 @@ class VisualLayer:
         self.paths: OrderedDict[str, List[visuals.Line]] = OrderedDict({})
         self.meshes_geom: OrderedDict[str, List[Any]] = OrderedDict({})
         self.paths_geom: OrderedDict[str, List[Any]] = OrderedDict({})
+        # Colours of every line as requested, FOREGROUND included, by id of the line
+        self.line_colors: Dict[int, List[Any]] = {}
+        self.dark_background: bool = True
 
         # Spatial Index for fast selection
         self.tree: Optional[STRtree] = None
@@ -501,7 +509,7 @@ class VisualLayer:
             logger.warning("Cannot Visualize an Empty Path")
         self.update_order()
 
-    def add_gcode(self, tag: str, gcode_list: List[Any], color: Tuple[str, str] = ("white", "orange")) -> None:
+    def add_gcode(self, tag: str, gcode_list: List[Any], color: Tuple[str, str] = (FOREGROUND, "orange")) -> None:
         """Adds a GCode path visualization, distinguishing between travel and cut moves."""
         if not gcode_list:
             logger.warning("Cannot Visualize an Empty GCode")
@@ -586,9 +594,15 @@ class VisualLayer:
         connect_arr = np.array(connect)
 
         line = visuals.Line(
-            pos=coords_arr, connect=connect_arr, width=width, color=all_colors, parent=self.canvas.view, antialias=True
+            pos=coords_arr,
+            connect=connect_arr,
+            width=width,
+            color=self._resolve_colors(all_colors),
+            parent=self.canvas.view,
+            antialias=True,
         )
         line.order = order
+        self.line_colors[id(line)] = all_colors
         if tag in list(self.paths.keys()):
             self.paths[tag] += [line]
         else:
@@ -596,6 +610,26 @@ class VisualLayer:
         self.canvas.view.add(line)
         self.canvas.view.camera.set_range()
         self.canvas.freeze()
+
+    def _resolve_colors(self, colors: List[Any]) -> List[Any]:
+        """Replace FOREGROUND with the foreground colour of the current background."""
+        foreground = self.FOREGROUND_COLORS[self.dark_background]
+        return [foreground if color == self.FOREGROUND else color for color in colors]
+
+    def set_dark_background(self, dark: bool) -> None:
+        """Set the background of the canvas for the theme and redraw the FOREGROUND lines in its colour."""
+        self.dark_background = dark
+        self.canvas.set_canvas_bgcolor(hex_color=self.BACKGROUND_COLORS[dark])
+        live_colors = {}
+        for lines in self.paths.values():
+            for line in lines:
+                colors = self.line_colors.get(id(line))
+                if colors is None:
+                    continue
+                live_colors[id(line)] = colors
+                if self.FOREGROUND in colors:
+                    line.set_data(color=self._resolve_colors(colors))
+        self.line_colors = live_colors
 
     def create_mesh(
         self, tag: str, ldata: List[Any], color: Optional[Any] = None, order: int = 0, auto_range: bool = True
