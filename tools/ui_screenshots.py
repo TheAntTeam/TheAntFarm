@@ -30,6 +30,16 @@ X-1000000Y3000000D01*
 X-1000000Y-1000000D01*
 M02*
 """
+# A bottom trace in millimetres, beside the top one
+SAMPLE_BOTTOM_GERBER = """%FSLAX46Y46*%
+%MOMM*%
+%ADD10C,0.300*%
+D10*
+X1500000Y-500000D02*
+X3800000Y-500000D01*
+X3800000Y300000D01*
+M02*
+"""
 STATUSES = ["Not Connected", "Idle", "Run", "Hold:0", "Jog", "Alarm", "Door:0", "Check", "Home", "Sleep"]
 ALIGNMENT_STATES = [("not_ready", False, 1), ("ready", False, 4), ("applied", True, 4)]
 
@@ -83,6 +93,16 @@ def gcode_sample() -> list:
     return moves
 
 
+def write_samples(folder: str) -> dict:
+    """Write the millimetre profile and bottom samples in ``folder``; return their paths by layer."""
+    samples = {}
+    for tag, content in (("profile", SAMPLE_PROFILE_GERBER), ("bottom", SAMPLE_BOTTOM_GERBER)):
+        samples[tag] = os.path.join(folder, f"{tag}.gbr")
+        with open(samples[tag], "w", encoding="utf-8") as sample_file:
+            sample_file.write(content)
+    return samples
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--out", default="ui_screenshots", help="folder for the PNG files")
@@ -93,9 +113,7 @@ def main() -> int:
     # The application keeps its settings next to its data: use a scratch copy, not the source tree.
     local_path = tempfile.mkdtemp(prefix="the_ant_farm_")
     shutil.copytree(os.path.join(APP_DIR, "macros"), os.path.join(local_path, "macros"))
-    sample_profile = os.path.join(local_path, "profile.gbr")
-    with open(sample_profile, "w", encoding="utf-8") as profile_file:
-        profile_file.write(SAMPLE_PROFILE_GERBER)
+    samples = write_samples(local_path)
     os.chdir(APP_DIR)
 
     import the_ant_farm
@@ -113,9 +131,10 @@ def main() -> int:
 
     ui = window.ui
     manager = window.ui_manager
-    for tag, path in (("top", SAMPLE_GERBER), ("profile", sample_profile), ("drill", SAMPLE_DRILL)):
+    layers = {"top": SAMPLE_GERBER, "bottom": samples["bottom"], "profile": samples["profile"], "drill": SAMPLE_DRILL}
+    for tag, path in layers.items():
         manager.ui_load_layer_m.load_layer_s.emit(tag, path)
-    ready = wait_for(lambda: {"top", "profile", "drill"} <= set(manager.vis_layer.meshes), 30, "layers")
+    ready = wait_for(lambda: set(layers) <= set(manager.vis_layer.meshes), 30, "layers")
     ui.prepare_widget.setCurrentWidget(ui.create_job_tab)
     QTest.qWait(200)
     manager.ui_create_job_m.generate_top_path()
