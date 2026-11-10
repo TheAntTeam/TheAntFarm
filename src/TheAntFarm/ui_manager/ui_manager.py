@@ -259,6 +259,7 @@ class UiManager(QObject):
             self.ui.actionLight.triggered.connect(lambda: self.set_dark_canvases(False))
 
     def set_dark_canvases(self, dark: bool) -> None:
-        """Give the three canvases the background of the theme, and their lines its foreground colour."""
+        """Give the three canvases the colours of the theme, and show its layer colours in the Settings tab."""
         for layer in (self.vis_layer, self.ctrl_layer, self.vis_align_layer):
             layer.set_dark_background(dark)
+        self.ui_settings_tab_m.set_dark_theme(dark)

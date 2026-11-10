@@ -23,7 +23,6 @@ class UiViewLoadLayerTab(QObject):
         self.lay_names = lay_names
         self.app_settings = app_settings
 
-        self.layer_colors = self.app_settings.layer_color
         self.L_TEXT = [
             self.ui.top_file_le,
             self.ui.bottom_file_le,
@@ -121,7 +120,7 @@ class UiViewLoadLayerTab(QObject):
             self.layers_te[layer_tag].clear()
             self.ui.status_bar.showMessage("WARNING: user tried to load an empty layer.", 3000)
         else:
-            self.vis_layer.add_layer(layer_tag, loaded_layer[0], self.layer_colors[layer_tag], holes)
+            self.vis_layer.add_layer(layer_tag, loaded_layer[0], self.app_settings.layer_colors_of(layer_tag), holes)
             self.layers_te[layer_tag].setText(layer_path)
 
     def visualize_all_active_layers(self):

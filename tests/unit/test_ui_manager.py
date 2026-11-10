@@ -200,6 +200,7 @@ class TestStyleActions:
         ui_manager.vis_layer = MagicMock()
         ui_manager.ctrl_layer = MagicMock()
         ui_manager.vis_align_layer = MagicMock()
+        ui_manager.ui_settings_tab_m = MagicMock()
         return ui_manager
 
     @staticmethod
@@ -219,6 +220,7 @@ class TestStyleActions:
 
         for layer in self._layers(ui_manager):
             layer.set_dark_background.assert_called_once_with(True)
+        ui_manager.ui_settings_tab_m.set_dark_theme.assert_called_once_with(True)
 
     @patch("TheAntFarm.ui_manager.ui_manager.QActionGroup")
     def test_light_sets_the_light_background_on_every_canvas(self, mock_group):
@@ -229,6 +231,7 @@ class TestStyleActions:
 
         for layer in self._layers(ui_manager):
             layer.set_dark_background.assert_called_once_with(False)
+        ui_manager.ui_settings_tab_m.set_dark_theme.assert_called_once_with(False)
 
     @patch("TheAntFarm.ui_manager.ui_manager.QActionGroup")
     def test_actions_are_exclusive_and_given_to_the_style_manager(self, mock_group):

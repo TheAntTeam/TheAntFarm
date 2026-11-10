@@ -1,6 +1,7 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
+from PySide6.QtGui import QColor
 
 
 @pytest.fixture
@@ -83,6 +84,14 @@ def mock_settings():
         "drill": "yellow",
         "nc_top": "gray",
         "nc_bottom": "white",
+    }
+    settings.app_settings.layer_color_light = {
+        "top": "navy",
+        "bottom": "maroon",
+        "profile": "darkgreen",
+        "drill": "olive",
+        "nc_top": "black",
+        "nc_bottom": "purple",
     }
     settings.app_settings.serial_error_warning_threshold = 5
     settings.app_settings.serial_error_critical_threshold = 10
@@ -384,14 +393,14 @@ class TestSetFocusLost:
 class TestToolChangeProcedure:
     """Tool change procedure widgets (shape_core macros)."""
 
-    def test_mode_combo_is_populated_from_the_macro_registry(self, mock_ui):
+    def test_mode_combo_is_populated_from_the_macro_registry(self, mock_ui, mock_settings):
         from shape_core import MACROS
 
         from TheAntFarm.ui_manager.ui_settings_preferences import UiSettingsPreferencesTab
 
         mock_ui.tool_change_mode_cb.addItems.reset_mock()
 
-        UiSettingsPreferencesTab(mock_ui, MagicMock(), MagicMock())
+        UiSettingsPreferencesTab(mock_ui, MagicMock(), mock_settings)
 
         mock_ui.tool_change_mode_cb.addItems.assert_called_with(list(MACROS["M6"].variants))
 
@@ -460,3 +469,50 @@ class TestToolChangeProcedure:
         assert mock_settings.machine_settings.tool_probe_backoff == 2.0
         assert mock_settings.machine_settings.spindle_stop_dwell == 4.0
         assert mock_settings.machine_settings.spindle_restart_delay == 8.0
+
+
+class TestSettingsTabLayerColors:
+    """The swatches of the Settings tab show and edit the colours of the current theme."""
+
+    def test_the_dark_colours_are_shown_first(self, settings_tab, mock_ui):
+        mock_ui.top_layer_color_la.setStyleSheet.assert_called_with("background-color: blue")
+        mock_ui.layer_colors_section_la.setText.assert_called_with("LAYER COLORS (DARK THEME)")
+
+    def test_the_light_theme_shows_the_light_colours(self, settings_tab, mock_ui):
+        settings_tab.set_dark_theme(False)
+
+        mock_ui.top_layer_color_la.setStyleSheet.assert_called_with("background-color: navy")
+        mock_ui.layer_colors_section_la.setText.assert_called_with("LAYER COLORS (LIGHT THEME)")
+
+    def test_a_chosen_colour_belongs_to_the_current_theme(self, settings_tab, mock_ui):
+        settings_tab.set_dark_theme(False)
+
+        with patch("TheAntFarm.ui_manager.ui_settings_preferences.QColorDialog") as dialog:
+            dialog.getColor.return_value = QColor("#123456")
+            settings_tab.layer_color_choice("profile")
+
+        assert settings_tab.pending_layer_colors[False]["profile"] == "#123456"
+        assert settings_tab.pending_layer_colors[True]["profile"] == "green"
+        mock_ui.profile_layer_color_la.setStyleSheet.assert_called_with("background-color: #123456")
+
+    def test_a_cancelled_dialog_changes_nothing(self, settings_tab):
+        with patch("TheAntFarm.ui_manager.ui_settings_preferences.QColorDialog") as dialog:
+            dialog.getColor.return_value = QColor()
+            settings_tab.layer_color_choice("profile")
+
+        assert settings_tab.pending_layer_colors[True]["profile"] == "green"
+
+    def test_an_unknown_layer_is_ignored(self, settings_tab):
+        with patch("TheAntFarm.ui_manager.ui_settings_preferences.QColorDialog") as dialog:
+            settings_tab.layer_color_choice("no_such_layer")
+
+        dialog.getColor.assert_not_called()
+
+    def test_saving_stores_both_themes(self, settings_tab, mock_settings):
+        settings_tab.pending_layer_colors[True]["top"] = "#010101"
+        settings_tab.pending_layer_colors[False]["top"] = "#020202"
+
+        settings_tab.save_settings_preferences()
+
+        assert mock_settings.app_settings.layer_color["top"] == "#010101"
+        assert mock_settings.app_settings.layer_color_light["top"] == "#020202"

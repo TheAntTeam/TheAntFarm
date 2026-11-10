@@ -30,12 +30,26 @@ class AppSettingsHandler:
     LAST_SERIAL_BAUD_DEFAULT = 115200
     LAYER_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../.."))
     GCODE_LAST_DIR_DEFAULT = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../.."))
-    TOP_LAYER_COLOR_DEFAULT = "#FFC300"
-    BOTTOM_LAYER_COLOR_DEFAULT = "#A3E4D7"
-    PROFILE_LAYER_COLOR_DEFAULT = "#000000"
-    DRILL_LAYER_COLOR_DEFAULT = "#999999"
-    NC_TOP_LAYER_COLOR_DEFAULT = "#800080"
-    NC_BOTTOM_LAYER_COLOR_DEFAULT = "#A52A2A"
+    LAYER_TAGS = ("top", "bottom", "profile", "drill", "nc_top", "nc_bottom")
+    # One colour per layer and per theme, readable on the dark (#444444) and on the light (#FFFFFF) canvas
+    LAYER_COLOR_DEFAULTS = {
+        "top": "#FFC300",
+        "bottom": "#A3E4D7",
+        "profile": "#FF8FAB",
+        "drill": "#999999",
+        "nc_top": "#D291FF",
+        "nc_bottom": "#FF7F50",
+    }
+    LAYER_COLOR_LIGHT_DEFAULTS = {
+        "top": "#B07800",
+        "bottom": "#117A65",
+        "profile": "#C2185B",
+        "drill": "#707070",
+        "nc_top": "#800080",
+        "nc_bottom": "#A52A2A",
+    }
+    # Former defaults, barely visible on the dark canvas: a configuration still holding them gets the new ones
+    OLD_LAYER_COLOR_DEFAULTS = {"profile": "#000000", "nc_top": "#800080", "nc_bottom": "#A52A2A"}
 
     CAMERA_SELECTED_OR_TOOL_DEFAULT = False  # Default selection should be tool, camera could be absent
     FLIP_HORIZONTAL_SELECTED_DEFAULT = False
@@ -95,13 +109,9 @@ class AppSettingsHandler:
         self.last_serial_baud = self.LAST_SERIAL_BAUD_DEFAULT
         self.layer_last_dir = self.layer_last_dir_default
         self.gcode_last_dir = self.gcode_last_dir_default
-        self.layer_color = Od({})
-        self.layer_color["top"] = self.TOP_LAYER_COLOR_DEFAULT
-        self.layer_color["bottom"] = self.BOTTOM_LAYER_COLOR_DEFAULT
-        self.layer_color["profile"] = self.PROFILE_LAYER_COLOR_DEFAULT
-        self.layer_color["drill"] = self.DRILL_LAYER_COLOR_DEFAULT
-        self.layer_color["nc_top"] = self.NC_TOP_LAYER_COLOR_DEFAULT
-        self.layer_color["nc_bottom"] = self.NC_BOTTOM_LAYER_COLOR_DEFAULT
+        # Layer colours of the dark theme (layer_color) and of the light theme (layer_color_light)
+        self.layer_color = Od(self.LAYER_COLOR_DEFAULTS)
+        self.layer_color_light = Od(self.LAYER_COLOR_LIGHT_DEFAULTS)
 
         self.camera_selected_or_tool = self.CAMERA_SELECTED_OR_TOOL_DEFAULT
         self.flip_horizontal_selected = self.FLIP_HORIZONTAL_SELECTED_DEFAULT
@@ -246,20 +256,34 @@ class AppSettingsHandler:
         if "LAYERS" in self.app_settings:
             app_layers_settings = self.app_settings["LAYERS"]
             self.layer_last_dir = app_layers_settings.get("layer_last_dir", self.layer_last_dir_default)
-            self.layer_color["top"] = app_layers_settings.get("top_layer_color", self.TOP_LAYER_COLOR_DEFAULT)
-            self.layer_color["bottom"] = app_layers_settings.get("bottom_layer_color", self.BOTTOM_LAYER_COLOR_DEFAULT)
-            self.layer_color["profile"] = app_layers_settings.get(
-                "profile_layer_color", self.PROFILE_LAYER_COLOR_DEFAULT
-            )
-            self.layer_color["drill"] = app_layers_settings.get("drill_layer_color", self.DRILL_LAYER_COLOR_DEFAULT)
-            self.layer_color["nc_top"] = app_layers_settings.get("nc_top_layer_color", self.NC_TOP_LAYER_COLOR_DEFAULT)
-            self.layer_color["nc_bottom"] = app_layers_settings.get(
-                "nc_bottom_layer_color", self.NC_BOTTOM_LAYER_COLOR_DEFAULT
-            )
+            self._read_layer_colors(app_layers_settings)
 
         if "GCODES" in self.app_settings:
             app_gcode_settings = self.app_settings["GCODES"]
             self.gcode_last_dir = app_gcode_settings.get("gcode_last_dir", self.gcode_last_dir_default)
+
+    def _read_layer_colors(self, app_layers_settings: configparser.SectionProxy) -> None:
+        """Read the dark and light colour of every layer; a former dark default becomes the new one."""
+        for tag in self.LAYER_TAGS:
+            dark = app_layers_settings.get(f"{tag}_layer_color", self.LAYER_COLOR_DEFAULTS[tag])
+            if dark.lower() == self.OLD_LAYER_COLOR_DEFAULTS.get(tag, "").lower():
+                dark = self.LAYER_COLOR_DEFAULTS[tag]
+            self.layer_color[tag] = dark
+            self.layer_color_light[tag] = app_layers_settings.get(
+                f"{tag}_layer_color_light", self.LAYER_COLOR_LIGHT_DEFAULTS[tag]
+            )
+
+    def layer_colors_of(self, tag: str) -> tuple:
+        """The (dark theme, light theme) colours of the layer ``tag``."""
+        return self.layer_color[tag], self.layer_color_light[tag]
+
+    def _layer_color_defaults(self) -> dict:
+        """The default colours of every layer, under their configuration keys."""
+        defaults = {}
+        for tag in self.LAYER_TAGS:
+            defaults[f"{tag}_layer_color"] = self.LAYER_COLOR_DEFAULTS[tag]
+            defaults[f"{tag}_layer_color_light"] = self.LAYER_COLOR_LIGHT_DEFAULTS[tag]
+        return defaults
 
     def _read_grbl_simulator_settings(self, app_general: configparser.SectionProxy) -> None:
         """Read the GRBL simulator settings, falling back to the defaults on an invalid value."""
@@ -304,12 +328,7 @@ class AppSettingsHandler:
             "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
             "console_visibility": self.console_visibility,
             "layer_last_dir": self.layer_last_dir_default,
-            "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
-            "bottom_layer_color": self.BOTTOM_LAYER_COLOR_DEFAULT,
-            "profile_layer_color": self.PROFILE_LAYER_COLOR_DEFAULT,
-            "drill_layer_color": self.DRILL_LAYER_COLOR_DEFAULT,
-            "nc_top_layer_color": self.NC_TOP_LAYER_COLOR_DEFAULT,
-            "nc_bottom_layer_color": self.NC_BOTTOM_LAYER_COLOR_DEFAULT,
+            **self._layer_color_defaults(),
             "gcode_last_dir": self.gcode_last_dir_default,
             "logs_file": self.logs_file_default,
             "logs_max_bytes": self.LOGS_MAX_BYTES,
@@ -367,12 +386,9 @@ class AppSettingsHandler:
         self.app_settings["LAYERS"] = {}
         app_layers = self.app_settings["LAYERS"]
         app_layers["layer_last_dir"] = self.layer_last_dir
-        app_layers["top_layer_color"] = self.layer_color["top"]
-        app_layers["bottom_layer_color"] = self.layer_color["bottom"]
-        app_layers["profile_layer_color"] = self.layer_color["profile"]
-        app_layers["drill_layer_color"] = self.layer_color["drill"]
-        app_layers["nc_top_layer_color"] = self.layer_color["nc_top"]
-        app_layers["nc_bottom_layer_color"] = self.layer_color["nc_bottom"]
+        for tag in self.LAYER_TAGS:
+            app_layers[f"{tag}_layer_color"] = self.layer_color[tag]
+            app_layers[f"{tag}_layer_color_light"] = self.layer_color_light[tag]
 
         # Layers related application settings #
         self.app_settings["GCODES"] = {}
@@ -401,12 +417,7 @@ class AppSettingsHandler:
             "settings_tab_visibility": self.SHOW_SETTINGS_TAB_DEFAULT,
             "console_visibility": self.console_visibility,
             "layer_last_dir": self.layer_last_dir_default,
-            "top_layer_color": self.TOP_LAYER_COLOR_DEFAULT,
-            "bottom_layer_color": self.BOTTOM_LAYER_COLOR_DEFAULT,
-            "profile_layer_color": self.PROFILE_LAYER_COLOR_DEFAULT,
-            "drill_layer_color": self.DRILL_LAYER_COLOR_DEFAULT,
-            "nc_top_layer_color": self.NC_TOP_LAYER_COLOR_DEFAULT,
-            "nc_bottom_layer_color": self.NC_BOTTOM_LAYER_COLOR_DEFAULT,
+            **self._layer_color_defaults(),
             "gcode_last_dir": self.gcode_last_dir_default,
             "logs_file": self.logs_file_default,
             "logs_max_bytes": self.LOGS_MAX_BYTES,
