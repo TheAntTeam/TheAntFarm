@@ -17,10 +17,6 @@ coverage:
         # advanced settings
         paths:
           - "src/TheAntFarm"
-        ignore:
-          - "src/TheAntFarm/app_resources_rc.py"
-          - "src/TheAntFarm/ui_the_ant_farm.py"
-          - "tests/"
     patch:
       default:
         target: 60%
