@@ -1,6 +1,7 @@
 # Start the application on Linux, Windows and macOS and save screenshots of every tab in the dark and light themes.
 # Run it from the Actions page ("Run workflow", once this file is on the default branch), or on a pull request by
-# adding the "screenshots" label: it then runs again at every push while the label is there.
+# adding the "screenshots" label: it then runs again at every push while the label is there. Adding any other
+# label does not start it, so a pull request opened with several labels takes the screenshots once.
 # The screenshots are uploaded as one artifact per operating system.
 
 name: UI screenshots
@@ -13,7 +14,10 @@ on:
 
 jobs:
   screenshots:
-    if: github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'screenshots')
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'screenshots') ||
+      (github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'screenshots'))
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     strategy:
