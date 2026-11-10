@@ -78,6 +78,9 @@ class StyleManager(QObject):
         self.current_icon_color = QColor(self.DARK_ICON_COLOR)
         self.current_disabled_color = QColor(self.DARK_DISABLED_ICON_COLOR)
         self._themed_widgets: Dict[QAbstractButton, Tuple[str, Optional[str], Optional[QColor]]] = {}
+        # The palettes of the themes are made for Fusion: a native style, like the Windows one, keeps its own
+        # colours in places, such as the menus
+        self.set_default_style()
 
     def themed_icon(self, name: str, checked_name: Optional[str] = None, color: Optional[QColor] = None) -> QIcon:
         """Return the single-colour icon ``name`` in the colours of the theme.
