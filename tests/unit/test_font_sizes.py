@@ -1,5 +1,7 @@
 """The fixed font sizes of the window are scaled on macOS, where a point is drawn smaller than on Windows."""
 
+from unittest.mock import patch
+
 import pytest
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QLabel, QMainWindow, QWidget
@@ -99,3 +101,35 @@ class TestFontSizesOfTheWindow:
         _, ui = window
 
         assert ui.status_l.font().family() == QFont().family()
+
+
+class TestMainWindowFontSizes:
+    """The main window scales its fixed font sizes when it starts on macOS, and only there."""
+
+    @staticmethod
+    def _main_window(system):
+        from TheAntFarm.the_ant_farm import MainWindow
+
+        managers = ("SettingsHandler", "ControllerWorker", "SerialWorker", "UiManager", "QThread")
+        patches = [patch(f"TheAntFarm.the_ant_farm.{name}") for name in managers]
+        for started in patches:
+            started.start()
+        try:
+            with patch("TheAntFarm.the_ant_farm.platform.system", return_value=system):
+                return MainWindow()
+        finally:
+            for started in patches:
+                started.stop()
+
+    def test_fixed_sizes_are_scaled_on_macos(self, qapp):
+        window = self._main_window("Darwin")
+
+        assert window.ui.xy_mul_10_pb.font().pointSizeF() == pytest.approx(8 * 96 / 72)
+        window.deleteLater()
+
+    @pytest.mark.parametrize("system", ["Windows", "Linux"])
+    def test_fixed_sizes_are_kept_elsewhere(self, qapp, system):
+        window = self._main_window(system)
+
+        assert window.ui.xy_mul_10_pb.font().pointSizeF() == 8
+        window.deleteLater()
