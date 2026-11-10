@@ -103,7 +103,7 @@ class TestAddGCode:
         layer.add_gcode("gcode", self._square_vectors())
 
         colours = {call["colors"] for call in layer.calls}
-        assert colours == {"white", "orange"}
+        assert colours == {VisualLayer.FOREGROUND, "orange"}
 
     def test_empty_list_only_warns(self):
         layer = self._layer()
@@ -122,6 +122,8 @@ class TestCreateLine:
         layer = object.__new__(VisualLayer)
         layer.canvas = MagicMock()
         layer.paths = {}
+        layer.line_colors = {}
+        layer.dark_background = True
         return layer
 
     @staticmethod
@@ -172,3 +174,56 @@ class TestCreateLine:
 
         assert "Path Colors List not Set" in caplog.text
         assert mock_visuals.Line.call_args.kwargs["color"] == []
+
+
+class TestThemeColours:
+    """FOREGROUND lines are white on the dark background and black on the light one, also when already drawn."""
+
+    _layer = staticmethod(TestCreateLine._layer)
+    _segments = staticmethod(TestCreateLine._segments)
+
+    def test_foreground_is_white_on_the_dark_background(self):
+        layer = self._layer()
+
+        with patch("TheAntFarm.shape_core.visual_manager.visuals") as mock_visuals:
+            layer.create_line("gcode", self._segments(), colors=[VisualLayer.FOREGROUND, "orange"])
+
+        assert mock_visuals.Line.call_args.kwargs["color"] == ["white"] * 3 + ["orange"] * 2
+
+    def test_foreground_is_black_on_the_light_background(self):
+        layer = self._layer()
+        layer.dark_background = False
+
+        with patch("TheAntFarm.shape_core.visual_manager.visuals") as mock_visuals:
+            layer.create_line("gcode", self._segments(), colors=VisualLayer.FOREGROUND)
+
+        assert mock_visuals.Line.call_args.kwargs["color"] == ["black"] * 5
+
+    def test_switching_theme_recolours_the_foreground_lines(self):
+        layer = self._layer()
+        with patch("TheAntFarm.shape_core.visual_manager.visuals") as mock_visuals:
+            foreground, fixed = MagicMock(), MagicMock()
+            mock_visuals.Line.side_effect = [foreground, fixed]
+            layer.create_line("gcode", self._segments(), colors=[VisualLayer.FOREGROUND, "orange"])
+            layer.create_line("top", self._segments(), colors="red")
+
+        layer.set_dark_background(False)
+
+        layer.canvas.set_canvas_bgcolor.assert_called_with(hex_color="#FFFFFF")
+        foreground.set_data.assert_called_once_with(color=["black"] * 3 + ["orange"] * 2)
+        fixed.set_data.assert_not_called()
+
+        layer.set_dark_background(True)
+
+        layer.canvas.set_canvas_bgcolor.assert_called_with(hex_color="#444444")
+        foreground.set_data.assert_called_with(color=["white"] * 3 + ["orange"] * 2)
+
+    def test_removed_lines_are_forgotten(self):
+        layer = self._layer()
+        with patch("TheAntFarm.shape_core.visual_manager.visuals"):
+            layer.create_line("gcode", self._segments(), colors=VisualLayer.FOREGROUND)
+        layer.paths.clear()
+
+        layer.set_dark_background(False)
+
+        assert layer.line_colors == {}
