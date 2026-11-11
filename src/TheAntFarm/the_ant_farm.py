@@ -25,14 +25,6 @@ from ui_the_ant_farm import Ui_MainWindow
 
 
 def config_os():
-    pys2_path = os.path.dirname(sys.modules["PySide6"].__file__)
-    if os.path.isdir(os.path.join(pys2_path, "Qt")):
-        pys2_path = os.path.join(pys2_path, "Qt")
-
-    # Simple mod to set the QT environment data just for python
-    # avoiding conflict with other applications using Qt
-    os.environ["QT_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins")
-
     sys_name = platform.system()
     print(sys_name)
     if sys_name == "Windows":
@@ -42,10 +34,8 @@ def config_os():
         os.add_dll_directory(os.path.dirname(sys.modules["PySide6"].__file__))
     elif sys_name == "Darwin":
         print("Mac Env")
-        os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
     else:
         print("Linux Env")
-        os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = os.path.join(pys2_path, "plugins", "platforms")
         os.environ["QT_QPA_PLATFORM"] = "wayland;xcb"
 
 
