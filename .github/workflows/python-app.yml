@@ -40,6 +40,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y \
           libegl1 \
+          libpulse0 \
+          libpulse-mainloop-glib0 \
           libxcb-icccm4 \
           libxcb-image0 \
           libxcb-keysyms1 \
