@@ -4384,67 +4384,35 @@
                        </widget>
                       </item>
                       <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_2">
-                        <item>
-                         <widget class="ComboBoxFilterEnter" name="send_cb">
-                          <property name="sizePolicy">
-                           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                           </sizepolicy>
-                          </property>
-                          <property name="autoFillBackground">
-                           <bool>true</bool>
-                          </property>
-                          <property name="editable">
-                           <bool>true</bool>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QPushButton" name="send_pb">
-                          <property name="sizePolicy">
-                           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                           </sizepolicy>
-                          </property>
-                          <property name="font">
-                           <font>
-                            <bold>true</bold>
-                           </font>
-                          </property>
-                          <property name="text">
-                           <string>Send</string>
-                          </property>
-                         </widget>
-                        </item>
-                       </layout>
-                      </item>
-                      <item>
-                       <layout class="QVBoxLayout" name="connectVerticalLayout">
-                        <property name="spacing">
-                         <number>6</number>
+                       <widget class="QStackedWidget" name="serial_row_sw">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
                         </property>
-                        <property name="leftMargin">
+                        <property name="currentIndex">
                          <number>0</number>
                         </property>
-                        <property name="topMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="bottomMargin">
-                         <number>0</number>
-                        </property>
-                        <item>
+                        <widget class="QWidget" name="serial_connect_page">
                          <layout class="QHBoxLayout" name="horizontalLayout">
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
+                           <number>0</number>
+                          </property>
                           <property name="spacing">
                            <number>6</number>
                           </property>
                           <item>
-                           <widget class="QComboBox" name="serial_ports_cb">
+                           <widget class="ComboBoxElideLeft" name="serial_ports_cb">
                             <property name="sizePolicy">
                              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                               <horstretch>0</horstretch>
@@ -4456,6 +4424,12 @@
                             </property>
                             <property name="statusTip">
                              <string>Available serial ports.</string>
+                            </property>
+                            <property name="sizeAdjustPolicy">
+                             <enum>QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLengthWithIcon</enum>
+                            </property>
+                            <property name="minimumContentsLength">
+                             <number>8</number>
                             </property>
                            </widget>
                           </item>
@@ -4475,6 +4449,12 @@
                             </property>
                             <property name="currentText">
                              <string/>
+                            </property>
+                            <property name="sizeAdjustPolicy">
+                             <enum>QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLengthWithIcon</enum>
+                            </property>
+                            <property name="minimumContentsLength">
+                             <number>5</number>
                             </property>
                            </widget>
                           </item>
@@ -4503,8 +4483,58 @@
                            </widget>
                           </item>
                          </layout>
-                        </item>
-                       </layout>
+                        </widget>
+                        <widget class="QWidget" name="serial_send_page">
+                         <layout class="QHBoxLayout" name="horizontalLayout_2">
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
+                           <number>0</number>
+                          </property>
+                          <item>
+                           <widget class="ComboBoxFilterEnter" name="send_cb">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <property name="autoFillBackground">
+                             <bool>true</bool>
+                            </property>
+                            <property name="editable">
+                             <bool>true</bool>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QPushButton" name="send_pb">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <property name="font">
+                             <font>
+                              <bold>true</bold>
+                             </font>
+                            </property>
+                            <property name="text">
+                             <string>Send</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </widget>
                       </item>
                       <item>
                        <layout class="QHBoxLayout" name="horizontalLayout_9">
@@ -10137,6 +10167,11 @@
    <class>ComboBoxFilterEnter</class>
    <extends>QComboBox</extends>
    <header>combobox_filter_enter</header>
+  </customwidget>
+  <customwidget>
+   <class>ComboBoxElideLeft</class>
+   <extends>QComboBox</extends>
+   <header>combobox_elide_left</header>
   </customwidget>
   <customwidget>
    <class>QLedLabel</class>
