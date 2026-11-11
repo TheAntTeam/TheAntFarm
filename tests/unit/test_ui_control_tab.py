@@ -370,3 +370,39 @@ class TestStatusColors:
 
         assert f"background-color : {background};" in style
         assert f"color : {text};" in style
+
+
+@pytest.mark.usefixtures("qapp")
+class TestSerialRow:
+    """The port row and the send row are the two pages of one box, which keeps one width."""
+
+    @pytest.fixture
+    def ui_tab(self):
+        from PySide6.QtCore import QObject
+
+        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
+
+        ui_tab = UiControlTab.__new__(UiControlTab)
+        QObject.__init__(ui_tab)
+        ui_tab.ui = Mock()
+        ui_tab.controlWo = Mock()
+        ui_tab.ctrl_layer = Mock()
+        ui_tab.is_gcode_rb_selected = Mock(return_value=False)
+        ui_tab.enable_control_jog_elements = Mock()
+        ui_tab.close_rejected_line_prompt = Mock()
+        return ui_tab
+
+    def test_connecting_shows_the_send_row(self, ui_tab):
+        ui_tab.act_on_connection(True)
+
+        ui_tab.ui.serial_row_sw.setCurrentWidget.assert_called_once_with(ui_tab.ui.serial_send_page)
+
+    def test_disconnecting_shows_the_port_row(self, ui_tab):
+        ui_tab.act_on_disconnection()
+
+        ui_tab.ui.serial_row_sw.setCurrentWidget.assert_called_once_with(ui_tab.ui.serial_connect_page)
+
+    def test_a_failed_connection_keeps_the_port_row(self, ui_tab):
+        ui_tab.act_on_connection(False)
+
+        ui_tab.ui.serial_row_sw.setCurrentWidget.assert_not_called()

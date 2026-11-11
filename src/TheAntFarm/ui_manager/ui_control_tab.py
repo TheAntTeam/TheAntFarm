@@ -109,8 +109,7 @@ class UiControlTab(QObject):
             "QComboBox::drop-down {border-width: 0px;} QComboBox::down-arrow {image: url(noimg); border-width: 0px;}"
         )
         self.ui.send_cb.setStyleSheet(combobox_ss)
-        self.ui.send_cb.hide()
-        self.ui.send_pb.hide()
+        self.ui.serial_row_sw.setCurrentWidget(self.ui.serial_connect_page)
 
         # Set x and y bbox step initial values.
         self.ui.x_num_step_sb.setValue(self.machine_settings.x_bbox_step)
@@ -746,11 +745,7 @@ class UiControlTab(QObject):
             self.serial_connection_status = True
             self.controlWo.reset_controller_status_s.emit()
             self.ui.connect_pb.setText("Disconnect")
-            self.ui.serial_ports_cb.hide()
-            self.ui.serial_baud_cb.hide()
-            self.ui.refresh_pb.hide()
-            self.ui.send_cb.show()
-            self.ui.send_pb.show()
+            self.ui.serial_row_sw.setCurrentWidget(self.ui.serial_send_page)
             self.ui.soft_reset_tb.setEnabled(True)
             self.ui.unlock_tb.setEnabled(True)
             self.ui.homing_tb.setEnabled(True)
@@ -769,11 +764,7 @@ class UiControlTab(QObject):
         self.controlWo.reset_controller_status_s.emit()
         self.serial_connection_status = False
         self.ui.connect_pb.setText("Connect")
-        self.ui.serial_ports_cb.show()
-        self.ui.serial_baud_cb.show()
-        self.ui.refresh_pb.show()
-        self.ui.send_cb.hide()
-        self.ui.send_pb.hide()
+        self.ui.serial_row_sw.setCurrentWidget(self.ui.serial_connect_page)
         self.ui.status_l.setText("Not Connected")
         self.update_status_colors("Not Connected")
         self.ui.soft_reset_tb.setEnabled(False)

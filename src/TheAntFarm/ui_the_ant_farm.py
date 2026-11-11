@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QAbstract
     QTableWidget, QTableWidgetItem, QTextEdit, QToolButton,
     QVBoxLayout, QWidget)
 
+from combobox_elide_left import ComboBoxElideLeft
 from combobox_filter_enter import ComboBoxFilterEnter
 from qcamera_label import QCameraLabel
 from qledlabel import QLedLabel
@@ -2172,53 +2173,38 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_17.addWidget(self.serial_te)
 
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.send_cb = ComboBoxFilterEnter(self.probe_terminal_tab)
-        self.send_cb.setObjectName(u"send_cb")
-        sizePolicy2.setHeightForWidth(self.send_cb.sizePolicy().hasHeightForWidth())
-        self.send_cb.setSizePolicy(sizePolicy2)
-        self.send_cb.setAutoFillBackground(True)
-        self.send_cb.setEditable(True)
-
-        self.horizontalLayout_2.addWidget(self.send_cb)
-
-        self.send_pb = QPushButton(self.probe_terminal_tab)
-        self.send_pb.setObjectName(u"send_pb")
-        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.serial_row_sw = QStackedWidget(self.probe_terminal_tab)
+        self.serial_row_sw.setObjectName(u"serial_row_sw")
+        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         sizePolicy12.setHorizontalStretch(0)
         sizePolicy12.setVerticalStretch(0)
-        sizePolicy12.setHeightForWidth(self.send_pb.sizePolicy().hasHeightForWidth())
-        self.send_pb.setSizePolicy(sizePolicy12)
-        self.send_pb.setFont(font)
-
-        self.horizontalLayout_2.addWidget(self.send_pb)
-
-
-        self.verticalLayout_17.addLayout(self.horizontalLayout_2)
-
-        self.connectVerticalLayout = QVBoxLayout()
-        self.connectVerticalLayout.setSpacing(6)
-        self.connectVerticalLayout.setObjectName(u"connectVerticalLayout")
-        self.connectVerticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout = QHBoxLayout()
+        sizePolicy12.setHeightForWidth(self.serial_row_sw.sizePolicy().hasHeightForWidth())
+        self.serial_row_sw.setSizePolicy(sizePolicy12)
+        self.serial_connect_page = QWidget()
+        self.serial_connect_page.setObjectName(u"serial_connect_page")
+        self.horizontalLayout = QHBoxLayout(self.serial_connect_page)
         self.horizontalLayout.setSpacing(6)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.serial_ports_cb = QComboBox(self.probe_terminal_tab)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.serial_ports_cb = ComboBoxElideLeft(self.serial_connect_page)
         self.serial_ports_cb.setObjectName(u"serial_ports_cb")
         sizePolicy2.setHeightForWidth(self.serial_ports_cb.sizePolicy().hasHeightForWidth())
         self.serial_ports_cb.setSizePolicy(sizePolicy2)
+        self.serial_ports_cb.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+        self.serial_ports_cb.setMinimumContentsLength(8)
 
         self.horizontalLayout.addWidget(self.serial_ports_cb)
 
-        self.serial_baud_cb = QComboBox(self.probe_terminal_tab)
+        self.serial_baud_cb = QComboBox(self.serial_connect_page)
         self.serial_baud_cb.setObjectName(u"serial_baud_cb")
         sizePolicy2.setHeightForWidth(self.serial_baud_cb.sizePolicy().hasHeightForWidth())
         self.serial_baud_cb.setSizePolicy(sizePolicy2)
+        self.serial_baud_cb.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+        self.serial_baud_cb.setMinimumContentsLength(5)
 
         self.horizontalLayout.addWidget(self.serial_baud_cb)
 
-        self.refresh_pb = QPushButton(self.probe_terminal_tab)
+        self.refresh_pb = QPushButton(self.serial_connect_page)
         self.refresh_pb.setObjectName(u"refresh_pb")
         sizePolicy2.setHeightForWidth(self.refresh_pb.sizePolicy().hasHeightForWidth())
         self.refresh_pb.setSizePolicy(sizePolicy2)
@@ -2227,11 +2213,35 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.refresh_pb)
 
+        self.serial_row_sw.addWidget(self.serial_connect_page)
+        self.serial_send_page = QWidget()
+        self.serial_send_page.setObjectName(u"serial_send_page")
+        self.horizontalLayout_2 = QHBoxLayout(self.serial_send_page)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.send_cb = ComboBoxFilterEnter(self.serial_send_page)
+        self.send_cb.setObjectName(u"send_cb")
+        sizePolicy2.setHeightForWidth(self.send_cb.sizePolicy().hasHeightForWidth())
+        self.send_cb.setSizePolicy(sizePolicy2)
+        self.send_cb.setAutoFillBackground(True)
+        self.send_cb.setEditable(True)
 
-        self.connectVerticalLayout.addLayout(self.horizontalLayout)
+        self.horizontalLayout_2.addWidget(self.send_cb)
 
+        self.send_pb = QPushButton(self.serial_send_page)
+        self.send_pb.setObjectName(u"send_pb")
+        sizePolicy13 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy13.setHorizontalStretch(0)
+        sizePolicy13.setVerticalStretch(0)
+        sizePolicy13.setHeightForWidth(self.send_pb.sizePolicy().hasHeightForWidth())
+        self.send_pb.setSizePolicy(sizePolicy13)
+        self.send_pb.setFont(font)
 
-        self.verticalLayout_17.addLayout(self.connectVerticalLayout)
+        self.horizontalLayout_2.addWidget(self.send_pb)
+
+        self.serial_row_sw.addWidget(self.serial_send_page)
+
+        self.verticalLayout_17.addWidget(self.serial_row_sw)
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
@@ -2481,11 +2491,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.camera_la = QCameraLabel(self.frame)
         self.camera_la.setObjectName(u"camera_la")
-        sizePolicy13 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Expanding)
-        sizePolicy13.setHorizontalStretch(0)
-        sizePolicy13.setVerticalStretch(0)
-        sizePolicy13.setHeightForWidth(self.camera_la.sizePolicy().hasHeightForWidth())
-        self.camera_la.setSizePolicy(sizePolicy13)
+        sizePolicy14 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Expanding)
+        sizePolicy14.setHorizontalStretch(0)
+        sizePolicy14.setVerticalStretch(0)
+        sizePolicy14.setHeightForWidth(self.camera_la.sizePolicy().hasHeightForWidth())
+        self.camera_la.setSizePolicy(sizePolicy14)
         self.camera_la.setMinimumSize(QSize(200, 150))
         self.camera_la.setMaximumSize(QSize(480, 480))
 
@@ -3175,11 +3185,8 @@ class Ui_MainWindow(object):
 
         self.label_18 = QLabel(self.align_tab)
         self.label_18.setObjectName(u"label_18")
-        sizePolicy14 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy14.setHorizontalStretch(0)
-        sizePolicy14.setVerticalStretch(0)
-        sizePolicy14.setHeightForWidth(self.label_18.sizePolicy().hasHeightForWidth())
-        self.label_18.setSizePolicy(sizePolicy14)
+        sizePolicy12.setHeightForWidth(self.label_18.sizePolicy().hasHeightForWidth())
+        self.label_18.setSizePolicy(sizePolicy12)
         self.label_18.setMinimumSize(QSize(0, 20))
         self.label_18.setMaximumSize(QSize(16777215, 20))
 
@@ -3567,8 +3574,8 @@ class Ui_MainWindow(object):
 
         self.z_feedrate_la = QLabel(self.jobs_machine_settings_tab_scroll)
         self.z_feedrate_la.setObjectName(u"z_feedrate_la")
-        sizePolicy14.setHeightForWidth(self.z_feedrate_la.sizePolicy().hasHeightForWidth())
-        self.z_feedrate_la.setSizePolicy(sizePolicy14)
+        sizePolicy12.setHeightForWidth(self.z_feedrate_la.sizePolicy().hasHeightForWidth())
+        self.z_feedrate_la.setSizePolicy(sizePolicy12)
         self.z_feedrate_la.setMinimumSize(QSize(130, 0))
         self.z_feedrate_la.setMaximumSize(QSize(130, 16777215))
         self.z_feedrate_la.setFont(font)
@@ -4564,6 +4571,7 @@ class Ui_MainWindow(object):
         self.jog_probe_tab_widget.setCurrentIndex(1)
         self.z_step_cb.setCurrentIndex(3)
         self.xy_step_cb.setCurrentIndex(3)
+        self.serial_row_sw.setCurrentIndex(0)
         self.z_step_cb_2.setCurrentIndex(3)
         self.xy_step_cb_2.setCurrentIndex(3)
         self.settings_sub_tab.setCurrentIndex(2)
@@ -4801,7 +4809,6 @@ class Ui_MainWindow(object):
         self.x_l.setText(QCoreApplication.translate("MainWindow", u"X", None))
         self.y_l.setText(QCoreApplication.translate("MainWindow", u"Y", None))
         self.z_l.setText(QCoreApplication.translate("MainWindow", u"Z", None))
-        self.send_pb.setText(QCoreApplication.translate("MainWindow", u"Send", None))
 #if QT_CONFIG(tooltip)
         self.serial_ports_cb.setToolTip(QCoreApplication.translate("MainWindow", u"Available serial ports.", None))
 #endif // QT_CONFIG(tooltip)
@@ -4819,6 +4826,7 @@ class Ui_MainWindow(object):
         self.refresh_pb.setStatusTip(QCoreApplication.translate("MainWindow", u"Refresh serial port list.", None))
 #endif // QT_CONFIG(statustip)
         self.refresh_pb.setText(QCoreApplication.translate("MainWindow", u"Serial Ports Refresh", None))
+        self.send_pb.setText(QCoreApplication.translate("MainWindow", u"Send", None))
         self.clear_terminal_pb.setText(QCoreApplication.translate("MainWindow", u"Clear Terminal", None))
 #if QT_CONFIG(statustip)
         self.connect_pb.setStatusTip(QCoreApplication.translate("MainWindow", u"Connect to selected serial port.", None))
