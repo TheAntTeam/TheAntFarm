@@ -120,6 +120,7 @@ src/TheAntFarm/
 
 - [docs/INSTALL.md](docs/INSTALL.md) — Installation guide
 - [CHANGELOG.md](CHANGELOG.md) — Release history
+- [docs/releasing.md](docs/releasing.md) — How a release is made
 - [CONTRIBUTING.md](CONTRIBUTING.md) — Contributor guide
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) — Community guidelines
 - [SECURITY.md](SECURITY.md) — Security policy
