@@ -53,3 +53,20 @@ def test_no_empty_band_under_the_canvas(ui):
 
     assert button.top() - canvas.bottom() <= max(spacing, 0) + 2
     assert ui.verticalLayout_9.geometry().bottom() - button.bottom() <= 2
+
+
+@pytest.mark.parametrize("name, slot", [("top_view_pb", "top_view"), ("bottom_view_pb", "bottom_view")])
+def test_the_buttons_turn_the_view(ui, name, slot):
+    from unittest.mock import MagicMock
+
+    from TheAntFarm.ui_manager.ui_view_load_layer_tab import UiViewLoadLayerTab
+
+    vis_layer = MagicMock()
+    tags = ("top", "bottom", "profile", "drill", "no_copper_1", "no_copper_2")
+    UiViewLoadLayerTab(MagicMock(ui=ui), MagicMock(), vis_layer, tags, tags, MagicMock())
+
+    getattr(ui, name).click()
+
+    getattr(vis_layer, slot).assert_called_once()
+    other = "bottom_view" if slot == "top_view" else "top_view"
+    getattr(vis_layer, other).assert_not_called()
