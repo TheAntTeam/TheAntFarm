@@ -1,0 +1,60 @@
+# Prepare a release from the Actions page ("Run workflow", with the new version, once this file is on the default
+# branch). From dev, it moves the "## Changelog" lines of the pull requests merged since the last tag and the
+# [Unreleased] entries into a new section of CHANGELOG.md, sets the version and opens a pull request into dev with
+# the change, to review and edit before merging. The steps that follow are in docs/releasing.md.
+# A pull request opened by a workflow does not start the other workflows: the tests run once it is merged into dev.
+
+name: Prepare release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "New version, major.minor.patch (for example 0.4.0)"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ inputs.version }}
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: dev
+        fetch-depth: 0
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Write the changelog section and the version
+      run: |
+        set -o pipefail
+        python tools/release.py prepare --version "$VERSION" --repo "$GITHUB_REPOSITORY" | tee summary.txt
+
+    - name: Open the pull request
+      run: |
+        branch="release/v$VERSION"
+        git config user.name "github-actions[bot]"
+        git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+        git checkout -b "$branch"
+        git add CHANGELOG.md pyproject.toml src/TheAntFarm/__init__.py
+        git commit -m "Prepare the release of version $VERSION"
+        git push origin "$branch"
+        {
+          echo "Prepares the release of version $VERSION: the changelog section and the version."
+          echo
+          echo "$(cat summary.txt)."
+          echo
+          echo "Before merging: read the new section of CHANGELOG.md and edit its wording or its categories here."
+          echo "The next steps are in docs/releasing.md."
+        } > body.md
+        gh pr create --base dev --head "$branch" --title "Release $VERSION" --body-file body.md

@@ -1,6 +1,14 @@
 name: build-executable.yml
 
+# Builds the executable on Linux, Windows and macOS after the tests pass on main or dev, from the Actions page, or for
+# the "Release" workflow, which passes the version to put in the file names.
 on:
+    workflow_call:
+        inputs:
+            version:
+                description: "Version written in the names of the packaged files"
+                type: string
+                required: true
     workflow_run:
         workflows: ["Python application"]
         types: [completed]
@@ -9,6 +17,7 @@ on:
 jobs:
     build:
         if: >
+            inputs.version ||
             github.event_name == 'workflow_dispatch' ||
             (
                 github.event.workflow_run.conclusion == 'success' &&
@@ -81,34 +90,43 @@ jobs:
                 cd ..
                 cd ..
 
+            # The executable is packed in an archive, which keeps its permission to run on Linux and macOS.
             # An ELF executable has no icon: on Linux the icon of the launcher comes
             # from the desktop entry and from the icon theme, so the executable is
             # shipped together with them.
-            - name: Package the Linux desktop integration
-              if: runner.os == 'Linux'
+            - name: Package the executable
+              shell: bash
+              env:
+                VERSION: ${{ inputs.version }}
               run: |
                 cd src/TheAntFarm/dist
-                mkdir -p package
-                cp the_ant_farm package/
-                cp ../../../packaging/linux/the_ant_farm.desktop package/
-                mkdir -p "package/icons/256x256/apps"
-                cp "../resources/logo/the_ant_farm_logo.png" "package/icons/256x256/apps/the_ant_farm.png"
-                for size in 128 64 48 32; do
-                  mkdir -p "package/icons/${size}x${size}/apps"
-                  cp "../resources/logo/the_ant_farm_logo_${size}.png" "package/icons/${size}x${size}/apps/the_ant_farm.png"
-                done
-                tar -czf the_ant_farm-linux.tar.gz -C package .
+                mkdir -p package release
+                case "$RUNNER_OS" in
+                  Windows) os=windows; cp the_ant_farm.exe package/ ;;
+                  macOS) os=macos; cp the_ant_farm package/ ;;
+                  Linux)
+                    os=linux
+                    cp the_ant_farm package/
+                    cp ../../../packaging/linux/the_ant_farm.desktop package/
+                    mkdir -p "package/icons/256x256/apps"
+                    cp "../resources/logo/the_ant_farm_logo.png" "package/icons/256x256/apps/the_ant_farm.png"
+                    for size in 128 64 48 32; do
+                      mkdir -p "package/icons/${size}x${size}/apps"
+                      cp "../resources/logo/the_ant_farm_logo_${size}.png" "package/icons/${size}x${size}/apps/the_ant_farm.png"
+                    done
+                    ;;
+                esac
+                name="the_ant_farm${VERSION:+-$VERSION}-$os"
+                case "$os" in
+                  linux) tar -czf "release/$name.tar.gz" -C package . ;;
+                  windows) (cd package && 7z a -tzip "../release/$name.zip" .) ;;
+                  macos) (cd package && zip -r "../release/$name.zip" .) ;;
+                esac
+                ls -l release
 
             - name: Upload artifact
-              if: runner.os != 'Linux'
               uses: actions/upload-artifact@v4
               with:
                 name: theantfarm_${{ matrix.os }}_py${{ matrix.python-version }}_${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}_${{github.run_number}}
-                path: ${{ matrix.os == 'windows-latest' && 'src/TheAntFarm/dist/the_ant_farm.exe' || 'src/TheAntFarm/dist/the_ant_farm' }}
-
-            - name: Upload artifact (Linux)
-              if: runner.os == 'Linux'
-              uses: actions/upload-artifact@v4
-              with:
-                name: theantfarm_${{ matrix.os }}_py${{ matrix.python-version }}_${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}_${{github.run_number}}
-                path: src/TheAntFarm/dist/the_ant_farm-linux.tar.gz
+                path: src/TheAntFarm/dist/release/*
+                if-no-files-found: error

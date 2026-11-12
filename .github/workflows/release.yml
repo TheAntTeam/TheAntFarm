@@ -1,0 +1,88 @@
+# Runs when a version tag (v0.4.0) is pushed on main: checks that the tag matches the version of the code, builds
+# the executables on Linux, Windows and macOS and creates a draft release with them, their SHA256SUMS and the
+# section of CHANGELOG.md of that version as notes. The draft is published by hand. See docs/releasing.md.
+
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Check the tag against the version of the code and main
+      id: version
+      run: |
+        version="${GITHUB_REF_NAME#v}"
+        code_version="$(python tools/release.py version)"
+        if [ "$version" != "$code_version" ]; then
+          echo "::error::The tag $GITHUB_REF_NAME does not match the version of the code, $code_version"
+          exit 1
+        fi
+        if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+          echo "::error::The tag $GITHUB_REF_NAME is not on main"
+          exit 1
+        fi
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+
+    - name: Write the release notes
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        previous="$(git describe --tags --abbrev=0 --match 'v*' "$GITHUB_SHA^" 2>/dev/null || true)"
+        python tools/release.py notes --version "$VERSION" --repo "$GITHUB_REPOSITORY" --previous-tag "$previous" > notes.md
+        cat notes.md
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: release-notes
+        path: notes.md
+
+  build:
+    needs: check
+    uses: ./.github/workflows/build-executable.yml
+    with:
+      version: ${{ needs.check.outputs.version }}
+
+  release:
+    needs: [check, build]
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      VERSION: ${{ needs.check.outputs.version }}
+
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: theantfarm_*
+        path: dist
+        merge-multiple: true
+
+    - uses: actions/download-artifact@v4
+      with:
+        name: release-notes
+
+    - name: Create the draft release
+      run: |
+        cd dist
+        sha256sum the_ant_farm-* > SHA256SUMS
+        cat SHA256SUMS
+        gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft --verify-tag \
+          --title "Release $GITHUB_REF_NAME" --notes-file ../notes.md the_ant_farm-* SHA256SUMS
