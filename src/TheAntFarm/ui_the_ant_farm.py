@@ -1180,19 +1180,19 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
-        self.pushButton_3 = QPushButton(self.view_tab)
-        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.top_view_pb = QPushButton(self.view_tab)
+        self.top_view_pb.setObjectName(u"top_view_pb")
 
-        self.horizontalLayout_3.addWidget(self.pushButton_3)
+        self.horizontalLayout_3.addWidget(self.top_view_pb)
 
-        self.pushButton_4 = QPushButton(self.view_tab)
-        self.pushButton_4.setObjectName(u"pushButton_4")
+        self.bottom_view_pb = QPushButton(self.view_tab)
+        self.bottom_view_pb.setObjectName(u"bottom_view_pb")
 
-        self.horizontalLayout_3.addWidget(self.pushButton_4)
+        self.horizontalLayout_3.addWidget(self.bottom_view_pb)
 
 
         self.verticalLayout_9.addLayout(self.horizontalLayout_3)
@@ -4716,8 +4716,8 @@ class Ui_MainWindow(object):
         self.nc_bottom_z_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"Z Feed Rate [mm/min]", None))
         self.nc_bottom_xy_feed_rate_la.setText(QCoreApplication.translate("MainWindow", u"XY Feed Rate [mm/min]", None))
         self.prepare_widget.setTabText(self.prepare_widget.indexOf(self.create_job_tab), QCoreApplication.translate("MainWindow", u"CREATE JOB", None))
-        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Top View", None))
-        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Bottom View", None))
+        self.top_view_pb.setText(QCoreApplication.translate("MainWindow", u"Top View", None))
+        self.bottom_view_pb.setText(QCoreApplication.translate("MainWindow", u"Bottom View", None))
         self.main_tab_widget.setTabText(self.main_tab_widget.indexOf(self.view_tab), QCoreApplication.translate("MainWindow", u"VIEW", None))
         ___qtablewidgetitem2 = self.gcode_tw.horizontalHeaderItem(0)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"File Path", None));

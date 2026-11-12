@@ -42,8 +42,8 @@ class UiViewLoadLayerTab(QObject):
         ]
         self.layers_chb = Od([(k, t) for k, t in zip(self.lay_tags, self.L_CHECKBOX)])
 
-        self.ui.pushButton_3.clicked.connect(self.vis_layer.top_view)
-        self.ui.pushButton_4.clicked.connect(self.vis_layer.bottom_view)
+        self.ui.top_view_pb.clicked.connect(self.vis_layer.top_view)
+        self.ui.bottom_view_pb.clicked.connect(self.vis_layer.bottom_view)
 
         # Load Layer TAB related controls.
         self.load_layer_s.connect(self.controlWo.load_new_layer)
