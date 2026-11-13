@@ -435,3 +435,23 @@ class TestJobRunning:
         ui_tab.handle_tool_change_start()
 
         assert ui_tab.job_running is True
+
+    def test_no_job_runs_on_a_new_tab(self, qapp):
+        from unittest.mock import MagicMock
+
+        from PySide6.QtWidgets import QMainWindow
+        from ui_the_ant_farm import Ui_MainWindow
+
+        from TheAntFarm.ui_manager.ui_control_tab import UiControlTab
+
+        window = QMainWindow()
+        ui = Ui_MainWindow()
+        ui.setupUi(window)
+        tab = UiControlTab(ui, MagicMock(), MagicMock(), MagicMock(), MagicMock())
+
+        assert tab.job_running is False
+        tab.disable_during_send()
+        assert tab.job_running is True
+        tab.enable_after_send()
+        assert tab.job_running is False
+        window.deleteLater()
