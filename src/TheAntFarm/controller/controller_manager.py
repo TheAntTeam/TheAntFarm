@@ -527,9 +527,7 @@ class ControllerWorker(ControllerSignals):
 
     def _step_override(self, kind: str) -> None:
         """Send the next step towards the target, or reset to 100 % while the value is unknown."""
-        target = self.override_targets.get(kind)
-        if target is None:
-            return
+        target = self.override_targets[kind]
         steps = self.OVERRIDE_STEPS[kind]
         reported = self.control_controller.status_report_od.get(self.OVERRIDE_REPORT_KEYS[kind])
         if reported is None:

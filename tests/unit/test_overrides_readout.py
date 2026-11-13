@@ -115,6 +115,12 @@ class TestFollowingTheMachine:
         _settle(tab)
         assert tab.sent == []
 
+    def test_a_rapid_value_grbl_does_not_have_is_ignored(self, tab):
+        tab.update_status(_status(OvRapid=30))
+
+        assert tab.ui.rapid_ov_sl.value() == 2
+        assert tab.ui.rapid_ov_l.text() == "100%"
+
     def test_a_target_is_kept_until_the_machine_reaches_it(self, tab):
         tab.ui.feed_ov_sb.setValue(70)
         _settle(tab)
