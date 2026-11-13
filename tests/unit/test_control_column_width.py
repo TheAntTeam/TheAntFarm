@@ -74,3 +74,12 @@ class TestConnectionRows:
 
         assert ui.send_cb.isVisible()
         assert ui.ctrl_tab_widget.sizeHint().width() == with_port_row
+
+
+class TestJogTab:
+    def test_the_overrides_do_not_widen_the_column(self, ui, qapp):
+        ui.jog_probe_tab_widget.setCurrentWidget(ui.jog_tab)
+        show(ui, qapp)
+
+        assert ui.overridesGridLayout.sizeHint().width() <= ui.probe_terminal_tab.sizeHint().width()
+        assert ui.jog_tab.sizeHint().width() <= ui.probe_terminal_tab.sizeHint().width()

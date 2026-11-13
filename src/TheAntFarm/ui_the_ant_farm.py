@@ -21,15 +21,16 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QAbstract
     QGridLayout, QHBoxLayout, QHeaderView, QLabel,
     QLayout, QLineEdit, QMainWindow, QMenu,
     QMenuBar, QPlainTextEdit, QProgressBar, QPushButton,
-    QRadioButton, QScrollArea, QSizePolicy, QSpacerItem,
-    QSpinBox, QStackedWidget, QStatusBar, QTabWidget,
-    QTableWidget, QTableWidgetItem, QTextEdit, QToolButton,
-    QVBoxLayout, QWidget)
+    QRadioButton, QScrollArea, QSizePolicy, QSlider,
+    QSpacerItem, QSpinBox, QStackedWidget, QStatusBar,
+    QTabWidget, QTableWidget, QTableWidgetItem, QTextEdit,
+    QToolButton, QVBoxLayout, QWidget)
 
 from combobox_elide_left import ComboBoxElideLeft
 from combobox_filter_enter import ComboBoxFilterEnter
 from qcamera_label import QCameraLabel
 from qledlabel import QLedLabel
+from saturating_spin_box import SaturatingSpinBox
 from vispy_qt_widget import VispyCanvas
 import app_resources_rc
 
@@ -1884,6 +1885,114 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout_18.addLayout(self.jogGridlayout)
+
+        self.overrides_line = QFrame(self.jog_tab)
+        self.overrides_line.setObjectName(u"overrides_line")
+        self.overrides_line.setFrameShape(QFrame.Shape.HLine)
+        self.overrides_line.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout_18.addWidget(self.overrides_line)
+
+        self.overridesGridLayout = QGridLayout()
+        self.overridesGridLayout.setObjectName(u"overridesGridLayout")
+        self.feed_ov_title_l = QLabel(self.jog_tab)
+        self.feed_ov_title_l.setObjectName(u"feed_ov_title_l")
+
+        self.overridesGridLayout.addWidget(self.feed_ov_title_l, 0, 0, 1, 1)
+
+        self.feed_ov_sl = QSlider(self.jog_tab)
+        self.feed_ov_sl.setObjectName(u"feed_ov_sl")
+        self.feed_ov_sl.setMinimumSize(QSize(100, 0))
+        self.feed_ov_sl.setMinimum(10)
+        self.feed_ov_sl.setMaximum(200)
+        self.feed_ov_sl.setPageStep(10)
+        self.feed_ov_sl.setValue(100)
+        self.feed_ov_sl.setOrientation(Qt.Orientation.Horizontal)
+        self.feed_ov_sl.setTickPosition(QSlider.TickPosition.TicksBelow)
+        self.feed_ov_sl.setTickInterval(10)
+
+        self.overridesGridLayout.addWidget(self.feed_ov_sl, 0, 1, 1, 1)
+
+        self.feed_ov_sb = SaturatingSpinBox(self.jog_tab)
+        self.feed_ov_sb.setObjectName(u"feed_ov_sb")
+        self.feed_ov_sb.setMinimumSize(QSize(0, 23))
+        self.feed_ov_sb.setKeyboardTracking(False)
+        self.feed_ov_sb.setMinimum(10)
+        self.feed_ov_sb.setMaximum(200)
+        self.feed_ov_sb.setSingleStep(1)
+        self.feed_ov_sb.setValue(100)
+
+        self.overridesGridLayout.addWidget(self.feed_ov_sb, 0, 2, 1, 1)
+
+        self.cur_feed_l = QLabel(self.jog_tab)
+        self.cur_feed_l.setObjectName(u"cur_feed_l")
+        self.cur_feed_l.setMinimumSize(QSize(60, 0))
+        self.cur_feed_l.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.overridesGridLayout.addWidget(self.cur_feed_l, 0, 3, 1, 1)
+
+        self.spindle_ov_title_l = QLabel(self.jog_tab)
+        self.spindle_ov_title_l.setObjectName(u"spindle_ov_title_l")
+
+        self.overridesGridLayout.addWidget(self.spindle_ov_title_l, 1, 0, 1, 1)
+
+        self.spindle_ov_sl = QSlider(self.jog_tab)
+        self.spindle_ov_sl.setObjectName(u"spindle_ov_sl")
+        self.spindle_ov_sl.setMinimumSize(QSize(100, 0))
+        self.spindle_ov_sl.setMinimum(10)
+        self.spindle_ov_sl.setMaximum(200)
+        self.spindle_ov_sl.setPageStep(10)
+        self.spindle_ov_sl.setValue(100)
+        self.spindle_ov_sl.setOrientation(Qt.Orientation.Horizontal)
+        self.spindle_ov_sl.setTickPosition(QSlider.TickPosition.TicksBelow)
+        self.spindle_ov_sl.setTickInterval(10)
+
+        self.overridesGridLayout.addWidget(self.spindle_ov_sl, 1, 1, 1, 1)
+
+        self.spindle_ov_sb = SaturatingSpinBox(self.jog_tab)
+        self.spindle_ov_sb.setObjectName(u"spindle_ov_sb")
+        self.spindle_ov_sb.setMinimumSize(QSize(0, 23))
+        self.spindle_ov_sb.setKeyboardTracking(False)
+        self.spindle_ov_sb.setMinimum(10)
+        self.spindle_ov_sb.setMaximum(200)
+        self.spindle_ov_sb.setSingleStep(1)
+        self.spindle_ov_sb.setValue(100)
+
+        self.overridesGridLayout.addWidget(self.spindle_ov_sb, 1, 2, 1, 1)
+
+        self.cur_spindle_l = QLabel(self.jog_tab)
+        self.cur_spindle_l.setObjectName(u"cur_spindle_l")
+        self.cur_spindle_l.setMinimumSize(QSize(60, 0))
+        self.cur_spindle_l.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.overridesGridLayout.addWidget(self.cur_spindle_l, 1, 3, 1, 1)
+
+        self.rapid_ov_title_l = QLabel(self.jog_tab)
+        self.rapid_ov_title_l.setObjectName(u"rapid_ov_title_l")
+
+        self.overridesGridLayout.addWidget(self.rapid_ov_title_l, 2, 0, 1, 1)
+
+        self.rapid_ov_sl = QSlider(self.jog_tab)
+        self.rapid_ov_sl.setObjectName(u"rapid_ov_sl")
+        self.rapid_ov_sl.setMinimumSize(QSize(100, 0))
+        self.rapid_ov_sl.setMinimum(0)
+        self.rapid_ov_sl.setMaximum(2)
+        self.rapid_ov_sl.setPageStep(1)
+        self.rapid_ov_sl.setValue(2)
+        self.rapid_ov_sl.setOrientation(Qt.Orientation.Horizontal)
+        self.rapid_ov_sl.setTickPosition(QSlider.TickPosition.TicksBelow)
+        self.rapid_ov_sl.setTickInterval(1)
+
+        self.overridesGridLayout.addWidget(self.rapid_ov_sl, 2, 1, 1, 1)
+
+        self.rapid_ov_l = QLabel(self.jog_tab)
+        self.rapid_ov_l.setObjectName(u"rapid_ov_l")
+        self.rapid_ov_l.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.overridesGridLayout.addWidget(self.rapid_ov_l, 2, 2, 1, 1)
+
+
+        self.verticalLayout_18.addLayout(self.overridesGridLayout)
 
         self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -4794,6 +4903,38 @@ class Ui_MainWindow(object):
         self.xy_div_10_pb.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
         self.xy_mul_10_pb.setText(QCoreApplication.translate("MainWindow", u"x10", None))
         self.xy_minus_1_pb.setText(QCoreApplication.translate("MainWindow", u"-1.0", None))
+        self.feed_ov_title_l.setText(QCoreApplication.translate("MainWindow", u"Feed", None))
+#if QT_CONFIG(tooltip)
+        self.feed_ov_sl.setToolTip(QCoreApplication.translate("MainWindow", u"Feed override, from 10% to 200%", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.feed_ov_sb.setToolTip(QCoreApplication.translate("MainWindow", u"Feed override, from 10% to 200%", None))
+#endif // QT_CONFIG(tooltip)
+        self.feed_ov_sb.setSuffix(QCoreApplication.translate("MainWindow", u"%", None))
+#if QT_CONFIG(tooltip)
+        self.cur_feed_l.setToolTip(QCoreApplication.translate("MainWindow", u"Current feed rate", None))
+#endif // QT_CONFIG(tooltip)
+        self.cur_feed_l.setText(QCoreApplication.translate("MainWindow", u"-", None))
+        self.spindle_ov_title_l.setText(QCoreApplication.translate("MainWindow", u"Spindle", None))
+#if QT_CONFIG(tooltip)
+        self.spindle_ov_sl.setToolTip(QCoreApplication.translate("MainWindow", u"Spindle override, from 10% to 200%", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.spindle_ov_sb.setToolTip(QCoreApplication.translate("MainWindow", u"Spindle override, from 10% to 200%", None))
+#endif // QT_CONFIG(tooltip)
+        self.spindle_ov_sb.setSuffix(QCoreApplication.translate("MainWindow", u"%", None))
+#if QT_CONFIG(tooltip)
+        self.cur_spindle_l.setToolTip(QCoreApplication.translate("MainWindow", u"Current spindle speed", None))
+#endif // QT_CONFIG(tooltip)
+        self.cur_spindle_l.setText(QCoreApplication.translate("MainWindow", u"-", None))
+        self.rapid_ov_title_l.setText(QCoreApplication.translate("MainWindow", u"Rapid", None))
+#if QT_CONFIG(tooltip)
+        self.rapid_ov_sl.setToolTip(QCoreApplication.translate("MainWindow", u"Rapid override: 25%, 50% or 100%", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.rapid_ov_l.setToolTip(QCoreApplication.translate("MainWindow", u"Rapid override", None))
+#endif // QT_CONFIG(tooltip)
+        self.rapid_ov_l.setText(QCoreApplication.translate("MainWindow", u"100%", None))
         self.jog_probe_tab_widget.setTabText(self.jog_probe_tab_widget.indexOf(self.jog_tab), QCoreApplication.translate("MainWindow", u"Jog", None))
         self.probe_pb.setText(QCoreApplication.translate("MainWindow", u"PROBE", None))
         self.get_bbox_pb.setText(QCoreApplication.translate("MainWindow", u"GET BBOX", None))

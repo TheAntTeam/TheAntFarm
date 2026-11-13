@@ -1,8 +1,10 @@
 import logging
 import os
+import time
 from collections import OrderedDict as Od
+from typing import Dict, Tuple
 
-from PySide6.QtCore import QItemSelectionModel, QObject, QPersistentModelIndex, QSize, Qt, Signal, Slot
+from PySide6.QtCore import QItemSelectionModel, QObject, QPersistentModelIndex, QSize, Qt, QTimer, Signal, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -36,6 +38,14 @@ class UiControlTab(QObject):
     remove_gcode_s = Signal(str)
 
     ui_send_cmd_s = Signal(str, tuple)
+    override_s = Signal(str, int)
+
+    OVERRIDE_KINDS = ("feed", "spindle", "rapid")
+    OVERRIDE_REPORT_KEYS = {"feed": "OvFeed", "spindle": "OvSpindle", "rapid": "OvRapid"}
+    RAPID_VALUES = (25, 50, 100)
+    OVERRIDE_SEND_DELAY_MS = 200
+    OVERRIDE_PENDING_S = 5.0
+    NO_VALUE = "-"
 
     def __init__(self, ui, control_worker, serial_worker, ctrl_layer, settings, style_manager=None):
         """
@@ -225,6 +235,9 @@ class UiControlTab(QObject):
 
         self.ui_send_cmd_s.connect(self.controlWo.execute_user_interface_cmd)
 
+        self.init_overrides()
+        self.override_s.connect(self.controlWo.set_override)
+
         self.init_xy_jog_step_value()
         self.init_z_jog_step_value()
 
@@ -347,6 +360,105 @@ class UiControlTab(QObject):
         self.ui.wpos_z_l_2.setText("{:.3f}".format(status_od["wpos"][2]))
 
         self.ctrl_layer.update_pointer(coords=status_od["wpos"])
+        self.update_override_readout(status_od)
+
+    def init_overrides(self) -> None:
+        """Connect the override sliders and text fields; a change is sent once it has settled."""
+        self.override_pending: Dict[str, Tuple[int, float]] = {}
+        self.override_timers: Dict[str, QTimer] = {}
+        for kind in self.OVERRIDE_KINDS:
+            timer = QTimer(self)
+            timer.setSingleShot(True)
+            timer.setInterval(self.OVERRIDE_SEND_DELAY_MS)
+            timer.timeout.connect(lambda k=kind: self._send_override(k))
+            self.override_timers[kind] = timer
+            slider = self._override_slider(kind)
+            if kind != "rapid":
+                spin_box = self._override_spin_box(kind)
+                slider.valueChanged.connect(spin_box.setValue)
+                spin_box.valueChanged.connect(slider.setValue)
+            slider.valueChanged.connect(lambda _value, k=kind: self._override_edited(k))
+        self.ui.rapid_ov_sl.valueChanged.connect(
+            lambda index: self.ui.rapid_ov_l.setText(f"{self.RAPID_VALUES[index]}%")
+        )
+        self.enable_override_elements(False)
+        self.clear_override_readout()
+
+    def _override_slider(self, kind: str):
+        return getattr(self.ui, kind + "_ov_sl")
+
+    def _override_spin_box(self, kind: str):
+        return getattr(self.ui, kind + "_ov_sb")
+
+    def _override_value(self, kind: str) -> int:
+        if kind == "rapid":
+            return self.RAPID_VALUES[self.ui.rapid_ov_sl.value()]
+        return self._override_spin_box(kind).value()
+
+    def _override_edited(self, kind: str) -> None:
+        self.override_timers[kind].start()
+
+    def _send_override(self, kind: str) -> None:
+        value = self._override_value(kind)
+        self.override_pending[kind] = (value, time.monotonic())
+        self.override_s.emit(kind, value)
+
+    def _show_override(self, kind: str, value: int) -> None:
+        """Show ``value`` without sending it back to the machine."""
+        slider = self._override_slider(kind)
+        if kind == "rapid":
+            if value not in self.RAPID_VALUES:
+                return
+            slider.blockSignals(True)
+            slider.setValue(self.RAPID_VALUES.index(value))
+            slider.blockSignals(False)
+            self.ui.rapid_ov_l.setText(f"{value}%")
+            return
+        spin_box = self._override_spin_box(kind)
+        for widget in (slider, spin_box):
+            widget.blockSignals(True)
+            widget.setValue(value)
+            widget.blockSignals(False)
+
+    def _follow_override_report(self, kind: str, reported: int) -> None:
+        """Move the slider to the value of the machine, unless the user is changing it."""
+        if self.override_timers[kind].isActive() or self._override_slider(kind).isSliderDown():
+            return
+        if kind != "rapid" and self._override_spin_box(kind).hasFocus():
+            return
+        pending = self.override_pending.get(kind)
+        if pending is not None:
+            target, sent_at = pending
+            if reported != target and time.monotonic() - sent_at < self.OVERRIDE_PENDING_S:
+                return
+            del self.override_pending[kind]
+        self._show_override(kind, reported)
+
+    def enable_override_elements(self, enable_flag: bool = True) -> None:
+        """Enable or disable the override controls, which stay usable during a job."""
+        for kind in self.OVERRIDE_KINDS:
+            self._override_slider(kind).setEnabled(enable_flag)
+            if kind != "rapid":
+                self._override_spin_box(kind).setEnabled(enable_flag)
+
+    def clear_override_readout(self) -> None:
+        for kind in self.OVERRIDE_KINDS:
+            self.override_timers[kind].stop()
+            self._show_override(kind, 100)
+        self.override_pending.clear()
+        self.ui.cur_feed_l.setText("F " + self.NO_VALUE)
+        self.ui.cur_spindle_l.setText("S " + self.NO_VALUE)
+
+    def update_override_readout(self, status_od: Od) -> None:
+        """Show the current feed rate, spindle speed and overrides of the last status reports."""
+        for kind in self.OVERRIDE_KINDS:
+            key = self.OVERRIDE_REPORT_KEYS[kind]
+            if key in status_od:
+                self._follow_override_report(kind, status_od[key])
+        if "curfeed" in status_od:
+            self.ui.cur_feed_l.setText(f"F {status_od['curfeed']:.0f}")
+        if "curspindle" in status_od:
+            self.ui.cur_spindle_l.setText(f"S {status_od['curspindle']:.0f}")
 
     def update_status_buttons(self, status):
         sta = status.lower()
@@ -756,6 +868,7 @@ class UiControlTab(QObject):
             if self.is_gcode_rb_selected():
                 self.ui.play_tb.setEnabled(True)
             self.enable_control_jog_elements(True)
+            self.enable_override_elements(True)
             self.controller_connected_s.emit(True)
             self.ctrl_layer.create_pointer(coords=(0, 0, 0))
             self.ui.get_tool_probe_pb.setEnabled(True)
@@ -778,6 +891,8 @@ class UiControlTab(QObject):
         self.ui.pause_resume_tb.setEnabled(False)
         self.ui.tool_change_tb.setEnabled(False)
         self.enable_control_jog_elements(False)
+        self.enable_override_elements(False)
+        self.clear_override_readout()
         self.controller_connected_s.emit(False)
         self.ctrl_layer.remove_pointer()
         self.ui.get_tool_probe_pb.setEnabled(False)
