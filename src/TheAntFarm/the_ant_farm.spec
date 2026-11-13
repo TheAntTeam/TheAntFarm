@@ -17,7 +17,7 @@ a = Analysis(
     ['the_ant_farm.py'],
     pathex=[],
     binaries=[],
-    datas=[('controller','controller'),('macros','macros'),('settings_manager','settings_manager'),('shape_core','shape_core'),('ui_manager','ui_manager'),('style_manager.py', '.'),('double_side_manager.py', '.'),('log_manager.py', '.'),('serial_manager.py', '.'),('grbl_simulator.py', '.'),('ui_the_ant_farm.py', '.'),('vispy_qt_widget.py', '.'),('app_resources_rc.py', '.'),('the_ant_farm.ui', '.'),('executable_path_checker.py', '.'),('combobox_filter_enter.py', '.'),('combobox_elide_left.py', '.'),('qledlabel.py', '.'),('qcamera_label.py', '.'),('__init__.py', '.')],
+    datas=[('controller','controller'),('macros','macros'),('settings_manager','settings_manager'),('shape_core','shape_core'),('ui_manager','ui_manager'),('style_manager.py', '.'),('double_side_manager.py', '.'),('log_manager.py', '.'),('serial_manager.py', '.'),('grbl_simulator.py', '.'),('ui_the_ant_farm.py', '.'),('vispy_qt_widget.py', '.'),('app_resources_rc.py', '.'),('the_ant_farm.ui', '.'),('executable_path_checker.py', '.'),('combobox_filter_enter.py', '.'),('combobox_elide_left.py', '.'),('saturating_spin_box.py', '.'),('qledlabel.py', '.'),('qcamera_label.py', '.'),('__init__.py', '.')],
     hiddenimports=['PySide6.QtCore', 'PySide6.QtGui', 'PySide6.QtSerialPort', 'PySide6.QtMultimedia', 'PySide6.QtSvg', 'shiboken6.Shiboken', 'vispy', 'vispy.app.backends._pyside6', 'vispy.app.qt', 'pyclipper', 'shapely', 'shapely.ops', 'shapely.validation', 'scipy.interpolate', 'qimage2ndarray', 'cv2', 'OpenGL', 'OpenGL.GL', 'OpenGL.GLU', 'OpenGL.GLUT', 'OpenGL.platform.egl'] + gerbyx_modules,
     hookspath=['.'],
     hooksconfig={},

@@ -624,3 +624,158 @@ class TestStopJobForClose:
 
         assert rig.realtime == [FEED_HOLD, SOFT_RESET]
         assert worker.sending_file is False
+
+
+OV_STATUS = "<Run|MPos:0.000,0.000,0.000|FS:300,1000|Ov:{},{},{}>\n"
+
+
+class TestSetOverride:
+    """A feed or spindle override moves one GRBL step per report, until the machine reports the target."""
+
+    def report(self, rig, feed=100, rapid=100, spindle=100):
+        rig.feed(OV_STATUS.format(feed, rapid, spindle))
+
+    def test_the_value_is_unknown_so_it_starts_from_100(self, worker):
+        rig = StreamRig(worker)
+
+        worker.set_override("feed", 85)
+
+        assert rig.realtime == [b"\x90"]
+
+    def test_the_feed_steps_down_by_tens_then_ones(self, worker):
+        rig = StreamRig(worker)
+        self.report(rig)
+        rig.realtime.clear()
+
+        worker.set_override("feed", 75)
+        for feed in (90, 80, 79, 78, 77, 76, 75, 75):
+            self.report(rig, feed=feed)
+
+        assert rig.realtime == [b"\x92", b"\x92", b"\x94", b"\x94", b"\x94", b"\x94", b"\x94"]
+        assert worker.override_targets == {}
+
+    def test_the_spindle_steps_up(self, worker):
+        rig = StreamRig(worker)
+        self.report(rig)
+        rig.realtime.clear()
+
+        worker.set_override("spindle", 112)
+        self.report(rig, spindle=110)
+        self.report(rig, spindle=111)
+        self.report(rig, spindle=112)
+
+        assert rig.realtime == [b"\x9a", b"\x9c", b"\x9c"]
+
+    def test_a_report_without_the_overrides_sends_nothing(self, worker):
+        rig = StreamRig(worker)
+        self.report(rig)
+        worker.set_override("feed", 120)
+        rig.realtime.clear()
+
+        rig.feed("<Run|MPos:0.000,0.000,0.000|FS:300,1000>\n")
+
+        assert rig.realtime == []
+
+    def test_a_stale_report_is_corrected(self, worker):
+        rig = StreamRig(worker)
+        self.report(rig)
+        rig.realtime.clear()
+
+        worker.set_override("feed", 90)
+        self.report(rig, feed=100)
+        self.report(rig, feed=80)
+        self.report(rig, feed=90)
+
+        assert rig.realtime == [b"\x92", b"\x92", b"\x91"]
+        assert worker.override_targets == {}
+
+    @pytest.mark.parametrize("value, target", [(5, 10), (250, 200)])
+    def test_the_target_is_kept_in_the_grbl_range(self, worker, value, target):
+        StreamRig(worker)
+
+        worker.set_override("feed", value)
+
+        assert worker.override_targets == {"feed": target}
+
+    @pytest.mark.parametrize("value, byte", [(100, b"\x95"), (50, b"\x96"), (25, b"\x97")])
+    def test_the_rapid_override_is_one_byte(self, worker, value, byte):
+        rig = StreamRig(worker)
+
+        worker.set_override("rapid", value)
+
+        assert rig.realtime == [byte]
+        assert worker.override_targets == {}
+
+    def test_a_job_goes_on_while_the_override_changes(self, worker):
+        rig = StreamRig(worker, JOB)
+        rig.sent()
+        self.report(rig)
+
+        worker.set_override("feed", 50)
+
+        assert worker.sending_file is True
+        rig.feed("ok\n")
+        assert rig.sent() != []
+
+    def test_disconnecting_forgets_the_targets(self, worker):
+        worker.init_timers()
+        rig = StreamRig(worker)
+        worker.set_override("feed", 50)
+
+        worker.on_controller_connection(False)
+        self.report(rig)
+
+        assert worker.override_targets == {}
+
+    @pytest.mark.parametrize("kind, value", [("coolant", 100), ("rapid", 75)])
+    def test_an_invalid_override_sends_nothing(self, worker, caplog, kind, value):
+        rig = StreamRig(worker)
+
+        worker.set_override(kind, value)
+
+        assert rig.realtime == []
+        assert worker.override_targets == {}
+        assert "override" in caplog.text
+
+
+class TestOverrideOnTheSimulator:
+    """The stepping reaches the target with the override reports of a GRBL-like controller."""
+
+    @pytest.mark.parametrize("kind, target", [("feed", 37), ("feed", 200), ("spindle", 10), ("spindle", 154)])
+    def test_the_target_is_reached(self, worker, kind, target):
+        from TheAntFarm.grbl_simulator import GrblSimulator
+
+        sim = GrblSimulator()
+        sim.read_output()
+        worker.serial_send_s.connect(sim.receive)
+
+        def poll():
+            sim.receive(b"?")
+            for line in sim.read_output().decode().splitlines():
+                if line.startswith("<"):
+                    worker.serialRxQueue.put(line + "\n")
+                    worker.parse_rx_queue()
+
+        poll()
+        worker.set_override(kind, target)
+        for _ in range(100):
+            poll()
+            if not worker.override_targets:
+                break
+
+        assert worker.override_targets == {}
+        assert getattr(sim, kind + "_override") == target
+
+
+class TestOverrideReachedLog:
+    def test_reaching_the_target_is_logged(self, worker, caplog):
+        import logging
+
+        rig = StreamRig(worker)
+        rig.feed(OV_STATUS.format(100, 100, 100))
+        worker.set_override("feed", 90)
+
+        with caplog.at_level(logging.INFO):
+            rig.feed(OV_STATUS.format(90, 100, 100))
+
+        assert "Feed override reached: 90%" in caplog.text

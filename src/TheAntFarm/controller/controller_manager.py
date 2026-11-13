@@ -4,7 +4,7 @@ import re
 import time
 import traceback
 from collections import OrderedDict as Od
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from PySide6.QtCore import QThread, QTimer, Slot
 from PySide6.QtGui import QPixmap
@@ -21,6 +21,14 @@ logger = logging.getLogger(__name__)
 class ControllerWorker(ControllerSignals):
     REMOTE_RX_BUFFER_MAX_SIZE = 128
     SPINDLE_STOP_TOGGLE = b"\x9e"
+    OVERRIDE_MIN = 10
+    OVERRIDE_MAX = 200
+    OVERRIDE_STEPS = {
+        "feed": {0: b"\x90", 10: b"\x91", -10: b"\x92", 1: b"\x93", -1: b"\x94"},
+        "spindle": {0: b"\x99", 10: b"\x9a", -10: b"\x9b", 1: b"\x9c", -1: b"\x9d"},
+    }
+    OVERRIDE_REPORT_KEYS = {"feed": "OvFeed", "spindle": "OvSpindle"}
+    RAPID_OVERRIDES = {100: b"\x95", 50: b"\x96", 25: b"\x97"}
 
     def __init__(self, serial_rx_queue, serial_tx_queue, settings):
         super(ControllerWorker, self).__init__()
@@ -42,6 +50,7 @@ class ControllerWorker(ControllerSignals):
         self.progress_timer = None
 
         self.align_active = False
+        self.override_targets: Dict[str, int] = {}
 
         self.status_to_ack = 0
         self.buffered_cmds = []
@@ -102,6 +111,7 @@ class ControllerWorker(ControllerSignals):
         else:
             self.poll_timer.stop()
             self._clear_rejected_line()
+            self.override_targets.clear()
 
     def init_timers(self):
         self.poll_timer = QTimer()
@@ -192,6 +202,8 @@ class ControllerWorker(ControllerSignals):
                     # logger.debug("Element received: " + str(element))
                     if re.match(r"^<.*>\s*$\s", element):
                         self.update_status_s.emit(self.control_controller.parse_bracket_angle(element))
+                        if "|Ov:" in element:
+                            self._step_overrides()
                         # This variable should be set to true the first time an ack is received.
                         if not self.dro_status_updated:
                             self.dro_status_updated = True
@@ -484,6 +496,52 @@ class ControllerWorker(ControllerSignals):
             logger.info("Sending Long User Command")
             self.send_soft_reset = False
             self.send_gcode_lines(str_l)
+
+    @Slot(str, int)
+    def set_override(self, kind: str, value: int) -> None:
+        """Bring the ``kind`` override (feed, spindle or rapid) to ``value`` percent, also during a job.
+
+        GRBL only takes steps of 10 % and 1 %, and merges equal steps that arrive together, so the
+        feed and spindle overrides move one step per status report that carries the override values,
+        until the reported value is the target.
+        """
+        if kind == "rapid":
+            cmd = self.RAPID_OVERRIDES.get(value)
+            if cmd is None:
+                logger.error(f"Invalid rapid override: {value}")
+                return
+            logger.info(f"Rapid override: {value}%")
+            self.serial_send_s.emit(cmd)
+            return
+        if kind not in self.OVERRIDE_STEPS:
+            logger.error(f"Unknown override: {kind}")
+            return
+        target = min(max(int(value), self.OVERRIDE_MIN), self.OVERRIDE_MAX)
+        logger.info(f"{kind.capitalize()} override: {target}%")
+        self.override_targets[kind] = target
+        self._step_override(kind)
+
+    def _step_overrides(self) -> None:
+        for kind in list(self.override_targets):
+            self._step_override(kind)
+
+    def _step_override(self, kind: str) -> None:
+        """Send the next step towards the target, or reset to 100 % while the value is unknown."""
+        target = self.override_targets.get(kind)
+        if target is None:
+            return
+        steps = self.OVERRIDE_STEPS[kind]
+        reported = self.control_controller.status_report_od.get(self.OVERRIDE_REPORT_KEYS[kind])
+        if reported is None:
+            self.serial_send_s.emit(steps[0])
+            return
+        diff = target - reported
+        if diff == 0:
+            del self.override_targets[kind]
+            logger.info(f"{kind.capitalize()} override reached: {target}%")
+            return
+        size = 10 if abs(diff) >= 10 else 1
+        self.serial_send_s.emit(steps[size if diff > 0 else -size])
 
     def execute_gcode_cmd(self, cmd_str):
         """Send generic G-CODE command coming from elsewhere."""

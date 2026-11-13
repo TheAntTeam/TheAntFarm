@@ -389,6 +389,8 @@ class TestSerialRow:
         ui_tab.ctrl_layer = Mock()
         ui_tab.is_gcode_rb_selected = Mock(return_value=False)
         ui_tab.enable_control_jog_elements = Mock()
+        ui_tab.enable_override_elements = Mock()
+        ui_tab.clear_override_readout = Mock()
         ui_tab.close_rejected_line_prompt = Mock()
         return ui_tab
 
