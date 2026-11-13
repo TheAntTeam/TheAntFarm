@@ -69,3 +69,23 @@ def test_the_arrows_stop_at_the_limits(spin_box):
     spin_box.stepBy(5)
 
     assert spin_box.value() == 200
+
+
+def test_a_prefix_is_skipped_when_saturating(spin_box):
+    spin_box.setPrefix("x")
+
+    type_and_confirm(spin_box, "250")
+
+    assert spin_box.value() == 200
+    assert spin_box.lineEdit().text() == "x200%"
+
+
+def test_an_empty_field_keeps_the_value(spin_box):
+    type_and_confirm(spin_box, "")
+
+    assert spin_box.value() == 100
+    assert spin_box.changes == []
+
+
+def test_text_without_a_number_is_left_to_the_spin_box(spin_box):
+    assert spin_box.fixup("%") == "%"
