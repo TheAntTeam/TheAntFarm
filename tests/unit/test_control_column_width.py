@@ -56,24 +56,56 @@ class TestBaudBox:
         assert bauds.sizeHint().width() == empty
 
 
-class TestConnectionRows:
-    def test_the_port_row_is_shown_first(self, ui, qapp):
+class TestConnectionRow:
+    CONNECTION_WIDGETS = ("serial_ports_cb", "serial_baud_cb", "refresh_pb", "connect_pb")
+
+    def test_it_is_outside_the_tabs(self, ui):
+        for name in self.CONNECTION_WIDGETS:
+            assert not ui.ctrl_tab_widget.isAncestorOf(getattr(ui, name)), name
+
+    @pytest.mark.parametrize("tab", ["gcode_load", "sender_tab"])
+    def test_it_is_visible_on_every_tab_of_the_left_column(self, ui, qapp, tab):
+        ui.ctrl_tab_widget.setCurrentWidget(getattr(ui, tab))
         show(ui, qapp)
 
-        assert ui.serial_row_sw.currentWidget() is ui.serial_connect_page
-        assert ui.serial_ports_cb.isVisible()
-        assert not ui.send_cb.isVisible()
+        for name in self.CONNECTION_WIDGETS:
+            assert getattr(ui, name).isVisible(), name
 
-    def test_the_column_keeps_its_width_on_both_rows(self, ui, qapp):
+    def test_it_is_a_box_in_the_right_column_under_the_status(self, ui, qapp):
+        from PySide6.QtWidgets import QGroupBox
+
+        show(ui, qapp)
+        status = ui.status_l.geometry()
+        box = ui.connection_box.geometry()
+
+        assert isinstance(ui.connection_box, QGroupBox)
+        assert box.left() == status.left()
+        assert status.bottom() < box.top()
+        assert box.bottom() < ui.unlock_tb.geometry().top()
+
+    def test_the_box_holds_the_widgets_one_under_the_other(self, ui, qapp):
+        show(ui, qapp)
+        previous_bottom = -1
+
+        for name in self.CONNECTION_WIDGETS:
+            widget = getattr(ui, name)
+            assert widget.parent() is ui.connection_box, name
+            assert widget.geometry().top() > previous_bottom, name
+            assert ui.connection_box.rect().contains(widget.geometry()), name
+            previous_bottom = widget.geometry().bottom()
+
+    def test_the_box_is_as_wide_as_the_machine_buttons(self, ui, qapp):
         ui.serial_ports_cb.addItems(PORTS)
         show(ui, qapp)
-        with_port_row = ui.ctrl_tab_widget.sizeHint().width()
 
-        ui.serial_row_sw.setCurrentWidget(ui.serial_send_page)
-        qapp.processEvents()
+        assert ui.connection_box.width() == ui.homing_tb.width()
 
-        assert ui.send_cb.isVisible()
-        assert ui.ctrl_tab_widget.sizeHint().width() == with_port_row
+    def test_the_terminal_keeps_the_send_row(self, ui, qapp):
+        show(ui, qapp)
+
+        for name in ("send_cb", "send_pb", "clear_terminal_pb"):
+            assert ui.probe_terminal_tab.isAncestorOf(getattr(ui, name)), name
+            assert getattr(ui, name).isVisible(), name
 
 
 class TestJogTab:
@@ -113,3 +145,24 @@ class TestLabels:
     def test_the_divide_buttons_do_not_read_as_plus(self, ui):
         for name in ("xy_div_10_pb", "z_div_10_pb", "xy_div_10_pb_2", "z_div_10_pb_2"):
             assert getattr(ui, name).text() == "/10"
+
+
+class TestShortWindow:
+    MACHINE_BUTTONS = ("unlock_tb", "homing_tb", "play_tb", "pause_resume_tb", "stop_tb", "tool_change_tb")
+
+    def test_the_machine_buttons_can_shrink(self, ui):
+        from machine_tool_button import MachineToolButton
+
+        assert all(isinstance(getattr(ui, name), MachineToolButton) for name in self.MACHINE_BUTTONS)
+
+    def test_the_connection_box_keeps_its_height_in_the_smallest_window(self, ui, qapp):
+        ui.window.resize(ui.window.minimumSize())
+        show(ui, qapp)
+
+        assert ui.connection_box.height() >= ui.connection_box.sizeHint().height()
+
+    def test_the_machine_buttons_keep_their_full_height_in_a_tall_window(self, ui, qapp):
+        ui.window.resize(1400, 1100)
+        show(ui, qapp)
+
+        assert [getattr(ui, name).iconSize().height() for name in self.MACHINE_BUTTONS] == [64, 64, 64, 64, 64, 72]

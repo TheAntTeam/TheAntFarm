@@ -374,7 +374,7 @@ class TestStatusColors:
 
 @pytest.mark.usefixtures("qapp")
 class TestSerialRow:
-    """The port row and the send row are the two pages of one box, which keeps one width."""
+    """The port is chosen while disconnected, and commands are sent while connected."""
 
     @pytest.fixture
     def ui_tab(self):
@@ -394,20 +394,50 @@ class TestSerialRow:
         ui_tab.close_rejected_line_prompt = Mock()
         return ui_tab
 
-    def test_connecting_shows_the_send_row(self, ui_tab):
+    @staticmethod
+    def _hidden_widgets(ui_tab):
+        return (ui_tab.ui.serial_baud_cb, ui_tab.ui.refresh_pb)
+
+    @staticmethod
+    def _send_widgets(ui_tab):
+        return (ui_tab.ui.send_cb, ui_tab.ui.send_pb)
+
+    def test_connecting_locks_the_port_and_enables_the_send_row(self, ui_tab):
         ui_tab.act_on_connection(True)
 
-        ui_tab.ui.serial_row_sw.setCurrentWidget.assert_called_once_with(ui_tab.ui.serial_send_page)
+        ui_tab.ui.serial_ports_cb.setEnabled.assert_called_once_with(False)
+        for widget in self._send_widgets(ui_tab):
+            widget.setEnabled.assert_called_once_with(True)
+        ui_tab.ui.connect_pb.setText.assert_called_once_with("Disconnect")
 
-    def test_disconnecting_shows_the_port_row(self, ui_tab):
+    def test_connecting_hides_the_baud_rate_and_refresh(self, ui_tab):
+        ui_tab.act_on_connection(True)
+
+        for widget in self._hidden_widgets(ui_tab):
+            widget.setVisible.assert_called_once_with(False)
+        ui_tab.ui.serial_ports_cb.setVisible.assert_not_called()
+
+    def test_disconnecting_frees_the_port_and_disables_the_send_row(self, ui_tab):
         ui_tab.act_on_disconnection()
 
-        ui_tab.ui.serial_row_sw.setCurrentWidget.assert_called_once_with(ui_tab.ui.serial_connect_page)
+        ui_tab.ui.serial_ports_cb.setEnabled.assert_called_once_with(True)
+        for widget in self._send_widgets(ui_tab):
+            widget.setEnabled.assert_called_once_with(False)
+        ui_tab.ui.connect_pb.setText.assert_called_once_with("Connect")
 
-    def test_a_failed_connection_keeps_the_port_row(self, ui_tab):
+    def test_disconnecting_shows_the_baud_rate_and_refresh(self, ui_tab):
+        ui_tab.act_on_disconnection()
+
+        for widget in self._hidden_widgets(ui_tab):
+            widget.setVisible.assert_called_once_with(True)
+
+    def test_a_failed_connection_changes_nothing(self, ui_tab):
         ui_tab.act_on_connection(False)
 
-        ui_tab.ui.serial_row_sw.setCurrentWidget.assert_not_called()
+        for widget in (ui_tab.ui.serial_ports_cb,) + self._send_widgets(ui_tab):
+            widget.setEnabled.assert_not_called()
+        for widget in self._hidden_widgets(ui_tab):
+            widget.setVisible.assert_not_called()
 
 
 class TestJobRunning:

@@ -4646,160 +4646,41 @@
                        </widget>
                       </item>
                       <item>
-                       <widget class="QStackedWidget" name="serial_row_sw">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="currentIndex">
-                         <number>0</number>
-                        </property>
-                        <widget class="QWidget" name="serial_connect_page">
-                         <layout class="QHBoxLayout" name="horizontalLayout">
-                          <property name="leftMargin">
-                           <number>0</number>
+                       <layout class="QHBoxLayout" name="serial_send_layout">
+                        <item>
+                         <widget class="ComboBoxFilterEnter" name="send_cb">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
                           </property>
-                          <property name="topMargin">
-                           <number>0</number>
+                          <property name="autoFillBackground">
+                           <bool>true</bool>
                           </property>
-                          <property name="rightMargin">
-                           <number>0</number>
+                          <property name="editable">
+                           <bool>true</bool>
                           </property>
-                          <property name="bottomMargin">
-                           <number>0</number>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="send_pb">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
                           </property>
-                          <property name="spacing">
-                           <number>6</number>
+                          <property name="font">
+                           <font>
+                            <bold>true</bold>
+                           </font>
                           </property>
-                          <item>
-                           <widget class="ComboBoxElideLeft" name="serial_ports_cb">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="toolTip">
-                             <string>Available serial ports.</string>
-                            </property>
-                            <property name="statusTip">
-                             <string>Available serial ports.</string>
-                            </property>
-                            <property name="sizeAdjustPolicy">
-                             <enum>QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLengthWithIcon</enum>
-                            </property>
-                            <property name="minimumContentsLength">
-                             <number>8</number>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QComboBox" name="serial_baud_cb">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="toolTip">
-                             <string>Serial port baudrate [bps]</string>
-                            </property>
-                            <property name="statusTip">
-                             <string>Serial port baudrate [bps]</string>
-                            </property>
-                            <property name="currentText">
-                             <string/>
-                            </property>
-                            <property name="sizeAdjustPolicy">
-                             <enum>QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLengthWithIcon</enum>
-                            </property>
-                            <property name="minimumContentsLength">
-                             <number>5</number>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QPushButton" name="refresh_pb">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="font">
-                             <font>
-                              <bold>true</bold>
-                             </font>
-                            </property>
-                            <property name="statusTip">
-                             <string>Refresh serial port list.</string>
-                            </property>
-                            <property name="text">
-                             <string>Serial Ports Refresh</string>
-                            </property>
-                            <property name="checkable">
-                             <bool>false</bool>
-                            </property>
-                           </widget>
-                          </item>
-                         </layout>
-                        </widget>
-                        <widget class="QWidget" name="serial_send_page">
-                         <layout class="QHBoxLayout" name="horizontalLayout_2">
-                          <property name="leftMargin">
-                           <number>0</number>
+                          <property name="text">
+                           <string>Send</string>
                           </property>
-                          <property name="topMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="rightMargin">
-                           <number>0</number>
-                          </property>
-                          <property name="bottomMargin">
-                           <number>0</number>
-                          </property>
-                          <item>
-                           <widget class="ComboBoxFilterEnter" name="send_cb">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="autoFillBackground">
-                             <bool>true</bool>
-                            </property>
-                            <property name="editable">
-                             <bool>true</bool>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QPushButton" name="send_pb">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="font">
-                             <font>
-                              <bold>true</bold>
-                             </font>
-                            </property>
-                            <property name="text">
-                             <string>Send</string>
-                            </property>
-                           </widget>
-                          </item>
-                         </layout>
-                        </widget>
-                       </widget>
-                      </item>
-                      <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_9">
+                         </widget>
+                        </item>
                         <item>
                          <widget class="QPushButton" name="clear_terminal_pb">
                           <property name="enabled">
@@ -4817,41 +4698,7 @@
                            </font>
                           </property>
                           <property name="text">
-                           <string>Clear Terminal</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <spacer name="horizontalSpacer_2">
-                          <property name="orientation">
-                           <enum>Qt::Orientation::Vertical</enum>
-                          </property>
-                          <property name="sizeHint" stdset="0">
-                           <size>
-                            <width>40</width>
-                            <height>20</height>
-                           </size>
-                          </property>
-                         </spacer>
-                        </item>
-                        <item>
-                         <widget class="QPushButton" name="connect_pb">
-                          <property name="sizePolicy">
-                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                           </sizepolicy>
-                          </property>
-                          <property name="font">
-                           <font>
-                            <bold>true</bold>
-                           </font>
-                          </property>
-                          <property name="statusTip">
-                           <string>Connect to selected serial port.</string>
-                          </property>
-                          <property name="text">
-                           <string>Connect</string>
+                           <string>Clear</string>
                           </property>
                          </widget>
                         </item>
@@ -5060,7 +4907,141 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="unlock_tb">
+           <widget class="QGroupBox" name="connection_box">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <layout class="QVBoxLayout" name="connection_layout">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>2</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>2</number>
+             </property>
+              <item>
+               <widget class="ComboBoxElideLeft" name="serial_ports_cb">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string>Available serial ports.</string>
+                </property>
+                <property name="statusTip">
+                 <string>Serial port of the machine</string>
+                </property>
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLengthWithIcon</enum>
+                </property>
+                <property name="minimumContentsLength">
+                 <number>6</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="serial_baud_cb">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string>Serial port baudrate [bps]</string>
+                </property>
+                <property name="statusTip">
+                 <string>Serial port baud rate [bps]</string>
+                </property>
+                <property name="currentText">
+                 <string/>
+                </property>
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLengthWithIcon</enum>
+                </property>
+                <property name="minimumContentsLength">
+                 <number>5</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="refresh_pb">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="statusTip">
+                 <string>Refresh serial port list.</string>
+                </property>
+                <property name="text">
+                 <string>Refresh</string>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="connect_pb">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="statusTip">
+                 <string>Connect to selected serial port.</string>
+                </property>
+                <property name="text">
+                 <string>Connect</string>
+                </property>
+               </widget>
+              </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="MachineToolButton" name="unlock_tb">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -5070,7 +5051,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>80</height>
+              <height>52</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -5106,7 +5087,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="homing_tb">
+           <widget class="MachineToolButton" name="homing_tb">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -5116,7 +5097,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>80</height>
+              <height>52</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -5152,7 +5133,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="play_tb">
+           <widget class="MachineToolButton" name="play_tb">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -5162,7 +5143,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>80</height>
+              <height>52</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -5198,7 +5179,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="pause_resume_tb">
+           <widget class="MachineToolButton" name="pause_resume_tb">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -5208,7 +5189,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>80</height>
+              <height>52</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -5244,7 +5225,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="stop_tb">
+           <widget class="MachineToolButton" name="stop_tb">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -5254,7 +5235,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>80</height>
+              <height>52</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -5290,7 +5271,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="tool_change_tb">
+           <widget class="MachineToolButton" name="tool_change_tb">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -5300,7 +5281,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>80</height>
+              <height>52</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -10587,6 +10568,11 @@
    <class>SaturatingSpinBox</class>
    <extends>QSpinBox</extends>
    <header>saturating_spin_box</header>
+  </customwidget>
+  <customwidget>
+   <class>MachineToolButton</class>
+   <extends>QToolButton</extends>
+   <header>machine_tool_button</header>
   </customwidget>
   <customwidget>
    <class>ComboBoxElideLeft</class>
