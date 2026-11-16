@@ -4895,7 +4895,7 @@ class Ui_MainWindow(object):
         self.z_step_cb.setItemText(7, QCoreApplication.translate("MainWindow", u"0.01", None))
 
         self.z_mul_10_pb.setText(QCoreApplication.translate("MainWindow", u"x10", None))
-        self.z_div_10_pb.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
+        self.z_div_10_pb.setText(QCoreApplication.translate("MainWindow", u"/10", None))
         self.z_minus_1_pb.setText(QCoreApplication.translate("MainWindow", u"-1.0", None))
         self.z_plus_1_pb.setText(QCoreApplication.translate("MainWindow", u"+1.0", None))
         self.xy_jog_l.setText(QCoreApplication.translate("MainWindow", u"XY step [mm]", None))
@@ -4909,7 +4909,7 @@ class Ui_MainWindow(object):
         self.xy_step_cb.setItemText(7, QCoreApplication.translate("MainWindow", u"0.01", None))
 
         self.xy_plus_1_pb.setText(QCoreApplication.translate("MainWindow", u"+1.0", None))
-        self.xy_div_10_pb.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
+        self.xy_div_10_pb.setText(QCoreApplication.translate("MainWindow", u"/10", None))
         self.xy_mul_10_pb.setText(QCoreApplication.translate("MainWindow", u"x10", None))
         self.xy_minus_1_pb.setText(QCoreApplication.translate("MainWindow", u"-1.0", None))
         self.feed_ov_title_l.setText(QCoreApplication.translate("MainWindow", u"Feed", None))
@@ -5083,7 +5083,7 @@ class Ui_MainWindow(object):
         self.z_step_cb_2.setItemText(7, QCoreApplication.translate("MainWindow", u"0.01", None))
 
         self.z_mul_10_pb_2.setText(QCoreApplication.translate("MainWindow", u"x10", None))
-        self.z_div_10_pb_2.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
+        self.z_div_10_pb_2.setText(QCoreApplication.translate("MainWindow", u"/10", None))
         self.z_minus_1_pb_2.setText(QCoreApplication.translate("MainWindow", u"-1.0", None))
         self.z_plus_1_pb_2.setText(QCoreApplication.translate("MainWindow", u"+1.0", None))
         self.xy_jog_l_2.setText(QCoreApplication.translate("MainWindow", u"XY step [mm]", None))
@@ -5097,7 +5097,7 @@ class Ui_MainWindow(object):
         self.xy_step_cb_2.setItemText(7, QCoreApplication.translate("MainWindow", u"0.01", None))
 
         self.xy_plus_1_pb_2.setText(QCoreApplication.translate("MainWindow", u"+1.0", None))
-        self.xy_div_10_pb_2.setText(QCoreApplication.translate("MainWindow", u"\u00f710", None))
+        self.xy_div_10_pb_2.setText(QCoreApplication.translate("MainWindow", u"/10", None))
         self.xy_mul_10_pb_2.setText(QCoreApplication.translate("MainWindow", u"x10", None))
         self.xy_minus_1_pb_2.setText(QCoreApplication.translate("MainWindow", u"-1.0", None))
         self.z_axis_l_2.setText(QCoreApplication.translate("MainWindow", u"Z", None))

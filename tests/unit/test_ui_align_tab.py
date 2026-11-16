@@ -84,7 +84,7 @@ class TestUpdateToolOrCamera:
         ui.ui = mock_main_win.ui
         ui.app_settings = mock_app_settings
         ui.update_tool_or_camera()
-        mock_main_win.ui.tool_or_camera_tb.setText.assert_called_with("TOOL_POSITION")
+        mock_main_win.ui.tool_or_camera_tb.setText.assert_called_with("TOOL POSITION")
 
     def test_update_tool_or_camera_camera(self):
         mock_main_win = MagicMock()
@@ -98,7 +98,7 @@ class TestUpdateToolOrCamera:
         ui.ui = mock_main_win.ui
         ui.app_settings = mock_app_settings
         ui.update_tool_or_camera()
-        mock_main_win.ui.tool_or_camera_tb.setText.assert_called_with("CAMERA_POSITION")
+        mock_main_win.ui.tool_or_camera_tb.setText.assert_called_with("CAMERA POSITION")
 
 
 class TestComputeOffsetPoint:

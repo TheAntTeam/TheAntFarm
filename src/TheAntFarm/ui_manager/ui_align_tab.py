@@ -139,10 +139,10 @@ class UiAlignTab(QObject):
 
     def update_tool_or_camera(self):
         if self.ui.tool_or_camera_tb.isChecked():
-            self.ui.tool_or_camera_tb.setText("CAMERA_POSITION")
+            self.ui.tool_or_camera_tb.setText("CAMERA POSITION")
             self.app_settings.camera_selected_or_tool = True
         else:
-            self.ui.tool_or_camera_tb.setText("TOOL_POSITION")
+            self.ui.tool_or_camera_tb.setText("TOOL POSITION")
             self.app_settings.camera_selected_or_tool = False
 
     def check_align_is_active(self):
