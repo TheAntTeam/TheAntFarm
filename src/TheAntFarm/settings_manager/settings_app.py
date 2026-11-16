@@ -61,6 +61,8 @@ class AppSettingsHandler:
     SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT = 3
     SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT = 10
     GRBL_SIMULATOR_ENABLED_DEFAULT = False
+    CONFIRMATIONS = ("confirm_play", "confirm_homing", "confirm_tool_change", "confirm_zero")
+    CONFIRM_DEFAULT = True
     GRBL_SIMULATOR_SPEED_DEFAULT = 1.0
     GRBL_SIMULATOR_SPEED_MIN = 0.1
     GRBL_SIMULATOR_SPEED_MAX = 100.0
@@ -125,6 +127,10 @@ class AppSettingsHandler:
         self.serial_error_critical_threshold = self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
         self.grbl_simulator_enabled = self.GRBL_SIMULATOR_ENABLED_DEFAULT
         self.grbl_simulator_speed = self.GRBL_SIMULATOR_SPEED_DEFAULT
+        self.confirm_play = self.CONFIRM_DEFAULT
+        self.confirm_homing = self.CONFIRM_DEFAULT
+        self.confirm_tool_change = self.CONFIRM_DEFAULT
+        self.confirm_zero = self.CONFIRM_DEFAULT
 
     @staticmethod
     def choose_version(version_s, version_default_s):
@@ -254,6 +260,7 @@ class AppSettingsHandler:
                 self.serial_error_warning_threshold = self.SERIAL_ERROR_WARNING_THRESHOLD_DEFAULT
                 self.serial_error_critical_threshold = self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT
             self._read_grbl_simulator_settings(app_general)
+            self._read_confirmation_settings(app_general)
 
         # Layers related application settings #
         if "LAYERS" in self.app_settings:
@@ -287,6 +294,14 @@ class AppSettingsHandler:
             defaults[f"{tag}_layer_color"] = self.LAYER_COLOR_DEFAULTS[tag]
             defaults[f"{tag}_layer_color_light"] = self.LAYER_COLOR_LIGHT_DEFAULTS[tag]
         return defaults
+
+    def _read_confirmation_settings(self, app_general: configparser.SectionProxy) -> None:
+        """Read which actions of the Control tab ask for confirmation; an invalid value keeps the default."""
+        for name in self.CONFIRMATIONS:
+            try:
+                setattr(self, name, app_general.getboolean(name, self.CONFIRM_DEFAULT))
+            except ValueError:
+                setattr(self, name, self.CONFIRM_DEFAULT)
 
     def _read_grbl_simulator_settings(self, app_general: configparser.SectionProxy) -> None:
         """Read the GRBL simulator settings, falling back to the defaults on an invalid value."""
@@ -349,6 +364,7 @@ class AppSettingsHandler:
             "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT,
             "grbl_simulator_enabled": self.GRBL_SIMULATOR_ENABLED_DEFAULT,
             "grbl_simulator_speed": self.GRBL_SIMULATOR_SPEED_DEFAULT,
+            **{name: self.CONFIRM_DEFAULT for name in self.CONFIRMATIONS},
         }
 
         # GENERAL application settings #
@@ -386,6 +402,8 @@ class AppSettingsHandler:
         app_general["serial_error_critical_threshold"] = str(self.serial_error_critical_threshold)
         app_general["grbl_simulator_enabled"] = str(self.grbl_simulator_enabled)
         app_general["grbl_simulator_speed"] = str(self.grbl_simulator_speed)
+        for name in self.CONFIRMATIONS:
+            app_general[name] = str(getattr(self, name))
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}
@@ -439,6 +457,7 @@ class AppSettingsHandler:
             "serial_error_critical_threshold": self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT,
             "grbl_simulator_enabled": self.GRBL_SIMULATOR_ENABLED_DEFAULT,
             "grbl_simulator_speed": self.GRBL_SIMULATOR_SPEED_DEFAULT,
+            **{name: self.CONFIRM_DEFAULT for name in self.CONFIRMATIONS},
         }
 
         # GENERAL application settings #
@@ -471,6 +490,8 @@ class AppSettingsHandler:
         app_general["serial_error_critical_threshold"] = str(self.SERIAL_ERROR_CRITICAL_THRESHOLD_DEFAULT)
         app_general["grbl_simulator_enabled"] = str(self.GRBL_SIMULATOR_ENABLED_DEFAULT)
         app_general["grbl_simulator_speed"] = str(self.GRBL_SIMULATOR_SPEED_DEFAULT)
+        for name in self.CONFIRMATIONS:
+            app_general[name] = str(self.CONFIRM_DEFAULT)
 
         # Layers related application settings #
         self.app_settings["LAYERS"] = {}

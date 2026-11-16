@@ -3,6 +3,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 from PySide6.QtGui import QColor
 
+CONFIRMATIONS = ("confirm_play", "confirm_homing", "confirm_tool_change", "confirm_zero")
+
 
 @pytest.fixture
 def mock_ui():
@@ -100,6 +102,7 @@ def mock_settings():
     settings.app_settings.camera_flip_v = False
     settings.app_settings.grbl_simulator_enabled = False
     settings.app_settings.grbl_simulator_speed = 1.0
+    settings.app_settings.CONFIRMATIONS = CONFIRMATIONS
     settings.jobs_settings = MagicMock()
     settings.jobs_settings.jobs_settings_od = {"common": {"mirroring_axis": "X"}}
     return settings
@@ -149,6 +152,24 @@ class TestResetApplicationSettings:
         mock_ui.top_layer_color_la = MagicMock()
         settings_tab.reset_application_settings()
         mock_ui.top_layer_color_la.setStyleSheet.assert_called()
+
+
+class TestConfirmationSettings:
+    @pytest.mark.parametrize("name", CONFIRMATIONS)
+    def test_reset_shows_the_stored_setting(self, settings_tab, mock_ui, mock_settings, name):
+        setattr(mock_settings.app_settings, name, False)
+
+        settings_tab.reset_confirmation_settings()
+
+        getattr(mock_ui, name + "_chb").setChecked.assert_called_with(False)
+
+    @pytest.mark.parametrize("name", CONFIRMATIONS)
+    def test_saving_stores_the_checkbox(self, settings_tab, mock_ui, mock_settings, name):
+        getattr(mock_ui, name + "_chb").isChecked.return_value = False
+
+        settings_tab.save_settings_preferences()
+
+        assert getattr(mock_settings.app_settings, name) is False
 
 
 class TestGrblSimulatorSettings:
