@@ -2062,6 +2062,9 @@
                     <height>50</height>
                    </size>
                   </property>
+                  <property name="toolTip">
+                   <string>Add generated G-code</string>
+                  </property>
                   <property name="statusTip">
                    <string>Reload gcode files generated.</string>
                   </property>
@@ -2091,6 +2094,9 @@
                     <height>50</height>
                    </size>
                   </property>
+                  <property name="toolTip">
+                   <string>Open G-code files</string>
+                  </property>
                   <property name="statusTip">
                    <string>Load gcode files.</string>
                   </property>
@@ -2113,6 +2119,9 @@
                     <width>50</width>
                     <height>50</height>
                    </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Remove selected</string>
                   </property>
                   <property name="statusTip">
                    <string>Remove gcode files.</string>
@@ -4004,6 +4013,9 @@
                             <bold>true</bold>
                            </font>
                           </property>
+                          <property name="toolTip">
+                           <string>Use the G-code bounding box</string>
+                          </property>
                           <property name="text">
                            <string>GET BBOX</string>
                           </property>
@@ -4035,6 +4047,9 @@
                              <font>
                               <bold>true</bold>
                              </font>
+                            </property>
+                            <property name="toolTip">
+                             <string>Probe for bed levelling</string>
                             </property>
                             <property name="text">
                              <string>ABL</string>
@@ -4927,6 +4942,9 @@
                   <height>30</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Apply alignment</string>
+                </property>
                 <property name="statusTip">
                  <string>Alignment OFF</string>
                 </property>
@@ -4973,6 +4991,9 @@
               <width>120</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Soft reset: stops the machine</string>
             </property>
             <property name="statusTip">
              <string>Send a soft reset command to the machine.</string>
@@ -5058,6 +5079,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Unlock ($X)</string>
+            </property>
             <property name="statusTip">
              <string>Send the unlock command to the machine.</string>
             </property>
@@ -5100,6 +5124,9 @@
               <width>120</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Home ($H)</string>
             </property>
             <property name="statusTip">
              <string>Execute homing procedure.</string>
@@ -5144,6 +5171,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Start the job</string>
+            </property>
             <property name="statusTip">
              <string>Send the selected gcode file.</string>
             </property>
@@ -5186,6 +5216,9 @@
               <width>120</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Pause / resume</string>
             </property>
             <property name="statusTip">
              <string>Pause/Hold the machine.</string>
@@ -5230,6 +5263,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Stop the job</string>
+            </property>
             <property name="statusTip">
              <string>Stop sending the gcode file.</string>
             </property>
@@ -5272,6 +5308,9 @@
               <width>120</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Tool change</string>
             </property>
             <property name="statusTip">
              <string>Execute a tool change procedure.</string>
@@ -6894,6 +6933,9 @@
                     <height>20</height>
                    </size>
                   </property>
+                  <property name="toolTip">
+                   <string>Load drill file</string>
+                  </property>
                   <property name="text">
                    <string>...</string>
                   </property>
@@ -6961,6 +7003,9 @@
                       <bold>true</bold>
                      </font>
                     </property>
+                    <property name="toolTip">
+                     <string>Add alignment point</string>
+                    </property>
                     <property name="statusTip">
                      <string>Add alignment point</string>
                     </property>
@@ -6995,6 +7040,9 @@
                       <pointsize>14</pointsize>
                       <bold>true</bold>
                      </font>
+                    </property>
+                    <property name="toolTip">
+                     <string>Remove selected points</string>
                     </property>
                     <property name="statusTip">
                      <string>Remove alignment point</string>
@@ -7032,7 +7080,7 @@
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Apply Alignment</string>
+                     <string>Apply alignment</string>
                     </property>
                     <property name="statusTip">
                      <string>Alignment OFF</string>
