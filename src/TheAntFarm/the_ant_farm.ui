@@ -3304,7 +3304,7 @@
                                  </font>
                                 </property>
                                 <property name="text">
-                                 <string>÷10</string>
+                                 <string>/10</string>
                                 </property>
                                 <property name="autoRepeat">
                                  <bool>false</bool>
@@ -3541,7 +3541,7 @@
                                  </font>
                                 </property>
                                 <property name="text">
-                                 <string>÷10</string>
+                                 <string>/10</string>
                                 </property>
                                 <property name="autoRepeat">
                                  <bool>false</bool>
@@ -6026,7 +6026,7 @@
                             </font>
                            </property>
                            <property name="text">
-                            <string>÷10</string>
+                            <string>/10</string>
                            </property>
                            <property name="autoRepeat">
                             <bool>false</bool>
@@ -6263,7 +6263,7 @@
                             </font>
                            </property>
                            <property name="text">
-                            <string>÷10</string>
+                            <string>/10</string>
                            </property>
                            <property name="autoRepeat">
                             <bool>false</bool>

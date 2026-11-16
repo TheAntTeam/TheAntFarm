@@ -107,3 +107,9 @@ class TestTooltips:
         missing = [name for name in self.ICON_ONLY if not getattr(ui, name).toolTip()]
 
         assert missing == []
+
+
+class TestLabels:
+    def test_the_divide_buttons_do_not_read_as_plus(self, ui):
+        for name in ("xy_div_10_pb", "z_div_10_pb", "xy_div_10_pb_2", "z_div_10_pb_2"):
+            assert getattr(ui, name).text() == "/10"
