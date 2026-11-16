@@ -83,3 +83,27 @@ class TestJogTab:
 
         assert ui.overridesGridLayout.sizeHint().width() <= ui.probe_terminal_tab.sizeHint().width()
         assert ui.jog_tab.sizeHint().width() <= ui.probe_terminal_tab.sizeHint().width()
+
+
+class TestTooltips:
+    ICON_ONLY = (
+        "soft_reset_tb",
+        "unlock_tb",
+        "homing_tb",
+        "play_tb",
+        "pause_resume_tb",
+        "stop_tb",
+        "tool_change_tb",
+        "upload_temp_tb",
+        "open_gcode_tb",
+        "remove_gcode_tb",
+        "load_align_layer_tb",
+        "add_point_tb",
+        "remove_point_tb",
+        "apply_alignment_tb_2",
+    )
+
+    def test_the_buttons_that_show_no_readable_text_have_a_tooltip(self, ui):
+        missing = [name for name in self.ICON_ONLY if not getattr(ui, name).toolTip()]
+
+        assert missing == []
