@@ -347,6 +347,53 @@ class TestAppSettingsHandler:
         assert new_settings.grbl_simulator_enabled is False
         assert new_settings.grbl_simulator_speed == 1.0
 
+    @pytest.mark.parametrize("name", AppSettingsHandler.CONFIRMATIONS)
+    def test_a_confirmation_is_on_by_default(self, app_settings_handler, name):
+        assert getattr(app_settings_handler, name) is True
+
+    @pytest.mark.parametrize("name", AppSettingsHandler.CONFIRMATIONS)
+    def test_a_confirmation_is_saved_and_loaded(self, app_settings_handler, tmp_path, name):
+        config_dir = tmp_path / "test_confirm" / "configurations"
+        config_dir.mkdir(parents=True)
+        app_settings_handler.app_config_path = str(config_dir / "app_config.ini")
+        setattr(app_settings_handler, name, False)
+
+        app_settings_handler.write_all_app_settings()
+        new_settings = AppSettingsHandler(str(config_dir), app_settings_handler.main_win)
+        new_settings.read_all_app_settings()
+
+        assert [n for n in AppSettingsHandler.CONFIRMATIONS if not getattr(new_settings, n)] == [name]
+
+    @pytest.mark.parametrize("name", AppSettingsHandler.CONFIRMATIONS)
+    def test_a_confirmation_is_restored_to_on(self, app_settings_handler, tmp_path, name):
+        config_dir = tmp_path / "test_restore_confirm" / "configurations"
+        config_dir.mkdir(parents=True)
+        app_settings_handler.app_config_path = str(config_dir / "app_config.ini")
+        setattr(app_settings_handler, name, False)
+        app_settings_handler.write_all_app_settings()
+
+        app_settings_handler.restore_app_settings()
+        new_settings = AppSettingsHandler(str(config_dir), app_settings_handler.main_win)
+        new_settings.read_all_app_settings()
+
+        assert getattr(new_settings, name) is True
+
+    @pytest.mark.parametrize("name", AppSettingsHandler.CONFIRMATIONS)
+    def test_an_invalid_confirmation_falls_back_to_on(self, app_settings_handler, tmp_path, name):
+        import configparser
+
+        config_dir = tmp_path / "test_invalid_confirm" / "configurations"
+        config_dir.mkdir(parents=True)
+        config = configparser.ConfigParser()
+        config["GENERAL"] = {name: "maybe"}
+        with open(str(config_dir / "app_config.ini"), "w") as f:
+            config.write(f)
+
+        new_settings = AppSettingsHandler(str(config_dir), app_settings_handler.main_win)
+        new_settings.read_all_app_settings()
+
+        assert getattr(new_settings, name) is True
+
     def _save_ports_and_reload(self, handler, port, baud):
         handler.main_win.ui.serial_ports_cb.currentText.return_value = port
         handler.main_win.ui.serial_baud_cb.currentText.return_value = baud

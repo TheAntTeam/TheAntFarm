@@ -2,7 +2,7 @@ import logging
 import os
 import time
 from collections import OrderedDict as Od
-from typing import Dict, Tuple
+from typing import Dict, Optional, Tuple
 
 from PySide6.QtCore import QItemSelectionModel, QObject, QPersistentModelIndex, QSize, Qt, QTimer, Signal, Slot
 from PySide6.QtGui import QIcon
@@ -46,6 +46,7 @@ class UiControlTab(QObject):
     OVERRIDE_SEND_DELAY_MS = 200
     OVERRIDE_PENDING_S = 5.0
     NO_VALUE = "-"
+    TURN_OFF_NOTE = "This question can be turned off in the settings."
 
     def __init__(self, ui, control_worker, serial_worker, ctrl_layer, settings, style_manager=None):
         """
@@ -274,6 +275,37 @@ class UiControlTab(QObject):
         self.ui.zero_y_pb.setEnabled(enable_flag)
         self.ui.zero_z_pb.setEnabled(enable_flag)
         self.ui.zero_xy_pb.setEnabled(enable_flag)
+
+    def _confirm(self, title: str, text: str, details: str = "", accept_label: str = "OK") -> bool:
+        """Ask the user to confirm an action on the machine; Cancel is the default answer."""
+        prompt = QMessageBox(self.ui.stop_tb.window())
+        prompt.setIcon(QMessageBox.Question)
+        prompt.setWindowTitle(title)
+        prompt.setText(text)
+        if details:
+            prompt.setInformativeText(details)
+        accept_button = prompt.addButton(accept_label, QMessageBox.AcceptRole)
+        cancel_button = prompt.addButton("Cancel", QMessageBox.RejectRole)
+        prompt.setDefaultButton(cancel_button)
+        prompt.setEscapeButton(cancel_button)
+        prompt.exec()
+        return prompt.clickedButton() is accept_button
+
+    def _work_position_text(self) -> str:
+        """The work position shown in the Sender tab, as one line."""
+        return "X {}  Y {}  Z {}".format(self.ui.wpos_x_l.text(), self.ui.wpos_y_l.text(), self.ui.wpos_z_l.text())
+
+    def _job_area_text(self, gcode_path: str) -> Optional[str]:
+        """The area covered by a G-code file, one axis per line, or None when it is not known."""
+        bbox = self.controlWo.get_gcode_bbox(gcode_path)
+        if bbox is None:
+            return None
+        return "\n".join(
+            "{} from {:.3f} to {:.3f}".format(axis, bbox[i], bbox[i + 3]) for i, axis in enumerate(("X", "Y", "Z"))
+        )
+
+    def _machine_is_idle(self) -> bool:
+        return self.ui.status_l.text().lower().startswith("idle")
 
     def deselect_all_gcode_row(self):
         """Clear all selections"""
@@ -705,8 +737,21 @@ class UiControlTab(QObject):
         if self.serial_connection_status:
             checked_row = self.get_selected_file()
             if checked_row >= 0:
-                self.send_gcode_s.emit(self.ui.gcode_tw.cellWidget(checked_row, 0).toolTip())
+                gcode_path = self.ui.gcode_tw.cellWidget(checked_row, 0).toolTip()
+                if not self._confirm_play(gcode_path):
+                    return
+                self.send_gcode_s.emit(gcode_path)
                 self.disable_during_send()
+
+    def _confirm_play(self, gcode_path: str) -> bool:
+        """Show what is about to be sent and where, and ask to start, unless the setting turns the question off."""
+        if not self.app_settings.confirm_play:
+            return True
+        area = self._job_area_text(gcode_path)
+        details = "Coordinates of the job, from the work zero [mm]:\n{}\n\n".format(area) if area else ""
+        details += "Current work position [mm]:\n{}\n\n".format(self._work_position_text())
+        details += "Check the work zero, the tool and the spindle before starting.\n\n" + self.TURN_OFF_NOTE
+        return self._confirm("Start the job", "Send {}?".format(os.path.basename(gcode_path)), details, "Start")
 
     def stop_send_file(self):
         self.close_rejected_line_prompt()
@@ -909,11 +954,22 @@ class UiControlTab(QObject):
             self.ui.logging_plain_te.hide()
 
     def handle_tool_change_start(self):
+        if self.app_settings.confirm_tool_change and not self._confirm(
+            "Tool change",
+            "Start a tool change?",
+            "The machine moves to the tool change position.\n\n" + self.TURN_OFF_NOTE,
+            "Start",
+        ):
+            return
         logger.debug("Tool change")
         self.controlWo.send_tool_change_s.emit()
         self.disable_during_send()
 
     def handle_soft_reset(self):
+        """Reset the controller; confirmed only at rest, since a reset is also the way to abort a move."""
+        if self._machine_is_idle() and not self.job_running:
+            if not self._confirm("Soft reset", "Reset the controller?", "", "Reset"):
+                return
         logger.info("Soft Reset Command")
         self.ui_send_cmd_s.emit("soft_reset", (None, None, None))
 
@@ -922,22 +978,43 @@ class UiControlTab(QObject):
         self.ui_send_cmd_s.emit("unlock", (None, None, None))
 
     def handle_homing(self):
+        if self.app_settings.confirm_homing and not self._confirm(
+            "Homing", "Home the machine?", "The axes move to their limit switches.\n\n" + self.TURN_OFF_NOTE, "Home"
+        ):
+            return
         logger.debug("Homing Command")
         self.ui_send_cmd_s.emit("homing", (None, None, None))
 
+    def _confirm_zero(self, axes: str) -> bool:
+        """Ask before moving the work zero of ``axes``, unless the setting turns the question off."""
+        if not self.app_settings.confirm_zero:
+            return True
+        details = "Current work position [mm]:\n{}\n\n{}".format(self._work_position_text(), self.TURN_OFF_NOTE)
+        return self._confirm(
+            "Set work zero", "Set the work zero of {} at the current position?".format(axes), details, "Set zero"
+        )
+
     def handle_xy_0(self):
+        if not self._confirm_zero("X and Y"):
+            return
         logger.debug("XY = 0")
         self.ui_send_cmd_s.emit("set_wps", (0.0, 0.0, None))
 
     def handle_x_0(self):
+        if not self._confirm_zero("X"):
+            return
         logger.debug("X = 0")
         self.ui_send_cmd_s.emit("set_wps", (0.0, None, None))
 
     def handle_y_0(self):
+        if not self._confirm_zero("Y"):
+            return
         logger.debug("Y = 0")
         self.ui_send_cmd_s.emit("set_wps", (None, 0.0, None))
 
     def handle_z_0(self):
+        if not self._confirm_zero("Z"):
+            return
         logger.debug("Z = 0")
         self.ui_send_cmd_s.emit("set_wps", (None, None, 0.0))
 

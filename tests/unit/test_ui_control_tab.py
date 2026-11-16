@@ -424,6 +424,8 @@ class TestJobRunning:
         ui_tab.serial_connection_status = True
         ui_tab.get_selected_file = Mock(return_value=0)
         ui_tab.enable_gcode_rb = Mock()
+        ui_tab._confirm = Mock(return_value=True)
+        ui_tab.app_settings = Mock(confirm_play=True, confirm_tool_change=True)
         return ui_tab
 
     def test_a_file_job_runs_until_it_ends(self, ui_tab):

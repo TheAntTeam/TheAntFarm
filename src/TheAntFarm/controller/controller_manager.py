@@ -626,6 +626,13 @@ class ControllerWorker(ControllerSignals):
     def get_gcode_data(self, gcode_path):
         return self.control_controller.get_gcode_tag_and_v(gcode_path)
 
+    def get_gcode_bbox(self, gcode_path: str) -> Optional[tuple]:
+        """The bounding box of a loaded G-code file (x, y, z minima, then the maxima), or None when unknown."""
+        try:
+            return self.control_controller.get_boundary_box(gcode_path)
+        except KeyError:
+            return None
+
     @Slot(str)
     def remove_gcode(self, gcode_path):
         self.control_controller.remove_gcode_file(gcode_path)

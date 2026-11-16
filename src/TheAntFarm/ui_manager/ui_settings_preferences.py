@@ -104,6 +104,9 @@ class UiSettingsPreferencesTab(QObject):
         self.reset_grbl_simulator_settings()
         self.ui.grbl_simulator_chb.clicked.connect(self.grbl_simulator_checked)
         self.ui.grbl_simulator_speed_dsb.valueChanged.connect(self.set_focus_lost)
+        self.reset_confirmation_settings()
+        for name in self.app_settings.CONFIRMATIONS:
+            getattr(self.ui, name + "_chb").clicked.connect(self.set_focus_lost)
         self.ui.top_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("top"))
         self.ui.bottom_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("bottom"))
         self.ui.profile_layer_color_pb.clicked.connect(lambda: self.layer_color_choice("profile"))
@@ -153,6 +156,11 @@ class UiSettingsPreferencesTab(QObject):
         self.ui.grbl_simulator_chb.setChecked(self.app_settings.grbl_simulator_enabled)
         self.ui.grbl_simulator_speed_dsb.setValue(self.app_settings.grbl_simulator_speed)
         self.ui.grbl_simulator_speed_dsb.setEnabled(self.app_settings.grbl_simulator_enabled)
+
+    def reset_confirmation_settings(self) -> None:
+        """Reset the confirmation UI elements according to application settings."""
+        for name in self.app_settings.CONFIRMATIONS:
+            getattr(self.ui, name + "_chb").setChecked(getattr(self.app_settings, name))
 
     def grbl_simulator_checked(self) -> None:
         """Enable the simulator speed only when the simulator is listed."""
@@ -222,6 +230,7 @@ class UiSettingsPreferencesTab(QObject):
         self.reset_application_settings()
         self.reset_serial_error_thresholds()
         self.reset_grbl_simulator_settings()
+        self.reset_confirmation_settings()
         self.reset_jobs_common_initial_settings()
         self.reset_probe_initial_settings()
         self.reset_tool_machine_initial_settings()
@@ -393,6 +402,8 @@ class UiSettingsPreferencesTab(QObject):
         self.app_settings.serial_error_critical_threshold = self.ui.serial_error_critical_threshold_sb.value()
 
         self.save_grbl_simulator_settings()
+        for name in self.app_settings.CONFIRMATIONS:
+            setattr(self.app_settings, name, getattr(self.ui, name + "_chb").isChecked())
 
         # Save camera rotation and flip settings to app settings
         self.app_settings.camera_rotation_angle = self.ui.camera_rotation_dsb.value()

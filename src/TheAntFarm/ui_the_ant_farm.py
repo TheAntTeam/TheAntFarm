@@ -3423,6 +3423,66 @@ class Ui_MainWindow(object):
 
         self.gridLayout_10.addWidget(self.grbl_simulator_speed_dsb, 3, 1, 1, 1)
 
+        self.confirm_play_la = QLabel(self.application_settings_tab)
+        self.confirm_play_la.setObjectName(u"confirm_play_la")
+        sizePolicy3.setHeightForWidth(self.confirm_play_la.sizePolicy().hasHeightForWidth())
+        self.confirm_play_la.setSizePolicy(sizePolicy3)
+        self.confirm_play_la.setMinimumSize(QSize(200, 0))
+        self.confirm_play_la.setFont(font)
+        self.confirm_play_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_10.addWidget(self.confirm_play_la, 4, 0, 1, 1)
+
+        self.confirm_play_chb = QCheckBox(self.application_settings_tab)
+        self.confirm_play_chb.setObjectName(u"confirm_play_chb")
+
+        self.gridLayout_10.addWidget(self.confirm_play_chb, 4, 1, 1, 1)
+
+        self.confirm_homing_la = QLabel(self.application_settings_tab)
+        self.confirm_homing_la.setObjectName(u"confirm_homing_la")
+        sizePolicy3.setHeightForWidth(self.confirm_homing_la.sizePolicy().hasHeightForWidth())
+        self.confirm_homing_la.setSizePolicy(sizePolicy3)
+        self.confirm_homing_la.setMinimumSize(QSize(200, 0))
+        self.confirm_homing_la.setFont(font)
+        self.confirm_homing_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_10.addWidget(self.confirm_homing_la, 5, 0, 1, 1)
+
+        self.confirm_homing_chb = QCheckBox(self.application_settings_tab)
+        self.confirm_homing_chb.setObjectName(u"confirm_homing_chb")
+
+        self.gridLayout_10.addWidget(self.confirm_homing_chb, 5, 1, 1, 1)
+
+        self.confirm_tool_change_la = QLabel(self.application_settings_tab)
+        self.confirm_tool_change_la.setObjectName(u"confirm_tool_change_la")
+        sizePolicy3.setHeightForWidth(self.confirm_tool_change_la.sizePolicy().hasHeightForWidth())
+        self.confirm_tool_change_la.setSizePolicy(sizePolicy3)
+        self.confirm_tool_change_la.setMinimumSize(QSize(200, 0))
+        self.confirm_tool_change_la.setFont(font)
+        self.confirm_tool_change_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_10.addWidget(self.confirm_tool_change_la, 6, 0, 1, 1)
+
+        self.confirm_tool_change_chb = QCheckBox(self.application_settings_tab)
+        self.confirm_tool_change_chb.setObjectName(u"confirm_tool_change_chb")
+
+        self.gridLayout_10.addWidget(self.confirm_tool_change_chb, 6, 1, 1, 1)
+
+        self.confirm_zero_la = QLabel(self.application_settings_tab)
+        self.confirm_zero_la.setObjectName(u"confirm_zero_la")
+        sizePolicy3.setHeightForWidth(self.confirm_zero_la.sizePolicy().hasHeightForWidth())
+        self.confirm_zero_la.setSizePolicy(sizePolicy3)
+        self.confirm_zero_la.setMinimumSize(QSize(200, 0))
+        self.confirm_zero_la.setFont(font)
+        self.confirm_zero_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_10.addWidget(self.confirm_zero_la, 7, 0, 1, 1)
+
+        self.confirm_zero_chb = QCheckBox(self.application_settings_tab)
+        self.confirm_zero_chb.setObjectName(u"confirm_zero_chb")
+
+        self.gridLayout_10.addWidget(self.confirm_zero_chb, 7, 1, 1, 1)
+
 
         self.gridLayout_9.addLayout(self.gridLayout_10, 7, 0, 1, 1)
 
@@ -5157,6 +5217,10 @@ class Ui_MainWindow(object):
         self.grbl_simulator_speed_dsb.setToolTip(QCoreApplication.translate("MainWindow", u"How many times faster than real time the simulated machine moves.", None))
 #endif // QT_CONFIG(tooltip)
         self.grbl_simulator_speed_dsb.setSuffix(QCoreApplication.translate("MainWindow", u" x", None))
+        self.confirm_play_la.setText(QCoreApplication.translate("MainWindow", u"Confirm Play", None))
+        self.confirm_homing_la.setText(QCoreApplication.translate("MainWindow", u"Confirm Homing", None))
+        self.confirm_tool_change_la.setText(QCoreApplication.translate("MainWindow", u"Confirm Tool Change", None))
+        self.confirm_zero_la.setText(QCoreApplication.translate("MainWindow", u"Confirm Work Zero", None))
         self.layer_colors_section_la.setText(QCoreApplication.translate("MainWindow", u"LAYER COLORS", None))
         self.top_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"TOP LAYER COLOR", None))
         self.bottom_layer_color_pb.setText(QCoreApplication.translate("MainWindow", u"BOTTOM LAYER COLOR", None))
