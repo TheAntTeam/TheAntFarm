@@ -4,7 +4,7 @@ import time
 from collections import OrderedDict as Od
 from typing import Dict, Optional, Tuple
 
-from PySide6.QtCore import QItemSelectionModel, QObject, QPersistentModelIndex, QSize, Qt, QTimer, Signal, Slot
+from PySide6.QtCore import QItemSelectionModel, QObject, QPersistentModelIndex, Qt, QTimer, Signal, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -121,7 +121,7 @@ class UiControlTab(QObject):
             "QComboBox::drop-down {border-width: 0px;} QComboBox::down-arrow {image: url(noimg); border-width: 0px;}"
         )
         self.ui.send_cb.setStyleSheet(combobox_ss)
-        self.ui.serial_row_sw.setCurrentWidget(self.ui.serial_connect_page)
+        self.enable_connection_elements(connected=False)
 
         # Set x and y bbox step initial values.
         self.ui.x_num_step_sb.setValue(self.machine_settings.x_bbox_step)
@@ -306,6 +306,17 @@ class UiControlTab(QObject):
 
     def _machine_is_idle(self) -> bool:
         return self.ui.status_l.text().lower().startswith("idle")
+
+    def enable_connection_elements(self, connected: bool) -> None:
+        """Let the user choose the port while disconnected, and send commands while connected.
+
+        While connected the port stays in view, greyed out, and the baud rate and Refresh are hidden.
+        """
+        self.ui.serial_ports_cb.setEnabled(not connected)
+        self.ui.serial_baud_cb.setVisible(not connected)
+        self.ui.refresh_pb.setVisible(not connected)
+        self.ui.send_cb.setEnabled(connected)
+        self.ui.send_pb.setEnabled(connected)
 
     def deselect_all_gcode_row(self):
         """Clear all selections"""
@@ -527,7 +538,6 @@ class UiControlTab(QObject):
             self.style_manager.set_themed_icon(self.ui.pause_resume_tb, name)
         else:
             self.ui.pause_resume_tb.setIcon(QIcon(f":/resources/resources/icons/{name}.svg"))
-        self.ui.pause_resume_tb.setIconSize(QSize(64, 64))
         self.ui.pause_resume_tb.setToolButtonStyle(Qt.ToolButtonIconOnly)
 
     def update_status_colors(self, status):
@@ -905,7 +915,7 @@ class UiControlTab(QObject):
             self.serial_connection_status = True
             self.controlWo.reset_controller_status_s.emit()
             self.ui.connect_pb.setText("Disconnect")
-            self.ui.serial_row_sw.setCurrentWidget(self.ui.serial_send_page)
+            self.enable_connection_elements(connected=True)
             self.ui.soft_reset_tb.setEnabled(True)
             self.ui.unlock_tb.setEnabled(True)
             self.ui.homing_tb.setEnabled(True)
@@ -925,7 +935,7 @@ class UiControlTab(QObject):
         self.controlWo.reset_controller_status_s.emit()
         self.serial_connection_status = False
         self.ui.connect_pb.setText("Connect")
-        self.ui.serial_row_sw.setCurrentWidget(self.ui.serial_connect_page)
+        self.enable_connection_elements(connected=False)
         self.ui.status_l.setText("Not Connected")
         self.update_status_colors("Not Connected")
         self.ui.soft_reset_tb.setEnabled(False)
