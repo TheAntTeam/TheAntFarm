@@ -29,6 +29,10 @@ class ControllerWorker(ControllerSignals):
     }
     OVERRIDE_REPORT_KEYS = {"feed": "OvFeed", "spindle": "OvSpindle"}
     RAPID_OVERRIDES = {100: b"\x95", 50: b"\x96", 25: b"\x97"}
+    FEED_HOLD = b"!"
+    SOFT_RESET = b"\x18"
+    MOVING_STATES = ("run", "jog", "hold:1")
+    STOP_RESET_TIMEOUT_MS = 5000
 
     def __init__(self, serial_rx_queue, serial_tx_queue, settings):
         super(ControllerWorker, self).__init__()
@@ -48,6 +52,10 @@ class ControllerWorker(ControllerSignals):
         self.poll_timer = None
         self.camera_timer = None
         self.progress_timer = None
+        self.stop_reset_timer: Optional[QTimer] = None
+        self.reset_pending = False
+        self.reset_reports_seen = 0
+        self.logged_state = ""
 
         self.align_active = False
         self.override_targets: Dict[str, int] = {}
@@ -112,6 +120,9 @@ class ControllerWorker(ControllerSignals):
             self.poll_timer.stop()
             self._clear_rejected_line()
             self.override_targets.clear()
+            self.logged_state = ""
+            if self.reset_pending:
+                self._finish_stop(send_reset=False)
 
     def init_timers(self):
         self.poll_timer = QTimer()
@@ -132,7 +143,7 @@ class ControllerWorker(ControllerSignals):
         (created by ``init_timers``), the control thread owns the progress timer of a job. Called by the
         GUI thread when the application closes, and from the control thread right before it finishes.
         """
-        for timer in (self.poll_timer, self.camera_timer, self.progress_timer):
+        for timer in (self.poll_timer, self.camera_timer, self.progress_timer, self.stop_reset_timer):
             if timer is not None and timer.thread() is QThread.currentThread():
                 timer.stop()
 
@@ -202,6 +213,7 @@ class ControllerWorker(ControllerSignals):
                     # logger.debug("Element received: " + str(element))
                     if re.match(r"^<.*>\s*$\s", element):
                         self.update_status_s.emit(self.control_controller.parse_bracket_angle(element))
+                        self._log_state_change()
                         if "|Ov:" in element:
                             self._step_overrides()
                         # This variable should be set to true the first time an ack is received.
@@ -209,6 +221,7 @@ class ControllerWorker(ControllerSignals):
                             self.dro_status_updated = True
                         self.check_eof_and_idle()
                         self._prompt_when_held()
+                        self._reset_when_stopped()
                     elif re.match(r"^\[.*\]\s*$\s", element):
                         self.control_controller.parse_bracket_square(element)
                         [ack_prb_flag, ack_abl_flag, send_next, other_cmd_flag] = (
@@ -725,9 +738,9 @@ class ControllerWorker(ControllerSignals):
         if self.progress_timer is not None:
             self.progress_timer.stop()
         if self.send_soft_reset:
-            # send soft reset
-            self.execute_gcode_cmd(b"!")
-            self.execute_gcode_cmd(b"\030")
+            self._hold_then_reset()
+        else:
+            self.stop_done_s.emit()
         self.send_soft_reset = True
         self.file_progress = 0.0
         self.cmds_to_ack = 0
@@ -738,6 +751,63 @@ class ControllerWorker(ControllerSignals):
         self.buffered_line_numbers = []
         self.buffered_size = 0
         self.wait_tag_decoding = False
+
+    def _hold_then_reset(self) -> None:
+        """Put the machine on feed hold now, and reset it once it has stopped.
+
+        A reset during the slow-down of the hold stops the motors abruptly and GRBL loses its position
+        (``ALARM:3``). The reset waits for a status report that shows the machine stopped; the first report
+        is skipped, as it may have been sent before the hold. Without such a report the reset goes after
+        ``STOP_RESET_TIMEOUT_MS``.
+        """
+        self.execute_gcode_cmd(self.FEED_HOLD)
+        if self.reset_pending:
+            return
+        self.reset_pending = True
+        self.reset_reports_seen = 0
+        if self.stop_reset_timer is None:
+            self.stop_reset_timer = QTimer()
+            self.stop_reset_timer.setSingleShot(True)
+            self.stop_reset_timer.setInterval(self.STOP_RESET_TIMEOUT_MS)
+            self.stop_reset_timer.timeout.connect(self._on_stop_reset_timeout)
+        self.stop_reset_timer.start()
+        logger.info("Feed hold: the machine is reset once it has stopped")
+
+    def _reset_when_stopped(self) -> None:
+        """Send the pending reset on the first status report, after the skipped one, of a stopped machine."""
+        if not self.reset_pending:
+            return
+        self.reset_reports_seen += 1
+        if self.reset_reports_seen < 2:
+            return
+        state = self.control_controller.status
+        if state.lower() not in self.MOVING_STATES:
+            logger.info(f"Machine stopped ({state}): soft reset")
+            self._finish_stop(send_reset=True)
+
+    def _log_state_change(self) -> None:
+        state = self.control_controller.status
+        if state != self.logged_state:
+            logger.debug(f"Machine state: {self.logged_state or '-'} -> {state}")
+            self.logged_state = state
+
+    def _on_stop_reset_timeout(self) -> None:
+        if self.reset_pending:
+            message = (
+                f"The machine did not report a stop within {self.STOP_RESET_TIMEOUT_MS / 1000:g} s of the feed hold: "
+                "reset anyway, the position may be lost."
+            )
+            logger.warning(message)
+            self.update_console_text_s.emit(message)
+            self._finish_stop(send_reset=True)
+
+    def _finish_stop(self, send_reset: bool) -> None:
+        self.reset_pending = False
+        if self.stop_reset_timer is not None:
+            self.stop_reset_timer.stop()
+        if send_reset:
+            self.execute_gcode_cmd(self.SOFT_RESET)
+        self.stop_done_s.emit()
 
     def pause_resume(self):
         if self.rejected_line_pending:
