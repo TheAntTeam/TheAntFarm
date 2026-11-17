@@ -198,6 +198,42 @@ class TestThemedIconsOfTheWindow:
         assert paths
         assert [path for path in sorted(paths) if not QFile.exists(path)] == []
 
+    def test_no_button_shows_the_placeholder_text_without_an_icon(self):
+        from ui_manager.ui_manager import UiManager
+
+        root = ET.parse(APP_DIR / "the_ant_farm.ui").getroot()
+        placeholders = {
+            widget.get("name")
+            for widget in root.iter("widget")
+            if widget.get("class") in ("QToolButton", "QPushButton", "MachineToolButton")
+            and any(
+                prop.get("name") == "text" and prop.findtext("string") == "..." for prop in widget.findall("property")
+            )
+        }
+        alignment_toggles = {"apply_alignment_tb", "apply_alignment_tb_2"}
+
+        assert placeholders
+        assert sorted(placeholders - set(UiManager.THEMED_ICONS) - alignment_toggles) == []
+
+    @pytest.mark.parametrize(
+        "button, side",
+        [
+            ("add_point_tb", 32),
+            ("remove_point_tb", 32),
+            ("apply_alignment_tb", 32),
+            ("apply_alignment_tb_2", 24),
+            ("upload_temp_tb", 32),
+            ("open_gcode_tb", 32),
+            ("remove_gcode_tb", 32),
+        ],
+    )
+    def test_icons_of_the_large_buttons_fill_them(self, button, side):
+        root = ET.parse(APP_DIR / "the_ant_farm.ui").getroot()
+        widget = next(w for w in root.iter("widget") if w.get("name") == button)
+        size = next(p for p in widget.findall("property") if p.get("name") == "iconSize").find("size")
+
+        assert (int(size.findtext("width")), int(size.findtext("height"))) == (side, side)
+
 
 class TestPauseResumeIcon:
     def _tab(self, style_manager):

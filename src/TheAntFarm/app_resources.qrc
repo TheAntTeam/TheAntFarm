@@ -4,8 +4,11 @@
     <file>resources/icons/apply-align.svg</file>
     <file>resources/icons/delete.svg</file>
     <file>resources/icons/home.svg</file>
-    <file>resources/icons/milling-machine.svg</file>
     <file>resources/icons/open-folder.svg</file>
+    <file>resources/icons/point-add.svg</file>
+    <file>resources/icons/point-remove.svg</file>
+    <file>resources/icons/soft-reset.svg</file>
+    <file>resources/icons/tool-change.svg</file>
     <file>resources/icons/pause-multimedia-big-gross-symbol-lines.svg</file>
     <file>resources/icons/play-and-pause-button.svg</file>
     <file>resources/icons/play-button-arrowhead.svg</file>
