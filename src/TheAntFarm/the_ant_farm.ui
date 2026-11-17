@@ -2078,6 +2078,12 @@
                     <disabledoff>:/resources/resources/icons/upload-file.svg</disabledoff>
                     <disabledon>:/resources/resources/icons/upload-file.svg</disabledon>:/resources/resources/icons/upload-file.svg</iconset>
                   </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -2110,6 +2116,12 @@
                   <property name="shortcut">
                    <string>Ctrl+G</string>
                   </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -2132,6 +2144,12 @@
                   <property name="icon">
                    <iconset resource="app_resources.qrc">
                     <normaloff>:/resources/resources/icons/delete.svg</normaloff>:/resources/resources/icons/delete.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
                   </property>
                  </widget>
                 </item>
@@ -4806,6 +4824,12 @@
                 <property name="checkable">
                  <bool>true</bool>
                 </property>
+                <property name="iconSize">
+                 <size>
+                  <width>24</width>
+                  <height>24</height>
+                 </size>
+                </property>
                </widget>
               </item>
              </layout>
@@ -4850,10 +4874,10 @@
             </property>
             <property name="icon">
              <iconset resource="app_resources.qrc">
-              <normaloff>:/resources/resources/icons/refresh.svg</normaloff>
-              <normalon>:/resources/resources/icons/refresh.svg</normalon>
-              <disabledoff>:/resources/resources/icons/refresh.svg</disabledoff>
-              <disabledon>:/resources/resources/icons/refresh.svg</disabledon>:/resources/resources/icons/refresh.svg</iconset>
+              <normaloff>:/resources/resources/icons/soft-reset.svg</normaloff>
+              <normalon>:/resources/resources/icons/soft-reset.svg</normalon>
+              <disabledoff>:/resources/resources/icons/soft-reset.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/soft-reset.svg</disabledon>:/resources/resources/icons/soft-reset.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5301,9 +5325,9 @@
             </property>
             <property name="icon">
              <iconset resource="app_resources.qrc">
-              <normaloff>:/resources/resources/icons/milling-machine.svg</normaloff>
-              <disabledoff>:/resources/resources/icons/milling-machine.svg</disabledoff>
-              <disabledon>:/resources/resources/icons/milling-machine.svg</disabledon>:/resources/resources/icons/milling-machine.svg</iconset>
+              <normaloff>:/resources/resources/icons/tool-change.svg</normaloff>
+              <disabledoff>:/resources/resources/icons/tool-change.svg</disabledoff>
+              <disabledon>:/resources/resources/icons/tool-change.svg</disabledon>:/resources/resources/icons/tool-change.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5403,6 +5427,10 @@
                     <widget class="QToolButton" name="camera_list_pb">
                      <property name="text">
                       <string>...</string>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="app_resources.qrc">
+                       <normaloff>:/resources/resources/icons/refresh.svg</normaloff>:/resources/resources/icons/refresh.svg</iconset>
                      </property>
                     </widget>
                    </item>
@@ -6920,6 +6948,10 @@
                   <property name="text">
                    <string>...</string>
                   </property>
+                  <property name="icon">
+                   <iconset resource="app_resources.qrc">
+                    <normaloff>:/resources/resources/icons/open-folder.svg</normaloff>:/resources/resources/icons/open-folder.svg</iconset>
+                  </property>
                  </widget>
                 </item>
                </layout>
@@ -6995,10 +7027,16 @@
                     </property>
                     <property name="icon">
                      <iconset resource="app_resources.qrc">
-                      <normaloff>:/resources/resources/icons/refresh.svg</normaloff>:/resources/resources/icons/refresh.svg</iconset>
+                      <normaloff>:/resources/resources/icons/point-add.svg</normaloff>:/resources/resources/icons/point-add.svg</iconset>
                     </property>
                     <property name="toolButtonStyle">
                      <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>32</width>
+                      <height>32</height>
+                     </size>
                     </property>
                    </widget>
                   </item>
@@ -7036,6 +7074,16 @@
                     </property>
                     <property name="toolButtonStyle">
                      <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="app_resources.qrc">
+                      <normaloff>:/resources/resources/icons/point-remove.svg</normaloff>:/resources/resources/icons/point-remove.svg</iconset>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>32</width>
+                      <height>32</height>
+                     </size>
                     </property>
                    </widget>
                   </item>
@@ -7079,6 +7127,12 @@
                     </property>
                     <property name="toolButtonStyle">
                      <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>32</width>
+                      <height>32</height>
+                     </size>
                     </property>
                    </widget>
                   </item>

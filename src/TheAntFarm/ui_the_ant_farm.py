@@ -1270,6 +1270,7 @@ class Ui_MainWindow(object):
         icon1.addFile(u":/resources/resources/icons/upload-file.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
         icon1.addFile(u":/resources/resources/icons/upload-file.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.upload_temp_tb.setIcon(icon1)
+        self.upload_temp_tb.setIconSize(QSize(32, 32))
 
         self.horizontalLayout_10.addWidget(self.upload_temp_tb)
 
@@ -1281,6 +1282,7 @@ class Ui_MainWindow(object):
         icon2 = QIcon()
         icon2.addFile(u":/resources/resources/icons/open-folder.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.open_gcode_tb.setIcon(icon2)
+        self.open_gcode_tb.setIconSize(QSize(32, 32))
 
         self.horizontalLayout_10.addWidget(self.open_gcode_tb)
 
@@ -1290,6 +1292,7 @@ class Ui_MainWindow(object):
         icon3 = QIcon()
         icon3.addFile(u":/resources/resources/icons/delete.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.remove_gcode_tb.setIcon(icon3)
+        self.remove_gcode_tb.setIconSize(QSize(32, 32))
 
         self.horizontalLayout_10.addWidget(self.remove_gcode_tb)
 
@@ -2372,6 +2375,7 @@ class Ui_MainWindow(object):
         icon13.addFile(u":/resources/resources/icons/alignment-applied.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
         self.apply_alignment_tb_2.setIcon(icon13)
         self.apply_alignment_tb_2.setCheckable(True)
+        self.apply_alignment_tb_2.setIconSize(QSize(24, 24))
 
         self.horizontalLayout_22.addWidget(self.apply_alignment_tb_2)
 
@@ -2395,10 +2399,10 @@ class Ui_MainWindow(object):
         self.soft_reset_tb.setMinimumSize(QSize(120, 25))
         self.soft_reset_tb.setMaximumSize(QSize(120, 16777215))
         icon14 = QIcon()
-        icon14.addFile(u":/resources/resources/icons/refresh.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon14.addFile(u":/resources/resources/icons/refresh.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
-        icon14.addFile(u":/resources/resources/icons/refresh.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon14.addFile(u":/resources/resources/icons/refresh.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon14.addFile(u":/resources/resources/icons/soft-reset.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon14.addFile(u":/resources/resources/icons/soft-reset.svg", QSize(), QIcon.Mode.Normal, QIcon.State.On)
+        icon14.addFile(u":/resources/resources/icons/soft-reset.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon14.addFile(u":/resources/resources/icons/soft-reset.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.soft_reset_tb.setIcon(icon14)
         self.soft_reset_tb.setIconSize(QSize(64, 64))
         self.soft_reset_tb.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
@@ -2556,9 +2560,9 @@ class Ui_MainWindow(object):
         self.tool_change_tb.setMinimumSize(QSize(120, 52))
         self.tool_change_tb.setMaximumSize(QSize(120, 16777215))
         icon20 = QIcon()
-        icon20.addFile(u":/resources/resources/icons/milling-machine.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        icon20.addFile(u":/resources/resources/icons/milling-machine.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
-        icon20.addFile(u":/resources/resources/icons/milling-machine.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
+        icon20.addFile(u":/resources/resources/icons/tool-change.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon20.addFile(u":/resources/resources/icons/tool-change.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.Off)
+        icon20.addFile(u":/resources/resources/icons/tool-change.svg", QSize(), QIcon.Mode.Disabled, QIcon.State.On)
         self.tool_change_tb.setIcon(icon20)
         self.tool_change_tb.setIconSize(QSize(72, 72))
         self.tool_change_tb.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
@@ -2623,6 +2627,9 @@ class Ui_MainWindow(object):
 
         self.camera_list_pb = QToolButton(self.frame)
         self.camera_list_pb.setObjectName(u"camera_list_pb")
+        icon21 = QIcon()
+        icon21.addFile(u":/resources/resources/icons/refresh.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.camera_list_pb.setIcon(icon21)
 
         self.gridLayout_28.addWidget(self.camera_list_pb, 0, 2, 1, 1)
 
@@ -3190,6 +3197,7 @@ class Ui_MainWindow(object):
         self.load_align_layer_tb.setObjectName(u"load_align_layer_tb")
         self.load_align_layer_tb.setMinimumSize(QSize(0, 20))
         self.load_align_layer_tb.setMaximumSize(QSize(16777215, 20))
+        self.load_align_layer_tb.setIcon(icon2)
 
         self.horizontalLayout_28.addWidget(self.load_align_layer_tb)
 
@@ -3228,10 +3236,11 @@ class Ui_MainWindow(object):
         font3.setPointSize(14)
         font3.setBold(True)
         self.add_point_tb.setFont(font3)
-        icon21 = QIcon()
-        icon21.addFile(u":/resources/resources/icons/refresh.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.add_point_tb.setIcon(icon21)
+        icon22 = QIcon()
+        icon22.addFile(u":/resources/resources/icons/point-add.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.add_point_tb.setIcon(icon22)
         self.add_point_tb.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
+        self.add_point_tb.setIconSize(QSize(32, 32))
 
         self.horizontalLayout_29.addWidget(self.add_point_tb)
 
@@ -3242,6 +3251,10 @@ class Ui_MainWindow(object):
         self.remove_point_tb.setMinimumSize(QSize(50, 50))
         self.remove_point_tb.setFont(font3)
         self.remove_point_tb.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
+        icon23 = QIcon()
+        icon23.addFile(u":/resources/resources/icons/point-remove.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.remove_point_tb.setIcon(icon23)
+        self.remove_point_tb.setIconSize(QSize(32, 32))
 
         self.horizontalLayout_29.addWidget(self.remove_point_tb)
 
@@ -3255,6 +3268,7 @@ class Ui_MainWindow(object):
         self.apply_alignment_tb.setIcon(icon13)
         self.apply_alignment_tb.setCheckable(True)
         self.apply_alignment_tb.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
+        self.apply_alignment_tb.setIconSize(QSize(32, 32))
 
         self.horizontalLayout_29.addWidget(self.apply_alignment_tb)
 

@@ -201,12 +201,15 @@ class UiManager(QObject):
         "play_tb": "play-button-arrowhead",
         "pause_resume_tb": "pause-multimedia-big-gross-symbol-lines",
         "stop_tb": "stop-button-rounded-square",
-        "tool_change_tb": "milling-machine",
-        "soft_reset_tb": "refresh",
+        "tool_change_tb": "tool-change",
+        "soft_reset_tb": "soft-reset",
         "upload_temp_tb": "upload-file",
         "open_gcode_tb": "open-folder",
         "remove_gcode_tb": "delete",
-        "add_point_tb": "refresh",
+        "add_point_tb": "point-add",
+        "remove_point_tb": "point-remove",
+        "load_align_layer_tb": "open-folder",
+        "camera_list_pb": "refresh",
         **{
             f"{button}{suffix}": icon
             for suffix in ("", "_2")
