@@ -269,17 +269,74 @@ class TestConfirmClose:
         prompt.setDefaultButton.assert_called_once_with(message_box.buttons["Cancel"])
         prompt.setEscapeButton.assert_called_once_with(message_box.buttons["Cancel"])
 
-    def test_running_job_is_stopped_in_the_control_thread_before_closing(self, main_window, message_box):
+    @pytest.fixture
+    def window_calls(self, main_window):
+        with patch.object(main_window, "setEnabled") as set_enabled, patch.object(
+            main_window, "statusBar"
+        ) as status_bar:
+            yield set_enabled, status_bar
+
+    def test_running_job_is_stopped_without_blocking_and_the_close_waits(
+        self, main_window, message_box, window_calls
+    ):
+        set_enabled, status_bar = window_calls
         main_window.tab.serial_connection_status = True
         main_window.tab.job_running = True
 
         event, meta_object = self._close(main_window, message_box, "Stop and Close")
 
         meta_object.invokeMethod.assert_called_once_with(
-            main_window.controlWo, "stop_job_for_close", Qt.BlockingQueuedConnection
+            main_window.controlWo, "stop_job_for_close", Qt.QueuedConnection
         )
-        main_window.stop_threads.assert_called_once_with()
+        event.ignore.assert_called_once_with()
+        main_window.stop_threads.assert_not_called()
+        main_window.ui_manager.save_all_settings.assert_not_called()
+        set_enabled.assert_called_once_with(False)
+        status_bar.return_value.showMessage.assert_called_once_with("Stopping the job…")
+
+    def test_a_close_while_stopping_is_ignored(self, main_window, message_box, window_calls):
+        main_window.tab.serial_connection_status = True
+        main_window.tab.job_running = True
+        self._close(main_window, message_box, "Stop and Close")
+        event = MagicMock()
+
+        main_window.closeEvent(event)
+
+        event.ignore.assert_called_once_with()
+        assert message_box.call_count == 1
+        main_window.stop_threads.assert_not_called()
+
+    def test_the_window_closes_without_asking_again_when_the_stop_has_ended(
+        self, main_window, message_box, window_calls
+    ):
+        set_enabled, _ = window_calls
+        main_window.tab.serial_connection_status = True
+        main_window.tab.job_running = True
+        self._close(main_window, message_box, "Stop and Close")
+        event = MagicMock()
+
+        closes = []
+
+        def close_once():
+            closes.append(1)
+            if len(closes) == 1:  # Qt does not run the close event again from inside it
+                main_window.closeEvent(event)
+
+        with patch.object(main_window, "close", side_effect=close_once):
+            main_window.close_after_stop()
+
+        assert len(closes) == 2
+        set_enabled.assert_called_with(True)
         event.ignore.assert_not_called()
+        assert message_box.call_count == 1
+        main_window.ui_manager.save_all_settings.assert_called_once_with()
+        main_window.stop_threads.assert_called_once_with()
+
+    def test_a_stop_that_is_not_for_the_close_does_not_close(self, main_window, window_calls):
+        with patch.object(main_window, "close") as close:
+            main_window.close_after_stop()
+
+        close.assert_not_called()
 
     def test_running_job_cancel_leaves_the_job_alone(self, main_window, message_box):
         main_window.tab.serial_connection_status = True

@@ -512,13 +512,20 @@ class TestStreamToSimulator:
         assert link.stopped == 0
         assert link.sim.state == "Run"
 
-    def test_stopping_a_running_job_leaves_the_machine_locked(self, controller_worker):
+    def test_stopping_a_running_job_resets_the_machine_after_the_hold(self, controller_worker):
         link = Link(controller_worker)
+        dones = []
+        controller_worker.stop_done_s.connect(lambda: dones.append(link.sim.state))
         controller_worker.send_gcode_lines(list(JOB))
         link.run(1.0)
+        assert link.sim.state == "Run"
 
         controller_worker.stop_gcode_file()
         link.run(0.1)
+        assert link.sim.state == "Hold"
+        assert dones == []
+        link.run(5.0)
 
-        assert link.sim.state == "Alarm"
-        assert "ALARM:3\r\n" in link.console
+        assert len(dones) == 1
+        assert link.sim.state == "Idle"
+        assert not [text for text in link.console if "alarm" in text.lower()]

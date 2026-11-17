@@ -229,6 +229,7 @@ class UiControlTab(QObject):
         self.ui.stop_tb.clicked.connect(self.stop_send_file)
         self.ui.pause_resume_tb.clicked.connect(self.pause_resume)
         self.controlWo.stop_send_s.connect(self.stop_send_file)
+        self.controlWo.stop_done_s.connect(self.end_stop)
 
         self.precalc_gcode_s.connect(self.controlWo.vectorize_new_gcode_file)
         self.select_gcode_s.connect(self.controlWo.select_active_gcode)
@@ -764,8 +765,13 @@ class UiControlTab(QObject):
         return self._confirm("Start the job", "Send {}?".format(os.path.basename(gcode_path)), details, "Start")
 
     def stop_send_file(self):
+        """Stop the job; the controls of a job stay as they are until the machine has been reset (``end_stop``)."""
         self.close_rejected_line_prompt()
         self.stop_gcode_s.emit()
+
+    @Slot()
+    def end_stop(self) -> None:
+        """Enable the controls again once a stopped job has ended, so a new job cannot meet a delayed reset."""
         self.enable_gcode_rb(True)
         self.enable_after_send()
 

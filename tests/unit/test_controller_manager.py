@@ -5,6 +5,7 @@ streamed line, and a macro that cannot run must stop the job instead of being
 silently skipped (the tool length offset would be wrong).
 """
 
+import logging
 import queue
 from typing import Any, List, Optional, Tuple
 from unittest.mock import MagicMock
@@ -446,6 +447,8 @@ class TestResumeAfterRejectedLine:
 
     def test_stop_from_the_prompt_resets_the_machine(self, worker, rig):
         worker.stop_gcode_file()
+        rig.status("Hold:0")
+        rig.status("Hold:0")
 
         assert rig.realtime[-2:] == [FEED_HOLD, SOFT_RESET]
         assert worker.rejected_line_pending is False
@@ -461,6 +464,8 @@ class TestAlarm:
 
         rig.feed("ALARM:1\n")
         worker.stop_gcode_file()
+        rig.status("Alarm")
+        rig.status("Alarm")
 
         assert rig.realtime == [FEED_HOLD, SOFT_RESET]
 
@@ -621,9 +626,151 @@ class TestStopJobForClose:
         worker.send_soft_reset = False  # as during a tool change or a long user command
 
         worker.stop_job_for_close()
+        rig.status("Hold:0")
+        rig.status("Hold:0")
 
         assert rig.realtime == [FEED_HOLD, SOFT_RESET]
         assert worker.sending_file is False
+
+
+class TestStopWaitsForTheHold:
+    """A stop holds the machine and resets it only once it has stopped (#112)."""
+
+    @pytest.fixture
+    def rig(self, worker):
+        rig = StreamRig(worker, JOB)
+        rig.run_until_line(4)
+        rig.dones = []
+        worker.stop_done_s.connect(lambda: rig.dones.append(1))
+        return rig
+
+    def test_the_stop_holds_the_machine_without_a_reset(self, worker, rig):
+        worker.stop_gcode_file()
+
+        assert rig.realtime == [FEED_HOLD]
+        assert worker.reset_pending is True
+        assert rig.dones == []
+
+    @pytest.mark.parametrize("state", ["Run", "Jog", "Hold:1"])
+    def test_no_reset_while_the_machine_moves(self, worker, rig, state):
+        worker.stop_gcode_file()
+
+        for _ in range(5):
+            rig.status(state)
+
+        assert rig.realtime == [FEED_HOLD]
+        assert rig.dones == []
+
+    @pytest.mark.parametrize("state", ["Hold:0", "Idle", "Alarm", "Door:0", "Home", "Check"])
+    def test_a_stopped_machine_is_reset_once(self, worker, rig, state):
+        worker.stop_gcode_file()
+
+        rig.status("Hold:1")
+        rig.status(state)
+        rig.status(state)
+        rig.status(state)
+
+        assert rig.realtime == [FEED_HOLD, SOFT_RESET]
+        assert worker.reset_pending is False
+        assert rig.dones == [1]
+
+    def test_the_first_report_after_the_hold_is_skipped(self, worker, rig):
+        worker.stop_gcode_file()
+
+        rig.status("Idle")
+
+        assert rig.realtime == [FEED_HOLD]
+
+    def test_a_second_stop_does_not_add_a_reset(self, worker, rig):
+        worker.stop_gcode_file()
+        rig.status("Hold:1")
+        worker.stop_gcode_file()
+
+        rig.status("Hold:0")
+        rig.status("Hold:0")
+
+        assert rig.realtime == [FEED_HOLD, FEED_HOLD, SOFT_RESET]
+        assert rig.dones == [1]
+
+    def test_the_timeout_resets_without_a_report(self, worker, rig):
+        worker.STOP_RESET_TIMEOUT_MS = 50
+        worker.stop_gcode_file()
+
+        QTest.qWait(150)
+
+        assert rig.realtime == [FEED_HOLD, SOFT_RESET]
+        assert rig.dones == [1]
+        assert any("position may be lost" in text for text in rig.console)
+
+    def test_the_timeout_does_not_follow_a_reset(self, worker, rig):
+        worker.STOP_RESET_TIMEOUT_MS = 50
+        worker.stop_gcode_file()
+        rig.status("Hold:0")
+        rig.status("Hold:0")
+
+        QTest.qWait(150)
+
+        assert rig.realtime == [FEED_HOLD, SOFT_RESET]
+        assert rig.dones == [1]
+
+    def test_a_stop_without_a_reset_ends_at_once(self, worker, rig):
+        worker.send_soft_reset = False
+
+        worker.stop_gcode_file()
+
+        assert rig.realtime == []
+        assert worker.reset_pending is False
+        assert rig.dones == [1]
+
+    def test_a_disconnection_ends_the_stop_without_a_reset(self, worker, rig):
+        worker.init_timers()
+        worker.stop_gcode_file()
+
+        worker.on_controller_connection(False)
+        rig.status("Hold:0")
+        rig.status("Hold:0")
+
+        assert rig.realtime == [FEED_HOLD]
+        assert rig.dones == [1]
+
+    def test_the_reset_logs_the_state_that_allowed_it(self, worker, rig, caplog):
+        worker.stop_gcode_file()
+
+        with caplog.at_level(logging.INFO, logger="controller.controller_manager"):
+            rig.status("Hold:1")
+            rig.status("Hold:0")
+
+        assert "Machine stopped (Hold:0): soft reset" in caplog.messages
+
+
+class TestStateChangeLog:
+    """The machine state is logged when it changes, not on every status report."""
+
+    def test_only_the_changes_are_logged(self, worker, caplog):
+        rig = StreamRig(worker, JOB)
+
+        with caplog.at_level(logging.DEBUG, logger="controller.controller_manager"):
+            for state in ["Idle", "Idle", "Run", "Run", "Hold:1", "Hold:0", "Hold:0"]:
+                rig.status(state)
+
+        changes = [message for message in caplog.messages if message.startswith("Machine state:")]
+        assert changes == [
+            "Machine state: - -> Idle",
+            "Machine state: Idle -> Run",
+            "Machine state: Run -> Hold:1",
+            "Machine state: Hold:1 -> Hold:0",
+        ]
+
+    def test_the_state_is_logged_again_after_a_reconnection(self, worker, caplog):
+        rig = StreamRig(worker, JOB)
+        worker.init_timers()
+        rig.status("Idle")
+
+        worker.on_controller_connection(False)
+        with caplog.at_level(logging.DEBUG, logger="controller.controller_manager"):
+            rig.status("Idle")
+
+        assert "Machine state: - -> Idle" in caplog.messages
 
 
 OV_STATUS = "<Run|MPos:0.000,0.000,0.000|FS:300,1000|Ov:{},{},{}>\n"

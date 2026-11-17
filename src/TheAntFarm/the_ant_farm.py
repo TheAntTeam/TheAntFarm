@@ -56,6 +56,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     serialRxQu: Queue[Any] = Queue()  # serial FIFO RX Queue
     serialTxQu: Queue[Any] = Queue()  # serial FIFO TX Queue
     THREAD_STOP_TIMEOUT_MS = 3000  # shared by the threads, more than a blocking serial write (1 s)
+    stopping_for_close = False  # a job is being stopped, the window closes when it has ended
+    job_stopped_for_close = False  # the next close follows that stop, without asking again
 
     def __init__(self, local_path="", style_manager=None):
         super(MainWindow, self).__init__()
@@ -85,6 +87,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # right before it finishes (finished is emitted from that thread).
         self.control_thread.finished.connect(self.controlWo.stop_timers, Qt.DirectConnection)
         self.control_thread.start()
+        self.controlWo.stop_done_s.connect(self.close_after_stop)
 
         # Serial Worker Thread.
         self.serial_thread = QThread(self)
@@ -98,7 +101,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         """Before closing the application stop all threads and return ok code."""
-        if not self.confirm_close():
+        if self.stopping_for_close:
+            event.ignore()
+            return
+        confirmed = self.job_stopped_for_close
+        self.job_stopped_for_close = False
+        if not confirmed and not self.confirm_close():
+            event.ignore()
+            return
+        if self.stopping_for_close:
             event.ignore()
             return
         already_saved = False
@@ -158,10 +169,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if msg.clickedButton() != close_btn:
             return False
         if control_tab.job_running:
-            # Blocking: the hold and reset are queued to the serial thread before the port is closed.
-            logger.info("Stopping the running job before closing")
-            QMetaObject.invokeMethod(self.controlWo, "stop_job_for_close", Qt.BlockingQueuedConnection)
+            self.stop_job_then_close()
         return True
+
+    def stop_job_then_close(self) -> None:
+        """Stop the job without blocking; the window closes when the machine has been reset (``close_after_stop``).
+
+        The reset waits for the end of the feed hold, which can take a few seconds while the machine slows down.
+        """
+        logger.info("Stopping the running job before closing")
+        self.stopping_for_close = True
+        self.setEnabled(False)
+        self.statusBar().showMessage("Stopping the job…")
+        QMetaObject.invokeMethod(self.controlWo, "stop_job_for_close", Qt.QueuedConnection)
+
+    def close_after_stop(self) -> None:
+        """Close the window once the job stopped by ``stop_job_then_close`` has ended."""
+        if not self.stopping_for_close:
+            return
+        self.stopping_for_close = False
+        self.job_stopped_for_close = True
+        self.statusBar().clearMessage()
+        self.setEnabled(True)
+        self.close()
 
     def stop_threads(self) -> None:
         """Close the serial port and stop the worker threads, waiting for them up to a shared deadline.

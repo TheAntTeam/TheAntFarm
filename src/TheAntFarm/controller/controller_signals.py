@@ -41,6 +41,7 @@ class ControllerSignals(QObject):
     # Control signals
     reset_controller_status_s = Signal()
     stop_send_s = Signal()
+    stop_done_s = Signal()  # A stopped job has ended: the reset, if any, has been sent to the machine
     line_rejected_s = Signal(str, str, int)  # A line has been rejected, the machine is on hold: error, line, number
     send_tool_change_s = Signal()  # Start the tool change procedure
 

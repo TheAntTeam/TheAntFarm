@@ -223,7 +223,13 @@ class TestRejectedLinePrompt:
         assert ui_tab.stops == [1]
         assert ui_tab.resumes == []
         assert ui_tab.rejected_line_prompt is None
-        ui_tab.enable_after_send.assert_called_once()
+        ui_tab.enable_after_send.assert_not_called()
+
+    def test_the_controls_come_back_when_the_stop_has_ended(self, ui_tab):
+        ui_tab.end_stop()
+
+        ui_tab.enable_after_send.assert_called_once_with()
+        ui_tab.enable_gcode_rb.assert_called_once_with(True)
 
     def test_job_stopped_elsewhere_closes_the_prompt(self, ui_tab, message_box):
         ui_tab.show_rejected_line_prompt("error:20", "G1 X2", 3)
