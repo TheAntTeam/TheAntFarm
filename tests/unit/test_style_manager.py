@@ -53,7 +53,6 @@ def icon_colors(icon, mode=QIcon.Normal):
     return colors_of(icon.pixmap(64, 64, mode))
 
 
-
 class TestStyle:
     def test_the_application_gets_the_fusion_style(self, resources):
         from style_manager import StyleManager
@@ -62,6 +61,7 @@ class TestStyle:
         StyleManager(app)
 
         app.setStyle.assert_called_once_with("Fusion")
+
 
 class TestIconManager:
     def test_every_visible_pixel_gets_the_colour(self, resources):

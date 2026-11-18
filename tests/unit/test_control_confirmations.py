@@ -155,7 +155,6 @@ class TestHomingAndToolChange:
         ui_tab.controlWo.send_tool_change_s.emit.assert_not_called()
         assert ui_tab.job_running is False
 
-
     def test_the_setting_turns_the_homing_question_off(self, ui_tab):
         ui_tab.app_settings.confirm_homing = False
 

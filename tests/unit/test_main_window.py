@@ -271,14 +271,13 @@ class TestConfirmClose:
 
     @pytest.fixture
     def window_calls(self, main_window):
-        with patch.object(main_window, "setEnabled") as set_enabled, patch.object(
-            main_window, "statusBar"
-        ) as status_bar:
+        with (
+            patch.object(main_window, "setEnabled") as set_enabled,
+            patch.object(main_window, "statusBar") as status_bar,
+        ):
             yield set_enabled, status_bar
 
-    def test_running_job_is_stopped_without_blocking_and_the_close_waits(
-        self, main_window, message_box, window_calls
-    ):
+    def test_running_job_is_stopped_without_blocking_and_the_close_waits(self, main_window, message_box, window_calls):
         set_enabled, status_bar = window_calls
         main_window.tab.serial_connection_status = True
         main_window.tab.job_running = True
