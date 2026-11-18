@@ -499,6 +499,18 @@ class TestAlarm:
         assert rig.stops == []
         assert "ALARM:1\n" in rig.console
 
+    def test_an_error_9_after_the_alarm_is_only_shown(self, worker):
+        rig = StreamRig(worker, JOB)
+        rig.run_until_line(7)
+
+        rig.feed("ALARM:5\n", "error:9\n", "error:9\n")
+
+        assert rig.stops == [1]
+        assert rig.prompts == []
+        assert len([text for text in rig.console if "Job stopped" in text]) == 1
+        assert not any("Machine locked" in text for text in rig.console)
+        assert rig.console.count("error:9\n") == 2
+
 
 class TestLineTooLong:
     LONG_LINE = "G1 X1 ; " + "c" * 130 + "\n"
@@ -898,6 +910,96 @@ class TestHomingOnTheSimulator:
 
         assert "Home" in states
         assert worker.homed is True
+
+
+PROBE_MISS_JOB = [
+    "G21\n",
+    "G90\n",
+    "G0 X0.000 Y0.000 Z0.000\n",
+    "G38.2 Z-2.000 F100.0\n",
+    "G0 Z1.000\n",
+    "G0 X5.000\n",
+    "G0 Y5.000\n",
+    "G0 X0.000\n",
+    "M5\n",
+]
+
+TOOL_CHANGE_JOB = ["G21\n", "G90\n", "T2\n", "M6\n", "G0 X6.000 Y2.000 Z1.000\n", "M5\n"]
+
+
+class TestAlarmWhileStreamingOnTheSimulator:
+    """A failed probe raises ALARM:5; a locked machine answers error:9. Both stop the job once."""
+
+    STEP_S = 0.05
+
+    def _run(self, worker, lines, probe_contact_z=-5.0, locked=False, seconds=60.0):
+        from grbl_simulator import GrblSimulator
+
+        sim = GrblSimulator(probe_contact_z=probe_contact_z)
+        if locked:
+            sim.state = "Alarm"
+        self.console: List[str] = []
+        self.stops: List[int] = []
+        self.prompts: List[Tuple[str, str, int]] = []
+
+        def to_simulator(data):
+            sim.receive(data if isinstance(data, bytes) else data.encode())
+
+        def on_stop():
+            self.stops.append(1)
+            worker.stop_gcode_file()
+
+        worker.serial_send_s.connect(to_simulator)
+        worker.update_console_text_s.connect(self.console.append)
+        worker.stop_send_s.connect(on_stop)
+        worker.line_rejected_s.connect(lambda error, line, number: self.prompts.append((error, line, number)))
+
+        def deliver():
+            for line in sim.read_output().decode().splitlines(True):
+                worker.serialRxQueue.put(line)
+                worker.parse_rx_queue()
+
+        worker.send_gcode_lines(list(lines))
+        for _ in range(round(seconds / self.STEP_S)):
+            while not worker.serialTxQueue.empty():
+                to_simulator(worker.serialTxQueue.get())
+            deliver()
+            sim.receive(b"?")
+            sim.advance(self.STEP_S)
+            deliver()
+        return sim
+
+    def test_a_missed_probe_stops_the_job_once(self, worker):
+        self._run(worker, PROBE_MISS_JOB)
+
+        assert self.stops == [1]
+        assert worker.job_aborted is True
+        assert worker.sending_file is False
+        assert any("Machine alarm (ALARM:5)" in text for text in self.console)
+        assert len([text for text in self.console if "Job stopped" in text]) == 1
+
+    def test_no_line_is_queued_behind_the_probe(self, worker):
+        self._run(worker, PROBE_MISS_JOB)
+
+        assert PROBE_MISS_JOB[4] not in self.console
+        assert not any(text.strip().lower() == "error:9" for text in self.console)
+
+    def test_a_missed_probe_in_the_tool_change_stops_the_job_once(self, worker):
+        self._run(worker, TOOL_CHANGE_JOB, probe_contact_z=-50.0)
+
+        assert self.stops == [1]
+        assert worker.job_aborted is True
+        assert worker.macro_on is False
+        assert self.prompts == []
+        assert any("Machine alarm (ALARM:5)" in text for text in self.console)
+        assert len([text for text in self.console if "Job stopped" in text]) == 1
+
+    def test_a_job_on_a_locked_machine_stops_at_the_first_line(self, worker):
+        self._run(worker, PROBE_MISS_JOB, locked=True)
+
+        assert self.stops == [1]
+        assert any("Machine locked (error:9) on line 1" in text for text in self.console)
+        assert self.prompts == []
 
 
 OV_STATUS = "<Run|MPos:0.000,0.000,0.000|FS:300,1000|Ov:{},{},{}>\n"
