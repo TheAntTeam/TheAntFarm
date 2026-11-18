@@ -202,14 +202,12 @@ reason in the console.
 
 Detailed in `docs/macros.md` §4, item M-03.
 
-### 5.4 Refuse to start a tool change on a non homed machine
+### 5.4 Warn before a tool change on a non homed machine (done)
 
-**Where** `controller/controller_manager.py` (`macro_check`),
-`controller/controller_control.py` (connection state).
-
-**Why** the tool change procedures move in machine coordinates (`G53`); GRBL
-does not report the homed state, so it has to be tracked from the commands the
-application sends (`$H`) and reset on connect/reset/alarm.
+`ControllerWorker` (`controller/controller_manager.py`) tracks whether the
+machine has been homed since the connection, and the Tool Change button of the
+Control tab asks for a confirmation when it has not, if the machine setting
+`tool_change_homing_warning` is on (off by default).
 
 Detailed in `docs/macros.md` §4, item M-02.
 

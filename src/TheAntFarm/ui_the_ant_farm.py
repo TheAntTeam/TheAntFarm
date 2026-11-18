@@ -4357,6 +4357,24 @@ class Ui_MainWindow(object):
 
         self.gridLayout_tool_change.addWidget(self.spindle_restart_delay_dsb, 10, 1, 1, 1)
 
+        self.tool_change_homing_warning_la = QLabel(self.jobs_machine_settings_tab_scroll)
+        self.tool_change_homing_warning_la.setObjectName(u"tool_change_homing_warning_la")
+        sizePolicy3.setHeightForWidth(self.tool_change_homing_warning_la.sizePolicy().hasHeightForWidth())
+        self.tool_change_homing_warning_la.setSizePolicy(sizePolicy3)
+        self.tool_change_homing_warning_la.setMinimumSize(QSize(160, 20))
+        self.tool_change_homing_warning_la.setMaximumSize(QSize(160, 16777215))
+        self.tool_change_homing_warning_la.setFont(font)
+        self.tool_change_homing_warning_la.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
+
+        self.gridLayout_tool_change.addWidget(self.tool_change_homing_warning_la, 11, 0, 1, 1)
+
+        self.tool_change_homing_warning_chb = QCheckBox(self.jobs_machine_settings_tab_scroll)
+        self.tool_change_homing_warning_chb.setObjectName(u"tool_change_homing_warning_chb")
+        sizePolicy3.setHeightForWidth(self.tool_change_homing_warning_chb.sizePolicy().hasHeightForWidth())
+        self.tool_change_homing_warning_chb.setSizePolicy(sizePolicy3)
+
+        self.gridLayout_tool_change.addWidget(self.tool_change_homing_warning_chb, 11, 1, 1, 1)
+
 
         self.verticalLayout_tool_change.addLayout(self.gridLayout_tool_change)
 
@@ -5276,6 +5294,13 @@ class Ui_MainWindow(object):
         self.spindle_restart_delay_la.setText(QCoreApplication.translate("MainWindow", u"Spindle Restart Delay [s]", None))
 #if QT_CONFIG(tooltip)
         self.spindle_restart_delay_dsb.setToolTip(QCoreApplication.translate("MainWindow", u"Time given to the spindle to get back to speed when a job is resumed after a rejected line, before the motion restarts.", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.tool_change_homing_warning_la.setToolTip(QCoreApplication.translate("MainWindow", u"Ask for a confirmation before a tool change when the machine has not been homed since the connection: the tool change moves to absolute machine positions. Off by default; turn it on for a machine with homing switches.", None))
+#endif // QT_CONFIG(tooltip)
+        self.tool_change_homing_warning_la.setText(QCoreApplication.translate("MainWindow", u"Warn If Not Homed", None))
+#if QT_CONFIG(tooltip)
+        self.tool_change_homing_warning_chb.setToolTip(QCoreApplication.translate("MainWindow", u"Ask for a confirmation before a tool change when the machine has not been homed since the connection: the tool change moves to absolute machine positions. Off by default; turn it on for a machine with homing switches.", None))
 #endif // QT_CONFIG(tooltip)
         self.settings_sub_tab.setTabText(self.settings_sub_tab.indexOf(self.jobs_machine_settings_tab), QCoreApplication.translate("MainWindow", u"Jobs/Machine Settings", None))
         self.alignment_drill_section_la.setText(QCoreApplication.translate("MainWindow", u"ALIGNMENT DRILL SETTINGS", None))

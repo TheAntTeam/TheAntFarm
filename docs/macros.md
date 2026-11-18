@@ -74,7 +74,8 @@ tool or the wrong tool length offset.
    converted to work coordinates by `MacroContext.probe()`.
 4. **Probe data** is a `deque(maxlen=2)` of machine coordinates: index 0 is the
    last probing cycle, index 1 the previous one.
-5. **`G53` requires homing.** GRBL does not report the homed state, see M-02.
+5. **`G53` requires homing.** GRBL does not report the homed state; the
+   application tracks it and warns before a tool change without homing, see M-02.
 
 ### 2.3 Placeholders
 
@@ -177,26 +178,38 @@ procedures is filled from `MACROS["M6"].variants`.
 See [`docs/shape_core.md`](shape_core.md) §5.2 for the table of the
 parameters and for the ones deliberately left out.
 
-### M-02 — Refuse to start the macro when the machine is not homed
+### M-02 — Warn before the macro when the machine is not homed (done)
 
-**Why** the three procedures use absolute machine coordinates (`G53`) for the
-safe Z, the probe/setter XY and the change position. Without homing those
-coordinates are meaningless and the machine can move into the fixture.
+The three procedures use absolute machine coordinates (`G53`) for the safe Z,
+the probe/setter XY and the change position; without homing those coordinates
+are meaningless and the machine can move into the fixture.
 
-**Where** `controller/controller_manager.py` (`macro_check`, line 289) and
-`controller/controller_control.py` (state tracking).
+`ControllerWorker` (`controller/controller_manager.py`) tracks the homed state
+of the connection, since GRBL does not report it:
 
-**How** track the homed state per connection: `homed = False` on connect, on
-soft reset and on `ALARM`, `homed = True` after a `$H` that ends with `ok`.
-GRBL does not report the flags, so the state has to be derived from the
-commands the application sends; FluidNC reports it too (verify with `$State`
-before relying on it). In `macro_check`, when `not homed`, call
-`abort_job_for_macro_error` with a clear message.
+- **homed** on the `ok` of a `$H` sent by the Home button or typed in the
+  terminal (GRBL answers it when the cycle has ended), or when a status report
+  shows the machine going from `Home` to `Idle`;
+- **not homed** on connect and disconnect, when a `$H` is sent (until it ends),
+  and on any alarm except a failed probe (`ALARM:4`, `ALARM:5`), which keeps the
+  position. A soft reset at rest keeps the position too; a reset while moving
+  raises `ALARM:3`.
 
-**Done when** a job that contains `M6` on a non homed machine stops before
-moving, with a message that says why.
+The Tool Change button of the Control tab (`UiControlTab._confirm_tool_change`)
+asks for a confirmation when the machine is not homed, saying why, with "Start
+anyway" and Cancel. The tool change is not refused: the app only knows whether it
+saw a homing, not whether the machine is homed (after a reconnection without a
+reset, for example), and GRBL with `$22=1` already starts locked until `$H` or
+`$X`. The warning replaces the usual Confirm Tool Change question, so it is asked
+once and also when that question is off. The warning is asked only when the
+machine setting `tool_change_homing_warning` (`Warn If Not Homed` in the tool
+change section of `Preferences -> Jobs/Machine Settings`) is on. It is off by
+default, so that a machine that cannot home (`$22=0`, no limit switches) is never
+asked; turn it on for a machine with homing switches. An `M6` inside a G-code
+file is not warned about.
 
-**Effort** ~2 h, medium risk (state machine of the connection).
+Not verified on FluidNC: whether its `$H` is also answered with `ok` only at the
+end of the cycle (the status transition covers it otherwise).
 
 ### M-03 — Handle probe failures and alarms while streaming
 
@@ -378,6 +391,13 @@ undone without consequences.
 7. **Failed probe.** Interrupt the probe (no contact): the console must show the
    "Probe not triggered" error, the measurement must not be used, and after
    M-03 the job must stop cleanly.
+8. **Homing warning.** Turn on Warn If Not Homed in the machine settings.
+   Connect, unlock with `$X` and press Tool Change: the
+   question must say the machine has not been homed, and Cancel must leave the
+   machine still. Home with the Home button, then with `$H` in the terminal
+   (after reconnecting): the console must log "Machine homed" and Tool Change
+   must ask the usual question. On FluidNC, check that the `ok` of `$H` comes
+   only at the end of the cycle.
 
 ---
 

@@ -458,6 +458,7 @@ class TestToolChangeProcedure:
         mock_settings.machine_settings.tool_probe_backoff = 2.0
         mock_settings.machine_settings.spindle_stop_dwell = 3.0
         mock_settings.machine_settings.spindle_restart_delay = 6.0
+        mock_settings.machine_settings.tool_change_homing_warning = False
 
         settings_tab.reset_tool_change_procedure_settings()
 
@@ -469,6 +470,7 @@ class TestToolChangeProcedure:
         mock_ui.tool_probe_backoff_dsb.setValue.assert_called_with(2.0)
         mock_ui.spindle_stop_dwell_dsb.setValue.assert_called_with(3.0)
         mock_ui.spindle_restart_delay_dsb.setValue.assert_called_with(6.0)
+        mock_ui.tool_change_homing_warning_chb.setChecked.assert_called_with(False)
 
     def test_save_settings_preferences_writes_the_procedure(self, settings_tab, mock_ui, mock_settings):
         mock_ui.tool_change_mode_cb.currentText.return_value = "tlo"
@@ -479,6 +481,7 @@ class TestToolChangeProcedure:
         mock_ui.tool_probe_backoff_dsb.value.return_value = 2.0
         mock_ui.spindle_stop_dwell_dsb.value.return_value = 4.0
         mock_ui.spindle_restart_delay_dsb.value.return_value = 8.0
+        mock_ui.tool_change_homing_warning_chb.isChecked.return_value = False
 
         settings_tab.save_settings_preferences()
 
@@ -490,6 +493,7 @@ class TestToolChangeProcedure:
         assert mock_settings.machine_settings.tool_probe_backoff == 2.0
         assert mock_settings.machine_settings.spindle_stop_dwell == 4.0
         assert mock_settings.machine_settings.spindle_restart_delay == 8.0
+        assert mock_settings.machine_settings.tool_change_homing_warning is False
 
 
 class TestSettingsTabLayerColors:

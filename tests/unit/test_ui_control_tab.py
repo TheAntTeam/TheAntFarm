@@ -462,6 +462,7 @@ class TestJobRunning:
         ui_tab.enable_gcode_rb = Mock()
         ui_tab._confirm = Mock(return_value=True)
         ui_tab.app_settings = Mock(confirm_play=True, confirm_tool_change=True)
+        ui_tab.machine_settings = Mock(tool_change_homing_warning=True)
         return ui_tab
 
     def test_a_file_job_runs_until_it_ends(self, ui_tab):
