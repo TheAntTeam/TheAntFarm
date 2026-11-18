@@ -9855,6 +9855,55 @@
                   </property>
                  </widget>
                 </item>
+                <item row="11" column="0">
+                 <widget class="QLabel" name="tool_change_homing_warning_la">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>160</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>Ask for a confirmation before a tool change when the machine has not been homed since the connection: the tool change moves to absolute machine positions. Off by default; turn it on for a machine with homing switches.</string>
+                  </property>
+                  <property name="locale">
+                   <locale language="English" country="UnitedKingdom"/>
+                  </property>
+                  <property name="text">
+                   <string>Warn If Not Homed</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="11" column="1">
+                 <widget class="QCheckBox" name="tool_change_homing_warning_chb">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>Ask for a confirmation before a tool change when the machine has not been homed since the connection: the tool change moves to absolute machine positions. Off by default; turn it on for a machine with homing switches.</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
              </layout>

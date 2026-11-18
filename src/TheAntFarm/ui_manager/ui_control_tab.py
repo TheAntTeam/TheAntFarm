@@ -47,6 +47,9 @@ class UiControlTab(QObject):
     OVERRIDE_PENDING_S = 5.0
     NO_VALUE = "-"
     TURN_OFF_NOTE = "This question can be turned off in the settings."
+    HOMING_WARNING_NOTE = (
+        "This warning can be turned off with Warn If Not Homed, in the Tool Change Procedure of the machine settings."
+    )
 
     def __init__(self, ui, control_worker, serial_worker, ctrl_layer, settings, style_manager=None):
         """
@@ -970,16 +973,30 @@ class UiControlTab(QObject):
             self.ui.logging_plain_te.hide()
 
     def handle_tool_change_start(self):
-        if self.app_settings.confirm_tool_change and not self._confirm(
-            "Tool change",
-            "Start a tool change?",
-            "The machine moves to the tool change position.\n\n" + self.TURN_OFF_NOTE,
-            "Start",
-        ):
+        if not self._confirm_tool_change():
             return
         logger.debug("Tool change")
         self.controlWo.send_tool_change_s.emit()
         self.disable_during_send()
+
+    def _confirm_tool_change(self) -> bool:
+        """Ask before a tool change; a machine not homed since the connection is always asked, with a warning."""
+        if self.machine_settings.tool_change_homing_warning and not self.controlWo.homed:
+            return self._confirm(
+                "Tool change",
+                "The machine has not been homed since the connection. Start the tool change anyway?",
+                "The tool change moves to absolute machine positions, which are only right after a homing cycle.\n\n"
+                + self.HOMING_WARNING_NOTE,
+                "Start anyway",
+            )
+        if not self.app_settings.confirm_tool_change:
+            return True
+        return self._confirm(
+            "Tool change",
+            "Start a tool change?",
+            "The machine moves to the tool change position.\n\n" + self.TURN_OFF_NOTE,
+            "Start",
+        )
 
     def handle_soft_reset(self):
         """Reset the controller; confirmed only at rest, since a reset is also the way to abort a move."""

@@ -40,6 +40,7 @@ class MachineSettingsHandler:
     TOOL_PROBE_BACKOFF_DEFAULT = 1.5
     SPINDLE_STOP_DWELL_DEFAULT = 1.0
     SPINDLE_RESTART_DELAY_DEFAULT = 4.0
+    TOOL_CHANGE_HOMING_WARNING_DEFAULT = False
 
     ALIGNMENT_DRILL_DIAMETER_DEFAULT = 0.0
     TOOL_CAMERA_OFFSET_X_DEFAULT = 0.0
@@ -86,6 +87,7 @@ class MachineSettingsHandler:
         self.tool_probe_backoff = self.TOOL_PROBE_BACKOFF_DEFAULT
         self.spindle_stop_dwell = self.SPINDLE_STOP_DWELL_DEFAULT
         self.spindle_restart_delay = self.SPINDLE_RESTART_DELAY_DEFAULT
+        self.tool_change_homing_warning = self.TOOL_CHANGE_HOMING_WARNING_DEFAULT
 
         self.alignment_drill_diameter = self.ALIGNMENT_DRILL_DIAMETER_DEFAULT
         self.tool_camera_offset_x = self.TOOL_CAMERA_OFFSET_X_DEFAULT
@@ -166,6 +168,9 @@ class MachineSettingsHandler:
             self.spindle_restart_delay = machine_general.getfloat(
                 "spindle_restart_delay", self.SPINDLE_RESTART_DELAY_DEFAULT
             )
+            self.tool_change_homing_warning = machine_general.getboolean(
+                "tool_change_homing_warning", self.TOOL_CHANGE_HOMING_WARNING_DEFAULT
+            )
 
             self.alignment_drill_diameter = machine_general.getfloat(
                 "alignment_drill_diameter", self.ALIGNMENT_DRILL_DIAMETER_DEFAULT
@@ -215,6 +220,7 @@ class MachineSettingsHandler:
             "tool_probe_backoff": self.TOOL_PROBE_BACKOFF_DEFAULT,
             "spindle_stop_dwell": self.SPINDLE_STOP_DWELL_DEFAULT,
             "spindle_restart_delay": self.SPINDLE_RESTART_DELAY_DEFAULT,
+            "tool_change_homing_warning": self.TOOL_CHANGE_HOMING_WARNING_DEFAULT,
         }
 
         # GENERAL machine settings #
@@ -256,6 +262,7 @@ class MachineSettingsHandler:
         machine_general["tool_probe_backoff"] = str(self.tool_probe_backoff)
         machine_general["spindle_stop_dwell"] = str(self.spindle_stop_dwell)
         machine_general["spindle_restart_delay"] = str(self.spindle_restart_delay)
+        machine_general["tool_change_homing_warning"] = str(self.tool_change_homing_warning)
 
         # Write machine ini file #
         with open(self.machine_config_path, "w") as configfile:
@@ -299,6 +306,7 @@ class MachineSettingsHandler:
             "tool_probe_backoff": self.TOOL_PROBE_BACKOFF_DEFAULT,
             "spindle_stop_dwell": self.SPINDLE_STOP_DWELL_DEFAULT,
             "spindle_restart_delay": self.SPINDLE_RESTART_DELAY_DEFAULT,
+            "tool_change_homing_warning": self.TOOL_CHANGE_HOMING_WARNING_DEFAULT,
         }
 
         # GENERAL machine settings #
@@ -339,6 +347,7 @@ class MachineSettingsHandler:
         machine_general["tool_probe_backoff"] = str(self.TOOL_PROBE_BACKOFF_DEFAULT)
         machine_general["spindle_stop_dwell"] = str(self.SPINDLE_STOP_DWELL_DEFAULT)
         machine_general["spindle_restart_delay"] = str(self.SPINDLE_RESTART_DELAY_DEFAULT)
+        machine_general["tool_change_homing_warning"] = str(self.TOOL_CHANGE_HOMING_WARNING_DEFAULT)
 
         # Write machine ini file #
         with open(self.machine_config_path, "w") as configfile:

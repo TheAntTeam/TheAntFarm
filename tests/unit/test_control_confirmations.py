@@ -24,6 +24,8 @@ def ui_tab(qapp):
     ui_tab.controlWo = Mock()
     ui_tab.controlWo.get_gcode_bbox.return_value = BBOX
     ui_tab.app_settings = Mock(confirm_play=True, confirm_homing=True, confirm_tool_change=True, confirm_zero=True)
+    ui_tab.machine_settings = Mock(tool_change_homing_warning=True)
+    ui_tab.controlWo.homed = True
     ui_tab.job_running = False
     ui_tab.serial_connection_status = True
     ui_tab.get_selected_file = Mock(return_value=0)
@@ -176,6 +178,71 @@ class TestHomingAndToolChange:
         getattr(ui_tab, handler)()
 
         assert ui_tab.TURN_OFF_NOTE in ui_tab._confirm.call_args.args[2]
+
+
+class TestToolChangeWithoutHoming:
+    @pytest.fixture(autouse=True)
+    def not_homed(self, ui_tab):
+        ui_tab.controlWo.homed = False
+
+    def test_the_question_warns_about_the_homing(self, ui_tab):
+        ui_tab.handle_tool_change_start()
+
+        _title, text, details, label = ui_tab._confirm.call_args.args
+        assert "not been homed" in text
+        assert ui_tab.HOMING_WARNING_NOTE in details
+        assert label == "Start anyway"
+
+    def test_confirming_starts_the_tool_change(self, ui_tab):
+        ui_tab.handle_tool_change_start()
+
+        ui_tab.controlWo.send_tool_change_s.emit.assert_called_once_with()
+        assert ui_tab.job_running is True
+
+    def test_declining_does_not_start_it(self, ui_tab):
+        ui_tab._confirm.return_value = False
+
+        ui_tab.handle_tool_change_start()
+
+        ui_tab.controlWo.send_tool_change_s.emit.assert_not_called()
+        assert ui_tab.job_running is False
+
+    def test_the_warning_is_asked_also_without_the_tool_change_question(self, ui_tab):
+        ui_tab.app_settings.confirm_tool_change = False
+
+        ui_tab.handle_tool_change_start()
+
+        ui_tab._confirm.assert_called_once()
+        assert "not been homed" in ui_tab._confirm.call_args.args[1]
+
+    def test_the_warning_is_asked_only_once(self, ui_tab):
+        ui_tab.handle_tool_change_start()
+
+        ui_tab._confirm.assert_called_once()
+
+    def test_the_setting_turns_the_warning_off(self, ui_tab):
+        ui_tab.machine_settings.tool_change_homing_warning = False
+
+        ui_tab.handle_tool_change_start()
+
+        text = ui_tab._confirm.call_args.args[1]
+        assert text == "Start a tool change?"
+
+    def test_both_settings_off_start_at_once(self, ui_tab):
+        ui_tab.machine_settings.tool_change_homing_warning = False
+        ui_tab.app_settings.confirm_tool_change = False
+
+        ui_tab.handle_tool_change_start()
+
+        ui_tab._confirm.assert_not_called()
+        ui_tab.controlWo.send_tool_change_s.emit.assert_called_once_with()
+
+    def test_a_homed_machine_gets_the_usual_question(self, ui_tab):
+        ui_tab.controlWo.homed = True
+
+        ui_tab.handle_tool_change_start()
+
+        assert ui_tab._confirm.call_args.args[1] == "Start a tool change?"
 
 
 class TestSoftReset:

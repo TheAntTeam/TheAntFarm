@@ -773,6 +773,133 @@ class TestStateChangeLog:
         assert "Machine state: - -> Idle" in caplog.messages
 
 
+class TestHomingTracking:
+    """The Control tab warns before a tool change on a machine not homed since the connection."""
+
+    def test_a_new_worker_is_not_homed(self, worker):
+        assert worker.homed is False
+
+    def test_a_tool_change_is_not_blocked_by_the_homing(self, worker):
+        assert _start_macro(worker) == "$#\n"
+
+    def test_the_ok_of_the_homing_button_homes_the_machine(self, worker):
+        rig = StreamRig(worker)
+
+        worker.execute_user_interface_cmd("homing", (None, None, None))
+        assert worker.homed is False
+        rig.feed("ok\n")
+
+        assert worker.homed is True
+
+    def test_homing_typed_in_the_terminal_counts(self, worker):
+        rig = StreamRig(worker)
+
+        worker.execute_gcode_cmd("$h\n")
+        rig.feed("ok\n")
+
+        assert worker.homed is True
+
+    def test_an_ok_without_homing_does_not_home(self, worker):
+        rig = StreamRig(worker)
+
+        worker.execute_gcode_cmd("$X\n")
+        rig.feed("ok\n")
+
+        assert worker.homed is False
+
+    def test_a_homing_cycle_seen_in_the_status_counts(self, worker):
+        rig = StreamRig(worker)
+
+        rig.status("Idle")
+        assert worker.homed is False
+        rig.status("Home")
+        rig.status("Idle")
+
+        assert worker.homed is True
+
+    def test_a_homing_that_ends_in_an_alarm_does_not_count(self, worker):
+        rig = StreamRig(worker)
+
+        worker.execute_user_interface_cmd("homing", (None, None, None))
+        rig.status("Home")
+        rig.feed("ALARM:9\n")
+        rig.status("Alarm")
+        rig.feed("ok\n")
+
+        assert worker.homed is False
+
+    @pytest.mark.parametrize("alarm", ["ALARM:1", "ALARM:2", "ALARM:3", "ALARM:6", "ALARM:8"])
+    def test_an_alarm_that_loses_the_position_forgets_the_homing(self, worker, alarm, caplog):
+        worker.homed = True
+        rig = StreamRig(worker)
+
+        with caplog.at_level(logging.INFO, logger="controller.controller_manager"):
+            rig.feed(alarm + "\n")
+
+        assert worker.homed is False
+        assert f"Homing lost ({alarm})" in caplog.text
+
+    @pytest.mark.parametrize("alarm", ["ALARM:4", "ALARM:5"])
+    def test_a_failed_probe_keeps_the_homing(self, worker, alarm):
+        worker.homed = True
+        StreamRig(worker).feed(alarm + "\n")
+
+        assert worker.homed is True
+
+    @pytest.mark.parametrize("connected", [True, False])
+    def test_a_connection_change_forgets_the_homing(self, worker, connected):
+        worker.homed = True
+        worker.init_timers()
+
+        worker.on_controller_connection(connected)
+
+        assert worker.homed is False
+
+    def test_the_homing_is_logged_once(self, worker, caplog):
+        rig = StreamRig(worker)
+
+        with caplog.at_level(logging.INFO, logger="controller.controller_manager"):
+            rig.status("Home")
+            rig.status("Idle")
+            rig.status("Home")
+            rig.status("Idle")
+
+        assert caplog.messages.count("Machine homed") == 1
+
+
+class TestHomingOnTheSimulator:
+    """A real homing cycle of a GRBL-like controller is seen as a homing."""
+
+    def test_the_homing_button_homes_the_machine(self, worker):
+        from TheAntFarm.grbl_simulator import GrblSimulator
+
+        sim = GrblSimulator()
+        sim.read_output()
+        worker.serial_send_s.connect(lambda data: sim.receive(data if isinstance(data, bytes) else data.encode()))
+
+        def poll():
+            sim.receive(b"?")
+            for line in sim.read_output().decode().splitlines():
+                worker.serialRxQueue.put(line + "\n")
+                worker.parse_rx_queue()
+
+        sim.receive(b"G0 X-20 Y-20 Z-3\n")
+        for _ in range(50):
+            sim.advance(0.5)
+            poll()
+        worker.execute_user_interface_cmd("homing", (None, None, None))
+        states = []
+        for _ in range(100):
+            sim.advance(0.1)
+            poll()
+            states.append(worker.control_controller.status)
+            if worker.homed:
+                break
+
+        assert "Home" in states
+        assert worker.homed is True
+
+
 OV_STATUS = "<Run|MPos:0.000,0.000,0.000|FS:300,1000|Ov:{},{},{}>\n"
 
 

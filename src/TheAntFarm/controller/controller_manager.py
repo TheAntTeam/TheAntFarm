@@ -4,7 +4,7 @@ import re
 import time
 import traceback
 from collections import OrderedDict as Od
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from PySide6.QtCore import QThread, QTimer, Slot
 from PySide6.QtGui import QPixmap
@@ -33,6 +33,8 @@ class ControllerWorker(ControllerSignals):
     SOFT_RESET = b"\x18"
     MOVING_STATES = ("run", "jog", "hold:1")
     STOP_RESET_TIMEOUT_MS = 5000
+    HOMING_COMMAND = "$H"
+    ALARMS_KEEPING_POSITION = ("4", "5")
 
     def __init__(self, serial_rx_queue, serial_tx_queue, settings):
         super(ControllerWorker, self).__init__()
@@ -56,6 +58,9 @@ class ControllerWorker(ControllerSignals):
         self.reset_pending = False
         self.reset_reports_seen = 0
         self.logged_state = ""
+        self.homed = False
+        self.homing_requested = False
+        self.homing_seen = False
 
         self.align_active = False
         self.override_targets: Dict[str, int] = {}
@@ -113,6 +118,7 @@ class ControllerWorker(ControllerSignals):
     @Slot(bool)
     def on_controller_connection(self, connected):
         self.connected = connected
+        self._forget_homing()
         if connected:
             self.buffered_size = 0
             self.poll_timer.start()
@@ -214,6 +220,7 @@ class ControllerWorker(ControllerSignals):
                     if re.match(r"^<.*>\s*$\s", element):
                         self.update_status_s.emit(self.control_controller.parse_bracket_angle(element))
                         self._log_state_change()
+                        self._track_homing_state()
                         if "|Ov:" in element:
                             self._step_overrides()
                         # This variable should be set to true the first time an ack is received.
@@ -241,11 +248,14 @@ class ControllerWorker(ControllerSignals):
                     elif re.match(r"ok\s*$\s", element):
                         logger.debug("buffered size: " + str(self.buffered_size))
                         self.update_console_text_s.emit(element)
+                        if self.homing_requested:
+                            self._set_homed()
                         if self.sending_file and self.cmds_to_ack > 0 and not self.rejected_line_pending:
                             self._ack_line_and_send_next()
                     elif re.match(r"alarm:", element, re.IGNORECASE):
                         self.update_console_text_s.emit(element)
                         logger.error(element)
+                        self._forget_homing_on_alarm(element)
                         if self.sending_file or self.eof_wait_for_idle:
                             self.abort_stream(f"Machine alarm ({element.strip()})")
                     elif "error" in element.lower():
@@ -503,6 +513,7 @@ class ControllerWorker(ControllerSignals):
 
         if len(str_l) == 1:
             logger.info("Sending Short User Command")
+            self._note_homing_command(str_l[0])
             self.update_console_text_s.emit(str(str_l[0]))  # To string because it can be a byte.
             self.serial_send_s.emit(str_l[0])
         elif len(str_l) > 1:
@@ -559,7 +570,46 @@ class ControllerWorker(ControllerSignals):
         logger.debug("Execute Gcode")
         parsed_cmd_str = self.decode_tag(cmd_str)
         logger.info("Sent GCODE: " + str(parsed_cmd_str))
+        self._note_homing_command(parsed_cmd_str)
         self.serial_send_s.emit(parsed_cmd_str)
+
+    def _note_homing_command(self, cmd: Union[str, bytes]) -> None:
+        """Remember a homing command: its ``ok`` comes once the homing cycle has ended."""
+        text = cmd.decode(errors="ignore") if isinstance(cmd, bytes) else str(cmd)
+        if text.strip().upper() == self.HOMING_COMMAND:
+            self.homed = False
+            self.homing_requested = True
+
+    def _track_homing_state(self) -> None:
+        """Count a homing cycle that ends in ``Idle`` as a homing, also when its ``ok`` was not tied to it."""
+        state = self.control_controller.status.lower()
+        if state.startswith("home"):
+            self.homing_seen = True
+        elif self.homing_seen:
+            self.homing_seen = False
+            if state == "idle":
+                self._set_homed()
+
+    def _set_homed(self) -> None:
+        self.homing_requested = False
+        self.homing_seen = False
+        if not self.homed:
+            logger.info("Machine homed")
+        self.homed = True
+
+    def _forget_homing(self) -> None:
+        self.homed = False
+        self.homing_requested = False
+        self.homing_seen = False
+
+    def _forget_homing_on_alarm(self, alarm: str) -> None:
+        """An alarm loses the machine position, except a failed probe."""
+        code = alarm.strip().split(":", 1)[-1].strip()
+        if code in self.ALARMS_KEEPING_POSITION:
+            return
+        if self.homed:
+            logger.info(f"Homing lost ({alarm.strip()})")
+        self._forget_homing()
 
     def cmd_probe(self, probe_z_min):
         self.control_controller.cmd_probe()
