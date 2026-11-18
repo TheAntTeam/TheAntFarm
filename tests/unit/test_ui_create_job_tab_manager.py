@@ -32,6 +32,40 @@ class TestAddDrillTool:
             mock_ui.drill_tw.insertRow.assert_called_once()
 
 
+class TestAddDefaultDrillTool:
+    """A drill bit added with the + button starts at the most common through-hole size."""
+
+    @staticmethod
+    def _tab(qapp):
+        from PySide6.QtWidgets import QTableWidget
+
+        from TheAntFarm.ui_manager.ui_create_job_tab_manager import UiCreateJobLayerTab
+
+        tab = UiCreateJobLayerTab.__new__(UiCreateJobLayerTab)
+        tab.ui = MagicMock()
+        tab.ui.drill_tw = QTableWidget(0, 2)
+        tab.current_drill_tool_idx = 0
+        return tab
+
+    def test_a_new_bit_starts_at_0_8_mm(self, qapp):
+        tab = self._tab(qapp)
+
+        tab.add_default_drill_tool()
+
+        assert tab.ui.drill_tw.cellWidget(0, 1).value() == 0.8
+
+    def test_new_bits_are_numbered_and_enable_the_generate_button(self, qapp):
+        tab = self._tab(qapp)
+
+        tab.add_default_drill_tool()
+        tab.add_default_drill_tool()
+
+        labels = [tab.ui.drill_tw.cellWidget(row, 0).text() for row in range(2)]
+        assert labels == ["Bit0", "Bit1"]
+        assert tab.ui.drill_tw.cellWidget(1, 1).value() == 0.8
+        tab.ui.drill_generate_job_pb.setEnabled.assert_called_with(True)
+
+
 class TestRemoveDrillTool:
     def test_remove_drill_tool(self):
         mock_ui = MagicMock()

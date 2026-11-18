@@ -25,6 +25,8 @@ class UiCreateJobLayerTab(QObject):
         "4 - 1 per corner",
     ]
 
+    DEFAULT_DRILL_BIT_DIAMETER = 0.8
+
     def __init__(self, ui, control_wo, vis_layer, lay_tags, lay_names, jobs_settings):
         super(UiCreateJobLayerTab, self).__init__()
         self.ui = ui
@@ -100,20 +102,8 @@ class UiCreateJobLayerTab(QObject):
         new_tool_diameter.setMaximum(99.99)
         self.ui.drill_tw.setCellWidget(count_row, 1, new_tool_diameter)
 
-    def add_default_drill_tool(self):
-        count_row = self.ui.drill_tw.rowCount()
-        self.ui.drill_tw.insertRow(count_row)
-        new_tool_label = QLabel("Bit" + str(self.current_drill_tool_idx))
-        self.current_drill_tool_idx = self.current_drill_tool_idx + 1
-        new_tool_label.setAlignment(Qt.AlignCenter)
-        self.ui.drill_tw.setCellWidget(count_row, 0, new_tool_label)
-        new_tool_diameter = QDoubleSpinBox()
-        new_tool_diameter.setAlignment(Qt.AlignCenter)
-        new_tool_diameter.setValue(0.07)
-        new_tool_diameter.setSingleStep(0.01)
-        new_tool_diameter.setMinimum(0.01)
-        new_tool_diameter.setMaximum(99.99)
-        self.ui.drill_tw.setCellWidget(count_row, 1, new_tool_diameter)
+    def add_default_drill_tool(self) -> None:
+        self.add_drill_tool("Bit" + str(self.current_drill_tool_idx), self.DEFAULT_DRILL_BIT_DIAMETER)
         if self.ui.drill_tw.rowCount() != 0:
             self.ui.drill_generate_job_pb.setEnabled(True)
 
