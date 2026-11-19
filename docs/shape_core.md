@@ -185,20 +185,12 @@ refused by the registry) and of the preferences (combo filled from the
 registry, enabling of the setter fields, save/restore), plus a manual run of
 the application on the `setter` procedure.
 
-### 5.3 Stop the job when the machine raises an alarm while streaming
+### 5.3 Stop the job when the machine raises an alarm while streaming (done)
 
-**Where** `controller/controller_manager.py`, `ControllerWorker.parse_rx_queue`
-(the `ok`/`error` branches from line ~230).
-
-**Why** a probing cycle that does not touch the workpiece makes GRBL raise
-`ALARM:5` and clear the planner; the lines still in flight are answered with
-`error:9`, so `cmds_to_ack` never reaches zero, `check_eof_and_idle()` never
-fires and the job stays "sending" forever. The measurement itself is already
-discarded (`ControllerControlController.parse_probe_report`), the stream is not.
-
-**How** call `abort_job_for_macro_error` (or its generic version) when an
-`ALARM:*` or `error:9` arrives while `sending_file` is true, and write the
-reason in the console.
+`ControllerWorker.parse_rx_queue` (`controller/controller_manager.py`) stops the
+job with `abort_stream` when an `ALARM:*` arrives during a job, or when a line of
+the job is answered with `error:9` (machine locked). The failed measurement is
+discarded (`ControllerControlController.parse_probe_report`).
 
 Detailed in `docs/macros.md` §4, item M-03.
 
