@@ -12,93 +12,24 @@
 
 ## Features
 
-### View Tab
-- Import Gerber (TOP, BOTTOM) and Excellon (DRILL, EDGE) files
-- Visualize and inspect PCB layers
-- Generate optimized G-code from imported designs
+- **Load** Gerber (top, bottom, profile) and Excellon (drill) files and look at the layers from either side.
+- **Create jobs**: isolation milling with several passes, board cut-out with tabs, drilling with several bits
+  and milling of the large holes, with an optimised order of the holes.
+- **Control** a GRBL 1.1 machine over a serial port: jog, work zero, probing, bed levelling, feed, spindle and
+  rapid overrides, progress of the job.
+- **Tool change** procedures with probing, for jobs with more than one tool.
+- **Align** the bottom side of double-sided boards, with a camera or with the tool.
+- **GRBL simulator**, to try everything without a machine.
+- Windows, Linux and macOS, dark and light themes.
 
-### Control Tab
-- Connect to CNC machines via serial port (GRBL v1.1)
-- Load and execute G-code files
-- Real-time progress tracking with elapsed time and percentage
-- Tool change automation and feedrate control
-
-### Align Tab
-- Double-sided PCB alignment using camera
-- Manual point selection and optical alignment
-- Path optimization algorithms (genetic, nearest insertion, 2-opt)
-
-### Development & Testing
-- Virtual serial port simulator for testing G-code without hardware
-- Cross-platform: Windows, Linux, macOS
+Tested with Gerber and drill files from Autodesk Eagle and KiCad, on machines with GRBL 1.1.
 
 ---
 
-## Development Status
+## Getting started
 
-**Version 0.3.2** — active development.
-
-| Tab | Status | Notes |
-|-----|--------|-------|
-| **View** | Stable | Gerber import, gcode generation, visualization |
-| **Control** | Functional | GRBL v1.1 control, gcode execution, progress tracking |
-| **Align** | Functional | Double-sided alignment via camera, path optimization |
-
-**Compatibility:** Tested with Gerber/drill files from Autodesk Eagle and KiCad EDA. CNC machines using GRBL v1.1 firmware.
-
----
-
-## Screenshots
-<!-- TODO: Add screenshots -->
-<!-- ![Main UI](docs/images/screenshot.png) -->
-
----
-
-## Installation
-
-See [docs/INSTALL.md](docs/INSTALL.md) for prerequisites and setup instructions.
-
----
-
-## Quick Start
-
-1. **Import** a Gerber file — the View tab renders the PCB
-2. **Configure tools** — set tool diameter, feed rate, depths
-3. **Generate G-code** — export to a `.nc` file
-4. **Connect CNC** — select port and baud rate in the Control tab
-5. **Run** — load the G-code and start machining
-
----
-
-## Project Structure
-
-```
-src/TheAntFarm/
-├── the_ant_farm.py              # Application entry point
-├── controller/
-│   ├── controller_manager.py    # Main controller orchestrator
-│   ├── controller_view.py       # View tab logic
-│   ├── controller_control.py    # Control tab logic
-│   ├── controller_align.py      # Alignment tab logic
-│   └── controller_signals.py    # Signal definitions
-├── serial_manager.py            # Serial port communication
-├── virtual_serial_port.py       # GRBL simulator (dev/testing)
-├── settings_manager/
-│   ├── settings_manager.py      # Settings coordinator
-│   ├── settings_app.py          # Application settings
-│   ├── settings_machine.py      # Machine configuration
-│   ├── settings_job.py          # Job parameters
-│   └── settings_gcode_files.py  # G-code file settings
-├── ui_manager/
-│   ├── ui_manager.py            # Main UI coordinator
-│   ├── ui_view_load_layer_tab.py
-│   ├── ui_control_tab.py
-│   ├── ui_align_tab.py
-│   └── ui_settings_preferences.py
-├── shape_core/                  # Gerber/shape processing engine
-├── resources/                   # Application resources
-└── configurations/              # User configuration files
-```
+- [Installation](docs/user/install.md)
+- [Quick start](docs/user/quick-start.md): from a Gerber file to a milled board
 
 ---
 
@@ -118,9 +49,10 @@ src/TheAntFarm/
 
 ## Documentation
 
-- [docs/INSTALL.md](docs/INSTALL.md) — Installation guide
+The [documentation](docs/index.md) has a user guide (installation, jobs, machine control, tool change,
+alignment, settings, troubleshooting) and a developer guide (architecture, CAM core, macros, testing, releasing).
+
 - [CHANGELOG.md](CHANGELOG.md) — Release history
-- [docs/releasing.md](docs/releasing.md) — How a release is made
 - [CONTRIBUTING.md](CONTRIBUTING.md) — Contributor guide
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) — Community guidelines
 - [SECURITY.md](SECURITY.md) — Security policy

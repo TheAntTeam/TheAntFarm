@@ -175,7 +175,7 @@ know that it is done.
 The six parameters of the tool change procedures are machine settings and
 have a section in `Preferences -> Jobs/Machine Settings`; the combo of the
 procedures is filled from `MACROS["M6"].variants`.
-See [`docs/shape_core.md`](shape_core.md) §5.2 for the table of the
+See [`docs/dev/shape_core.md`](shape_core.md) §5.2 for the table of the
 parameters and for the ones deliberately left out.
 
 ### M-02 — Warn before the macro when the machine is not homed (done)
@@ -346,7 +346,7 @@ macro work was continued:
   removed the first vector from the model used to regenerate the G-code).
 
 What is left of that review was the structural part, now implemented and
-described in [`docs/shape_core.md`](shape_core.md) (see the *Structural
+described in [`docs/dev/shape_core.md`](shape_core.md) (see the *Structural
 backlog* section at the end of this section for the pointer).
 
 ### M-09 — Test isolation (documented)
@@ -355,14 +355,14 @@ backlog* section at the end of this section for the pointer).
 `tests/unit/test_controller_align.py` patches `double_side_manager.DoubleSideManager`
 before importing `controller.controller_align`, so the fixture only works if no
 other module imported `controller_align` first. The fix is described in
-[`docs/shape_core.md`](shape_core.md) §5.6.
+[`docs/dev/shape_core.md`](shape_core.md) §5.6.
 
 ### Structural backlog
 
 The structural part of the review (public API, `ToolPath` dataclass, single
 configuration, `Geom` validation, coordinate resolution) has been implemented
 in `shape_core` and is described, together with the changes that still need
-code outside the module, in [`docs/shape_core.md`](shape_core.md).
+code outside the module, in [`docs/dev/shape_core.md`](shape_core.md).
 
 ---
 

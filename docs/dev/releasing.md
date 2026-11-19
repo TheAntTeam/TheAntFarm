@@ -70,6 +70,18 @@ git tag -f v0.4.0 origin/main
 git push origin v0.4.0
 ```
 
+## Building an executable locally
+
+The workflows build the executables with PyInstaller; the same build runs locally:
+
+```bash
+pip install pyinstaller
+cd src/TheAntFarm
+pyinstaller the_ant_farm.spec
+```
+
+The executable is written in `src/TheAntFarm/dist/`.
+
 ## Not covered
 
 The executables are not signed: Windows SmartScreen and macOS Gatekeeper warn the first time they are opened.

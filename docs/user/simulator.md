@@ -1,12 +1,11 @@
 # GRBL simulator
 
-The Ant Farm can connect to a simulated GRBL 1.1 controller, to try the sender
-and test changes without a machine. The simulator lives in
-`src/TheAntFarm/grbl_simulator.py`.
+The Ant Farm can connect to a simulated GRBL 1.1 controller, to try the application
+without a machine: connecting, jogging, sending jobs, tool changes and alarms.
 
 ## Enabling it
 
-In `Settings/Preferences -> Application Settings`, under `SERIAL SETTINGS`,
+In **Settings/Preferences › Application Settings**, under SERIAL SETTINGS,
 check `GRBL Simulator: List in the serial ports`, choose the `GRBL Simulator
 Speed` and press `Save Settings/Preferences`. The port list in the Control tab then ends with
 `GRBL simulator`; choose it and press Connect. The real ports keep working as
@@ -61,9 +60,4 @@ be typed in the sender console while a job runs:
 | `$SIM=ALARM:1` | `ALARM:1` now (hard limit: only a reset is accepted) |
 | `$SIM=PROBE:-2` | The probe touches at machine Z `-2` |
 
-## In tests
-
-`GrblSimulator` runs on simulated time and needs no Qt event loop: write bytes
-with `receive()`, let time pass with `advance(seconds)` and read the replies
-with `read_output()`. See `tests/unit/test_grbl_simulator.py`, which also
-streams jobs through the real `ControllerWorker`.
+For its use in the tests, see [Testing](../dev/testing.md#the-grbl-simulator).
