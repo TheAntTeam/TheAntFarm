@@ -667,7 +667,7 @@
                        <number>2</number>
                       </property>
                       <property name="minimum">
-                       <double>1.000000000000000</double>
+                       <double>0.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
@@ -917,7 +917,7 @@
                        <number>2</number>
                       </property>
                       <property name="minimum">
-                       <double>1.000000000000000</double>
+                       <double>0.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
@@ -1193,7 +1193,7 @@
                        <number>2</number>
                       </property>
                       <property name="minimum">
-                       <double>1.000000000000000</double>
+                       <double>0.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
@@ -1389,7 +1389,7 @@
                        <number>2</number>
                       </property>
                       <property name="minimum">
-                       <double>1.000000000000000</double>
+                       <double>0.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
@@ -1616,7 +1616,7 @@
                        <number>2</number>
                       </property>
                       <property name="minimum">
-                       <double>1.000000000000000</double>
+                       <double>0.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
@@ -1823,7 +1823,7 @@
                        <number>2</number>
                       </property>
                       <property name="minimum">
-                       <double>1.000000000000000</double>
+                       <double>0.000000000000000</double>
                       </property>
                       <property name="maximum">
                        <double>9999.000000000000000</double>
