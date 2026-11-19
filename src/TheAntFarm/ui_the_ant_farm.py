@@ -408,7 +408,7 @@ class Ui_MainWindow(object):
         self.top_xy_feed_rate_dsb.setObjectName(u"top_xy_feed_rate_dsb")
         self.top_xy_feed_rate_dsb.setAccelerated(True)
         self.top_xy_feed_rate_dsb.setDecimals(2)
-        self.top_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.top_xy_feed_rate_dsb.setMinimum(1.000000000000000)
         self.top_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_2.addWidget(self.top_xy_feed_rate_dsb, 7, 1, 1, 1)
@@ -462,7 +462,7 @@ class Ui_MainWindow(object):
         self.top_z_feed_rate_dsb.setObjectName(u"top_z_feed_rate_dsb")
         self.top_z_feed_rate_dsb.setAccelerated(True)
         self.top_z_feed_rate_dsb.setDecimals(2)
-        self.top_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.top_z_feed_rate_dsb.setMinimum(1.000000000000000)
         self.top_z_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_2.addWidget(self.top_z_feed_rate_dsb, 9, 1, 1, 1)
@@ -491,7 +491,7 @@ class Ui_MainWindow(object):
         self.bottom_z_feed_rate_dsb.setObjectName(u"bottom_z_feed_rate_dsb")
         self.bottom_z_feed_rate_dsb.setAccelerated(True)
         self.bottom_z_feed_rate_dsb.setDecimals(2)
-        self.bottom_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.bottom_z_feed_rate_dsb.setMinimum(1.000000000000000)
         self.bottom_z_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_3.addWidget(self.bottom_z_feed_rate_dsb, 9, 1, 1, 1)
@@ -526,7 +526,7 @@ class Ui_MainWindow(object):
         self.bottom_xy_feed_rate_dsb.setObjectName(u"bottom_xy_feed_rate_dsb")
         self.bottom_xy_feed_rate_dsb.setAccelerated(True)
         self.bottom_xy_feed_rate_dsb.setDecimals(2)
-        self.bottom_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.bottom_xy_feed_rate_dsb.setMinimum(1.000000000000000)
         self.bottom_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_3.addWidget(self.bottom_xy_feed_rate_dsb, 8, 1, 1, 1)
@@ -606,7 +606,7 @@ class Ui_MainWindow(object):
         self.profile_xy_feed_rate_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_xy_feed_rate_dsb.setObjectName(u"profile_xy_feed_rate_dsb")
         self.profile_xy_feed_rate_dsb.setDecimals(2)
-        self.profile_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.profile_xy_feed_rate_dsb.setMinimum(1.000000000000000)
         self.profile_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_4.addWidget(self.profile_xy_feed_rate_dsb, 9, 3, 1, 1)
@@ -673,7 +673,7 @@ class Ui_MainWindow(object):
         self.profile_z_feed_rate_dsb = QDoubleSpinBox(self.profile_page)
         self.profile_z_feed_rate_dsb.setObjectName(u"profile_z_feed_rate_dsb")
         self.profile_z_feed_rate_dsb.setDecimals(2)
-        self.profile_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.profile_z_feed_rate_dsb.setMinimum(1.000000000000000)
         self.profile_z_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_4.addWidget(self.profile_z_feed_rate_dsb, 10, 3, 1, 1)
@@ -845,7 +845,7 @@ class Ui_MainWindow(object):
         self.drill_z_feed_rate_dsb.setObjectName(u"drill_z_feed_rate_dsb")
         self.drill_z_feed_rate_dsb.setAccelerated(True)
         self.drill_z_feed_rate_dsb.setDecimals(2)
-        self.drill_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.drill_z_feed_rate_dsb.setMinimum(1.000000000000000)
         self.drill_z_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_5.addWidget(self.drill_z_feed_rate_dsb, 12, 2, 1, 1)
@@ -890,7 +890,7 @@ class Ui_MainWindow(object):
         self.drill_xy_feed_rate_dsb.setObjectName(u"drill_xy_feed_rate_dsb")
         self.drill_xy_feed_rate_dsb.setAccelerated(True)
         self.drill_xy_feed_rate_dsb.setDecimals(2)
-        self.drill_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.drill_xy_feed_rate_dsb.setMinimum(1.000000000000000)
         self.drill_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_5.addWidget(self.drill_xy_feed_rate_dsb, 10, 2, 1, 1)
@@ -949,7 +949,7 @@ class Ui_MainWindow(object):
         self.nc_top_xy_feed_rate_dsb.setObjectName(u"nc_top_xy_feed_rate_dsb")
         self.nc_top_xy_feed_rate_dsb.setAccelerated(True)
         self.nc_top_xy_feed_rate_dsb.setDecimals(2)
-        self.nc_top_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.nc_top_xy_feed_rate_dsb.setMinimum(1.000000000000000)
         self.nc_top_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_6.addWidget(self.nc_top_xy_feed_rate_dsb, 5, 1, 1, 1)
@@ -1031,7 +1031,7 @@ class Ui_MainWindow(object):
         self.nc_top_z_feed_rate_dsb.setObjectName(u"nc_top_z_feed_rate_dsb")
         self.nc_top_z_feed_rate_dsb.setAccelerated(True)
         self.nc_top_z_feed_rate_dsb.setDecimals(2)
-        self.nc_top_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.nc_top_z_feed_rate_dsb.setMinimum(1.000000000000000)
         self.nc_top_z_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_6.addWidget(self.nc_top_z_feed_rate_dsb, 6, 1, 1, 1)
@@ -1103,7 +1103,7 @@ class Ui_MainWindow(object):
         self.nc_bottom_z_feed_rate_dsb.setObjectName(u"nc_bottom_z_feed_rate_dsb")
         self.nc_bottom_z_feed_rate_dsb.setAccelerated(True)
         self.nc_bottom_z_feed_rate_dsb.setDecimals(2)
-        self.nc_bottom_z_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.nc_bottom_z_feed_rate_dsb.setMinimum(1.000000000000000)
         self.nc_bottom_z_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_7.addWidget(self.nc_bottom_z_feed_rate_dsb, 7, 1, 1, 1)
@@ -1145,7 +1145,7 @@ class Ui_MainWindow(object):
         self.nc_bottom_xy_feed_rate_dsb.setObjectName(u"nc_bottom_xy_feed_rate_dsb")
         self.nc_bottom_xy_feed_rate_dsb.setAccelerated(True)
         self.nc_bottom_xy_feed_rate_dsb.setDecimals(2)
-        self.nc_bottom_xy_feed_rate_dsb.setMinimum(-9999.000000000000000)
+        self.nc_bottom_xy_feed_rate_dsb.setMinimum(1.000000000000000)
         self.nc_bottom_xy_feed_rate_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_7.addWidget(self.nc_bottom_xy_feed_rate_dsb, 6, 1, 1, 1)
@@ -3740,6 +3740,7 @@ class Ui_MainWindow(object):
         self.feedrate_z_dsb.setFont(font)
         self.feedrate_z_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
         self.feedrate_z_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.UpDownArrows)
+        self.feedrate_z_dsb.setMinimum(1.000000000000000)
         self.feedrate_z_dsb.setMaximum(100000.000000000000000)
         self.feedrate_z_dsb.setSingleStep(1.000000000000000)
 
@@ -3776,6 +3777,7 @@ class Ui_MainWindow(object):
         self.feedrate_xy_dsb.setFont(font)
         self.feedrate_xy_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
         self.feedrate_xy_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.UpDownArrows)
+        self.feedrate_xy_dsb.setMinimum(1.000000000000000)
         self.feedrate_xy_dsb.setMaximum(100000.000000000000000)
         self.feedrate_xy_dsb.setSingleStep(1.000000000000000)
 
@@ -3788,6 +3790,7 @@ class Ui_MainWindow(object):
         self.feedrate_probe_dsb.setFont(font)
         self.feedrate_probe_dsb.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
         self.feedrate_probe_dsb.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.UpDownArrows)
+        self.feedrate_probe_dsb.setMinimum(1.000000000000000)
         self.feedrate_probe_dsb.setMaximum(100000.000000000000000)
         self.feedrate_probe_dsb.setSingleStep(1.000000000000000)
 
