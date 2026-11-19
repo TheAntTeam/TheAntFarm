@@ -21,4 +21,4 @@
 - [Testing](dev/testing.md)
 - [Releasing](dev/releasing.md)
 
-See also [CONTRIBUTING.md](../CONTRIBUTING.md) and [CHANGELOG.md](../CHANGELOG.md).
+See also [CONTRIBUTING.md](https://github.com/TheAntTeam/TheAntFarm/blob/main/CONTRIBUTING.md) and [CHANGELOG.md](https://github.com/TheAntTeam/TheAntFarm/blob/main/CHANGELOG.md).

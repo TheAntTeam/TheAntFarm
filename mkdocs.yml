@@ -1,0 +1,57 @@
+site_name: The Ant Farm
+site_description: PCB milling with GRBL machines, from Gerber and Excellon files to the finished board
+site_url: https://theantteam.github.io/TheAntFarm/
+repo_url: https://github.com/TheAntTeam/TheAntFarm
+repo_name: TheAntTeam/TheAntFarm
+edit_uri: edit/dev/docs/
+
+docs_dir: docs
+strict: true
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+nav:
+  - Home: index.md
+  - User guide:
+      - Installation: user/install.md
+      - Quick start: user/quick-start.md
+      - Loading layers: user/loading-layers.md
+      - Creating a job: user/creating-a-job.md
+      - Running a job: user/running-a-job.md
+      - Tool change: user/tool-change.md
+      - Alignment: user/alignment.md
+      - Settings: user/settings.md
+      - GRBL simulator: user/simulator.md
+      - Troubleshooting: user/troubleshooting.md
+  - Developer guide:
+      - Architecture: dev/architecture.md
+      - shape_core: dev/shape_core.md
+      - Macros: dev/macros.md
+      - Testing: dev/testing.md
+      - Releasing: dev/releasing.md
