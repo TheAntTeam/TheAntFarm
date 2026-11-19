@@ -211,28 +211,30 @@ file is not warned about.
 Not verified on FluidNC: whether its `$H` is also answered with `ok` only at the
 end of the cycle (the status transition covers it otherwise).
 
-### M-03 — Handle probe failures and alarms while streaming
+### M-03 — Handle probe failures and alarms while streaming (done)
 
-**Why** a probing cycle that does not touch the workpiece makes GRBL raise
-`ALARM:5` and clear the planner. The lines that are still in the TX buffer are
-answered with `error:9` (machine locked), so `cmds_to_ack` never reaches zero,
-`check_eof_and_idle()` never fires and the job stays "sending" forever. The
-failed measurement itself is already discarded (`parse_probe_report`), but the
-stream is left in an inconsistent state.
+A probing cycle that does not touch makes GRBL raise `ALARM:5`; a machine in
+alarm answers every G-code line with `error:9` (machine locked).
 
-**Where** `controller/controller_manager.py`, `parse_rx_queue` (the `ok`,
-`error` and `ALARM` branches, from line 165).
+`ControllerWorker` (`controller/controller_manager.py`) handles both while a
+job or a macro is streaming:
 
-**How** factor the abort of M-03/item 3 into a generic
-`abort_job(reason)` (the current `abort_job_for_macro_error` already does the
-right state cleanup) and call it when, while `sending_file` is true, an
-`ALARM:*` line or an `error:9` is received. Emit the reason in the console.
+- **`ALARM:*`** during a job, or while waiting for its last moves, stops the job
+  with `abort_stream`: the console shows "Machine alarm (ALARM:x). Job stopped.",
+  the macro state is cleared and the machine is reset through the regular stop
+  path. The failed measurement is discarded (`parse_probe_report`).
+- **`error:9`** for a line of the job (a job started on a locked machine) stops
+  it the same way, with "Machine locked (error:9) on line N: ...", instead of
+  the hold and Resume/Stop question used for the other rejected lines.
+- An `error:9` that arrives after the job has stopped is only shown in the
+  console.
 
-**Done when** a simulated `ALARM:5` during a job stops the streaming, clears
-the buffers and reports the alarm; covered by a unit test that feeds the lines
-to `parse_rx_queue`.
+The job is streamed one line per acknowledgement, so at most one line is
+waiting in GRBL when the alarm is raised.
 
-**Effort** ~2 h, low risk.
+Covered by unit tests that feed the lines to `parse_rx_queue`, and by jobs and a
+tool change streamed into the GRBL simulator with a probe that does not touch
+and with a locked machine.
 
 ### M-04 — Tool table and tool number
 
@@ -310,8 +312,9 @@ change is 37 round trips (about 2-3 s at 115200 baud).
 
 **How** add `get_next_lines(max_bytes)` and send N lines as one block, counting
 the acknowledgements per line (`cmds_to_ack += number of lines`) and keeping
-`buffered_size` correct. Only worth doing after M-03, because it changes the
-same accounting.
+`buffered_size` correct. With several lines in GRBL at once, an alarm is
+followed by an `error:9` for each of them: the abort of M-03 must still happen
+only once.
 
 **Done when** the acknowledgement accounting stays correct with a macro of 37
 lines sent in blocks of 5, and the golden test still passes.
@@ -389,8 +392,8 @@ undone without consequences.
 6. **`M5` on GRBL.** Confirm that `M5` followed by `G4 P1` really stops the
    spindle before `M0` (some VFDs need more time).
 7. **Failed probe.** Interrupt the probe (no contact): the console must show the
-   "Probe not triggered" error, the measurement must not be used, and after
-   M-03 the job must stop cleanly.
+   "Probe not triggered" error, the measurement must not be used, and the job
+   must stop cleanly with "Machine alarm (ALARM:5). Job stopped.".
 8. **Homing warning.** Turn on Warn If Not Homed in the machine settings.
    Connect, unlock with `$X` and press Tool Change: the
    question must say the machine has not been homed, and Cancel must leave the
