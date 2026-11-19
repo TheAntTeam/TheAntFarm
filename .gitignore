@@ -30,3 +30,6 @@ src/TheAntFarm/shape_core/check_interp2d.py
 src/TheAntFarm/shape_core/check_tps_algo.py
 src/TheAntFarm/shape_core/demo_out.svg
 src/TheAntFarm/shape_core/plot_rounded_rect.py
+
+# MkDocs build output
+/site/
