@@ -341,11 +341,14 @@ class GCoder:
         z_drill = self.cfg["cut"]
         delta_z = z_drill / (steps * 1.0)
         z = 0.0
+        # The feed rate is written on every plunge: a tool change macro leaves
+        # its own XY feed rate as the modal one.
+        zf_str = self.format_float(self.cfg["z_feedrate"])
 
         for i in range(steps):
             z += delta_z
             zt_str = self.format_float(z)
-            gc += "G01 Z" + zt_str + "\n"
+            gc += "G01 Z" + zt_str + " F" + zf_str + "\n"
             gc += "G00 Z" + z_zero_str + "\n"
         self.gcode.append(gc)
 

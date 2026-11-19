@@ -378,6 +378,52 @@ class TestZeroLengthDrillPath:
         assert gcode.count("G01 Z") == gcoder.STEPS
 
 
+class TestDrillFeedAfterToolChange:
+    """The tool change macros end with ``G01 F@PROBE_FEED_XY@``: the drilling must not inherit that feed (#132)."""
+
+    MACRO_END_FEED = 300.0
+
+    @staticmethod
+    def _plunge_feeds(gcode_lines: list, macro_end_feed: float) -> list:
+        feeds = []
+        modal_feed = None
+        for line in "".join(gcode_lines).splitlines():
+            if line.strip() == "M6":
+                modal_feed = macro_end_feed
+                continue
+            feed = re.search(r"\bF(-?[\d.]+)", line)
+            if feed:
+                modal_feed = float(feed.group(1))
+            depth = re.match(r"G0?1 .*Z(-?[\d.]+)", line)
+            if depth and float(depth.group(1)) < 0:
+                feeds.append(modal_feed)
+        return feeds
+
+    def test_plunges_after_a_tool_change_use_the_z_feed_rate(self):
+        gcoder = GCoder(tag="test", machining_type="drill")
+        gcoder.cfg.update({"cut": -1.8, "z_feedrate": 40.0})
+        gcoder.load_path(
+            [
+                ToolPath(0.8, "drill", [LineString([(1.0, 1.0), (2.0, 1.0)])]),
+                ToolPath(1.0, "drill", [LineString([(5.0, 5.0), (6.0, 5.0)])]),
+            ]
+        )
+
+        assert gcoder.compute() is True
+        assert "".join(gcoder.gcode).count("M6") == 1
+        feeds = self._plunge_feeds(gcoder.gcode, self.MACRO_END_FEED)
+        assert len(feeds) == 4 * gcoder.STEPS
+        assert set(feeds) == {40.0}
+
+    def test_plunges_without_a_tool_change_use_the_z_feed_rate(self):
+        gcoder = GCoder(tag="test", machining_type="drill")
+        gcoder.cfg.update({"cut": -1.8, "z_feedrate": 40.0})
+        gcoder.load_path([ToolPath(0.8, "drill", [LineString([(1.0, 1.0), (2.0, 1.0)])])])
+
+        assert gcoder.compute() is True
+        assert set(self._plunge_feeds(gcoder.gcode, self.MACRO_END_FEED)) == {40.0}
+
+
 class TestMachiningConfigGuards:
     """Configuration guards: missing multi_depth key and zero cut depth."""
 
