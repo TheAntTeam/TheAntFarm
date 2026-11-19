@@ -107,7 +107,7 @@ class GCoder:
 
     def compute(self):
         mirror = self.cfg.get("mirror", False)
-        if self.type in ("gerber", "profile", "pocketing", "drill") and not self._feed_rates_are_valid():
+        if self.type in ("gerber", "profile", "pocketing", "drill") and not self._speeds_and_feeds_are_valid():
             return False
         if self.type == "gerber":
             self.compute_gerber(mirror=mirror)
@@ -124,10 +124,11 @@ class GCoder:
             return False
         return True
 
-    def _feed_rates_are_valid(self) -> bool:
-        """GRBL rejects a move with a zero (error:22) or negative (error:4) feed rate."""
+    def _speeds_and_feeds_are_valid(self) -> bool:
+        """GRBL rejects a move with a zero (error:22) or negative (error:4) feed rate and a negative spindle
+        speed (error:4); with a zero spindle speed the job would cut with the spindle stopped."""
         valid = True
-        for key in ("xy_feedrate", "z_feedrate"):
+        for key in ("xy_feedrate", "z_feedrate", "spindle"):
             feed = self.cfg.get(key)
             if feed is None or feed <= 0:
                 logger.error(f"The {key} of the {self.type} job must be greater than 0, not {feed}")
