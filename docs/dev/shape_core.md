@@ -46,7 +46,7 @@ application does not have to be changed in the same commit (see §5.1).
 | `path_manager.py` | `MachinePath` (the four procedures), `Gapper` (tabs), `remap_invalid_ids` |
 | `drill_path_optimizer.py`, `gerber_path_optimizer.py` | travel optimization |
 | `gcode_manager.py` | `GCoder`, `GCode`, `GCodeParser`, `GcodeLine`, `GcodePoint`, `GCodeAlignment`, `GCodeLeveler`, `GCodeMacro` |
-| `macros_manager.py` | tag catalog, template validation, expansion (see `docs/macros.md`) |
+| `macros_manager.py` | tag catalog, template validation, expansion (see `docs/dev/macros.md`) |
 | `commands_manager.py` | manual GRBL commands (jog, goto, probe, …) |
 | `align_manager.py` | thin plate spline alignment |
 | `gcode_drill_converter.py` | holes read back from a G-code file |
@@ -192,7 +192,7 @@ job with `abort_stream` when an `ALARM:*` arrives during a job, or when a line o
 the job is answered with `error:9` (machine locked). The failed measurement is
 discarded (`ControllerControlController.parse_probe_report`).
 
-Detailed in `docs/macros.md` §4, item M-03.
+Detailed in `docs/dev/macros.md` §4, item M-03.
 
 ### 5.4 Warn before a tool change on a non homed machine (done)
 
@@ -201,7 +201,7 @@ machine has been homed since the connection, and the Tool Change button of the
 Control tab asks for a confirmation when it has not, if the machine setting
 `tool_change_homing_warning` is on (off by default).
 
-Detailed in `docs/macros.md` §4, item M-02.
+Detailed in `docs/dev/macros.md` §4, item M-02.
 
 ### 5.5 Packaging and dependencies (done)
 

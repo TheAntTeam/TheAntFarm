@@ -1,6 +1,6 @@
 # Runs when a version tag (v0.4.0) is pushed on main: checks that the tag matches the version of the code, builds
 # the executables on Linux, Windows and macOS and creates a draft release with them, their SHA256SUMS and the
-# section of CHANGELOG.md of that version as notes. The draft is published by hand. See docs/releasing.md.
+# section of CHANGELOG.md of that version as notes. The draft is published by hand. See docs/dev/releasing.md.
 
 name: Release
 

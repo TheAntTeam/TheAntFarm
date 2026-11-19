@@ -1,7 +1,7 @@
 # Prepare a release from the Actions page ("Run workflow", with the new version, once this file is on the default
 # branch). From dev, it moves the "## Changelog" lines of the pull requests merged since the last tag and the
 # [Unreleased] entries into a new section of CHANGELOG.md, sets the version and opens a pull request into dev with
-# the change, to review and edit before merging. The steps that follow are in docs/releasing.md.
+# the change, to review and edit before merging. The steps that follow are in docs/dev/releasing.md.
 # A pull request opened by a workflow does not start the other workflows: the tests run once it is merged into dev.
 
 name: Prepare release
@@ -55,6 +55,6 @@ jobs:
           echo "$(cat summary.txt)."
           echo
           echo "Before merging: read the new section of CHANGELOG.md and edit its wording or its categories here."
-          echo "The next steps are in docs/releasing.md."
+          echo "The next steps are in docs/dev/releasing.md."
         } > body.md
         gh pr create --base dev --head "$branch" --title "Release $VERSION" --body-file body.md

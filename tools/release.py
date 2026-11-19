@@ -1,4 +1,4 @@
-"""Release helper of The Ant Farm, used by the "Prepare release" and "Release" workflows (see docs/releasing.md).
+"""Release helper of The Ant Farm, used by the "Prepare release" and "Release" workflows (see docs/dev/releasing.md).
 
 ``version``  prints the version written in ``src/TheAntFarm/__init__.py``.
 ``prepare``  collects the "## Changelog" lines of the pull requests merged into ``dev`` since the last tag, moves them
