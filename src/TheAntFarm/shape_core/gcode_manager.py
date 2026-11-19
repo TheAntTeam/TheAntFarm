@@ -107,6 +107,8 @@ class GCoder:
 
     def compute(self):
         mirror = self.cfg.get("mirror", False)
+        if self.type in ("gerber", "profile", "pocketing", "drill") and not self._feed_rates_are_valid():
+            return False
         if self.type == "gerber":
             self.compute_gerber(mirror=mirror)
         elif self.type in ("profile", "pocketing"):
@@ -121,6 +123,16 @@ class GCoder:
             logger.error(f"Machining Type not supported: {self.type}")
             return False
         return True
+
+    def _feed_rates_are_valid(self) -> bool:
+        """GRBL rejects a move with a zero (error:22) or negative (error:4) feed rate."""
+        valid = True
+        for key in ("xy_feedrate", "z_feedrate"):
+            feed = self.cfg.get(key)
+            if feed is None or feed <= 0:
+                logger.error(f"The {key} of the {self.type} job must be greater than 0, not {feed}")
+                valid = False
+        return valid
 
     def compute_drill(self, mirror=False):
         # compute GCode from a drill path

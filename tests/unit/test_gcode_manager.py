@@ -469,6 +469,26 @@ class TestMachiningConfigGuards:
 
         assert gcoder.compute() is False
 
+    @pytest.mark.parametrize("machining_type", ["gerber", "profile", "pocketing", "drill"])
+    @pytest.mark.parametrize("key", ["xy_feedrate", "z_feedrate"])
+    @pytest.mark.parametrize("feed", [0.0, -40.0])
+    def test_job_with_a_feed_rate_not_above_zero_fails(self, simple_path, machining_type, key, feed):
+        """GRBL rejects G01 with F0 (error:22) or a negative F (error:4): no file is generated."""
+        gcoder = GCoder(tag="test", machining_type=machining_type)
+        gcoder.cfg["cut"] = -0.1
+        gcoder.cfg[key] = feed
+        gcoder.load_path(simple_path)
+
+        assert gcoder.compute() is False
+
+    @pytest.mark.parametrize("machining_type", ["gerber", "profile", "pocketing", "drill"])
+    def test_job_with_positive_feed_rates_is_generated(self, simple_path, machining_type):
+        gcoder = GCoder(tag="test", machining_type=machining_type)
+        gcoder.cfg.update({"cut": -0.1, "xy_feedrate": 250.0, "z_feedrate": 40.0})
+        gcoder.load_path(simple_path)
+
+        assert gcoder.compute() is True
+
     def test_profile_multi_depth_generates_one_pass_per_increment(self):
         gcoder = GCoder(tag="test", machining_type="profile")
         gcoder.cfg.update({"multi_depth": True, "depth_per_pass": 0.5, "cut": -1.5})
