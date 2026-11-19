@@ -438,7 +438,7 @@ class Ui_MainWindow(object):
         self.top_spindle_speed_dsb = QDoubleSpinBox(self.top_page)
         self.top_spindle_speed_dsb.setObjectName(u"top_spindle_speed_dsb")
         self.top_spindle_speed_dsb.setDecimals(2)
-        self.top_spindle_speed_dsb.setMinimum(1.000000000000000)
+        self.top_spindle_speed_dsb.setMinimum(0.000000000000000)
         self.top_spindle_speed_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_2.addWidget(self.top_spindle_speed_dsb, 6, 1, 1, 1)
@@ -588,7 +588,7 @@ class Ui_MainWindow(object):
         self.bottom_spindle_speed_dsb.setObjectName(u"bottom_spindle_speed_dsb")
         self.bottom_spindle_speed_dsb.setAccelerated(True)
         self.bottom_spindle_speed_dsb.setDecimals(2)
-        self.bottom_spindle_speed_dsb.setMinimum(1.000000000000000)
+        self.bottom_spindle_speed_dsb.setMinimum(0.000000000000000)
         self.bottom_spindle_speed_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_3.addWidget(self.bottom_spindle_speed_dsb, 6, 1, 1, 1)
@@ -754,7 +754,7 @@ class Ui_MainWindow(object):
         self.profile_spindle_speed_dsb.setObjectName(u"profile_spindle_speed_dsb")
         self.profile_spindle_speed_dsb.setAccelerated(True)
         self.profile_spindle_speed_dsb.setDecimals(2)
-        self.profile_spindle_speed_dsb.setMinimum(1.000000000000000)
+        self.profile_spindle_speed_dsb.setMinimum(0.000000000000000)
         self.profile_spindle_speed_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_4.addWidget(self.profile_spindle_speed_dsb, 7, 3, 1, 1)
@@ -876,7 +876,7 @@ class Ui_MainWindow(object):
         self.drill_spindle_speed_dsb.setObjectName(u"drill_spindle_speed_dsb")
         self.drill_spindle_speed_dsb.setAccelerated(True)
         self.drill_spindle_speed_dsb.setDecimals(2)
-        self.drill_spindle_speed_dsb.setMinimum(1.000000000000000)
+        self.drill_spindle_speed_dsb.setMinimum(0.000000000000000)
         self.drill_spindle_speed_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_5.addWidget(self.drill_spindle_speed_dsb, 8, 2, 1, 1)
@@ -1007,7 +1007,7 @@ class Ui_MainWindow(object):
         self.nc_top_spindle_speed_dsb.setObjectName(u"nc_top_spindle_speed_dsb")
         self.nc_top_spindle_speed_dsb.setAccelerated(True)
         self.nc_top_spindle_speed_dsb.setDecimals(2)
-        self.nc_top_spindle_speed_dsb.setMinimum(1.000000000000000)
+        self.nc_top_spindle_speed_dsb.setMinimum(0.000000000000000)
         self.nc_top_spindle_speed_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_6.addWidget(self.nc_top_spindle_speed_dsb, 4, 1, 1, 1)
@@ -1126,7 +1126,7 @@ class Ui_MainWindow(object):
         self.nc_bottom_spindle_speed_dsb.setObjectName(u"nc_bottom_spindle_speed_dsb")
         self.nc_bottom_spindle_speed_dsb.setAccelerated(True)
         self.nc_bottom_spindle_speed_dsb.setDecimals(2)
-        self.nc_bottom_spindle_speed_dsb.setMinimum(1.000000000000000)
+        self.nc_bottom_spindle_speed_dsb.setMinimum(0.000000000000000)
         self.nc_bottom_spindle_speed_dsb.setMaximum(9999.000000000000000)
 
         self.gridLayout_7.addWidget(self.nc_bottom_spindle_speed_dsb, 4, 1, 1, 1)

@@ -482,15 +482,25 @@ class TestMachiningConfigGuards:
         assert gcoder.compute() is False
 
     @pytest.mark.parametrize("machining_type", ["gerber", "profile", "pocketing", "drill"])
-    @pytest.mark.parametrize("speed", [0.0, -1000.0])
-    def test_job_with_a_spindle_speed_not_above_zero_fails(self, simple_path, machining_type, speed):
-        """GRBL rejects a negative S (error:4); with S0 the job would cut with the spindle stopped (#135)."""
+    @pytest.mark.parametrize("speed", [-0.01, -1000.0])
+    def test_job_with_a_negative_spindle_speed_fails(self, simple_path, machining_type, speed):
+        """GRBL rejects a negative S with error:4 (#135)."""
         gcoder = GCoder(tag="test", machining_type=machining_type)
         gcoder.cfg["cut"] = -0.1
         gcoder.cfg["spindle"] = speed
         gcoder.load_path(simple_path)
 
         assert gcoder.compute() is False
+
+    @pytest.mark.parametrize("machining_type", ["gerber", "profile", "pocketing", "drill"])
+    def test_job_with_a_spindle_speed_of_zero_is_generated(self, simple_path, machining_type):
+        """S0 is a valid way to keep the spindle stopped."""
+        gcoder = GCoder(tag="test", machining_type=machining_type)
+        gcoder.cfg.update({"cut": -0.1, "spindle": 0.0})
+        gcoder.load_path(simple_path)
+
+        assert gcoder.compute() is True
+        assert "M3 S0.0000" in "".join(gcoder.gcode)
 
     @pytest.mark.parametrize("machining_type", ["gerber", "profile", "pocketing", "drill"])
     def test_job_with_positive_feed_rates_is_generated(self, simple_path, machining_type):

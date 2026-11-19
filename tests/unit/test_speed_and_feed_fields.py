@@ -1,6 +1,6 @@
 """The feed rate and spindle speed fields accept only values that GRBL can run.
 
-F0 is error:22 and a negative F or S is error:4 (#132); S0 cuts with the spindle stopped (#135).
+F0 is error:22 and a negative F or S is error:4 (#132, #135); S0 is allowed, it keeps the spindle stopped.
 """
 
 import pytest
@@ -38,8 +38,8 @@ def test_every_spindle_speed_field_is_listed(ui) -> None:
     assert _fields_named(ui, "spindle_speed") == set(SPINDLE_SPEED_FIELDS)
 
 
-@pytest.mark.parametrize("name", JOB_FEED_FIELDS + MACHINE_FEED_FIELDS + SPINDLE_SPEED_FIELDS)
-def test_field_refuses_zero_and_negative_values(ui, name: str) -> None:
+@pytest.mark.parametrize("name", JOB_FEED_FIELDS + MACHINE_FEED_FIELDS)
+def test_feed_rate_field_refuses_zero_and_negative_values(ui, name: str) -> None:
     field = getattr(ui, name)
 
     assert field.minimum() > 0
@@ -47,3 +47,14 @@ def test_field_refuses_zero_and_negative_values(ui, name: str) -> None:
     assert field.value() > 0
     field.setValue(-40.0)
     assert field.value() > 0
+
+
+@pytest.mark.parametrize("name", SPINDLE_SPEED_FIELDS)
+def test_spindle_speed_field_accepts_zero_and_refuses_negative_values(ui, name: str) -> None:
+    field = getattr(ui, name)
+
+    assert field.minimum() == 0
+    field.setValue(0.0)
+    assert field.value() == 0
+    field.setValue(-1000.0)
+    assert field.value() == 0

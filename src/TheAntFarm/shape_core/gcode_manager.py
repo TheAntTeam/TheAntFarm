@@ -125,14 +125,18 @@ class GCoder:
         return True
 
     def _speeds_and_feeds_are_valid(self) -> bool:
-        """GRBL rejects a move with a zero (error:22) or negative (error:4) feed rate and a negative spindle
-        speed (error:4); with a zero spindle speed the job would cut with the spindle stopped."""
+        """GRBL rejects a move with a zero (error:22) or negative (error:4) feed rate, and a negative spindle
+        speed (error:4). A spindle speed of 0 is valid: it keeps the spindle stopped."""
         valid = True
-        for key in ("xy_feedrate", "z_feedrate", "spindle"):
+        for key in ("xy_feedrate", "z_feedrate"):
             feed = self.cfg.get(key)
             if feed is None or feed <= 0:
                 logger.error(f"The {key} of the {self.type} job must be greater than 0, not {feed}")
                 valid = False
+        speed = self.cfg.get("spindle")
+        if speed is None or speed < 0:
+            logger.error(f"The spindle speed of the {self.type} job must be 0 or more, not {speed}")
+            valid = False
         return valid
 
     def compute_drill(self, mirror=False):
