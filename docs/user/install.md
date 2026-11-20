@@ -100,7 +100,9 @@ sudo apt-get install -y \
 
 ### macOS
 
-No executable is built for Apple Silicon at the moment; run the application from the sources.
+The macOS archive contains an executable for Apple Silicon (arm64). It is a plain executable, not an `.app`
+bundle (see [#133](https://github.com/TheAntTeam/TheAntFarm/issues/133)), it is not signed, and it has not been
+tried on a Mac yet. If it does not start, run the application from the sources as described above.
 
 ## Linux: access to the serial port
 
