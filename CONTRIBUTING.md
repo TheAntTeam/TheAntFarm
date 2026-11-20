@@ -26,25 +26,23 @@ pip install -r requirements-test.txt
 
 This project uses automated formatting and linting:
 
-- **Black** (line length: 120)
-- **isort** (profile: black, line length: 120)
-- **flake8** (max line length: 120, extend-ignore: E203)
+- **Ruff** for formatting, import order and linting (line length: 120); the rules and the excluded files are in
+  `pyproject.toml`
 - **mypy** (ignore missing imports)
 
 Run checks before committing:
 
 ```bash
-black --check --exclude="(app_resources_rc|ui_the_ant_farm|hook-vispy|vispy_qt_widget)\.py" src tests
-isort --check-only --profile=black --line-length=120 src tests
-flake8 --exclude app_resources_rc.py,ui_the_ant_farm.py,hook-vispy.py,vispy_qt_widget.py src tests
+ruff check src tests
+ruff format --check src tests
 mypy src tests --ignore-missing-imports
 ```
 
-Or apply formatting automatically:
+Or apply formatting and the safe fixes automatically:
 
 ```bash
-black --exclude="(app_resources_rc|ui_the_ant_farm|hook-vispy|vispy_qt_widget)\.py" src tests
-isort --profile=black --line-length=120 src tests
+ruff format src tests
+ruff check --fix src tests
 ```
 
 ## Pre-commit Hooks
